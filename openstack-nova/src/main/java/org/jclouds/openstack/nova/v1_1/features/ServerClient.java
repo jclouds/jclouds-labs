@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
-import org.jclouds.openstack.nova.v1_1.domain.Resource;
+import org.jclouds.openstack.domain.Resource;
 import org.jclouds.openstack.nova.v1_1.domain.Server;
 
 /**

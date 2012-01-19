@@ -36,7 +36,7 @@ public class NovaPropertiesBuilder extends PropertiesBuilder {
       Properties properties = super.defaultProperties();
       // TODO: keystone
       properties.setProperty(PROPERTY_ENDPOINT, "http://localhost:5000");
-      properties.setProperty(PROPERTY_API_VERSION, "1.1");
+      properties.setProperty(PROPERTY_API_VERSION, "2.0");
       return properties;
    }
 
