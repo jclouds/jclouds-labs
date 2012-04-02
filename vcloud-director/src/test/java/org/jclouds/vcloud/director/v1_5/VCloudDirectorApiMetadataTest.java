@@ -16,21 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.aws.elb;
+package org.jclouds.vcloud.director.v1_5;
 
-import org.jclouds.elb.ELBApiMetadata;
-import org.jclouds.providers.BaseProviderMetadataTest;
+import org.jclouds.apis.ApiType;
+import org.jclouds.apis.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
 /**
- * The AWSELBProviderTest tests the org.jclouds.providers.AWSELBProvider class.
  * 
  * @author Adrian Cole
  */
-@Test(groups = "unit", testName = "AWSELBProviderTest")
-public class AWSELBProviderTest extends BaseProviderMetadataTest {
+@Test(groups = "unit", testName = "VCloudDirectorApiMetadataTest")
+public class VCloudDirectorApiMetadataTest extends BaseApiMetadataTest {
 
-   public AWSELBProviderTest() {
-      super(new AWSELBProviderMetadata(), new ELBApiMetadata());
+   public VCloudDirectorApiMetadataTest() {
+      super(new VCloudDirectorApiMetadata(), ApiType.COMPUTE);
    }
 }

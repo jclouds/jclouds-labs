@@ -16,21 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.aws.elb;
+package org.jclouds.virtualbox;
 
-import org.jclouds.elb.ELBApiMetadata;
-import org.jclouds.providers.BaseProviderMetadataTest;
+import org.jclouds.apis.ApiType;
+import org.jclouds.apis.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
 /**
- * The AWSELBProviderTest tests the org.jclouds.providers.AWSELBProvider class.
  * 
  * @author Adrian Cole
  */
-@Test(groups = "unit", testName = "AWSELBProviderTest")
-public class AWSELBProviderTest extends BaseProviderMetadataTest {
+@Test(groups = "unit", testName = "VirtualBoxApiMetadataTest")
+public class VirtualBoxApiMetadataTest extends BaseApiMetadataTest {
 
-   public AWSELBProviderTest() {
-      super(new AWSELBProviderMetadata(), new ELBApiMetadata());
+   public VirtualBoxApiMetadataTest() {
+      super(new VirtualBoxApiMetadata(), ApiType.COMPUTE);
    }
 }

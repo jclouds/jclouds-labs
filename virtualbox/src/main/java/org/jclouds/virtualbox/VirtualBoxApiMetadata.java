@@ -16,44 +16,43 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.aws.elb;
+package org.jclouds.virtualbox;
 
 import java.net.URI;
 
-import org.jclouds.elb.ELBApiMetadata;
-import org.jclouds.providers.BaseProviderMetadata;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.apis.ApiType;
+import org.jclouds.apis.BaseApiMetadata;
 
 /**
- * Implementation of @ link org.jclouds.types.ProviderMetadata} for Amazon's Elastic Load Balancing
- * provider.
+ * Implementation of {@link ApiMetadata} for VirtualBox API
  * 
  * @author Adrian Cole
  */
-public class AWSELBProviderMetadata extends BaseProviderMetadata {
+public class VirtualBoxApiMetadata extends BaseApiMetadata {
 
-   public AWSELBProviderMetadata() {
+   public VirtualBoxApiMetadata() {
       this(builder()
-            .id("aws-elb")
-            .name("Amazon Elastic Load Balancing")
-            .api(new ELBApiMetadata())
-            .homepage(URI.create("http://aws.amazon.com/elasticloadbalancing"))
-            .console(URI.create("https://console.aws.amazon.com/ec2/home"))
-            .linkedServices("aws-ec2","aws-elb", "aws-elb", "aws-s3", "aws-simpledb")
-            .iso3166Codes("US-VA", "US-CA", "BR-SP", "US-OR", "IE", "SG", "JP-13"));
+            .id("virtualbox")
+            .type(ApiType.COMPUTE)
+            .name("VirtualBox API")
+            .identityName("User")
+            .credentialName("Password")
+            .documentation(URI.create("https://www.virtualbox.org/sdkref/index.html")));
    }
 
    // below are so that we can reuse builders, toString, hashCode, etc.
    // we have to set concrete classes here, as our base class cannot be
    // concrete due to serviceLoader
-   protected AWSELBProviderMetadata(ConcreteBuilder builder) {
+   protected VirtualBoxApiMetadata(ConcreteBuilder builder) {
       super(builder);
    }
 
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
 
       @Override
-      public AWSELBProviderMetadata build() {
-         return new AWSELBProviderMetadata(this);
+      public VirtualBoxApiMetadata build() {
+         return new VirtualBoxApiMetadata(this);
       }
    }
 
@@ -61,8 +60,8 @@ public class AWSELBProviderMetadata extends BaseProviderMetadata {
       return new ConcreteBuilder();
    }
 
+   @Override
    public ConcreteBuilder toBuilder() {
-      return builder().fromProviderMetadata(this);
+      return builder().fromApiMetadata(this);
    }
-
 }
