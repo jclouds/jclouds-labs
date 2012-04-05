@@ -16,70 +16,73 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.glesys;
+package org.jclouds.savvis.vpdc;
+
+import static org.jclouds.savvis.vpdc.reference.VPDCConstants.PROPERTY_VPDC_TIMEOUT_TASK_COMPLETED;
 
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.apis.ApiMetadata;
+import org.jclouds.apis.ApiType;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.internal.BaseComputeServiceApiMetadata;
 
 import com.google.common.reflect.TypeToken;
 
 /**
- * Implementation of {@link ApiMetadata} for  API
+ * Implementation of {@link org.jclouds.types.ApiMetadata} for Savvis Symphony VPDC services.
  * 
- * @author Adrian Cole
+ * @author Kedar Dave
  */
-public class GleSYSApiMetadata
+public class VPDCApiMetadata
       extends
-      BaseComputeServiceApiMetadata<GleSYSClient, GleSYSAsyncClient, ComputeServiceContext<GleSYSClient, GleSYSAsyncClient>, GleSYSApiMetadata> {
+      BaseComputeServiceApiMetadata<VPDCClient, VPDCAsyncClient, ComputeServiceContext<VPDCClient, VPDCAsyncClient>, VPDCApiMetadata> {
 
    @Override
    public Builder toBuilder() {
       return new Builder().fromApiMetadata(this);
    }
 
-   public GleSYSApiMetadata() {
+   public VPDCApiMetadata() {
       this(new Builder());
    }
 
-   protected GleSYSApiMetadata(Builder builder) {
+   protected VPDCApiMetadata(Builder builder) {
       super(builder);
    }
 
    protected static Properties defaultProperties() {
       Properties properties = BaseComputeServiceApiMetadata.Builder.defaultProperties();
-      properties.setProperty("jclouds.ssh.max-retries", "5");
-      properties.setProperty("jclouds.ssh.retry-auth", "true");
+      properties.setProperty(PROPERTY_VPDC_TIMEOUT_TASK_COMPLETED, 600l * 1000l + "");
       return properties;
    }
 
    public static class Builder
          extends
-         BaseComputeServiceApiMetadata.Builder<GleSYSClient, GleSYSAsyncClient, ComputeServiceContext<GleSYSClient, GleSYSAsyncClient>, GleSYSApiMetadata> {
+         BaseComputeServiceApiMetadata.Builder<VPDCClient, VPDCAsyncClient, ComputeServiceContext<VPDCClient, VPDCAsyncClient>, VPDCApiMetadata> {
 
       protected Builder() {
-         id("glesys")
-         .name("GleSYS API")
+         id("savvis-symphonyvpdc")
+         .type(ApiType.COMPUTE)
+         .name("Savvis Symphony VPDC API")
          .identityName("Username")
-         .credentialName("API Key")
-         .documentation(URI.create("https://customer.glesys.com/api.php"))
-         .version("1")
-         .defaultEndpoint("https://api.glesys.com")
-         .defaultProperties(GleSYSApiMetadata.defaultProperties())
-         .javaApi(GleSYSClient.class, GleSYSAsyncClient.class)
-         .contextBuilder(TypeToken.of(GleSYSContextBuilder.class));
+         .credentialName("Password")
+         .documentation(URI.create("https://api.savvis.net/doc/spec/api/index.html"))
+         .version("1.0")
+         .buildVersion("2.3")
+         .defaultEndpoint("https://api.savvis.net/vpdc")
+         .defaultProperties(VPDCApiMetadata.defaultProperties())
+         .javaApi(VPDCClient.class, VPDCAsyncClient.class)
+         .contextBuilder(TypeToken.of(VPDCContextBuilder.class));
       }
 
       @Override
-      public GleSYSApiMetadata build() {
-         return new GleSYSApiMetadata(this);
+      public VPDCApiMetadata build() {
+         return new VPDCApiMetadata(this);
       }
 
       @Override
-      public Builder fromApiMetadata(GleSYSApiMetadata in) {
+      public Builder fromApiMetadata(VPDCApiMetadata in) {
          super.fromApiMetadata(in);
          return this;
       }

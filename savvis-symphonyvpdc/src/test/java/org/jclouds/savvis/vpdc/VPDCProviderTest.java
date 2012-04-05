@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to jclouds, Inc. (jclouds) under one or more
  * contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,32 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.opsource.servers;
+package org.jclouds.savvis.vpdc;
 
-import static org.jclouds.Constants.PROPERTY_API_VERSION;
-import static org.jclouds.Constants.PROPERTY_ENDPOINT;
-
-import java.util.Properties;
-
-import org.jclouds.PropertiesBuilder;
+import org.jclouds.providers.internal.BaseProviderMetadataTest;
+import org.testng.annotations.Test;
 
 /**
- * Builds properties used in OpSourceServers clients
+ * The VPDCProviderTest tests the
+ * org.jclouds.savvis.vpdc.VPDCProviderMetadata class.
  * 
- * @author Adrian Cole
+ * @author Kedar Dave
  */
-public class OpSourceServersPropertiesBuilder extends PropertiesBuilder {
+@Test(groups = "unit", testName = "VPDCProviderTest")
+public class VPDCProviderTest extends BaseProviderMetadataTest {
 
-   @Override
-   public Properties defaultProperties() {
-      Properties properties = super.defaultProperties();
-      properties.setProperty(PROPERTY_ENDPOINT, "https://api.opsourcecloud.net/oec/${jclouds.api-version}");
-      properties.setProperty(PROPERTY_API_VERSION, "0.9");
-      return properties;
+   public VPDCProviderTest() {
+      super(new VPDCProviderMetadata(), new VPDCApiMetadata());
    }
-
-   public OpSourceServersPropertiesBuilder(Properties properties) {
-      super(properties);
-   }
-
 }

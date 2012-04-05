@@ -16,14 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.glesys;
+package org.jclouds.opsource.servers;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.compute.ComputeServiceContext;
-import org.jclouds.compute.internal.BaseComputeServiceApiMetadata;
+import org.jclouds.apis.ApiType;
+import org.jclouds.rest.RestContext;
+import org.jclouds.rest.internal.BaseRestApiMetadata;
 
 import com.google.common.reflect.TypeToken;
 
@@ -32,54 +33,52 @@ import com.google.common.reflect.TypeToken;
  * 
  * @author Adrian Cole
  */
-public class GleSYSApiMetadata
+public class OpSourceServersApiMetadata
       extends
-      BaseComputeServiceApiMetadata<GleSYSClient, GleSYSAsyncClient, ComputeServiceContext<GleSYSClient, GleSYSAsyncClient>, GleSYSApiMetadata> {
+      BaseRestApiMetadata<OpSourceServersClient, OpSourceServersAsyncClient, RestContext<OpSourceServersClient, OpSourceServersAsyncClient>, OpSourceServersApiMetadata> {
 
    @Override
    public Builder toBuilder() {
       return new Builder().fromApiMetadata(this);
    }
 
-   public GleSYSApiMetadata() {
+   public OpSourceServersApiMetadata() {
       this(new Builder());
    }
 
-   protected GleSYSApiMetadata(Builder builder) {
+   protected OpSourceServersApiMetadata(Builder builder) {
       super(builder);
    }
 
    protected static Properties defaultProperties() {
-      Properties properties = BaseComputeServiceApiMetadata.Builder.defaultProperties();
-      properties.setProperty("jclouds.ssh.max-retries", "5");
-      properties.setProperty("jclouds.ssh.retry-auth", "true");
+      Properties properties = BaseRestApiMetadata.Builder.defaultProperties();
       return properties;
    }
 
    public static class Builder
          extends
-         BaseComputeServiceApiMetadata.Builder<GleSYSClient, GleSYSAsyncClient, ComputeServiceContext<GleSYSClient, GleSYSAsyncClient>, GleSYSApiMetadata> {
+         BaseRestApiMetadata.Builder<OpSourceServersClient, OpSourceServersAsyncClient, RestContext<OpSourceServersClient, OpSourceServersAsyncClient>, OpSourceServersApiMetadata> {
 
       protected Builder() {
-         id("glesys")
-         .name("GleSYS API")
+         super(OpSourceServersClient.class, OpSourceServersAsyncClient.class);
+         id("opsource-servers")
+         .name("OpSourceServers API")
          .identityName("Username")
          .credentialName("API Key")
-         .documentation(URI.create("https://customer.glesys.com/api.php"))
-         .version("1")
-         .defaultEndpoint("https://api.glesys.com")
-         .defaultProperties(GleSYSApiMetadata.defaultProperties())
-         .javaApi(GleSYSClient.class, GleSYSAsyncClient.class)
-         .contextBuilder(TypeToken.of(GleSYSContextBuilder.class));
+         .documentation(URI.create("http://www.opsource.net/Services/Cloud-Hosting/Open-API"))
+         .version("0.9")
+         .defaultEndpoint("https://api.opsourcecloud.net/oec/${jclouds.api-version}")
+         .type(ApiType.COMPUTE)
+         .contextBuilder(TypeToken.of(OpSourceServersContextBuilder.class));
       }
 
       @Override
-      public GleSYSApiMetadata build() {
-         return new GleSYSApiMetadata(this);
+      public OpSourceServersApiMetadata build() {
+         return new OpSourceServersApiMetadata(this);
       }
 
       @Override
-      public Builder fromApiMetadata(GleSYSApiMetadata in) {
+      public Builder fromApiMetadata(OpSourceServersApiMetadata in) {
          super.fromApiMetadata(in);
          return this;
       }
