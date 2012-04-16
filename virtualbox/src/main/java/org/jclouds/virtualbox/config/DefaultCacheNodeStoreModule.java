@@ -16,34 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.glesys.compute;
+package org.jclouds.virtualbox.config;
 
-import static org.testng.Assert.assertEquals;
+import java.net.URI;
 
-import org.jclouds.compute.ComputeServiceContext;
-import org.jclouds.glesys.compute.internal.BaseGleSYSComputeServiceExpectTest;
-import org.testng.annotations.Test;
+import org.jclouds.byon.Node;
+import org.jclouds.byon.config.CacheNodeStoreModule;
+import org.jclouds.compute.domain.OsFamily;
 
-/**
- * 
- * @author Adrian Cole
- */
-@Test(groups = "live", singleThreaded = true, testName = "GleSYSExperimentLiveTest")
-public class GleSYSExperimentExpectTest extends BaseGleSYSComputeServiceExpectTest {
+import com.google.common.collect.ImmutableMap;
 
-   @Test
-   public void testAndExperiment() {
-      ComputeServiceContext context = null;
-      try {
-
-         context = computeContextForKnownArgumentsAndConstantPassword();
-
-         assertEquals(context.getComputeService().listAssignableLocations().size(), 4);
-
-      } finally {
-         if (context != null)
-            context.close();
-      }
+public class DefaultCacheNodeStoreModule extends CacheNodeStoreModule {
+   public DefaultCacheNodeStoreModule() {
+      super(ImmutableMap.of("host", Node.builder().id("host").name("host installing virtualbox").hostname("localhost")
+               .osFamily(OsFamily.LINUX.toString()).osDescription(System.getProperty("os.name")).osVersion(
+                        System.getProperty("os.version")).group("ssh").username(System.getProperty("user.name"))
+               .credentialUrl(URI.create("file://" + System.getProperty("user.home") + "/.ssh/id_rsa")).build()));
    }
-
 }
