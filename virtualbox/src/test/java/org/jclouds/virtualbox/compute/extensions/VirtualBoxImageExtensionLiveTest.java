@@ -17,9 +17,9 @@
  * under the License.
  */
 
-package org.jclouds.virtualbox.compute;
+package org.jclouds.virtualbox.compute.extensions;
 
-import org.jclouds.compute.internal.BaseImageExtensionLiveTest;
+import org.jclouds.compute.extensions.internal.BaseImageExtensionLiveTest;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
