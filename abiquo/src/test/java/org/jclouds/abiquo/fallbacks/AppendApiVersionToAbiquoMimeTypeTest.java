@@ -17,11 +17,12 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.fallbacks;
 
 import static org.testng.Assert.assertEquals;
 
 import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.functions.AppendApiVersionToAbiquoMimeType;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;

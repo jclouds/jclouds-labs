@@ -17,82 +17,81 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.fallbacks;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+
+import java.io.IOException;
+
+import javax.ws.rs.core.Response.Status;
 
 import org.easymock.EasyMock;
+import org.jclouds.abiquo.fallbacks.MovedVolume.ReturnMoveVolumeReference;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.io.Payload;
+import org.jclouds.io.Payloads;
+import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Function;
+import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.inject.TypeLiteral;
 
 /**
- * Unit tests for the {@link ReturnNullOn303} function.
+ * Unit tests for the {@link MovedVolume} function.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", testName = "ReturnNullOn303Test")
-public class ReturnNullOn303Test {
+@Test(groups = "unit", testName = "MovedVolumeTest")
+public class MovedVolumeTest {
    public void testReturnOriginalExceptionIfNotHttpResponseException() {
-      Function<Exception, Object> function = new ReturnNullOn303();
+      MovedVolume function = new MovedVolume(new ReturnMoveVolumeReference(
+            new JAXBParser("false"), TypeLiteral.get(MovedVolumeDto.class)));
+
       RuntimeException exception = new RuntimeException();
 
       try {
-         function.apply(exception);
+         function.create(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
    }
 
-   public void testReturnNullIf303() {
-      Function<Exception, Object> function = new ReturnNullOn303();
+   public void testReturnVolume() throws IOException {
+      JAXBParser xmlParser = new JAXBParser("false");
+      MovedVolume function = new MovedVolume(new ReturnMoveVolumeReference(
+            new JAXBParser("false"), TypeLiteral.get(MovedVolumeDto.class)));
+
+      VolumeManagementDto volume = new VolumeManagementDto();
+      volume.setName("Test volume");
+      MovedVolumeDto movedRef = new MovedVolumeDto();
+      movedRef.setVolume(volume);
+
       HttpResponse response = EasyMock.createMock(HttpResponse.class);
       HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
+      Payload payload = Payloads.newPayload(xmlParser.toXML(movedRef));
 
       // Status code is called once
-      expect(response.getStatusCode()).andReturn(303);
+      expect(response.getStatusCode()).andReturn(Status.MOVED_PERMANENTLY.getStatusCode());
       // Get response gets called twice
       expect(exception.getResponse()).andReturn(response);
       expect(exception.getResponse()).andReturn(response);
+      // Get payload is called three times: one to deserialize it, and twice to
+      // release it
+      expect(response.getPayload()).andReturn(payload);
+      expect(response.getPayload()).andReturn(payload);
+      expect(response.getPayload()).andReturn(payload);
       // Get cause is called to determine the root cause
       expect(exception.getCause()).andReturn(null);
 
       replay(response);
       replay(exception);
 
-      assertNull(function.apply(exception));
-
-      verify(response);
-      verify(exception);
-   }
-
-   public void testReturnExceptionIfNot303() {
-      Function<Exception, Object> function = new ReturnNullOn303();
-      HttpResponse response = EasyMock.createMock(HttpResponse.class);
-      HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
-
-      // Status code is called once
-      expect(response.getStatusCode()).andReturn(600);
-      // Get response gets called twice
-      expect(exception.getResponse()).andReturn(response);
-      expect(exception.getResponse()).andReturn(response);
-      // Get cause is called to determine the root cause
-      expect(exception.getCause()).andReturn(null);
-
-      replay(response);
-      replay(exception);
-
-      try {
-         function.apply(exception);
-      } catch (Exception ex) {
-         assertEquals(ex, exception);
-      }
+      function.create(exception);
 
       verify(response);
       verify(exception);

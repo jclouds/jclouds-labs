@@ -17,40 +17,42 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.fallbacks;
 
+import static com.google.common.util.concurrent.Futures.getUnchecked;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 import org.easymock.EasyMock;
+import org.jclouds.abiquo.AbiquoFallbacks.FalseIfNotAvailable;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Function;
-
 /**
- * Unit tests for the {@link ReturnFalseOn5xx} function.
+ * Unit tests for the {@link FalseIfNotAvailable} function.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", testName = "ReturnFalseOn5xxTest")
-public class ReturnFalseOn5xxTest {
-   public void testReturnOriginalExceptionIfNotHttpResponseException() {
-      Function<Exception, Object> function = new ReturnFalseOn5xx();
+@Test(groups = "unit", testName = "FalseIfNotAvailableTest")
+public class FalseIfNotAvailableTest {
+   public void testOriginalExceptionIfUnknownException() {
+      FalseIfNotAvailable function = new FalseIfNotAvailable();
       RuntimeException exception = new RuntimeException();
 
       try {
-         function.apply(exception);
+         function.create(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
    }
 
-   public void testReturnFalseIf5xx() {
-      Function<Exception, Object> function = new ReturnFalseOn5xx();
+   public void testFalseIf5xx() {
+      FalseIfNotAvailable function = new FalseIfNotAvailable();
       HttpResponse response = EasyMock.createMock(HttpResponse.class);
       HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
 
@@ -66,14 +68,14 @@ public class ReturnFalseOn5xxTest {
       replay(response);
       replay(exception);
 
-      assertEquals(function.apply(exception), false);
+      assertFalse(getUnchecked(function.create(exception)));
 
       verify(response);
       verify(exception);
    }
 
-   public void testReturnExceptionIfNot5xx() {
-      Function<Exception, Object> function = new ReturnFalseOn5xx();
+   public void testExceptionIfNot5xx() {
+      FalseIfNotAvailable function = new FalseIfNotAvailable();
       HttpResponse response = EasyMock.createMock(HttpResponse.class);
       HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
 
@@ -90,7 +92,7 @@ public class ReturnFalseOn5xxTest {
       replay(exception);
 
       try {
-         function.apply(exception);
+         function.create(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
@@ -98,4 +100,12 @@ public class ReturnFalseOn5xxTest {
       verify(response);
       verify(exception);
    }
+
+   public void testFalseIfResourceNotFound() {
+      FalseIfNotAvailable function = new FalseIfNotAvailable();
+      ResourceNotFoundException exception = new ResourceNotFoundException();
+
+      assertFalse(getUnchecked(function.create(exception)));
+   }
+
 }

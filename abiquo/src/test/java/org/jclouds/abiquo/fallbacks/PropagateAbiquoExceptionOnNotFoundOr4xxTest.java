@@ -17,55 +17,55 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.fallbacks;
 
 import static org.testng.Assert.assertEquals;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.abiquo.AbiquoFallbacks.PropagateAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.transport.error.ErrorsDto;
-import com.google.common.base.Function;
 
 /**
- * Unit tests for the {@link ReturnAbiquoExceptionOnNotFoundOr4xx} function.
+ * Unit tests for the {@link PropagateAbiquoExceptionOnNotFoundOr4xx} function.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", testName = "ReturnAbiquoExceptionOnNotFoundOr4xxTest")
-public class ReturnAbiquoExceptionOnNotFoundOr4xxTest {
-   public void testReturnOriginalExceptionIfNotResourceNotFound() {
-      Function<Exception, Object> function = new ReturnAbiquoExceptionOnNotFoundOr4xx();
+@Test(groups = "unit", testName = "PropagateAbiquoExceptionOnNotFoundOr4xxTest")
+public class PropagateAbiquoExceptionOnNotFoundOr4xxTest {
+   public void testOriginalExceptionIfNotResourceNotFound() {
+      PropagateAbiquoExceptionOnNotFoundOr4xx function = new PropagateAbiquoExceptionOnNotFoundOr4xx();
       RuntimeException exception = new RuntimeException();
 
       try {
-         function.apply(exception);
+         function.create(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
    }
 
-   public void testReturnOriginalExceptionIfNotAbiquoException() {
-      Function<Exception, Object> function = new ReturnAbiquoExceptionOnNotFoundOr4xx();
+   public void testOriginalExceptionIfNotAbiquoException() {
+      PropagateAbiquoExceptionOnNotFoundOr4xx function = new PropagateAbiquoExceptionOnNotFoundOr4xx();
       ResourceNotFoundException exception = new ResourceNotFoundException();
 
       try {
-         function.apply(exception);
+         function.create(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
    }
 
-   public void testReturnAbiquoException() {
-      Function<Exception, Object> function = new ReturnAbiquoExceptionOnNotFoundOr4xx();
+   public void testAbiquoException() {
+      PropagateAbiquoExceptionOnNotFoundOr4xx function = new PropagateAbiquoExceptionOnNotFoundOr4xx();
       AbiquoException abiquoException = new AbiquoException(Status.NOT_FOUND, new ErrorsDto());
       ResourceNotFoundException exception = new ResourceNotFoundException(abiquoException);
 
       try {
-         function.apply(exception);
+         function.create(exception);
       } catch (Exception ex) {
          assertEquals(ex, abiquoException);
       }

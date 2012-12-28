@@ -16,28 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.jenkins.v1.functions;
+package org.jclouds.jenkins.v1;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.equalTo;
+import static com.google.common.base.Throwables.propagate;
+import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
-import javax.inject.Singleton;
-
-import com.google.common.base.Function;
 import com.google.common.base.Predicates;
-import com.google.common.base.Throwables;
+import com.google.common.util.concurrent.FutureFallback;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * 
  * @author Adrian Cole
  */
-@Singleton
-public class ReturnVoidOn302Or404 implements Function<Exception, Void> {
+public final class JenkinsFallbacks {
+   private JenkinsFallbacks() {
+   }
 
-   public Void apply(Exception from) {
-      Boolean returnVal = returnValueOnCodeOrNull(from, true, Predicates.<Integer>or(equalTo(302), equalTo(404)));
-      if (returnVal != null && returnVal)
-         return null;
-      throw Throwables.propagate(from);
+   public static final class VoidOn302Or404 implements FutureFallback<Void> {
+      @Override
+      public ListenableFuture<Void> create(final Throwable t) {
+         Boolean returnVal = returnValueOnCodeOrNull(checkNotNull(t, "throwable"), true,
+               Predicates.<Integer> or(equalTo(302), equalTo(404)));
+         if (returnVal != null && returnVal)
+            return immediateFuture(null);
+         throw propagate(t);
+      }
+
    }
 }

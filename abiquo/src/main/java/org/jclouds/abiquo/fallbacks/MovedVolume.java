@@ -17,40 +17,68 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.fallbacks;
 
+import static com.google.common.base.Throwables.getCausalChain;
+import static com.google.common.base.Throwables.propagate;
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.util.concurrent.Futures.immediateFuture;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.xml.XMLParser;
 
-import com.google.common.base.Function;
+import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.FutureFallback;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.inject.TypeLiteral;
 
 /**
  * Return false on service error exceptions.
  * 
  * @author Ignasi Barrera
  */
-public abstract class ReturnMovedResource<T> implements Function<Exception, T> {
+@Singleton
+public class MovedVolume implements FutureFallback<VolumeManagementDto> {
+
+   @Singleton
+   @VisibleForTesting
+   static class ReturnMoveVolumeReference extends ParseXMLWithJAXB<MovedVolumeDto> {
+      @Inject
+      public ReturnMoveVolumeReference(final XMLParser xml, final TypeLiteral<MovedVolumeDto> type) {
+         super(xml, type);
+      }
+
+   }
+
+   private ParseXMLWithJAXB<MovedVolumeDto> parser;
+
+   @Inject
+   public MovedVolume(final ReturnMoveVolumeReference parser) {
+      this.parser = parser;
+   }
 
    @Override
-   public T apply(final Exception from) {
-      Throwable exception = Iterables.find(Throwables.getCausalChain(from), isMovedException(from), null);
+   public ListenableFuture<VolumeManagementDto> create(final Throwable from) {
+      Throwable exception = find(getCausalChain(from), isMovedException(from), null);
 
       if (exception != null) {
          HttpResponseException responseException = (HttpResponseException) exception;
          HttpResponse response = responseException.getResponse();
 
-         return getMovedEntity(response);
+         return immediateFuture(parser.apply(response).getVolume());
       }
 
-      throw Throwables.propagate(from);
+      throw propagate(from);
    }
-
-   protected abstract T getMovedEntity(HttpResponse response);
 
    private static Predicate<Throwable> isMovedException(final Throwable exception) {
       return new Predicate<Throwable>() {
