@@ -40,7 +40,7 @@
        <module>cdmi</module>
        <module>joyent-cloudapi</module>
        <module>joyentcloud</module>
-       <module>google-compute</module>
+       <module>google-compute-engine</module>
        <module>iam</module>
        <module>aws-iam</module>
        <module>rds</module>
