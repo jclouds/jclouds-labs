@@ -25,8 +25,12 @@ import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
 import org.jclouds.rackspace.clouddns.v1.CloudDNSAsyncApi;
+import org.jclouds.rackspace.clouddns.v1.features.DomainApi;
+import org.jclouds.rackspace.clouddns.v1.features.DomainAsyncApi;
 import org.jclouds.rackspace.clouddns.v1.features.LimitApi;
 import org.jclouds.rackspace.clouddns.v1.features.LimitAsyncApi;
+import org.jclouds.rackspace.clouddns.v1.features.RecordApi;
+import org.jclouds.rackspace.clouddns.v1.features.RecordAsyncApi;
 import org.jclouds.rest.ConfiguresRestClient;
 import org.jclouds.rest.config.RestClientModule;
 
@@ -44,6 +48,8 @@ public class CloudDNSRestClientModule extends RestClientModule<CloudDNSApi, Clou
 
    public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>> builder()
          .put(LimitApi.class, LimitAsyncApi.class)
+         .put(DomainApi.class, DomainAsyncApi.class)
+         .put(RecordApi.class, RecordAsyncApi.class)
          .build();
 
    public CloudDNSRestClientModule() {
