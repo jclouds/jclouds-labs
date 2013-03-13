@@ -16,9 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.fujitsu.fgcp.compute.config;
+package org.jclouds.fujitsu.fgcp.compute;
 
 
+import org.jclouds.fujitsu.fgcp.compute.FGCPBaseComputeServiceLiveTest;
 import org.testng.annotations.Test;
 
 
@@ -26,12 +27,12 @@ import org.testng.annotations.Test;
  * @author Dies Koper
  *
  */
-@Test(groups = "live", enabled = true, singleThreaded = true, testName = "FGCPDEComputeServiceLiveTest")
-public class FGCPDEComputeServiceLiveTest extends FGCPBaseComputeServiceLiveTest {
+@Test(groups = "live", enabled = true, singleThreaded = true, testName = "FGCPAUComputeServiceLiveTest")
+public class FGCPAUComputeServiceLiveTest extends FGCPBaseComputeServiceLiveTest {
 
    @Override
    public void setServiceDefaults() {
-      provider = "fgcp-de";
+      provider = "fgcp-au";
    }
 
 }

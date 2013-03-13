@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.fujitsu.fgcp.FGCPApi;
 import org.jclouds.fujitsu.fgcp.FGCPProviderMetadata;
-import org.jclouds.fujitsu.fgcp.compute.FGCPRestClientModule;
+import org.jclouds.fujitsu.fgcp.config.FGCPRestClientModule;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.io.Payload;
 import org.jclouds.providers.ProviderMetadata;
