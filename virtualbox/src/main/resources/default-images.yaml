@@ -117,20 +117,10 @@ images:
 
                       %packages --ignoremissing
                       @core
-                      @ Base
-                      @ Development Tools
-                      mc
-                      wget
-                      bzip2
-                      kernel-devel
-                      kernel-headers
-                      -ipw2100-firmware
-                      -ipw2200-firmware
-                      -ivtv-firmware
                       %end
 
                       %post
-                      /usr/bin/yum -y install sudo gcc make gcc-c++ kernel-devel-`uname -r` zlib-devel openssl-devel readline-devel sqlite-devel perl dkms acpid
+                      /usr/bin/yum -y install sudo gcc make kernel kernel-devel openssl-devel perl wget dkms acpid
                       /etc/init.d/haldaemon stop
                       /etc/init.d/acpid start
                       /etc/init.d/haldaemon start

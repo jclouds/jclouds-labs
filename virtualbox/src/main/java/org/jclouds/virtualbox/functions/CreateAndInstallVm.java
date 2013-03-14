@@ -18,21 +18,14 @@
  */
 package org.jclouds.virtualbox.functions;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Iterables.transform;
-import static org.jclouds.scriptbuilder.domain.Statements.call;
-import static org.jclouds.virtualbox.config.VirtualBoxConstants.GUEST_OS_PASSWORD;
-import static org.jclouds.virtualbox.config.VirtualBoxConstants.GUEST_OS_USER;
-import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_PRECONFIGURATION_URL;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Splitter;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.inject.Inject;
 import org.jclouds.compute.domain.ExecResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.options.RunScriptOptions;
@@ -50,14 +43,17 @@ import org.virtualbox_4_2.DeviceType;
 import org.virtualbox_4_2.IMachine;
 import org.virtualbox_4_2.IMediumAttachment;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Iterables;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.inject.Inject;
+import javax.annotation.Resource;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.transform;
+import static org.jclouds.scriptbuilder.domain.Statements.call;
+import static org.jclouds.virtualbox.config.VirtualBoxConstants.*;
 
 @Singleton
 public class CreateAndInstallVm implements Function<MasterSpec, IMachine> {
@@ -126,9 +122,14 @@ public class CreateAndInstallVm implements Function<MasterSpec, IMachine> {
       logger.debug(">> awaiting installation of guest additions on vm: %s", masterName);
       ListenableFuture<ExecResponse> execInstallGA = machineUtils.runScriptOnNode(nodeMetadata,
                new InstallGuestAdditions(vmSpec, version), RunScriptOptions.NONE);
-      ExecResponse gaInstallationResponse = Futures.getUnchecked(execInstallGA);
-      checkState(gaInstallationResponse.getExitStatus() == 0, "installation of guest additions on vm(%s) failed", masterName);
-      
+
+      logger.debug(">> check installation of guest additions on vm: %s", masterName);
+      ListenableFuture<ExecResponse> checkGAinstallation = machineUtils.runScriptOnNode(nodeMetadata,
+              call("checkVBoxService"), RunScriptOptions.NONE);
+      ExecResponse checkGAinstallationResponse = Futures.getUnchecked(checkGAinstallation);
+      checkState(checkGAinstallationResponse.getExitStatus() == 0, "check installation of guest additions on vm(%s) " +
+              "failed", masterName);
+
       machineController.ensureMachineIsShutdown(masterName);
 
       // detach DVD and ISOs, if needed

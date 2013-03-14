@@ -88,8 +88,8 @@ public class VirtualBoxApiMetadata extends BaseApiMetadata {
          .defaultCredential("CHANGE_ME")
          .defaultEndpoint("http://localhost:18083/")
          .documentation(URI.create("https://github.com/jclouds/jclouds/tree/master/labs/virtualbox"))
-         .version("4.2.6")
-         .buildVersion("4.2.6")
+         .version("4.2.8")
+         .buildVersion("4.2.8")
          .defaultProperties(VirtualBoxApiMetadata.defaultProperties())
          .view(ComputeServiceContext.class)
          .defaultModules(ImmutableSet.<Class<? extends Module>>of(HardcodeLocalhostAsNodeMetadataSupplier.class, VirtualBoxComputeServiceContextModule.class));

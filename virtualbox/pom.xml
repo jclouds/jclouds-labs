@@ -33,9 +33,9 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <virtualbox.version>4.2.6</virtualbox.version>
+    <virtualbox.version>4.2.8</virtualbox.version>
     <test.virtualbox.endpoint>http://localhost:18083/</test.virtualbox.endpoint>
-    <test.virtualbox.api-version>4.2.6</test.virtualbox.api-version>
+    <test.virtualbox.api-version>4.2.8</test.virtualbox.api-version>
     <test.virtualbox.build-version>${virtualbox.version}</test.virtualbox.build-version>
     <test.virtualbox.identity>${user.name}</test.virtualbox.identity>
     <test.virtualbox.credential>CHANGE_ME</test.virtualbox.credential>

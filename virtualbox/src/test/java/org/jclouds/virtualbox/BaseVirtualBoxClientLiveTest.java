@@ -30,14 +30,12 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.jclouds.compute.callables.RunScriptOnNode.Factory;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
 import org.jclouds.concurrent.config.ExecutorServiceModule;
-import org.jclouds.config.ValueOfConfigurationKeyOrNull;
 import org.jclouds.rest.annotations.BuildVersion;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.jclouds.util.Strings2;
@@ -88,7 +86,7 @@ import com.google.inject.Module;
 @Test(groups = "live", singleThreaded = true, testName = "BaseVirtualBoxClientLiveTest")
 public class BaseVirtualBoxClientLiveTest extends BaseComputeServiceContextLiveTest {
 
-   public static final String DONT_DESTROY_MASTER = "jclouds.virtualbox.keep-test-master";
+   public static final String DESTROY_MASTER = "jclouds.virtualbox.destroy-test-master";
 
    public BaseVirtualBoxClientLiveTest() {
       provider = "virtualbox";
@@ -121,9 +119,6 @@ public class BaseVirtualBoxClientLiveTest extends BaseComputeServiceContextLiveT
    protected String isosDir;
    protected String keystrokeSequence;
    @Inject protected Supplier<NodeMetadata> host;
-   @Inject protected Factory runScriptOnNodeFactory;
-   @Inject protected RetryIfSocketNotYetOpen socketTester;
-   @Inject protected HardcodedHostToHostNodeMetadata hardcodedHostToHostNodeMetadata;
    @Inject
    protected PrioritizeCredentialsFromTemplate prioritizeCredentialsFromTemplate;
    @Inject
@@ -217,8 +212,8 @@ public class BaseVirtualBoxClientLiveTest extends BaseComputeServiceContextLiveT
 
    @AfterSuite
    protected void destroyMaster() {
-      if (System.getProperty(DONT_DESTROY_MASTER) == null
-               || !Boolean.parseBoolean(System.getProperty(DONT_DESTROY_MASTER))) {
+      if (System.getProperty(DESTROY_MASTER) != null
+               || Boolean.parseBoolean(System.getProperty(DESTROY_MASTER))) {
          undoVm(masterName);
       }
    }

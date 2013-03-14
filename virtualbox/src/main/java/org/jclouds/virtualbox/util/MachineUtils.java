@@ -18,16 +18,12 @@
  */
 package org.jclouds.virtualbox.util;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import static org.jclouds.util.Predicates2.retry;
-
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.Uninterruptibles;
+import com.google.inject.Inject;
 import org.jclouds.compute.callables.RunScriptOnNode;
 import org.jclouds.compute.callables.RunScriptOnNode.Factory;
 import org.jclouds.compute.domain.ExecResponse;
@@ -37,20 +33,16 @@ import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.logging.Logger;
 import org.jclouds.scriptbuilder.domain.Statement;
 import org.jclouds.util.Throwables2;
-import org.jclouds.virtualbox.functions.IpAddressesLoadingCache;
-import org.virtualbox_4_2.IMachine;
-import org.virtualbox_4_2.ISession;
-import org.virtualbox_4_2.LockType;
-import org.virtualbox_4_2.SessionState;
-import org.virtualbox_4_2.VBoxException;
-import org.virtualbox_4_2.VirtualBoxManager;
+import org.virtualbox_4_2.*;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.Uninterruptibles;
-import com.google.inject.Inject;
+import javax.annotation.Resource;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.util.concurrent.TimeUnit;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+import static org.jclouds.util.Predicates2.retry;
 
 /**
  * Utilities for executing functions on a VirtualBox machine.
@@ -283,5 +275,5 @@ public class MachineUtils {
          return session.getState().equals(input);
       }
    }
-   
+
 }
