@@ -55,7 +55,7 @@
         <test.fgcp-au.build-version />
         <test.fgcp-au.identity>fgcp-id</test.fgcp-au.identity>
         <test.fgcp-au.credential>fgcp-cred</test.fgcp-au.credential>
-        <test.fgcp-au.image-id>IMG_3c9820_71OW9NZC268</test.fgcp-au.image-id><!-- CentOS 6.2 64bit(EN) in AU -->
+        <test.fgcp-au.image-id>IMG_3c9820_S24FWXU0Q9VH0JK</test.fgcp-au.image-id><!-- CentOS 6.2 64bit(EN) in AU -->
         <test.fgcp-au.image.login-user />
         <test.fgcp-au.image.authenticate-sudo />
         <jclouds.osgi.export>org.jclouds.fujitsu.fgcp*;version="${project.version}"</jclouds.osgi.export>
