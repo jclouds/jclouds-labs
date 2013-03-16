@@ -48,6 +48,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableSet.of;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.OPERATION_COMPLETE_INTERVAL;
@@ -96,9 +97,11 @@ public class CreateNodesWithGroupEncodedIntoNameThenAddToSet extends
    }
 
    @Override
-   public Map<?, ListenableFuture<Void>> execute(String group, int count, Template template,
-                                                 Set<NodeMetadata> goodNodes, Map<NodeMetadata, Exception> badNodes,
-                                                 Multimap<NodeMetadata, CustomizationResponse> customizationResponses) {
+   public synchronized Map<?, ListenableFuture<Void>> execute(String group, int count,
+                                                              Template template,
+                                                              Set<NodeMetadata> goodNodes,
+                                                              Map<NodeMetadata, Exception> badNodes,
+                                                              Multimap<NodeMetadata, CustomizationResponse> customizationResponses) {
 
       String sharedResourceName = namingConvention.create().sharedNameForGroup(group);
       Template mutableTemplate = template.clone();
@@ -108,7 +111,7 @@ public class CreateNodesWithGroupEncodedIntoNameThenAddToSet extends
 
       // get or create the network and create a firewall with the users configuration
       Network network = getOrCreateNetwork(templateOptions, sharedResourceName);
-      createFirewall(templateOptions, network, sharedResourceName);
+      getOrCreateFirewall(templateOptions, network, sharedResourceName);
       templateOptions.network(network.getSelfLink());
 
       return super.execute(group, count, mutableTemplate, goodNodes, badNodes, customizationResponses);
@@ -129,17 +132,15 @@ public class CreateNodesWithGroupEncodedIntoNameThenAddToSet extends
          return network;
       }
 
-      if (network == null && templateOptions.getNetwork().isPresent()) {
-         throw new IllegalStateException("user defined network does not exist: " + templateOptions.getNetwork().get());
-      }
+      checkState(templateOptions.getNetwork().isPresent(), "user defined network does not exist: " + templateOptions
+              .getNetwork().get());
 
       AtomicReference<Operation> operation = new AtomicReference<Operation>(api.getNetworkApiForProject(userProject
               .get()).createInIPv4Range(sharedResourceName, DEFAULT_INTERNAL_NETWORK_RANGE));
       retry(operationDonePredicate, operationCompleteCheckTimeout, operationCompleteCheckInterval,
               MILLISECONDS).apply(operation);
-      if (operation.get().getHttpError().isPresent()) {
-         throw new IllegalStateException("Could not create network, operation failed" + operation);
-      }
+
+      checkState(!operation.get().getHttpError().isPresent(),"Could not create network, operation failed" + operation);
 
       return checkNotNull(api.getNetworkApiForProject(userProject.get()).get(sharedResourceName),
               "no network with name %s was found", sharedResourceName);
@@ -151,8 +152,8 @@ public class CreateNodesWithGroupEncodedIntoNameThenAddToSet extends
     *
     * @see org.jclouds.googlecomputeengine.features.FirewallAsyncApi#patch(String, org.jclouds.googlecomputeengine.options.FirewallOptions)
     */
-   private void createFirewall(GoogleComputeEngineTemplateOptions templateOptions, Network network,
-                               String sharedResourceName) {
+   private void getOrCreateFirewall(GoogleComputeEngineTemplateOptions templateOptions, Network network,
+                                    String sharedResourceName) {
 
       Firewall firewall = api.getFirewallApiForProject(userProject.get()).get(sharedResourceName);
 
@@ -190,9 +191,7 @@ public class CreateNodesWithGroupEncodedIntoNameThenAddToSet extends
       retry(operationDonePredicate, operationCompleteCheckTimeout, operationCompleteCheckInterval,
               MILLISECONDS).apply(operation);
 
-      if (operation.get().getHttpError().isPresent()) {
-         throw new IllegalStateException("Could not create firewall, operation failed" + operation.get());
-      }
+      checkState(!operation.get().getHttpError().isPresent(),"Could not create firewall, operation failed" + operation);
    }
 
 
