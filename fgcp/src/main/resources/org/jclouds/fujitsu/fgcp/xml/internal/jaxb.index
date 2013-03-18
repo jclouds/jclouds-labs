@@ -28,3 +28,4 @@ ListVDiskResponse
 ListVServerResponse
 ListVSYSResponse
 PublicIPWithSystemId
+StatusResponse
