@@ -1,0 +1,9 @@
+{
+    creationDate: null,
+    name: "file.txt",
+    lastModifiedDate: "2013-01-09T22:48:14+02:00",
+    providerId: null,
+    userMetadata: { },
+    type: "BLOB",
+    uri: "https://somecontainer.s3.amazonaws.com/file.txt"
+}

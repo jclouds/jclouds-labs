@@ -1,0 +1,23 @@
+{
+    tags: [ ],
+    id: "large",
+    ram: 15360,
+    hypervisor: null,
+    name: "large",
+    volumes: [
+        {
+            id: null,
+            bootDevice: true,
+            device: null,
+            durable: false,
+            type: "LOCAL",
+            size: 1690
+        }
+    ],
+    processors: [
+        {
+            speed: 1,
+            cores: 8
+        }
+    ]
+}

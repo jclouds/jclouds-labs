@@ -67,6 +67,8 @@
        <module>fgcp-au</module>
        <module>fgcp-de</module>
        <module>abiquo</module>
+       <module>jclouds-representations</module>
+       <module>jclouds-management</module>
     </modules>
 
     <build>
