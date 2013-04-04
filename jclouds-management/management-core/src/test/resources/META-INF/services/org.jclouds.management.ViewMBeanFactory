@@ -1,0 +1,2 @@
+org.jclouds.management.StorageMBeanFactory
+org.jclouds.management.ComputeMBeanFactory
