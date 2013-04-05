@@ -28,7 +28,6 @@
   </parent>
   <groupId>org.jclouds.labs</groupId>
   <artifactId>nodepool</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
   <name>jcloud nodepool api</name>
   <packaging>bundle</packaging>
 

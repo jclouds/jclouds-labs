@@ -28,7 +28,6 @@
   </parent>
   <groupId>org.jclouds.labs</groupId>
   <artifactId>vcloud-director</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
   <name>jclouds vcloud-director api</name>
   <description>jclouds components to access an implementation of VMware vCloud Director 1.5+</description>
   <packaging>bundle</packaging>

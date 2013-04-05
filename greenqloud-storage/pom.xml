@@ -28,7 +28,6 @@
     </parent>
     <groupId>org.jclouds.labs</groupId>
     <artifactId>greenqloud-storage</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
     <name>jclouds GreenQloud Simple Storage Service (S3) provider</name>
     <description>Simple Storage Service (S3) implementation targeted to GreenQloud Web Services</description>
     <packaging>bundle</packaging>
