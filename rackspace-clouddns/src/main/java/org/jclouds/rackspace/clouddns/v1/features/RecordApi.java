@@ -18,27 +18,20 @@
  */
 package org.jclouds.rackspace.clouddns.v1.features;
 
+import java.util.Set;
+
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
-import org.jclouds.openstack.v2_0.domain.Limits;
+import org.jclouds.rackspace.clouddns.v1.domain.CreateRecord;
+import org.jclouds.rackspace.clouddns.v1.domain.Job;
+import org.jclouds.rackspace.clouddns.v1.domain.Record;
 import org.jclouds.rest.annotations.RequestFilters;
 
 /**
- * All accounts, by default, have a preconfigured set of thresholds (or limits) to manage capacity and prevent abuse
- * of the system. The system recognizes two kinds of limits: rate limits and absolute limits. Rate limits are 
- * thresholds that are reset after a certain amount of time passes. Absolute limits are fixed.
- * 
- * @see LimitAsyncApi
+ * @see RecordAsyncApi
  * @author Everett Toews
  */
 @RequestFilters(AuthenticateRequest.class)
-public interface LimitApi {
-   /**
-    * Provides a list of all applicable limits.
-    */
-   Limits list();
-   
-   /**
-    * All applicable limit types.
-    */
-   Iterable<String> listTypes();
+public interface RecordApi {
+
+   Job<Set<Record>> create(int domainId, Iterable<CreateRecord> createRecords);
 }

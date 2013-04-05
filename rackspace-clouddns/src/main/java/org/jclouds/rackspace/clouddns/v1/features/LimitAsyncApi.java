@@ -37,7 +37,7 @@ import org.jclouds.rest.annotations.SelectJson;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * @see LimitAsyncApi
+ * @see LimitApi
  * @author Everett Toews
  */
 @Endpoint(CloudDNS.class)
