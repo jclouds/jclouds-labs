@@ -7,7 +7,7 @@
         <version>1.6.0-SNAPSHOT</version>
         <relativePath>../project/pom.xml</relativePath>
     </parent>
-    
+    <groupId>org.jclouds.labs</groupId>
     <artifactId>abiquo</artifactId>
     <name>jclouds Abiquo api</name>
     <description>jclouds components to access an implementation of Abiquo</description>
