@@ -28,7 +28,6 @@
     </parent>
     <groupId>org.jclouds.labs</groupId>
     <artifactId>rds</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
     <name>jcloud rds api</name>
     <description>jclouds components to access an implementation of Relational Database Service</description>
     <packaging>bundle</packaging>

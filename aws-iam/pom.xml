@@ -28,7 +28,6 @@
     </parent>
     <groupId>org.jclouds.labs</groupId>
     <artifactId>aws-iam</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
     <name>jclouds Amazon Identity and Access Management (IAM) provider</name>
     <description>Identity and Access Management (IAM) to Amazon Web Services</description>
     <packaging>bundle</packaging>

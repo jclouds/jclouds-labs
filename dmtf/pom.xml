@@ -28,7 +28,6 @@
   </parent>
   <groupId>org.jclouds.labs</groupId>
   <artifactId>dmtf</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
   <name>jclouds dmtf domain objects</name>
   <description>jclouds implementation of DMTF OVF and CIM domain objects</description>
   <packaging>bundle</packaging>

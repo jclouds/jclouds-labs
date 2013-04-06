@@ -28,7 +28,6 @@
   </parent>
   <groupId>org.jclouds.labs</groupId>
   <artifactId>iam</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
   <name>jcloud iam api</name>
   <description>jclouds components to access an implementation of Identity and Access Management (IAM)</description>
   <packaging>bundle</packaging>

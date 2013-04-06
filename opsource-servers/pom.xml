@@ -28,7 +28,6 @@
   </parent>
   <groupId>org.jclouds.labs</groupId>
   <artifactId>opsource-servers</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
   <name>jcloud opsource-servers api</name>
   <description>jclouds components to access an implementation of OpSource Cloud Servers</description>
   <packaging>bundle</packaging>

@@ -28,7 +28,6 @@
   </parent>
   <groupId>org.jclouds.labs</groupId>
   <artifactId>joyentcloud</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
   <name>jcloud joyentcloud api</name>
   <description>jclouds components to access the Joyent Cloud</description>
   <packaging>bundle</packaging>
