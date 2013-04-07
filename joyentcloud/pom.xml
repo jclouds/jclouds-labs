@@ -27,8 +27,11 @@
     <version>1.6.0-SNAPSHOT</version>
     <relativePath>../project/pom.xml</relativePath>
   </parent>
+
+  <!-- TODO: when out of labs, switch to org.jclouds.provider -->
+  <groupId>org.jclouds.labs</groupId>
   <artifactId>joyentcloud</artifactId>
-  <name>jcloud joyentcloud api</name>
+  <name>jcloud joyentcloud provider</name>
   <description>jclouds components to access the Joyent Cloud</description>
   <packaging>bundle</packaging>
 
