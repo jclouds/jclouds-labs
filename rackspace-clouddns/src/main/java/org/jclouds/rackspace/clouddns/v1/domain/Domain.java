@@ -48,13 +48,13 @@ public class Domain {
    private final int ttl;
    private final Set<String> nameservers;
    private final Set<Subdomain> subdomains;
-   private final Set<Record> records;
+   private final Set<RecordDetail> records;
 
    @ConstructorProperties({ "id", "name", "emailAddress", "comment", "created", "updated", "accountId", "ttl",
          "nameservers", "subdomains", "recordsList" })
    protected Domain(int id, String name, String email, @Nullable String comment, Date created, Date updated,
          int accountId, int ttl, @Nullable Set<String> nameservers, @Nullable Set<Subdomain> nameToSubdomain,
-         @Nullable Set<Record> records) {
+         @Nullable Set<RecordDetail> records) {
       this.id = id;
       this.name = name;
       this.email = email;
@@ -65,7 +65,7 @@ public class Domain {
       this.ttl = ttl;
       this.nameservers = nameservers != null ? nameservers : ImmutableSet.<String> of();
       this.subdomains = nameToSubdomain != null ? nameToSubdomain : ImmutableSet.<Subdomain> of();
-      this.records = records != null ? records : ImmutableSet.<Record> of();
+      this.records = records != null ? records : ImmutableSet.<RecordDetail> of();
    }
 
    public int getId() {
@@ -108,7 +108,7 @@ public class Domain {
       return subdomains;
    }
 
-   public Set<Record> getRecords() {
+   public Set<RecordDetail> getRecords() {
       return records;
    }
 

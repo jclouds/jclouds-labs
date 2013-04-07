@@ -18,6 +18,7 @@
  */
 package org.jclouds.rackspace.clouddns.v1.features;
 
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
@@ -43,7 +44,7 @@ public class LimitApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> {
             rackspaceAuthWithUsernameAndApiKey,
             responseWithAccess, 
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/limit-list.json")).build()
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/limit-list.json")).build()
       ).getLimitApi();
 
       Limits limits = api.list();
@@ -65,7 +66,7 @@ public class LimitApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> {
             rackspaceAuthWithUsernameAndApiKey,
             responseWithAccess, 
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/limit-types-list.json")).build()
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/limit-types-list.json")).build()
       ).getLimitApi();
 
       Iterable<String> limitTypes = api.listTypes();

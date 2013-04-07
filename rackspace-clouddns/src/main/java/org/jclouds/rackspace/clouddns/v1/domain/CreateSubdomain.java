@@ -33,7 +33,7 @@ public class CreateSubdomain {
    private final Optional<Integer> ttl;
    private final Optional<String> comment;
 
-   protected CreateSubdomain(String name, String email, Optional<Integer> ttl, Optional<String> comment) {
+   private CreateSubdomain(String name, String email, Optional<Integer> ttl, Optional<String> comment) {
       this.name = checkNotNull(name, "name required");
       this.emailAddress = checkNotNull(email, "email required");
       this.ttl = ttl;
