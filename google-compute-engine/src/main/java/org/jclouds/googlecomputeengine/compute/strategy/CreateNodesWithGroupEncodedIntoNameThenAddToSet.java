@@ -122,18 +122,16 @@ public class CreateNodesWithGroupEncodedIntoNameThenAddToSet extends
     */
    private Network getOrCreateNetwork(GoogleComputeEngineTemplateOptions templateOptions, String sharedResourceName) {
 
-      String networkName = templateOptions.getNetworkName().isPresent() ? templateOptions.getNetworkName().get() :
-              sharedResourceName;
+      String networkName = templateOptions.getNetworkName().or(sharedResourceName);
 
       // check if the network was previously created (cache???)
       Network network = api.getNetworkApiForProject(userProject.get()).get(networkName);
 
       if (network != null) {
          return network;
+      } else if (templateOptions.getNetwork().isPresent()) {
+         throw new IllegalArgumentException("requested network " + networkName + " does not exist"); 
       }
-
-      checkState(templateOptions.getNetwork().isPresent(), "user defined network does not exist: " + templateOptions
-              .getNetwork().get());
 
       AtomicReference<Operation> operation = new AtomicReference<Operation>(api.getNetworkApiForProject(userProject
               .get()).createInIPv4Range(sharedResourceName, DEFAULT_INTERNAL_NETWORK_RANGE));
