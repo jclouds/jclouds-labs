@@ -19,9 +19,9 @@
 package org.jclouds.rackspace.clouddns.v1.features;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.List;
@@ -30,12 +30,13 @@ import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import org.jclouds.rackspace.clouddns.v1.domain.CreateDomain;
-import org.jclouds.rackspace.clouddns.v1.domain.CreateRecord;
 import org.jclouds.rackspace.clouddns.v1.domain.CreateSubdomain;
 import org.jclouds.rackspace.clouddns.v1.domain.Domain;
 import org.jclouds.rackspace.clouddns.v1.domain.Record;
+import org.jclouds.rackspace.clouddns.v1.domain.RecordDetail;
 import org.jclouds.rackspace.clouddns.v1.domain.Subdomain;
 import org.jclouds.rackspace.clouddns.v1.domain.UpdateDomain;
+import org.jclouds.rackspace.clouddns.v1.functions.DomainFunctions;
 import org.jclouds.rackspace.clouddns.v1.internal.BaseCloudDNSApiLiveTest;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Test;
@@ -50,13 +51,14 @@ import com.google.common.collect.Maps;
 @Test(groups = "live", singleThreaded = true, testName = "DomainApiLiveTest")
 public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
 
-   private static final String JCLOUDS_EXAMPLE = System.getProperty("user.name").replace('.', '-') + "-clouddnstest-jclouds.org";
+   // just in case the username has a '.' we replace it to avoid creating subdomains
+   private static final String JCLOUDS_EXAMPLE = System.getProperty("user.name").replace('.', '-') + "-domaintest-jclouds.org";
    
    private Map<String, Domain> testDomains;
 
    @Test
    public void testCreateDomainsWithSubdomainsAndRecords() throws Exception {
-      CreateRecord createMXRecord = CreateRecord.builder()
+      Record createMXRecord = Record.builder()
             .type("MX")
             .name(JCLOUDS_EXAMPLE)
             .data("mail." + JCLOUDS_EXAMPLE)
@@ -65,7 +67,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             .ttl(60000)
             .build();
       
-      CreateRecord createARecord = CreateRecord.builder()
+      Record createARecord = Record.builder()
             .type("A")
             .name(JCLOUDS_EXAMPLE)
             .data("10.0.0.1")
@@ -73,7 +75,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             .ttl(60000)
             .build();
       
-      List<CreateRecord> createRecords = ImmutableList.of(createMXRecord, createARecord);
+      List<Record> createRecords = ImmutableList.of(createMXRecord, createARecord);
       
       CreateSubdomain createSubdomain1 = CreateSubdomain.builder()
             .name("dev." + JCLOUDS_EXAMPLE)
@@ -106,7 +108,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       Iterable<CreateDomain> createDomains = ImmutableList.of(createDomain1, createDomain2);      
-      testDomains = Domains.getNameToDomainMap(Domains.create(cloudDNSApi, createDomains));
+      testDomains = DomainFunctions.toDomainMap(Domains.create(cloudDNSApi, createDomains));
 
       assertEquals(testDomains.size(), 2);
 
@@ -152,10 +154,10 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       
       assertEquals(jclouds.getRecords().size(), 2);
       
-      Record mxRecord = null;
-      Record aRecord = null;
+      RecordDetail mxRecord = null;
+      RecordDetail aRecord = null;
       
-      for (Record record: jclouds.getRecords()) {
+      for (RecordDetail record: jclouds.getRecords()) {
          if (record.getType().equals("MX")) {
             mxRecord = record;
          } else if (record.getType().equals("A")) {
@@ -166,8 +168,8 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       assertNotNull(mxRecord.getId());
       assertEquals(mxRecord.getType(), "MX");
       assertEquals(mxRecord.getName(), JCLOUDS_EXAMPLE);
-      assertEquals(mxRecord.getPriority().get().intValue(), 11235);
-      assertEquals(mxRecord.getComment().get(), "MX Record");
+      assertEquals(mxRecord.getPriority().intValue(), 11235);
+      assertEquals(mxRecord.getComment(), "MX Record");
       assertEquals(mxRecord.getTTL(), 60000);
       assertTrue(mxRecord.getCreated().before(now));
       assertTrue(mxRecord.getUpdated().before(now));
@@ -175,8 +177,8 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       assertNotNull(aRecord.getId());
       assertEquals(aRecord.getType(), "A");
       assertEquals(aRecord.getName(), JCLOUDS_EXAMPLE);
-      assertFalse(aRecord.getPriority().isPresent());
-      assertEquals(aRecord.getComment().get(), "A Record");
+      assertNull(aRecord.getPriority());
+      assertEquals(aRecord.getComment(), "A Record");
       assertEquals(aRecord.getTTL(), 60000);
       assertTrue(aRecord.getCreated().before(now));
       assertTrue(aRecord.getUpdated().before(now));
@@ -272,11 +274,11 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       
       assertEquals(jclouds.getRecords().size(), 4); // 2 created above + 2 nameserver (NS) records
       
-      Record mxRecord = null;
-      Record aRecord = null;
-      Record nsRecord = null;
+      RecordDetail mxRecord = null;
+      RecordDetail aRecord = null;
+      RecordDetail nsRecord = null;
       
-      for (Record record: jclouds.getRecords()) {
+      for (RecordDetail record: jclouds.getRecords()) {
          if (record.getType().equals("MX")) {
             mxRecord = record;
          } else if (record.getType().equals("A")) {
@@ -289,8 +291,8 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       assertNotNull(mxRecord.getId());
       assertEquals(mxRecord.getType(), "MX");
       assertEquals(mxRecord.getName(), JCLOUDS_EXAMPLE);
-      assertEquals(mxRecord.getPriority().get().intValue(), 11235);
-      assertEquals(mxRecord.getComment().get(), "MX Record");
+      assertEquals(mxRecord.getPriority().intValue(), 11235);
+      assertEquals(mxRecord.getComment(), "MX Record");
       assertEquals(mxRecord.getTTL(), 60000);
       assertTrue(mxRecord.getCreated().before(now));
       assertTrue(mxRecord.getUpdated().before(now));
@@ -298,8 +300,8 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       assertNotNull(aRecord.getId());
       assertEquals(aRecord.getType(), "A");
       assertEquals(aRecord.getName(), JCLOUDS_EXAMPLE);
-      assertFalse(aRecord.getPriority().isPresent());
-      assertEquals(aRecord.getComment().get(), "A Record");
+      assertNull(aRecord.getPriority());
+      assertEquals(aRecord.getComment(), "A Record");
       assertEquals(aRecord.getTTL(), 60000);
       assertTrue(aRecord.getCreated().before(now));
       assertTrue(aRecord.getUpdated().before(now));
@@ -369,7 +371,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             "imp-" + JCLOUDS_EXAMPLE + ".      600   IN A  50.56.174.152"); 
 
       Domain domain = Domains.importFormat(cloudDNSApi, contents, Domain.Format.BIND_9);
-      Record record = domain.getRecords().iterator().next();
+      RecordDetail record = domain.getRecords().iterator().next();
       
       assertEquals(domain.getName(), "imp-" + JCLOUDS_EXAMPLE);
       assertEquals(domain.getEmail(), "jclouds@imp-" + JCLOUDS_EXAMPLE);

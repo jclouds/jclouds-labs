@@ -32,7 +32,7 @@ public class DomainChange {
    private final List<Change> changes;
 
    @ConstructorProperties({ "from", "to", "changes" })
-   protected DomainChange(Date from, Date to, List<Change> changes) {
+   private DomainChange(Date from, Date to, List<Change> changes) {
       this.from = from;
       this.to = to;
       this.changes = changes;

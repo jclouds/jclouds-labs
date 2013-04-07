@@ -59,6 +59,7 @@ public interface DomainApi {
    /**
     * The resulting list is flat, and does not break the domains down hierarchically by subdomain. All representative
     * domains are included in the list, even if a domain is conceptually a subdomain of another domain in the list.
+    * Records are not included.
     */
    PagedIterable<Domain> list();
 
@@ -102,20 +103,17 @@ public interface DomainApi {
     * 
     * @see RecordApi
     */
-   @SuppressWarnings("rawtypes")
-   Job update(int id, UpdateDomain updateDomain);
+   Job<Void> update(int id, UpdateDomain updateDomain);
 
    /**
     * This call modifies the domain's TTL only.
     */
-   @SuppressWarnings("rawtypes")
-   Job updateTTL(Iterable<Integer> ids, int ttl);
+   Job<Void> updateTTL(Iterable<Integer> ids, int ttl);
 
    /**
     * This call modifies the domain's email only.
     */
-   @SuppressWarnings("rawtypes")
-   Job updateEmail(Iterable<Integer> ids, String email);
+   Job<Void> updateEmail(Iterable<Integer> ids, String email);
 
    /**
     * This call removes one or more specified domains from the account; when a domain is deleted, its immediate resource
@@ -124,8 +122,7 @@ public interface DomainApi {
     * optional deleteSubdomains parameter on domains without subdomains does not result in a failure. When a domain is
     * deleted, any and all domain data is immediately purged and is not recoverable via the API.
     */
-   @SuppressWarnings("rawtypes")
-   Job delete(Iterable<Integer> ids, boolean deleteSubdomains);
+   Job<Void> delete(Iterable<Integer> ids, boolean deleteSubdomains);
 
    /**
     * This call provides the BIND (Berkeley Internet Name Domain) 9 formatted contents of the requested domain. This

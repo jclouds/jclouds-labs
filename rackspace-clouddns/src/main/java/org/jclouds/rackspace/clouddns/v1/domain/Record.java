@@ -3,7 +3,7 @@
  * contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  jclouds licenses this file
- * to you under the Apache License, String 2.0 (the
+ * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
@@ -18,8 +18,8 @@
  */
 package org.jclouds.rackspace.clouddns.v1.domain;
 
-import java.beans.ConstructorProperties;
-import java.util.Date;
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
 
 import org.jclouds.javax.annotation.Nullable;
 
@@ -31,69 +31,70 @@ import com.google.common.base.Optional;
  * @author Everett Toews
  */
 public class Record {
-   private final String id;
    private final String name;
    private final String type;
-   private final int ttl;
+   private final Optional<Integer> ttl;
    private final String data;
-   private final Optional<Integer> priority;
-   private final Optional<String> comment;
-   private final Date created;
-   private final Date updated;
+   private final Integer priority;
+   private final String comment;
 
-   @ConstructorProperties({ "id", "name", "type", "ttl", "data", "priority", "comment", "created", "updated" })
-   protected Record(String id, String name, String type, int ttl, String data, @Nullable Integer priority,
-         @Nullable String comment, Date created, Date updated) {
-      this.id = id;
+   private Record(@Nullable String name, @Nullable String type, Optional<Integer> ttl, @Nullable String data,
+         @Nullable Integer priority, @Nullable String comment) {
       this.name = name;
       this.type = type;
       this.ttl = ttl;
       this.data = data;
-      this.priority = Optional.fromNullable(priority);
-      this.comment = Optional.fromNullable(comment);
-      this.created = created;
-      this.updated = updated;
+      this.priority = priority;
+      this.comment = comment;
    }
 
-   public String getId() {
-      return id;
-   }
-
+   /**
+    * @see Record.Builder#name(String)
+    */
    public String getName() {
       return name;
    }
 
+   /**
+    * @see Record.Builder#type(String)
+    */
    public String getType() {
       return type;
    }
 
-   public int getTTL() {
+   /**
+    * @see Record.Builder#ttl(Integer)
+    */
+   public Optional<Integer> getTTL() {
       return ttl;
    }
 
+   /**
+    * @see Record.Builder#data(String)
+    */
    public String getData() {
       return data;
    }
 
-   public Optional<Integer> getPriority() {
+   /**
+    * @see Record.Builder#priority(Integer)
+    */
+   @Nullable
+   public Integer getPriority() {
       return priority;
    }
 
-   public Optional<String> getComment() {
+   /**
+    * @see Record.Builder#comment(String)
+    */
+   @Nullable
+   public String getComment() {
       return comment;
-   }
-
-   public Date getCreated() {
-      return created;
-   }
-
-   public Date getUpdated() {
-      return updated;
    }
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(id);
+      return Objects.hashCode(name, type, ttl, data, priority, comment);
    }
 
    @Override
@@ -104,17 +105,117 @@ public class Record {
          return false;
       Record that = Record.class.cast(obj);
 
-      return Objects.equal(this.id, that.id);
+      return equal(this.name, that.name) && equal(this.type, that.type) && equal(this.ttl, that.ttl)
+            && equal(this.data, that.data) && equal(this.priority, that.priority) && equal(this.comment, that.comment);
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id).add("name", name).add("type", type)
-            .add("ttl", ttl).add("data", data).add("priority", priority.orNull()).add("comment", comment.orNull())
-            .add("created", created).add("updated", updated);
+      return toStringHelper(this).omitNullValues().add("name", name).add("type", type).add("ttl", ttl)
+            .add("data", data).add("priority", priority).add("comment", comment);
    }
 
    @Override
    public String toString() {
       return string().toString();
+   }
+
+   public final static class Builder {
+      private String name;
+      private String type;
+      private Optional<Integer> ttl = Optional.absent();
+      private String data;
+      private Integer priority;
+      private String comment;
+
+      /**
+       * The name for the domain or subdomain. Must be a fully qualified domain name (FQDN) that doesn't end in a '.'.
+       * </p>
+       * Users can add one or more wildcard records to any domain or sub-domain on their account. For information on the
+       * intent and use of wildcard records, see the DNS literature including RFC 1034, section 4.3.3, and RFC 4595.
+       * </p>
+       * Wildcards are supported for A, AAAA, CNAME, MX, SRV and TXT record types.
+       * </p>
+       * A valid wildcard DNS record is specified by using an asterisk ("*") as the leftmost part of a record name, for
+       * example *.example.com. An asterisk in any other part of a record name is invalid. Only the asterisk ("*") is
+       * accepted as a wildcard character.
+       * </p>
+       * For SRV records, this specifies the entire service name, which is made up of the service, protocol, and domain
+       * name to which the record belongs. The service and protocol fields of the service name can be modified but not
+       * the domain name field.
+       */
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
+
+      /**
+       * The record type to add.
+       * </p>
+       * See <a href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/supported_record_types.html">
+       * Supported Record Types</a>
+       */
+      public Builder type(String type) {
+         this.type = type;
+         return this;
+      }
+
+      /**
+       * The duration in seconds that the record may be cached by clients. If specified, must be greater than 300. The
+       * default value, if not specified, is 3600.
+       */
+      public Builder ttl(int ttl) {
+         this.ttl = Optional.fromNullable(ttl);
+         return this;
+      }
+
+      /**
+       * @see Builder#ttl(int)
+       */
+      public Builder ttl(Optional<Integer> ttl) {
+         this.ttl = ttl;
+         return this;
+      }
+
+      /**
+       * The data field for PTR, A, and AAAA records must be a valid IPv4 or IPv6 IP address.
+       */
+      public Builder data(String data) {
+         this.data = data;
+         return this;
+      }
+
+      /**
+       * Required for MX and SRV records, but forbidden for other record types. If specified, must be an integer from 0
+       * to 65535.
+       */
+      public Builder priority(Integer priority) {
+         this.priority = priority;
+         return this;
+      }
+
+      /**
+       * If included, its length must be less than or equal to 160 characters.
+       */
+      public Builder comment(String comment) {
+         this.comment = comment;
+         return this;
+      }
+
+      public Record build() {
+         return new Record(name, type, ttl, data, priority, comment);
+      }
+
+      public Builder from(Record in) {
+         return name(in.getName()).type(in.getType()).ttl(in.getTTL()).data(in.getData()).priority(in.getPriority())
+               .comment(in.getComment());
+      }
+   }
+
+   public static Builder builder() {
+      return new Builder();
+   }
+
+   public Builder toBuilder() {
+      return builder().from(this);
    }
 }
