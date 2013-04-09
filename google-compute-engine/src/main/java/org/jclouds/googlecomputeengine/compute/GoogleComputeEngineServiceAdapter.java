@@ -53,6 +53,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.contains;
+import static com.google.common.collect.Iterables.filter;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.GOOGLE_PROJECT;
 import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.OPERATION_COMPLETE_INTERVAL;
@@ -178,6 +180,17 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
    @Override
    public Iterable<Instance> listNodes() {
       return api.getInstanceApiForProject(userProject.get()).list().concat();
+   }
+
+   @Override
+   public Iterable<Instance> listNodesByIds(final Iterable<String> ids) {
+      return filter(listNodes(), new Predicate<Instance>() {
+
+         @Override
+         public boolean apply(Instance instance) {
+            return contains(ids, instance.getName());
+         }
+      });
    }
 
    @Override
