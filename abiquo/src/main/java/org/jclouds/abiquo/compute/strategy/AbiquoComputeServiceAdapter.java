@@ -21,6 +21,8 @@ package org.jclouds.abiquo.compute.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.concat;
+import static com.google.common.collect.Iterables.contains;
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 
 import java.util.List;
@@ -237,6 +239,17 @@ public class AbiquoComputeServiceAdapter
    @Override
    public Iterable<VirtualMachine> listNodes() {
       return cloudService.listVirtualMachines();
+   }
+
+   @Override
+   public Iterable<VirtualMachine> listNodesByIds(final Iterable<String> ids) {
+      return filter(listNodes(), new Predicate<VirtualMachine>() {
+
+         @Override
+         public boolean apply(VirtualMachine machine) {
+            return contains(ids, Integer.toString(machine.getId()));
+         }
+      });
    }
 
    private static Predicate<VirtualMachine> vmId(final String id) {
