@@ -19,6 +19,8 @@
 package org.jclouds.fujitsu.fgcp.compute.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.contains;
+import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.util.Predicates2.retry;
 
 import java.util.List;
@@ -246,6 +248,17 @@ public class FGCPComputeServiceAdapter implements
       }
 
       return servers.build();
+   }
+
+   @Override
+   public Iterable<VServerMetadata> listNodesByIds(final Iterable<String> ids) {
+      return filter(listNodes(), new Predicate<VServerMetadata>() {
+
+         @Override
+         public boolean apply(VServerMetadata server) {
+            return contains(ids, server.getId());
+         }
+      });
    }
 
    /**
