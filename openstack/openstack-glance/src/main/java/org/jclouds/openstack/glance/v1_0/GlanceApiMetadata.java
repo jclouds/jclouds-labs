@@ -25,17 +25,15 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.openstack.glance.v1_0.config.GlanceRestClientModule;
+import org.jclouds.openstack.glance.v1_0.config.GlanceHttpApiModule;
+import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.MappedAuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
 import org.jclouds.openstack.v2_0.ServiceType;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
@@ -43,11 +41,7 @@ import com.google.inject.Module;
  * 
  * @author Adrian Cole
  */
-public class GlanceApiMetadata extends BaseRestApiMetadata {
-
-   public static final TypeToken<RestContext<GlanceApi, GlanceAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<GlanceApi, GlanceAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class GlanceApiMetadata extends BaseHttpApiMetadata<GlanceApi> {
 
    @Override
    public Builder toBuilder() {
@@ -63,16 +57,15 @@ public class GlanceApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(SERVICE_TYPE, ServiceType.IMAGE);
       properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<GlanceApi, Builder> {
 
       protected Builder() {
-         super(GlanceApi.class, GlanceAsyncApi.class);
           id("openstack-glance")
          .name("OpenStack Glance API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
@@ -83,10 +76,10 @@ public class GlanceApiMetadata extends BaseRestApiMetadata {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(GlanceApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                                     .add(MappedAuthenticationApiModule.class)
+                                     .add(AuthenticationApiModule.class)
                                      .add(KeystoneAuthenticationModule.class)
                                      .add(ZoneModule.class)
-                                     .add(GlanceRestClientModule.class).build());
+                                     .add(GlanceHttpApiModule.class).build());
       }
       
       @Override

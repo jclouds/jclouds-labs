@@ -19,10 +19,7 @@
 package org.jclouds.openstack.glance.v1_0.config;
 
 
-import static org.jclouds.reflect.Reflection2.typeToken;
-
 import java.net.URI;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -36,25 +33,18 @@ import org.jclouds.http.annotation.ServerError;
 import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
-import org.jclouds.openstack.glance.v1_0.GlanceAsyncApi;
-import org.jclouds.openstack.glance.v1_0.features.ImageApi;
-import org.jclouds.openstack.glance.v1_0.features.ImageAsyncApi;
 import org.jclouds.openstack.glance.v1_0.handlers.GlanceErrorHandler;
 import org.jclouds.openstack.v2_0.domain.Extension;
-import org.jclouds.openstack.v2_0.features.ExtensionApi;
-import org.jclouds.openstack.v2_0.features.ExtensionAsyncApi;
 import org.jclouds.openstack.v2_0.functions.PresentWhenExtensionAnnotationNamespaceEqualsAnyNamespaceInExtensionsSet;
-import org.jclouds.rest.ConfiguresRestClient;
-import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
 import org.jclouds.rest.functions.ImplicitOptionalConverter;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Provides;
 
 /**
@@ -62,20 +52,10 @@ import com.google.inject.Provides;
  * 
  * @author Adrian Cole
  */
-@ConfiguresRestClient
-public class GlanceRestClientModule<S extends GlanceApi, A extends GlanceAsyncApi> extends RestClientModule<S, A> {
+@ConfiguresHttpApi
+public class GlanceHttpApiModule extends HttpApiModule<GlanceApi> {
 
-   public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>> builder()
-         .put(ExtensionApi.class, ExtensionAsyncApi.class)
-         .put(ImageApi.class, ImageAsyncApi.class)
-         .build();
-
-   public GlanceRestClientModule() {
-      super(TypeToken.class.cast(typeToken(GlanceApi.class)), TypeToken.class.cast(typeToken(GlanceAsyncApi.class)), DELEGATE_MAP);
-   }
-
-   protected GlanceRestClientModule(TypeToken<S> syncClientType, TypeToken<A> asyncClientType, Map<Class<?>, Class<?>> sync2Async) {
-      super(syncClientType, asyncClientType, sync2Async);
+   public GlanceHttpApiModule() {
    }
 
    @Override

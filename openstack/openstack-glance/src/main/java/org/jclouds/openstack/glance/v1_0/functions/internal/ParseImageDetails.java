@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.collect.IterableWithMarker;
-import org.jclouds.collect.internal.CallerArg0ToPagedIterable;
+import org.jclouds.collect.internal.Arg0ToPagedIterable;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
@@ -39,6 +39,7 @@ import org.jclouds.openstack.v2_0.domain.Link;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -63,7 +64,7 @@ public class ParseImageDetails extends ParseJson<Images> {
       super(json, TypeLiteral.get(Images.class));
    }
 
-   public static class ToPagedIterable extends CallerArg0ToPagedIterable<ImageDetails, ToPagedIterable> {
+   public static class ToPagedIterable extends Arg0ToPagedIterable.FromCaller<ImageDetails, ToPagedIterable> {
 
       private final GlanceApi api;
 
@@ -73,7 +74,8 @@ public class ParseImageDetails extends ParseJson<Images> {
       }
 
       @Override
-      protected Function<Object, IterableWithMarker<ImageDetails>> markerToNextForCallingArg0(final String zone) {
+      protected Function<Object, IterableWithMarker<ImageDetails>> markerToNextForArg0(Optional<Object> arg0) {
+         String zone = arg0.isPresent() ? arg0.get().toString() : null;
          final ImageApi imageApi = api.getImageApiForZone(zone);
          return new Function<Object, IterableWithMarker<ImageDetails>>() {
 

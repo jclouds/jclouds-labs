@@ -20,17 +20,10 @@ package org.jclouds.openstack.glance.v1_0.internal;
 
 import java.util.Properties;
 
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.openstack.glance.v1_0.GlanceApiMetadata;
-import org.jclouds.openstack.glance.v1_0.GlanceAsyncApi;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
-import org.jclouds.rest.RestContext;
-import org.testng.annotations.AfterGroups;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * Tests behavior of {@code GlanceApi}
@@ -38,19 +31,10 @@ import com.google.common.reflect.TypeToken;
  * @author Adrian Cole
  */
 @Test(groups = "live")
-public class BaseGlanceApiLiveTest extends BaseContextLiveTest<RestContext<GlanceApi, GlanceAsyncApi>> {
+public class BaseGlanceApiLiveTest extends BaseApiLiveTest<GlanceApi> {
 
    public BaseGlanceApiLiveTest() {
       provider = "openstack-glance";
-   }
-
-   protected RestContext<GlanceApi, GlanceAsyncApi> glanceContext;
-
-   @BeforeGroups(groups = { "integration", "live" })
-   @Override
-   public void setupContext() {
-      super.setupContext();
-      glanceContext = context;
    }
 
    @Override
@@ -59,10 +43,4 @@ public class BaseGlanceApiLiveTest extends BaseContextLiveTest<RestContext<Glanc
       setIfTestSystemPropertyPresent(props, KeystoneProperties.CREDENTIAL_TYPE);
       return props;
    }
-
-   @Override
-   protected TypeToken<RestContext<GlanceApi, GlanceAsyncApi>> contextType() {
-      return GlanceApiMetadata.CONTEXT_TOKEN;
-   }
-
 }
