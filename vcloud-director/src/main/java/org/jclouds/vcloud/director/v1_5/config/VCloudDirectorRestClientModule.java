@@ -19,7 +19,7 @@
 package org.jclouds.vcloud.director.v1_5.config;
 
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
-import static org.jclouds.rest.config.BinderUtils.bindMappedHttpApi;
+import static org.jclouds.rest.config.BinderUtils.bindSyncToAsyncHttpApi;
 
 import java.net.URI;
 import java.util.Map;
@@ -145,16 +145,16 @@ public class VCloudDirectorRestClientModule extends RestClientModule<VCloudDirec
       });
       
       // Bind apis that are used directly in Functions, Predicates and other circumstances
-      bindMappedHttpApi(binder(), OrgApi.class, OrgAsyncApi.class);
-      bindMappedHttpApi(binder(), SessionApi.class, SessionAsyncApi.class);
-      bindMappedHttpApi(binder(), TaskApi.class, TaskAsyncApi.class);
-      bindMappedHttpApi(binder(), VAppApi.class, VAppAsyncApi.class);
-      bindMappedHttpApi(binder(), VmApi.class, VmAsyncApi.class);
+      bindSyncToAsyncHttpApi(binder(), OrgApi.class, OrgAsyncApi.class);
+      bindSyncToAsyncHttpApi(binder(), SessionApi.class, SessionAsyncApi.class);
+      bindSyncToAsyncHttpApi(binder(), TaskApi.class, TaskAsyncApi.class);
+      bindSyncToAsyncHttpApi(binder(), VAppApi.class, VAppAsyncApi.class);
+      bindSyncToAsyncHttpApi(binder(), VmApi.class, VmAsyncApi.class);
       
       bind(HttpRetryHandler.class).annotatedWith(ClientError.class).to(InvalidateSessionAndRetryOn401AndLogoutOnClose.class);
       
       super.configure();
-      bindMappedHttpApi(binder(),  VCloudDirectorAdminApi.class, VCloudDirectorAdminAsyncApi.class);
+      bindSyncToAsyncHttpApi(binder(),  VCloudDirectorAdminApi.class, VCloudDirectorAdminAsyncApi.class);
 
    }
    

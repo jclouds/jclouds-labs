@@ -21,7 +21,7 @@ package org.jclouds.abiquo.config;
 
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
-import static org.jclouds.rest.config.BinderUtils.bindMappedHttpApi;
+import static org.jclouds.rest.config.BinderUtils.bindSyncToAsyncHttpApi;
 
 import java.util.List;
 import java.util.Map;
@@ -103,7 +103,7 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoApi, AbiquoAs
    @Override
    protected void configure() {
       super.configure();
-      bindMappedHttpApi(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class);
+      bindSyncToAsyncHttpApi(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class);
       bind(Utils.class).to(ExtendedUtils.class);
    }
 
