@@ -25,13 +25,11 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
+import org.jclouds.oauth.v2.config.OAuthHttpApiModule;
 import org.jclouds.oauth.v2.config.OAuthModule;
-import org.jclouds.oauth.v2.config.OAuthRestClientModule;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
@@ -39,11 +37,7 @@ import com.google.inject.Module;
  *
  * @author David Alves
  */
-public class OAuthApiMetadata extends BaseRestApiMetadata {
-
-   public static final TypeToken<RestContext<OAuthApi, OAuthAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<OAuthApi, OAuthAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class OAuthApiMetadata extends BaseHttpApiMetadata<OAuthApi> {
 
    @Override
    public Builder toBuilder() {
@@ -59,24 +53,23 @@ public class OAuthApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.put(SIGNATURE_OR_MAC_ALGORITHM, "RS256");
       properties.put(PROPERTY_SESSION_INTERVAL, 3600);
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<OAuthApi, Builder> {
 
       protected Builder() {
-         super(OAuthApi.class, OAuthAsyncApi.class);
-         id("oauth").name("OAuth API")
-                 .identityName("service_account")
-                 .credentialName("service_key")
-                 .documentation(URI.create("TODO"))
-                 .version("2")
-                 .defaultProperties(OAuthApiMetadata.defaultProperties())
-                 .defaultModules(ImmutableSet.<Class<? extends Module>>of(OAuthModule.class, OAuthRestClientModule
-                         .class));
+         id("oauth")
+         .name("OAuth API")
+         .identityName("service_account")
+         .credentialName("service_key")
+         .documentation(URI.create("TODO"))
+         .version("2")
+         .defaultProperties(OAuthApiMetadata.defaultProperties())
+         .defaultModules(ImmutableSet.<Class<? extends Module>>of(OAuthModule.class, OAuthHttpApiModule.class));
       }
 
       @Override
