@@ -38,18 +38,17 @@ public class CreateDomain {
    // subdomains is an ImmutableMap for serialization
    private final ImmutableMap<String, Iterable<CreateSubdomain>> subdomains;
    // recordList is an ImmutableMap for serialization
-   private final ImmutableMap<String, Iterable<CreateRecord>> recordsList;
+   private final ImmutableMap<String, Iterable<Record>> recordsList;
 
-   protected CreateDomain(String name, String email, Optional<Integer> ttl, Optional<String> comment,
+   private CreateDomain(String name, String email, Optional<Integer> ttl, Optional<String> comment,
          ImmutableMap<String, Iterable<CreateSubdomain>> subdomains,
-         ImmutableMap<String, Iterable<CreateRecord>> recordsList) {
+         ImmutableMap<String, Iterable<Record>> recordsList) {
       this.name = checkNotNull(name, "name required");
       this.emailAddress = checkNotNull(email, "email required");
       this.ttl = ttl;
       this.comment = comment;
       this.subdomains = subdomains != null ? subdomains : ImmutableMap.<String, Iterable<CreateSubdomain>> of();
-      this.recordsList = recordsList != null ? recordsList : ImmutableMap.<String, Iterable<CreateRecord>> of();
-      ;
+      this.recordsList = recordsList != null ? recordsList : ImmutableMap.<String, Iterable<Record>> of();
    }
 
    /**
@@ -90,7 +89,7 @@ public class CreateDomain {
    /**
     * @see Builder#records(Iterable)
     */
-   public Iterable<CreateRecord> getRecords() {
+   public Iterable<Record> getRecords() {
       return recordsList.get("records");
    }
 
@@ -127,7 +126,7 @@ public class CreateDomain {
       private Optional<Integer> ttl = Optional.absent();
       private Optional<String> comment = Optional.absent();
       private ImmutableMap<String, Iterable<CreateSubdomain>> subdomains;
-      private ImmutableMap<String, Iterable<CreateRecord>> records;
+      private ImmutableMap<String, Iterable<Record>> records;
 
       /**
        * The name for the domain or subdomain. Must be a fully qualified domain name (FQDN) that doesn't end in a '.'.
@@ -175,8 +174,11 @@ public class CreateDomain {
 
       /**
        * Create Records for this Domain.
+       * </p>
+       * See <a href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/supported_record_types.html">
+       * Supported Record Types</a>
        */
-      public Builder records(Iterable<CreateRecord> records) {
+      public Builder records(Iterable<Record> records) {
          if (records != null) {
             this.records = ImmutableMap.of("records", records);
          }

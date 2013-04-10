@@ -19,6 +19,7 @@
 package org.jclouds.rackspace.clouddns.v1.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.toRecordDetails;
 
 import java.beans.ConstructorProperties;
 
@@ -27,7 +28,8 @@ import javax.inject.Inject;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.v2_0.domain.Link;
-import org.jclouds.rackspace.clouddns.v1.domain.Domain;
+import org.jclouds.rackspace.clouddns.v1.domain.RecordDetail;
+import org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.RawRecord;
 import org.jclouds.rackspace.cloudidentity.v2_0.domain.PaginatedCollection;
 
 import com.google.common.base.Function;
@@ -35,27 +37,35 @@ import com.google.common.base.Function;
 /**
  * @author Everett Toews
  */
-public class ParseDomains implements Function<HttpResponse, PaginatedCollection<Domain>> {
+public class ParseRecords implements Function<HttpResponse, PaginatedCollection<RecordDetail>> {
 
-   private final ParseJson<Domains> json;
+   private final ParseJson<RawRecords> json;
 
    @Inject
-   ParseDomains(ParseJson<Domains> json) {
+   ParseRecords(ParseJson<RawRecords> json) {
       this.json = checkNotNull(json, "json");
    }
 
    @Override
-   public PaginatedCollection<Domain> apply(HttpResponse response) {
-      Domains domains = json.apply(response);
+   public PaginatedCollection<RecordDetail> apply(HttpResponse response) {
+      RawRecords rawRecords = json.apply(response);
+      Iterable<RecordDetail> records = rawRecords.transform(toRecordDetails);
 
-      return domains;
+      return new Records(records, rawRecords.getLinks(), rawRecords.getTotalEntries());
    }
 
-   private static class Domains extends PaginatedCollection<Domain> {
+   private static class RawRecords extends PaginatedCollection<RawRecord> {
 
-      @ConstructorProperties({ "domains", "links", "totalEntries" })
-      protected Domains(Iterable<Domain> domains, Iterable<Link> links, int totalEntries) {
-         super(domains, links, totalEntries);
+      @ConstructorProperties({ "records", "links", "totalEntries" })
+      protected RawRecords(Iterable<RawRecord> records, Iterable<Link> links, int totalEntries) {
+         super(records, links, totalEntries);
+      }
+   }
+
+   private static class Records extends PaginatedCollection<RecordDetail> {
+
+      protected Records(Iterable<RecordDetail> records, Iterable<Link> links, int totalEntries) {
+         super(records, links, totalEntries);
       }
    }
 }

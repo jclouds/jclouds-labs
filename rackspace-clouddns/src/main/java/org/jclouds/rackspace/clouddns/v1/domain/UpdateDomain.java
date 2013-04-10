@@ -32,7 +32,7 @@ public class UpdateDomain {
    private final Optional<Integer> ttl;
    private final Optional<String> comment;
 
-   protected UpdateDomain(Optional<String> email, Optional<Integer> ttl, Optional<String> comment) {
+   private UpdateDomain(Optional<String> email, Optional<Integer> ttl, Optional<String> comment) {
       this.emailAddress = email;
       this.ttl = ttl;
       this.comment = comment;

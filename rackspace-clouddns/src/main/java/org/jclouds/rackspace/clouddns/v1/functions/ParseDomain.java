@@ -19,6 +19,7 @@
 package org.jclouds.rackspace.clouddns.v1.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.toRecordDetails;
 
 import java.beans.ConstructorProperties;
 import java.util.Date;
@@ -31,10 +32,12 @@ import javax.inject.Named;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.rackspace.clouddns.v1.domain.Domain;
-import org.jclouds.rackspace.clouddns.v1.domain.Record;
+import org.jclouds.rackspace.clouddns.v1.domain.RecordDetail;
 import org.jclouds.rackspace.clouddns.v1.domain.Subdomain;
+import org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.RawRecord;
 
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 
@@ -52,18 +55,18 @@ public class ParseDomain implements Function<HttpResponse, Domain> {
 
    @Override
    public Domain apply(HttpResponse response) {
-      RawDomain domainParsed = json.apply(response);
+      RawDomain rawDomain = json.apply(response);
 
-      if (domainParsed == null)
+      if (rawDomain == null)
          return null;
 
-      return domainParsed.getDomain();
+      return rawDomain.getDomain();
    }
 
    /**
     * This class is here only to deal with the domain JSON format in Cloud DNS.
     */
-   public static class RawDomain extends Domain {
+   static class RawDomain extends Domain {
       @ConstructorProperties({ "id", "name", "emailAddress", "comment", "created", "updated", "accountId", "ttl",
             "nameservers", "subdomains", "recordsList" })
       protected RawDomain(int id, String name, String emailAddress, String comment, Date created, Date updated,
@@ -96,12 +99,13 @@ public class ParseDomain implements Function<HttpResponse, Domain> {
          }
       }
 
-      private static Set<Record> transform(RecordsWithTotalEntries recordsWTE) {
+      private static Set<RecordDetail> transform(RecordsWithTotalEntries recordsWTE) {
          if (recordsWTE == null) {
             return null;
          }
          else {
-            return ImmutableSet.<Record> copyOf(recordsWTE.records);
+            Set<RecordDetail> recordDetails = FluentIterable.from(recordsWTE.records).transform(toRecordDetails).toSet();
+            return recordDetails;
          }
       }
 
@@ -124,10 +128,10 @@ public class ParseDomain implements Function<HttpResponse, Domain> {
        */
       private static class RecordsWithTotalEntries {
          // ignore "totalEntries" in the JSON as it can just be derived form the size of records
-         private Set<Record> records;
+         private Set<RawRecord> records;
 
          @ConstructorProperties({ "records" })
-         protected RecordsWithTotalEntries(Set<Record> records) {
+         protected RecordsWithTotalEntries(Set<RawRecord> records) {
             this.records = records;
          }
       }

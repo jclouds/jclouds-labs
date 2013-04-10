@@ -41,7 +41,7 @@ public class Subdomain {
    private final Date updated;
 
    @ConstructorProperties({ "id", "name", "emailAddress", "comment", "created", "updated" })
-   protected Subdomain(int id, String name, String email, @Nullable String comment, Date created, Date updated) {
+   private Subdomain(int id, String name, String email, @Nullable String comment, Date created, Date updated) {
       this.id = id;
       this.name = name;
       this.emailAddress = email;

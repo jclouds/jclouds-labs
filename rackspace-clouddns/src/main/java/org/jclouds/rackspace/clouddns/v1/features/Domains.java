@@ -23,7 +23,6 @@ import static org.jclouds.rackspace.clouddns.v1.predicates.JobPredicates.jobComp
 import static org.jclouds.util.Predicates2.retry;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,8 +33,6 @@ import org.jclouds.rackspace.clouddns.v1.domain.Domain;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
 import org.jclouds.rackspace.clouddns.v1.domain.UpdateDomain;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.Atomics;
 
 /**
@@ -62,9 +59,8 @@ public class Domains {
    /**
     * As per {@link DomainApi#update(int, UpdateDomain)} but waits for the job to complete.
     */
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    public static void update(CloudDNSApi cloudDNSApi, int id, UpdateDomain updateDomain) throws TimeoutException {
-      AtomicReference<Job<Object>> jobRef = new AtomicReference(cloudDNSApi.getDomainApi().update(id, updateDomain));
+      AtomicReference<Job<Void>> jobRef = Atomics.newReference(cloudDNSApi.getDomainApi().update(id, updateDomain));
 
       if (!retry(jobCompleted(cloudDNSApi), 600, 2, 2, SECONDS).apply(jobRef)) {
          throw new TimeoutException("Timeout on update domain: " + jobRef.get());
@@ -74,9 +70,8 @@ public class Domains {
    /**
     * As per {@link DomainApi#updateTTL(Iterable, int) but waits for the job to complete.
     */
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    public static void updateTTL(CloudDNSApi cloudDNSApi, Iterable<Integer> ids, int ttl) throws TimeoutException {
-      AtomicReference<Job<Object>> jobRef = new AtomicReference(cloudDNSApi.getDomainApi().updateTTL(ids, ttl));
+      AtomicReference<Job<Void>> jobRef = Atomics.newReference(cloudDNSApi.getDomainApi().updateTTL(ids, ttl));
 
       if (!retry(jobCompleted(cloudDNSApi), 600, 2, 2, SECONDS).apply(jobRef)) {
          throw new TimeoutException("Timeout on update domain: " + jobRef.get());
@@ -86,9 +81,8 @@ public class Domains {
    /**
     * As per {@link DomainApi#updateEmail(Iterable, String)} but waits for the job to complete.
     */
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    public static void updateEmail(CloudDNSApi cloudDNSApi, Iterable<Integer> ids, String email) throws TimeoutException {
-      AtomicReference<Job<Object>> jobRef = new AtomicReference(cloudDNSApi.getDomainApi().updateEmail(ids, email));
+      AtomicReference<Job<Void>> jobRef = Atomics.newReference(cloudDNSApi.getDomainApi().updateEmail(ids, email));
 
       if (!retry(jobCompleted(cloudDNSApi), 600, 2, 2, SECONDS).apply(jobRef)) {
          throw new TimeoutException("Timeout on update domain: " + jobRef.get());
@@ -98,9 +92,8 @@ public class Domains {
    /**
     * As per {@link DomainApi#delete(Iterable, boolean)} but waits for the job to complete.
     */
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    public static void delete(CloudDNSApi cloudDNSApi, Iterable<Integer> domainIds) throws TimeoutException {
-      AtomicReference<Job<Object>> jobRef = new AtomicReference(cloudDNSApi.getDomainApi().delete(domainIds, true));
+      AtomicReference<Job<Void>> jobRef = Atomics.newReference(cloudDNSApi.getDomainApi().delete(domainIds, true));
 
       if (!retry(jobCompleted(cloudDNSApi), 600, 2, 2, SECONDS).apply(jobRef)) {
          throw new TimeoutException("Timeout on delete domain: " + jobRef.get());
@@ -136,20 +129,4 @@ public class Domains {
 
       return jobRef.get().getResource().get();
    }
-
-   /**
-    * Take a Set of Domains and return a Map of domain name to the Domain.
-    */
-   public static Map<String, Domain> getNameToDomainMap(Set<Domain> domains) {
-      return Maps.uniqueIndex(domains, DOMAIN_TO_NAME);
-   }
-
-   /**
-    * Take a Domain and return its name.
-    */
-   public static final Function<Domain, String> DOMAIN_TO_NAME = new Function<Domain, String>() {
-      public String apply(Domain domain) {
-         return domain.getName();
-      }
-   };
 }
