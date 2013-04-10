@@ -18,7 +18,9 @@
  */
 package org.jclouds.openstack.glance.v1_0;
 
+import java.io.Closeable;
 import java.util.Set;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Zone;
 import org.jclouds.location.functions.ZoneToEndpoint;
@@ -30,14 +32,13 @@ import org.jclouds.rest.annotations.EndpointParam;
 import com.google.inject.Provides;
 
 /**
- * Provides synchronous access to Glance.
+ * Provides access to Glance.
  * <p/>
  * 
- * @see GlanceAsyncApi
  * @see <a href="http://glance.openstack.org/glanceapi.html">api doc</a>
  * @author Adrian Cole
  */
-public interface GlanceApi {
+public interface GlanceApi extends Closeable {
    /**
     * 
     * @return the Zone codes configured
@@ -47,14 +48,14 @@ public interface GlanceApi {
    Set<String> getConfiguredZones();
 
    /**
-    * Provides synchronous access to Extension features.
+    * Provides access to Extension features.
     */
    @Delegate
    ExtensionApi getExtensionApiForZone(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
 
    /**
-    * Provides synchronous access to Image features.
+    * Provides access to Image features.
     */
    @Delegate
    ImageApi getImageApiForZone(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
