@@ -35,7 +35,7 @@ import org.jclouds.rackspace.clouddns.v1.domain.Record;
 import org.jclouds.rackspace.clouddns.v1.domain.RecordDetail;
 import org.jclouds.rackspace.clouddns.v1.functions.RecordFunctions;
 import org.jclouds.rackspace.clouddns.v1.internal.BaseCloudDNSApiLiveTest;
-import org.testng.annotations.AfterGroups;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -65,7 +65,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       Iterable<CreateDomain> createDomains = ImmutableList.of(createDomain);      
-      Domain domain = Domains.create(cloudDNSApi, createDomains).iterator().next();
+      Domain domain = Domains.create(api, createDomains).iterator().next();
       
       assertEquals(domain.getName(), JCLOUDS_EXAMPLE);
       assertEquals(domain.getEmail(), "jclouds@" + JCLOUDS_EXAMPLE);
@@ -100,7 +100,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       List<Record> createRecords = ImmutableList.of(createMXRecord, createARecord, createSRVRecord);
-      Set<RecordDetail> records = Records.create(cloudDNSApi, domainId, createRecords);
+      Set<RecordDetail> records = Records.create(api, domainId, createRecords);
 
       Thread.sleep(1000);
       Date now = new Date();
@@ -149,23 +149,23 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testCreateRecords")
    public void testListRecords() throws Exception {
-      Set<RecordDetail> records = cloudDNSApi.getRecordApiForDomain(domainId).list().concat().toSet();
+      Set<RecordDetail> records = api.getRecordApiForDomain(domainId).list().concat().toSet();
       assertEquals(records.size(), 5); // 3 created above + 2 nameserver (NS) records
    }
 
    @Test(dependsOnMethods = "testListRecords")
    public void testListRecordsByCriteriaMethods() throws Exception {
-      List<RecordDetail> records = cloudDNSApi.getRecordApiForDomain(domainId).listByType("SRV").concat().toList();
+      List<RecordDetail> records = api.getRecordApiForDomain(domainId).listByType("SRV").concat().toList();
       assertEquals(records.size(), 1);
       
       srvRecordId = records.get(0).getId();
 
-      records = cloudDNSApi.getRecordApiForDomain(domainId).listByTypeAndData("A", "10.0.0.1").concat().toList();
+      records = api.getRecordApiForDomain(domainId).listByTypeAndData("A", "10.0.0.1").concat().toList();
       assertEquals(records.size(), 1);
       
       aRecordId = records.get(0).getId();
 
-      records = cloudDNSApi.getRecordApiForDomain(domainId).listByNameAndType(JCLOUDS_EXAMPLE, "MX").concat().toList();
+      records = api.getRecordApiForDomain(domainId).listByNameAndType(JCLOUDS_EXAMPLE, "MX").concat().toList();
       assertEquals(records.size(), 1);
       
       mxRecordId = records.get(0).getId();
@@ -173,7 +173,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testListRecordsByCriteriaMethods")
    public void testGetRecordByNameAndTypeAndData() throws Exception {
-      RecordDetail record = cloudDNSApi.getRecordApiForDomain(domainId).getByNameAndTypeAndData(JCLOUDS_EXAMPLE, "A", "10.0.0.1");
+      RecordDetail record = api.getRecordApiForDomain(domainId).getByNameAndTypeAndData(JCLOUDS_EXAMPLE, "A", "10.0.0.1");
       Date now = new Date();
       
       assertNotNull(record.getId());
@@ -187,7 +187,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testGetRecordByNameAndTypeAndData")
    public void testGetRecord() throws Exception {
-      RecordDetail record = cloudDNSApi.getRecordApiForDomain(domainId).get(aRecordId);
+      RecordDetail record = api.getRecordApiForDomain(domainId).get(aRecordId);
       Date now = new Date();
       
       assertNotNull(record.getId());
@@ -209,8 +209,8 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
             .comment("Updated Protocol to UDP")
             .build();
 
-      Records.update(cloudDNSApi, domainId, srvRecordId, record);
-      RecordDetail srvRecord = cloudDNSApi.getRecordApiForDomain(domainId).get(srvRecordId);
+      Records.update(api, domainId, srvRecordId, record);
+      RecordDetail srvRecord = api.getRecordApiForDomain(domainId).get(srvRecordId);
       Date now = new Date();
       
       assertNotNull(srvRecord.getId());
@@ -226,12 +226,12 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testUpdateRecord")
    public void testUpdateRecords() throws Exception {      
-      Set<RecordDetail> recordDetails = cloudDNSApi.getRecordApiForDomain(domainId).list().concat().toSet();
+      Set<RecordDetail> recordDetails = api.getRecordApiForDomain(domainId).list().concat().toSet();
       Map<String, Record> idsToRecords = RecordFunctions.toRecordMap(recordDetails);
       Map<String, Record> updateRecords = Maps.transformValues(idsToRecords, updateTTLAndComment(35813, "New TTL")); 
             
-      Records.update(cloudDNSApi, domainId, updateRecords);
-      RecordDetail record = cloudDNSApi.getRecordApiForDomain(domainId).get(aRecordId);
+      Records.update(api, domainId, updateRecords);
+      RecordDetail record = api.getRecordApiForDomain(domainId).get(aRecordId);
       Date now = new Date();
       
       assertNotNull(record.getId());
@@ -243,7 +243,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
       assertTrue(record.getCreated().before(now));
       assertTrue(record.getUpdated().before(now));
       
-      recordDetails = cloudDNSApi.getRecordApiForDomain(domainId).list().concat().toSet();
+      recordDetails = api.getRecordApiForDomain(domainId).list().concat().toSet();
       
       for (RecordDetail recordDetail: recordDetails) {
          assertEquals(recordDetail.getTTL(), 35813);
@@ -261,28 +261,29 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testUpdateRecords")
    public void testDeleteRecord() throws Exception {      
-      Records.delete(cloudDNSApi, domainId, aRecordId);
+      Records.delete(api, domainId, aRecordId);
       
-      assertNull(cloudDNSApi.getRecordApiForDomain(domainId).get(aRecordId));
+      assertNull(api.getRecordApiForDomain(domainId).get(aRecordId));
    }
 
    @Test(dependsOnMethods = "testDeleteRecord")
    public void testDeleteRecords() throws Exception {      
       List<String> recordIds = ImmutableList.<String> of(srvRecordId, mxRecordId);
-      Records.delete(cloudDNSApi, domainId, recordIds);
+      Records.delete(api, domainId, recordIds);
       
-      assertNull(cloudDNSApi.getRecordApiForDomain(domainId).get(srvRecordId));
-      assertNull(cloudDNSApi.getRecordApiForDomain(domainId).get(mxRecordId));
+      assertNull(api.getRecordApiForDomain(domainId).get(srvRecordId));
+      assertNull(api.getRecordApiForDomain(domainId).get(mxRecordId));
    }
 
    @Override
-   @AfterGroups(groups = "live")
-   protected void tearDownContext() {
+   @AfterClass(groups = { "integration", "live" })
+   protected void tearDown() {
       try {
-         Domains.delete(cloudDNSApi, ImmutableList.<Integer> of(domainId));
+         Domains.delete(api, ImmutableList.<Integer> of(domainId));
       }
       catch (TimeoutException e) {
          e.printStackTrace();
       }
+      super.tearDown();
    }
 }

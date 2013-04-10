@@ -38,7 +38,7 @@ import org.jclouds.rackspace.clouddns.v1.domain.Subdomain;
 import org.jclouds.rackspace.clouddns.v1.domain.UpdateDomain;
 import org.jclouds.rackspace.clouddns.v1.functions.DomainFunctions;
 import org.jclouds.rackspace.clouddns.v1.internal.BaseCloudDNSApiLiveTest;
-import org.testng.annotations.AfterGroups;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -108,7 +108,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       Iterable<CreateDomain> createDomains = ImmutableList.of(createDomain1, createDomain2);      
-      testDomains = DomainFunctions.toDomainMap(Domains.create(cloudDNSApi, createDomains));
+      testDomains = DomainFunctions.toDomainMap(Domains.create(api, createDomains));
 
       assertEquals(testDomains.size(), 2);
 
@@ -201,7 +201,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       Iterable<CreateDomain> createDomains = ImmutableList.of(createDomain);      
-      Domain domain = Domains.create(cloudDNSApi, createDomains).iterator().next();
+      Domain domain = Domains.create(api, createDomains).iterator().next();
       
       assertEquals(domain.getName(), "simple-" + JCLOUDS_EXAMPLE);
       assertEquals(domain.getEmail(), "simple-jclouds@" + JCLOUDS_EXAMPLE);
@@ -212,27 +212,27 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testCreateSimpleDomain")
    public void testListDomains() throws Exception {
-      Set<Domain> domains = cloudDNSApi.getDomainApi().list().concat().toSet();
+      Set<Domain> domains = api.getDomainApi().list().concat().toSet();
       assertEquals(domains.size(), 5);
    }
 
    @Test(dependsOnMethods = "testListDomains")
    public void testListDomainsWithFilter() throws Exception {
-      Set<Domain> domains = cloudDNSApi.getDomainApi().listWithFilterByNamesMatching("alt-" + JCLOUDS_EXAMPLE).concat().toSet();
+      Set<Domain> domains = api.getDomainApi().listWithFilterByNamesMatching("alt-" + JCLOUDS_EXAMPLE).concat().toSet();
       assertEquals(domains.size(), 1);
    }
 
    @Test(dependsOnMethods = "testListDomainsWithFilter")
    public void testListSubdomains() throws Exception {
       Domain domain = testDomains.get(JCLOUDS_EXAMPLE);
-      Set<Subdomain> subdomains = cloudDNSApi.getDomainApi().listSubdomains(domain.getId()).concat().toSet();
+      Set<Subdomain> subdomains = api.getDomainApi().listSubdomains(domain.getId()).concat().toSet();
       assertEquals(subdomains.size(), 2);
    }
 
    @Test(dependsOnMethods = "testListSubdomains")
    public void testGetDomain() throws Exception {
       Domain domain = testDomains.get(JCLOUDS_EXAMPLE);
-      Domain jclouds = cloudDNSApi.getDomainApi().get(domain.getId());
+      Domain jclouds = api.getDomainApi().get(domain.getId());
 
       Date now = new Date();
 
@@ -322,8 +322,8 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             .comment("Hello Domain Update 3")
             .build();
 
-      Domains.update(cloudDNSApi, testDomains.get(JCLOUDS_EXAMPLE).getId(), updateDomain);
-      Domain jclouds = cloudDNSApi.getDomainApi().get(testDomains.get(JCLOUDS_EXAMPLE).getId());
+      Domains.update(api, testDomains.get(JCLOUDS_EXAMPLE).getId(), updateDomain);
+      Domain jclouds = api.getDomainApi().get(testDomains.get(JCLOUDS_EXAMPLE).getId());
       
       assertEquals(jclouds.getEmail(), "jclouds3@" + JCLOUDS_EXAMPLE);
       assertEquals(jclouds.getComment().get(), "Hello Domain Update 3");
@@ -334,10 +334,10 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
    public void testUpdateDomainsTTL() throws Exception {
       List<Integer> ids = ImmutableList.of(
             testDomains.get(JCLOUDS_EXAMPLE).getId(), testDomains.get("alt-" + JCLOUDS_EXAMPLE).getId());
-      Domains.updateTTL(cloudDNSApi, ids, 1234567);
+      Domains.updateTTL(api, ids, 1234567);
       
-      Domain jclouds = cloudDNSApi.getDomainApi().get(testDomains.get(JCLOUDS_EXAMPLE).getId());
-      Domain altjclouds = cloudDNSApi.getDomainApi().get(testDomains.get("alt-" + JCLOUDS_EXAMPLE).getId());
+      Domain jclouds = api.getDomainApi().get(testDomains.get(JCLOUDS_EXAMPLE).getId());
+      Domain altjclouds = api.getDomainApi().get(testDomains.get("alt-" + JCLOUDS_EXAMPLE).getId());
       
       assertEquals(jclouds.getTTL(), 1234567);
       assertEquals(altjclouds.getTTL(), 1234567);
@@ -347,10 +347,10 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
    public void testUpdateDomainsEmail() throws Exception {
       List<Integer> ids = ImmutableList.of(
             testDomains.get(JCLOUDS_EXAMPLE).getId(), testDomains.get("alt-" + JCLOUDS_EXAMPLE).getId());
-      Domains.updateEmail(cloudDNSApi, ids, "jclouds-up@" + JCLOUDS_EXAMPLE);
+      Domains.updateEmail(api, ids, "jclouds-up@" + JCLOUDS_EXAMPLE);
 
-      Domain jclouds = cloudDNSApi.getDomainApi().get(testDomains.get(JCLOUDS_EXAMPLE).getId());
-      Domain altjclouds = cloudDNSApi.getDomainApi().get(testDomains.get("alt-" + JCLOUDS_EXAMPLE).getId());
+      Domain jclouds = api.getDomainApi().get(testDomains.get(JCLOUDS_EXAMPLE).getId());
+      Domain altjclouds = api.getDomainApi().get(testDomains.get("alt-" + JCLOUDS_EXAMPLE).getId());
 
       assertEquals(jclouds.getEmail(), "jclouds-up@" + JCLOUDS_EXAMPLE);
       assertEquals(altjclouds.getEmail(), "jclouds-up@" + JCLOUDS_EXAMPLE);
@@ -359,7 +359,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
    @Test(dependsOnMethods = "testUpdateDomainsEmail")
    public void testExportDomain() throws Exception {
       Domain domain = testDomains.get(JCLOUDS_EXAMPLE);
-      List<String> domainExport = Domains.exportFormat(cloudDNSApi, domain.getId(), Domain.Format.BIND_9);
+      List<String> domainExport = Domains.exportFormat(api, domain.getId(), Domain.Format.BIND_9);
       
       assertTrue(domainExport.get(0).contains(JCLOUDS_EXAMPLE));
    }
@@ -370,7 +370,7 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
             "imp-" + JCLOUDS_EXAMPLE + ".      3600  IN SOA   ns.rackspace.com. jclouds.imp-" + JCLOUDS_EXAMPLE + ". 1363882703 3600 3600 3600 3600",
             "imp-" + JCLOUDS_EXAMPLE + ".      600   IN A  50.56.174.152"); 
 
-      Domain domain = Domains.importFormat(cloudDNSApi, contents, Domain.Format.BIND_9);
+      Domain domain = Domains.importFormat(api, contents, Domain.Format.BIND_9);
       RecordDetail record = domain.getRecords().iterator().next();
       
       assertEquals(domain.getName(), "imp-" + JCLOUDS_EXAMPLE);
@@ -384,8 +384,8 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
    }
 
    @Override
-   @AfterGroups(groups = "live")
-   protected void tearDownContext() {
+   @AfterClass(groups = { "integration", "live" })
+   protected void tearDown() {
       List<Integer> domainIds = Lists.newArrayList();
       
       for (Domain domain: testDomains.values()) {
@@ -393,10 +393,11 @@ public class DomainApiLiveTest extends BaseCloudDNSApiLiveTest {
       }
 
       try {
-         Domains.delete(cloudDNSApi, domainIds);
+         Domains.delete(api, domainIds);
       }
       catch (TimeoutException e) {
          e.printStackTrace();
       }
+      super.tearDown();
    }
 }

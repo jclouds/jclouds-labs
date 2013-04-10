@@ -20,32 +20,17 @@ package org.jclouds.rackspace.clouddns.v1.internal;
 
 import java.util.Properties;
 
-import org.jclouds.apis.BaseContextLiveTest;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
-import org.jclouds.rackspace.clouddns.v1.CloudDNSApiMetadata;
-import org.jclouds.rackspace.clouddns.v1.CloudDNSAsyncApi;
-import org.jclouds.rest.RestContext;
-import org.testng.annotations.BeforeGroups;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * @author Everett Toews
  */
-public class BaseCloudDNSApiLiveTest extends BaseContextLiveTest<RestContext<CloudDNSApi, CloudDNSAsyncApi>> {
-   protected CloudDNSApi cloudDNSApi;
+public class BaseCloudDNSApiLiveTest extends BaseApiLiveTest<CloudDNSApi> {
 
    public BaseCloudDNSApiLiveTest() {
       provider = "rackspace-clouddns";
-   }
-
-   @BeforeGroups(groups = { "integration", "live" })
-   @Override
-   public void setupContext() {
-      super.setupContext();
-
-      cloudDNSApi = context.getApi();
    }
 
    @Override
@@ -53,10 +38,5 @@ public class BaseCloudDNSApiLiveTest extends BaseContextLiveTest<RestContext<Clo
       Properties props = super.setupProperties();
       setIfTestSystemPropertyPresent(props, KeystoneProperties.CREDENTIAL_TYPE);
       return props;
-   }
-   
-   @Override
-   protected TypeToken<RestContext<CloudDNSApi, CloudDNSAsyncApi>> contextType() {
-      return CloudDNSApiMetadata.CONTEXT_TOKEN;
    }
 }
