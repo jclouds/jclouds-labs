@@ -18,29 +18,30 @@
  */
 package org.jclouds.oauth.v2.config;
 
+import static org.jclouds.rest.config.BinderUtils.bindHttpApi;
+
+import java.net.URI;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.jclouds.oauth.v2.OAuthApi;
+
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import org.jclouds.oauth.v2.OAuthApi;
-import org.jclouds.oauth.v2.OAuthAsyncApi;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.net.URI;
-
-import static org.jclouds.rest.config.BinderUtils.bindSyncToAsyncHttpApi;
 
 /**
  * An OAuth module to be used form other providers.
- *
+ * 
  * @author David Alves
  */
 public class OAuthAuthenticationModule extends AbstractModule {
 
    @Override
    protected void configure() {
-      bindSyncToAsyncHttpApi(binder(), OAuthApi.class, OAuthAsyncApi.class);
+      bindHttpApi(binder(), OAuthApi.class);
    }
 
    /**

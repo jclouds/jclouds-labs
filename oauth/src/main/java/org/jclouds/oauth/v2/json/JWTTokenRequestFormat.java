@@ -21,6 +21,7 @@ package org.jclouds.oauth.v2.json;
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Joiner.on;
 import static com.google.common.io.BaseEncoding.base64Url;
+import static org.jclouds.io.Payloads.newUrlEncodedFormPayload;
 
 import java.util.Set;
 
@@ -28,7 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.io.Payloads;
+import org.jclouds.io.Payload;
 import org.jclouds.json.Json;
 import org.jclouds.oauth.v2.domain.TokenRequest;
 import org.jclouds.oauth.v2.domain.TokenRequestFormat;
@@ -64,9 +65,9 @@ public class JWTTokenRequestFormat implements TokenRequestFormat {
       this.json = json;
    }
 
+   @SuppressWarnings("unchecked")
    @Override
-   public <R extends HttpRequest> R formatRequest(R httpRequest, TokenRequest tokenRequest) {
-      HttpRequest.Builder builder = httpRequest.toBuilder();
+   public <R extends HttpRequest> R formatRequest(R request, TokenRequest tokenRequest) {
 
       String encodedHeader = json.toJson(tokenRequest.getHeader());
       String encodedClaimSet = json.toJson(tokenRequest.getClaimSet());
@@ -79,11 +80,11 @@ public class JWTTokenRequestFormat implements TokenRequestFormat {
 
       // the final assertion in base 64 encoded {header}.{claimSet}.{signature} format
       String assertion = on(".").join(encodedHeader, encodedClaimSet, encodedSignature);
+      Payload payload = newUrlEncodedFormPayload(ImmutableMultimap.<String, String> builder()
+                           .put(GRANT_TYPE_FORM_PARAM, GRANT_TYPE_JWT_BEARER)
+                           .put(ASSERTION_FORM_PARAM, assertion).build());
 
-      builder.payload(Payloads.newUrlEncodedFormPayload(ImmutableMultimap.of(GRANT_TYPE_FORM_PARAM,
-              GRANT_TYPE_JWT_BEARER, ASSERTION_FORM_PARAM, assertion)));
-
-      return (R) builder.build();
+      return (R) request.toBuilder().payload(payload).build();
    }
 
    @Override
