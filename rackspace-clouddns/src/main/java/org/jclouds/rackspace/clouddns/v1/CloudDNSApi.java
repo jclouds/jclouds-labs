@@ -18,27 +18,43 @@
  */
 package org.jclouds.rackspace.clouddns.v1;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.rackspace.clouddns.v1.config.CloudDNS;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
 import org.jclouds.rackspace.clouddns.v1.features.DomainApi;
 import org.jclouds.rackspace.clouddns.v1.features.Domains;
 import org.jclouds.rackspace.clouddns.v1.features.LimitApi;
 import org.jclouds.rackspace.clouddns.v1.features.RecordApi;
+import org.jclouds.rackspace.clouddns.v1.functions.ParseJob;
 import org.jclouds.rackspace.clouddns.v1.predicates.JobPredicates;
 import org.jclouds.rest.annotations.Delegate;
+import org.jclouds.rest.annotations.Endpoint;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 
 /**
  * Provides access to the Rackspace Cloud DNS API.
  * <p/>
  * See <a href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/index.html">Cloud DNS Developer Guide</a>
  *  
- * @see CloudDNSAsyncApi
  * @author Everett Toews
  */
-public interface CloudDNSApi {
+public interface CloudDNSApi extends Closeable {
+
    /**
     * Returns the current status of a job.
     * </p>
@@ -50,23 +66,32 @@ public interface CloudDNSApi {
     *
     * @return null, if not found.
     */
+   @Named("job:get")
+   @Endpoint(CloudDNS.class)
+   @RequestFilters(AuthenticateRequest.class)
+   @GET
+   @Consumes(APPLICATION_JSON)
+   @ResponseParser(ParseJob.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @QueryParams(keys = "showDetails", values = "true")
+   @Path("/status/{jobId}")
    @Nullable
-   <T> Job<T> getJob(String jobId);
-   
+   <T> Job<T> getJob(@PathParam("jobId") String jobId);
+
    /**
-    * Provides synchronous access to Limit features.
+    * Provides access to Limit features.
     */
    @Delegate
    LimitApi getLimitApi();
 
    /**
-    * Provides synchronous access to Domain features.
+    * Provides access to Domain features.
     */
    @Delegate
    DomainApi getDomainApi();
 
    /**
-    * Provides synchronous access to Record features.
+    * Provides access to Record features.
     */
    @Delegate
    @Path("/domains/{domainId}")
