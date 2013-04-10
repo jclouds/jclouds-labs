@@ -30,7 +30,7 @@ import org.jclouds.rackspace.clouddns.v1.config.CloudDNSRestClientModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.MappedCloudIdentityAuthenticationApiModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.config.SyncToAsyncCloudIdentityAuthenticationApiModule;
 import org.jclouds.rest.RestContext;
 import org.jclouds.rest.internal.BaseRestApiMetadata;
 
@@ -83,7 +83,7 @@ public class CloudDNSApiMetadata extends BaseRestApiMetadata {
                .defaultProperties(CloudDNSApiMetadata.defaultProperties())
                .defaultModules(
                      ImmutableSet.<Class<? extends Module>> builder()
-                        .add(MappedCloudIdentityAuthenticationApiModule.class)
+                        .add(SyncToAsyncCloudIdentityAuthenticationApiModule.class)
                         .add(CloudIdentityAuthenticationModule.class)
                         .add(ProviderModule.class)
                         .add(CloudDNSRestClientModule.class)
