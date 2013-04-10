@@ -19,23 +19,14 @@
 package org.jclouds.rackspace.clouddns.v1.config;
 
 import java.net.URI;
-import java.util.Map;
 
 import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
-import org.jclouds.rackspace.clouddns.v1.CloudDNSAsyncApi;
-import org.jclouds.rackspace.clouddns.v1.features.DomainApi;
-import org.jclouds.rackspace.clouddns.v1.features.DomainAsyncApi;
-import org.jclouds.rackspace.clouddns.v1.features.LimitApi;
-import org.jclouds.rackspace.clouddns.v1.features.LimitAsyncApi;
-import org.jclouds.rackspace.clouddns.v1.features.RecordApi;
-import org.jclouds.rackspace.clouddns.v1.features.RecordAsyncApi;
-import org.jclouds.rest.ConfiguresRestClient;
-import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
 
 import com.google.common.base.Supplier;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -43,18 +34,8 @@ import com.google.inject.TypeLiteral;
  * 
  * @author Everett Toews
  */
-@ConfiguresRestClient
-public class CloudDNSRestClientModule extends RestClientModule<CloudDNSApi, CloudDNSAsyncApi> {
-
-   public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>> builder()
-         .put(LimitApi.class, LimitAsyncApi.class)
-         .put(DomainApi.class, DomainAsyncApi.class)
-         .put(RecordApi.class, RecordAsyncApi.class)
-         .build();
-
-   public CloudDNSRestClientModule() {
-      super(DELEGATE_MAP);
-   }
+@ConfiguresHttpApi
+public class CloudDNSHttpApiModule extends HttpApiModule<CloudDNSApi> {
 
    @Override
    protected void configure() {

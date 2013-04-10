@@ -38,8 +38,8 @@
     <test.rackspace-clouddns.endpoint>https://identity.api.rackspacecloud.com/v2.0/</test.rackspace-clouddns.endpoint>
     <test.rackspace-clouddns.api-version>1.0</test.rackspace-clouddns.api-version>
     <test.rackspace-clouddns.build-version />
-    <test.rackspace-clouddns.identity>${test.rackspace.identity}</test.rackspace-clouddns.identity>
-    <test.rackspace-clouddns.credential>${test.rackspace.credential}</test.rackspace-clouddns.credential>
+    <test.rackspace-clouddns.identity>${test.rackspace-us.identity}</test.rackspace-clouddns.identity>
+    <test.rackspace-clouddns.credential>${test.rackspace-us.credential}</test.rackspace-clouddns.credential>
 
     <jclouds.osgi.export>org.jclouds.rackspace.clouddns.v1*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>

@@ -20,34 +20,28 @@ package org.jclouds.rackspace.clouddns.v1;
 
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.rackspace.cloudidentity.v2_0.ServiceType.DNS;
+import static org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes.API_KEY_CREDENTIALS;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ProviderModule;
-import org.jclouds.rackspace.clouddns.v1.config.CloudDNSRestClientModule;
-import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
+import org.jclouds.rackspace.clouddns.v1.config.CloudDNSHttpApiModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.SyncToAsyncCloudIdentityAuthenticationApiModule;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
- * Implementation of {@link ApiMetadata} for DynECT 1.0 API
+ * Implementation of {@link ApiMetadata} for Rackspace Cloud DNS 1.0 API
  * 
  * @author Everett Toews
  */
-public class CloudDNSApiMetadata extends BaseRestApiMetadata {
-
-   public static final TypeToken<RestContext<CloudDNSApi, CloudDNSAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<CloudDNSApi, CloudDNSAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class CloudDNSApiMetadata extends BaseHttpApiMetadata<CloudDNSApi> {
 
    @Override
    public Builder toBuilder() {
@@ -63,31 +57,29 @@ public class CloudDNSApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
-      properties.setProperty(SERVICE_TYPE, ServiceType.DNS);
-      properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
+      properties.setProperty(SERVICE_TYPE, DNS);
+      properties.setProperty(CREDENTIAL_TYPE, API_KEY_CREDENTIALS);
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<CloudDNSApi, Builder> {
 
       protected Builder() {
-         super(CloudDNSApi.class, CloudDNSAsyncApi.class);
          id("rackspace-clouddns")
-               .name("Rackspace Cloud DNS API")
-               .identityName("Username")
-               .credentialName("API Key")
-               .documentation(URI.create("http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/index.html"))
-               .version("1.0")
-               .defaultEndpoint("https://identity.api.rackspacecloud.com/v2.0/")
-               .defaultProperties(CloudDNSApiMetadata.defaultProperties())
-               .defaultModules(
-                     ImmutableSet.<Class<? extends Module>> builder()
-                        .add(SyncToAsyncCloudIdentityAuthenticationApiModule.class)
-                        .add(CloudIdentityAuthenticationModule.class)
-                        .add(ProviderModule.class)
-                        .add(CloudDNSRestClientModule.class)
-                        .build());
+         .name("Rackspace Cloud DNS API")
+         .identityName("Username")
+         .credentialName("API Key")
+         .documentation(URI.create("http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/index.html"))
+         .version("1.0")
+         .defaultEndpoint("https://identity.api.rackspacecloud.com/v2.0/")
+         .defaultProperties(CloudDNSApiMetadata.defaultProperties())
+         .defaultModules(ImmutableSet.<Class<? extends Module>> builder()
+                                     .add(CloudIdentityAuthenticationApiModule.class)
+                                     .add(CloudIdentityAuthenticationModule.class)
+                                     .add(ProviderModule.class)
+                                     .add(CloudDNSHttpApiModule.class)
+                                     .build());
       }
 
       @Override
