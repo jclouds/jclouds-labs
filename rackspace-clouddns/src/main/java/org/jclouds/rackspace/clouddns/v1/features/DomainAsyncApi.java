@@ -39,7 +39,6 @@ import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.clouddns.v1.binders.FormatAndContentsToJSON;
-import org.jclouds.rackspace.clouddns.v1.binders.UpdateDomainToJSON;
 import org.jclouds.rackspace.clouddns.v1.binders.UpdateDomainsToJSON;
 import org.jclouds.rackspace.clouddns.v1.config.CloudDNS;
 import org.jclouds.rackspace.clouddns.v1.domain.CreateDomain;
@@ -58,6 +57,7 @@ import org.jclouds.rackspace.cloudidentity.v2_0.CloudIdentityFallbacks.EmptyPagi
 import org.jclouds.rackspace.cloudidentity.v2_0.domain.PaginatedCollection;
 import org.jclouds.rackspace.cloudidentity.v2_0.functions.DateParser;
 import org.jclouds.rackspace.cloudidentity.v2_0.options.PaginationOptions;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Endpoint;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -68,6 +68,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.Transform;
 import org.jclouds.rest.annotations.WrapWith;
+import org.jclouds.rest.binders.BindToJsonPayload;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -182,9 +183,7 @@ public interface DomainAsyncApi {
    @ResponseParser(ParseJob.class)
    @Fallback(VoidOnNotFoundOr404.class)
    @Path("/domains/{id}")
-   @MapBinder(UpdateDomainToJSON.class)
-   @SuppressWarnings("rawtypes")
-   ListenableFuture<Job> update(@PathParam("id") int id, @PayloadParam("updateDomain") UpdateDomain updateDomain);
+   ListenableFuture<Job<Void>> update(@PathParam("id") int id, @BinderParam(BindToJsonPayload.class) UpdateDomain updateDomain);
 
    /**
     * @see DomainApi#updateTTL(Iterable, int)
@@ -197,8 +196,7 @@ public interface DomainAsyncApi {
    @Fallback(VoidOnNotFoundOr404.class)
    @Path("/domains")
    @MapBinder(UpdateDomainsToJSON.class)
-   @SuppressWarnings("rawtypes")
-   ListenableFuture<Job> updateTTL(@PayloadParam("ids") Iterable<Integer> ids, @PayloadParam("ttl") int ttl);
+   ListenableFuture<Job<Void>> updateTTL(@PayloadParam("ids") Iterable<Integer> ids, @PayloadParam("ttl") int ttl);
 
    /**
     * @see DomainApi#updateEmail(Iterable, String)
@@ -211,8 +209,7 @@ public interface DomainAsyncApi {
    @Fallback(VoidOnNotFoundOr404.class)
    @Path("/domains")
    @MapBinder(UpdateDomainsToJSON.class)
-   @SuppressWarnings("rawtypes")
-   ListenableFuture<Job> updateEmail(@PayloadParam("ids") Iterable<Integer> ids, @PayloadParam("emailAddress") String email);
+   ListenableFuture<Job<Void>> updateEmail(@PayloadParam("ids") Iterable<Integer> ids, @PayloadParam("emailAddress") String email);
 
    /**
     * @see DomainApi#delete(Iterable, boolean)
@@ -223,8 +220,7 @@ public interface DomainAsyncApi {
    @ResponseParser(ParseJob.class)
    @Path("/domains")
    @Consumes("*/*")
-   @SuppressWarnings("rawtypes")
-   ListenableFuture<Job> delete(@QueryParam("id") Iterable<Integer> ids,
+   ListenableFuture<Job<Void>> delete(@QueryParam("id") Iterable<Integer> ids,
          @QueryParam("deleteSubdomains") boolean deleteSubdomains);
 
    /**

@@ -19,7 +19,7 @@ public class Job<T> {
    private final Optional<Error> error;
    private final Optional<T> resource;
    
-   protected Job(String id, Status status, Optional<Error> error, Optional<T> resource) {
+   private Job(String id, Status status, Optional<Error> error, Optional<T> resource) {
       this.id = id;
       this.status = status;
       this.error = error;

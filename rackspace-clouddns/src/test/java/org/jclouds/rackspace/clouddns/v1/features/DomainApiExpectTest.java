@@ -18,6 +18,9 @@
  */
 package org.jclouds.rackspace.clouddns.v1.features;
 
+import static javax.ws.rs.HttpMethod.POST;
+import static javax.ws.rs.HttpMethod.PUT;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -33,12 +36,13 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
 import org.jclouds.rackspace.clouddns.v1.domain.CreateDomain;
-import org.jclouds.rackspace.clouddns.v1.domain.CreateRecord;
 import org.jclouds.rackspace.clouddns.v1.domain.CreateSubdomain;
 import org.jclouds.rackspace.clouddns.v1.domain.Domain;
 import org.jclouds.rackspace.clouddns.v1.domain.DomainChange;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
+import org.jclouds.rackspace.clouddns.v1.domain.Record;
 import org.jclouds.rackspace.clouddns.v1.domain.UpdateDomain;
+import org.jclouds.rackspace.clouddns.v1.functions.DomainFunctions;
 import org.jclouds.rackspace.clouddns.v1.internal.BaseCloudDNSApiExpectTest;
 import org.testng.annotations.Test;
 
@@ -57,27 +61,27 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET()
-               .method("POST")
+               .method(POST)
                .payload(payloadFromResource("/domain-create.json"))
                .endpoint(endpoint)
                .build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-create-response.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-create-response.json")).build())
             .getDomainApi();
 
-      CreateRecord createMXRecord = CreateRecord.builder()
+      Record createMXRecord = Record.builder()
             .type("MX")
             .name(JCLOUDS_EXAMPLE)
             .data("mail." + JCLOUDS_EXAMPLE)
             .priority(11235)
             .build();
       
-      CreateRecord createARecord = CreateRecord.builder()
+      Record createARecord = Record.builder()
             .type("A")
             .name(JCLOUDS_EXAMPLE)
             .data("10.0.0.1")
             .build();
       
-      List<CreateRecord> createRecords = ImmutableList.of(createMXRecord, createARecord);
+      List<Record> createRecords = ImmutableList.of(createMXRecord, createARecord);
       
       CreateSubdomain createSubdomain1 = CreateSubdomain.builder()
             .name("dev." + JCLOUDS_EXAMPLE)
@@ -115,7 +119,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
       assertEquals(job.getStatus(), Job.Status.COMPLETED);
       assertTrue(job.getResource().isPresent());
       
-      Map<String, Domain> domains = Domains.getNameToDomainMap(job.getResource().get());
+      Map<String, Domain> domains = DomainFunctions.toDomainMap(job.getResource().get());
       
       assertEquals(domains.get(JCLOUDS_EXAMPLE).getId(), 3650906);
       assertEquals(domains.get(JCLOUDS_EXAMPLE).getEmail(), "jclouds@jclouds-example.com");
@@ -130,7 +134,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-list.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-list.json")).build())
             .getDomainApi();
 
       ImmutableList<Domain> domains = api.list().concat().toList();
@@ -147,7 +151,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-list-with-filter.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-list-with-filter.json")).build())
             .getDomainApi();
 
       ImmutableList<Domain> domains = api.listWithFilterByNamesMatching("test." + JCLOUDS_EXAMPLE).concat().toList();
@@ -162,7 +166,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-list-changes.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-list-changes.json")).build())
             .getDomainApi();
 
       Calendar cal = Calendar.getInstance(new SimpleTimeZone(0, "GMT"));
@@ -178,7 +182,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-get.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-get.json")).build())
             .getDomainApi();
 
       Domain domain = api.get(3650908);
@@ -195,11 +199,11 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET()
-               .method("PUT")
+               .method(PUT)
                .payload(payloadFromResourceWithContentType("/domain-update.json", MediaType.APPLICATION_JSON))
                .endpoint(endpoint)
                .build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-update-response.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-update-response.json")).build())
             .getDomainApi();
 
       UpdateDomain updateDomain = UpdateDomain.builder()
@@ -220,11 +224,11 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET()
-               .method("PUT")
+               .method(PUT)
                .payload(payloadFromResource("/domain-update-ttl.json"))
                .endpoint(endpoint)
                .build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-update-response.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-update-response.json")).build())
             .getDomainApi();
 
       List<Integer> ids = ImmutableList.of(3650906, 3650908);
@@ -240,11 +244,11 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET()
-               .method("PUT")
+               .method(PUT)
                .payload(payloadFromResource("/domain-update-email.json"))
                .endpoint(endpoint)
                .build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-update-response.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-update-response.json")).build())
             .getDomainApi();
 
       List<Integer> ids = ImmutableList.of(3650906, 3650908);
@@ -260,7 +264,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET().method("DELETE").replaceHeader("Accept", MediaType.WILDCARD).endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-delete.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-delete.json")).build())
             .getDomainApi();
 
       List<Integer> domainIds = ImmutableList.<Integer> of(3650907, 3650906, 3650908, 3650909);      
@@ -275,7 +279,7 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET().endpoint(endpoint).build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-export.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-export.json")).build())
             .getDomainApi();
 
       Job<List<String>> job = api.exportFormat(3651323, Domain.Format.BIND_9);
@@ -289,11 +293,11 @@ public class DomainApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
             rackspaceAuthWithUsernameAndApiKey, 
             responseWithAccess,
             authenticatedGET()
-               .method("POST")
+               .method(POST)
                .payload(payloadFromResource("/domain-import.json"))
                .endpoint(endpoint)
                .build(),
-            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/domain-import-response.json")).build())
+            HttpResponse.builder().statusCode(OK.getStatusCode()).payload(payloadFromResource("/domain-import-response.json")).build())
             .getDomainApi();
 
       List<String> contents = ImmutableList.<String> of(

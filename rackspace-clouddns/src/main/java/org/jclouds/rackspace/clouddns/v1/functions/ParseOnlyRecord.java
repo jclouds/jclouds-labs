@@ -19,43 +19,42 @@
 package org.jclouds.rackspace.clouddns.v1.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.toRecordDetails;
 
-import java.beans.ConstructorProperties;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
-import org.jclouds.openstack.v2_0.domain.Link;
-import org.jclouds.rackspace.clouddns.v1.domain.Domain;
-import org.jclouds.rackspace.cloudidentity.v2_0.domain.PaginatedCollection;
+import org.jclouds.rackspace.clouddns.v1.domain.RecordDetail;
+import org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.RawRecord;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 
 /**
  * @author Everett Toews
  */
-public class ParseDomains implements Function<HttpResponse, PaginatedCollection<Domain>> {
+public class ParseOnlyRecord implements Function<HttpResponse, RecordDetail> {
 
-   private final ParseJson<Domains> json;
+   private final ParseJson<Map<String, List<RawRecord>>> json;
 
    @Inject
-   ParseDomains(ParseJson<Domains> json) {
+   ParseOnlyRecord(ParseJson<Map<String, List<RawRecord>>> json) {
       this.json = checkNotNull(json, "json");
    }
 
    @Override
-   public PaginatedCollection<Domain> apply(HttpResponse response) {
-      Domains domains = json.apply(response);
+   public RecordDetail apply(HttpResponse response) {
+      Map<String, List<RawRecord>> records = json.apply(response);
 
-      return domains;
-   }
+      if (records == null)
+         return null;
+      
+      RawRecord rawRecord = Iterables.getOnlyElement(records.get("records"));
 
-   private static class Domains extends PaginatedCollection<Domain> {
-
-      @ConstructorProperties({ "domains", "links", "totalEntries" })
-      protected Domains(Iterable<Domain> domains, Iterable<Link> links, int totalEntries) {
-         super(domains, links, totalEntries);
-      }
+      return toRecordDetails.apply(rawRecord);
    }
 }

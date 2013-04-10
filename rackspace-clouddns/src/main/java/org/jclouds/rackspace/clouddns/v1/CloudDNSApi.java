@@ -18,6 +18,9 @@
  */
 package org.jclouds.rackspace.clouddns.v1;
 
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
 import org.jclouds.rackspace.clouddns.v1.features.DomainApi;
@@ -66,5 +69,6 @@ public interface CloudDNSApi {
     * Provides synchronous access to Record features.
     */
    @Delegate
-   RecordApi getRecordApi();
+   @Path("/domains/{domainId}")
+   RecordApi getRecordApiForDomain(@PathParam("domainId") int domainId);
 }

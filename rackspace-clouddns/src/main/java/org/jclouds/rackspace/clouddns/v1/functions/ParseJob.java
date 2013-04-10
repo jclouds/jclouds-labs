@@ -19,6 +19,7 @@
 package org.jclouds.rackspace.clouddns.v1.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.toRecordDetails;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -33,12 +34,14 @@ import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.rackspace.clouddns.v1.domain.Domain;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
-import org.jclouds.rackspace.clouddns.v1.domain.Record;
+import org.jclouds.rackspace.clouddns.v1.domain.RecordDetail;
 import org.jclouds.rackspace.clouddns.v1.functions.ParseDomain.RawDomain;
+import org.jclouds.rackspace.clouddns.v1.functions.ParseRecord.RawRecord;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
@@ -50,6 +53,7 @@ public class ParseJob implements Function<HttpResponse, Job<?>> {
 
    private final ParseJson<RawJob> parseJson;
    private final Json json;
+   private boolean isCreateSingleRecord;
 
    @Inject
    ParseJob(Json json, ParseJson<RawJob> parseJson) {
@@ -75,36 +79,41 @@ public class ParseJob implements Function<HttpResponse, Job<?>> {
    protected Object parseResponse(String requestUrl, JsonBall response) {
       if (response == null) {
          return null;
-      } else if (requestUrl.contains("import")) {
-         Type type = new TypeLiteral<Map<String, Set<ParseDomain.RawDomain>>>() {}.getType();
+      }
+      else if (requestUrl.contains("import")) {
+         Type type = new TypeLiteral<Map<String, Set<ParseDomain.RawDomain>>>() { }.getType();
          Map<String, Set<RawDomain>> domainMap = json.fromJson(response.toString(), type);
          Domain domain = Iterators.getOnlyElement(domainMap.get("domains").iterator()).getDomain();
 
          return domain;
-      } else if (requestUrl.contains("export")) {
-         Type type = new TypeLiteral<Map<String, String>>() {}.getType();
+      }
+      else if (requestUrl.contains("export")) {
+         Type type = new TypeLiteral<Map<String, String>>() { }.getType();
          Map<String, String> exportMap = json.fromJson(response.toString(), type);
          String contents = exportMap.get("contents");
          List<String> contentsAsList = Lists.newArrayList(Splitter.on("\n").omitEmptyStrings().split(contents));
 
          return contentsAsList;
-      } else if (response.toString().contains("domains")) {
-         Type type = new TypeLiteral<Map<String, Set<RawDomain>>>() {}.getType();
+      }
+      else if (response.toString().contains("domains")) {
+         Type type = new TypeLiteral<Map<String, Set<RawDomain>>>() { }.getType();
          Map<String, Set<RawDomain>> domainMap = json.fromJson(response.toString(), type);
-         Function<RawDomain, Domain> toDomain = new Function<RawDomain, Domain> () {
-            public Domain apply(RawDomain domain) {
-               return domain.getDomain();
-             }
-         };
          Set<Domain> domains = FluentIterable.from(domainMap.get("domains")).transform(toDomain).toSet();
 
          return domains;
-      } else if (response.toString().contains("records")) {
-         Type type = new TypeLiteral<Map<String, Set<Record>>>() {}.getType();
-         Map<String, Set<Record>> recordMap = json.fromJson(response.toString(), type);
-
-         return recordMap.get("records");
-      } else {
+      }
+      else if (response.toString().contains("records")) {
+         Type type = new TypeLiteral<Map<String, Set<RawRecord>>>() { }.getType();
+         Map<String, Set<RawRecord>> recordMap = json.fromJson(response.toString(), type);
+         Set<RecordDetail> records = FluentIterable.from(recordMap.get("records")).transform(toRecordDetails).toSet();
+         
+         if (isCreateSingleRecord) {
+            return Iterables.getOnlyElement(records);
+         } else {
+            return records;
+         }
+      }
+      else {
          throw new IllegalStateException("Job parsing problem. Did not recognize any type in job response.\n"
                + response.toString());
       }
@@ -117,4 +126,10 @@ public class ParseJob implements Function<HttpResponse, Job<?>> {
       private String requestUrl;
       private JsonBall response;
    }
+
+   private static final Function<RawDomain, Domain> toDomain = new Function<RawDomain, Domain>() {
+      public Domain apply(RawDomain domain) {
+         return domain.getDomain();
+      }
+   };
 }

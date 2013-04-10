@@ -81,5 +81,6 @@ public interface CloudDNSAsyncApi {
     * Provides asynchronous access to Record features.
     */
    @Delegate
-   RecordAsyncApi getRecordApi();
+   @Path("/domains/{domainId}")
+   RecordAsyncApi getRecordApiForDomain(@PathParam("domainId") int domainId);
 }
