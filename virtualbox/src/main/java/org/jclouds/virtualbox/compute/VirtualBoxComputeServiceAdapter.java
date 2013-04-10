@@ -21,6 +21,7 @@ package org.jclouds.virtualbox.compute;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_IMAGE_PREFIX;
 import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_NODE_NAME_SEPARATOR;
@@ -121,6 +122,17 @@ public class VirtualBoxComputeServiceAdapter implements ComputeServiceAdapter<IM
          @Override
          public boolean apply(IMachine arg0) {
             return arg0.getName().startsWith(VIRTUALBOX_NODE_PREFIX);
+         }
+      });
+   }
+
+   @Override
+   public Iterable<IMachine> listNodesByIds(final Iterable<String> ids) {
+      return filter(listNodes(), new Predicate<IMachine>() {
+
+         @Override
+         public boolean apply(IMachine machine) {
+            return contains(ids, machine.getId());
          }
       });
    }
@@ -261,5 +273,4 @@ public class VirtualBoxComputeServiceAdapter implements ComputeServiceAdapter<IM
          throw Throwables.propagate(e);
       }
    }
-
 }

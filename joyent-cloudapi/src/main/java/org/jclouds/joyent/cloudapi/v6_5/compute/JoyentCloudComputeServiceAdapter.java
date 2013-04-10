@@ -20,6 +20,8 @@ package org.jclouds.joyent.cloudapi.v6_5.compute;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.contains;
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static org.jclouds.compute.reference.ComputeServiceConstants.COMPUTE_LOGGER;
 import static org.jclouds.compute.util.ComputeServiceUtils.metadataAndTagsAsCommaDelimitedValue;
@@ -150,6 +152,17 @@ public class JoyentCloudComputeServiceAdapter implements
                }));
       }
       return builder.build();
+   }
+
+   @Override
+   public Iterable<MachineInDatacenter> listNodesByIds(final Iterable<String> ids) {
+      return filter(listNodes(), new Predicate<MachineInDatacenter>() {
+
+         @Override
+         public boolean apply(MachineInDatacenter machine) {
+            return contains(ids, machine.slashEncode());
+         }
+      });
    }
 
    @Override
