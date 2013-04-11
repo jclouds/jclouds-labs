@@ -38,7 +38,8 @@ import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
-import org.jclouds.rackspace.clouddns.v1.binders.BindRecordsToJsonPayload;
+import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
+import org.jclouds.rackspace.clouddns.v1.binders.UpdateRecordsToJSON;
 import org.jclouds.rackspace.clouddns.v1.config.CloudDNS;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
 import org.jclouds.rackspace.clouddns.v1.domain.Record;
@@ -48,6 +49,7 @@ import org.jclouds.rackspace.clouddns.v1.functions.ParseOnlyRecord;
 import org.jclouds.rackspace.clouddns.v1.functions.ParseRecord;
 import org.jclouds.rackspace.clouddns.v1.functions.ParseRecords;
 import org.jclouds.rackspace.clouddns.v1.functions.RecordsToPagedIterable;
+import org.jclouds.rackspace.clouddns.v1.predicates.JobPredicates;
 import org.jclouds.rackspace.cloudidentity.v2_0.CloudIdentityFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
 import org.jclouds.rackspace.cloudidentity.v2_0.domain.PaginatedCollection;
 import org.jclouds.rackspace.cloudidentity.v2_0.options.PaginationOptions;
@@ -72,6 +74,8 @@ public interface RecordApi {
     * </p>
     * See <a href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/supported_record_types.html">
     * Supported Record Types</a>
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("record:create")
    @POST
@@ -173,6 +177,8 @@ public interface RecordApi {
 
    /**
     * Update the configuration of the specified record in the specified domain.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("record:update")
    @PUT
@@ -185,6 +191,8 @@ public interface RecordApi {
 
    /**
     * Update the configuration of the specified records in the specified domain.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("record:update")
    @PUT
@@ -192,10 +200,12 @@ public interface RecordApi {
    @ResponseParser(ParseJob.class)
    @Path("/records")
    Job<Void> update(
-         @BinderParam(BindRecordsToJsonPayload.class) Map<String, Record> idsToRecords);
+         @BinderParam(UpdateRecordsToJSON.class) Map<String, Record> idsToRecords);
 
    /**
     * Delete the specified record in the specified domain.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("record:delete")
    @DELETE
@@ -207,6 +217,8 @@ public interface RecordApi {
 
    /**
     * Delete the specified records in the specified domain.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("record:delete")
    @DELETE

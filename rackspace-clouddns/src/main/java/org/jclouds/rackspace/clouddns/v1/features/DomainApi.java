@@ -40,6 +40,7 @@ import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
 import org.jclouds.rackspace.clouddns.v1.binders.FormatAndContentsToJSON;
 import org.jclouds.rackspace.clouddns.v1.binders.UpdateDomainsToJSON;
 import org.jclouds.rackspace.clouddns.v1.config.CloudDNS;
@@ -55,6 +56,7 @@ import org.jclouds.rackspace.clouddns.v1.functions.ParseDomains;
 import org.jclouds.rackspace.clouddns.v1.functions.ParseJob;
 import org.jclouds.rackspace.clouddns.v1.functions.ParseSubdomains;
 import org.jclouds.rackspace.clouddns.v1.functions.SubdomainsToPagedIterable;
+import org.jclouds.rackspace.clouddns.v1.predicates.JobPredicates;
 import org.jclouds.rackspace.cloudidentity.v2_0.CloudIdentityFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
 import org.jclouds.rackspace.cloudidentity.v2_0.domain.PaginatedCollection;
 import org.jclouds.rackspace.cloudidentity.v2_0.functions.DateParser;
@@ -90,6 +92,8 @@ public interface DomainApi {
     * default. When a record is added without a specified TTL, it will receive the domain TTL by default. When the
     * domain and/or record TTL is supplied by the user, either via a create or update call, the TTL values must be 300
     * seconds or more.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("domain:create")
    @POST
@@ -146,6 +150,9 @@ public interface DomainApi {
    @Path("/domains")
    PaginatedCollection<Domain> list(PaginationOptions options);
 
+   /**
+    * List the subdomains of a domain.
+    */
    @Named("domain:list")
    @GET
    @Consumes(MediaType.APPLICATION_JSON)
@@ -156,6 +163,9 @@ public interface DomainApi {
    @Nullable
    PagedIterable<Subdomain> listSubdomains(@PathParam("domainId") int domainId);
 
+   /**
+    * List the subdomains of a domain and manually control pagination.
+    */
    @Named("domain:list")
    @GET
    @ResponseParser(ParseSubdomains.class)
@@ -192,6 +202,8 @@ public interface DomainApi {
 
    /**
     * This call modifies the domain attributes only. Records cannot be added, modified, or removed.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     * 
     * @see RecordApi
     */
@@ -205,6 +217,8 @@ public interface DomainApi {
 
    /**
     * This call modifies the domain's TTL only.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("domain:update")
    @PUT
@@ -217,6 +231,8 @@ public interface DomainApi {
 
    /**
     * This call modifies the domain's email only.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("domain:update")
    @PUT
@@ -233,6 +249,8 @@ public interface DomainApi {
     * a root domain and is not deleted; this can be overridden by the optional deleteSubdomains parameter. Utilizing the
     * optional deleteSubdomains parameter on domains without subdomains does not result in a failure. When a domain is
     * deleted, any and all domain data is immediately purged and is not recoverable via the API.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("domain:delete")
    @DELETE
@@ -247,6 +265,8 @@ public interface DomainApi {
     * This call provides the BIND (Berkeley Internet Name Domain) 9 formatted contents of the requested domain. This
     * call is for a single domain only, and as such, does not traverse up or down the domain hierarchy for details (that
     * is, no subdomain information is provided).
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("domain:export")
    @GET
@@ -262,6 +282,8 @@ public interface DomainApi {
     * contents. If the corresponding request cannot be fulfilled due to insufficient or invalid data, an exception will
     * be thrown with information regarding the nature of the failure in the body of the response. Failures in the
     * validation process are non-recoverable and require the caller to correct the cause of the failure and call again.
+    * </p>
+    * To wait for this call to complete use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}.
     */
    @Named("domain:import")
    @POST

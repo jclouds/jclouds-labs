@@ -19,35 +19,21 @@
 package org.jclouds.rackspace.clouddns.v1.predicates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.jclouds.util.Predicates2.retry;
 
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.jclouds.rackspace.clouddns.v1.CloudDNSApi;
 import org.jclouds.rackspace.clouddns.v1.CloudDNSExceptions;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
-import org.jclouds.rackspace.clouddns.v1.features.Domains;
 
 import com.google.common.base.Predicate;
+import com.google.common.util.concurrent.Atomics;
 
 /**
- * Best to not use this class directly. See {@link Domains}
- * </p>
- * Tests to see if a Job has reached a status. This class is most useful when paired with a RetryablePredicate as
- * in the code below. This class can be used to block execution until the Job status has reached a desired state.
- * This is useful when your Job needs to be 100% ready before you can continue with execution.
- *
- * <pre>
- * {@code
- *    Job<Set<Domain>> job = cloudDNSApi.getDomainApi().create(createDomains);
- *    JobStatusPredicate<Set<Domain>> jobCompleted = new JobStatusPredicate<Set<Domain>>(cloudDNSApi, Job.Status.COMPLETED);
- *
- *    if (!retry(jobCompleted, 600, 2, 2, SECONDS).apply(job)) {
- *       throw new TimeoutException("Timeout on create domain: " + job);
- *    }
- *
- *    Set<Domain> domains = jobCompleted.getJob().getResource().get();
- * }
- * </pre>
+ * Useful Predicates for dealing with Jobs.
  * 
  * @author Everett Toews
  */
@@ -55,14 +41,42 @@ public class JobPredicates {
    
    private JobPredicates() {
    }
+
+   /**
+    * Tests to see if a Job has completed.
+    *
+    * <pre>
+    * {@code
+    * CreateDomain createDomain1 = CreateDomain.builder()
+    *    .name("jclouds-example.org")
+    *    .email("jclouds@jclouds-example.org")
+    *    .ttl(600001)
+    *    .comment("Hello Domain 1")
+    *    .build();
+    *
+    * Iterable<CreateDomain> createDomains = ImmutableList.of(createDomain1);      
+    * Set<Domain> domains = awaitComplete(api, api.getDomainApi().create(createDomains));
+    * }
+    * </pre>
+    */
+   public static <T> T awaitComplete(CloudDNSApi api, Job<T> job)
+         throws TimeoutException {
+      AtomicReference<Job<T>> jobRef = Atomics.newReference(job);
+
+      if (!retry(jobCompleted(api), 600, 2, 2, SECONDS).apply(jobRef)) {
+         throw new TimeoutException("Timeout on: " + jobRef.get());
+      }
+
+      return jobRef.get().getResource().orNull();
+   }
    
    @SuppressWarnings({ "rawtypes", "unchecked" })
-   public static Predicate<AtomicReference<? extends Job<?>>> jobCompleted(CloudDNSApi cloudDNSApi) {
+   private static Predicate<AtomicReference<? extends Job<?>>> jobCompleted(CloudDNSApi cloudDNSApi) {
       return new JobStatusPredicate(cloudDNSApi, Job.Status.COMPLETED);
    }
    
    @SuppressWarnings({ "rawtypes", "unchecked" })
-   public static Predicate<AtomicReference<? extends Job<?>>> jobStatusEqualTo(CloudDNSApi cloudDNSApi, Job.Status status) {
+   private static Predicate<AtomicReference<? extends Job<?>>> jobStatusEqualTo(CloudDNSApi cloudDNSApi, Job.Status status) {
       return new JobStatusPredicate(cloudDNSApi, status);
    }
    

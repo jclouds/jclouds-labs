@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.core.MediaType;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
@@ -41,12 +42,12 @@ import com.google.common.collect.Lists;
  * @author Everett Toews
  */
 @Singleton
-public class BindRecordsToJsonPayload implements Binder {
+public class UpdateRecordsToJSON implements Binder {
 
    private final Json jsonBinder;
 
    @Inject
-   public BindRecordsToJsonPayload(Json jsonBinder) {
+   public UpdateRecordsToJSON(Json jsonBinder) {
       this.jsonBinder = checkNotNull(jsonBinder, "jsonBinder");
    }
 
@@ -56,9 +57,19 @@ public class BindRecordsToJsonPayload implements Binder {
       checkArgument(checkNotNull(input, "input") instanceof Map, "This binder is only valid for Map<String, Record>");
       checkNotNull(request, "request");
 
-      Map<String, Record> idsToRecords = (Map<String, Record>) input;
-      List<UpdateRecord> updateRecords = Lists.newArrayList();
+      Map<String, Record> idsToRecords = (Map<String, Record>) input;      
+      List<UpdateRecord> updateRecords = toUpdateRecordList(idsToRecords);
       
+      String json = jsonBinder.toJson(ImmutableMap.of("records", updateRecords));
+      request.setPayload(json);
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      
+      return request;
+   }
+   
+   static List<UpdateRecord> toUpdateRecordList(Map<String, Record> idsToRecords) {
+      List<UpdateRecord> updateRecords = Lists.newArrayList();
+
       for (String recordId: idsToRecords.keySet()) {
          Record record = idsToRecords.get(recordId);
          
@@ -73,15 +84,10 @@ public class BindRecordsToJsonPayload implements Binder {
          updateRecords.add(updateRecord);
       }
       
-      String json = jsonBinder.toJson(ImmutableMap.of("records", updateRecords));
-      request.setPayload(json);
-      request.getPayload().getContentMetadata().setContentType("application/json");
-      return request;
+      return updateRecords;
    }
    
-   // fields are used when creating the JSON
-   @SuppressWarnings("unused")
-   private static final class UpdateRecord {
+   static final class UpdateRecord {
       public String id;
       public String name;
       public Integer ttl;
