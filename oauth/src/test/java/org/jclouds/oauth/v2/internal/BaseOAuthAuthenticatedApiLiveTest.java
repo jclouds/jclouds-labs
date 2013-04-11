@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.oauth.v2;
+package org.jclouds.oauth.v2.internal;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
@@ -31,6 +31,8 @@ import java.util.Properties;
 
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.config.ValueOfConfigurationKeyOrNull;
+import org.jclouds.oauth.v2.OAuthApi;
+import org.jclouds.oauth.v2.OAuthConstants;
 import org.jclouds.oauth.v2.domain.ClaimSet;
 import org.jclouds.oauth.v2.domain.Header;
 import org.jclouds.oauth.v2.domain.Token;

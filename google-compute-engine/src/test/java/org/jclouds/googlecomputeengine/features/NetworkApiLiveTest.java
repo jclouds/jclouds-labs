@@ -19,19 +19,19 @@
 
 package org.jclouds.googlecomputeengine.features;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.util.List;
+
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.Network;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiLiveTest;
 import org.jclouds.googlecomputeengine.options.ListOptions;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * @author David Alves
@@ -42,13 +42,8 @@ public class NetworkApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private static final String IPV4_RANGE = "10.0.0.0/8";
    private static final int TIME_WAIT = 10;
 
-   @BeforeClass(groups = {"integration", "live"})
-   public void setupContext() {
-      super.setupContext();
-   }
-
    private NetworkApi api() {
-      return context.getApi().getNetworkApiForProject(getUserProject());
+      return api.getNetworkApiForProject(userProject.get());
    }
 
    @Test(groups = "live")

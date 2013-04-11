@@ -46,7 +46,7 @@ public class OperationApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private Operation deleteOperation;
 
    private OperationApi api() {
-      return context.getApi().getOperationApiForProject(getUserProject());
+      return api.getOperationApiForProject(userProject.get());
    }
 
 
@@ -54,10 +54,10 @@ public class OperationApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    public void testCreateOperations() {
       //create some operations by adding and deleting metadata items
       // this will make sure there is stuff to listFirstPage
-      addOperation = assertOperationDoneSucessfully(addItemToMetadata(context.getApi().getProjectApi(),
-              getUserProject(), METADATA_ITEM_KEY, METADATA_ITEM_VALUE), 20);
-      deleteOperation = assertOperationDoneSucessfully(deleteItemFromMetadata(context.getApi()
-              .getProjectApi(), getUserProject(), METADATA_ITEM_KEY), 20);
+      addOperation = assertOperationDoneSucessfully(addItemToMetadata(api.getProjectApi(),
+              userProject.get(), METADATA_ITEM_KEY, METADATA_ITEM_VALUE), 20);
+      deleteOperation = assertOperationDoneSucessfully(deleteItemFromMetadata(api
+              .getProjectApi(), userProject.get(), METADATA_ITEM_KEY), 20);
 
       assertNotNull(addOperation);
       assertNotNull(deleteOperation);

@@ -19,17 +19,15 @@
 
 package org.jclouds.googlecomputeengine.compute;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.Module;
+import static org.testng.Assert.assertTrue;
+
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
-import org.jclouds.oauth.v2.OAuthTestUtils;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
-import java.util.Properties;
-
-import static org.testng.Assert.assertTrue;
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Module;
 
 /**
  * @author David Alves
@@ -63,6 +61,11 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
    @Test(enabled = true, dependsOnMethods = "testReboot")
    public void testSuspendResume() throws Exception {
    }
+   
+   @Test(enabled = true, dependsOnMethods = "testSuspendResume")
+   public void testListNodesByIds() throws Exception {
+      super.testGetNodesWithDetails();
+   }
 
    @Test(enabled = true, dependsOnMethods = "testSuspendResume")
    @Override
@@ -76,7 +79,7 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
       super.testListNodes();
    }
 
-   @Test(enabled = true, dependsOnMethods = {"testListNodes", "testGetNodesWithDetails"})
+   @Test(enabled = true, dependsOnMethods = { "testListNodes", "testGetNodesWithDetails", "testListNodesByIds" })
    @Override
    public void testDestroyNodes() {
       super.testDestroyNodes();
@@ -85,12 +88,5 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
    @Override
    protected Module getSshModule() {
       return new SshjSshClientModule();
-   }
-
-   @Override
-   protected Properties setupProperties() {
-      Properties properties = super.setupProperties();
-      OAuthTestUtils.setCredentialFromPemFile(properties, "google-compute-engine.credential");
-      return properties;
    }
 }
