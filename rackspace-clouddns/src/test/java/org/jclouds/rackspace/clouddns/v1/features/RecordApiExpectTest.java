@@ -220,7 +220,7 @@ public class RecordApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
       assertTrue(record.getUpdated().before(now));
    }
 
-   public void testGetDomain() {
+   public void testGetRecord() {
       URI endpoint = URI.create("https://dns.api.rackspacecloud.com/v1.0/123123/domains/3650908/records/A-9846146");
       RecordApi api = requestsSendResponses(
             rackspaceAuthWithUsernameAndApiKey, 
@@ -311,7 +311,7 @@ public class RecordApiExpectTest extends BaseCloudDNSApiExpectTest<CloudDNSApi> 
       assertEquals(job.getStatus(), Job.Status.COMPLETED);
    }
 
-   public void testDeleteDomains() {
+   public void testDeleteRecords() {
       URI endpoint = URI.create("https://dns.api.rackspacecloud.com/v1.0/123123/domains/3650908/records?id=A-9846146&id=MX-9846146");
       RecordApi api = requestsSendResponses(
             rackspaceAuthWithUsernameAndApiKey, 

@@ -34,14 +34,15 @@ import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.clouddns.v1.config.CloudDNS;
 import org.jclouds.rackspace.clouddns.v1.domain.Job;
 import org.jclouds.rackspace.clouddns.v1.features.DomainApi;
-import org.jclouds.rackspace.clouddns.v1.features.Domains;
 import org.jclouds.rackspace.clouddns.v1.features.LimitApi;
 import org.jclouds.rackspace.clouddns.v1.features.RecordApi;
+import org.jclouds.rackspace.clouddns.v1.features.ReverseDNSApi;
 import org.jclouds.rackspace.clouddns.v1.functions.ParseJob;
 import org.jclouds.rackspace.clouddns.v1.predicates.JobPredicates;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.Endpoint;
 import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
@@ -62,7 +63,7 @@ public interface CloudDNSApi extends Closeable {
     * a Job containing information, which allows the status and response information of the job to be 
     * retrieved at a later point in time.
     * </p>
-    * You likely won't need to use this method directly. Use {@link Domains} or see {@link JobPredicates.JobStatusPredicate}. 
+    * You likely won't need to use this method directly. Use {@link JobPredicates#awaitComplete(CloudDNSApi, Job)}. 
     *
     * @return null, if not found.
     */
@@ -96,4 +97,10 @@ public interface CloudDNSApi extends Closeable {
    @Delegate
    @Path("/domains/{domainId}")
    RecordApi getRecordApiForDomain(@PathParam("domainId") int domainId);
+
+   /**
+    * Provides access to Reverse DNS features.
+    */
+   @Delegate
+   ReverseDNSApi getReverseDNSApiForService(@PayloadParam("serviceName") @PathParam("serviceName") String serviceName);
 }
