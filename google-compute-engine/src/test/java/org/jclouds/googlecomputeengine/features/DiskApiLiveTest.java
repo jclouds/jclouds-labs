@@ -19,21 +19,21 @@
 
 package org.jclouds.googlecomputeengine.features;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.net.URI;
+import java.util.List;
+
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.Disk;
 import org.jclouds.googlecomputeengine.domain.Project;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiLiveTest;
 import org.jclouds.googlecomputeengine.options.ListOptions;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.net.URI;
-import java.util.List;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * @author David Alves
@@ -44,21 +44,15 @@ public class DiskApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private static final int TIME_WAIT = 10;
 
    private URI zoneUrl;
-   private int sizeGb;
-
-   @BeforeClass(groups = {"integration", "live"})
-   public void setupContext() {
-      super.setupContext();
-      sizeGb = 1;
-   }
+   private int sizeGb = 1;
 
    private DiskApi api() {
-      return context.getApi().getDiskApiForProject( getUserProject());
+      return api.getDiskApiForProject(userProject.get());
    }
 
    @Test(groups = "live")
    public void testInsertDisk() {
-      Project project = context.getApi().getProjectApi().get(getUserProject());
+      Project project = api.getProjectApi().get(userProject.get());
       zoneUrl = getDefaultZoneUrl(project.getName());
       assertOperationDoneSucessfully(api().createInZone(DISK_NAME, sizeGb, zoneUrl), TIME_WAIT);
 

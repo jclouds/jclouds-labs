@@ -19,20 +19,23 @@
 
 package org.jclouds.googlecomputeengine.features;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.util.List;
+import java.util.Properties;
+
 import org.jclouds.collect.PagedIterable;
+import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.domain.Instance;
 import org.jclouds.googlecomputeengine.domain.InstanceTemplate;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiLiveTest;
 import org.jclouds.googlecomputeengine.options.ListOptions;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.inject.Module;
 
 /**
  * @author David Alves
@@ -46,34 +49,35 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private static final int TIME_WAIT = 600;
 
    private InstanceTemplate instance;
-
-   @BeforeClass(groups = {"integration", "live"})
-   public void setupContext() {
-      super.setupContext();
+   
+   @Override
+   protected GoogleComputeEngineApi create(Properties props, Iterable<Module> modules) {
+      GoogleComputeEngineApi api = super.create(props, modules);
       instance = InstanceTemplate.builder()
-              .forMachineType(getDefaultMachineTypekUrl(getUserProject()))
-              .addNetworkInterface(getNetworkUrl(getUserProject(), INSTANCE_NETWORK_NAME),
-                      Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
-              .addMetadata("mykey", "myvalue")
-              .addTag("atag")
-              .description("a description")
-              .addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE, getDiskUrl(getUserProject(), DISK_NAME))
-              .zone(getDefaultZoneUrl(getUserProject()));
+            .forMachineType(getDefaultMachineTypekUrl(userProject.get()))
+            .addNetworkInterface(getNetworkUrl(userProject.get(), INSTANCE_NETWORK_NAME),
+                    Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
+            .addMetadata("mykey", "myvalue")
+            .addTag("atag")
+            .description("a description")
+            .addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE, getDiskUrl(userProject.get(), DISK_NAME))
+            .zone(getDefaultZoneUrl(userProject.get()));
+      return api;
    }
 
    private InstanceApi api() {
-      return context.getApi().getInstanceApiForProject(getUserProject());
+      return api.getInstanceApiForProject(userProject.get());
    }
 
    @Test(groups = "live")
    public void testInsertInstance() {
 
       // need to create the network first
-      assertOperationDoneSucessfully(context.getApi().getNetworkApiForProject(getUserProject()).createInIPv4Range
+      assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).createInIPv4Range
               (INSTANCE_NETWORK_NAME, IPV4_RANGE), TIME_WAIT);
 
-      assertOperationDoneSucessfully(context.getApi().getDiskApiForProject(getUserProject()).createInZone
-              ("instance-live-test-disk", 1, getDefaultZoneUrl(getUserProject())), TIME_WAIT);
+      assertOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).createInZone
+              ("instance-live-test-disk", 1, getDefaultZoneUrl(userProject.get())), TIME_WAIT);
 
       assertOperationDoneSucessfully(api().createInZone(INSTANCE_NAME, instance, DEFAULT_ZONE_NAME), TIME_WAIT);
 
@@ -105,9 +109,9 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    public void testDeleteInstance() {
 
       assertOperationDoneSucessfully(api().delete(INSTANCE_NAME), TIME_WAIT);
-      assertOperationDoneSucessfully(context.getApi().getDiskApiForProject(getUserProject()).delete(DISK_NAME),
+      assertOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).delete(DISK_NAME),
               TIME_WAIT);
-      assertOperationDoneSucessfully(context.getApi().getNetworkApiForProject(getUserProject()).delete
+      assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).delete
               (INSTANCE_NETWORK_NAME), TIME_WAIT);
    }
 

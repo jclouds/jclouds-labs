@@ -80,6 +80,6 @@ public class OAuthApiLiveTest extends BaseOAuthApiLiveTest {
       TokenRequest tokenRequest = TokenRequest.builder().header(header).claimSet(claimSet).build();
       Token token = api.authenticate(tokenRequest);
 
-      assertNotNull(token);
+      assertNotNull(token, "no token when authenticating " + tokenRequest);
    }
 }

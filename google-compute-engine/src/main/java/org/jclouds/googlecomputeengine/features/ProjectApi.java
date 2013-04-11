@@ -19,18 +19,39 @@
 
 package org.jclouds.googlecomputeengine.features;
 
-import org.jclouds.googlecomputeengine.domain.Operation;
-import org.jclouds.googlecomputeengine.domain.Project;
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_SCOPE;
 
 import java.util.Map;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.googlecomputeengine.domain.Operation;
+import org.jclouds.googlecomputeengine.domain.Project;
+import org.jclouds.googlecomputeengine.handlers.MetadataBinder;
+import org.jclouds.oauth.v2.config.OAuthScopes;
+import org.jclouds.oauth.v2.filters.OAuthAuthenticator;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.SkipEncoding;
+
 /**
- * Provides synchronous access to Projects via their REST API.
- * <p/>
+ * Provides access to Projects via their REST API.
  *
  * @author David Alves
- * @see ProjectAsyncApi
  * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/projects"/>
  */
+@SkipEncoding({'/', '='})
+@RequestFilters(OAuthAuthenticator.class)
 public interface ProjectApi {
 
    /**
@@ -39,7 +60,13 @@ public interface ProjectApi {
     * @param projectName name of the project to return
     * @return if successful, this method returns a Project resource
     */
-   Project get(String projectName);
+   @Named("Projects:get")
+   @GET
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/projects/{project}")
+   Project get(@PathParam("project") String projectName);
 
    /**
     * Sets metadata common to all instances within the specified project using the data included in the request.
@@ -58,6 +85,13 @@ public interface ProjectApi {
     * @return an Operations resource. To check on the status of an operation, poll the Operations resource returned
     *         to you, and look for the status field.
     */
-   Operation setCommonInstanceMetadata(String projectName, Map<String, String> commonInstanceMetadata);
-
+   @Named("Projects:setCommonInstanceMetadata")
+   @POST
+   @Path("/projects/{project}/setCommonInstanceMetadata")
+   @OAuthScopes(COMPUTE_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Produces(MediaType.APPLICATION_JSON)
+   Operation setCommonInstanceMetadata(@PathParam("project") String projectName,
+                                                         @BinderParam(MetadataBinder.class)
+                                                         Map<String, String> commonInstanceMetadata);
 }
