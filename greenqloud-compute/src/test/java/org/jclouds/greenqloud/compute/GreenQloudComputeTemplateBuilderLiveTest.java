@@ -38,34 +38,45 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * 
- * @author Adrian Cole
+ * @author Adrian Cole, Jos van der Til
  */
 @Test(groups = "live", testName = "GreenQloudComputeTemplateBuilderLiveTest")
-public class GreenQloudComputeTemplateBuilderLiveTestDisabled extends BaseTemplateBuilderLiveTest {
+public class GreenQloudComputeTemplateBuilderLiveTest extends BaseTemplateBuilderLiveTest {
 
-   public GreenQloudComputeTemplateBuilderLiveTestDisabled() {
+   public GreenQloudComputeTemplateBuilderLiveTest() {
       provider = "greenqloud-compute";
    }
 
    @Override
    protected Predicate<OsFamilyVersion64Bit> defineUnsupportedOperatingSystems() {
       return Predicates.not(new Predicate<OsFamilyVersion64Bit>() {
-
          @Override
          public boolean apply(OsFamilyVersion64Bit input) {
             switch (input.family) {
                case UBUNTU:
-                  return (input.version.equals("") || input.version.equals("10.04") || input.version.equals("11.04") || input.version
-                           .equals("11.10"))
+                  return (input.version.equals("")
+                          || input.version.equals("10.04")
+                          || input.version.equals("11.10")
+                          || input.version.equals("12.04.1")
+                          || input.version.equals("12.10"))
                            && input.is64Bit;
                case DEBIAN:
-                  return (input.version.equals("") || input.version.equals("6.0")) && input.is64Bit;
+                  return (input.version.equals("") || input.version.equals("6.0"))
+                          && input.is64Bit;
                case CENTOS:
-                  return (input.version.equals("") || input.version.equals("5.5") || input.version.equals("5.6") || input.version
-                           .equals("6.0"))
+                  return (input.version.equals("")
+                          || input.version.equals("5.8")
+                          || input.version.equals("6.0")
+                          || input.version.equals("6.3"))
                            && input.is64Bit;
                case FEDORA:
-                  return input.version.equals("") && input.is64Bit;
+                  return (input.version.equals("") || input.version.equals("16"))
+                          && input.is64Bit;
+                case WINDOWS:
+                  return (input.version.equals("")
+                          || input.version.equals("2008 R2")
+                          || input.version.equals("2012"))
+                           && input.is64Bit;
                default:
                   return false;
             }
@@ -82,7 +93,7 @@ public class GreenQloudComputeTemplateBuilderLiveTestDisabled extends BaseTempla
       assertEquals(defaultTemplate.getImage().getOperatingSystem().is64Bit(), true);
       assertEquals(defaultTemplate.getImage().getOperatingSystem().getFamily(), OsFamily.UBUNTU);
       assertEquals(defaultTemplate.getImage().getUserMetadata().get("rootDeviceType"), "ebs");
-      assertEquals(defaultTemplate.getHardware().getId(), "m1.small");
+      assertEquals(defaultTemplate.getHardware().getId(), "t1.nano");
       assertEquals(defaultTemplate.getLocation().getId(), "is-1");
       assertEquals(defaultTemplate.getLocation().getScope(), LocationScope.REGION);
       assertEquals(AWSUtils.getRegionFromLocationOrNull(defaultTemplate.getLocation()), "is-1");
