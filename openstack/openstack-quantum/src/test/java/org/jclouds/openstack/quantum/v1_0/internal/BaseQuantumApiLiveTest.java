@@ -19,49 +19,28 @@
 package org.jclouds.openstack.quantum.v1_0.internal;
 
 import java.util.Properties;
-
-import org.jclouds.apis.BaseContextLiveTest;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.quantum.v1_0.QuantumApi;
-import org.jclouds.openstack.quantum.v1_0.QuantumApiMetadata;
-import org.jclouds.openstack.quantum.v1_0.QuantumAsyncApi;
-import org.jclouds.rest.RestContext;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * Tests behavior of {@code QuantumApi}
  * 
  * @author Adam Lowe
+ * @author Zack Shoylev
  */
 @Test(groups = "live")
-public class BaseQuantumApiLiveTest extends BaseContextLiveTest<RestContext<QuantumApi, QuantumAsyncApi>> {
+public class BaseQuantumApiLiveTest extends BaseApiLiveTest<QuantumApi> {
 
    public BaseQuantumApiLiveTest() {
       provider = "openstack-quantum";
    }
-
-   protected RestContext<QuantumApi, QuantumAsyncApi> quantumContext;
-
-   @BeforeGroups(groups = { "integration", "live" })
-   @Override
-   public void setupContext() {
-      super.setupContext();
-      quantumContext = context;
-   }
-
+   
    @Override
    protected Properties setupProperties() {
       Properties props = super.setupProperties();
       setIfTestSystemPropertyPresent(props, KeystoneProperties.CREDENTIAL_TYPE);
       return props;
    }
-
-   @Override
-   protected TypeToken<RestContext<QuantumApi, QuantumAsyncApi>> contextType() {
-      return QuantumApiMetadata.CONTEXT_TOKEN;
-   }
-
 }
