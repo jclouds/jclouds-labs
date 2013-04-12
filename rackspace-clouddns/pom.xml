@@ -73,6 +73,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.jclouds</groupId>
+      <artifactId>jclouds-compute</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jclouds.api</groupId>
       <artifactId>openstack-keystone</artifactId>
       <version>${project.version}</version>
@@ -81,7 +88,21 @@
     </dependency>
     <dependency>
       <groupId>org.jclouds.api</groupId>
+      <artifactId>openstack-nova</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jclouds.api</groupId>
       <artifactId>rackspace-cloudidentity</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jclouds.provider</groupId>
+      <artifactId>rackspace-cloudservers-us</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
