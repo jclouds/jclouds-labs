@@ -20,11 +20,13 @@ package org.jclouds.greenqloud.compute.config;
 
 import org.jclouds.ec2.compute.config.EC2ComputeServiceContextModule;
 import org.jclouds.ec2.compute.strategy.ReviseParsedImage;
+import org.jclouds.ec2.compute.suppliers.EC2HardwareSupplier;
 import org.jclouds.greenqloud.compute.strategy.GreenQloudComputeReviseParsedImage;
+import org.jclouds.greenqloud.compute.suppliers.GreenQloudEC2HardwareSupplier;
 
 /**
  * 
- * @author Adrian Cole
+ * @author Adrian Cole, Jos van der Til
  */
 public class GreenQloudComputeComputeServiceContextModule extends EC2ComputeServiceContextModule {
 
@@ -32,6 +34,7 @@ public class GreenQloudComputeComputeServiceContextModule extends EC2ComputeServ
    protected void configure() {
       super.configure();
       bind(ReviseParsedImage.class).to(GreenQloudComputeReviseParsedImage.class);
+      bind(EC2HardwareSupplier.class).to(GreenQloudEC2HardwareSupplier.class);
    }
 
 }
