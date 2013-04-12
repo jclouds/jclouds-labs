@@ -19,35 +19,19 @@
 package org.jclouds.openstack.swift.v1.internal;
 
 import java.util.Properties;
-
-import org.jclouds.apis.BaseContextLiveTest;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.swift.v1.SwiftApi;
-import org.jclouds.openstack.swift.v1.SwiftApiMetadata;
-import org.jclouds.openstack.swift.v1.SwiftAsyncApi;
-import org.jclouds.rest.RestContext;
-import org.testng.annotations.BeforeGroups;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * Tests behavior of {@code SwiftApi}
  * 
  * @author Adrian Cole
  */
-public class BaseSwiftApiLiveTest extends BaseContextLiveTest<RestContext<SwiftApi, SwiftAsyncApi>> {
+public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
 
    public BaseSwiftApiLiveTest() {
       provider = "openstack-swift";
-   }
-
-   protected RestContext<SwiftApi, SwiftAsyncApi> swiftContext;
-
-   @BeforeGroups(groups = { "integration", "live" })
-   @Override
-   public void setupContext() {
-      super.setupContext();
-      swiftContext = context;
    }
 
    @Override
@@ -56,10 +40,4 @@ public class BaseSwiftApiLiveTest extends BaseContextLiveTest<RestContext<SwiftA
       setIfTestSystemPropertyPresent(props, KeystoneProperties.CREDENTIAL_TYPE);
       return props;
    }
-
-   @Override
-   protected TypeToken<RestContext<SwiftApi, SwiftAsyncApi>> contextType() {
-      return SwiftApiMetadata.CONTEXT_TOKEN;
-   }
-
 }
