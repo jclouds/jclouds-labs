@@ -27,15 +27,16 @@ import org.testng.annotations.Test;
 
 /**
  * @author Adrian Cole
+ * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "ContainerApiLiveTest")
 public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
 
    @Test
    public void testGetAccountMetadata() throws Exception {
-      for (String regionId : swiftContext.getApi().getConfiguredRegions()) {
-         AccountApi api = swiftContext.getApi().getAccountApiForRegion(regionId);
-         Account account = api.get();
+      for (String regionId : api.getConfiguredRegions()) {
+         AccountApi accountApi = api.getAccountApiForRegion(regionId);
+         Account account = accountApi.get();
          assertNotNull(account);
          assertTrue(account.getContainerCount() >= 0);
          assertTrue(account.getBytesUsed() >= 0);

@@ -18,6 +18,9 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.rest.annotations.RequestFilters;
+
 /**
  * Storage Object Services An object represents the data and any metadata for the files stored in
  * the system. Through the ReST interface, metadata for an object can be included by adding custom
@@ -27,12 +30,13 @@ package org.jclouds.openstack.swift.v1.features;
  * download a single concatenated object. You can work with the segments and manifests directly with
  * HTTP requests.
  * 
- * @see ObjectAsyncApi
  * @author Adrian Cole
+ * @author Zack Shoylev
  * @see <a href=
  *      "http://docs.openstack.org/api/openstack-object-storage/1.0/content/storage-object-services.html"
  *      >api doc</a>
  */
+@RequestFilters(AuthenticateRequest.class)
 public interface ObjectApi {
 
 }
