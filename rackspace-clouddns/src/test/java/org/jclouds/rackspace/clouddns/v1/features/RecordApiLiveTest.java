@@ -18,6 +18,7 @@
  */
 package org.jclouds.rackspace.clouddns.v1.features;
 
+import static org.jclouds.rackspace.clouddns.v1.predicates.JobPredicates.awaitComplete;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -65,7 +66,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       Iterable<CreateDomain> createDomains = ImmutableList.of(createDomain);      
-      Domain domain = Domains.create(api, createDomains).iterator().next();
+      Domain domain = awaitComplete(api, api.getDomainApi().create(createDomains)).iterator().next();
       
       assertEquals(domain.getName(), JCLOUDS_EXAMPLE);
       assertEquals(domain.getEmail(), "jclouds@" + JCLOUDS_EXAMPLE);
@@ -100,7 +101,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
             .build();
 
       List<Record> createRecords = ImmutableList.of(createMXRecord, createARecord, createSRVRecord);
-      Set<RecordDetail> records = Records.create(api, domainId, createRecords);
+      Set<RecordDetail> records = awaitComplete(api, api.getRecordApiForDomain(domainId).create(createRecords));
 
       Thread.sleep(1000);
       Date now = new Date();
@@ -209,7 +210,8 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
             .comment("Updated Protocol to UDP")
             .build();
 
-      Records.update(api, domainId, srvRecordId, record);
+      awaitComplete(api, api.getRecordApiForDomain(domainId).update(srvRecordId, record));
+
       RecordDetail srvRecord = api.getRecordApiForDomain(domainId).get(srvRecordId);
       Date now = new Date();
       
@@ -230,7 +232,8 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
       Map<String, Record> idsToRecords = RecordFunctions.toRecordMap(recordDetails);
       Map<String, Record> updateRecords = Maps.transformValues(idsToRecords, updateTTLAndComment(35813, "New TTL")); 
             
-      Records.update(api, domainId, updateRecords);
+      awaitComplete(api, api.getRecordApiForDomain(domainId).update(updateRecords));
+
       RecordDetail record = api.getRecordApiForDomain(domainId).get(aRecordId);
       Date now = new Date();
       
@@ -261,7 +264,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
 
    @Test(dependsOnMethods = "testUpdateRecords")
    public void testDeleteRecord() throws Exception {      
-      Records.delete(api, domainId, aRecordId);
+      awaitComplete(api, api.getRecordApiForDomain(domainId).delete(aRecordId));
       
       assertNull(api.getRecordApiForDomain(domainId).get(aRecordId));
    }
@@ -269,7 +272,8 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
    @Test(dependsOnMethods = "testDeleteRecord")
    public void testDeleteRecords() throws Exception {      
       List<String> recordIds = ImmutableList.<String> of(srvRecordId, mxRecordId);
-      Records.delete(api, domainId, recordIds);
+      
+      awaitComplete(api, api.getRecordApiForDomain(domainId).delete(recordIds));
       
       assertNull(api.getRecordApiForDomain(domainId).get(srvRecordId));
       assertNull(api.getRecordApiForDomain(domainId).get(mxRecordId));
@@ -279,7 +283,7 @@ public class RecordApiLiveTest extends BaseCloudDNSApiLiveTest {
    @AfterClass(groups = { "integration", "live" })
    protected void tearDown() {
       try {
-         Domains.delete(api, ImmutableList.<Integer> of(domainId));
+         awaitComplete(api, api.getDomainApi().delete(ImmutableList.<Integer> of(domainId), true));
       }
       catch (TimeoutException e) {
          e.printStackTrace();
