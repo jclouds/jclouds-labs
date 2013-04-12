@@ -20,36 +20,28 @@ package org.jclouds.openstack.quantum.v1_0;
 
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
-
 import java.net.URI;
 import java.util.Properties;
-
 import org.jclouds.apis.ApiMetadata;
+import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.MappedAuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
-import org.jclouds.openstack.quantum.v1_0.config.QuantumRestClientModule;
+import org.jclouds.openstack.quantum.v1_0.config.QuantumHttpApiModule;
 import org.jclouds.openstack.v2_0.ServiceType;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
-
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Quantum 1.0 API
  * 
  * @author Adam Lowe
+ * @author Zack Shoylev
  */
-public class QuantumApiMetadata extends BaseRestApiMetadata {
+public class QuantumApiMetadata extends BaseHttpApiMetadata<QuantumApi> {
 
-   public static final TypeToken<RestContext<QuantumApi, QuantumAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<QuantumApi, QuantumAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
-
-   @Override
+    @Override
    public Builder toBuilder() {
       return new Builder().fromApiMetadata(this);
    }
@@ -63,16 +55,15 @@ public class QuantumApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(SERVICE_TYPE, ServiceType.NETWORK);
       properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<QuantumApi, Builder> {
 
       protected Builder() {
-         super(QuantumApi.class, QuantumAsyncApi.class);
           id("openstack-quantum")
          .name("OpenStack Quantum API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
@@ -83,10 +74,10 @@ public class QuantumApiMetadata extends BaseRestApiMetadata {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(QuantumApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                                     .add(MappedAuthenticationApiModule.class)
+                                     .add(AuthenticationApiModule.class)
                                      .add(KeystoneAuthenticationModule.class)
                                      .add(ZoneModule.class)
-                                     .add(QuantumRestClientModule.class).build());
+                                     .add(QuantumHttpApiModule.class).build());
       }
       
       @Override

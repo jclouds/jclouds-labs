@@ -36,14 +36,15 @@ import com.google.common.collect.ImmutableList;
  * Tests NetworkApi
  *
  * @author Adam Lowe
+ * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "NetworkApiLiveTest", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseQuantumApiLiveTest {
 
    public void testListNetworks() {
-      for (String zoneId : quantumContext.getApi().getConfiguredZones()) {
-         Set<? extends Reference> ids = quantumContext.getApi().getNetworkApiForZone(zoneId).listReferences().toSet();
-         Set<? extends Network> networks = quantumContext.getApi().getNetworkApiForZone(zoneId).list().toSet();
+      for (String zoneId : api.getConfiguredZones()) {
+         Set<? extends Reference> ids = api.getNetworkApiForZone(zoneId).listReferences().toSet();
+         Set<? extends Network> networks = api.getNetworkApiForZone(zoneId).list().toSet();
          assertNotNull(ids);
          assertEquals(ids.size(), networks.size());
          for (Network network : networks) {
@@ -54,13 +55,13 @@ public class NetworkApiLiveTest extends BaseQuantumApiLiveTest {
    }
 
    public void testCreateUpdateAndDeleteNetwork() {
-      for (String zoneId : quantumContext.getApi().getConfiguredZones()) {
-         NetworkApi api = quantumContext.getApi().getNetworkApiForZone(zoneId);
-         Reference net = api.create("jclouds-test");
+      for (String zoneId : api.getConfiguredZones()) {
+         NetworkApi netApi = api.getNetworkApiForZone(zoneId);
+         Reference net = netApi.create("jclouds-test");
          assertNotNull(net);
 
-         Network network = api.get(net.getId());
-         NetworkDetails details = api.getDetails(net.getId());
+         Network network = netApi.get(net.getId());
+         NetworkDetails details = netApi.getDetails(net.getId());
          
          for(Network checkme : ImmutableList.of(network, details)) {
             assertEquals(checkme.getId(), net.getId());
@@ -69,11 +70,11 @@ public class NetworkApiLiveTest extends BaseQuantumApiLiveTest {
          
          assertTrue(details.getPorts().isEmpty());
 
-         assertTrue(api.rename(net.getId(), "jclouds-live-test"));
+         assertTrue(netApi.rename(net.getId(), "jclouds-live-test"));
          
          // Grab the updated metadata
-         network = api.get(net.getId());
-         details = api.getDetails(net.getId());
+         network = netApi.get(net.getId());
+         details = netApi.getDetails(net.getId());
 
          for(Network checkme : ImmutableList.of(network, details)) {
             assertEquals(checkme.getId(), net.getId());
@@ -82,11 +83,11 @@ public class NetworkApiLiveTest extends BaseQuantumApiLiveTest {
 
          assertTrue(details.getPorts().isEmpty());
 
-         Reference net2 = api.create("jclouds-test2");
+         Reference net2 = netApi.create("jclouds-test2");
          assertNotNull(net2);
         
-         assertTrue(api.delete(net.getId()));
-         assertTrue(api.delete(net2.getId()));
+         assertTrue(netApi.delete(net.getId()));
+         assertTrue(netApi.delete(net2.getId()));
       }
    }   
 }
