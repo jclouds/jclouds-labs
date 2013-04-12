@@ -33,15 +33,17 @@ import org.jclouds.rest.annotations.EndpointParam;
 
 import com.google.inject.Provides;
 
+import java.io.Closeable;
+
 /**
- * Provides synchronous access to Quantum.
+ * Provides access to Quantum.
  * <p/>
  *
  * @author Adam Lowe
- * @see QuantumAsyncApi
+ * @author Zack Shoylev
  * @see <a href="http://docs.openstack.org/api/openstack-network/1.0/content">api doc</a>
  */
-public interface QuantumApi {
+public interface QuantumApi extends Closeable {
    /**
     * @return the Zone codes configured
     */
@@ -50,20 +52,20 @@ public interface QuantumApi {
    Set<String> getConfiguredZones();
 
    /**
-    * Provides synchronous access to Extension features.
+    * Provides access to Extension features.
     */
    @Delegate
    ExtensionApi getExtensionApiForZone(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
 
    /**
-    * Provides synchronous access to Network features.
+    * Provides access to Network features.
     */
    @Delegate
    NetworkApi getNetworkApiForZone(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
 
    /**
-    * Provides synchronous access to Port features.
+    * Provides access to Port features.
     */
    @Delegate
    @Path("/networks/{net}")

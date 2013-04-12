@@ -18,16 +18,11 @@
  */
 package org.jclouds.openstack.quantum.v1_0.config;
 
-import static org.jclouds.reflect.Reflection2.typeToken;
-
 import java.net.URI;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Provider;
 import javax.inject.Singleton;
-
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
@@ -35,51 +30,27 @@ import org.jclouds.http.annotation.ServerError;
 import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.openstack.quantum.v1_0.QuantumApi;
-import org.jclouds.openstack.quantum.v1_0.QuantumAsyncApi;
-import org.jclouds.openstack.quantum.v1_0.features.NetworkApi;
-import org.jclouds.openstack.quantum.v1_0.features.NetworkAsyncApi;
-import org.jclouds.openstack.quantum.v1_0.features.PortApi;
-import org.jclouds.openstack.quantum.v1_0.features.PortAsyncApi;
 import org.jclouds.openstack.quantum.v1_0.handlers.QuantumErrorHandler;
 import org.jclouds.openstack.v2_0.domain.Extension;
-import org.jclouds.openstack.v2_0.features.ExtensionApi;
-import org.jclouds.openstack.v2_0.features.ExtensionAsyncApi;
 import org.jclouds.openstack.v2_0.functions.PresentWhenExtensionAnnotationNamespaceEqualsAnyNamespaceInExtensionsSet;
-import org.jclouds.rest.ConfiguresRestClient;
-import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
 import org.jclouds.rest.functions.ImplicitOptionalConverter;
-
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Provides;
 
 /**
  * Configures the Quantum connection.
  * 
  * @author Adam Lowe
+ * @author Zack Shoylev
  */
-@ConfiguresRestClient
-public class QuantumRestClientModule<S extends QuantumApi, A extends QuantumAsyncApi> extends RestClientModule<S, A> {
-
-   public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>> builder()
-         .put(ExtensionApi.class, ExtensionAsyncApi.class)
-         .put(NetworkApi.class, NetworkAsyncApi.class)
-         .put(PortApi.class, PortAsyncApi.class)
-         .build();
-
-   @SuppressWarnings("unchecked")
-   public QuantumRestClientModule() {
-      super(TypeToken.class.cast(typeToken(QuantumApi.class)), TypeToken.class.cast(typeToken(QuantumAsyncApi.class)), DELEGATE_MAP);
-   }
-
-   protected QuantumRestClientModule(TypeToken<S> syncClientType, TypeToken<A> asyncClientType, Map<Class<?>, Class<?>> sync2Async) {
-      super(syncClientType, asyncClientType, sync2Async);
-   }
+@ConfiguresHttpApi
+public class QuantumHttpApiModule extends HttpApiModule<QuantumApi> {
    
    @Override
    protected void configure() {
