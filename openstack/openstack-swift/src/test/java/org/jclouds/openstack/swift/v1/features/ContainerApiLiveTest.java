@@ -36,9 +36,9 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
 
    @Test
    public void testListContainers() throws Exception {
-      for (String regionId : swiftContext.getApi().getConfiguredRegions()) {
-         ContainerApi api = swiftContext.getApi().getContainerApiForRegion(regionId);
-         FluentIterable<? extends Container> response = api.list();
+      for (String regionId : api.getConfiguredRegions()) {
+         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
+         FluentIterable<? extends Container> response = containerApi.list();
          assertNotNull(response);
          for (Container container : response) {
             assertNotNull(container.getName());

@@ -20,35 +20,27 @@ package org.jclouds.openstack.swift.v1;
 
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
-
 import java.net.URI;
 import java.util.Properties;
-
 import org.jclouds.apis.ApiMetadata;
+import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.MappedAuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
-import org.jclouds.openstack.swift.v1.config.SwiftRestClientModule;
+import org.jclouds.openstack.swift.v1.config.SwiftHttpApiModule;
 import org.jclouds.openstack.v2_0.ServiceType;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
-
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Swift 1.0 API
  * 
  * @author Adrian Cole
+ * @author Zack Shoylev
  */
-public class SwiftApiMetadata extends BaseRestApiMetadata {
-
-   public static final TypeToken<RestContext<SwiftApi, SwiftAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<SwiftApi, SwiftAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
-
+public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
+   
    @Override
    public Builder toBuilder() {
       return new Builder().fromApiMetadata(this);
@@ -63,16 +55,15 @@ public class SwiftApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(SERVICE_TYPE, ServiceType.OBJECT_STORE);
       properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<SwiftApi, Builder> {
 
       protected Builder() {
-         super(SwiftApi.class, SwiftAsyncApi.class);
           id("openstack-swift")
          .name("OpenStack Swift Diablo+ API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
@@ -83,10 +74,10 @@ public class SwiftApiMetadata extends BaseRestApiMetadata {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(SwiftApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                                     .add(MappedAuthenticationApiModule.class)
+                                     .add(AuthenticationApiModule.class)
                                      .add(KeystoneAuthenticationModule.class)
                                      .add(RegionModule.class)
-                                     .add(SwiftRestClientModule.class).build());
+                                     .add(SwiftHttpApiModule.class).build());
       }
       
       @Override
