@@ -18,17 +18,24 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import javax.ws.rs.HEAD;
+import javax.ws.rs.Path;
+import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.domain.Account;
+import org.jclouds.openstack.swift.v1.functions.ParseAccountMetadataResponseFromHeaders;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 
 /**
  * Storage Account Services
  * 
- * @see AccountAsyncApi
  * @author Adrian Cole
+ * @author Zack Shoylev
  * @see <a
  *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/storage-account-services.html"
  *      >api doc</a>
  */
+@RequestFilters(AuthenticateRequest.class)
 public interface AccountApi {
    
    /**
@@ -36,6 +43,9 @@ public interface AccountApi {
     * 
     * @return account metadata including container count and bytes used
     */
+   @HEAD
+   @ResponseParser(ParseAccountMetadataResponseFromHeaders.class)
+   @Path("/")
    Account get();
 
 }

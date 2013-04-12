@@ -18,6 +18,7 @@
  */
 package org.jclouds.openstack.swift.v1;
 
+import java.io.Closeable;
 import java.util.Set;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
@@ -32,14 +33,14 @@ import org.jclouds.rest.annotations.EndpointParam;
 import com.google.inject.Provides;
 
 /**
- * Provides synchronous access to Swift.
+ * Provides access to Swift.
  * <p/>
- * 
- * @see SwiftAsyncApi
+ *
  * @see <a href="http://docs.openstack.org/api/openstack-object-storage/1.0/content">api doc</a>
  * @author Adrian Cole
+ * @author Zack Shoylev
  */
-public interface SwiftApi {
+public interface SwiftApi extends Closeable {
    /**
     * 
     * @return the Region codes configured
@@ -49,26 +50,26 @@ public interface SwiftApi {
    Set<String> getConfiguredRegions();
 
    /**
-    * Provides synchronous access to Extension features.
+    * Provides access to Extension features.
     */
    @Delegate
    ExtensionApi getExtensionApiForRegion(
          @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
    /**
-    * Provides synchronous access to Account features.
+    * Provides access to Account features.
     */
    @Delegate
    AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
    /**
-    * Provides synchronous access to Container features.
+    * Provides access to Container features.
     */
    @Delegate
    ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
    /**
-    * Provides synchronous access to Object features.
+    * Provides access to Object features.
     */
    @Delegate
    ObjectApi getObjectApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);

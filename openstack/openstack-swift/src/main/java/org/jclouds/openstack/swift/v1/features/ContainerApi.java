@@ -18,25 +18,40 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
+import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
+import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.options.ListContainersOptions;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
 
 import com.google.common.collect.FluentIterable;
 
 /**
  * Storage Container Services
  * 
- * @see ContainerAsyncApi
  * @author Adrian Cole
+ * @author Zack Shoylev
  * @see <a href=
  *      "http://docs.openstack.org/api/openstack-object-storage/1.0/content/storage-container-services.html"
  *      >api doc</a>
  */
+@RequestFilters(AuthenticateRequest.class)
 public interface ContainerApi {
 
    /**
     * @see #list(ListContainersOptions)
     */
+   @GET
+   @Consumes(MediaType.APPLICATION_JSON)
+   @QueryParams(keys = "format", values = "json")
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
+   @Path("/")
    FluentIterable<? extends Container> list();
 
    /**
@@ -47,6 +62,11 @@ public interface ContainerApi {
     * @param options
     * @return a list of existing storage containers ordered by name.
     */
+   @GET
+   @Consumes(MediaType.APPLICATION_JSON)
+   @QueryParams(keys = "format", values = "json")
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
+   @Path("/")
    FluentIterable<? extends Container> list(ListContainersOptions options);
 
 }
