@@ -70,11 +70,11 @@ public class Conversion extends DomainWithTasksWrapper<ConversionDto> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_MACHINE_TEMPLATE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
       ParseXMLWithJAXB<VirtualMachineTemplateDto> parser = new ParseXMLWithJAXB<VirtualMachineTemplateDto>(
-            utils.getXml(), TypeLiteral.get(VirtualMachineTemplateDto.class));
+            utils.xml(), TypeLiteral.get(VirtualMachineTemplateDto.class));
 
       return wrap(context, VirtualMachineTemplate.class, parser.apply(response));
    }

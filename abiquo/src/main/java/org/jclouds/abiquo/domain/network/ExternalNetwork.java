@@ -129,10 +129,10 @@ public class ExternalNetwork extends Network<ExternalIp> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.ENTERPRISE), ValidationErrors.MISSING_REQUIRED_LINK
             + " " + ParentLinkName.ENTERPRISE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<EnterpriseDto> parser = new ParseXMLWithJAXB<EnterpriseDto>(utils.getXml(),
+      ParseXMLWithJAXB<EnterpriseDto> parser = new ParseXMLWithJAXB<EnterpriseDto>(utils.xml(),
             TypeLiteral.get(EnterpriseDto.class));
 
       enterprise = wrap(context, Enterprise.class, parser.apply(response));
@@ -143,10 +143,10 @@ public class ExternalNetwork extends Network<ExternalIp> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.DATACENTER), ValidationErrors.MISSING_REQUIRED_LINK
             + " " + ParentLinkName.DATACENTER);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(utils.getXml(),
+      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(utils.xml(),
             TypeLiteral.get(DatacenterDto.class));
 
       datacenter = wrap(context, Datacenter.class, parser.apply(response));

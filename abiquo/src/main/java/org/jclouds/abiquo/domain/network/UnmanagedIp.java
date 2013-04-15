@@ -57,10 +57,10 @@ public class UnmanagedIp extends AbstractPublicIp<UnmanagedIpDto, UnmanagedNetwo
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.UNMANAGED_NETWORK),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.UNMANAGED_NETWORK);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<VLANNetworkDto> parser = new ParseXMLWithJAXB<VLANNetworkDto>(utils.getXml(),
+      ParseXMLWithJAXB<VLANNetworkDto> parser = new ParseXMLWithJAXB<VLANNetworkDto>(utils.xml(),
             TypeLiteral.get(VLANNetworkDto.class));
 
       return wrap(context, UnmanagedNetwork.class, parser.apply(response));

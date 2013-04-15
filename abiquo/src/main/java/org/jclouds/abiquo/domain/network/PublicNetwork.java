@@ -123,10 +123,10 @@ public class PublicNetwork extends Network<PublicIp> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.DATACENTER), ValidationErrors.MISSING_REQUIRED_LINK
             + " " + ParentLinkName.DATACENTER);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(utils.getXml(),
+      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(utils.xml(),
             TypeLiteral.get(DatacenterDto.class));
 
       datacenter = wrap(context, Datacenter.class, parser.apply(response));

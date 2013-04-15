@@ -83,7 +83,7 @@ public class BaseGoogleComputeEngineApiLiveTest extends BaseContextLiveTest<Rest
    }
 
    protected Predicate<AtomicReference<Operation>> getOperationDonePredicate() {
-      return context.utils().getInjector().getInstance(Key.get(new TypeLiteral<Predicate<AtomicReference<Operation>>>
+      return context.utils().injector().getInstance(Key.get(new TypeLiteral<Predicate<AtomicReference<Operation>>>
               () {}));
    }
 

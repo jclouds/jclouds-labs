@@ -434,19 +434,19 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    }
 
    public List<VirtualMachineTemplate> listTemplates() {
-      ListVirtualMachineTemplates strategy = context.getUtils().getInjector()
+      ListVirtualMachineTemplates strategy = context.utils().injector()
             .getInstance(ListVirtualMachineTemplates.class);
       return ImmutableList.copyOf(strategy.execute(this));
    }
 
    public List<VirtualMachineTemplate> listTemplates(final Predicate<VirtualMachineTemplate> filter) {
-      ListVirtualMachineTemplates strategy = context.getUtils().getInjector()
+      ListVirtualMachineTemplates strategy = context.utils().injector()
             .getInstance(ListVirtualMachineTemplates.class);
       return ImmutableList.copyOf(strategy.execute(this, filter));
    }
 
    public VirtualMachineTemplate findTemplate(final Predicate<VirtualMachineTemplate> filter) {
-      ListVirtualMachineTemplates strategy = context.getUtils().getInjector()
+      ListVirtualMachineTemplates strategy = context.utils().injector()
             .getInstance(ListVirtualMachineTemplates.class);
       return Iterables.getFirst(strategy.execute(this, filter), null);
    }
@@ -474,10 +474,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter) {
       DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("externalnetworks"));
 
-      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),
+      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(utils.xml(),
             TypeLiteral.get(VLANNetworksDto.class));
 
       return wrap(context, ExternalNetwork.class, parser.apply(response).getCollection());
@@ -498,12 +498,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter) {
       DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       // The "rel" for the unmanaged networks is the same than the one used for
       // external networks
       HttpResponse response = utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("externalnetworks"));
 
-      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),
+      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(utils.xml(),
             TypeLiteral.get(VLANNetworksDto.class));
 
       return wrap(context, UnmanagedNetwork.class, parser.apply(response).getCollection());

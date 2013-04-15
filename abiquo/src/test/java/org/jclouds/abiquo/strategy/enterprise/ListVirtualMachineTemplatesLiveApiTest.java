@@ -44,7 +44,7 @@ public class ListVirtualMachineTemplatesLiveApiTest extends BaseAbiquoStrategyLi
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListVirtualMachineTemplates.class);
+      this.strategy = env.context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
    }
 
    public void testExecute() {
