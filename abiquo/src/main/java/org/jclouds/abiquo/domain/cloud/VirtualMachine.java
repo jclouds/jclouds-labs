@@ -235,10 +235,10 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_APPLIANCE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<VirtualApplianceDto> parser = new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(),
+      ParseXMLWithJAXB<VirtualApplianceDto> parser = new ParseXMLWithJAXB<VirtualApplianceDto>(utils.xml(),
             TypeLiteral.get(VirtualApplianceDto.class));
 
       return wrap(context, VirtualAppliance.class, parser.apply(response));
@@ -316,7 +316,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
    public List<Ip<?, ?>> listAttachedNics() {
       // The strategy will refresh the vm. There is no need to do it here
-      ListAttachedNics strategy = context.getUtils().getInjector().getInstance(ListAttachedNics.class);
+      ListAttachedNics strategy = context.utils().injector().getInstance(ListAttachedNics.class);
       return ImmutableList.copyOf(strategy.execute(this));
    }
 
@@ -503,7 +503,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
       // available
       if (task != null) {
          VirtualMachineState originalState = target.getState();
-         VirtualMachineMonitor monitor = context.getUtils().getInjector().getInstance(MonitoringService.class)
+         VirtualMachineMonitor monitor = context.utils().injector().getInstance(MonitoringService.class)
                .getVirtualMachineMonitor();
          monitor.awaitState(originalState, this);
       }

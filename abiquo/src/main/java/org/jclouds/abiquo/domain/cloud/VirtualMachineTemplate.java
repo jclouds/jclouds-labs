@@ -175,10 +175,10 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     */
    public Volume getVolume() {
       if (this.isPersistent()) {
-         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+         ExtendedUtils utils = (ExtendedUtils) context.utils();
          HttpResponse rp = checkNotNull(utils.getAbiquoHttpClient().get(target.searchLink("volume")), "volume");
 
-         ParseXMLWithJAXB<VolumeManagementDto> parser = new ParseXMLWithJAXB<VolumeManagementDto>(utils.getXml(),
+         ParseXMLWithJAXB<VolumeManagementDto> parser = new ParseXMLWithJAXB<VolumeManagementDto>(utils.xml(),
                TypeLiteral.get(VolumeManagementDto.class));
 
          VolumeManagementDto dto = parser.apply(rp);

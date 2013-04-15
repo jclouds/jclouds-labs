@@ -74,10 +74,10 @@ public class Blade extends AbstractPhysicalMachine {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.RACK), ValidationErrors.MISSING_REQUIRED_LINK + " "
             + ParentLinkName.RACK);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<UcsRackDto> parser = new ParseXMLWithJAXB<UcsRackDto>(utils.getXml(),
+      ParseXMLWithJAXB<UcsRackDto> parser = new ParseXMLWithJAXB<UcsRackDto>(utils.xml(),
             TypeLiteral.get(UcsRackDto.class));
 
       return wrap(context, ManagedRack.class, parser.apply(response));

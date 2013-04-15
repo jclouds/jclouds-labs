@@ -152,24 +152,24 @@ public class BaseMonitoringService implements MonitoringService {
 
    @Override
    public VirtualMachineMonitor getVirtualMachineMonitor() {
-      return checkNotNull(context.getUtils().getInjector().getInstance(VirtualMachineMonitor.class),
+      return checkNotNull(context.utils().injector().getInstance(VirtualMachineMonitor.class),
             "virtualMachineMonitor");
    }
 
    @Override
    public VirtualApplianceMonitor getVirtualApplianceMonitor() {
-      return checkNotNull(context.getUtils().getInjector().getInstance(VirtualApplianceMonitor.class),
+      return checkNotNull(context.utils().injector().getInstance(VirtualApplianceMonitor.class),
             "virtualApplianceMonitor");
    }
 
    @Override
    public AsyncTaskMonitor getAsyncTaskMonitor() {
-      return checkNotNull(context.getUtils().getInjector().getInstance(AsyncTaskMonitor.class), "asyncTaskMonitor");
+      return checkNotNull(context.utils().injector().getInstance(AsyncTaskMonitor.class), "asyncTaskMonitor");
    }
 
    @Override
    public ConversionMonitor getConversionMonitor() {
-      return checkNotNull(context.getUtils().getInjector().getInstance(ConversionMonitor.class), "conversionMonitor");
+      return checkNotNull(context.utils().injector().getInstance(ConversionMonitor.class), "conversionMonitor");
    }
 
    /**

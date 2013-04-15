@@ -86,22 +86,22 @@ public class ListAttachedNics implements ListEntities<Ip<?, ?>, VirtualMachine> 
             HttpResponse response = extendedUtils.getAbiquoHttpClient().get(input);
 
             if (input.getType().equals(PrivateIpDto.BASE_MEDIA_TYPE)) {
-               ParseXMLWithJAXB<PrivateIpDto> parser = new ParseXMLWithJAXB<PrivateIpDto>(extendedUtils.getXml(),
+               ParseXMLWithJAXB<PrivateIpDto> parser = new ParseXMLWithJAXB<PrivateIpDto>(extendedUtils.xml(),
                      TypeLiteral.get(PrivateIpDto.class));
 
                return wrap(context, PrivateIp.class, parser.apply(response));
             } else if (input.getType().equals(PublicIpDto.BASE_MEDIA_TYPE)) {
-               ParseXMLWithJAXB<PublicIpDto> parser = new ParseXMLWithJAXB<PublicIpDto>(extendedUtils.getXml(),
+               ParseXMLWithJAXB<PublicIpDto> parser = new ParseXMLWithJAXB<PublicIpDto>(extendedUtils.xml(),
                      TypeLiteral.get(PublicIpDto.class));
 
                return wrap(context, PublicIp.class, parser.apply(response));
             } else if (input.getType().equals(ExternalIpDto.BASE_MEDIA_TYPE)) {
-               ParseXMLWithJAXB<ExternalIpDto> parser = new ParseXMLWithJAXB<ExternalIpDto>(extendedUtils.getXml(),
+               ParseXMLWithJAXB<ExternalIpDto> parser = new ParseXMLWithJAXB<ExternalIpDto>(extendedUtils.xml(),
                      TypeLiteral.get(ExternalIpDto.class));
 
                return wrap(context, ExternalIp.class, parser.apply(response));
             } else if (input.getType().equals(UnmanagedIpDto.BASE_MEDIA_TYPE)) {
-               ParseXMLWithJAXB<UnmanagedIpDto> parser = new ParseXMLWithJAXB<UnmanagedIpDto>(extendedUtils.getXml(),
+               ParseXMLWithJAXB<UnmanagedIpDto> parser = new ParseXMLWithJAXB<UnmanagedIpDto>(extendedUtils.xml(),
                      TypeLiteral.get(UnmanagedIpDto.class));
 
                return wrap(context, UnmanagedIp.class, parser.apply(response));

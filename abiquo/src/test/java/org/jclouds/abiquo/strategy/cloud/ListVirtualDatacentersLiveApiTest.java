@@ -44,7 +44,7 @@ public class ListVirtualDatacentersLiveApiTest extends BaseAbiquoStrategyLiveApi
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListVirtualDatacenters.class);
+      this.strategy = env.context.utils().injector().getInstance(ListVirtualDatacenters.class);
    }
 
    public void testExecute() {

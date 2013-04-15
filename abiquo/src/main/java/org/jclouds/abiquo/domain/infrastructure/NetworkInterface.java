@@ -68,10 +68,10 @@ public class NetworkInterface extends DomainWrapper<NetworkInterfaceDto> {
    public NetworkServiceType getNetworkServiceType() {
       RESTLink link = target.getNetworkServiceTypeLink();
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<NetworkServiceTypeDto> parser = new ParseXMLWithJAXB<NetworkServiceTypeDto>(utils.getXml(),
+      ParseXMLWithJAXB<NetworkServiceTypeDto> parser = new ParseXMLWithJAXB<NetworkServiceTypeDto>(utils.xml(),
             TypeLiteral.get(NetworkServiceTypeDto.class));
 
       return wrap(context, NetworkServiceType.class, parser.apply(response));

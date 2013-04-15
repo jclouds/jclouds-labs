@@ -49,7 +49,7 @@ public class BaseInjectionTest {
             .credentials("identity", "credential") //
             .modules(ImmutableSet.<Module> of(new NullLoggingModule())) //
             .overrides(buildProperties()) //
-            .build(AbiquoContext.class).getUtils().getInjector();
+            .build(AbiquoContext.class).utils().injector();
    }
 
    protected Properties buildProperties() {

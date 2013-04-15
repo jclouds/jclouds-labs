@@ -147,10 +147,10 @@ public class StoragePool extends DomainWrapper<StoragePoolDto> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.STORAGE_DEVICE),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.STORAGE_DEVICE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<StorageDeviceDto> parser = new ParseXMLWithJAXB<StorageDeviceDto>(utils.getXml(),
+      ParseXMLWithJAXB<StorageDeviceDto> parser = new ParseXMLWithJAXB<StorageDeviceDto>(utils.xml(),
             TypeLiteral.get(StorageDeviceDto.class));
 
       return wrap(context, StorageDevice.class, parser.apply(response));
@@ -168,10 +168,10 @@ public class StoragePool extends DomainWrapper<StoragePoolDto> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.TIER), ValidationErrors.MISSING_REQUIRED_LINK + " "
             + ParentLinkName.TIER);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<TierDto> parser = new ParseXMLWithJAXB<TierDto>(utils.getXml(), TypeLiteral.get(TierDto.class));
+      ParseXMLWithJAXB<TierDto> parser = new ParseXMLWithJAXB<TierDto>(utils.xml(), TypeLiteral.get(TierDto.class));
 
       return wrap(context, Tier.class, parser.apply(response));
    }

@@ -127,7 +127,7 @@ public class User extends DomainWrapper<UserDto> {
          return this.getEnterprise().listVirtualDatacenters();
       }
 
-      ListVirtualDatacenters listVirtualDatacenters = context.getUtils().getInjector()
+      ListVirtualDatacenters listVirtualDatacenters = context.utils().injector()
             .getInstance(ListVirtualDatacenters.class);
       return ImmutableList.copyOf(listVirtualDatacenters.execute(ids));
    }

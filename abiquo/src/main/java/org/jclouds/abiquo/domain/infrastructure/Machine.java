@@ -118,10 +118,10 @@ public class Machine extends AbstractPhysicalMachine {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.RACK), ValidationErrors.MISSING_REQUIRED_LINK + " "
             + ParentLinkName.RACK);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<RackDto> parser = new ParseXMLWithJAXB<RackDto>(utils.getXml(), TypeLiteral.get(RackDto.class));
+      ParseXMLWithJAXB<RackDto> parser = new ParseXMLWithJAXB<RackDto>(utils.xml(), TypeLiteral.get(RackDto.class));
 
       return wrap(context, Rack.class, parser.apply(response));
    }

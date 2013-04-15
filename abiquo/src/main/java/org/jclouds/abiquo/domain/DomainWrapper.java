@@ -95,10 +95,10 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
    public void refresh() {
       RESTLink link = checkNotNull(LinkUtils.getSelfLink(target), ValidationErrors.MISSING_REQUIRED_LINK + " edit/self");
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+      ExtendedUtils utils = (ExtendedUtils) context.utils();
       HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-      ParseXMLWithJAXB<T> parser = new ParseXMLWithJAXB<T>(utils.getXml(),
+      ParseXMLWithJAXB<T> parser = new ParseXMLWithJAXB<T>(utils.xml(),
             TypeLiteral.get((Class<T>) target.getClass()));
 
       target = parser.apply(response);
