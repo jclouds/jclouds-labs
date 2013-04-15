@@ -37,7 +37,7 @@
        <!--<module>openstack-keystone-v3</module>-->
        <!--<module>openstack-moniker</module>-->
        <module>openstack-quantum</module>
-       <!--<module>openstack-reddwarf</module>-->
+       <module>openstack-reddwarf</module>
        <module>openstack-swift</module>
   </modules>
 </project>
