@@ -1,0 +1,54 @@
+/**
+ * Licensed to jclouds, Inc. (jclouds) under one or more
+ * contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  jclouds licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.jclouds.openstack.reddwarf.v1.domain;
+
+import org.jclouds.http.Uris;
+import org.jclouds.openstack.v2_0.domain.Link;
+import org.jclouds.openstack.v2_0.domain.Link.Relation;
+import org.testng.annotations.Test;
+import com.google.common.collect.ImmutableList;
+import static org.testng.Assert.assertEquals;
+
+@Test(groups = "unit", testName = "FlavorTest")
+public class FlavorTest {
+   public void testFlavorForId() {
+      Flavor flavor = forId(1);
+      assertEquals(flavor.getId(), 1);
+      assertEquals(flavor.getName(), "small");
+   }
+   
+   /**
+    * Creates a dummy Flavor when you need a Flavor with just the flavorId. 
+    * 
+    * 1. name  = small
+    * 2. ram   = 512
+    * 3. links = self, bookmark
+    */
+   public static Flavor forId(int flavorId) {       
+       return Flavor.builder()
+               .id(flavorId)
+               .name("small")
+               .ram(512)
+               .links( 
+                       ImmutableList.of(
+                               Link.create(Relation.SELF, Uris.uriBuilder("http://test1").build() ),
+                               Link.create(Relation.BOOKMARK, Uris.uriBuilder("http://test2").build() )
+                               ) ).build();
+   }
+}
