@@ -77,6 +77,8 @@
        <module>oauth</module>
        <module>openstack</module>
        <module>rackspace-clouddns</module>
+       <module>rackspace-clouddns-us</module>
+       <module>rackspace-clouddns-uk</module>
     </modules>
 
     <build>
