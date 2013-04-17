@@ -24,13 +24,16 @@ import org.jclouds.openstack.v2_0.domain.Link.Relation;
 import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableList;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 @Test(groups = "unit", testName = "FlavorTest")
 public class FlavorTest {
    public void testFlavorForId() {
-      Flavor flavor = forId(1);
-      assertEquals(flavor.getId(), 1);
-      assertEquals(flavor.getName(), "small");
+      Flavor flavor1 = forId(1);
+      Flavor flavor2 = forId(2);
+      assertEquals(flavor1.getId(), 1);
+      assertEquals(flavor1.getName(), "small");
+      assertFalse(flavor1.equals(flavor2));
    }
    
    /**
