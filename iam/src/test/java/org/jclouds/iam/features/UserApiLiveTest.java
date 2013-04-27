@@ -66,6 +66,6 @@ public class UserApiLiveTest extends BaseIAMApiLiveTest {
    }
 
    protected UserApi api() {
-      return context.getApi().getUserApi();
+      return api.getUserApi();
    }
 }

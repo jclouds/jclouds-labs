@@ -25,30 +25,23 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.iam.config.IAMRestClientModule;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
-
-import com.google.common.reflect.TypeToken;
+import org.jclouds.iam.config.IAMHttpApiModule;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 /**
  * Implementation of {@link ApiMetadata} for Amazon's IAM api.
  * 
  * @author Adrian Cole
  */
-public class IAMApiMetadata extends BaseRestApiMetadata {
-
-   public static final TypeToken<RestContext<? extends IAMApi, ? extends IAMAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<? extends IAMApi, ? extends IAMAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class IAMApiMetadata extends BaseHttpApiMetadata<IAMApi> {
 
    @Override
    public Builder toBuilder() {
-      return new Builder(getApi(), getAsyncApi()).fromApiMetadata(this);
+      return new Builder().fromApiMetadata(this);
    }
 
    public IAMApiMetadata() {
-      this(new Builder(IAMApi.class, IAMAsyncApi.class));
+      this(new Builder());
    }
 
    protected IAMApiMetadata(Builder builder) {
@@ -56,16 +49,15 @@ public class IAMApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(PROPERTY_AUTH_TAG, "AWS");
       properties.setProperty(PROPERTY_HEADER_TAG, "amz");
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<IAMApi, Builder> {
 
-      protected Builder(Class<?> api, Class<?> asyncApi) {
-         super(api, asyncApi);
+      protected Builder() {
          id("iam")
          .name("Amazon IAM Api")
          .identityName("Access Key ID")
@@ -74,7 +66,7 @@ public class IAMApiMetadata extends BaseRestApiMetadata {
          .documentation(URI.create("http://docs.amazonwebservices.com/IAM/latest/APIReference/"))
          .defaultEndpoint("https://iam.amazonaws.com")
          .defaultProperties(IAMApiMetadata.defaultProperties())
-         .defaultModule(IAMRestClientModule.class);
+         .defaultModule(IAMHttpApiModule.class);
       }
 
       @Override

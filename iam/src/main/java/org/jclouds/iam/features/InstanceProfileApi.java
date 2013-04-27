@@ -18,15 +18,37 @@
  */
 package org.jclouds.iam.features;
 
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.iam.domain.InstanceProfile;
+import org.jclouds.iam.functions.InstanceProfilesToPagedIterable;
+import org.jclouds.iam.xml.InstanceProfileHandler;
+import org.jclouds.iam.xml.ListInstanceProfilesResultHandler;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
- * @see InstanceProfileAsyncApi
+ * Provides access to Amazon IAM via the Query API
+ * <p/>
+ * 
+ * @see <a href="http://docs.amazonwebservices.com/IAM/latest/APIReference" />
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface InstanceProfileApi {
 
    /**
@@ -36,21 +58,43 @@ public interface InstanceProfileApi {
     *           Name of the instance profile to create.
     * @return the new instance profile
     */
-   InstanceProfile create(String name);
+   @Named("CreateInstanceProfile")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "CreateInstanceProfile")
+   @XMLResponseParser(InstanceProfileHandler.class)
+   InstanceProfile create(@FormParam("InstanceProfileName") String name);
 
    /**
     * like {@link #create(String)}, except you can specify a path.
     */
-   InstanceProfile createWithPath(String name, String path);
+   @Named("CreateInstanceProfile")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "CreateInstanceProfile")
+   @XMLResponseParser(InstanceProfileHandler.class)
+   InstanceProfile createWithPath(@FormParam("InstanceProfileName") String name,
+         @FormParam("Path") String path);
 
    /**
     * returns all instance profiles in order.
     */
+   @Named("ListInstanceProfiles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfiles")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   @Transform(InstanceProfilesToPagedIterable.class)
    PagedIterable<InstanceProfile> list();
 
    /**
     * retrieves up to 100 instance profiles in order.
     */
+   @Named("ListInstanceProfiles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfiles")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
    IterableWithMarker<InstanceProfile> listFirstPage();
 
    /**
@@ -59,7 +103,12 @@ public interface InstanceProfileApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<InstanceProfile> listAt(String marker);
+   @Named("ListInstanceProfiles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfiles")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   IterableWithMarker<InstanceProfile> listAt(@FormParam("Marker") String marker);
 
    /**
     * returns all instance profiles in order at the specified {@code pathPrefix}.
@@ -67,7 +116,13 @@ public interface InstanceProfileApi {
     * @param pathPrefix
     *           ex. {@code /division_abc/subdivision_xyz/}
     */
-   PagedIterable<InstanceProfile> listPathPrefix(String pathPrefix);
+   @Named("ListInstanceProfiles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfiles")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   @Transform(InstanceProfilesToPagedIterable.class)
+   PagedIterable<InstanceProfile> listPathPrefix(@FormParam("PathPrefix") String pathPrefix);
 
    /**
     * retrieves up to 100 instance profiles in order at the specified {@code pathPrefix}.
@@ -75,7 +130,13 @@ public interface InstanceProfileApi {
     * @param pathPrefix
     *           ex. {@code /division_abc/subdivision_xyz/}
     */
-   IterableWithMarker<InstanceProfile> listPathPrefixFirstPage(String pathPrefix);
+   @Named("ListInstanceProfiles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfiles")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   IterableWithMarker<InstanceProfile> listPathPrefixFirstPage(
+         @FormParam("PathPrefix") String pathPrefix);
 
    /**
     * retrieves up to 100 instance profiles in order at the specified {@code pathPrefix}, starting at {@code marker}.
@@ -85,7 +146,13 @@ public interface InstanceProfileApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<InstanceProfile> listPathPrefixAt(String pathPrefix, String marker);
+   @Named("ListInstanceProfiles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfiles")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   IterableWithMarker<InstanceProfile> listPathPrefixAt(@FormParam("PathPrefix") String pathPrefix,
+         @FormParam("Marker") String marker);
 
    /**
     * Retrieves information about the specified instance profile, including the instance profile's path, GUID, and ARN.
@@ -94,8 +161,14 @@ public interface InstanceProfileApi {
     *           Name of the instance profile to get information about.
     * @return null if not found
     */
+   @Named("GetInstanceProfile")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceProfileHandler.class)
+   @FormParams(keys = "Action", values = "GetInstanceProfile")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   InstanceProfile get(String name);
+   InstanceProfile get(@FormParam("InstanceProfileName") String name);
 
    /**
     * Deletes the specified instanceProfile. The instance profile must not have any policies attached.
@@ -103,7 +176,12 @@ public interface InstanceProfileApi {
     * @param name
     *           Name of the instance profile to delete
     */
-   void delete(String name);
+   @Named("DeleteInstanceProfile")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "DeleteInstanceProfile")
+   @Fallback(VoidOnNotFoundOr404.class)
+   void delete(@FormParam("InstanceProfileName") String name);
 
    /**
     * Adds the specified role to the specified instance profile.
@@ -113,7 +191,12 @@ public interface InstanceProfileApi {
     * @param roleName
     *           Name of the role to add
     */
-   void addRole(String name, String roleName);
+   @Named("AddRoleToInstanceProfile")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "AddRoleToInstanceProfile")
+   @Fallback(VoidOnNotFoundOr404.class)
+   void addRole(@FormParam("InstanceProfileName") String name, @FormParam("RoleName") String roleName);
 
    /**
     * Removes the specified role from the specified instance profile.
@@ -123,5 +206,11 @@ public interface InstanceProfileApi {
     * @param roleName
     *           Name of the role to remove
     */
-   void removeRole(String name, String roleName);
+   @Named("RemoveRoleFromInstanceProfile")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "RemoveRoleFromInstanceProfile")
+   @Fallback(VoidOnNotFoundOr404.class)
+   void removeRole(@FormParam("InstanceProfileName") String name,
+         @FormParam("RoleName") String roleName);
 }

@@ -16,23 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.iam.internal;
+package org.jclouds.iam.config;
 
-import java.util.Properties;
-
-import org.jclouds.http.HttpRequest;
-import org.jclouds.http.HttpResponse;
-import org.jclouds.iam.IAMAsyncApi;
-
-import com.google.common.base.Function;
-import com.google.inject.Module;
+import org.jclouds.aws.config.FormSigningHttpApiModule;
+import org.jclouds.iam.IAMApi;
+import org.jclouds.rest.ConfiguresHttpApi;
 
 /**
+ * Configures the IAM connection.
  * 
  * @author Adrian Cole
  */
-public class BaseIAMAsyncApiExpectTest extends BaseIAMExpectTest<IAMAsyncApi> {
-   public IAMAsyncApi createApi(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {
-      return createInjector(fn, module, props).getInstance(IAMAsyncApi.class);
+@ConfiguresHttpApi
+public class IAMHttpApiModule extends FormSigningHttpApiModule<IAMApi> {
+   public IAMHttpApiModule() {
    }
 }

@@ -18,18 +18,41 @@
  */
 package org.jclouds.iam.features;
 
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.iam.domain.InstanceProfile;
 import org.jclouds.iam.domain.Role;
+import org.jclouds.iam.functions.InstanceProfilesForRoleToPagedIterable;
+import org.jclouds.iam.functions.RolesToPagedIterable;
+import org.jclouds.iam.xml.ListInstanceProfilesResultHandler;
+import org.jclouds.iam.xml.ListRolesResultHandler;
+import org.jclouds.iam.xml.RoleHandler;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
- * @see RoleAsyncApi
+ * Provides access to Amazon IAM via the Query API
+ * <p/>
+ * 
+ * @see <a href="http://docs.amazonwebservices.com/IAM/latest/APIReference" />
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface RoleApi {
-
    /**
     * Creates a new role for your AWS account
     * 
@@ -39,21 +62,44 @@ public interface RoleApi {
     *           The policy that grants an entity permission to assume the role.}
     * @return the new role
     */
-   Role createWithPolicy(String name, String assumeRolePolicy);
+   @Named("CreateRole")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "CreateRole")
+   @XMLResponseParser(RoleHandler.class)
+   Role createWithPolicy(@FormParam("RoleName") String name,
+         @FormParam("AssumeRolePolicyDocument") String assumeRolePolicy);
 
    /**
     * like {@link #createWithPolicy(String, String)}, except you can specify a path.
     */
-   Role createWithPolicyAndPath(String name, String assumeRolePolicy, String path);
+   @Named("CreateRole")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "CreateRole")
+   @XMLResponseParser(RoleHandler.class)
+   Role createWithPolicyAndPath(@FormParam("RoleName") String name,
+         @FormParam("AssumeRolePolicyDocument") String assumeRolePolicy, @FormParam("Path") String path);
 
    /**
     * returns all roles in order.
     */
+   @Named("ListRoles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListRoles")
+   @XMLResponseParser(ListRolesResultHandler.class)
+   @Transform(RolesToPagedIterable.class)
    PagedIterable<Role> list();
 
    /**
     * retrieves up to 100 roles in order.
     */
+   @Named("ListRoles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListRoles")
+   @XMLResponseParser(ListRolesResultHandler.class)
    IterableWithMarker<Role> listFirstPage();
 
    /**
@@ -62,7 +108,12 @@ public interface RoleApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<Role> listAt(String marker);
+   @Named("ListRoles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListRoles")
+   @XMLResponseParser(ListRolesResultHandler.class)
+   IterableWithMarker<Role> listAt(@FormParam("Marker") String marker);
 
    /**
     * returns all roles in order at the specified {@code pathPrefix}.
@@ -70,7 +121,13 @@ public interface RoleApi {
     * @param pathPrefix
     *           ex. {@code /division_abc/subdivision_xyz/}
     */
-   PagedIterable<Role> listPathPrefix(String pathPrefix);
+   @Named("ListRoles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListRoles")
+   @XMLResponseParser(ListRolesResultHandler.class)
+   @Transform(RolesToPagedIterable.class)
+   PagedIterable<Role> listPathPrefix(@FormParam("PathPrefix") String pathPrefix);
 
    /**
     * retrieves up to 100 roles in order at the specified {@code pathPrefix}.
@@ -78,7 +135,12 @@ public interface RoleApi {
     * @param pathPrefix
     *           ex. {@code /division_abc/subdivision_xyz/}
     */
-   IterableWithMarker<Role> listPathPrefixFirstPage(String pathPrefix);
+   @Named("ListRoles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListRoles")
+   @XMLResponseParser(ListRolesResultHandler.class)
+   IterableWithMarker<Role> listPathPrefixFirstPage(@FormParam("PathPrefix") String pathPrefix);
 
    /**
     * retrieves up to 100 roles in order at the specified {@code pathPrefix}, starting at {@code marker}.
@@ -88,7 +150,13 @@ public interface RoleApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<Role> listPathPrefixAt(String pathPrefix, String marker);
+   @Named("ListRoles")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListRoles")
+   @XMLResponseParser(ListRolesResultHandler.class)
+   IterableWithMarker<Role> listPathPrefixAt(@FormParam("PathPrefix") String pathPrefix,
+         @FormParam("Marker") String marker);
 
    /**
     * Retrieves information about the specified role, including the role's path, GUID, and ARN.
@@ -97,8 +165,14 @@ public interface RoleApi {
     *           Name of the role to get information about.
     * @return null if not found
     */
+   @Named("GetRole")
+   @POST
+   @Path("/")
+   @XMLResponseParser(RoleHandler.class)
+   @FormParams(keys = "Action", values = "GetRole")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   Role get(String name);
+   Role get(@FormParam("RoleName") String name);
 
    /**
     * returns all instance profiles in order for this role.
@@ -106,7 +180,13 @@ public interface RoleApi {
     * @param name
     *           Name of the role to get instance profiles for.
     */
-   PagedIterable<InstanceProfile> listInstanceProfiles(String name);
+   @Named("ListInstanceProfilesForRole")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfilesForRole")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   @Transform(InstanceProfilesForRoleToPagedIterable.class)
+   PagedIterable<InstanceProfile> listInstanceProfiles(@FormParam("RoleName") String name);
 
    /**
     * retrieves up to 100 instance profiles in order for this role.
@@ -114,7 +194,13 @@ public interface RoleApi {
     * @param name
     *           Name of the role to get instance profiles for.
     */
-   IterableWithMarker<InstanceProfile> listFirstPageOfInstanceProfiles(String name);
+   @Named("ListInstanceProfilesForRole")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfilesForRole")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   IterableWithMarker<InstanceProfile> listFirstPageOfInstanceProfiles(
+         @FormParam("RoleName") String name);
 
    /**
     * retrieves up to 100 instance profiles in order for this role, starting at {@code marker}
@@ -124,7 +210,13 @@ public interface RoleApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<InstanceProfile> listInstanceProfilesAt(String name, String marker);
+   @Named("ListInstanceProfilesForRole")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListInstanceProfilesForRole")
+   @XMLResponseParser(ListInstanceProfilesResultHandler.class)
+   IterableWithMarker<InstanceProfile> listInstanceProfilesAt(@FormParam("RoleName") String name,
+         @FormParam("Marker") String marker);
 
    /**
     * Deletes the specified role. The role must not have any policies attached. 
@@ -132,5 +224,10 @@ public interface RoleApi {
     * @param name
     *           Name of the role to delete
     */
-   void delete(String name);
+   @Named("DeleteRole")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "DeleteRole")
+   @Fallback(VoidOnNotFoundOr404.class)
+   void delete(@FormParam("RoleName") String name);
 }
