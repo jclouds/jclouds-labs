@@ -25,12 +25,10 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.rds.config.RDSRestClientModule;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rds.config.RDSHttpApiModule;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
@@ -38,36 +36,31 @@ import com.google.inject.Module;
  * 
  * @author Adrian Cole
  */
-public class RDSApiMetadata extends BaseRestApiMetadata {
-   
-   public static final TypeToken<RestContext<RDSApi, RDSAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<RDSApi, RDSAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class RDSApiMetadata extends BaseHttpApiMetadata<RDSApi> {
 
    @Override
    public Builder toBuilder() {
-      return new Builder(getApi(), getAsyncApi()).fromApiMetadata(this);
+      return new Builder().fromApiMetadata(this);
    }
 
    public RDSApiMetadata() {
-      this(new Builder(RDSApi.class, RDSAsyncApi.class));
+      this(new Builder());
    }
 
    protected RDSApiMetadata(Builder builder) {
-      super(builder);
+      super(Builder.class.cast(builder));
    }
    
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(PROPERTY_AUTH_TAG, "AWS");
       properties.setProperty(PROPERTY_HEADER_TAG, "amz");
       return properties;
    }
    
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<RDSApi, Builder> {
 
-      protected Builder(Class<?> api, Class<?> asyncApi) {
-         super(api, asyncApi);
+      protected Builder() {
          id("rds")
          .name("Amazon Relational Database Service Api")
          .identityName("Access Key ID")
@@ -76,7 +69,7 @@ public class RDSApiMetadata extends BaseRestApiMetadata {
          .defaultProperties(RDSApiMetadata.defaultProperties())
          .defaultEndpoint("https://rds.us-east-1.amazonaws.com")
          .documentation(URI.create("http://docs.amazonwebservices.com/AmazonRDS/latest/APIReference"))
-         .defaultModules(ImmutableSet.<Class<? extends Module>>of(RDSRestClientModule.class));
+         .defaultModules(ImmutableSet.<Class<? extends Module>>of(RDSHttpApiModule.class));
       }
 
       @Override

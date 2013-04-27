@@ -18,22 +18,43 @@
  */
 package org.jclouds.rds.features;
 
+import static org.jclouds.aws.reference.FormParameters.ACTION;
+
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rds.domain.SubnetGroup;
+import org.jclouds.rds.functions.SubnetGroupsToPagedIterable;
 import org.jclouds.rds.options.ListSubnetGroupsOptions;
+import org.jclouds.rds.xml.DescribeDBSubnetGroupsResultHandler;
+import org.jclouds.rds.xml.SubnetGroupHandler;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
  * Provides access to Amazon RDS via the Query API
  * <p/>
  * 
- * @see <a href="http://docs.amazonwebservices.com/AmazonRDS/latest/APIReference" >doc</a>
- * @see SubnetGroupAsyncApi
+ * @see <a href="http://docs.amazonwebservices.com/AmazonRDS/latest/APIReference"
+ *      >doc</a>
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface SubnetGroupApi {
-
+ 
    /**
     * Retrieves information about the specified {@link SubnetGroup}.
     * 
@@ -42,7 +63,26 @@ public interface SubnetGroupApi {
     * @return null if not found
     */
    @Nullable
-   SubnetGroup get(String name);
+   @Named("DescribeDBSubnetGroups")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SubnetGroupHandler.class)
+   @FormParams(keys = "Action", values = "DescribeDBSubnetGroups")
+   @Fallback(NullOnNotFoundOr404.class)
+   SubnetGroup get(@FormParam("DBSubnetGroupName") String name);
+
+   /**
+    * Returns a list of {@link SubnetGroup}s.
+    * 
+    * @return the response object
+    */
+   @Named("DescribeDBSubnetGroups")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeDBSubnetGroupsResultHandler.class)
+   @Transform(SubnetGroupsToPagedIterable.class)
+   @FormParams(keys = "Action", values = "DescribeDBSubnetGroups")
+   PagedIterable<SubnetGroup> list();
 
    /**
     * Returns a list of {@link SubnetGroup}s.
@@ -55,14 +95,12 @@ public interface SubnetGroupApi {
     * 
     * @return the response object
     */
+   @Named("DescribeDBSubnetGroups")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeDBSubnetGroupsResultHandler.class)
+   @FormParams(keys = "Action", values = "DescribeDBSubnetGroups")
    IterableWithMarker<SubnetGroup> list(ListSubnetGroupsOptions options);
-
-   /**
-    * Returns a list of {@link SubnetGroup}s.
-    * 
-    * @return the response object
-    */
-   PagedIterable<SubnetGroup> list();
 
    /**
     * Deletes a DB subnet group.
@@ -84,6 +122,10 @@ public interface SubnetGroupApi {
     * 
     *           You cannot delete the default subnet group.
     */
-   void delete(String name);
-
+   @Named("DeleteDBSubnetGroup")
+   @POST
+   @Path("/")
+   @Fallback(VoidOnNotFoundOr404.class)
+   @FormParams(keys = ACTION, values = "DeleteDBSubnetGroup")
+   void delete(@FormParam("DBSubnetGroupName") String name);
 }

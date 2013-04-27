@@ -25,10 +25,10 @@ import java.util.Map;
 
 import org.jclouds.aws.domain.Region;
 import org.jclouds.date.DateService;
-import org.jclouds.rds.config.RDSRestClientModule;
+import org.jclouds.rds.config.RDSHttpApiModule;
 import org.jclouds.location.config.LocationModule;
 import org.jclouds.location.suppliers.RegionIdToURISupplier;
-import org.jclouds.rest.ConfiguresRestClient;
+import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 import org.jclouds.util.Suppliers2;
 
@@ -46,8 +46,8 @@ public class BaseRDSExpectTest<T> extends BaseRestApiExpectTest<T> {
       provider = "rds";
    }
    
-   @ConfiguresRestClient
-   private static final class TestRDSRestClientModule extends RDSRestClientModule {
+   @ConfiguresHttpApi
+   private static final class TestRDSHttpApiModule extends RDSHttpApiModule {
 
       @Override
       protected void installLocations() {
@@ -73,6 +73,6 @@ public class BaseRDSExpectTest<T> extends BaseRestApiExpectTest<T> {
 
    @Override
    protected Module createModule() {
-      return new TestRDSRestClientModule();
+      return new TestRDSHttpApiModule();
    }
 }
