@@ -22,13 +22,11 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
@@ -55,7 +53,7 @@ public class Blade extends AbstractPhysicalMachine {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Blade(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final MachineDto target) {
+   protected Blade(final ApiContext<AbiquoApi> context, final MachineDto target) {
       super(context, target);
    }
 
@@ -74,10 +72,9 @@ public class Blade extends AbstractPhysicalMachine {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.RACK), ValidationErrors.MISSING_REQUIRED_LINK + " "
             + ParentLinkName.RACK);
 
-      ExtendedUtils utils = (ExtendedUtils) context.utils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<UcsRackDto> parser = new ParseXMLWithJAXB<UcsRackDto>(utils.xml(),
+      ParseXMLWithJAXB<UcsRackDto> parser = new ParseXMLWithJAXB<UcsRackDto>(context.utils().xml(),
             TypeLiteral.get(UcsRackDto.class));
 
       return wrap(context, ManagedRack.class, parser.apply(response));

@@ -25,10 +25,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.PricingPeriod;
 import com.abiquo.model.rest.RESTLink;
@@ -54,7 +54,7 @@ public class PricingTemplate extends DomainWrapper<PricingTemplateDto> {
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   private PricingTemplate(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final PricingTemplateDto target) {
+   private PricingTemplate(final ApiContext<AbiquoApi> context, final PricingTemplateDto target) {
       super(context, target);
    }
 
@@ -75,12 +75,12 @@ public class PricingTemplate extends DomainWrapper<PricingTemplateDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Currency currency) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Currency currency) {
       return new Builder(context, currency);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Currency currency;
 
@@ -114,7 +114,7 @@ public class PricingTemplate extends DomainWrapper<PricingTemplateDto> {
 
       private Date lastUpdate;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Currency currency) {
+      public Builder(final ApiContext<AbiquoApi> context, final Currency currency) {
          super();
          this.currency = checkNotNull(currency, ValidationErrors.NULL_RESOURCE + Currency.class);
          this.context = context;

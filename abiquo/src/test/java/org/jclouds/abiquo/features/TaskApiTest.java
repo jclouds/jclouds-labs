@@ -39,17 +39,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code TaskAsyncApi}
+ * Tests annotation parsing of {@code TaskApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Test(groups = "unit", testName = "TaskAsyncApiTest")
-public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi> {
+@Test(groups = "unit", testName = "TaskApiTest")
+public class TaskApiTest extends BaseAbiquoApiTest<TaskApi> {
    /*********************** Task ***********************/
 
    public void testGetTaskVirtualMachine() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(TaskAsyncApi.class, "getTask", RESTLink.class);
+      Invokable<?, ?> method = method(TaskApi.class, "getTask", RESTLink.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(new RESTLink("task",
                   "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1"
@@ -69,7 +69,7 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi> {
    }
 
    public void testListTasksVirtualMachine() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(TaskAsyncApi.class, "listTasks", SingleResourceTransportDto.class);
+      Invokable<?, ?> method = method(TaskApi.class, "listTasks", SingleResourceTransportDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(CloudResources.virtualMachinePut())));
 
@@ -86,7 +86,7 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi> {
    }
 
    public void testGetTaskVirtualMachineTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(TaskAsyncApi.class, "getTask", RESTLink.class);
+      Invokable<?, ?> method = method(TaskApi.class, "getTask", RESTLink.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(new RESTLink("task",
                   "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/"
@@ -106,7 +106,7 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi> {
    }
 
    public void testListTasksVirtualMachineTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(TaskAsyncApi.class, "listTasks", SingleResourceTransportDto.class);
+      Invokable<?, ?> method = method(TaskApi.class, "listTasks", SingleResourceTransportDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(TemplateResources.virtualMachineTemplatePut())));
 

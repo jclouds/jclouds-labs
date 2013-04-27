@@ -28,7 +28,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
-import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

@@ -22,11 +22,10 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
@@ -50,7 +49,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected HardDisk(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final DiskManagementDto target) {
+   protected HardDisk(final ApiContext<AbiquoApi> context, final DiskManagementDto target) {
       super(context, target);
    }
 
@@ -93,19 +92,18 @@ public class HardDisk extends DomainWrapper<DiskManagementDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final VirtualDatacenter virtualDatacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final VirtualDatacenter virtualDatacenter) {
       return new Builder(context, virtualDatacenter);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Long sizeInMb;
 
       private VirtualDatacenter virtualDatacenter;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenter virtualDatacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final VirtualDatacenter virtualDatacenter) {
          super();
          checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE + VirtualDatacenter.class);
          this.context = context;

@@ -27,7 +27,6 @@ import static org.testng.Assert.assertTrue;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
-import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

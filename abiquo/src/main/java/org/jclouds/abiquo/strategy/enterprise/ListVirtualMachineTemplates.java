@@ -21,22 +21,26 @@ package org.jclouds.abiquo.strategy.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.transform;
+import static com.google.common.util.concurrent.Futures.allAsList;
+import static com.google.common.util.concurrent.Futures.getUnchecked;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
-import static org.jclouds.concurrent.FutureIterables.transformParallel;
+
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.annotation.Resource;
 import javax.inject.Named;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.ListEntities;
 import org.jclouds.logging.Logger;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
@@ -54,19 +58,15 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class ListVirtualMachineTemplates implements ListEntities<VirtualMachineTemplate, Enterprise> {
-   protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected final ApiContext<AbiquoApi> context;
 
    protected final ListeningExecutorService userExecutor;
 
    @Resource
    protected Logger logger = Logger.NULL;
 
-   @Inject(optional = true)
-   @Named(Constants.PROPERTY_REQUEST_TIMEOUT)
-   protected Long maxTime;
-
    @Inject
-   ListVirtualMachineTemplates(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+   ListVirtualMachineTemplates(final ApiContext<AbiquoApi> context,
          @Named(Constants.PROPERTY_USER_THREADS) final ListeningExecutorService userExecutor) {
       super();
       this.context = checkNotNull(context, "context");
@@ -75,30 +75,45 @@ public class ListVirtualMachineTemplates implements ListEntities<VirtualMachineT
 
    @Override
    public Iterable<VirtualMachineTemplate> execute(final Enterprise parent) {
-      // Find virtual machine templates in concurrent requests
-      Iterable<Datacenter> dcs = parent.listAllowedDatacenters();
-      Iterable<VirtualMachineTemplateDto> templates = listConcurrentTemplates(parent, dcs);
-
-      return wrap(context, VirtualMachineTemplate.class, templates);
+      return execute(userExecutor, parent);
    }
 
    @Override
    public Iterable<VirtualMachineTemplate> execute(final Enterprise parent,
          final Predicate<VirtualMachineTemplate> selector) {
-      return filter(execute(parent), selector);
+      return execute(userExecutor, parent, selector);
    }
 
-   private Iterable<VirtualMachineTemplateDto> listConcurrentTemplates(final Enterprise parent,
-         final Iterable<Datacenter> dcs) {
-      Iterable<VirtualMachineTemplatesDto> templates = transformParallel(dcs,
-            new Function<Datacenter, ListenableFuture<? extends VirtualMachineTemplatesDto>>() {
+   public Iterable<VirtualMachineTemplate> execute(ListeningExecutorService executor, final Enterprise parent) {
+      // Find virtual machine templates in concurrent requests
+      Iterable<Datacenter> dcs = parent.listAllowedDatacenters();
+      Iterable<VirtualMachineTemplateDto> templates = listConcurrentTemplates(executor, parent, dcs);
+
+      return wrap(context, VirtualMachineTemplate.class, templates);
+   }
+
+   public Iterable<VirtualMachineTemplate> execute(ListeningExecutorService executor, final Enterprise parent,
+         final Predicate<VirtualMachineTemplate> selector) {
+      return filter(execute(executor, parent), selector);
+   }
+
+   private Iterable<VirtualMachineTemplateDto> listConcurrentTemplates(final ListeningExecutorService executor,
+         final Enterprise parent, final Iterable<Datacenter> dcs) {
+      ListenableFuture<List<VirtualMachineTemplatesDto>> futures = allAsList(transform(dcs,
+            new Function<Datacenter, ListenableFuture<VirtualMachineTemplatesDto>>() {
                @Override
                public ListenableFuture<VirtualMachineTemplatesDto> apply(final Datacenter input) {
-                  return context.getAsyncApi().getVirtualMachineTemplateApi()
-                        .listVirtualMachineTemplates(parent.getId(), input.getId());
+                  return executor.submit(new Callable<VirtualMachineTemplatesDto>() {
+                     @Override
+                     public VirtualMachineTemplatesDto call() throws Exception {
+                        return context.getApi().getVirtualMachineTemplateApi()
+                              .listVirtualMachineTemplates(parent.getId(), input.getId());
+                     }
+                  });
                }
-            }, userExecutor, maxTime, logger, "getting virtual machine templates");
+            }));
 
-      return DomainWrapper.join(templates);
+      logger.trace("getting virtual machine templates");
+      return DomainWrapper.join(getUnchecked(futures));
    }
 }

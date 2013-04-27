@@ -21,13 +21,11 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.network.NetworkServiceType;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.network.NetworkInterfaceDto;
@@ -48,7 +46,7 @@ public class NetworkInterface extends DomainWrapper<NetworkInterfaceDto> {
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   protected NetworkInterface(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final NetworkInterfaceDto target) {
+   protected NetworkInterface(final ApiContext<AbiquoApi> context, final NetworkInterfaceDto target) {
       super(context, target);
    }
 
@@ -68,11 +66,10 @@ public class NetworkInterface extends DomainWrapper<NetworkInterfaceDto> {
    public NetworkServiceType getNetworkServiceType() {
       RESTLink link = target.getNetworkServiceTypeLink();
 
-      ExtendedUtils utils = (ExtendedUtils) context.utils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<NetworkServiceTypeDto> parser = new ParseXMLWithJAXB<NetworkServiceTypeDto>(utils.xml(),
-            TypeLiteral.get(NetworkServiceTypeDto.class));
+      ParseXMLWithJAXB<NetworkServiceTypeDto> parser = new ParseXMLWithJAXB<NetworkServiceTypeDto>(context.utils()
+            .xml(), TypeLiteral.get(NetworkServiceTypeDto.class));
 
       return wrap(context, NetworkServiceType.class, parser.apply(response));
    }

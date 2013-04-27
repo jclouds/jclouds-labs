@@ -28,7 +28,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
-import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.domain.config.options;
 
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
@@ -27,7 +26,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
  * 
  * @author Francesc Montserrat
  */
-@EnterpriseEdition
 public class LicenseOptions extends BaseHttpRequestOptions {
    public static Builder builder() {
       return new Builder();

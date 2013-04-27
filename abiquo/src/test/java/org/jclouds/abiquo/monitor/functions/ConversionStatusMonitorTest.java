@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.domain.cloud.Conversion;
 import org.jclouds.abiquo.monitor.MonitorStatus;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.ConversionState;
@@ -76,7 +76,7 @@ public class ConversionStatusMonitorTest {
    private static class MockConversion extends Conversion {
       @SuppressWarnings("unchecked")
       public MockConversion() {
-         super(EasyMock.createMock(RestContext.class), new ConversionDto());
+         super(EasyMock.createMock(ApiContext.class), new ConversionDto());
       }
 
       @Override

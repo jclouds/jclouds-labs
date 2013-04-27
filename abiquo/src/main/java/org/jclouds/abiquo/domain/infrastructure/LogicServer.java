@@ -22,10 +22,9 @@ package org.jclouds.abiquo.domain.infrastructure;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.rest.RestContext;
+
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
@@ -38,12 +37,11 @@ import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
-@EnterpriseEdition
 public class LogicServer extends DomainWrapper<LogicServerDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected LogicServer(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final LogicServerDto target) {
+   protected LogicServer(final ApiContext<AbiquoApi> context, final LogicServerDto target) {
       super(context, target);
    }
 

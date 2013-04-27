@@ -22,11 +22,10 @@ package org.jclouds.abiquo.domain.enterprise;
 import java.util.Map;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 
@@ -40,13 +39,11 @@ import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
  *      http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource
  *      </a>
  */
-@EnterpriseEdition
 public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected EnterpriseProperties(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final EnterprisePropertiesDto target) {
+   protected EnterpriseProperties(final ApiContext<AbiquoApi> context, final EnterprisePropertiesDto target) {
       super(context, target);
    }
 

@@ -19,6 +19,31 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.AbiquoFallbacks.FalseIfNotAvailable;
+import org.jclouds.abiquo.AbiquoFallbacks.PropagateAbiquoExceptionOnNotFoundOr4xx;
+import org.jclouds.abiquo.binders.AppendToPath;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.infrastructure.AppendMachineIdToPath;
+import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
@@ -26,7 +51,18 @@ import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.http.functions.ReturnStringIf2xx;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.ParamParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -77,11 +113,12 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see InfrastructureAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public interface InfrastructureApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+@Path("/admin")
+public interface InfrastructureApi extends Closeable {
    /*********************** Datacenter ***********************/
 
    /**
@@ -89,6 +126,11 @@ public interface InfrastructureApi {
     * 
     * @return The list of Datacenters.
     */
+   @Named("datacenter:list")
+   @GET
+   @Path("/datacenters")
+   @Consumes(DatacentersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    DatacentersDto listDatacenters();
 
    /**
@@ -98,7 +140,13 @@ public interface InfrastructureApi {
     *           The datacenter to be created.
     * @return The created datacenter.
     */
-   DatacenterDto createDatacenter(DatacenterDto datacenter);
+   @Named("datacenter:create")
+   @POST
+   @Path("/datacenters")
+   @Produces(DatacenterDto.BASE_MEDIA_TYPE)
+   @Consumes(DatacenterDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacenterDto createDatacenter(@BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
 
    /**
     * Get the given datacenter.
@@ -107,7 +155,13 @@ public interface InfrastructureApi {
     *           The id of the datacenter.
     * @return The datacenter or <code>null</code> if it does not exist.
     */
-   DatacenterDto getDatacenter(Integer datacenterId);
+   @Named("datacenter:get")
+   @GET
+   @Path("/datacenters/{datacenter}")
+   @Consumes(DatacenterDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   DatacenterDto getDatacenter(@PathParam("datacenter") Integer datacenterId);
 
    /**
     * Updates an existing datacenter.
@@ -116,7 +170,13 @@ public interface InfrastructureApi {
     *           The new attributes for the datacenter.
     * @return The updated datacenter.
     */
-   DatacenterDto updateDatacenter(DatacenterDto datacenter);
+   @Named("datacenter:update")
+   @PUT
+   @Produces(DatacenterDto.BASE_MEDIA_TYPE)
+   @Consumes(DatacenterDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacenterDto updateDatacenter(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
 
    /**
     * Deletes an existing datacenter.
@@ -124,7 +184,9 @@ public interface InfrastructureApi {
     * @param datacenter
     *           The datacenter to delete.
     */
-   void deleteDatacenter(DatacenterDto datacenter);
+   @Named("datacenter:delete")
+   @DELETE
+   void deleteDatacenter(@EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Retrieve remote machine information.
@@ -146,8 +208,15 @@ public interface InfrastructureApi {
     *           Password to authenticate.
     * @return The physical machine.
     */
-   MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip, HypervisorType hypervisorType, String user,
-         String password);
+   @Named("machine:discover")
+   @GET
+   @Consumes(MachineDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineDto discoverSingleMachine(
+         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
+         @QueryParam("user") String user, @QueryParam("password") String password);
 
    /**
     * Retrieve remote machine information.
@@ -171,8 +240,15 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The physical machine.
     */
-   MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip, HypervisorType hypervisorType, String user,
-         String password, MachineOptions options);
+   @Named("machine:discover")
+   @GET
+   @Consumes(MachineDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineDto discoverSingleMachine(
+         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
+         @QueryParam("user") String user, @QueryParam("password") String password, MachineOptions options);
 
    /**
     * Retrieve a list of remote machine information.
@@ -196,8 +272,16 @@ public interface InfrastructureApi {
     *           Password to authenticate.
     * @return The physical machine list.
     */
-   MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom, final String ipTo,
-         final HypervisorType hypervisorType, final String user, final String password);
+   @Named("machine:discover")
+   @GET
+   @Consumes(MachinesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineDto discoverMultipleMachines(
+         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
+         @QueryParam("hypervisor") HypervisorType hypervisorType, @QueryParam("user") String user,
+         @QueryParam("password") String password);
 
    /**
     * Retrieve a list of remote machine information.
@@ -223,8 +307,16 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The physical machine list.
     */
-   MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom, final String ipTo,
-         final HypervisorType hypervisorType, final String user, final String password, final MachineOptions options);
+   @Named("machine:discover")
+   @GET
+   @Consumes(MachinesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachinesDto discoverMultipleMachines(
+         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
+         @QueryParam("hypervisor") HypervisorType hypervisorType, @QueryParam("user") String user,
+         @QueryParam("password") String password, MachineOptions options);
 
    /**
     * Retrieves limits for the given datacenter and any enterprise.
@@ -233,7 +325,11 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The usage limits for the datacenter on any enterprise.
     */
-   DatacentersLimitsDto listLimits(DatacenterDto datacenter);
+   @Named("limit:list")
+   @GET
+   @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacentersLimitsDto listLimits(@EndpointLink("getLimits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Check the state of a remote machine. This machine does not need to be
@@ -252,8 +348,15 @@ public interface InfrastructureApi {
     *           Password to authenticate.
     * @return The physical machine state information.
     */
-   MachineStateDto checkMachineState(DatacenterDto datacenter, String ip, HypervisorType hypervisorType, String user,
-         String password);
+   @Named("machine:checkstate")
+   @GET
+   @Consumes(MachineStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineStateDto checkMachineState(
+         @EndpointLink("checkmachinestate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
+         @QueryParam("user") String user, @QueryParam("password") String password);
 
    /**
     * Check the state of a remote machine. This machine does not need to be
@@ -274,8 +377,15 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The physical machine state information.
     */
-   MachineStateDto checkMachineState(DatacenterDto datacenter, String ip, HypervisorType hypervisorType, String user,
-         String password, MachineOptions options);
+   @Named("machine:checkstate")
+   @GET
+   @Consumes(MachineStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineStateDto checkMachineState(
+         @EndpointLink("checkmachinestate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
+         @QueryParam("user") String user, @QueryParam("password") String password, MachineOptions options);
 
    /**
     * Check the ipmi configuration state of a remote machine. This machine does
@@ -291,7 +401,14 @@ public interface InfrastructureApi {
     *           Password to authenticate.
     * @return The ipmi configuration state information
     */
-   MachineIpmiStateDto checkMachineIpmiState(DatacenterDto datacenter, String ip, String user, String password);
+   @Named("machine:checkipmi")
+   @GET
+   @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineIpmiStateDto checkMachineIpmiState(
+         @EndpointLink("checkmachineipmistate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ip") String ip, @QueryParam("user") String user, @QueryParam("password") String password);
 
    /**
     * Check the ipmi configuration state of a remote machine. This machine does
@@ -309,7 +426,14 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The ipmi configuration state information
     */
-   MachineIpmiStateDto checkMachineIpmiState(DatacenterDto datacenter, String ip, String user, String password,
+   @Named("machine:checkipmi")
+   @GET
+   @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(PropagateAbiquoExceptionOnNotFoundOr4xx.class)
+   MachineIpmiStateDto checkMachineIpmiState(
+         @EndpointLink("checkmachineipmistate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @QueryParam("ip") String ip, @QueryParam("user") String user, @QueryParam("password") String password,
          IpmiOptions options);
 
    /*********************** Hypervisor ***********************/
@@ -323,7 +447,12 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The hypervisor type.
     */
-   String getHypervisorTypeFromMachine(DatacenterDto datacenter, DatacenterOptions options);
+   @Named("hypervisortype:getfrommachine")
+   @GET
+   @Consumes(MediaType.TEXT_PLAIN)
+   @ResponseParser(ReturnStringIf2xx.class)
+   String getHypervisorTypeFromMachine(
+         @EndpointLink("hypervisor") @BinderParam(BindToPath.class) DatacenterDto datacenter, DatacenterOptions options);
 
    /**
     * Retrieves the hypervisor types in the datacenter.
@@ -332,7 +461,12 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The hypervisor types.
     */
-   HypervisorTypesDto getHypervisorTypes(DatacenterDto datacenter);
+   @Named("hypervisortype:list")
+   @GET
+   @Consumes(HypervisorTypesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   HypervisorTypesDto getHypervisorTypes(
+         @EndpointLink("hypervisors") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /*********************** Unmanaged Rack ********************** */
 
@@ -343,7 +477,11 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The list of not managed racks for the datacenter.
     */
-   RacksDto listRacks(DatacenterDto datacenter);
+   @Named("rack:list")
+   @GET
+   @Consumes(RacksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RacksDto listRacks(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Create a new not managed rack in a datacenter.
@@ -354,7 +492,13 @@ public interface InfrastructureApi {
     *           The rack to be created.
     * @return The created rack.
     */
-   RackDto createRack(final DatacenterDto datacenter, final RackDto rack);
+   @Named("rack:create")
+   @POST
+   @Produces(RackDto.BASE_MEDIA_TYPE)
+   @Consumes(RackDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RackDto createRack(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
    /**
     * Get the given rack from the given datacenter.
@@ -365,7 +509,13 @@ public interface InfrastructureApi {
     *           The id of the rack.
     * @return The rack or <code>null</code> if it does not exist.
     */
-   RackDto getRack(DatacenterDto datacenter, Integer rackId);
+   @Named("rack:get")
+   @GET
+   @Consumes(RackDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   RackDto getRack(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(AppendToPath.class) Integer rackId);
 
    /**
     * Updates an existing rack from the given datacenter.
@@ -374,7 +524,12 @@ public interface InfrastructureApi {
     *           The new attributes for the rack.
     * @return The updated rack.
     */
-   RackDto updateRack(final RackDto rack);
+   @Named("rack:update")
+   @PUT
+   @Consumes(RackDto.BASE_MEDIA_TYPE)
+   @Produces(RackDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RackDto updateRack(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
 
    /**
     * Deletes an existing rack.
@@ -382,7 +537,9 @@ public interface InfrastructureApi {
     * @param rack
     *           The rack to delete.
     */
-   void deleteRack(final RackDto rack);
+   @Named("rack:delete")
+   @DELETE
+   void deleteRack(@EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
    /*********************** Managed Rack **********************/
 
@@ -393,8 +550,11 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The list of managed racks for the datacenter.
     */
-   @EnterpriseEdition
-   UcsRacksDto listManagedRacks(DatacenterDto datacenter);
+   @Named("ucs:listracks")
+   @GET
+   @Consumes(UcsRacksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UcsRacksDto listManagedRacks(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Create a new managed rack in a datacenter.
@@ -405,8 +565,13 @@ public interface InfrastructureApi {
     *           The managed rack to be created.
     * @return The created rack.
     */
-   @EnterpriseEdition
-   UcsRackDto createManagedRack(final DatacenterDto datacenter, final UcsRackDto rack);
+   @Named("ucs:createrack")
+   @POST
+   @Produces(UcsRackDto.BASE_MEDIA_TYPE)
+   @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UcsRackDto createManagedRack(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) UcsRackDto rack);
 
    /**
     * Get the given managed rack from the given datacenter.
@@ -417,8 +582,13 @@ public interface InfrastructureApi {
     *           The id of the rack.
     * @return The rack or <code>null</code> if it does not exist.
     */
-   @EnterpriseEdition
-   UcsRackDto getManagedRack(DatacenterDto datacenter, Integer rackId);
+   @Named("ucs:getrack")
+   @GET
+   @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   UcsRackDto getManagedRack(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(AppendToPath.class) Integer rackId);
 
    /**
     * Updates an existing managed rack from the given datacenter.
@@ -427,8 +597,12 @@ public interface InfrastructureApi {
     *           The new attributes for the rack.
     * @return The updated rack.
     */
-   @EnterpriseEdition
-   UcsRackDto updateManagedRack(final UcsRackDto rack);
+   @Named("ucs:updaterack")
+   @PUT
+   @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
+   @Produces(UcsRackDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UcsRackDto updateManagedRack(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UcsRackDto rack);
 
    /**
     * List all service profiles of the ucs rack.
@@ -437,8 +611,11 @@ public interface InfrastructureApi {
     *           The ucs rack.
     * @return The list of service profiles for the rack.
     */
-   @EnterpriseEdition
-   LogicServersDto listServiceProfiles(UcsRackDto rack);
+   @Named("ucs:listserviceprofiles")
+   @GET
+   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   LogicServersDto listServiceProfiles(@EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
 
    /**
     * List service profiles of the ucs rack with filtering options.
@@ -449,8 +626,12 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The list of service profiles for the rack.
     */
-   @EnterpriseEdition
-   LogicServersDto listServiceProfiles(UcsRackDto rack, FilterOptions options);
+   @Named("ucs:listserviceprofiles")
+   @GET
+   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   LogicServersDto listServiceProfiles(@EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack,
+         FilterOptions options);
 
    /**
     * List all service profile templates of the ucs rack.
@@ -459,8 +640,12 @@ public interface InfrastructureApi {
     *           The ucs rack.
     * @return The list of service profile templates for the rack.
     */
-   @EnterpriseEdition
-   LogicServersDto listServiceProfileTemplates(UcsRackDto rack);
+   @Named("ucs:listserviceprofiletemplates")
+   @GET
+   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   LogicServersDto listServiceProfileTemplates(
+         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack);
 
    /**
     * List all service profile templates of the ucs rack with options.
@@ -471,8 +656,12 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The list of service profile templates for the rack.
     */
-   @EnterpriseEdition
-   LogicServersDto listServiceProfileTemplates(UcsRackDto rack, FilterOptions options);
+   @Named("ucs:listserviceproviletemplates")
+   @GET
+   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   LogicServersDto listServiceProfileTemplates(
+         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack, FilterOptions options);
 
    /**
     * List all organizations of the ucs rack.
@@ -481,8 +670,11 @@ public interface InfrastructureApi {
     *           The ucs rack.
     * @return The list of organizations for the rack.
     */
-   @EnterpriseEdition
-   OrganizationsDto listOrganizations(UcsRackDto rack);
+   @Named("ucs:listorganizations")
+   @GET
+   @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   OrganizationsDto listOrganizations(@EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack);
 
    /**
     * List all organizations of the ucs rack with options.
@@ -493,8 +685,12 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The list of organizations for the rack.
     */
-   @EnterpriseEdition
-   OrganizationsDto listOrganizations(UcsRackDto rack, FilterOptions options);
+   @Named("ucs:listorganizations")
+   @GET
+   @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   OrganizationsDto listOrganizations(@EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
+         FilterOptions options);
 
    /**
     * Clone a service profile.
@@ -508,8 +704,12 @@ public interface InfrastructureApi {
     * @param newName
     *           The name of the new service profile.
     */
-   @EnterpriseEdition
-   void cloneLogicServer(UcsRackDto rack, LogicServerDto logicServer, OrganizationDto organization, String newName);
+   @Named("ucs:clonelogicserver")
+   @POST
+   void cloneLogicServer(@EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
+         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+         @QueryParam("newName") String newName);
 
    /**
     * Delete a service profile.
@@ -519,8 +719,10 @@ public interface InfrastructureApi {
     * @param logicServer
     *           The original logic server.
     */
-   @EnterpriseEdition
-   void deleteLogicServer(UcsRackDto rack, LogicServerDto logicServer);
+   @Named("ucs:deletelogicserver")
+   @POST
+   void deleteLogicServer(@EndpointLink("ls-delete") @BinderParam(BindToPath.class) UcsRackDto rack,
+         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
 
    /**
     * Associate a service profile with a blade.
@@ -534,8 +736,12 @@ public interface InfrastructureApi {
     * @param bladeName
     *           The name of the blade.
     */
-   @EnterpriseEdition
-   void associateLogicServer(UcsRackDto rack, LogicServerDto logicServer, OrganizationDto organization, String bladeName);
+   @Named("ucs:associatelogicserver")
+   @POST
+   void associateLogicServer(@EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
+         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+         @QueryParam("bladeDn") String bladeName);
 
    /**
     * Associate a service profile with a blade instantiating a service profile
@@ -552,9 +758,12 @@ public interface InfrastructureApi {
     * @param bladeName
     *           The name of the blade.
     */
-   @EnterpriseEdition
-   void associateTemplate(UcsRackDto rack, LogicServerDto logicServer, OrganizationDto organization, String newName,
-         String bladeName);
+   @Named("ucs:associatetemplate")
+   @POST
+   void associateTemplate(@EndpointLink("ls-associatetemplate") @BinderParam(BindToPath.class) UcsRackDto rack,
+         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
 
    /**
     * Clone a service profile and associate it with a blade.
@@ -570,9 +779,12 @@ public interface InfrastructureApi {
     * @param bladeName
     *           The name of the blade.
     */
-   @EnterpriseEdition
-   void cloneAndAssociateLogicServer(UcsRackDto rack, LogicServerDto logicServer, OrganizationDto organization,
-         String newName, String bladeName);
+   @Named("ucs:cloneandassociatelogicserver")
+   @POST
+   void cloneAndAssociateLogicServer(@EndpointLink("ls-associateclone") @BinderParam(BindToPath.class) UcsRackDto rack,
+         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
 
    /**
     * Dissociate a service profile from a blade.
@@ -582,8 +794,10 @@ public interface InfrastructureApi {
     * @param logicServer
     *           The logic server.
     */
-   @EnterpriseEdition
-   void dissociateLogicServer(UcsRackDto rack, LogicServerDto logicServer);
+   @Named("ucs:dissociatelogicserver")
+   @POST
+   void dissociateLogicServer(@EndpointLink("ls-dissociate") @BinderParam(BindToPath.class) UcsRackDto rack,
+         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
 
    /**
     * Get FSM list of an entity
@@ -595,8 +809,11 @@ public interface InfrastructureApi {
     * @param fsm
     *           The fsm.
     */
-   @EnterpriseEdition
-   FsmsDto listFsms(UcsRackDto rack, String dn);
+   @Named("ucs:listfsms")
+   @GET
+   @Consumes(FsmsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   FsmsDto listFsms(@EndpointLink("fsm") @BinderParam(BindToPath.class) UcsRackDto rack, @QueryParam("dn") String dn);
 
    /*********************** Remote Service ********************** */
 
@@ -607,7 +824,12 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The list of remote services for the datacenter.
     */
-   RemoteServicesDto listRemoteServices(DatacenterDto datacenter);
+   @Named("rs:list")
+   @GET
+   @Consumes(RemoteServicesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RemoteServicesDto listRemoteServices(
+         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Create a new remote service in a datacenter.
@@ -618,7 +840,14 @@ public interface InfrastructureApi {
     *           The remote service to be created.
     * @return The created remote service.
     */
-   RemoteServiceDto createRemoteService(final DatacenterDto datacenter, final RemoteServiceDto remoteService);
+   @Named("rs:create")
+   @POST
+   @Produces(RemoteServiceDto.BASE_MEDIA_TYPE)
+   @Consumes(RemoteServiceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RemoteServiceDto createRemoteService(
+         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) RemoteServiceDto remoteService);
 
    /**
     * Get the given remote service from the given datacenter.
@@ -629,7 +858,14 @@ public interface InfrastructureApi {
     *           The type of the remote service.
     * @return The remote service or <code>null</code> if it does not exist.
     */
-   RemoteServiceDto getRemoteService(DatacenterDto datacenter, RemoteServiceType remoteServiceType);
+   @Named("rs:get")
+   @GET
+   @Consumes(RemoteServiceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   RemoteServiceDto getRemoteService(
+         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) final DatacenterDto datacenter,
+         @BinderParam(AppendRemoteServiceTypeToPath.class) final RemoteServiceType remoteServiceType);
 
    /**
     * Updates an existing remote service from the given datacenter.
@@ -638,7 +874,13 @@ public interface InfrastructureApi {
     *           The new attributes for the remote service.
     * @return The updated remote service.
     */
-   RemoteServiceDto updateRemoteService(RemoteServiceDto remoteService);
+   @Named("rs:update")
+   @PUT
+   @Consumes(RemoteServiceDto.BASE_MEDIA_TYPE)
+   @Produces(RemoteServiceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RemoteServiceDto updateRemoteService(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RemoteServiceDto remoteService);
 
    /**
     * Deletes an existing remote service.
@@ -646,7 +888,9 @@ public interface InfrastructureApi {
     * @param remoteService
     *           The remote service to delete.
     */
-   void deleteRemoteService(RemoteServiceDto remoteService);
+   @Named("rs:delete")
+   @DELETE
+   void deleteRemoteService(@EndpointLink("edit") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
    /**
     * Check if the given remote service is available and properly configured.
@@ -655,7 +899,10 @@ public interface InfrastructureApi {
     *           The remote service to check.
     * @return A Boolean indicating if the remote service is available.
     */
-   boolean isAvailable(RemoteServiceDto remoteService);
+   @Named("rs:available")
+   @GET
+   @Fallback(FalseIfNotAvailable.class)
+   boolean isAvailable(@EndpointLink("check") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
    /*********************** Machine ********************** */
 
@@ -668,7 +915,13 @@ public interface InfrastructureApi {
     *           The physical machine to be created.
     * @return The created physical machine.
     */
-   MachineDto createMachine(RackDto rack, MachineDto machine);
+   @Named("machine:create")
+   @POST
+   @Produces(MachineDto.BASE_MEDIA_TYPE)
+   @Consumes(MachineDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachineDto createMachine(@EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack,
+         @BinderParam(BindToXMLPayload.class) MachineDto machine);
 
    /**
     * Get the given machine from the given rack.
@@ -679,7 +932,13 @@ public interface InfrastructureApi {
     *           The id of the machine.
     * @return The machine or <code>null</code> if it does not exist.
     */
-   MachineDto getMachine(RackDto rack, Integer machineId);
+   @Named("machine:get")
+   @GET
+   @Consumes(MachineDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   MachineDto getMachine(@EndpointLink("machines") @BinderParam(BindToPath.class) final RackDto rack,
+         @BinderParam(AppendToPath.class) Integer machineId);
 
    /**
     * Checks the real infrastructure state for the given physical machine. The
@@ -687,11 +946,18 @@ public interface InfrastructureApi {
     * 
     * @param machine
     *           The machine to check
-    * @param sync boolean that indicates a database synchronization
+    * @param sync
+    *           boolean that indicates a database synchronization
     * @return A machineStateDto with a machine state value from enum
     *         MachineState
     */
-   MachineStateDto checkMachineState(MachineDto machine, boolean sync);
+   @Named("machine:checkstate")
+   @GET
+   @Consumes(MachineStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachineStateDto checkMachineState(
+         @EndpointLink("checkstate") @BinderParam(BindToPath.class) final MachineDto machine,
+         @QueryParam("sync") boolean sync);
 
    /**
     * Checks the ipmi configuration state for the given physical machine.
@@ -701,7 +967,12 @@ public interface InfrastructureApi {
     * @return A machineIpmiStateDto with a machine ipmi configuration state
     *         value from enum MachineState
     */
-   MachineIpmiStateDto checkMachineIpmiState(MachineDto machine);
+   @Named("machine:checkipmi")
+   @GET
+   @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachineIpmiStateDto checkMachineIpmiState(
+         @EndpointLink("checkipmistate") @BinderParam(BindToPath.class) final MachineDto machine);
 
    /**
     * Updates an existing physical machine.
@@ -710,7 +981,12 @@ public interface InfrastructureApi {
     *           The new attributes for the physical machine.
     * @return The updated machine.
     */
-   MachineDto updateMachine(MachineDto machine);
+   @Named("machine:update")
+   @PUT
+   @Produces(MachineDto.BASE_MEDIA_TYPE)
+   @Consumes(MachineDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachineDto updateMachine(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) MachineDto machine);
 
    /**
     * Deletes an existing physical machine.
@@ -718,7 +994,9 @@ public interface InfrastructureApi {
     * @param machine
     *           The physical machine to delete.
     */
-   void deleteMachine(MachineDto machine);
+   @Named("machine:delete")
+   @DELETE
+   void deleteMachine(@EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * Reserve the given machine for the given enterprise.
@@ -729,7 +1007,13 @@ public interface InfrastructureApi {
     *           The machine to reserve.
     * @return The reserved machine.
     */
-   MachineDto reserveMachine(EnterpriseDto enterprise, MachineDto machine);
+   @Named("machine:reserve")
+   @POST
+   @Consumes(MachineDto.BASE_MEDIA_TYPE)
+   @Produces(MachineDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachineDto reserveMachine(@EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(BindToXMLPayload.class) MachineDto machine);
 
    /**
     * Cancels the reservation of the given machine.
@@ -739,7 +1023,10 @@ public interface InfrastructureApi {
     * @param machine
     *           The machine to release.
     */
-   void cancelReservation(EnterpriseDto enterprise, MachineDto machine);
+   @Named("machine:cancelreservation")
+   @DELETE
+   void cancelReservation(@EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(AppendMachineIdToPath.class) MachineDto machine);
 
    /**
     * List all machines racks for a rack.
@@ -748,7 +1035,11 @@ public interface InfrastructureApi {
     *           The rack.
     * @return The list of physical machines for the rack.
     */
-   MachinesDto listMachines(RackDto rack);
+   @Named("machine:list")
+   @GET
+   @Consumes(MachinesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachinesDto listMachines(@EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack);
 
    /*********************** Blade ***********************/
 
@@ -758,8 +1049,9 @@ public interface InfrastructureApi {
     * @param machine
     *           The physical machine.
     */
-   @EnterpriseEdition
-   void powerOff(MachineDto machine);
+   @Named("machine:poweroff")
+   @PUT
+   void powerOff(@EndpointLink("poweroff") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * Power on a physical machine in a UCS rack.
@@ -767,8 +1059,9 @@ public interface InfrastructureApi {
     * @param machine
     *           The physical machine.
     */
-   @EnterpriseEdition
-   void powerOn(MachineDto machine);
+   @Named("machine:poweron")
+   @PUT
+   void powerOn(@EndpointLink("poweron") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * Get the logic server associated with a machine in a Cisco UCS rack.
@@ -777,8 +1070,11 @@ public interface InfrastructureApi {
     *           The physical machine.
     * @return The logic server.
     */
-   @EnterpriseEdition
-   LogicServerDto getLogicServer(MachineDto machine);
+   @Named("machine:getlogicserver")
+   @GET
+   @Consumes(LogicServerDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   LogicServerDto getLogicServer(@EndpointLink("logicserver") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * Turn off locator led of a physical machine in a UCS rack.
@@ -786,8 +1082,9 @@ public interface InfrastructureApi {
     * @param machine
     *           The physical machine.
     */
-   @EnterpriseEdition
-   void ledOn(MachineDto machine);
+   @Named("machine:ledon")
+   @POST
+   void ledOn(@EndpointLink("ledon") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * Light locator led of a physical machine in a UCS rack.
@@ -795,8 +1092,9 @@ public interface InfrastructureApi {
     * @param machine
     *           The physical machine.
     */
-   @EnterpriseEdition
-   void ledOff(MachineDto machine);
+   @Named("machine:ledoff")
+   @POST
+   void ledOff(@EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * Get led locator info from a physical machine in a UCS rack.
@@ -805,8 +1103,11 @@ public interface InfrastructureApi {
     *           The physical machine.
     * @return Led locator information.
     */
-   @EnterpriseEdition
-   BladeLocatorLedDto getLocatorLed(MachineDto machine);
+   @Named("machine:getlocatorled")
+   @GET
+   @Consumes(BladeLocatorLedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   BladeLocatorLedDto getLocatorLed(@EndpointLink("led") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * List all virtual machines in a physical machine.
@@ -815,7 +1116,12 @@ public interface InfrastructureApi {
     *           The physical machine.
     * @return The list of virtual machines in the physical machine.
     */
-   VirtualMachinesWithNodeExtendedDto listVirtualMachinesByMachine(MachineDto machine, MachineOptions options);
+   @Named("machine:listvms")
+   @GET
+   @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachinesWithNodeExtendedDto listVirtualMachinesByMachine(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) MachineDto machine, MachineOptions options);
 
    /**
     * Get the given virtual machine
@@ -824,7 +1130,14 @@ public interface InfrastructureApi {
     * @param virtualMachineId
     * @return
     */
-   VirtualMachineWithNodeExtendedDto getVirtualMachine(MachineDto machine, Integer virtualMachineId);
+   @Named("machine:getvm")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineWithNodeExtendedDto getVirtualMachine(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) MachineDto machine,
+         @BinderParam(AppendToPath.class) Integer virtualMachineId);
 
    /*********************** Storage Device ***********************/
 
@@ -835,8 +1148,11 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The list of storage devices in the datacenter.
     */
-   @EnterpriseEdition
-   StorageDevicesDto listStorageDevices(DatacenterDto datacenter);
+   @Named("storagedevice:list")
+   @GET
+   @Consumes(StorageDevicesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StorageDevicesDto listStorageDevices(@EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * List all supported storage devices.
@@ -845,8 +1161,12 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The list of supported storage devices.
     */
-   @EnterpriseEdition
-   StorageDevicesMetadataDto listSupportedStorageDevices(DatacenterDto datacenter);
+   @Named("storagedevice:listsupported")
+   @GET
+   @Consumes(StorageDevicesMetadataDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StorageDevicesMetadataDto listSupportedStorageDevices(
+         @EndpointLink("devices") @BinderParam(BindSupportedDevicesLinkToPath.class) DatacenterDto datacenter);
 
    /**
     * Get the storage device.
@@ -855,8 +1175,13 @@ public interface InfrastructureApi {
     *           The id of the storage device.
     * @return The storage device or <code>null</code> if it does not exist.
     */
-   @EnterpriseEdition
-   StorageDeviceDto getStorageDevice(DatacenterDto datacenter, Integer storageDeviceId);
+   @Named("storagedevice:get")
+   @GET
+   @Consumes(StorageDeviceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   StorageDeviceDto getStorageDevice(@EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(AppendToPath.class) Integer storageDeviceId);
 
    /**
     * Create a new storage device.
@@ -867,8 +1192,14 @@ public interface InfrastructureApi {
     *           The storage device to be created.
     * @return The created storage device.
     */
-   @EnterpriseEdition
-   StorageDeviceDto createStorageDevice(final DatacenterDto datacenter, final StorageDeviceDto storageDevice);
+   @Named("storagedevice:create")
+   @POST
+   @Produces(StorageDeviceDto.BASE_MEDIA_TYPE)
+   @Consumes(StorageDeviceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StorageDeviceDto createStorageDevice(
+         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) StorageDeviceDto storageDevice);
 
    /**
     * Deletes an existing storage device.
@@ -876,8 +1207,9 @@ public interface InfrastructureApi {
     * @param storageDevice
     *           The storage device to delete.
     */
-   @EnterpriseEdition
-   void deleteStorageDevice(StorageDeviceDto storageDevice);
+   @Named("storagedevice:delete")
+   @DELETE
+   void deleteStorageDevice(@EndpointLink("edit") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice);
 
    /**
     * Updates an existing storage device.
@@ -886,8 +1218,13 @@ public interface InfrastructureApi {
     *           The new attributes for the storage device.
     * @return The updated storage device.
     */
-   @EnterpriseEdition
-   StorageDeviceDto updateStorageDevice(StorageDeviceDto storageDevice);
+   @Named("storagedevice:update")
+   @PUT
+   @Produces(StorageDeviceDto.BASE_MEDIA_TYPE)
+   @Consumes(StorageDeviceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StorageDeviceDto updateStorageDevice(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StorageDeviceDto storageDevice);
 
    /*********************** Tier ***********************/
    /**
@@ -897,8 +1234,11 @@ public interface InfrastructureApi {
     *           The datacenter.
     * @return The list of tiers in the datacenter.
     */
-   @EnterpriseEdition
-   TiersDto listTiers(DatacenterDto datacenter);
+   @Named("tier:list")
+   @GET
+   @Consumes(TiersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TiersDto listTiers(@EndpointLink("tiers") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Updates a tier.
@@ -907,8 +1247,12 @@ public interface InfrastructureApi {
     *           The new attributes for the tier.
     * @return The updated tier.
     */
-   @EnterpriseEdition
-   TierDto updateTier(TierDto tier);
+   @Named("tier:update")
+   @PUT
+   @Produces(TierDto.BASE_MEDIA_TYPE)
+   @Consumes(TierDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TierDto updateTier(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TierDto tier);
 
    /**
     * Get the tier.
@@ -917,8 +1261,13 @@ public interface InfrastructureApi {
     *           The id of the tier.
     * @return The tier or <code>null</code> if it does not exist.
     */
-   @EnterpriseEdition
-   TierDto getTier(DatacenterDto datacenter, Integer tierId);
+   @Named("tier:get")
+   @GET
+   @Consumes(TierDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   TierDto getTier(@EndpointLink("tiers") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(AppendToPath.class) Integer tierId);
 
    /*********************** Storage Pool ***********************/
 
@@ -931,8 +1280,13 @@ public interface InfrastructureApi {
     *           Optional query params.
     * @return The list of storage pools in the storage device.
     */
-   @EnterpriseEdition
-   StoragePoolsDto listStoragePools(StorageDeviceDto storageDeviceDto, StoragePoolOptions storagePoolOptions);
+   @Named("storagepool:list")
+   @GET
+   @Consumes(StoragePoolsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StoragePoolsDto listStoragePools(
+         @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
+         StoragePoolOptions options);
 
    /**
     * List storage pools on a tier.
@@ -941,8 +1295,11 @@ public interface InfrastructureApi {
     *           The tier device.
     * @return The list of storage pools in the tier.
     */
-   @EnterpriseEdition
-   StoragePoolsDto listStoragePools(TierDto tier);
+   @Named("storagepool:list")
+   @GET
+   @Consumes(StoragePoolsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StoragePoolsDto listStoragePools(@EndpointLink("pools") @BinderParam(BindToPath.class) TierDto tier);
 
    /**
     * Create a new storage pool in a storage device.
@@ -953,8 +1310,14 @@ public interface InfrastructureApi {
     *           The storage pool to be created.
     * @return The created storage pool.
     */
-   @EnterpriseEdition
-   StoragePoolDto createStoragePool(StorageDeviceDto storageDevice, StoragePoolDto storagePool);
+   @Named("storagepool:create")
+   @POST
+   @Consumes(StoragePoolDto.BASE_MEDIA_TYPE)
+   @Produces(StoragePoolDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StoragePoolDto createStoragePool(
+         @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
+         @BinderParam(BindToXMLPayload.class) StoragePoolDto storagePool);
 
    /**
     * Updates a storage pool.
@@ -963,8 +1326,15 @@ public interface InfrastructureApi {
     *           The new attributes for the storage pool.
     * @return The updated tier.
     */
-   @EnterpriseEdition
-   StoragePoolDto updateStoragePool(StoragePoolDto storagePool);
+   @Named("storagepool:update")
+   @PUT
+   // For the most strangest reason in world, compiler does not accept
+   // constants StoragePoolDto.BASE_MEDIA_TYPE for this method.
+   @Consumes("application/vnd.abiquo.storagepool+xml")
+   @Produces("application/vnd.abiquo.storagepool+xml")
+   @JAXBResponseParser
+   StoragePoolDto updateStoragePool(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StoragePoolDto StoragePoolDto);
 
    /**
     * Deletes an existing storage pool.
@@ -972,8 +1342,9 @@ public interface InfrastructureApi {
     * @param storagePool
     *           The storage pool to delete.
     */
-   @EnterpriseEdition
-   void deleteStoragePool(StoragePoolDto storagePool);
+   @Named("storagepool:delete")
+   @DELETE
+   void deleteStoragePool(@EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool);
 
    /**
     * Get the storage pool.
@@ -984,8 +1355,14 @@ public interface InfrastructureApi {
     *           The id of the storage pool.
     * @return The storage pool or <code>null</code> if it does not exist.
     */
-   @EnterpriseEdition
-   StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
+   @Named("storagepool:get")
+   @GET
+   @Consumes(StoragePoolDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   StoragePoolDto getStoragePool(
+         @EndpointLink("pools") @BinderParam(BindToPath.class) final StorageDeviceDto storageDevice,
+         @BinderParam(AppendToPath.class) final String storagePoolId);
 
    /**
     * Refresh the given storage pool data.
@@ -996,8 +1373,12 @@ public interface InfrastructureApi {
     *           The options to query the storage pool.
     * @return The updated storage pool.
     */
-   @EnterpriseEdition
-   StoragePoolDto refreshStoragePool(StoragePoolDto storagePool, StoragePoolOptions options);
+   @Named("storagepool:refresh")
+   @GET
+   @Consumes(StoragePoolDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   StoragePoolDto refreshStoragePool(@EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool,
+         StoragePoolOptions options);
 
    /*********************** Network ***********************/
 
@@ -1009,8 +1390,11 @@ public interface InfrastructureApi {
     * @return The list of not public, external and not managed for the
     *         datacenter.
     */
-   @EnterpriseEdition
-   VLANNetworksDto listNetworks(DatacenterDto datacenter);
+   @Named("network:list")
+   @GET
+   @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworksDto listNetworks(@EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * List networks of a datacenter with options.
@@ -1022,8 +1406,12 @@ public interface InfrastructureApi {
     * @return The list of not public, external and not managed for the
     *         datacenter.
     */
-   @EnterpriseEdition
-   VLANNetworksDto listNetworks(DatacenterDto datacenter, NetworkOptions options);
+   @Named("network:list")
+   @GET
+   @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworksDto listNetworks(@EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         NetworkOptions options);
 
    /**
     * Get the given network from the given datacenter.
@@ -1034,7 +1422,13 @@ public interface InfrastructureApi {
     *           The id of the network.
     * @return The rack or <code>null</code> if it does not exist.
     */
-   VLANNetworkDto getNetwork(DatacenterDto datacenter, Integer networkId);
+   @Named("network:get")
+   @GET
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   VLANNetworkDto getNetwork(@EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(AppendToPath.class) Integer networkId);
 
    /**
     * Create a new public network.
@@ -1045,8 +1439,13 @@ public interface InfrastructureApi {
     *           The storage pool to be created.
     * @return The created storage pool.
     */
-   @EnterpriseEdition
-   VLANNetworkDto createNetwork(DatacenterDto datacenter, VLANNetworkDto network);
+   @Named("network:create")
+   @POST
+   @Produces(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworkDto createNetwork(@EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) VLANNetworkDto network);
 
    /**
     * Updates a network.
@@ -1055,8 +1454,12 @@ public interface InfrastructureApi {
     *           The new attributes for the network.
     * @return The updated tier.
     */
-   @EnterpriseEdition
-   VLANNetworkDto updateNetwork(VLANNetworkDto network);
+   @Named("network:update")
+   @PUT
+   @Produces(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworkDto updateNetwork(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto network);
 
    /**
     * Deletes an existing network.
@@ -1064,8 +1467,9 @@ public interface InfrastructureApi {
     * @param network
     *           The network to delete.
     */
-   @EnterpriseEdition
-   void deleteNetwork(VLANNetworkDto network);
+   @Named("network:delete")
+   @DELETE
+   void deleteNetwork(@EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * Check the availability of a tag.
@@ -1076,8 +1480,14 @@ public interface InfrastructureApi {
     *           Tag to check.
     * @return A tag availability object.
     */
-   @EnterpriseEdition
-   VlanTagAvailabilityDto checkTagAvailability(DatacenterDto datacenter, Integer tag);
+   @Named("network:checktag")
+   @GET
+   @Path("/datacenters/{datacenter}/network/action/checkavailability")
+   @Consumes(VlanTagAvailabilityDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VlanTagAvailabilityDto checkTagAvailability(
+         @PathParam("datacenter") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter,
+         @QueryParam("tag") Integer tag);
 
    /*********************** Network IPs ***********************/
 
@@ -1089,7 +1499,11 @@ public interface InfrastructureApi {
     * @return The IPs in the given public network.
     * @since 2.3
     */
-   PublicIpsDto listPublicIps(VLANNetworkDto network);
+   @Named("publicnetwork:listips")
+   @GET
+   @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpsDto listPublicIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all the IPs in the given public network.
@@ -1101,7 +1515,12 @@ public interface InfrastructureApi {
     * @return The IPs in the given public network.
     * @since 2.3
     */
-   PublicIpsDto listPublicIps(VLANNetworkDto network, IpOptions options);
+   @Named("publicnetwork:listips")
+   @GET
+   @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpsDto listPublicIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         IpOptions options);
 
    /**
     * Get the given public ip.
@@ -1113,7 +1532,12 @@ public interface InfrastructureApi {
     * @return The requested ip.
     * @since 2.3
     */
-   PublicIpDto getPublicIp(VLANNetworkDto network, Integer ipId);
+   @Named("publicnetwork:getip")
+   @GET
+   @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpDto getPublicIp(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         @BinderParam(AppendToPath.class) Integer ipId);
 
    /**
     * List all the IPs in the given external network.
@@ -1123,7 +1547,11 @@ public interface InfrastructureApi {
     * @return The IPs in the given external network.
     * @since 2.3
     */
-   ExternalIpsDto listExternalIps(VLANNetworkDto network);
+   @Named("externalnetwork:listips")
+   @GET
+   @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   ExternalIpsDto listExternalIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all the IPs in the given external network.
@@ -1135,7 +1563,12 @@ public interface InfrastructureApi {
     * @return The IPs in the given external network.
     * @since 2.3
     */
-   ExternalIpsDto listExternalIps(VLANNetworkDto network, IpOptions options);
+   @Named("externalnetwork:listips")
+   @GET
+   @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   ExternalIpsDto listExternalIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         IpOptions options);
 
    /**
     * Get the given external ip.
@@ -1147,7 +1580,12 @@ public interface InfrastructureApi {
     * @return The requested ip.
     * @since 2.3
     */
-   ExternalIpDto getExternalIp(VLANNetworkDto network, Integer ipId);
+   @Named("externalnetwork:getip")
+   @GET
+   @Consumes(ExternalIpDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   ExternalIpDto getExternalIp(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         @BinderParam(AppendToPath.class) Integer ipId);
 
    /**
     * List all the IPs in the given unmanaged network.
@@ -1157,7 +1595,11 @@ public interface InfrastructureApi {
     * @return The IPs in the given unmanaged network.
     * @since 2.3
     */
-   UnmanagedIpsDto listUnmanagedIps(VLANNetworkDto network);
+   @Named("unmanagednetwork:listips")
+   @GET
+   @Consumes(UnmanagedIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UnmanagedIpsDto listUnmanagedIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all the IPs in the given unmanaged network.
@@ -1169,7 +1611,12 @@ public interface InfrastructureApi {
     * @return The IPs in the given unmanaged network.
     * @since 2.3
     */
-   UnmanagedIpsDto listUnmanagedIps(VLANNetworkDto network, IpOptions options);
+   @Named("unmanagednetwork:listips")
+   @GET
+   @Consumes(UnmanagedIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UnmanagedIpsDto listUnmanagedIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         IpOptions options);
 
    /**
     * Get the given unmanaged ip.
@@ -1181,7 +1628,12 @@ public interface InfrastructureApi {
     * @return The requested ip.
     * @since 2.3
     */
-   UnmanagedIpDto getUnmanagedIp(VLANNetworkDto network, Integer ipId);
+   @Named("unmanagednetwork:getip")
+   @GET
+   @Consumes(UnmanagedIpDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UnmanagedIpDto getUnmanagedIp(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         @BinderParam(AppendToPath.class) Integer ipId);
 
    /**
     * List all the Network Service types definied into a datacenter.
@@ -1190,7 +1642,12 @@ public interface InfrastructureApi {
     *           The datacenter
     * @return The list of Network Service Types in the datacenter.
     */
-   NetworkServiceTypesDto listNetworkServiceTypes(DatacenterDto datacenter);
+   @Named("networkservicetype:list")
+   @GET
+   @Consumes(NetworkServiceTypesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   NetworkServiceTypesDto listNetworkServiceTypes(
+         @EndpointLink("networkservicetypes") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
    /**
     * Create a new Network Service Type Dto.
@@ -1201,7 +1658,14 @@ public interface InfrastructureApi {
     *           {@link NetworkServiceTypeDto} instance to create
     * @return the created {@link NetworkServiceTypeDto}
     */
-   NetworkServiceTypeDto createNetworkServiceType(DatacenterDto datacenter, NetworkServiceTypeDto nst);
+   @Named("networkservicetype:create")
+   @POST
+   @Produces(NetworkServiceTypeDto.BASE_MEDIA_TYPE)
+   @Consumes(NetworkServiceTypeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   NetworkServiceTypeDto createNetworkServiceType(
+         @EndpointLink("networkservicetypes") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) NetworkServiceTypeDto nst);
 
    /**
     * Get a single instance of a {@link NetworkServiceTypeDto}
@@ -1212,7 +1676,14 @@ public interface InfrastructureApi {
     *           identifier of the {@link NetworkServiceTypeDto}
     * @return the found entity
     */
-   NetworkServiceTypeDto getNetworkServiceType(DatacenterDto datacenter, Integer nstId);
+   @Named("networkservicetype:get")
+   @GET
+   @Consumes(NetworkServiceTypeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   NetworkServiceTypeDto getNetworkServiceType(
+         @EndpointLink("networkservicetypes") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         @BinderParam(AppendToPath.class) Integer nstId);
 
    /**
     * Update the value of a {@link NetworkServiceTypeDto}
@@ -1221,7 +1692,13 @@ public interface InfrastructureApi {
     *           the instance to update with the new values.
     * @return the updated entity.
     */
-   NetworkServiceTypeDto updateNetworkServiceType(NetworkServiceTypeDto nstDto);
+   @Named("networkservicetype:update")
+   @PUT
+   @Produces(NetworkServiceTypeDto.BASE_MEDIA_TYPE)
+   @Consumes(NetworkServiceTypeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   NetworkServiceTypeDto updateNetworkServiceType(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) NetworkServiceTypeDto nstDto);
 
    /**
     * Remove a {@link NetworkServiceTypeDto} entity.
@@ -1229,6 +1706,8 @@ public interface InfrastructureApi {
     * @param nstDto
     *           the entity to delete
     */
-   void deleteNetworkServiceType(NetworkServiceTypeDto nstDto);
+   @Named("networkservicetype:delete")
+   @DELETE
+   void deleteNetworkServiceType(@EndpointLink("edit") @BinderParam(BindToPath.class) NetworkServiceTypeDto nstDto);
 
 }

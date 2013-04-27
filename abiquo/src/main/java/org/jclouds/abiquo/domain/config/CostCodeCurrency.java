@@ -21,15 +21,14 @@ package org.jclouds.abiquo.domain.config;
 import java.math.BigDecimal;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.pricing.CostCodeCurrencyDto;
 
 public class CostCodeCurrency extends DomainWrapper<CostCodeCurrencyDto> {
 
-   protected CostCodeCurrency(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final CostCodeCurrencyDto target) {
+   protected CostCodeCurrency(final ApiContext<AbiquoApi> context, final CostCodeCurrencyDto target) {
       super(context, target);
    }
 

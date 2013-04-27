@@ -25,12 +25,11 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
@@ -50,7 +49,6 @@ import com.google.common.collect.Iterables;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/RackResource">
  *      http://community.abiquo.com/display/ABI20/RackResource</a>
  */
-@EnterpriseEdition
 public class ManagedRack extends DomainWrapper<UcsRackDto> {
    /** The default minimum VLAN id. */
    private static final int DEFAULT_VLAN_ID_MIN = 2;
@@ -70,7 +68,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected ManagedRack(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final UcsRackDto target) {
+   protected ManagedRack(final ApiContext<AbiquoApi> context, final UcsRackDto target) {
       super(context, target);
    }
 
@@ -422,12 +420,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
       return new Builder(context, datacenter);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Integer id;
 
@@ -461,7 +459,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto> {
 
       private Datacenter datacenter;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
          super();
          checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
          this.datacenter = datacenter;

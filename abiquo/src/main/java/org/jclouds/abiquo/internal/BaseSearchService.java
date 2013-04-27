@@ -27,7 +27,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.Volume;
@@ -46,7 +45,7 @@ import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.features.services.SearchService;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
@@ -65,10 +64,10 @@ import com.google.common.annotations.VisibleForTesting;
 @Singleton
 public class BaseSearchService implements SearchService {
    @VisibleForTesting
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    @Inject
-   protected BaseSearchService(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   protected BaseSearchService(final ApiContext<AbiquoApi> context) {
       this.context = checkNotNull(context, "context");
    }
 

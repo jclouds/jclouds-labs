@@ -33,13 +33,12 @@ import java.util.Map;
 
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.domain.Location;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
@@ -56,7 +55,7 @@ import com.google.common.base.Supplier;
 public class VirtualMachineTemplateToImageTest {
    @SuppressWarnings("unchecked")
    public void testVirtualMachineTemplateToImage() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<Datacenter, Location> dcToLocation = mockDatacenterToLocation();
       Supplier<Map<Integer, Datacenter>> regionMap = mockRegionMap();
       VirtualMachineTemplateToImage function = new VirtualMachineTemplateToImage(dcToLocation, regionMap);
@@ -82,7 +81,7 @@ public class VirtualMachineTemplateToImageTest {
 
    @SuppressWarnings("unchecked")
    public void testConvertWithoutDownloadLink() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<Datacenter, Location> dcToLocation = mockDatacenterToLocation();
       Supplier<Map<Integer, Datacenter>> regionMap = mockRegionMap();
       VirtualMachineTemplateToImage function = new VirtualMachineTemplateToImage(dcToLocation, regionMap);
@@ -104,7 +103,7 @@ public class VirtualMachineTemplateToImageTest {
    @SuppressWarnings("unchecked")
    @Test(expectedExceptions = NullPointerException.class)
    public void testConvertWithoutId() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<Datacenter, Location> dcToLocation = mockDatacenterToLocation();
       Supplier<Map<Integer, Datacenter>> regionMap = mockRegionMap();
       VirtualMachineTemplateToImage function = new VirtualMachineTemplateToImage(dcToLocation, regionMap);

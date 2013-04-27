@@ -18,24 +18,22 @@
  */
 
 package org.jclouds.abiquo;
+
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
 import static org.jclouds.abiquo.config.AbiquoProperties.ASYNC_TASK_MONITOR_DELAY;
 import static org.jclouds.abiquo.config.AbiquoProperties.CREDENTIAL_IS_TOKEN;
-import static org.jclouds.reflect.Reflection2.typeToken;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
-import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.config.AbiquoHttpApiModule;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.concurrent.config.ScheduledExecutorServiceModule;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
@@ -43,12 +41,7 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-public class AbiquoApiMetadata extends BaseRestApiMetadata {
-
-   /** The token describing the rest api context. */
-   public static TypeToken<RestContext<AbiquoApi, AbiquoAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<AbiquoApi, AbiquoAsyncApi>>() {
-      private static final long serialVersionUID = -2098594161943130770L;
-   };
+public class AbiquoApiMetadata extends BaseHttpApiMetadata<AbiquoApi> {
 
    public AbiquoApiMetadata() {
       this(new Builder());
@@ -58,13 +51,13 @@ public class AbiquoApiMetadata extends BaseRestApiMetadata {
    public Builder toBuilder() {
       return new Builder().fromApiMetadata(this);
    }
-   
+
    protected AbiquoApiMetadata(Builder builder) {
       super(builder);
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       // By default redirects will be handled in the domain objects
       properties.setProperty(PROPERTY_MAX_REDIRECTS, "0");
       // The default polling delay between AsyncTask monitor requests
@@ -74,24 +67,23 @@ public class AbiquoApiMetadata extends BaseRestApiMetadata {
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<AbiquoApi, Builder> {
       private static final String DOCUMENTATION_ROOT = "http://community.abiquo.com/display/ABI"
-            + CharMatcher.DIGIT.retainFrom(AbiquoAsyncApi.API_VERSION);
+            + CharMatcher.DIGIT.retainFrom(AbiquoApi.API_VERSION);
 
       protected Builder() {
-         super(AbiquoApi.class, AbiquoAsyncApi.class);
          id("abiquo")
                .name("Abiquo API")
                .identityName("API Username")
                .credentialName("API Password")
                .documentation(URI.create(DOCUMENTATION_ROOT + "/API+Reference"))
                .defaultEndpoint("http://localhost/api")
-               .version(AbiquoAsyncApi.API_VERSION)
-               .buildVersion(AbiquoAsyncApi.BUILD_VERSION)
-               .view(typeToken(AbiquoContext.class))
+               .version(AbiquoApi.API_VERSION)
+               .buildVersion(AbiquoApi.BUILD_VERSION)
+               .view(AbiquoContext.class)
                .defaultProperties(AbiquoApiMetadata.defaultProperties())
                .defaultModules(
-                     ImmutableSet.<Class<? extends Module>> of(AbiquoRestClientModule.class,
+                     ImmutableSet.<Class<? extends Module>> of(AbiquoHttpApiModule.class,
                            AbiquoComputeServiceContextModule.class, ScheduledExecutorServiceModule.class));
       }
 

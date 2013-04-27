@@ -40,7 +40,7 @@ import com.abiquo.server.core.infrastructure.network.NetworkServiceTypesDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "InfrastructureApiExpectTest")
-public class InfrastructureApiExpectTest extends BaseAbiquoRestApiExpectTest<InfrastructureApi> {
+public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<InfrastructureApi> {
 
    public void testListNetworkServiceTypesReturns2xx() {
       InfrastructureApi api = requestSendsResponse(

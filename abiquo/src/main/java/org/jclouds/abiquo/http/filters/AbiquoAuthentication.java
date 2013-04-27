@@ -38,7 +38,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Supplier;
 
 /**
- * Authenticates using Basic Authentication or a generated token from previous API sessions.
+ * Authenticates using Basic Authentication or a generated token from previous
+ * API sessions.
  * 
  * @author Ignasi Barrera
  */

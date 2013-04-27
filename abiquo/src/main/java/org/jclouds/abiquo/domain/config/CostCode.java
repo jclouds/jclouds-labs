@@ -22,9 +22,9 @@ package org.jclouds.abiquo.domain.config;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.pricing.CostCodeCurrenciesDto;
@@ -52,7 +52,7 @@ public class CostCode extends DomainWrapper<CostCodeDto> {
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   private CostCode(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final CostCodeDto target) {
+   private CostCode(final ApiContext<AbiquoApi> context, final CostCodeDto target) {
       super(context, target);
    }
 
@@ -87,12 +87,12 @@ public class CostCode extends DomainWrapper<CostCodeDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   public static Builder builder(final ApiContext<AbiquoApi> context) {
       return new Builder(context);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -100,7 +100,7 @@ public class CostCode extends DomainWrapper<CostCodeDto> {
 
       private List<CostCodePrice> defaultPrices = Lists.newArrayList();
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+      public Builder(final ApiContext<AbiquoApi> context) {
          super();
          this.context = context;
       }

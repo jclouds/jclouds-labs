@@ -27,7 +27,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -39,7 +38,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.google.common.annotations.VisibleForTesting;
@@ -55,7 +54,7 @@ import com.google.common.collect.Iterables;
 @Singleton
 public class BaseCloudService implements CloudService {
    @VisibleForTesting
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    @VisibleForTesting
    protected final ListVirtualDatacenters listVirtualDatacenters;
@@ -67,9 +66,8 @@ public class BaseCloudService implements CloudService {
    protected ListVirtualMachines listVirtualMachines;
 
    @Inject
-   protected BaseCloudService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final ListVirtualDatacenters listVirtualDatacenters, final ListVirtualAppliances listVirtualAppliances,
-         final ListVirtualMachines listVirtualMachines) {
+   protected BaseCloudService(final ApiContext<AbiquoApi> context, final ListVirtualDatacenters listVirtualDatacenters,
+         final ListVirtualAppliances listVirtualAppliances, final ListVirtualMachines listVirtualMachines) {
       this.context = checkNotNull(context, "context");
       this.listVirtualDatacenters = checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
       this.listVirtualAppliances = checkNotNull(listVirtualAppliances, "listVirtualAppliances");
