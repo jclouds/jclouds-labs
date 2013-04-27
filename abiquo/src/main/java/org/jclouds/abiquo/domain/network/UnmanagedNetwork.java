@@ -24,17 +24,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
@@ -55,7 +52,6 @@ import com.google.inject.TypeLiteral;
  *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource"
  *      > http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
-@EnterpriseEdition
 public class UnmanagedNetwork extends Network<UnmanagedIp> {
    /** The datacenter where the network belongs. */
    private Datacenter datacenter;
@@ -66,7 +62,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected UnmanagedNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VLANNetworkDto target) {
+   protected UnmanagedNetwork(final ApiContext<AbiquoApi> context, final VLANNetworkDto target) {
       super(context, target);
    }
 
@@ -129,10 +125,9 @@ public class UnmanagedNetwork extends Network<UnmanagedIp> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.ENTERPRISE), ValidationErrors.MISSING_REQUIRED_LINK
             + " " + ParentLinkName.ENTERPRISE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<EnterpriseDto> parser = new ParseXMLWithJAXB<EnterpriseDto>(utils.getXml(),
+      ParseXMLWithJAXB<EnterpriseDto> parser = new ParseXMLWithJAXB<EnterpriseDto>(context.utils().xml(),
             TypeLiteral.get(EnterpriseDto.class));
 
       enterprise = wrap(context, Enterprise.class, parser.apply(response));
@@ -143,10 +138,9 @@ public class UnmanagedNetwork extends Network<UnmanagedIp> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.DATACENTER), ValidationErrors.MISSING_REQUIRED_LINK
             + " " + ParentLinkName.DATACENTER);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(utils.getXml(),
+      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(context.utils().xml(),
             TypeLiteral.get(DatacenterDto.class));
 
       datacenter = wrap(context, Datacenter.class, parser.apply(response));
@@ -167,7 +161,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter,
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter,
          final Enterprise enterprise) {
       return new Builder(context, datacenter, enterprise);
    }
@@ -179,8 +173,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp> {
 
       private Optional<NetworkServiceType> networkServiceType = Optional.absent();
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter,
-            final Enterprise enterprise) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter, final Enterprise enterprise) {
          super(context);
          this.datacenter = checkNotNull(datacenter,
                ValidationErrors.NULL_RESOURCE + Datacenter.class.getCanonicalName());

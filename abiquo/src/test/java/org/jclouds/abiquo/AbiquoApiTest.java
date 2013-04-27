@@ -17,40 +17,46 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.features;
+package org.jclouds.abiquo;
 
 import static org.jclouds.reflect.Reflection2.method;
 
 import java.io.IOException;
 
-import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.features.BaseAbiquoApiTest;
+import org.jclouds.functions.IdentityFunction;
 import org.jclouds.reflect.Invocation;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.event.EventsDto;
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code EventAsyncApi}
+ * Tests annotation parsing of {@code AbiquoApi}.
  * 
  * @author Ignasi Barrera
- * @author Vivien Mahé
  */
-@Test(groups = "unit", testName = "EventAsyncApiTest")
-public class EventAsyncApiTest extends BaseAbiquoAsyncApiTest<EventAsyncApi> {
-   public void testListEvents() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EventAsyncApi.class, "listEvents");
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
+@Test(groups = "unit", testName = "AbiquoApiTest")
+public class AbiquoApiTest extends BaseAbiquoApiTest<AbiquoApi> {
+   public void testGet() throws SecurityException, NoSuchMethodException, IOException {
+      RESTLink link = new RESTLink("edit", "http://foo/bar");
+      link.setType(DatacentersDto.BASE_MEDIA_TYPE);
 
-      assertRequestLineEquals(request, "GET http://localhost/api/events HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + EventsDto.BASE_MEDIA_TYPE + "\n");
+      Invokable<?, ?> method = method(AbiquoApi.class, "get", RESTLink.class);
+      GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(link)));
+
+      assertRequestLineEquals(request, "GET http://foo/bar HTTP/1.1");
+      assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersDto.BASE_MEDIA_TYPE + "\n");
       assertPayloadEquals(request, null, null, false);
 
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+      assertResponseParserClassEquals(method, request, IdentityFunction.class);
       assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
+      assertFallbackClassEquals(method, NullOnNotFoundOr404.class);
 
       checkFilters(request);
    }

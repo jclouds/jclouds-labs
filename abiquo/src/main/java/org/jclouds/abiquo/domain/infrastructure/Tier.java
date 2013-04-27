@@ -24,11 +24,10 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
@@ -48,7 +47,6 @@ import com.google.common.collect.Iterables;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/TierResource">
  *      http://community.abiquo.com/display/ABI20/TierResource</a>
  */
-@EnterpriseEdition
 public class Tier extends DomainWrapper<TierDto> {
    /** The datacenter where the tier belongs. */
    private Datacenter datacenter;
@@ -56,7 +54,7 @@ public class Tier extends DomainWrapper<TierDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Tier(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final TierDto target) {
+   protected Tier(final ApiContext<AbiquoApi> context, final TierDto target) {
       super(context, target);
    }
 

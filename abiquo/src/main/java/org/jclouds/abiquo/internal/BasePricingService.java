@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.config.CostCode;
 import org.jclouds.abiquo.domain.config.CostCodeCurrency;
 import org.jclouds.abiquo.domain.config.Currency;
@@ -38,7 +37,7 @@ import org.jclouds.abiquo.domain.config.PricingCostCode;
 import org.jclouds.abiquo.domain.config.PricingTemplate;
 import org.jclouds.abiquo.domain.config.PricingTier;
 import org.jclouds.abiquo.features.services.PricingService;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.pricing.CostCodeCurrenciesDto;
 import com.abiquo.server.core.pricing.CostCodeDto;
@@ -64,10 +63,10 @@ import com.google.common.collect.Iterables;
 @Singleton
 public class BasePricingService implements PricingService {
    @VisibleForTesting
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    @Inject
-   protected BasePricingService(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   protected BasePricingService(final ApiContext<AbiquoApi> context) {
       this.context = checkNotNull(context, "context");
    }
 

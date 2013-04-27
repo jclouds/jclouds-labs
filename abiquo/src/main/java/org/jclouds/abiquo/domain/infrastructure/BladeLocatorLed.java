@@ -20,10 +20,9 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.rest.RestContext;
+
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 
@@ -37,12 +36,11 @@ import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
  *      > http://community.abiquo.com/display/ABI20/MachineResource#
  *      MachineResource- Retrievethelocatorledoftheblade</a>
  */
-@EnterpriseEdition
 public class BladeLocatorLed extends DomainWrapper<BladeLocatorLedDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected BladeLocatorLed(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final BladeLocatorLedDto target) {
+   protected BladeLocatorLed(final ApiContext<AbiquoApi> context, final BladeLocatorLedDto target) {
       super(context, target);
    }
 

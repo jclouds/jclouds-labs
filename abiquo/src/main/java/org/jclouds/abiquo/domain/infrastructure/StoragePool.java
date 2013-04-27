@@ -22,17 +22,14 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
@@ -50,7 +47,6 @@ import com.google.inject.TypeLiteral;
  *      href="http://community.abiquo.com/display/ABI20/StoragePoolResource">
  *      http://community.abiquo.com/display/ABI20/StoragePoolResource</a>
  */
-@EnterpriseEdition
 public class StoragePool extends DomainWrapper<StoragePoolDto> {
 
    /** The datacenter where the storage device is. */
@@ -62,7 +58,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected StoragePool(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StoragePoolDto target) {
+   protected StoragePool(final ApiContext<AbiquoApi> context, final StoragePoolDto target) {
       super(context, target);
    }
 
@@ -147,10 +143,9 @@ public class StoragePool extends DomainWrapper<StoragePoolDto> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.STORAGE_DEVICE),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.STORAGE_DEVICE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<StorageDeviceDto> parser = new ParseXMLWithJAXB<StorageDeviceDto>(utils.getXml(),
+      ParseXMLWithJAXB<StorageDeviceDto> parser = new ParseXMLWithJAXB<StorageDeviceDto>(context.utils().xml(),
             TypeLiteral.get(StorageDeviceDto.class));
 
       return wrap(context, StorageDevice.class, parser.apply(response));
@@ -168,27 +163,27 @@ public class StoragePool extends DomainWrapper<StoragePoolDto> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.TIER), ValidationErrors.MISSING_REQUIRED_LINK + " "
             + ParentLinkName.TIER);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<TierDto> parser = new ParseXMLWithJAXB<TierDto>(utils.getXml(), TypeLiteral.get(TierDto.class));
+      ParseXMLWithJAXB<TierDto> parser = new ParseXMLWithJAXB<TierDto>(context.utils().xml(),
+            TypeLiteral.get(TierDto.class));
 
       return wrap(context, Tier.class, parser.apply(response));
    }
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDevice storageDevice) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final StorageDevice storageDevice) {
       return new Builder(context, storageDevice);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
       private StorageDevice storageDevice;
       private String name;
       private Long totalSizeInMb;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDevice storageDevice) {
+      public Builder(final ApiContext<AbiquoApi> context, final StorageDevice storageDevice) {
          super();
          checkNotNull(storageDevice, ValidationErrors.NULL_RESOURCE + StorageDevice.class);
          this.storageDevice = storageDevice;

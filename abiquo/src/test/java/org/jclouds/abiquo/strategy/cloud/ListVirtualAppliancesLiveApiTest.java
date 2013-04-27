@@ -27,7 +27,6 @@ import static org.testng.Assert.assertTrue;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
-import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -43,7 +42,7 @@ public class ListVirtualAppliancesLiveApiTest extends BaseAbiquoStrategyLiveApiT
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListVirtualAppliances.class);
+      this.strategy = env.context.utils().injector().getInstance(ListVirtualAppliances.class);
    }
 
    public void testExecute() {

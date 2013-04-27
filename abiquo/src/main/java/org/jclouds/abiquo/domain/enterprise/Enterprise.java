@@ -24,7 +24,6 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
@@ -39,12 +38,10 @@ import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.UnmanagedIp;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
@@ -86,7 +83,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Enterprise(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final EnterpriseDto target) {
+   protected Enterprise(final ApiContext<AbiquoApi> context, final EnterpriseDto target) {
       super(context, target);
    }
 
@@ -434,20 +431,17 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    }
 
    public List<VirtualMachineTemplate> listTemplates() {
-      ListVirtualMachineTemplates strategy = context.getUtils().getInjector()
-            .getInstance(ListVirtualMachineTemplates.class);
+      ListVirtualMachineTemplates strategy = context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
       return ImmutableList.copyOf(strategy.execute(this));
    }
 
    public List<VirtualMachineTemplate> listTemplates(final Predicate<VirtualMachineTemplate> filter) {
-      ListVirtualMachineTemplates strategy = context.getUtils().getInjector()
-            .getInstance(ListVirtualMachineTemplates.class);
+      ListVirtualMachineTemplates strategy = context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
       return ImmutableList.copyOf(strategy.execute(this, filter));
    }
 
    public VirtualMachineTemplate findTemplate(final Predicate<VirtualMachineTemplate> filter) {
-      ListVirtualMachineTemplates strategy = context.getUtils().getInjector()
-            .getInstance(ListVirtualMachineTemplates.class);
+      ListVirtualMachineTemplates strategy = context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
       return Iterables.getFirst(strategy.execute(this, filter), null);
    }
 
@@ -470,52 +464,44 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#
     *      EnterpriseResource- Getthelistofexternalnetworks</a>
     */
-   @EnterpriseEdition
    public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter) {
       DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("externalnetworks"));
+      HttpResponse response = context.getApi().get(limitForDatacenter.searchLink("externalnetworks"));
 
-      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),
+      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(context.utils().xml(),
             TypeLiteral.get(VLANNetworksDto.class));
 
       return wrap(context, ExternalNetwork.class, parser.apply(response).getCollection());
    }
 
-   @EnterpriseEdition
    public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter,
          final Predicate<Network<ExternalIp>> filter) {
       return ImmutableList.copyOf(filter(listExternalNetworks(datacenter), filter));
    }
 
-   @EnterpriseEdition
    public ExternalNetwork findExternalNetwork(final Datacenter datacenter, final Predicate<Network<ExternalIp>> filter) {
       return Iterables.getFirst(filter(listExternalNetworks(datacenter), filter), null);
    }
 
-   @EnterpriseEdition
    public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter) {
       DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
       // The "rel" for the unmanaged networks is the same than the one used for
       // external networks
-      HttpResponse response = utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("externalnetworks"));
+      HttpResponse response = context.getApi().get(limitForDatacenter.searchLink("externalnetworks"));
 
-      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),
+      ParseXMLWithJAXB<VLANNetworksDto> parser = new ParseXMLWithJAXB<VLANNetworksDto>(context.utils().xml(),
             TypeLiteral.get(VLANNetworksDto.class));
 
       return wrap(context, UnmanagedNetwork.class, parser.apply(response).getCollection());
    }
 
-   @EnterpriseEdition
    public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter,
          final Predicate<Network<UnmanagedIp>> filter) {
       return ImmutableList.copyOf(filter(listUnmanagedNetworks(datacenter), filter));
    }
 
-   @EnterpriseEdition
    public UnmanagedNetwork findUnmanagedNetwork(final Datacenter datacenter,
          final Predicate<Network<UnmanagedIp>> filter) {
       return Iterables.getFirst(filter(listUnmanagedNetworks(datacenter), filter), null);
@@ -724,12 +710,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   public static Builder builder(final ApiContext<AbiquoApi> context) {
       return new Builder(context);
    }
 
    public static class Builder extends LimitsBuilder<Builder> {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -749,7 +735,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
 
       private String chefValidatorCertificate;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+      public Builder(final ApiContext<AbiquoApi> context) {
          super();
          this.context = context;
       }

@@ -20,9 +20,8 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.DatastoreDto;
 
@@ -37,7 +36,7 @@ public class Datastore extends DomainWrapper<DatastoreDto> {
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   private Datastore(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final DatastoreDto target) {
+   private Datastore(final ApiContext<AbiquoApi> context, final DatastoreDto target) {
       super(context, target);
    }
 

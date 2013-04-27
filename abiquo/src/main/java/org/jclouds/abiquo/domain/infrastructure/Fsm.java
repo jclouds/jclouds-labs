@@ -20,10 +20,9 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.rest.RestContext;
+
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.FsmDto;
 
@@ -35,12 +34,11 @@ import com.abiquo.server.core.infrastructure.FsmDto;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
-@EnterpriseEdition
 public class Fsm extends DomainWrapper<FsmDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Fsm(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final FsmDto target) {
+   protected Fsm(final ApiContext<AbiquoApi> context, final FsmDto target) {
       super(context, target);
    }
 

@@ -23,10 +23,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.math.BigDecimal;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.pricing.PricingCostCodeDto;
@@ -41,19 +40,19 @@ public class PricingCostCode extends DomainWrapper<PricingCostCodeDto> {
 
    private PricingTemplate pricingTemplate;
 
-   protected PricingCostCode(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final PricingCostCodeDto target) {
+   protected PricingCostCode(final ApiContext<AbiquoApi> context, final PricingCostCodeDto target) {
       super(context, target);
    }
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final PricingTemplate pricingtemplate, final CostCode costcode) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final PricingTemplate pricingtemplate,
+         final CostCode costcode) {
       return new Builder(context, pricingtemplate, costcode);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Integer id;
 
@@ -63,8 +62,7 @@ public class PricingCostCode extends DomainWrapper<PricingCostCodeDto> {
 
       private BigDecimal price;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final PricingTemplate pricingTemplate,
-            final CostCode costcode) {
+      public Builder(final ApiContext<AbiquoApi> context, final PricingTemplate pricingTemplate, final CostCode costcode) {
          super();
          this.pricingTemplate = checkNotNull(pricingTemplate, ValidationErrors.NULL_RESOURCE + PricingTemplate.class);
          this.costcode = checkNotNull(costcode, ValidationErrors.NULL_RESOURCE + CostCode.class);

@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.monitor.MonitorStatus;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
@@ -80,7 +80,7 @@ public class VirtualMachineUndeployMonitorTest {
 
       @SuppressWarnings("unchecked")
       public MockVirtualMachine() {
-         super(EasyMock.createMock(RestContext.class), new VirtualMachineWithNodeExtendedDto());
+         super(EasyMock.createMock(ApiContext.class), new VirtualMachineWithNodeExtendedDto());
       }
 
       @Override

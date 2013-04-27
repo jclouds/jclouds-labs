@@ -25,11 +25,10 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
@@ -66,7 +65,7 @@ public class Rack extends DomainWrapper<RackDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Rack(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RackDto target) {
+   protected Rack(final ApiContext<AbiquoApi> context, final RackDto target) {
       super(context, target);
    }
 
@@ -188,12 +187,12 @@ public class Rack extends DomainWrapper<RackDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
       return new Builder(context, datacenter);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Integer id;
 
@@ -215,7 +214,7 @@ public class Rack extends DomainWrapper<RackDto> {
 
       private Datacenter datacenter;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
          super();
          checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
          this.datacenter = datacenter;

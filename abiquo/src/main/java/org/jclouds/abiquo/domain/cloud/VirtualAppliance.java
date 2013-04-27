@@ -25,14 +25,13 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -67,7 +66,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected VirtualAppliance(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualApplianceDto target) {
+   protected VirtualAppliance(final ApiContext<AbiquoApi> context, final VirtualApplianceDto target) {
       super(context, target);
    }
 
@@ -295,19 +294,18 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final VirtualDatacenter virtualDatacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final VirtualDatacenter virtualDatacenter) {
       return new Builder(context, virtualDatacenter);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
       private VirtualDatacenter virtualDatacenter;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenter virtualDatacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final VirtualDatacenter virtualDatacenter) {
          super();
          checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE + VirtualDatacenter.class);
          this.virtualDatacenter = virtualDatacenter;

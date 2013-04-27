@@ -41,17 +41,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code AdminAsyncApi}
+ * Tests annotation parsing of {@code AdminApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Test(groups = "unit", testName = "AdminAsyncApiTest")
-public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
+@Test(groups = "unit", testName = "AdminApiTest")
+public class AdminApiTest extends BaseAbiquoApiTest<AdminApi> {
    /*********************** Role ***********************/
 
    public void testListRoles() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "listRoles");
+      Invokable<?, ?> method = method(AdminApi.class, "listRoles");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/admin/roles HTTP/1.1");
@@ -66,7 +66,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    }
 
    public void testGetRoleFromUser() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "getRole", UserDto.class);
+      Invokable<?, ?> method = method(AdminApi.class, "getRole", UserDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.userPut())));
 
@@ -82,7 +82,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    }
 
    public void testCreateRole() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "createRole", RoleDto.class);
+      Invokable<?, ?> method = method(AdminApi.class, "createRole", RoleDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(AdminResources.rolePost())));
 
@@ -99,7 +99,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    }
 
    public void testDeleteRole() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "deleteRole", RoleDto.class);
+      Invokable<?, ?> method = method(AdminApi.class, "deleteRole", RoleDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(AdminResources.rolePut())));
 
@@ -115,7 +115,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    }
 
    public void testUpdateRole() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "updateRole", RoleDto.class);
+      Invokable<?, ?> method = method(AdminApi.class, "updateRole", RoleDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(AdminResources.rolePut())));
 
@@ -132,7 +132,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    }
 
    public void testGetRoleById() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "getRole", Integer.class);
+      Invokable<?, ?> method = method(AdminApi.class, "getRole", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/admin/roles/1 HTTP/1.1");
@@ -147,7 +147,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    }
 
    public void testListPrivilegesByRoles() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "listPrivileges", RoleDto.class);
+      Invokable<?, ?> method = method(AdminApi.class, "listPrivileges", RoleDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(AdminResources.rolePut())));
 
@@ -165,7 +165,7 @@ public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi> {
    /*********************** Current User **********************/
 
    public void testGetCurrentUser() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(AdminAsyncApi.class, "getCurrentUser");
+      Invokable<?, ?> method = method(AdminApi.class, "getCurrentUser");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/login HTTP/1.1");

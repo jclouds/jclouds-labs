@@ -26,7 +26,6 @@ import static com.google.common.collect.Iterables.find;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
@@ -34,10 +33,9 @@ import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.NetworkInterfacePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
@@ -72,7 +70,7 @@ public class Machine extends AbstractPhysicalMachine {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Machine(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final MachineDto target) {
+   protected Machine(final ApiContext<AbiquoApi> context, final MachineDto target) {
       super(context, target);
    }
 
@@ -118,10 +116,10 @@ public class Machine extends AbstractPhysicalMachine {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.RACK), ValidationErrors.MISSING_REQUIRED_LINK + " "
             + ParentLinkName.RACK);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<RackDto> parser = new ParseXMLWithJAXB<RackDto>(utils.getXml(), TypeLiteral.get(RackDto.class));
+      ParseXMLWithJAXB<RackDto> parser = new ParseXMLWithJAXB<RackDto>(context.utils().xml(),
+            TypeLiteral.get(RackDto.class));
 
       return wrap(context, Rack.class, parser.apply(response));
    }
@@ -291,12 +289,12 @@ public class Machine extends AbstractPhysicalMachine {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Rack rack) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Rack rack) {
       return new Builder(context, rack);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -338,7 +336,7 @@ public class Machine extends AbstractPhysicalMachine {
 
       private Rack rack;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Rack rack) {
+      public Builder(final ApiContext<AbiquoApi> context, final Rack rack) {
          super();
          checkNotNull(rack, ValidationErrors.NULL_RESOURCE + Rack.class);
          this.rack = rack;

@@ -55,7 +55,7 @@ public class ListAttachedNicsLiveApiTest extends BaseAbiquoStrategyLiveApiTest {
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListAttachedNics.class);
+      this.strategy = env.context.utils().injector().getInstance(ListAttachedNics.class);
 
       privateIp = env.privateNetwork.listUnusedIps().get(0);
       assertNotNull(privateIp);

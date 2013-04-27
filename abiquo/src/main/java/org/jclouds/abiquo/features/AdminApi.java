@@ -19,6 +19,33 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.ParamParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
+
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -30,11 +57,11 @@ import com.abiquo.server.core.enterprise.UserDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see AdminAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public interface AdminApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+public interface AdminApi extends Closeable {
    /* ********************** User ********************** */
 
    /**
@@ -42,6 +69,11 @@ public interface AdminApi {
     * 
     * @return The information of the current user.
     */
+   @Named("user:get")
+   @GET
+   @Path("/login")
+   @Consumes(UserDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    UserDto getCurrentUser();
 
    /* ********************** Role ********************** */
@@ -51,6 +83,11 @@ public interface AdminApi {
     * 
     * @return The list of global Roles.
     */
+   @Named("role:list")
+   @GET
+   @Path("/admin/roles")
+   @Consumes(RolesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    RolesDto listRoles();
 
    /**
@@ -58,7 +95,12 @@ public interface AdminApi {
     * 
     * @return The list of Roles for the given enterprise.
     */
-   RolesDto listRoles(EnterpriseDto enterprise);
+   @Named("role:list")
+   @GET
+   @Path("/admin/roles")
+   @Consumes(RolesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RolesDto listRoles(@QueryParam("identerprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
    /**
     * Retrieves the role of the given user.
@@ -67,7 +109,12 @@ public interface AdminApi {
     *           The user.
     * @return The role of the user.
     */
-   RoleDto getRole(UserDto user);
+   @Named("role:get")
+   @GET
+   @Consumes(RoleDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   RoleDto getRole(@EndpointLink("role") @BinderParam(BindToPath.class) UserDto user);
 
    /**
     * Get the given role.
@@ -76,7 +123,13 @@ public interface AdminApi {
     *           The id of the role.
     * @return The role or <code>null</code> if it does not exist.
     */
-   RoleDto getRole(Integer roleId);
+   @Named("role:get")
+   @GET
+   @Path("/admin/roles/{role}")
+   @Consumes(RoleDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   RoleDto getRole(@PathParam("role") Integer roleId);
 
    /**
     * Deletes an existing role.
@@ -84,7 +137,9 @@ public interface AdminApi {
     * @param role
     *           The role to delete.
     */
-   void deleteRole(final RoleDto role);
+   @Named("role:delete")
+   @DELETE
+   void deleteRole(@EndpointLink("edit") @BinderParam(BindToPath.class) RoleDto role);
 
    /**
     * Updates an existing role.
@@ -93,7 +148,12 @@ public interface AdminApi {
     *           The new attributes for the role.
     * @return The updated role.
     */
-   RoleDto updateRole(RoleDto role);
+   @Named("role:update")
+   @PUT
+   @Produces(RoleDto.BASE_MEDIA_TYPE)
+   @Consumes(RoleDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RoleDto updateRole(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RoleDto role);
 
    /**
     * Create a new role.
@@ -102,7 +162,13 @@ public interface AdminApi {
     *           The role to be created.
     * @return The created role.
     */
-   RoleDto createRole(RoleDto role);
+   @Named("role:create")
+   @POST
+   @Path("/admin/roles")
+   @Produces(RoleDto.BASE_MEDIA_TYPE)
+   @Consumes(RoleDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   RoleDto createRole(@BinderParam(BindToXMLPayload.class) RoleDto role);
 
    /**
     * Get privileges of the given role.
@@ -111,5 +177,9 @@ public interface AdminApi {
     *           The role.
     * @return The list of privileges.
     */
-   PrivilegesDto listPrivileges(RoleDto role);
+   @Named("privilege:list")
+   @GET
+   @Consumes(PrivilegesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PrivilegesDto listPrivileges(@EndpointLink("privileges") @BinderParam(BindToPath.class) RoleDto role);
 }

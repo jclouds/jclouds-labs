@@ -20,9 +20,8 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceMetadataDto;
 
@@ -35,8 +34,7 @@ public class StorageDeviceMetadata extends DomainWrapper<StorageDeviceMetadataDt
    /**
     * Constructor to be used only by the builder.
     */
-   protected StorageDeviceMetadata(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final StorageDeviceMetadataDto target) {
+   protected StorageDeviceMetadata(final ApiContext<AbiquoApi> context, final StorageDeviceMetadataDto target) {
       super(context, target);
    }
 

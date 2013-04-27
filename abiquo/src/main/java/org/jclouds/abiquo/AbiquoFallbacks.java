@@ -43,7 +43,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 public final class AbiquoFallbacks {
    private AbiquoFallbacks() {
    }
-   
+
    /**
     * Return an Abiquo Exception on not found errors.
     */

@@ -19,8 +19,34 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.binders.AppendToPath;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.ParamParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.am.model.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
@@ -46,11 +72,12 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EnterpriseAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public interface EnterpriseApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+@Path("/admin")
+public interface EnterpriseApi extends Closeable {
 
    /*********************** Enterprise ********************** */
 
@@ -59,6 +86,11 @@ public interface EnterpriseApi {
     * 
     * @return The list of Enterprises.
     */
+   @Named("enterprise:list")
+   @GET
+   @Path("/enterprises")
+   @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    EnterprisesDto listEnterprises();
 
    /**
@@ -68,6 +100,11 @@ public interface EnterpriseApi {
     *           Filtering options.
     * @return The list of Enterprises.
     */
+   @Named("enterprise:list")
+   @GET
+   @Path("/enterprises")
+   @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    EnterprisesDto listEnterprises(EnterpriseOptions options);
 
    /**
@@ -79,7 +116,12 @@ public interface EnterpriseApi {
     *           Filtering options.
     * @return The list of Enterprises.
     */
-   EnterprisesDto listEnterprises(DatacenterDto datacenter, EnterpriseOptions options);
+   @Named("enterprise:list")
+   @GET
+   @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   EnterprisesDto listEnterprises(@EndpointLink("enterprises") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+         EnterpriseOptions options);
 
    /**
     * Create a new enterprise.
@@ -88,7 +130,13 @@ public interface EnterpriseApi {
     *           The enterprise to be created.
     * @return The created enterprise.
     */
-   EnterpriseDto createEnterprise(EnterpriseDto enterprise);
+   @Named("enterprise:create")
+   @POST
+   @Path("/enterprises")
+   @Produces(EnterpriseDto.BASE_MEDIA_TYPE)
+   @Consumes(EnterpriseDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   EnterpriseDto createEnterprise(@BinderParam(BindToXMLPayload.class) EnterpriseDto enterprise);
 
    /**
     * Get the given enterprise.
@@ -97,7 +145,13 @@ public interface EnterpriseApi {
     *           The id of the enterprise.
     * @return The enterprise or <code>null</code> if it does not exist.
     */
-   EnterpriseDto getEnterprise(Integer enterpriseId);
+   @Named("enterprise:get")
+   @GET
+   @Path("/enterprises/{enterprise}")
+   @Consumes(EnterpriseDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   EnterpriseDto getEnterprise(@PathParam("enterprise") Integer enterpriseId);
 
    /**
     * Updates an existing enterprise.
@@ -106,7 +160,13 @@ public interface EnterpriseApi {
     *           The new attributes for the enterprise.
     * @return The updated enterprise.
     */
-   EnterpriseDto updateEnterprise(EnterpriseDto enterprise);
+   @Named("enterprise:update")
+   @PUT
+   @Produces(EnterpriseDto.BASE_MEDIA_TYPE)
+   @Consumes(EnterpriseDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   EnterpriseDto updateEnterprise(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) EnterpriseDto enterprise);
 
    /**
     * Deletes an existing enterprise.
@@ -114,7 +174,9 @@ public interface EnterpriseApi {
     * @param enterprise
     *           The enterprise to delete.
     */
-   void deleteEnterprise(EnterpriseDto enterprise);
+   @Named("enterprise:delete")
+   @DELETE
+   void deleteEnterprise(@EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * List the allowed datacenters to the given enterprise.
@@ -123,7 +185,12 @@ public interface EnterpriseApi {
     *           The id of the enterprise.
     * @return The allowed datacenters to the given enterprise.
     */
-   DatacentersDto listAllowedDatacenters(Integer enterpriseId);
+   @Named("enterprise:listalloweddatacenters")
+   @GET
+   @Path("/datacenters")
+   @Consumes(DatacentersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacentersDto listAllowedDatacenters(@QueryParam("idEnterprise") Integer enterpriseId);
 
    /**
     * List all virtual datacenters of an enterprise.
@@ -132,7 +199,12 @@ public interface EnterpriseApi {
     *           The given enterprise.
     * @return The list of Datacenters.
     */
-   VirtualDatacentersDto listVirtualDatacenters(EnterpriseDto enterprise);
+   @Named("enterprise:listvirtualdatacenters")
+   @GET
+   @Consumes(VirtualDatacentersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualDatacentersDto listVirtualDatacenters(
+         @EndpointLink("cloud/virtualdatacenters") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /*********************** Enterprise Properties ***********************/
 
@@ -143,8 +215,12 @@ public interface EnterpriseApi {
     *           The enterprise id.
     * @return Set of enterprise properties.
     */
-   @EnterpriseEdition
-   EnterprisePropertiesDto getEnterpriseProperties(EnterpriseDto enterprise);
+   @Named("enterprise:getproperties")
+   @GET
+   @Consumes(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   EnterprisePropertiesDto getEnterpriseProperties(
+         @EndpointLink("properties") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * Updates the given enterprise properties set.
@@ -153,8 +229,13 @@ public interface EnterpriseApi {
     *           The properties set.
     * @return The updated properties.
     */
-   @EnterpriseEdition
-   EnterprisePropertiesDto updateEnterpriseProperties(EnterprisePropertiesDto properties);
+   @Named("enterprse:setproperties")
+   @PUT
+   @Produces(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
+   @Consumes(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   EnterprisePropertiesDto updateEnterpriseProperties(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) EnterprisePropertiesDto properties);
 
    /*********************** Enterprise Limits ***********************/
 
@@ -170,8 +251,15 @@ public interface EnterpriseApi {
     *           The usage limits for the enterprise in the given datacenter.
     * @return The usage limits for the enterprise in the given datacenter.
     */
-   DatacenterLimitsDto createLimits(final EnterpriseDto enterprise, final DatacenterDto datacenter,
-         final DatacenterLimitsDto limits);
+   @Named("limit:create")
+   @POST
+   @Produces(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+   @Consumes(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacenterLimitsDto createLimits(
+         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
+         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter,
+         @BinderParam(BindToXMLPayload.class) DatacenterLimitsDto limits);
 
    /**
     * Retrieves the limits for the given enterprise and datacenter.
@@ -182,7 +270,14 @@ public interface EnterpriseApi {
     *           The datacenter.
     * @return The usage limits for the enterprise in the given datacenter.
     */
-   DatacentersLimitsDto getLimits(EnterpriseDto enterprise, DatacenterDto datacenter);
+   @Named("limit:get")
+   @GET
+   @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   DatacentersLimitsDto getLimits(
+         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
+         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter);
 
    /**
     * Retrieves limits for the given enterprise and any datacenter.
@@ -191,7 +286,11 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The usage limits for the enterprise on any datacenter.
     */
-   DatacentersLimitsDto listLimits(EnterpriseDto enterprise);
+   @Named("limit:list")
+   @GET
+   @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacentersLimitsDto listLimits(@EndpointLink("limits") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * Updates an existing enterprise-datacenter limits.
@@ -200,7 +299,13 @@ public interface EnterpriseApi {
     *           The new set of limits.
     * @return The updated limits.
     */
-   DatacenterLimitsDto updateLimits(DatacenterLimitsDto limits);
+   @Named("limit:update")
+   @PUT
+   @Produces(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+   @Consumes(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DatacenterLimitsDto updateLimits(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterLimitsDto limits);
 
    /**
     * Deletes existing limits for a pair enterprise-datacenter.
@@ -208,7 +313,9 @@ public interface EnterpriseApi {
     * @param limits
     *           The limits to delete.
     */
-   void deleteLimits(DatacenterLimitsDto limits);
+   @Named("limit:delete")
+   @DELETE
+   void deleteLimits(@EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterLimitsDto limits);
 
    /*********************** User ********************** */
 
@@ -219,7 +326,11 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The users of the enterprise.
     */
-   UsersDto listUsers(final EnterpriseDto enterprise);
+   @Named("user:list")
+   @GET
+   @Consumes(UsersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UsersDto listUsers(@EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * Create a new user in the given enterprise.
@@ -230,7 +341,13 @@ public interface EnterpriseApi {
     *           The user to be created.
     * @return The created user.
     */
-   UserDto createUser(EnterpriseDto enterprise, UserDto user);
+   @Named("user:create")
+   @POST
+   @Produces(UserDto.BASE_MEDIA_TYPE)
+   @Consumes(UserDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UserDto createUser(@EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(BindToXMLPayload.class) UserDto user);
 
    /**
     * Get the given user from the given enterprise.
@@ -241,7 +358,13 @@ public interface EnterpriseApi {
     *           The id of the user.
     * @return The user or <code>null</code> if it does not exist.
     */
-   UserDto getUser(final EnterpriseDto enterprise, final Integer idUser);
+   @Named("user:get")
+   @GET
+   @Consumes(UserDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   UserDto getUser(@EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(AppendToPath.class) Integer userId);
 
    /**
     * Updates an existing user.
@@ -250,7 +373,12 @@ public interface EnterpriseApi {
     *           The new attributes for the user.
     * @return The updated user.
     */
-   UserDto updateUser(UserDto user);
+   @Named("user:update")
+   @PUT
+   @Produces(UserDto.BASE_MEDIA_TYPE)
+   @Consumes(UserDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UserDto updateUser(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UserDto user);
 
    /**
     * Deletes existing user.
@@ -258,7 +386,9 @@ public interface EnterpriseApi {
     * @param user
     *           The user to delete.
     */
-   void deleteUser(UserDto user);
+   @Named("user:delete")
+   @DELETE
+   void deleteUser(@EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
 
    /**
     * Retrieves list of virtual machines by user.
@@ -267,7 +397,12 @@ public interface EnterpriseApi {
     *           The user.
     * @return The list of virtual machines of the user.
     */
-   VirtualMachinesWithNodeExtendedDto listVirtualMachines(final UserDto user);
+   @Named("user:listvms")
+   @GET
+   @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachinesWithNodeExtendedDto listVirtualMachines(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) final UserDto user);
 
    /*********************** Datacenter Repository ***********************/
 
@@ -281,7 +416,14 @@ public interface EnterpriseApi {
     * @return The datacenter repository or <code>null</code> if it does not
     *         exist.
     */
-   DatacenterRepositoryDto getDatacenterRepository(final EnterpriseDto enterprise, final Integer datacenterRepositoryId);
+   @Named("repository:get")
+   @GET
+   @Consumes(DatacenterRepositoryDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   UserDto getDatacenterRepository(
+         @EndpointLink("datacenterrepositories") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(AppendToPath.class) Integer datacenterRepositoryId);
 
    /**
     * Refreshes database with virtual machine templates existing in the
@@ -292,7 +434,11 @@ public interface EnterpriseApi {
     * @param datacenterRepositoryId
     *           Id of the datacenter repository containing the templates.
     */
-   void refreshTemplateRepository(Integer enterpriseId, Integer datacenterRepositoryId);
+   @Named("repository:refresh")
+   @PUT
+   @Path("/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
+   void refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
+         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 
    /*********************** Network ***********************/
 
@@ -303,8 +449,12 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The list of external networks created and assigned.
     */
-   @EnterpriseEdition
-   VLANNetworksDto listExternalNetworks(EnterpriseDto enterprise);
+   @Named("enterprise:listexternalnetworks")
+   @GET
+   @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworksDto listExternalNetworks(
+         @EndpointLink("externalnetworks") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /*********************** Cloud ***********************/
 
@@ -315,7 +465,12 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The list of virtual appliances of the enterprise.
     */
-   VirtualAppliancesDto listVirtualAppliances(EnterpriseDto enterprise);
+   @Named("enterprise:listvapps")
+   @GET
+   @Consumes(VirtualAppliancesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualAppliancesDto listVirtualAppliances(
+         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) final EnterpriseDto enterprise);
 
    /**
     * List virtual machines for the enterprise
@@ -324,7 +479,12 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The list of virtual machines by the enterprise.
     */
-   VirtualMachinesWithNodeExtendedDto listVirtualMachines(EnterpriseDto enterprise);
+   @Named("enterprise:listvms")
+   @GET
+   @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachinesWithNodeExtendedDto listVirtualMachines(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * List reserved machines for the enterprise
@@ -333,7 +493,12 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The list of reserved machines by the enterprise.
     */
-   MachinesDto listReservedMachines(EnterpriseDto enterprise);
+   @Named("enterprise:listreservedmachines")
+   @GET
+   @Consumes(MachinesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   MachinesDto listReservedMachines(
+         @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * List all template definitions in apps library.
@@ -342,7 +507,12 @@ public interface EnterpriseApi {
     *           The enterprise.
     * @return The list of template definitions by the enterprise.
     */
-   TemplateDefinitionListsDto listTemplateDefinitionLists(EnterpriseDto enterprise);
+   @Named("templatedefinitionlist:list")
+   @GET
+   @Consumes(TemplateDefinitionListsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TemplateDefinitionListsDto listTemplateDefinitionLists(
+         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
    /**
     * Create a new template definition list in apps library in the given
@@ -354,8 +524,14 @@ public interface EnterpriseApi {
     *           The template to be created.
     * @return The created template.
     */
-   TemplateDefinitionListDto createTemplateDefinitionList(EnterpriseDto enterprise,
-         TemplateDefinitionListDto templateList);
+   @Named("templatedefinitionlist:create")
+   @POST
+   @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+   @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TemplateDefinitionListDto createTemplateDefinitionList(
+         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(BindToXMLPayload.class) TemplateDefinitionListDto templateList);
 
    /**
     * Update an existing template definition list in apps library.
@@ -364,7 +540,13 @@ public interface EnterpriseApi {
     *           The template to be update.
     * @return The updated template.
     */
-   TemplateDefinitionListDto updateTemplateDefinitionList(TemplateDefinitionListDto templateList);
+   @Named("templatedefinitionlist:update")
+   @PUT
+   @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+   @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TemplateDefinitionListDto updateTemplateDefinitionList(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TemplateDefinitionListDto templateList);
 
    /**
     * Deletes existing user.
@@ -372,7 +554,10 @@ public interface EnterpriseApi {
     * @param user
     *           The user to delete.
     */
-   void deleteTemplateDefinitionList(TemplateDefinitionListDto templateList);
+   @Named("templatedefinitionlist:delete")
+   @DELETE
+   void deleteTemplateDefinitionList(
+         @EndpointLink("edit") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList);
 
    /**
     * Get the given template definition list from the given enterprise.
@@ -383,7 +568,14 @@ public interface EnterpriseApi {
     *           The id of the template definition list.
     * @return The list or <code>null</code> if it does not exist.
     */
-   TemplateDefinitionListDto getTemplateDefinitionList(final EnterpriseDto enterprise, final Integer templateListId);
+   @Named("templatedefinitionlist:get")
+   @GET
+   @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   TemplateDefinitionListDto getTemplateDefinitionList(
+         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         @BinderParam(AppendToPath.class) Integer templateListId);
 
    /**
     * Get the list of status of a template definition list in a datacenter.
@@ -394,5 +586,11 @@ public interface EnterpriseApi {
     *           The given datacenter.
     * @return The list of states.
     */
-   TemplatesStateDto listTemplateListStatus(TemplateDefinitionListDto templateList, DatacenterDto datacenter);
+   @Named("templatedefinitionlist:status")
+   @GET
+   @Consumes(TemplatesStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TemplatesStateDto listTemplateListStatus(
+         @EndpointLink("repositoryStatus") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList,
+         @QueryParam("datacenterId") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter);
 }

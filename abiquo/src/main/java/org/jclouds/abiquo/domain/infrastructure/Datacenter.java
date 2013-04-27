@@ -27,8 +27,6 @@ import static com.google.common.collect.Iterables.transform;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
-import org.jclouds.abiquo.config.AbiquoEdition;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -41,8 +39,7 @@ import org.jclouds.abiquo.domain.network.NetworkServiceType;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.predicates.network.NetworkServiceTypePredicates;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineIpmiState;
@@ -95,20 +92,9 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    private String ip;
 
    /**
-    * Indicates the Abiquo edition to create the available remote services.
-    * 
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform"
-    *      >
-    *      http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+
-    *      Platform</a>
-    */
-   private AbiquoEdition edition;
-
-   /**
     * Constructor to be used only by the builder.
     */
-   protected Datacenter(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final DatacenterDto target) {
+   protected Datacenter(final ApiContext<AbiquoApi> context, final DatacenterDto target) {
       super(context, target);
    }
 
@@ -147,7 +133,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
       target = context.getApi().getInfrastructureApi().createDatacenter(target);
 
       // If remote services data is set, create remote services.
-      if (ip != null && edition != null) {
+      if (ip != null) {
          createRemoteServices();
       }
    }
@@ -258,7 +244,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      - RetrievealistofUCSracks</a>
     * @return List of managed racks in this datacenter.
     */
-   @EnterpriseEdition
    public List<ManagedRack> listManagedRacks() {
       UcsRacksDto racks = context.getApi().getInfrastructureApi().listManagedRacks(target);
       return wrap(context, ManagedRack.class, racks.getCollection());
@@ -275,7 +260,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      - RetrievealistofUCSracks</a>
     * @return Filtered list of managed racks in this datacenter.
     */
-   @EnterpriseEdition
    public List<ManagedRack> listManagedRacks(final Predicate<ManagedRack> filter) {
       return ImmutableList.copyOf(filter(listManagedRacks(), filter));
    }
@@ -293,7 +277,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return First managed rack matching the filter or <code>null</code> if
     *         there is none.
     */
-   @EnterpriseEdition
    public ManagedRack findManagedRack(final Predicate<ManagedRack> filter) {
       return getFirst(filter(listManagedRacks(), filter), null);
    }
@@ -311,7 +294,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return Unmanaged rack with the given id or <code>null</code> if it does
     *         not exist.
     */
-   @EnterpriseEdition
    public ManagedRack getManagedRack(final Integer id) {
       UcsRackDto rack = context.getApi().getInfrastructureApi().getManagedRack(target, id);
       return wrap(context, ManagedRack.class, rack);
@@ -327,7 +309,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *         information for the storage devices, such as the management and
     *         iscsi ports, or the default credentials to access the device.
     */
-   @EnterpriseEdition
    public List<StorageDeviceMetadata> listSupportedStorageDevices() {
       StorageDevicesMetadataDto devices = context.getApi().getInfrastructureApi().listSupportedStorageDevices(target);
       return wrap(context, StorageDeviceMetadata.class, devices.getCollection());
@@ -345,7 +326,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *         information for the storage devices, such as the management and
     *         iscsi ports, or the default credentials to access the device.
     */
-   @EnterpriseEdition
    public List<StorageDeviceMetadata> listSupportedStorageDevices(final Predicate<StorageDeviceMetadata> filter) {
       return ImmutableList.copyOf(filter(listSupportedStorageDevices(), filter));
    }
@@ -358,7 +338,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return First supported storage device matching the filter or
     *         <code>null</code> if there is none.
     */
-   @EnterpriseEdition
    public StorageDeviceMetadata findSupportedStorageDevice(final Predicate<StorageDeviceMetadata> filter) {
       return getFirst(filter(listSupportedStorageDevices(), filter), null);
    }
@@ -372,7 +351,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
     * @return List of storage devices in this datacenter.
     */
-   @EnterpriseEdition
    public List<StorageDevice> listStorageDevices() {
       StorageDevicesDto devices = context.getApi().getInfrastructureApi().listStorageDevices(target);
       return wrap(context, StorageDevice.class, devices.getCollection());
@@ -389,7 +367,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
     * @return Filtered list of storage devices in this datacenter.
     */
-   @EnterpriseEdition
    public List<StorageDevice> listStorageDevices(final Predicate<StorageDevice> filter) {
       return ImmutableList.copyOf(filter(listStorageDevices(), filter));
    }
@@ -407,7 +384,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return First storage device matching the filter or <code>null</code> if
     *         there is none.
     */
-   @EnterpriseEdition
    public StorageDevice findStorageDevice(final Predicate<StorageDevice> filter) {
       return getFirst(filter(listStorageDevices(), filter), null);
    }
@@ -424,7 +400,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return Storage device with the given id or <code>null</code> if it does
     *         not exist.
     */
-   @EnterpriseEdition
    public StorageDevice getStorageDevice(final Integer id) {
       StorageDeviceDto device = context.getApi().getInfrastructureApi().getStorageDevice(target, id);
       return wrap(context, StorageDevice.class, device);
@@ -537,12 +512,9 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    }
 
    private void createRemoteServices() {
-      if (this.edition == AbiquoEdition.ENTERPRISE) {
-         createRemoteService(RemoteServiceType.BPM_SERVICE);
-         createRemoteService(RemoteServiceType.DHCP_SERVICE);
-         createRemoteService(RemoteServiceType.STORAGE_SYSTEM_MONITOR);
-      }
-
+      createRemoteService(RemoteServiceType.BPM_SERVICE);
+      createRemoteService(RemoteServiceType.DHCP_SERVICE);
+      createRemoteService(RemoteServiceType.STORAGE_SYSTEM_MONITOR);
       createRemoteService(RemoteServiceType.APPLIANCE_MANAGER);
       createRemoteService(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR);
       createRemoteService(RemoteServiceType.NODE_COLLECTOR);
@@ -615,7 +587,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      Retrievethelistoftiers </a>
     * @return List of tiers in this datacenter.
     */
-   @EnterpriseEdition
    public List<Tier> listTiers() {
       TiersDto dto = context.getApi().getInfrastructureApi().listTiers(this.unwrap());
       return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
@@ -633,7 +604,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      Retrievethelistoftiers </a>
     * @return Filtered list of tiers in this datacenter.
     */
-   @EnterpriseEdition
    public List<Tier> listTiers(final Predicate<Tier> filter) {
       return ImmutableList.copyOf(filter(listTiers(), filter));
    }
@@ -651,7 +621,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return First tier matching the filter or <code>null</code> if there is
     *         none.
     */
-   @EnterpriseEdition
    public Tier findTier(final Predicate<Tier> filter) {
       return getFirst(filter(listTiers(), filter), null);
    }
@@ -813,7 +782,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      DatacenterResource- Retrieveavailablehypervisortypes</a>
     * @return List of available hypervisor types in the datacenter.
     */
-   @EnterpriseEdition
    public List<HypervisorType> listAvailableHypervisors() {
       HypervisorTypesDto types = context.getApi().getInfrastructureApi().getHypervisorTypes(target);
 
@@ -831,7 +799,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      DatacenterResource- Retrieveavailablehypervisortypes</a>
     * @return Filtered list of available hypervisor types in the datacenter.
     */
-   @EnterpriseEdition
    public List<HypervisorType> listAvailableHypervisors(final Predicate<HypervisorType> filter) {
       return ImmutableList.copyOf(filter(listAvailableHypervisors(), filter));
    }
@@ -849,7 +816,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return First hypervisor type matching the filter or <code>null</code> if
     *         there is none.
     */
-   @EnterpriseEdition
    public HypervisorType findHypervisor(final Predicate<HypervisorType> filter) {
       return getFirst(filter(listAvailableHypervisors(), filter), null);
    }
@@ -1185,12 +1151,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   public static Builder builder(final ApiContext<AbiquoApi> context) {
       return new Builder(context);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -1198,16 +1164,13 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
 
       private String ip;
 
-      private AbiquoEdition edition;
-
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+      public Builder(final ApiContext<AbiquoApi> context) {
          super();
          this.context = context;
       }
 
-      public Builder remoteServices(final String ip, final AbiquoEdition edition) {
+      public Builder remoteServices(final String ip) {
          this.ip = ip;
-         this.edition = edition;
          return this;
       }
 
@@ -1226,7 +1189,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
          dto.setName(name);
          dto.setLocation(location);
          Datacenter datacenter = new Datacenter(context, dto);
-         datacenter.edition = edition;
          datacenter.ip = ip;
          return datacenter;
       }

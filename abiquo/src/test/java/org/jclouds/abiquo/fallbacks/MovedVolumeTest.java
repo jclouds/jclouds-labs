@@ -47,8 +47,8 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit", testName = "MovedVolumeTest")
 public class MovedVolumeTest {
    public void testReturnOriginalExceptionIfNotHttpResponseException() {
-      MovedVolume function = new MovedVolume(new ReturnMoveVolumeReference(
-            new JAXBParser("false"), TypeLiteral.get(MovedVolumeDto.class)));
+      MovedVolume function = new MovedVolume(new ReturnMoveVolumeReference(new JAXBParser("false"),
+            TypeLiteral.get(MovedVolumeDto.class)));
 
       RuntimeException exception = new RuntimeException();
 
@@ -61,8 +61,8 @@ public class MovedVolumeTest {
 
    public void testReturnVolume() throws Exception {
       JAXBParser xmlParser = new JAXBParser("false");
-      MovedVolume function = new MovedVolume(new ReturnMoveVolumeReference(
-            new JAXBParser("false"), TypeLiteral.get(MovedVolumeDto.class)));
+      MovedVolume function = new MovedVolume(new ReturnMoveVolumeReference(new JAXBParser("false"),
+            TypeLiteral.get(MovedVolumeDto.class)));
 
       VolumeManagementDto volume = new VolumeManagementDto();
       volume.setName("Test volume");

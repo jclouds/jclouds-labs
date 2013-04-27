@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.monitor.MonitorStatus;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -81,7 +81,7 @@ public class VirtualApplianceDeployMonitorTest {
 
       @SuppressWarnings("unchecked")
       public MockVirtualAppliance() {
-         super(EasyMock.createMock(RestContext.class), new VirtualApplianceDto());
+         super(EasyMock.createMock(ApiContext.class), new VirtualApplianceDto());
       }
 
       @Override

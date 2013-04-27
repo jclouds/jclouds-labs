@@ -25,12 +25,11 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.rest.RestContext;
+
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
@@ -54,7 +53,7 @@ public class Role extends DomainWrapper<RoleDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Role(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RoleDto target) {
+   protected Role(final ApiContext<AbiquoApi> context, final RoleDto target) {
       super(context, target);
    }
 
@@ -105,14 +104,12 @@ public class Role extends DomainWrapper<RoleDto> {
       target.addLink(new RESTLink("enterprise", link.getHref()));
    }
 
-   @EnterpriseEdition
    public void setPrivileges(final List<Privilege> privileges) {
       for (Privilege privilege : privileges) {
          addPrivilege(privilege);
       }
    }
 
-   @EnterpriseEdition
    private void addPrivilege(final Privilege privilege) {
       checkNotNull(privilege, ValidationErrors.NULL_RESOURCE + Privilege.class);
       checkNotNull(privilege.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in " + Privilege.class);
@@ -153,18 +150,18 @@ public class Role extends DomainWrapper<RoleDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   public static Builder builder(final ApiContext<AbiquoApi> context) {
       return new Builder(context);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
       private boolean blocked = DEFAULT_BLOCKED;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+      public Builder(final ApiContext<AbiquoApi> context) {
          super();
          this.context = context;
       }

@@ -19,11 +19,10 @@
 
 package org.jclouds.abiquo.domain.config;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
-import org.jclouds.rest.RestContext;
+
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.enterprise.PrivilegeDto;
 
@@ -33,13 +32,12 @@ import com.abiquo.server.core.enterprise.PrivilegeDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@EnterpriseEdition
 public class Privilege extends DomainWrapper<PrivilegeDto> {
    /**
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   private Privilege(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final PrivilegeDto target) {
+   private Privilege(final ApiContext<AbiquoApi> context, final PrivilegeDto target) {
       super(context, target);
    }
 

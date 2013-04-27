@@ -19,6 +19,12 @@
 
 package org.jclouds.abiquo;
 
+import java.io.Closeable;
+
+import javax.ws.rs.GET;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.binders.BindLinkToPathAndAcceptHeader;
 import org.jclouds.abiquo.features.AdminApi;
 import org.jclouds.abiquo.features.CloudApi;
 import org.jclouds.abiquo.features.ConfigApi;
@@ -28,17 +34,36 @@ import org.jclouds.abiquo.features.InfrastructureApi;
 import org.jclouds.abiquo.features.PricingApi;
 import org.jclouds.abiquo.features.TaskApi;
 import org.jclouds.abiquo.features.VirtualMachineTemplateApi;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Delegate;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.SingleResourceTransportDto;
 
 /**
  * Provides synchronous access to Abiquo.
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see AbiquoAsyncApi
  * @author Ignasi Barrera
  */
-public interface AbiquoApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+public interface AbiquoApi extends Closeable {
+   /**
+    * The version of the supported Abiquo API.
+    */
+   public static final String API_VERSION = SingleResourceTransportDto.API_VERSION;
+
+   /**
+    * The supported build version of the Abiquo Api.
+    */
+   public static final String BUILD_VERSION = "7bbfe95-158721b";
+
    /**
     * Provides synchronous access to Admin features.
     */
@@ -92,5 +117,16 @@ public interface AbiquoApi {
     */
    @Delegate
    PricingApi getPricingApi();
+
+   /**
+    * Perform a GET request to the given link.
+    * 
+    * @param link
+    *           The link to get.
+    * @return The response.
+    */
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   HttpResponse get(@BinderParam(BindLinkToPathAndAcceptHeader.class) final RESTLink link);
 
 }

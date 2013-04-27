@@ -19,15 +19,54 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.binders.AppendToPath;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
+import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
+import org.jclouds.abiquo.binders.cloud.BindNetworkConfigurationRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindNetworkRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.abiquo.fallbacks.MovedVolume;
+import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
+import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.http.functions.ReturnStringIf2xx;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.ParamParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -51,6 +90,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
+import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -61,11 +101,12 @@ import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see CloudAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public interface CloudApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+@Path("/cloud")
+public interface CloudApi extends Closeable {
    /*********************** Virtual Datacenter ***********************/
 
    /**
@@ -75,6 +116,11 @@ public interface CloudApi {
     *           Optional query params.
     * @return The list of Datacenters.
     */
+   @Named("vdc:list")
+   @GET
+   @Path("/virtualdatacenters")
+   @Consumes(VirtualDatacentersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    VirtualDatacentersDto listVirtualDatacenters(VirtualDatacenterOptions options);
 
    /**
@@ -84,7 +130,13 @@ public interface CloudApi {
     *           The id of the virtual datacenter.
     * @return The virtual datacenter or <code>null</code> if it does not exist.
     */
-   VirtualDatacenterDto getVirtualDatacenter(Integer virtualDatacenterId);
+   @Named("vdc:get")
+   @GET
+   @Path("/virtualdatacenters/{virtualdatacenter}")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualDatacenterDto getVirtualDatacenter(@PathParam("virtualdatacenter") Integer virtualDatacenterId);
 
    /**
     * Create a new virtual datacenter.
@@ -97,8 +149,16 @@ public interface CloudApi {
     *           Enterprise of the virtual datacenter.
     * @return The created virtual datacenter.
     */
-   VirtualDatacenterDto createVirtualDatacenter(VirtualDatacenterDto virtualDatacenter, DatacenterDto datacenter,
-         EnterpriseDto enterprise);
+   @Named("vdc:create")
+   @POST
+   @Path("/virtualdatacenters")
+   @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualDatacenterDto createVirtualDatacenter(
+         @BinderParam(BindToXMLPayload.class) final VirtualDatacenterDto virtualDatacenter,
+         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter,
+         @QueryParam("enterprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
    /**
     * Updates an existing virtual datacenter.
@@ -107,7 +167,13 @@ public interface CloudApi {
     *           The new attributes for the virtual datacenter.
     * @return The updated virtual datacenter.
     */
-   VirtualDatacenterDto updateVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+   @Named("vdc:update")
+   @PUT
+   @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualDatacenterDto updateVirtualDatacenter(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * Deletes an existing virtual datacenter.
@@ -115,7 +181,10 @@ public interface CloudApi {
     * @param virtualDatacenter
     *           The virtual datacenter to delete.
     */
-   void deleteVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+   @Named("vdc:delete")
+   @DELETE
+   void deleteVirtualDatacenter(
+         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * List all available templates for the given virtual datacenter.
@@ -124,7 +193,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The list of available templates.
     */
-   VirtualMachineTemplatesDto listAvailableTemplates(VirtualDatacenterDto virtualDatacenter);
+   @Named("vdc:listtemplates")
+   @GET
+   @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineTemplatesDto listAvailableTemplates(
+         @EndpointLink("templates") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * List all available templates for the given virtual datacenter.
@@ -135,7 +209,12 @@ public interface CloudApi {
     *           Filtering options.
     * @return The list of available templates.
     */
-   VirtualMachineTemplatesDto listAvailableTemplates(VirtualDatacenterDto virtualDatacenter,
+   @Named("vdc:listtemplates")
+   @GET
+   @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineTemplatesDto listAvailableTemplates(
+         @EndpointLink("templates") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
          VirtualMachineTemplateOptions options);
 
    /**
@@ -148,7 +227,13 @@ public interface CloudApi {
     *           Filtering options.
     * @return The list of available ips.
     */
-   PublicIpsDto listAvailablePublicIps(VirtualDatacenterDto virtualDatacenter, IpOptions options);
+   @Named("vdc:listavailablepublicips")
+   @GET
+   @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpsDto listAvailablePublicIps(
+         @EndpointLink("topurchase") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         IpOptions options);
 
    /**
     * List all purchased public ip addresses in the virtual datacenter.
@@ -159,7 +244,13 @@ public interface CloudApi {
     *           Filtering options.
     * @return The list of purchased ips.
     */
-   PublicIpsDto listPurchasedPublicIps(VirtualDatacenterDto virtualDatacenter, IpOptions options);
+   @Named("vdc:listpurchasedpublicips")
+   @GET
+   @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpsDto listPurchasedPublicIps(
+         @EndpointLink("purchased") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         IpOptions options);
 
    /**
     * Purchase a public IP.
@@ -168,7 +259,11 @@ public interface CloudApi {
     *           The public ip address to purchase.
     * @return The purchased public ip.
     */
-   PublicIpDto purchasePublicIp(PublicIpDto publicIp);
+   @Named("vdc:purchasepublicip")
+   @PUT
+   @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpDto purchasePublicIp(@EndpointLink("purchase") @BinderParam(BindToPath.class) PublicIpDto publicIp);
 
    /**
     * Release a public IP.
@@ -177,7 +272,11 @@ public interface CloudApi {
     *           The public ip address to purchase.
     * @return The release public ip.
     */
-   PublicIpDto releasePublicIp(PublicIpDto publicIp);
+   @Named("vdc:releasepublicip")
+   @PUT
+   @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PublicIpDto releasePublicIp(@EndpointLink("release") @BinderParam(BindToPath.class) PublicIpDto publicIp);
 
    /**
     * List the storage tiers available for the given virtual datacenter.
@@ -186,8 +285,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The storage tiers available to the given virtual datacenter.
     */
-   @EnterpriseEdition
-   TiersDto listStorageTiers(VirtualDatacenterDto virtualDatacenter);
+   @Named("vdc:listtiers")
+   @GET
+   @Consumes(TiersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TiersDto listStorageTiers(
+         @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * Get the storage tier from the given virtual datacenter.
@@ -198,8 +301,13 @@ public interface CloudApi {
     *           id of the storage tier.
     * @return The storage tiers available to the given virtual datacenter.
     */
-   @EnterpriseEdition
-   TierDto getStorageTier(VirtualDatacenterDto virtualDatacenter, Integer tierId);
+   @Named("vdc:gettier")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(TierDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   TierDto getStorageTier(@EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(AppendToPath.class) Integer tierId);
 
    /*********************** Private Network ***********************/
 
@@ -210,7 +318,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The default network of the virtual datacenter.
     */
-   VLANNetworkDto getDefaultNetwork(VirtualDatacenterDto virtualDatacenter);
+   @Named("vdc:getdefaultnetwork")
+   @GET
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworkDto getDefaultNetwork(
+         @EndpointLink("defaultnetwork") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * Set the default network of the virtual datacenter.
@@ -220,7 +333,12 @@ public interface CloudApi {
     * @param network
     *           The default network.
     */
-   void setDefaultNetwork(VirtualDatacenterDto virtualDatacenter, VLANNetworkDto network);
+   @Named("vdc:setdefaultnetwork")
+   @PUT
+   @Produces(LinksDto.BASE_MEDIA_TYPE)
+   void setDefaultNetwork(
+         @EndpointLink("defaultvlan") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(BindNetworkRefToPayload.class) VLANNetworkDto network);
 
    /**
     * List all private networks for a virtual datacenter.
@@ -229,7 +347,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The list of private networks for the virtual datacenter.
     */
-   VLANNetworksDto listPrivateNetworks(VirtualDatacenterDto virtualDatacenter);
+   @Named("privatenetwork:list")
+   @GET
+   @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworksDto listPrivateNetworks(
+         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * Get the given private network from the given virtual datacenter.
@@ -240,7 +363,14 @@ public interface CloudApi {
     *           The id of the private network.
     * @return The private network or <code>null</code> if it does not exist.
     */
-   VLANNetworkDto getPrivateNetwork(VirtualDatacenterDto virtualDatacenter, Integer privateNetworkId);
+   @Named("privatenetwork:get")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworkDto getPrivateNetwork(
+         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(AppendToPath.class) Integer privateNetworkId);
 
    /**
     * Create a new private network in a virtual datacenter.
@@ -251,7 +381,14 @@ public interface CloudApi {
     *           The private network to be created.
     * @return The created private network.
     */
-   VLANNetworkDto createPrivateNetwork(final VirtualDatacenterDto virtualDatacenter, final VLANNetworkDto privateNetwork);
+   @Named("privatenetwork:create")
+   @POST
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @Produces(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworkDto createPrivateNetwork(
+         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(BindToXMLPayload.class) VLANNetworkDto privateNetwork);
 
    /**
     * Updates an existing private network from the given virtual datacenter.
@@ -260,7 +397,13 @@ public interface CloudApi {
     *           The new attributes for the private network.
     * @return The updated private network.
     */
-   VLANNetworkDto updatePrivateNetwork(VLANNetworkDto privateNetwork);
+   @Named("privatenetwork:update")
+   @PUT
+   @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @Produces(VLANNetworkDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VLANNetworkDto updatePrivateNetwork(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto privateNetwork);
 
    /**
     * Deletes an existing private network.
@@ -268,7 +411,9 @@ public interface CloudApi {
     * @param privateNetwork
     *           The private network to delete.
     */
-   void deletePrivateNetwork(VLANNetworkDto privateNetwork);
+   @Named("privatenetwork:delete")
+   @DELETE
+   void deletePrivateNetwork(@EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto privateNetwork);
 
    /*********************** Private Network IPs ***********************/
 
@@ -279,7 +424,11 @@ public interface CloudApi {
     *           The private network.
     * @return The list of ips for the private network.
     */
-   PrivateIpsDto listPrivateNetworkIps(VLANNetworkDto network);
+   @Named("privatenetwork:listips")
+   @GET
+   @Consumes(PrivateIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PrivateIpsDto listPrivateNetworkIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all ips for a private network with options.
@@ -290,7 +439,12 @@ public interface CloudApi {
     *           Filtering options.
     * @return The list of ips for the private network.
     */
-   PrivateIpsDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
+   @Named("privatenetwork:listips")
+   @GET
+   @Consumes(PrivateIpsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PrivateIpsDto listPrivateNetworkIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         IpOptions options);
 
    /**
     * Get the requested ip from the given private network.
@@ -301,7 +455,12 @@ public interface CloudApi {
     *           The id of the ip to get.
     * @return The requested ip.
     */
-   PrivateIpDto getPrivateNetworkIp(VLANNetworkDto network, Integer ipId);
+   @Named("privatenetwork:getip")
+   @GET
+   @Consumes(PrivateIpDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PrivateIpDto getPrivateNetworkIp(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+         @BinderParam(AppendToPath.class) Integer ipId);
 
    /*********************** Virtual Appliance ***********************/
 
@@ -312,7 +471,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The list of virtual appliances for the virtual datacenter.
     */
-   VirtualAppliancesDto listVirtualAppliances(VirtualDatacenterDto virtualDatacenter);
+   @Named("vapp:list")
+   @GET
+   @Consumes(VirtualAppliancesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualAppliancesDto listVirtualAppliances(
+         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * Get the given virtual appliance from the given virtual datacenter.
@@ -323,7 +487,14 @@ public interface CloudApi {
     *           The id of the virtual appliance.
     * @return The virtual appliance or <code>null</code> if it does not exist.
     */
-   VirtualApplianceDto getVirtualAppliance(VirtualDatacenterDto virtualDatacenter, Integer virtualApplianceId);
+   @Named("vapp:get")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualApplianceDto getVirtualAppliance(
+         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(AppendToPath.class) Integer virtualApplianceId);
 
    /**
     * Create a new virtual appliance in a virtual datacenter.
@@ -334,8 +505,14 @@ public interface CloudApi {
     *           The virtual appliance to be created.
     * @return The created virtual appliance.
     */
-   VirtualApplianceDto createVirtualAppliance(VirtualDatacenterDto virtualDatacenter,
-         VirtualApplianceDto virtualAppliance);
+   @Named("vapp:create")
+   @POST
+   @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualApplianceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualApplianceDto createVirtualAppliance(
+         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
 
    /**
     * Updates an existing virtual appliance from the given virtual datacenter.
@@ -344,7 +521,13 @@ public interface CloudApi {
     *           The new attributes for the virtual appliance.
     * @return The updated virtual appliance.
     */
-   VirtualApplianceDto updateVirtualAppliance(VirtualApplianceDto virtualAppliance);
+   @Named("vapp:update")
+   @PUT
+   @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualApplianceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualApplianceDto updateVirtualAppliance(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualApplianceDto virtualAppliance);
 
    /**
     * Deletes an existing virtual appliance.
@@ -352,7 +535,9 @@ public interface CloudApi {
     * @param virtualAppliance
     *           The virtual appliance to delete.
     */
-   void deleteVirtualAppliance(VirtualApplianceDto virtualAppliance);
+   @Named("vapp:delete")
+   @DELETE
+   void deleteVirtualAppliance(@EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
    /**
     * Deletes an existing virtual appliance.
@@ -363,7 +548,11 @@ public interface CloudApi {
     *           The options to customize the delete operation (e.g. Force
     *           delete).
     */
-   void deleteVirtualAppliance(VirtualApplianceDto virtualAppliance, VirtualApplianceOptions options);
+   @Named("vapp:delete")
+   @DELETE
+   void deleteVirtualAppliance(
+         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+         VirtualApplianceOptions options);
 
    /**
     * Deploy a virtual appliance.
@@ -374,7 +563,14 @@ public interface CloudApi {
     *           the extra options for the deploy process.
     * @return Response message to the deploy request.
     */
-      AcceptedRequestDto<String> deployVirtualAppliance(VirtualApplianceDto virtualAppliance, VirtualMachineTaskDto options);
+   @Named("vapp:deploy")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> deployVirtualAppliance(
+         @EndpointLink("deploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
    /**
     * Undeploy a virtual appliance.
@@ -385,8 +581,14 @@ public interface CloudApi {
     *           the extra options for the undeploy process.
     * @return Response message to the undeploy request.
     */
-   AcceptedRequestDto<String> undeployVirtualAppliance(VirtualApplianceDto virtualAppliance,
-         VirtualMachineTaskDto options);
+   @Named("vapp:undeploy")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> undeployVirtualAppliance(
+         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
    /**
     * Get the state of the given virtual appliance.
@@ -395,7 +597,12 @@ public interface CloudApi {
     *           The given virtual appliance.
     * @return The state of the given virtual appliance.
     */
-   VirtualApplianceStateDto getVirtualApplianceState(VirtualApplianceDto virtualAppliance);
+   @Named("vapp:getstate")
+   @GET
+   @Consumes(VirtualApplianceStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualApplianceStateDto getVirtualApplianceState(
+         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
    /**
     * Gets the price of the given virtual appliance.
@@ -405,7 +612,12 @@ public interface CloudApi {
     * @return A <code>String</code> representation of the price of the virtual
     *         appliance.
     */
-   String getVirtualAppliancePrice(VirtualApplianceDto virtualAppliance);
+   @Named("vapp:gerprice")
+   @GET
+   @Consumes(MediaType.TEXT_PLAIN)
+   @ResponseParser(ReturnStringIf2xx.class)
+   String getVirtualAppliancePrice(
+         @EndpointLink("price") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
    /*********************** Virtual Machine ***********************/
 
@@ -416,7 +628,12 @@ public interface CloudApi {
     *           The virtual appliance.
     * @return The list of virtual machines for the virtual appliance.
     */
-   VirtualMachinesWithNodeExtendedDto listVirtualMachines(VirtualApplianceDto virtualAppliance);
+   @Named("vm:list")
+   @GET
+   @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachinesWithNodeExtendedDto listVirtualMachines(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
    /**
     * List all virtual machines for a virtual appliance.
@@ -427,7 +644,12 @@ public interface CloudApi {
     *           The options to filter the list of virtual machines.
     * @return The list of virtual machines for the virtual appliance.
     */
-   VirtualMachinesWithNodeExtendedDto listVirtualMachines(VirtualApplianceDto virtualAppliance,
+   @Named("vm:list")
+   @GET
+   @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachinesWithNodeExtendedDto listVirtualMachines(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
          VirtualMachineOptions options);
 
    /**
@@ -439,7 +661,14 @@ public interface CloudApi {
     *           The id of the virtual machine.
     * @return The virtual machine or <code>null</code> if it does not exist.
     */
-   VirtualMachineWithNodeExtendedDto getVirtualMachine(VirtualApplianceDto virtualAppliance, Integer virtualMachineId);
+   @Named("vm:get")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineWithNodeExtendedDto getVirtualMachine(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+         @BinderParam(AppendToPath.class) Integer virtualMachineId);
 
    /**
     * Create a new virtual machine in a virtual appliance.
@@ -450,8 +679,14 @@ public interface CloudApi {
     *           The virtual machine to be created.
     * @return The created virtual machine.
     */
-   VirtualMachineWithNodeExtendedDto createVirtualMachine(VirtualApplianceDto virtualAppliance,
-         VirtualMachineWithNodeExtendedDto virtualMachine);
+   @Named("vm:create")
+   @POST
+   @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineWithNodeExtendedDto createVirtualMachine(
+         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineWithNodeExtendedDto virtualMachine);
 
    /**
     * Deletes an existing virtual machine.
@@ -459,7 +694,9 @@ public interface CloudApi {
     * @param virtualMachine
     *           The virtual machine to delete.
     */
-   void deleteVirtualMachine(VirtualMachineDto virtualMachine);
+   @Named("vm:delete")
+   @DELETE
+   void deleteVirtualMachine(@EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Updates an existing virtual machine from the given virtual appliance.
@@ -469,7 +706,13 @@ public interface CloudApi {
     * @return The task reference or <code>null</code> if the operation completed
     *         synchronously.
     */
-   AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineWithNodeExtendedDto virtualMachine);
+   @Named("vm:update")
+   @PUT
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> updateVirtualMachine(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineWithNodeExtendedDto virtualMachine);
 
    /**
     * Updates an existing virtual machine from the given virtual appliance.
@@ -481,7 +724,13 @@ public interface CloudApi {
     * @return The task reference or <code>null</code> if the operation completed
     *         synchronously.
     */
-   AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineWithNodeExtendedDto virtualMachine,
+   @Named("vm:update")
+   @PUT
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> updateVirtualMachine(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineWithNodeExtendedDto virtualMachine,
          VirtualMachineOptions options);
 
    /**
@@ -493,7 +742,14 @@ public interface CloudApi {
     *           The new state.
     * @return The task reference.
     */
-   AcceptedRequestDto<String> changeVirtualMachineState(VirtualMachineDto virtualMachine, VirtualMachineStateDto state);
+   @Named("vm:changestate")
+   @PUT
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> changeVirtualMachineState(
+         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineStateDto state);
 
    /**
     * Get the state of the given virtual machine.
@@ -502,7 +758,12 @@ public interface CloudApi {
     *           The given virtual machine.
     * @return The state of the given virtual machine.
     */
-   VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
+   @Named("vm:getstate")
+   @GET
+   @Consumes(VirtualMachineStateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineStateDto getVirtualMachineState(
+         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Deploy a virtual machine with task options.
@@ -513,7 +774,14 @@ public interface CloudApi {
     *           extra deploy options.
     * @return Response message to the deploy request.
     */
-   AcceptedRequestDto<String> deployVirtualMachine(VirtualMachineDto virtualMachine, VirtualMachineTaskDto options);
+   @Named("vm:deploy")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> deployVirtualMachine(
+         @EndpointLink("deploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto options);
 
    /**
     * Undeploy a virtual machine with task options.
@@ -524,7 +792,14 @@ public interface CloudApi {
     *           extra undeploy options.
     * @return Response message to the undeploy request.
     */
-   AcceptedRequestDto<String> undeployVirtualMachine(VirtualMachineDto virtualMachine, VirtualMachineTaskDto options);
+   @Named("vm:undeploy")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> undeployVirtualMachine(
+         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto options);
 
    /**
     * List all available network configurations for a virtual machine.
@@ -533,7 +808,12 @@ public interface CloudApi {
     *           The virtual machine.
     * @return The list of network configurations.
     */
-   VMNetworkConfigurationsDto listNetworkConfigurations(VirtualMachineDto virtualMachine);
+   @Named("vm:listnetworkconfigurations")
+   @GET
+   @Consumes(VMNetworkConfigurationsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VMNetworkConfigurationsDto listNetworkConfigurations(
+         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Sets the gateway network to be used by this virtual machine.
@@ -543,7 +823,12 @@ public interface CloudApi {
     * @param network
     *           The gateway network to use.
     */
-   void setGatewayNetwork(final VirtualMachineDto virtualMachine, final VLANNetworkDto network);
+   @Named("vm:setgateway")
+   @PUT
+   @Produces(LinksDto.BASE_MEDIA_TYPE)
+   void setGatewayNetwork(
+         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         @BinderParam(BindNetworkConfigurationRefToPayload.class) VLANNetworkDto network);
 
    /**
     * Reboot a virtual machine.
@@ -552,7 +837,12 @@ public interface CloudApi {
     *           The virtual machine to reboot.
     * @return Response message to the reset request.
     */
-   AcceptedRequestDto<String> rebootVirtualMachine(VirtualMachineDto virtualMachine);
+   @Named("vm:reboot")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> rebootVirtualMachine(
+         @EndpointLink("reset") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /******************* Virtual Machine Template ***********************/
 
@@ -563,7 +853,12 @@ public interface CloudApi {
     *           The given virtual machine.
     * @return The template of the given virtual machine.
     */
-   VirtualMachineTemplateDto getVirtualMachineTemplate(VirtualMachineDto virtualMachine);
+   @Named("vm:gettemplate")
+   @GET
+   @Consumes(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineTemplateDto getVirtualMachineTemplate(
+         @EndpointLink("virtualmachinetemplate") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Get the volumes attached to the given virtual machine.
@@ -572,7 +867,12 @@ public interface CloudApi {
     *           The virtual machine.
     * @return The volumes attached to the given virtual machine.
     */
-   VolumesManagementDto listAttachedVolumes(VirtualMachineDto virtualMachine);
+   @Named("vm:listvolumes")
+   @GET
+   @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VolumesManagementDto listAttachedVolumes(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Detach all volumes from the given virtual machine.
@@ -585,7 +885,12 @@ public interface CloudApi {
     * @return The task reference or <code>null</code> if the operation completed
     *         synchronously.
     */
-   AcceptedRequestDto<String> detachAllVolumes(VirtualMachineDto virtualMachine);
+   @Named("vm:detachvolumes")
+   @DELETE
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> detachAllVolumes(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Replaces the current volumes attached to the virtual machine with the
@@ -603,8 +908,14 @@ public interface CloudApi {
     * @return The task reference or <code>null</code> if the operation completed
     *         synchronously.
     */
-   AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine, VirtualMachineOptions options,
-         VolumeManagementDto... volumes);
+   @Named("vm:changevolumes")
+   @PUT
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(LinksDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> replaceVolumes(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         VirtualMachineOptions options, @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
    /**
     * List all hard disks attached to the given virtual machine.
@@ -613,7 +924,12 @@ public interface CloudApi {
     *           The virtual machine.
     * @return The hard disks attached to the virtual machine.
     */
-   DisksManagementDto listAttachedHardDisks(VirtualMachineDto virtualMachine);
+   @Named("vm:listharddisks")
+   @GET
+   @Consumes(DisksManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DisksManagementDto listAttachedHardDisks(
+         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Detach all hard disks from the given virtual machine.
@@ -626,7 +942,12 @@ public interface CloudApi {
     * @return The task reference or <code>null</code> if the operation completed
     *         synchronously.
     */
-   AcceptedRequestDto<String> detachAllHardDisks(VirtualMachineDto virtualMachine);
+   @Named("vm:detachharddisks")
+   @DELETE
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> detachAllHardDisks(
+         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
    /**
     * Replaces the current hard disks attached to the virtual machine with the
@@ -642,7 +963,14 @@ public interface CloudApi {
     * @return The task reference or <code>null</code> if the operation completed
     *         synchronously.
     */
-   AcceptedRequestDto<String> replaceHardDisks(VirtualMachineDto virtualMachine, DiskManagementDto... hardDisks);
+   @Named("vm:changeharddisks")
+   @PUT
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(LinksDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> replaceHardDisks(
+         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         @BinderParam(BindHardDiskRefsToPayload.class) DiskManagementDto... hardDisks);
 
    /*********************** Hard disks ***********************/
 
@@ -653,7 +981,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The hard disks in the virtual datacenter.
     */
-   DisksManagementDto listHardDisks(VirtualDatacenterDto virtualDatacenter);
+   @Named("harddisk:list")
+   @GET
+   @Consumes(DisksManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DisksManagementDto listHardDisks(
+         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * Get the hard disk with the given id in the given virtual datacenter.
@@ -664,7 +997,14 @@ public interface CloudApi {
     *           The id of the hard disk to get.
     * @return The requested hard disk or <code>null</code> if it does not exist.
     */
-   DiskManagementDto getHardDisk(VirtualDatacenterDto virtualDatacenter, Integer diskId);
+   @Named("harddisk:get")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(DiskManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DiskManagementDto getHardDisk(
+         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(AppendToPath.class) Integer diskId);
 
    /**
     * Creates a new hard disk in the given virtual datacenter.
@@ -675,7 +1015,14 @@ public interface CloudApi {
     *           The hard disk to create.
     * @return The created hard disk.
     */
-   DiskManagementDto createHardDisk(VirtualDatacenterDto virtualDatacenter, DiskManagementDto hardDisk);
+   @Named("harddisk:create")
+   @POST
+   @Consumes(DiskManagementDto.BASE_MEDIA_TYPE)
+   @Produces(DiskManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   DiskManagementDto createHardDisk(
+         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(BindToXMLPayload.class) DiskManagementDto hardDisk);
 
    /**
     * Deletes the given hard disk.
@@ -683,7 +1030,9 @@ public interface CloudApi {
     * @param hardDisk
     *           The hard disk to delete.
     */
-   void deleteHardDisk(DiskManagementDto hardDisk);
+   @Named("harddisk:delete")
+   @DELETE
+   void deleteHardDisk(@EndpointLink("edit") @BinderParam(BindToPath.class) DiskManagementDto hardDisk);
 
    /*********************** Volumes ***********************/
 
@@ -694,8 +1043,12 @@ public interface CloudApi {
     *           The virtual datacenter.
     * @return The volumes in the virtual datacenter.
     */
-   @EnterpriseEdition
-   VolumesManagementDto listVolumes(VirtualDatacenterDto virtualDatacenter);
+   @Named("volume:list")
+   @GET
+   @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VolumesManagementDto listVolumes(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
    /**
     * List all volumes in the given virtual datacenter.
@@ -706,8 +1059,13 @@ public interface CloudApi {
     *           Optional parameters to filter the volume list.
     * @return The volumes in the virtual datacenter.
     */
-   @EnterpriseEdition
-   VolumesManagementDto listVolumes(VirtualDatacenterDto virtualDatacenter, VolumeOptions options);
+   @Named("volume:list")
+   @GET
+   @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VolumesManagementDto listVolumes(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         VolumeOptions options);
 
    /**
     * Get a volume from the given virtual datacenter.
@@ -718,8 +1076,14 @@ public interface CloudApi {
     *           The id of the volume to get.
     * @return The volume or <code>null</code> if it does not exist.
     */
-   @EnterpriseEdition
-   VolumeManagementDto getVolume(VirtualDatacenterDto virtualDatacenter, Integer volumeId);
+   @Named("volume:get")
+   @GET
+   @Fallback(NullOnNotFoundOr404.class)
+   @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VolumeManagementDto getVolume(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(AppendToPath.class) Integer volumeId);
 
    /**
     * Creates a volume in the given virtual datacenter.
@@ -731,8 +1095,14 @@ public interface CloudApi {
     *           tier where the volume should be created.
     * @return The created volume.
     */
-   @EnterpriseEdition
-   VolumeManagementDto createVolume(VirtualDatacenterDto virtualDatacenter, VolumeManagementDto volume);
+   @Named("volume:create")
+   @POST
+   @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+   @Produces(VolumeManagementDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VolumeManagementDto createVolume(
+         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+         @BinderParam(BindToXMLPayload.class) VolumeManagementDto volume);
 
    /**
     * Modifies the given volume.
@@ -745,8 +1115,13 @@ public interface CloudApi {
     *           The volume to modify.
     * @return The task reference or <code>null</code> if no task was generated.
     */
-   @EnterpriseEdition
-   AcceptedRequestDto<String> updateVolume(VolumeManagementDto volume);
+   @Named("volume:update")
+   @PUT
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VolumeManagementDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> updateVolume(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VolumeManagementDto volume);
 
    /**
     * Delete the given volume.
@@ -754,8 +1129,9 @@ public interface CloudApi {
     * @param volume
     *           The volume to delete.
     */
-   @EnterpriseEdition
-   void deleteVolume(VolumeManagementDto volume);
+   @Named("volume:delete")
+   @DELETE
+   void deleteVolume(@EndpointLink("edit") @BinderParam(BindToPath.class) VolumeManagementDto volume);
 
    /**
     * Moves the given volume to a new virtual datacenter.
@@ -769,7 +1145,13 @@ public interface CloudApi {
     *           The destination virtual datacenter.
     * @return The reference to the volume in the new virtual datacenter.
     */
-   @EnterpriseEdition
-   VolumeManagementDto moveVolume(VolumeManagementDto volume, VirtualDatacenterDto newVirtualDatacenter);
+   @Named("volume:move")
+   @POST
+   @Fallback(MovedVolume.class)
+   @Consumes(MovedVolumeDto.BASE_MEDIA_TYPE)
+   @Produces(LinksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VolumeManagementDto moveVolume(@BinderParam(BindMoveVolumeToPath.class) VolumeManagementDto volume,
+         @BinderParam(BindVirtualDatacenterRefToPayload.class) VirtualDatacenterDto newVirtualDatacenter);
 
 }

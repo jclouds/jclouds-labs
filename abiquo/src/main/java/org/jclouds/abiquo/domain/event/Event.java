@@ -21,10 +21,9 @@ package org.jclouds.abiquo.domain.event;
 
 import java.util.Date;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.SeverityType;
 import com.abiquo.server.core.event.EventDto;
@@ -36,7 +35,7 @@ public class Event extends DomainWrapper<EventDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Event(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final EventDto target) {
+   protected Event(final ApiContext<AbiquoApi> context, final EventDto target) {
       super(context, target);
    }
 

@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -45,7 +44,7 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 import org.jclouds.collect.Memoized;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.appslibrary.CategoriesDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
@@ -74,7 +73,7 @@ import com.google.common.collect.Iterables;
 @Singleton
 public class BaseAdministrationService implements AdministrationService {
    @VisibleForTesting
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    @VisibleForTesting
    protected final ListMachines listMachines;
@@ -86,9 +85,8 @@ public class BaseAdministrationService implements AdministrationService {
    protected final Supplier<Enterprise> currentEnterprise;
 
    @Inject
-   protected BaseAdministrationService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final ListMachines listMachines, @Memoized final Supplier<User> currentUser,
-         @Memoized final Supplier<Enterprise> currentEnterprise) {
+   protected BaseAdministrationService(final ApiContext<AbiquoApi> context, final ListMachines listMachines,
+         @Memoized final Supplier<User> currentUser, @Memoized final Supplier<Enterprise> currentEnterprise) {
       this.context = checkNotNull(context, "context");
       this.listMachines = checkNotNull(listMachines, "listMachines");
       this.currentUser = checkNotNull(currentUser, "currentUser");

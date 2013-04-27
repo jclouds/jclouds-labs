@@ -24,10 +24,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.task.TaskDto;
@@ -43,7 +42,7 @@ public class AsyncTask extends DomainWrapper<TaskDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected AsyncTask(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final TaskDto target) {
+   protected AsyncTask(final ApiContext<AbiquoApi> context, final TaskDto target) {
       super(context, target);
    }
 

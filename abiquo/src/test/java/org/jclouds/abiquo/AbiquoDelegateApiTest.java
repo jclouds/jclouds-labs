@@ -24,7 +24,7 @@ import static org.testng.Assert.assertNotNull;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.jclouds.abiquo.features.BaseAbiquoAsyncApiTest;
+import org.jclouds.abiquo.features.BaseAbiquoApiTest;
 import org.jclouds.http.HttpRequest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -35,8 +35,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AbiquoDelegateApiTest")
-public class AbiquoDelegateApiTest extends BaseAbiquoAsyncApiTest<AbiquoAsyncApi> {
-   private AbiquoAsyncApi asyncApi;
+public class AbiquoDelegateApiTest extends BaseAbiquoApiTest<AbiquoApi> {
 
    private AbiquoApi syncApi;
 
@@ -44,7 +43,6 @@ public class AbiquoDelegateApiTest extends BaseAbiquoAsyncApiTest<AbiquoAsyncApi
    @Override
    protected void setupFactory() throws IOException {
       super.setupFactory();
-      asyncApi = injector.getInstance(AbiquoAsyncApi.class);
       syncApi = injector.getInstance(AbiquoApi.class);
    }
 
@@ -57,17 +55,6 @@ public class AbiquoDelegateApiTest extends BaseAbiquoAsyncApiTest<AbiquoAsyncApi
       assertNotNull(syncApi.getVirtualMachineTemplateApi());
       assertNotNull(syncApi.getTaskApi());
       assertNotNull(syncApi.getPricingApi());
-   }
-
-   public void testAsync() throws SecurityException, NoSuchMethodException, InterruptedException, ExecutionException {
-      assertNotNull(asyncApi.getAdminApi());
-      assertNotNull(asyncApi.getConfigApi());
-      assertNotNull(asyncApi.getInfrastructureApi());
-      assertNotNull(asyncApi.getEnterpriseApi());
-      assertNotNull(asyncApi.getCloudApi());
-      assertNotNull(asyncApi.getVirtualMachineTemplateApi());
-      assertNotNull(asyncApi.getTaskApi());
-      assertNotNull(asyncApi.getPricingApi());
    }
 
    @Override
