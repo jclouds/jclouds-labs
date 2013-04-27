@@ -109,16 +109,16 @@ public class InstanceProfileApiLiveTest extends BaseIAMApiLiveTest {
    }
 
    protected InstanceProfileApi api() {
-      return context.getApi().getInstanceProfileApi();
+      return api.getInstanceProfileApi();
    }
 
    void createRoleWithPolicy(String roleName) {
-      context.getApi().getRoleApi().createWithPolicy(roleName, RoleApiLiveTest.assumeRolePolicy);
-      context.getApi().getPolicyApiForRole(roleName).create("S3Access", RolePolicyApiLiveTest.s3Policy);
+      api.getRoleApi().createWithPolicy(roleName, RoleApiLiveTest.assumeRolePolicy);
+      api.getPolicyApiForRole(roleName).create("S3Access", RolePolicyApiLiveTest.s3Policy);
    }
 
    void tearDownRoleWithPolicy(String roleName) {
-      context.getApi().getPolicyApiForRole(roleName).delete("S3Access");
-      context.getApi().getRoleApi().delete(roleName);
+      api.getPolicyApiForRole(roleName).delete("S3Access");
+      api.getRoleApi().delete(roleName);
    }
 }

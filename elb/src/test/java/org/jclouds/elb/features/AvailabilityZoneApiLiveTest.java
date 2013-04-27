@@ -28,6 +28,6 @@ import org.testng.annotations.Test;
 public class AvailabilityZoneApiLiveTest extends BaseELBApiLiveTest {
 
    protected AvailabilityZoneApi api() {
-      return context.getApi().getAvailabilityZoneApi();
+      return api.getAvailabilityZoneApi();
    }
 }

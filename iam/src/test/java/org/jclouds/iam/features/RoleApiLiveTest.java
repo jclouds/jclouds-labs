@@ -97,6 +97,6 @@ public class RoleApiLiveTest extends BaseIAMApiLiveTest {
    }
 
    protected RoleApi api() {
-      return context.getApi().getRoleApi();
+      return api.getRoleApi();
    }
 }

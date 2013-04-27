@@ -18,7 +18,10 @@
  */
 package org.jclouds.rds;
 
+import java.io.Closeable;
 import java.util.Set;
+
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpointOrProviderIfNull;
@@ -27,6 +30,8 @@ import org.jclouds.rds.features.SecurityGroupApi;
 import org.jclouds.rds.features.SubnetGroupApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.VirtualHost;
 
 import com.google.common.annotations.Beta;
 import com.google.inject.Provides;
@@ -36,10 +41,11 @@ import com.google.inject.Provides;
  * <p/>
  * 
  * @author Adrian Cole
- * @see RDSAsyncApi
  */
 @Beta
-public interface RDSApi {
+@RequestFilters(FormSigner.class)
+@VirtualHost
+public interface RDSApi extends Closeable {
    /**
     * 
     * @return the Region codes configured
@@ -49,7 +55,7 @@ public interface RDSApi {
    Set<String> getConfiguredRegions();
 
    /**
-    * Provides synchronous access to Instance features.
+    * Provides access to Instance features.
     */
    @Delegate
    InstanceApi getInstanceApi();
@@ -59,7 +65,7 @@ public interface RDSApi {
             @EndpointParam(parser = RegionToEndpointOrProviderIfNull.class) @Nullable String region);
 
    /**
-    * Provides synchronous access to SecurityGroup features.
+    * Provides access to SecurityGroup features.
     */
    @Delegate
    SecurityGroupApi getSecurityGroupApi();
@@ -69,7 +75,7 @@ public interface RDSApi {
             @EndpointParam(parser = RegionToEndpointOrProviderIfNull.class) @Nullable String region);
    
    /**
-    * Provides synchronous access to SubnetGroup features.
+    * Provides access to SubnetGroup features.
     */
    @Delegate
    SubnetGroupApi getSubnetGroupApi();

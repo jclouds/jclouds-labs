@@ -18,15 +18,34 @@
  */
 package org.jclouds.elb.features;
 
+import static org.jclouds.aws.reference.FormParameters.ACTION;
+
 import java.util.Set;
+
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.aws.filters.FormSigner;
+import org.jclouds.elb.binders.BindAvailabilityZonesToIndexedFormParams;
+import org.jclouds.elb.xml.AvailabilityZonesResultHandler;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
+
 /**
  * Provides access to Amazon ELB via the Query API
  * <p/>
  * 
- * @see <a href="http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference" />
- * @see AvailabilityZoneAsyncApi
+ * @see <a href="http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference"
+ *      >doc</a>
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface AvailabilityZoneApi {
 
    /**
@@ -51,9 +70,28 @@ public interface AvailabilityZoneApi {
     * 
     * @return An updated list of Availability Zones for the LoadBalancer.
     */
-   Set<String> addAvailabilityZonesToLoadBalancer(Iterable<String> zones, String loadBalancerName);
+   @Named("EnableAvailabilityZonesForLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(AvailabilityZonesResultHandler.class)
+   @FormParams(keys = ACTION, values = "EnableAvailabilityZonesForLoadBalancer")
+   Set<String> addAvailabilityZonesToLoadBalancer(
+            @BinderParam(BindAvailabilityZonesToIndexedFormParams.class) Iterable<String> zones,
+            @FormParam("LoadBalancerName") String loadBalancerName);
+   
 
-   Set<String> addAvailabilityZoneToLoadBalancer(String zone, String loadBalancerName);
+   /**
+    * @see AvailabilityZoneApi#addAvailabilityZoneToLoadBalancer
+    */
+   @Named("EnableAvailabilityZonesForLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(AvailabilityZonesResultHandler.class)
+   @FormParams(keys = ACTION, values = "EnableAvailabilityZonesForLoadBalancer")
+   Set<String> addAvailabilityZoneToLoadBalancer(
+            @FormParam("AvailabilityZones.member.1") String zone,
+            @FormParam("LoadBalancerName") String loadBalancerName);
+
 
    /**
     * Removes the specified EC2 Availability Zones from the set of configured Availability Zones for
@@ -90,8 +128,24 @@ public interface AvailabilityZoneApi {
     * 
     * @return A list of updated Availability Zones for the LoadBalancer.
     */
-   Set<String> removeAvailabilityZonesFromLoadBalancer(Iterable<String> zones, String loadBalancerName);
+   @Named("DisableAvailabilityZonesForLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(AvailabilityZonesResultHandler.class)
+   @FormParams(keys = ACTION, values = "DisableAvailabilityZonesForLoadBalancer")
+   Set<String> removeAvailabilityZonesFromLoadBalancer(
+            @BinderParam(BindAvailabilityZonesToIndexedFormParams.class) Iterable<String> zones,
+            @FormParam("LoadBalancerName") String loadBalancerName);
 
-   Set<String> removeAvailabilityZoneFromLoadBalancer(String zone, String loadBalancerName);
-
+   /**
+    * @see AvailabilityZoneApi#removeAvailabilityZoneFromLoadBalancer
+    */
+   @Named("DisableAvailabilityZonesForLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(AvailabilityZonesResultHandler.class)
+   @FormParams(keys = ACTION, values = "DisableAvailabilityZonesForLoadBalancer")
+   Set<String> removeAvailabilityZoneFromLoadBalancer(
+            @FormParam("AvailabilityZones.member.1") String zone,
+            @FormParam("LoadBalancerName") String loadBalancerName);
 }

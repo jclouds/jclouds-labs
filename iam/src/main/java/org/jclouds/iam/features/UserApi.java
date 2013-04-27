@@ -18,30 +18,57 @@
  */
 package org.jclouds.iam.features;
 
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.iam.domain.User;
+import org.jclouds.iam.functions.UsersToPagedIterable;
+import org.jclouds.iam.xml.ListUsersResultHandler;
+import org.jclouds.iam.xml.UserHandler;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
+ * Provides access to Amazon IAM via the Query API
+ * <p/>
  * 
- * @see UserAsyncApi
+ * @see <a href="http://docs.amazonwebservices.com/IAM/latest/APIReference" />
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface UserApi {
-   /**
-    * Retrieves information about the current user, including the user's path, GUID, and ARN.
-    */
-   User getCurrent();
 
    /**
     * returns all users in order.
     */
+   @Named("ListUsers")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListUsers")
+   @XMLResponseParser(ListUsersResultHandler.class)
+   @Transform(UsersToPagedIterable.class)
    PagedIterable<User> list();
 
    /**
     * retrieves up to 100 users in order.
     */
+   @Named("ListUsers")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListUsers")
+   @XMLResponseParser(ListUsersResultHandler.class)
    IterableWithMarker<User> listFirstPage();
 
    /**
@@ -50,7 +77,12 @@ public interface UserApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<User> listAt(String marker);
+   @Named("ListUsers")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListUsers")
+   @XMLResponseParser(ListUsersResultHandler.class)
+   IterableWithMarker<User> listAt(@FormParam("Marker") String marker);
 
    /**
     * returns all users in order at the specified {@code pathPrefix}.
@@ -58,7 +90,13 @@ public interface UserApi {
     * @param pathPrefix
     *           ex. {@code /division_abc/subdivision_xyz/}
     */
-   PagedIterable<User> listPathPrefix(String pathPrefix);
+   @Named("ListUsers")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListUsers")
+   @XMLResponseParser(ListUsersResultHandler.class)
+   @Transform(UsersToPagedIterable.class)
+   PagedIterable<User> listPathPrefix(@FormParam("PathPrefix") String pathPrefix);
 
    /**
     * retrieves up to 100 users in order at the specified {@code pathPrefix}.
@@ -66,7 +104,12 @@ public interface UserApi {
     * @param pathPrefix
     *           ex. {@code /division_abc/subdivision_xyz/}
     */
-   IterableWithMarker<User> listPathPrefixFirstPage(String pathPrefix);
+   @Named("ListUsers")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListUsers")
+   @XMLResponseParser(ListUsersResultHandler.class)
+   IterableWithMarker<User> listPathPrefixFirstPage(@FormParam("PathPrefix") String pathPrefix);
 
    /**
     * retrieves up to 100 users in order at the specified {@code pathPrefix}, starting at {@code marker}.
@@ -76,7 +119,23 @@ public interface UserApi {
     * @param marker
     *           starting point to resume the list
     */
-   IterableWithMarker<User> listPathPrefixAt(String pathPrefix, String marker);
+   @Named("ListUsers")
+   @POST
+   @Path("/")
+   @FormParams(keys = "Action", values = "ListUsers")
+   @XMLResponseParser(ListUsersResultHandler.class)
+   IterableWithMarker<User> listPathPrefixAt(@FormParam("PathPrefix") String pathPrefix,
+         @FormParam("Marker") String marker);
+
+   /**
+    * Retrieves information about the current user, including the user's path, GUID, and ARN.
+    */
+   @Named("GetUser")
+   @POST
+   @Path("/")
+   @XMLResponseParser(UserHandler.class)
+   @FormParams(keys = "Action", values = "GetUser")
+   User getCurrent();
 
    /**
     * Retrieves information about the specified user, including the user's path, GUID, and ARN.
@@ -85,6 +144,12 @@ public interface UserApi {
     *           Name of the user to get information about.
     * @return null if not found
     */
+   @Named("GetUser")
+   @POST
+   @Path("/")
+   @XMLResponseParser(UserHandler.class)
+   @FormParams(keys = "Action", values = "GetUser")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   User get(String name);
+   User get(@FormParam("UserName") String name);
 }

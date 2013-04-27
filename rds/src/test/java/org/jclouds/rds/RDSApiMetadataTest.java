@@ -19,7 +19,7 @@
 package org.jclouds.rds;
 
 import org.jclouds.View;
-import org.jclouds.rest.internal.BaseRestApiMetadataTest;
+import org.jclouds.rest.internal.BaseHttpApiMetadataTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
@@ -30,7 +30,7 @@ import com.google.common.reflect.TypeToken;
  * @author Adrian Cole
  */
 @Test(groups = "unit", testName = "RDSApiMetadataTest")
-public class RDSApiMetadataTest extends BaseRestApiMetadataTest {
+public class RDSApiMetadataTest extends BaseHttpApiMetadataTest {
 
    // no database abstraction, yet
    public RDSApiMetadataTest() {

@@ -74,6 +74,6 @@ public class SubnetGroupApiLiveTest extends BaseRDSApiLiveTest {
    }
 
    protected SubnetGroupApi api() {
-      return context.getApi().getSubnetGroupApi();
+      return api.getSubnetGroupApi();
    }
 }

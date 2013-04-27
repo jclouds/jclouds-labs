@@ -29,7 +29,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 
 /**
  * @author Adrian Cole
@@ -47,7 +46,7 @@ public class InstanceApiLiveTest extends BaseELBApiLiveTest {
 
    @Test
    protected void testListInstanceStates() {
-      for (LoadBalancer loadBalancer : Iterables.concat(context.getApi().getLoadBalancerApi().list())) {
+      for (LoadBalancer loadBalancer : api.getLoadBalancerApi().list().concat()) {
          Set<InstanceHealth> response = api().getHealthOfInstancesOfLoadBalancer(loadBalancer.getName());
 
          for (InstanceHealth instanceState : response) {
@@ -65,6 +64,6 @@ public class InstanceApiLiveTest extends BaseELBApiLiveTest {
    }
 
    protected InstanceApi api() {
-      return context.getApi().getInstanceApi();
+      return api.getInstanceApi();
    }
 }

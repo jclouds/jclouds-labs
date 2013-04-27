@@ -42,7 +42,7 @@ public class RolePolicyApiLiveTest extends BaseIAMApiLiveTest {
 
    @Test
    protected void testListRolePolicies() {
-      for (Role role : context.getApi().getRoleApi().list().concat()) {
+      for (Role role : api.getRoleApi().list().concat()) {
          for (String policy : api(role.getName()).list().concat()) {
             checkPolicy(api(role.getName()).get(policy));
          }
@@ -56,7 +56,7 @@ public class RolePolicyApiLiveTest extends BaseIAMApiLiveTest {
       String roleName = System.getProperty("user.name").replace('.', '-') + ".role_policy.iamtest.jclouds.org.";
       Role newRole;
       try {
-         newRole = context.getApi().getRoleApi().createWithPolicy(roleName, RoleApiLiveTest.assumeRolePolicy);
+         newRole = api.getRoleApi().createWithPolicy(roleName, RoleApiLiveTest.assumeRolePolicy);
          getAnonymousLogger().info("created role: " + newRole);
          api(roleName).create("S3Access", s3Policy);
          Policy newPolicy = api(roleName).get("S3Access");
@@ -67,11 +67,11 @@ public class RolePolicyApiLiveTest extends BaseIAMApiLiveTest {
          assertNull(api(roleName).get("S3Access"));
       } finally {
          api(roleName).delete("S3Access");
-         context.getApi().getRoleApi().delete(roleName);
+         api.getRoleApi().delete(roleName);
       }
    }
 
    protected RolePolicyApi api(String role) {
-      return context.getApi().getPolicyApiForRole(role);
+      return api.getPolicyApiForRole(role);
    }
 }
