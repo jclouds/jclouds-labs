@@ -16,21 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.googlecomputeengine.internal;
+package org.jclouds.oauth.v2.config;
 
-import com.google.common.base.Function;
-import com.google.inject.Module;
-import org.jclouds.googlecomputeengine.GoogleComputeEngineAsyncApi;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.http.HttpResponse;
+import java.net.URI;
 
-import java.util.Properties;
+import javax.inject.Singleton;
+
+import org.jclouds.oauth.v2.OAuthApi;
+import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
+
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+import com.google.inject.Provides;
 
 /**
- * @author Adrian Cole
+ * OAuth module to when accessing OAuth stand-alone.
+ * 
+ * @author David Alves
  */
-public class BaseGoogleComputeEngineAsyncApiExpectTest extends BaseGoogleComputeEngineExpectTest<GoogleComputeEngineAsyncApi> {
-   public GoogleComputeEngineAsyncApi createClient(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {
-      return createInjector(fn, module, props).getInstance(GoogleComputeEngineAsyncApi.class);
+@ConfiguresHttpApi
+public class OAuthHttpApiModule extends HttpApiModule<OAuthApi> {
+
+   @Provides
+   @Singleton
+   @Authentication
+   protected Supplier<URI> provideAuthenticationEndpoint(ProviderMetadata providerMetadata) {
+      return Suppliers.ofInstance(URI.create(providerMetadata.getEndpoint()));
    }
+
 }

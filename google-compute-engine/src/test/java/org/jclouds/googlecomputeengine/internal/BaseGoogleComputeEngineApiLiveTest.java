@@ -18,35 +18,32 @@
  */
 package org.jclouds.googlecomputeengine.internal;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import com.google.common.reflect.TypeToken;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
-import org.jclouds.googlecomputeengine.GoogleComputeEngineApiMetadata;
-import org.jclouds.googlecomputeengine.GoogleComputeEngineAsyncApi;
-import org.jclouds.googlecomputeengine.config.UserProject;
-import org.jclouds.googlecomputeengine.domain.Operation;
-import org.jclouds.oauth.v2.OAuthTestUtils;
-import org.jclouds.rest.RestContext;
-
-import java.net.URI;
-import java.util.Properties;
-import java.util.concurrent.atomic.AtomicReference;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.net.URI;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
+import org.jclouds.googlecomputeengine.config.UserProject;
+import org.jclouds.googlecomputeengine.domain.Operation;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+
 
 /**
  * @author David Alves
  */
-public class BaseGoogleComputeEngineApiLiveTest extends BaseContextLiveTest<RestContext<GoogleComputeEngineApi,
-        GoogleComputeEngineAsyncApi>> {
+public class BaseGoogleComputeEngineApiLiveTest extends BaseApiLiveTest<GoogleComputeEngineApi> {
 
    protected static final String API_URL_PREFIX = "https://www.googleapis.com/compute/v1beta13/projects/";
    protected static final String ZONE_API_URL_SUFFIX = "/zones/";
@@ -60,31 +57,21 @@ public class BaseGoogleComputeEngineApiLiveTest extends BaseContextLiveTest<Rest
 
    protected static final String GOOGLE_PROJECT = "google";
 
+   protected Supplier<String> userProject;
+   protected Predicate<AtomicReference<Operation>> operationDonePredicate;
+
 
    public BaseGoogleComputeEngineApiLiveTest() {
       provider = "google-compute-engine";
    }
 
-   @Override
-   protected Properties setupProperties() {
-      Properties properties = super.setupProperties();
-      OAuthTestUtils.setCredentialFromPemFile(properties, "google-compute-engine.credential");
-      return properties;
-   }
-
-   @Override
-   protected TypeToken<RestContext<GoogleComputeEngineApi, GoogleComputeEngineAsyncApi>> contextType() {
-      return GoogleComputeEngineApiMetadata.CONTEXT_TOKEN;
-   }
-
-   protected String getUserProject() {
-      return context.utils().injector().getInstance(Key.get(new TypeLiteral<Supplier<String>>() {
-      }, UserProject.class)).get();
-   }
-
-   protected Predicate<AtomicReference<Operation>> getOperationDonePredicate() {
-      return context.utils().getInjector().getInstance(Key.get(new TypeLiteral<Predicate<AtomicReference<Operation>>>
-              () {}));
+   protected GoogleComputeEngineApi create(Properties props, Iterable<Module> modules) {
+      Injector injector = newBuilder().modules(modules).overrides(props).buildInjector();
+      userProject = injector.getInstance(Key.get(new TypeLiteral<Supplier<String>>() {
+      }, UserProject.class));
+      operationDonePredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<AtomicReference<Operation>>>() {
+      }));
+      return injector.getInstance(GoogleComputeEngineApi.class);
    }
 
    protected Operation assertOperationDoneSucessfully(Operation operation, long maxWaitSeconds) {
@@ -95,7 +82,7 @@ public class BaseGoogleComputeEngineApiLiveTest extends BaseContextLiveTest<Rest
    }
 
    protected Operation waitOperationDone(Operation operation, long maxWaitSeconds) {
-      return waitOperationDone(getOperationDonePredicate(), operation, maxWaitSeconds);
+      return waitOperationDone(operationDonePredicate, operation, maxWaitSeconds);
    }
 
    protected URI getDefaultZoneUrl(String project) {

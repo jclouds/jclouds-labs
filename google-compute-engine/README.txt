@@ -42,13 +42,22 @@ A.
 2. Extract only the pk and remove passphrase
  openssl rsa -in <my_keystore>.pem -out <my_key>.pem
 
-The last file (<my_key>.pem) should contain the pk that needs to be passed to google-compute as a string literal property named "google-compute-engine.credential".
+The last file (<my_key>.pem) should contain the pk that needs to be passed to `ContextBuilder.credential()` for the provider `google-compute-engine`.
 
 
 Running the live tests:
 --------
 
-mvn clean install -Plive -Dtest.google-compute-engine.identity=<my account>@developer.gserviceaccount.com -Dtest.google-compute-engine.credential=<path to pk.pem>
+1. Place the following in your ~/.m2/settings.xml in a profile enabled when live:
+```
+    <test.google-compute-engine.identity>YOUR_ACCOUNT_NUMBER@developer.gserviceaccount.com</test.google-compute-engine.identity>
+    <test.google-compute-engine.credential>-----BEGIN RSA PRIVATE KEY-----
+MIICXgIBAAKBgQRRbRqVDtJLN1MO/xJoKqZuphDeBh5jIKueW3aNIiWs1XFcct+h
+-- this text is literally from your <my_key>.pem
+aH7xmpHSTbbXmQkuuv+z8EKijigprd/FoJpTX1f5/R+4wQ==
+-----END RSA PRIVATE KEY-----</test.google-compute-engine.credential>
+  </properties>
+```
 
-
+2. mvn clean install -Plive 
 

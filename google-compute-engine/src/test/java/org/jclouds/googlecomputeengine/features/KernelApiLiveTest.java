@@ -44,7 +44,7 @@ public class KernelApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private Kernel kernel;
 
    private KernelApi api() {
-      return context.getApi().getKernelApiForProject("google");
+      return api.getKernelApiForProject("google");
    }
 
    @Test(groups = "live")

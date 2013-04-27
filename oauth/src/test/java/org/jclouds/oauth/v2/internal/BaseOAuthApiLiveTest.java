@@ -18,38 +18,30 @@
  */
 package org.jclouds.oauth.v2.internal;
 
-import com.google.common.base.Ticker;
-import com.google.common.reflect.TypeToken;
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.oauth.v2.OAuthApi;
-import org.jclouds.oauth.v2.OAuthApiMetadata;
-import org.jclouds.oauth.v2.OAuthAsyncApi;
-import org.jclouds.rest.RestContext;
-import org.testng.annotations.Test;
-
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.oauth.v2.OAuthTestUtils.setCredentialFromPemFile;
 import static org.jclouds.oauth.v2.config.OAuthProperties.AUDIENCE;
 import static org.jclouds.oauth.v2.config.OAuthProperties.SCOPES;
 import static org.jclouds.oauth.v2.config.OAuthProperties.SIGNATURE_OR_MAC_ALGORITHM;
 
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.oauth.v2.OAuthApi;
+import org.testng.annotations.Test;
+
+import com.google.common.base.Ticker;
+
 
 /**
  * @author David Alves
  */
 @Test(groups = "live")
-public class BaseOAuthApiLiveTest extends BaseContextLiveTest<RestContext<OAuthApi, OAuthAsyncApi>> {
+public class BaseOAuthApiLiveTest extends BaseApiLiveTest<OAuthApi> {
 
    public BaseOAuthApiLiveTest() {
       provider = "oauth";
-   }
-
-   @Override
-   protected TypeToken<RestContext<OAuthApi, OAuthAsyncApi>> contextType() {
-      return OAuthApiMetadata.CONTEXT_TOKEN;
    }
 
    @Override
