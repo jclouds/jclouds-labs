@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.config.AbiquoEdition;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
@@ -199,7 +198,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       String remoteServicesAddress = endpoint.getHost();
 
       datacenter = Datacenter.builder(context.getApiContext()).name(randomName()).location("Honolulu")
-            .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            .remoteServices(remoteServicesAddress).build();
       datacenter.save();
       assertNotNull(datacenter.getId());
 

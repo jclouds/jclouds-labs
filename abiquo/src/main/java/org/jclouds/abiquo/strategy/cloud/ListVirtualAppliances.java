@@ -21,21 +21,25 @@ package org.jclouds.abiquo.strategy.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.transform;
+import static com.google.common.util.concurrent.Futures.allAsList;
+import static com.google.common.util.concurrent.Futures.getUnchecked;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
-import static org.jclouds.concurrent.FutureIterables.transformParallel;
+
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.annotation.Resource;
 import javax.inject.Named;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.strategy.ListRootEntities;
 import org.jclouds.logging.Logger;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -53,7 +57,7 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class ListVirtualAppliances implements ListRootEntities<VirtualAppliance> {
-   protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected final ApiContext<AbiquoApi> context;
 
    protected final ListVirtualDatacenters listVirtualDatacenters;
 
@@ -62,12 +66,8 @@ public class ListVirtualAppliances implements ListRootEntities<VirtualAppliance>
    @Resource
    protected Logger logger = Logger.NULL;
 
-   @Inject(optional = true)
-   @Named(Constants.PROPERTY_REQUEST_TIMEOUT)
-   protected Long maxTime;
-
    @Inject
-   ListVirtualAppliances(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+   ListVirtualAppliances(final ApiContext<AbiquoApi> context,
          @Named(Constants.PROPERTY_USER_THREADS) final ListeningExecutorService userExecutor,
          final ListVirtualDatacenters listVirtualDatacenters) {
       this.context = checkNotNull(context, "context");
@@ -77,27 +77,42 @@ public class ListVirtualAppliances implements ListRootEntities<VirtualAppliance>
 
    @Override
    public Iterable<VirtualAppliance> execute() {
-      // Find virtual appliances in concurrent requests
-      Iterable<VirtualDatacenter> vdcs = listVirtualDatacenters.execute();
-      Iterable<VirtualApplianceDto> vapps = listConcurrentVirtualAppliances(vdcs);
-
-      return wrap(context, VirtualAppliance.class, vapps);
+      return execute(userExecutor);
    }
 
    @Override
    public Iterable<VirtualAppliance> execute(final Predicate<VirtualAppliance> selector) {
-      return filter(execute(), selector);
+      return execute(userExecutor, selector);
    }
 
-   private Iterable<VirtualApplianceDto> listConcurrentVirtualAppliances(final Iterable<VirtualDatacenter> vdcs) {
-      Iterable<VirtualAppliancesDto> vapps = transformParallel(vdcs,
-            new Function<VirtualDatacenter, ListenableFuture<? extends VirtualAppliancesDto>>() {
+   private Iterable<VirtualApplianceDto> listConcurrentVirtualAppliances(final ListeningExecutorService executor,
+         final Iterable<VirtualDatacenter> vdcs) {
+      ListenableFuture<List<VirtualAppliancesDto>> futures = allAsList(transform(vdcs,
+            new Function<VirtualDatacenter, ListenableFuture<VirtualAppliancesDto>>() {
                @Override
                public ListenableFuture<VirtualAppliancesDto> apply(final VirtualDatacenter input) {
-                  return context.getAsyncApi().getCloudApi().listVirtualAppliances(input.unwrap());
+                  return executor.submit(new Callable<VirtualAppliancesDto>() {
+                     @Override
+                     public VirtualAppliancesDto call() throws Exception {
+                        return context.getApi().getCloudApi().listVirtualAppliances(input.unwrap());
+                     }
+                  });
                }
-            }, userExecutor, maxTime, logger, "getting virtual appliances");
+            }));
 
-      return DomainWrapper.join(vapps);
+      logger.trace("getting virtual appliances");
+      return DomainWrapper.join(getUnchecked(futures));
+   }
+
+   public Iterable<VirtualAppliance> execute(ListeningExecutorService executor) {
+      // / Find virtual appliances in concurrent requests
+      Iterable<VirtualDatacenter> vdcs = listVirtualDatacenters.execute(executor);
+      Iterable<VirtualApplianceDto> vapps = listConcurrentVirtualAppliances(executor, vdcs);
+
+      return wrap(context, VirtualAppliance.class, vapps);
+   }
+
+   public Iterable<VirtualAppliance> execute(ListeningExecutorService executor, Predicate<VirtualAppliance> selector) {
+      return filter(execute(executor), selector);
    }
 }

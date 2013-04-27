@@ -32,7 +32,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
@@ -45,7 +44,7 @@ import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.logging.Logger;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
@@ -61,7 +60,7 @@ import com.google.inject.Inject;
 @Singleton
 public class BaseMonitoringService implements MonitoringService {
    @VisibleForTesting
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    /** The scheduler used to perform monitoring tasks. */
    @VisibleForTesting
@@ -83,7 +82,7 @@ public class BaseMonitoringService implements MonitoringService {
    private Logger logger = Logger.NULL;
 
    @Inject
-   public BaseMonitoringService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+   public BaseMonitoringService(final ApiContext<AbiquoApi> context,
          @Named(PROPERTY_SCHEDULER_THREADS) final ScheduledExecutorService scheduler,
          @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus) {
       this.context = checkNotNull(context, "context");
@@ -152,8 +151,7 @@ public class BaseMonitoringService implements MonitoringService {
 
    @Override
    public VirtualMachineMonitor getVirtualMachineMonitor() {
-      return checkNotNull(context.utils().injector().getInstance(VirtualMachineMonitor.class),
-            "virtualMachineMonitor");
+      return checkNotNull(context.utils().injector().getInstance(VirtualMachineMonitor.class), "virtualMachineMonitor");
    }
 
    @Override
@@ -176,7 +174,8 @@ public class BaseMonitoringService implements MonitoringService {
     * Performs the periodical monitoring tasks.
     * 
     * @author Ignasi Barrera
-    * @param <T> The type of the object being monitored.
+    * @param <T>
+    *           The type of the object being monitored.
     */
    @VisibleForTesting
    class AsyncMonitor<T> implements Runnable {
@@ -204,8 +203,10 @@ public class BaseMonitoringService implements MonitoringService {
       /**
        * Starts the monitoring job with the given timeout.
        * 
-       * @param maxWait The timeout.
-       * @param timeUnit The timeunit used in the maxWait parameter.
+       * @param maxWait
+       *           The timeout.
+       * @param timeUnit
+       *           The timeunit used in the maxWait parameter.
        */
       public void startMonitoring(final Long maxWait, TimeUnit timeUnit) {
          if (maxWait != null) {

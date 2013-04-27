@@ -25,13 +25,12 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
@@ -52,7 +51,6 @@ import com.google.common.collect.Iterables;
  *      href="http://community.abiquo.com/display/ABI20/StorageDeviceResource">
  *      http://community.abiquo.com/display/ABI20/StorageDeviceResource</a>
  */
-@EnterpriseEdition
 public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
    /** The datacenter where the storage device is. */
    private Datacenter datacenter;
@@ -60,7 +58,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected StorageDevice(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDeviceDto target) {
+   protected StorageDevice(final ApiContext<AbiquoApi> context, final StorageDeviceDto target) {
       super(context, target);
    }
 
@@ -300,12 +298,12 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
       return Iterables.getFirst(filter(listTiersFromDatacenter(), filter), null);
    }
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
       return new Builder(context, datacenter);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Datacenter datacenter;
 
@@ -325,7 +323,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
 
       private String username;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
          super();
          checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
          this.datacenter = datacenter;

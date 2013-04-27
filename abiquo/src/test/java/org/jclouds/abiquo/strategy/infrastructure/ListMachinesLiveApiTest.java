@@ -27,7 +27,6 @@ import static org.testng.Assert.assertTrue;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.predicates.infrastructure.MachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
-import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

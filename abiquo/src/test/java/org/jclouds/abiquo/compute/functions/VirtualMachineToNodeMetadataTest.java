@@ -44,7 +44,7 @@ import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadata.Status;
 import org.jclouds.domain.Location;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -199,9 +199,9 @@ public class VirtualMachineToNodeMetadataTest {
    private VirtualMachine mockVirtualMachine(final VirtualAppliance vapp) {
       VirtualMachine mockVm = EasyMock.createMock(VirtualMachine.class);
 
-      Ip<?, ?> mockPrivNic = wrap(EasyMock.createMock(RestContext.class), PrivateIp.class, privNic);
-      Ip<?, ?> mockPubNic = wrap(EasyMock.createMock(RestContext.class), PublicIp.class, pubNic);
-      Ip<?, ?> mockExtNic = wrap(EasyMock.createMock(RestContext.class), ExternalIp.class, extNic);
+      Ip<?, ?> mockPrivNic = wrap(EasyMock.createMock(ApiContext.class), PrivateIp.class, privNic);
+      Ip<?, ?> mockPubNic = wrap(EasyMock.createMock(ApiContext.class), PublicIp.class, pubNic);
+      Ip<?, ?> mockExtNic = wrap(EasyMock.createMock(ApiContext.class), ExternalIp.class, extNic);
 
       expect(mockVm.getId()).andReturn(vm.getId());
       expect(mockVm.getURI()).andReturn(URI.create(vm.getEditLink().getHref()));

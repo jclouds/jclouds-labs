@@ -25,9 +25,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
@@ -46,7 +45,7 @@ import com.google.common.primitives.Longs;
  */
 public abstract class DomainWithTasksWrapper<T extends SingleResourceTransportDto> extends DomainWrapper<T> {
 
-   protected DomainWithTasksWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final T target) {
+   protected DomainWithTasksWrapper(final ApiContext<AbiquoApi> context, final T target) {
       super(context, target);
    }
 

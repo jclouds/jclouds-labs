@@ -48,18 +48,18 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code VirtualMachineTemplateAsyncApi}
+ * Tests annotation parsing of {@code VirtualMachineTemplateApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Test(groups = "unit", testName = "VirtualMachineTemplateAsyncApiTest")
-public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<VirtualMachineTemplateAsyncApi> {
+@Test(groups = "unit", testName = "VirtualMachineTemplateApiTest")
+public class VirtualMachineTemplateApiTest extends BaseAbiquoApiTest<VirtualMachineTemplateApi> {
    /*********************** Virtual Machine Template ***********************/
 
    public void testListVirtualMachineTemplates() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "listVirtualMachineTemplates",
-            Integer.class, Integer.class);
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "listVirtualMachineTemplates", Integer.class,
+            Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1, 1)));
 
       assertRequestLineEquals(request,
@@ -76,8 +76,8 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
 
    public void testListVirtualMachineTemplatesWithOptions() throws SecurityException, NoSuchMethodException,
          IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "listVirtualMachineTemplates",
-            Integer.class, Integer.class, VirtualMachineTemplateOptions.class);
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "listVirtualMachineTemplates", Integer.class,
+            Integer.class, VirtualMachineTemplateOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(
             method,
             ImmutableList.<Object> of(
@@ -100,7 +100,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    }
 
    public void testGetVirtualMachineTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "getVirtualMachineTemplate", Integer.class,
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "getVirtualMachineTemplate", Integer.class,
             Integer.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1, 1, 1)));
 
@@ -117,7 +117,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    }
 
    public void testUpdateVirtualMachineTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "updateVirtualMachineTemplate",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "updateVirtualMachineTemplate",
             VirtualMachineTemplateDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(TemplateResources.virtualMachineTemplatePut())));
@@ -136,7 +136,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    }
 
    public void testDeleteVirtualMachineTemplate() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "deleteVirtualMachineTemplate",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "deleteVirtualMachineTemplate",
             VirtualMachineTemplateDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(TemplateResources.virtualMachineTemplatePut())));
@@ -155,7 +155,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
 
    public void testCreatePersistentVirtualMachineTemplate() throws SecurityException, NoSuchMethodException,
          IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "createPersistentVirtualMachineTemplate",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "createPersistentVirtualMachineTemplate",
             Integer.class, Integer.class, VirtualMachineTemplatePersistentDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(1, 1, TemplateResources.persistentData())));
@@ -176,7 +176,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    /*********************** Conversions ***********************/
 
    public void testRequestConversion() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "requestConversion",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "requestConversion",
             VirtualMachineTemplateDto.class, DiskFormatType.class, ConversionDto.class);
 
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(
@@ -199,7 +199,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    }
 
    public void testListConversions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "listConversions",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "listConversions",
             VirtualMachineTemplateDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(TemplateResources.virtualMachineTemplatePut())));
@@ -218,7 +218,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    }
 
    public void testListConversionsWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "listConversions",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "listConversions",
             VirtualMachineTemplateDto.class, ConversionOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(
             method,
@@ -239,7 +239,7 @@ public class VirtualMachineTemplateAsyncApiTest extends BaseAbiquoAsyncApiTest<V
    }
 
    public void testGetConversion() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateAsyncApi.class, "getConversion",
+      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "getConversion",
             VirtualMachineTemplateDto.class, DiskFormatType.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(TemplateResources.virtualMachineTemplatePut(), DiskFormatType.RAW)));

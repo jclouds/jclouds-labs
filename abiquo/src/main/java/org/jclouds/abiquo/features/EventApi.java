@@ -19,7 +19,18 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
 import org.jclouds.abiquo.domain.event.options.EventOptions;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
 
 import com.abiquo.server.core.event.EventsDto;
 
@@ -28,16 +39,21 @@ import com.abiquo.server.core.event.EventsDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EventAsyncApi
  * @author Ignasi Barrera
  * @author Vivien Mahé
  */
-public interface EventApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+@Path("/events")
+public interface EventApi extends Closeable {
    /**
     * List events.
     * 
     * @return The list of events.
     */
+   @Named("event:list")
+   @GET
+   @Consumes(EventsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    EventsDto listEvents();
 
    /**
@@ -45,5 +61,9 @@ public interface EventApi {
     * 
     * @return The list of events using filters.
     */
+   @Named("event:list")
+   @GET
+   @Consumes(EventsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    EventsDto listEvents(EventOptions options);
 }

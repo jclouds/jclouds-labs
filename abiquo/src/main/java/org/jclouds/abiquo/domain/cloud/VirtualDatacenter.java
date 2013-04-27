@@ -25,7 +25,6 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
@@ -41,7 +40,7 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
@@ -86,7 +85,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
    /**
     * Constructor to be used only by the builder.
     */
-   protected VirtualDatacenter(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenterDto target) {
+   protected VirtualDatacenter(final ApiContext<AbiquoApi> context, final VirtualDatacenterDto target) {
       super(context, target);
    }
 
@@ -512,13 +511,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter,
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter,
          final Enterprise enterprise) {
       return new Builder(context, datacenter, enterprise);
    }
 
    public static class Builder extends LimitsBuilder<Builder> {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -530,8 +529,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
       private PrivateNetwork network;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter,
-            final Enterprise enterprise) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter, final Enterprise enterprise) {
          super();
          checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
          this.datacenter = datacenter;

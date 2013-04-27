@@ -28,7 +28,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
@@ -38,10 +37,9 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
@@ -75,8 +73,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
    /**
     * Constructor to be used only by the builder.
     */
-   protected VirtualMachineTemplate(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final VirtualMachineTemplateDto target) {
+   protected VirtualMachineTemplate(final ApiContext<AbiquoApi> context, final VirtualMachineTemplateDto target) {
       super(context, target);
    }
 
@@ -175,11 +172,10 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     */
    public Volume getVolume() {
       if (this.isPersistent()) {
-         ExtendedUtils utils = (ExtendedUtils) context.utils();
-         HttpResponse rp = checkNotNull(utils.getAbiquoHttpClient().get(target.searchLink("volume")), "volume");
+         HttpResponse rp = checkNotNull(context.getApi().get(target.searchLink("volume")), "volume");
 
-         ParseXMLWithJAXB<VolumeManagementDto> parser = new ParseXMLWithJAXB<VolumeManagementDto>(utils.xml(),
-               TypeLiteral.get(VolumeManagementDto.class));
+         ParseXMLWithJAXB<VolumeManagementDto> parser = new ParseXMLWithJAXB<VolumeManagementDto>(
+               context.utils().xml(), TypeLiteral.get(VolumeManagementDto.class));
 
          VolumeManagementDto dto = parser.apply(rp);
          return new Volume(context, dto);

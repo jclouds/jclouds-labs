@@ -24,16 +24,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
@@ -53,7 +50,6 @@ import com.google.inject.TypeLiteral;
  *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource"
  *      > http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
-@EnterpriseEdition
 public class PublicNetwork extends Network<PublicIp> {
    /** The datacenter where the network belongs. */
    private Datacenter datacenter;
@@ -61,7 +57,7 @@ public class PublicNetwork extends Network<PublicIp> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected PublicNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VLANNetworkDto target) {
+   protected PublicNetwork(final ApiContext<AbiquoApi> context, final VLANNetworkDto target) {
       super(context, target);
    }
 
@@ -123,10 +119,9 @@ public class PublicNetwork extends Network<PublicIp> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.DATACENTER), ValidationErrors.MISSING_REQUIRED_LINK
             + " " + ParentLinkName.DATACENTER);
 
-      ExtendedUtils utils = (ExtendedUtils) context.utils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(utils.xml(),
+      ParseXMLWithJAXB<DatacenterDto> parser = new ParseXMLWithJAXB<DatacenterDto>(context.utils().xml(),
             TypeLiteral.get(DatacenterDto.class));
 
       datacenter = wrap(context, Datacenter.class, parser.apply(response));
@@ -135,7 +130,7 @@ public class PublicNetwork extends Network<PublicIp> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
       return new Builder(context, datacenter);
    }
 
@@ -144,7 +139,7 @@ public class PublicNetwork extends Network<PublicIp> {
 
       private Optional<NetworkServiceType> networkServiceType = Optional.absent();
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
          super(context);
          this.datacenter = checkNotNull(datacenter,
                ValidationErrors.NULL_RESOURCE + Datacenter.class.getCanonicalName());

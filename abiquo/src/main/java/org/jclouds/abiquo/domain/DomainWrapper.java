@@ -30,15 +30,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.exception.WrapperException;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -60,12 +58,12 @@ import com.google.inject.TypeLiteral;
  */
 public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
    /** The rest context. */
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    /** The wrapped object. */
    protected T target;
 
-   protected DomainWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final T target) {
+   protected DomainWrapper(final ApiContext<AbiquoApi> context, final T target) {
       super();
       this.context = checkNotNull(context, "context");
       this.target = checkNotNull(target, "target");
@@ -95,11 +93,10 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
    public void refresh() {
       RESTLink link = checkNotNull(LinkUtils.getSelfLink(target), ValidationErrors.MISSING_REQUIRED_LINK + " edit/self");
 
-      ExtendedUtils utils = (ExtendedUtils) context.utils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<T> parser = new ParseXMLWithJAXB<T>(utils.xml(),
-            TypeLiteral.get((Class<T>) target.getClass()));
+      ParseXMLWithJAXB<T> parser = new ParseXMLWithJAXB<T>(context.utils().xml(), TypeLiteral.get((Class<T>) target
+            .getClass()));
 
       target = parser.apply(response);
    }
@@ -119,13 +116,13 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
     * Wraps an object in the given wrapper class.
     */
    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
-         final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Class<W> wrapperClass, final T target) {
+         final ApiContext<AbiquoApi> context, final Class<W> wrapperClass, final T target) {
       if (target == null) {
          return null;
       }
 
       try {
-         Invokable<W, W> cons = constructor(wrapperClass, RestContext.class, target.getClass());
+         Invokable<W, W> cons = constructor(wrapperClass, ApiContext.class, target.getClass());
          return cons.invoke(null, context, target);
       } catch (InvocationTargetException e) {
          throw new WrapperException(wrapperClass, target, e.getTargetException());
@@ -138,7 +135,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
     * Wrap a collection of objects to the given wrapper class.
     */
    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<W> wrap(
-         final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Class<W> wrapperClass, final Iterable<T> targets) {
+         final ApiContext<AbiquoApi> context, final Class<W> wrapperClass, final Iterable<T> targets) {
       if (targets == null) {
          return null;
       }

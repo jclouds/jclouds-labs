@@ -22,11 +22,10 @@ package org.jclouds.abiquo.domain.network;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
 
@@ -42,7 +41,7 @@ import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
  * @author Jaume Devesa
  */
 public class NetworkServiceType extends DomainWrapper<NetworkServiceTypeDto> {
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
       return new Builder(context, datacenter);
    }
 
@@ -52,13 +51,13 @@ public class NetworkServiceType extends DomainWrapper<NetworkServiceTypeDto> {
     * @author Jaume Devesa
     */
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Datacenter datacenter;
 
       private String name;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
          super();
          checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
          this.datacenter = datacenter;
@@ -84,7 +83,7 @@ public class NetworkServiceType extends DomainWrapper<NetworkServiceTypeDto> {
    private Datacenter datacenter;
 
    /** Constructor will only be used by the builder. */
-   protected NetworkServiceType(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final NetworkServiceTypeDto target) {
+   protected NetworkServiceType(final ApiContext<AbiquoApi> context, final NetworkServiceTypeDto target) {
       super(context, target);
    }
 

@@ -20,8 +20,7 @@
 package org.jclouds.abiquo.domain.network;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.network.AbstractInfrastructureIpDto;
 
@@ -35,7 +34,7 @@ public abstract class AbstractPublicIp<T extends AbstractInfrastructureIpDto, N 
    /**
     * Constructor to be used only by the builder.
     */
-   protected AbstractPublicIp(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final T target) {
+   protected AbstractPublicIp(final ApiContext<AbiquoApi> context, final T target) {
       super(context, target);
    }
 

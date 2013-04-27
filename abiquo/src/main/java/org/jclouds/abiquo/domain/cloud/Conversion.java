@@ -24,15 +24,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Date;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
@@ -54,7 +52,7 @@ public class Conversion extends DomainWithTasksWrapper<ConversionDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Conversion(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final ConversionDto target) {
+   protected Conversion(final ApiContext<AbiquoApi> context, final ConversionDto target) {
       super(context, target);
    }
 
@@ -70,11 +68,10 @@ public class Conversion extends DomainWithTasksWrapper<ConversionDto> {
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_MACHINE_TEMPLATE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.utils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
       ParseXMLWithJAXB<VirtualMachineTemplateDto> parser = new ParseXMLWithJAXB<VirtualMachineTemplateDto>(
-            utils.xml(), TypeLiteral.get(VirtualMachineTemplateDto.class));
+            context.utils().xml(), TypeLiteral.get(VirtualMachineTemplateDto.class));
 
       return wrap(context, VirtualMachineTemplate.class, parser.apply(response));
    }

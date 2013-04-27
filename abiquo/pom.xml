@@ -8,7 +8,6 @@
     </parent>
     
     <!-- TODO: when out of labs, switch to org.jclouds.api -->
-    <groupId>org.jclouds.labs</groupId>
     <artifactId>abiquo</artifactId>
     <name>jclouds Abiquo api</name>
     <description>jclouds components to access an implementation of Abiquo</description>

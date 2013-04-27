@@ -18,6 +18,7 @@
  */
 
 package org.jclouds.abiquo.binders;
+
 import static org.jclouds.reflect.Reflection2.method;
 import static org.testng.Assert.assertEquals;
 
@@ -63,8 +64,7 @@ public class BindToPathTest {
       Invokable<?, ?> withEndpointLink = method(TestEndpointLink.class, "withEndpointLink", TestDto.class);
       GeneratedHttpRequest request = GeneratedHttpRequest.builder()
             .invocation(Invocation.create(withEndpointLink, ImmutableList.<Object> of(new TestDto())))
-            .method(HttpMethod.GET)
-            .endpoint(URI.create("http://localhost")).build();
+            .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
 
       BindToPath binder = new BindToPath();
       binder.bindToRequest(request, null);
@@ -75,8 +75,7 @@ public class BindToPathTest {
       Invokable<?, ?> withEndpointLink = method(TestEndpointLink.class, "withEndpointLink", TestDto.class);
       GeneratedHttpRequest request = GeneratedHttpRequest.builder()
             .invocation(Invocation.create(withEndpointLink, ImmutableList.<Object> of(new TestDto())))
-            .method(HttpMethod.GET)
-            .endpoint(URI.create("http://localhost")).build();
+            .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
 
       BindToPath binder = new BindToPath();
       binder.bindToRequest(request, new Object());
@@ -87,8 +86,7 @@ public class BindToPathTest {
       TestDto dto = new TestDto();
       Invokable<?, ?> withoutEndpointLink = method(TestEndpointLink.class, "withoutEndpointLink", TestDto.class);
       GeneratedHttpRequest request = GeneratedHttpRequest.builder()
-            .invocation(Invocation.create(withoutEndpointLink, ImmutableList.<Object> of(dto)))
-            .method(HttpMethod.GET)
+            .invocation(Invocation.create(withoutEndpointLink, ImmutableList.<Object> of(dto))).method(HttpMethod.GET)
             .endpoint(URI.create("http://localhost")).build();
 
       BindToPath binder = new BindToPath();
@@ -100,8 +98,7 @@ public class BindToPathTest {
       TestDto dto = new TestDto();
       Invokable<?, ?> withUnexistingLink = method(TestEndpointLink.class, "withUnexistingLink", TestDto.class);
       GeneratedHttpRequest request = GeneratedHttpRequest.builder()
-            .invocation(Invocation.create(withUnexistingLink, ImmutableList.<Object> of(dto)))
-            .method(HttpMethod.GET)
+            .invocation(Invocation.create(withUnexistingLink, ImmutableList.<Object> of(dto))).method(HttpMethod.GET)
             .endpoint(URI.create("http://localhost")).build();
 
       BindToPath binder = new BindToPath();
@@ -112,8 +109,7 @@ public class BindToPathTest {
       TestDto dto = new TestDto();
       Invokable<?, ?> withEndpointLink = method(TestEndpointLink.class, "withEndpointLink", TestDto.class);
       GeneratedHttpRequest request = GeneratedHttpRequest.builder()
-            .invocation(Invocation.create(withEndpointLink, ImmutableList.<Object> of(dto)))
-            .method(HttpMethod.GET)
+            .invocation(Invocation.create(withEndpointLink, ImmutableList.<Object> of(dto))).method(HttpMethod.GET)
             .endpoint(URI.create("http://localhost")).build();
 
       BindToPath binder = new BindToPath();
@@ -125,8 +121,7 @@ public class BindToPathTest {
       TestDto dto = new TestDto();
       Invokable<?, ?> withEndpointLink = method(TestEndpointLink.class, "withEndpointLink", TestDto.class);
       GeneratedHttpRequest request = GeneratedHttpRequest.builder()
-            .invocation(Invocation.create(withEndpointLink, ImmutableList.<Object> of(dto)))
-            .method(HttpMethod.GET)
+            .invocation(Invocation.create(withEndpointLink, ImmutableList.<Object> of(dto))).method(HttpMethod.GET)
             .endpoint(URI.create("http://localhost?param=value")).build();
 
       BindToPath binder = new BindToPath();

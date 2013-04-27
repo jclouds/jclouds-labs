@@ -30,14 +30,13 @@ import java.util.Map;
 
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationScope;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -68,7 +67,7 @@ public class VirtualDatacenterToLocationTest {
 
    @SuppressWarnings("unchecked")
    private static VirtualDatacenter mockVirtualDatacenter() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Datacenter datacenter = EasyMock.createMock(Datacenter.class);
       Enterprise enterprise = EasyMock.createMock(Enterprise.class);
       PrivateNetwork network = EasyMock.createMock(PrivateNetwork.class);

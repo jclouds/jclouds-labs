@@ -20,9 +20,8 @@
 package org.jclouds.abiquo.domain.config;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.pricing.CurrencyDto;
 
@@ -38,7 +37,7 @@ public class Currency extends DomainWrapper<CurrencyDto> {
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   private Currency(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final CurrencyDto target) {
+   private Currency(final ApiContext<AbiquoApi> context, final CurrencyDto target) {
       super(context, target);
    }
 
@@ -59,12 +58,12 @@ public class Currency extends DomainWrapper<CurrencyDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   public static Builder builder(final ApiContext<AbiquoApi> context) {
       return new Builder(context);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -72,7 +71,7 @@ public class Currency extends DomainWrapper<CurrencyDto> {
 
       private int digits;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+      public Builder(final ApiContext<AbiquoApi> context) {
          super();
          this.context = context;
       }

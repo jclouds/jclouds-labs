@@ -27,7 +27,7 @@ import org.jclouds.abiquo.features.services.PricingService;
 import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.compute.ComputeServiceContext;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.google.inject.ImplementedBy;
 
@@ -45,7 +45,7 @@ public interface AbiquoContext extends ComputeServiceContext {
     * 
     * @return The Abiquo API context.
     */
-   RestContext<AbiquoApi, AbiquoAsyncApi> getApiContext();
+   ApiContext<AbiquoApi> getApiContext();
 
    /**
     * Returns the administration service.

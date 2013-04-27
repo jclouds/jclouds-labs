@@ -19,6 +19,23 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+
+import org.jclouds.abiquo.AbiquoFallbacks.NullOn303;
+import org.jclouds.abiquo.binders.BindLinkToPath;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
@@ -29,11 +46,11 @@ import com.abiquo.server.core.task.TasksDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see TaskAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public interface TaskApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+public interface TaskApi extends Closeable {
    /*********************** Task ***********************/
 
    /**
@@ -43,7 +60,12 @@ public interface TaskApi {
     *           The link of the task.
     * @return The task.
     */
-   TaskDto getTask(final RESTLink link);
+   @Named("task:get")
+   @GET
+   @Consumes(TaskDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOn303.class)
+   TaskDto getTask(@BinderParam(BindLinkToPath.class) RESTLink link);
 
    /**
     * Get the list of tasks of the given object.
@@ -52,5 +74,9 @@ public interface TaskApi {
     *           The object.
     * @return The list of tasks for the given object.
     */
-   <T extends SingleResourceTransportDto> TasksDto listTasks(T dto);
+   @Named("task:list")
+   @GET
+   @Consumes(TasksDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   <T extends SingleResourceTransportDto> TasksDto listTasks(@EndpointLink("tasks") @BinderParam(BindToPath.class) T dto);
 }

@@ -23,11 +23,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.math.BigDecimal;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.pricing.PricingTierDto;
@@ -42,19 +41,19 @@ public class PricingTier extends DomainWrapper<PricingTierDto> {
 
    private PricingTemplate pricingTemplate;
 
-   protected PricingTier(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final PricingTierDto target) {
+   protected PricingTier(final ApiContext<AbiquoApi> context, final PricingTierDto target) {
       super(context, target);
    }
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final PricingTemplate pricingtemplate, final Tier tier) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final PricingTemplate pricingtemplate,
+         final Tier tier) {
       return new Builder(context, pricingtemplate, tier);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Integer id;
 
@@ -64,8 +63,7 @@ public class PricingTier extends DomainWrapper<PricingTierDto> {
 
       private BigDecimal price;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final PricingTemplate pricingTemplate,
-            final Tier tier) {
+      public Builder(final ApiContext<AbiquoApi> context, final PricingTemplate pricingTemplate, final Tier tier) {
          super();
          this.pricingTemplate = checkNotNull(pricingTemplate, ValidationErrors.NULL_RESOURCE + PricingTemplate.class);
          this.tier = checkNotNull(tier, ValidationErrors.NULL_RESOURCE + Tier.class);

@@ -141,7 +141,7 @@ public class AbiquoAuthenticationLiveApiTest {
       try {
          // Create a request to authenticate to the API and generate the token
          HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create(endpoint)).build();
-        
+
          request = request.toBuilder().replaceHeader(HttpHeaders.AUTHORIZATION, basic(identity, credential)).build();
 
          // Execute the request and read the generated token

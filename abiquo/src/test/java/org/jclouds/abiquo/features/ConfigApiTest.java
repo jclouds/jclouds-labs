@@ -46,17 +46,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code AdminAsyncApi}.
+ * Tests annotation parsing of {@code ConfigApi}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Test(groups = "unit", testName = "ConfigAsyncApiTest")
-public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
+@Test(groups = "unit", testName = "ConfigApiTest")
+public class ConfigApiTest extends BaseAbiquoApiTest<ConfigApi> {
    /*********************** License ***********************/
 
    public void testListLicenses() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "listLicenses");
+      Invokable<?, ?> method = method(ConfigApi.class, "listLicenses");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/licenses HTTP/1.1");
@@ -71,7 +71,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testListLicenseWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "listLicenses", LicenseOptions.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "listLicenses", LicenseOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(LicenseOptions.builder().active(true).build())));
 
@@ -87,7 +87,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testAddLicense() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "addLicense", LicenseDto.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "addLicense", LicenseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(ConfigResources.licensePost())));
 
@@ -104,7 +104,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testRemoveLicense() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "removeLicense", LicenseDto.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "removeLicense", LicenseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(ConfigResources.licensePut())));
 
@@ -122,7 +122,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    /*********************** Privilege ***********************/
 
    public void testListPrivileges() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "listPrivileges");
+      Invokable<?, ?> method = method(ConfigApi.class, "listPrivileges");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/privileges HTTP/1.1");
@@ -137,7 +137,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testGetPrivilege() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "getPrivilege", Integer.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "getPrivilege", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/privileges/1 HTTP/1.1");
@@ -154,7 +154,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    /*********************** System Properties ***********************/
 
    public void testListSystemProperties() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "listSystemProperties");
+      Invokable<?, ?> method = method(ConfigApi.class, "listSystemProperties");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/properties HTTP/1.1");
@@ -169,7 +169,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testListSystemPropertiesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "listSystemProperties", PropertyOptions.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "listSystemProperties", PropertyOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PropertyOptions.builder().component("api").build())));
 
@@ -185,7 +185,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testUpdateSystemProperty() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "updateSystemProperty", SystemPropertyDto.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "updateSystemProperty", SystemPropertyDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(ConfigResources.propertyPut())));
 
@@ -204,7 +204,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    /*********************** Category ***********************/
 
    public void testListCategories() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "listCategories");
+      Invokable<?, ?> method = method(ConfigApi.class, "listCategories");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/categories HTTP/1.1");
@@ -219,7 +219,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testGetCategory() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "getCategory", Integer.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "getCategory", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/categories/1 HTTP/1.1");
@@ -234,7 +234,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testCreateCategory() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "createCategory", CategoryDto.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "createCategory", CategoryDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(ConfigResources.categoryPost())));
 
@@ -251,7 +251,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testUpdateCategory() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "updateCategory", CategoryDto.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "updateCategory", CategoryDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(ConfigResources.categoryPut())));
 
@@ -268,7 +268,7 @@ public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi> {
    }
 
    public void testDeleteCategory() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(ConfigAsyncApi.class, "deleteCategory", CategoryDto.class);
+      Invokable<?, ?> method = method(ConfigApi.class, "deleteCategory", CategoryDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(ConfigResources.categoryPut())));
 

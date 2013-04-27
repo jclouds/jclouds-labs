@@ -22,11 +22,10 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -53,7 +52,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected RemoteService(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RemoteServiceDto target) {
+   protected RemoteService(final ApiContext<AbiquoApi> context, final RemoteServiceDto target) {
       super(context, target);
    }
 
@@ -125,12 +124,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto> {
       return datacenter;
    }
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
       return new Builder(context, datacenter);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Integer id;
 
@@ -147,7 +146,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto> {
       // To be used only internally by the builder
       private String uri;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter) {
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
          super();
          checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
          this.datacenter = datacenter;

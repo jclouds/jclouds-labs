@@ -31,13 +31,12 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualApplianceDeployMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualApplianceUndeployMonitor;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.EventBus;
@@ -56,7 +55,7 @@ public class BaseVirtualApplianceMonitor extends BaseMonitoringService implement
    protected VirtualApplianceUndeployMonitor undeployMonitor;
 
    @Inject
-   public BaseVirtualApplianceMonitor(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+   public BaseVirtualApplianceMonitor(final ApiContext<AbiquoApi> context,
          @Named(PROPERTY_SCHEDULER_THREADS) final ScheduledExecutorService scheduler,
          @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus,
          final VirtualApplianceDeployMonitor deployMonitor, final VirtualApplianceUndeployMonitor undeployMonitor) {

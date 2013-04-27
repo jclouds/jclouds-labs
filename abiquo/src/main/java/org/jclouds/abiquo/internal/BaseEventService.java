@@ -26,11 +26,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.event.Event;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.features.services.EventService;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.event.EventsDto;
 import com.google.common.annotations.VisibleForTesting;
@@ -44,10 +43,10 @@ import com.google.common.annotations.VisibleForTesting;
 @Singleton
 public class BaseEventService implements EventService {
    @VisibleForTesting
-   protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   protected ApiContext<AbiquoApi> context;
 
    @Inject
-   protected BaseEventService(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   protected BaseEventService(final ApiContext<AbiquoApi> context) {
       this.context = checkNotNull(context, "context");
    }
 

@@ -21,7 +21,6 @@ package org.jclouds.abiquo.config;
 
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
-import static org.jclouds.rest.config.BinderUtils.bindSyncToAsyncHttpApi;
 
 import java.util.List;
 import java.util.Map;
@@ -31,48 +30,24 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Named;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.features.AdminApi;
-import org.jclouds.abiquo.features.AdminAsyncApi;
-import org.jclouds.abiquo.features.CloudApi;
-import org.jclouds.abiquo.features.CloudAsyncApi;
-import org.jclouds.abiquo.features.ConfigApi;
-import org.jclouds.abiquo.features.ConfigAsyncApi;
-import org.jclouds.abiquo.features.EnterpriseApi;
-import org.jclouds.abiquo.features.EnterpriseAsyncApi;
-import org.jclouds.abiquo.features.EventApi;
-import org.jclouds.abiquo.features.EventAsyncApi;
-import org.jclouds.abiquo.features.InfrastructureApi;
-import org.jclouds.abiquo.features.InfrastructureAsyncApi;
-import org.jclouds.abiquo.features.PricingApi;
-import org.jclouds.abiquo.features.PricingAsyncApi;
-import org.jclouds.abiquo.features.TaskApi;
-import org.jclouds.abiquo.features.TaskAsyncApi;
-import org.jclouds.abiquo.features.VirtualMachineTemplateApi;
-import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncApi;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
-import org.jclouds.abiquo.rest.internal.AbiquoHttpAsyncClient;
-import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.collect.Memoized;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
+import org.jclouds.rest.ApiContext;
 import org.jclouds.rest.AuthorizationException;
-import org.jclouds.rest.ConfiguresRestClient;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.Utils;
-import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
 import org.jclouds.rest.suppliers.MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -82,30 +57,8 @@ import com.google.inject.Singleton;
  * 
  * @author Ignasi Barrera
  */
-@ConfiguresRestClient
-public class AbiquoRestClientModule extends RestClientModule<AbiquoApi, AbiquoAsyncApi> {
-   public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>> builder() //
-         .put(InfrastructureApi.class, InfrastructureAsyncApi.class) //
-         .put(EnterpriseApi.class, EnterpriseAsyncApi.class) //
-         .put(AdminApi.class, AdminAsyncApi.class) //
-         .put(ConfigApi.class, ConfigAsyncApi.class) //
-         .put(CloudApi.class, CloudAsyncApi.class) //
-         .put(VirtualMachineTemplateApi.class, VirtualMachineTemplateAsyncApi.class) //
-         .put(TaskApi.class, TaskAsyncApi.class) //
-         .put(EventApi.class, EventAsyncApi.class) //
-         .put(PricingApi.class, PricingAsyncApi.class) //
-         .build();
-
-   public AbiquoRestClientModule() {
-      super(DELEGATE_MAP);
-   }
-
-   @Override
-   protected void configure() {
-      super.configure();
-      bindSyncToAsyncHttpApi(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class);
-      bind(Utils.class).to(ExtendedUtils.class);
-   }
+@ConfiguresHttpApi
+public class AbiquoHttpApiModule extends HttpApiModule<AbiquoApi> {
 
    @Override
    protected void bindErrorHandlers() {
@@ -118,7 +71,7 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoApi, AbiquoAs
    @Singleton
    @Memoized
    public Supplier<User> getCurrentUser(final AtomicReference<AuthorizationException> authException,
-         @Named(PROPERTY_SESSION_INTERVAL) final long seconds, final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+         @Named(PROPERTY_SESSION_INTERVAL) final long seconds, final ApiContext<AbiquoApi> context) {
       return MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier.create(authException, new Supplier<User>() {
          @Override
          public User get() {

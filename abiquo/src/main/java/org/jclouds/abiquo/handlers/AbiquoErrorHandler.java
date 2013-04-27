@@ -19,7 +19,10 @@
 
 package org.jclouds.abiquo.handlers;
 
+import static com.google.common.base.Throwables.propagate;
 import static javax.ws.rs.core.Response.Status.fromStatusCode;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -83,8 +86,12 @@ public class AbiquoErrorHandler implements HttpErrorHandler {
                break;
          }
       } finally {
-         Closeables.closeQuietly(response.getPayload());
-         command.setException(exception);
+         try {
+            Closeables.close(response.getPayload(), true);
+            command.setException(exception);
+         } catch (IOException e) {
+            throw propagate(e);
+         }
       }
    }
 
