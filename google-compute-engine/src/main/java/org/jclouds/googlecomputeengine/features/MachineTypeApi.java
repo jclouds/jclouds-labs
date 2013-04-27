@@ -19,19 +19,42 @@
 
 package org.jclouds.googlecomputeengine.features;
 
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404;
+import org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.ListPage;
 import org.jclouds.googlecomputeengine.domain.MachineType;
+import org.jclouds.googlecomputeengine.functions.internal.ParseMachineTypes;
 import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.oauth.v2.config.OAuthScopes;
+import org.jclouds.oauth.v2.filters.OAuthAuthenticator;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.SkipEncoding;
+import org.jclouds.rest.annotations.Transform;
 
 /**
- * Provides synchronous access to MachineTypes via their REST API.
- * <p/>
+ * Provides access to MachineTypes via their REST API.
  *
  * @author David Alves
  * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/machineTypes"/>
  */
+@SkipEncoding({'/', '='})
+@RequestFilters(OAuthAuthenticator.class)
+@Consumes(MediaType.APPLICATION_JSON)
 public interface MachineTypeApi {
 
    /**
@@ -40,17 +63,34 @@ public interface MachineTypeApi {
     * @param machineTypeName name of the machine type resource to return.
     * @return If successful, this method returns a MachineType resource
     */
-   MachineType get(String machineTypeName);
+   @Named("MachineTypes:get")
+   @GET
+   @Path("/machineTypes/{machineType}")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Fallback(NullOnNotFoundOr404.class)
+   MachineType get(@PathParam("machineType") String machineTypeName);
 
    /**
     * @see MachineTypeApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
+   @Named("MachineTypes:list")
+   @GET
+   @Path("/machineTypes")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseMachineTypes.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
    ListPage<MachineType> listFirstPage();
 
    /**
     * @see MachineTypeApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   ListPage<MachineType> listAtMarker(@Nullable String marker);
+   @Named("MachineTypes:list")
+   @GET
+   @Path("/machineTypes")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseMachineTypes.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<MachineType> listAtMarker(@QueryParam("pageToken") @Nullable String marker);
 
    /**
     * Retrieves the list of machine type resources available to the specified project.
@@ -64,11 +104,25 @@ public interface MachineTypeApi {
     * @see ListOptions
     * @see org.jclouds.googlecomputeengine.domain.ListPage
     */
-   ListPage<MachineType> listAtMarker(@Nullable String marker, ListOptions listOptions);
+   @Named("MachineTypes:list")
+   @GET
+   @Path("/machineTypes")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseMachineTypes.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<MachineType> listAtMarker(@QueryParam("pageToken") @Nullable String marker,
+                                                        ListOptions listOptions);
 
    /**
     * @see MachineTypeApi#list(org.jclouds.googlecomputeengine.options.ListOptions)
     */
+   @Named("MachineTypes:list")
+   @GET
+   @Path("/machineTypes")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseMachineTypes.class)
+   @Transform(ParseMachineTypes.ToPagedIterable.class)
+   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<MachineType> list();
 
    /**
@@ -78,6 +132,13 @@ public interface MachineTypeApi {
     * @see PagedIterable
     * @see MachineTypeApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
+   @Named("MachineTypes:list")
+   @GET
+   @Path("/machineTypes")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseMachineTypes.class)
+   @Transform(ParseMachineTypes.ToPagedIterable.class)
+   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<MachineType> list(ListOptions listOptions);
 
 }

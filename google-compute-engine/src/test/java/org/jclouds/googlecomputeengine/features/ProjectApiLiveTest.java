@@ -48,7 +48,7 @@ public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private static final String METADATA_ITEM_VALUE = "projectLiveTestTestValue";
 
    private ProjectApi projectApi() {
-      return context.getApi().getProjectApi();
+      return api.getProjectApi();
    }
 
    private Project project;
@@ -56,7 +56,7 @@ public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    @Test(groups = "live")
    public void testGetProjectWhenExists() {
-      this.project = projectApi().get(getUserProject());
+      this.project = projectApi().get(userProject.get());
       assertNotNull(project);
       assertNotNull(project.getId());
       assertNotNull(project.getName());
@@ -71,9 +71,9 @@ public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    @Test(groups = "live", dependsOnMethods = "testGetProjectWhenExists")
    public void addItemToMetadata() {
       this.initialMetadataSize = project.getCommonInstanceMetadata().size();
-      assertOperationDoneSucessfully(addItemToMetadata(projectApi(), getUserProject(), METADATA_ITEM_KEY,
+      assertOperationDoneSucessfully(addItemToMetadata(projectApi(), userProject.get(), METADATA_ITEM_KEY,
               METADATA_ITEM_VALUE), 20);
-      this.project = projectApi().get(getUserProject());
+      this.project = projectApi().get(userProject.get());
       assertNotNull(project);
       assertTrue(this.project.getCommonInstanceMetadata().containsKey(METADATA_ITEM_KEY),
               this.project.toString());
@@ -83,8 +83,8 @@ public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    @Test(groups = "live", dependsOnMethods = "addItemToMetadata")
    public void testDeleteItemFromMetadata() {
-      assertOperationDoneSucessfully(deleteItemFromMetadata(projectApi(), getUserProject(), METADATA_ITEM_KEY), 20);
-      this.project = projectApi().get(getUserProject());
+      assertOperationDoneSucessfully(deleteItemFromMetadata(projectApi(), userProject.get(), METADATA_ITEM_KEY), 20);
+      this.project = projectApi().get(userProject.get());
       assertNotNull(project);
       assertFalse(project.getCommonInstanceMetadata().containsKey(METADATA_ITEM_KEY));
       assertSame(this.project.getCommonInstanceMetadata().size(), initialMetadataSize);

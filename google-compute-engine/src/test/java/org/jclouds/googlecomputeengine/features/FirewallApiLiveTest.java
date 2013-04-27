@@ -46,14 +46,14 @@ public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private static final int TIME_WAIT = 30;
 
    private FirewallApi api() {
-      return context.getApi().getFirewallApiForProject(getUserProject());
+      return api.getFirewallApiForProject(userProject.get());
    }
 
    @Test(groups = "live")
    public void testInsertFirewall() {
 
       // need to create the network first
-      assertOperationDoneSucessfully(context.getApi().getNetworkApiForProject(getUserProject()).createInIPv4Range
+      assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).createInIPv4Range
               (FIREWALL_NETWORK_NAME, IPV4_RANGE), TIME_WAIT);
 
       FirewallOptions firewall = new FirewallOptions()
@@ -65,7 +65,7 @@ public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
               .addSourceTag("tag1")
               .addTargetTag("tag2");
 
-      assertOperationDoneSucessfully(api().createInNetwork(FIREWALL_NAME, getNetworkUrl(getUserProject(),
+      assertOperationDoneSucessfully(api().createInNetwork(FIREWALL_NAME, getNetworkUrl(userProject.get(),
               FIREWALL_NETWORK_NAME), firewall), TIME_WAIT);
 
    }
@@ -75,7 +75,7 @@ public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
       FirewallOptions firewall = new FirewallOptions()
               .name(FIREWALL_NAME)
-              .network(getNetworkUrl(getUserProject(),FIREWALL_NETWORK_NAME))
+              .network(getNetworkUrl(userProject.get(),FIREWALL_NETWORK_NAME))
               .addSourceRange("10.0.0.0/8")
               .addSourceTag("tag1")
               .addTargetTag("tag2")
@@ -95,7 +95,7 @@ public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
       FirewallOptions firewall = new FirewallOptions()
               .name(FIREWALL_NAME)
-              .network(getNetworkUrl(getUserProject(),FIREWALL_NETWORK_NAME))
+              .network(getNetworkUrl(userProject.get(),FIREWALL_NETWORK_NAME))
               .allowedRules(ImmutableSet.of(
                       Firewall.Rule.builder()
                               .IPProtocol(IPProtocol.TCP)
@@ -118,7 +118,7 @@ public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
       FirewallOptions patchedFirewall = new FirewallOptions()
               .name(FIREWALL_NAME)
-              .network(getNetworkUrl(getUserProject(), FIREWALL_NETWORK_NAME))
+              .network(getNetworkUrl(userProject.get(), FIREWALL_NETWORK_NAME))
               .allowedRules(ImmutableSet.of(
                       Firewall.Rule.builder()
                               .IPProtocol(IPProtocol.TCP)
@@ -153,7 +153,7 @@ public class FirewallApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    public void testDeleteFirewall() {
 
       assertOperationDoneSucessfully(api().delete(FIREWALL_NAME), TIME_WAIT);
-      assertOperationDoneSucessfully(context.getApi().getNetworkApiForProject(getUserProject()).delete
+      assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).delete
               (FIREWALL_NETWORK_NAME), TIME_WAIT);
    }
 

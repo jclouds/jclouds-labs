@@ -19,19 +19,42 @@
 
 package org.jclouds.googlecomputeengine.features;
 
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404;
+import org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.Kernel;
 import org.jclouds.googlecomputeengine.domain.ListPage;
+import org.jclouds.googlecomputeengine.functions.internal.ParseKernels;
 import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.oauth.v2.config.OAuthScopes;
+import org.jclouds.oauth.v2.filters.OAuthAuthenticator;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.SkipEncoding;
+import org.jclouds.rest.annotations.Transform;
 
 /**
- * Provides synchronous access to MachineTypes via their REST API.
- * <p/>
+ * Provides access to Kernels via their REST API.
  *
  * @author David Alves
  * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/kernels"/>
  */
+@SkipEncoding({'/', '='})
+@RequestFilters(OAuthAuthenticator.class)
+@Consumes(MediaType.APPLICATION_JSON)
 public interface KernelApi {
 
    /**
@@ -40,17 +63,34 @@ public interface KernelApi {
     * @param kernelName name of the kernel resource to return.
     * @return If successful, this method returns a Kernel resource
     */
-   public Kernel get(String kernelName);
+   @Named("Kernels:get")
+   @GET
+   @Path("/kernels/{kernel}")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Fallback(NullOnNotFoundOr404.class)
+   Kernel get(@PathParam("kernel") String kernelName);
 
    /**
     * @see KernelApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public ListPage<Kernel> listFirstPage();
+   @Named("Kernels:list")
+   @GET
+   @Path("/kernels")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseKernels.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<Kernel> listFirstPage();
 
    /**
     * @see KernelApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public ListPage<Kernel> listAtMarker(@Nullable String marker);
+   @Named("Kernels:list")
+   @GET
+   @Path("/kernels")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseKernels.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<Kernel> listAtMarker(@QueryParam("pageToken") @Nullable String marker);
 
    /**
     * Retrieves the list of kernel resources available to the specified project.
@@ -63,12 +103,26 @@ public interface KernelApi {
     * @see ListOptions
     * @see org.jclouds.googlecomputeengine.domain.ListPage
     */
-   public ListPage<Kernel> listAtMarker(String marker, ListOptions listOptions);
+   @Named("Kernels:list")
+   @GET
+   @Path("/kernels")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseKernels.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<Kernel> listAtMarker(@QueryParam("pageToken") @Nullable String marker,
+                                                   ListOptions listOptions);
 
    /**
     * @see KernelApi#list(org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public PagedIterable<Kernel> list();
+   @Named("Kernels:list")
+   @GET
+   @Path("/kernels")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseKernels.class)
+   @Transform(ParseKernels.ToPagedIterable.class)
+   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   PagedIterable<Kernel> list();
 
    /**
     * A paged version of KernelApi#list()
@@ -77,6 +131,13 @@ public interface KernelApi {
     * @see PagedIterable
     * @see KernelApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public PagedIterable<Kernel> list(ListOptions listOptions);
+   @Named("Kernels:list")
+   @GET
+   @Path("/kernels")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @ResponseParser(ParseKernels.class)
+   @Transform(ParseKernels.ToPagedIterable.class)
+   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   PagedIterable<Kernel> list(ListOptions listOptions);
 
 }

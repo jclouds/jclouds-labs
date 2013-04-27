@@ -18,7 +18,11 @@
  */
 package org.jclouds.googlecomputeengine;
 
-import com.google.common.annotations.Beta;
+import java.io.Closeable;
+
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
 import org.jclouds.googlecomputeengine.features.DiskApi;
 import org.jclouds.googlecomputeengine.features.FirewallApi;
 import org.jclouds.googlecomputeengine.features.ImageApi;
@@ -31,23 +35,21 @@ import org.jclouds.googlecomputeengine.features.ProjectApi;
 import org.jclouds.googlecomputeengine.features.ZoneApi;
 import org.jclouds.rest.annotations.Delegate;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import com.google.common.annotations.Beta;
 
 
 /**
- * Provides synchronous access to GoogleCompute.
+ * Provides access to GoogleCompute.
  * <p/>
  *
  * @author David Alves
- * @see GoogleComputeEngineAsyncApi
  * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13">api doc</a>
  */
 @Beta
-public interface GoogleComputeEngineApi {
+public interface GoogleComputeEngineApi extends Closeable {
 
    /**
-    * Provides synchronous access to Disk features
+    * Provides access to Disk features
     *
     * @param projectName the name of the project
     */
@@ -56,7 +58,7 @@ public interface GoogleComputeEngineApi {
    DiskApi getDiskApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Firewall features
+    * Provides access to Firewall features
     *
     * @param projectName the name of the project
     */
@@ -65,7 +67,7 @@ public interface GoogleComputeEngineApi {
    FirewallApi getFirewallApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Image features
+    * Provides access to Image features
     *
     * @param projectName the name of the project
     */
@@ -74,7 +76,7 @@ public interface GoogleComputeEngineApi {
    ImageApi getImageApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Instance features
+    * Provides access to Instance features
     *
     * @param projectName the name of the project
     */
@@ -83,7 +85,7 @@ public interface GoogleComputeEngineApi {
    InstanceApi getInstanceApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Kernel features
+    * Provides access to Kernel features
     *
     * @param projectName the name of the project
     */
@@ -92,7 +94,7 @@ public interface GoogleComputeEngineApi {
    KernelApi getKernelApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to MachineType features
+    * Provides access to MachineType features
     *
     * @param projectName the name of the project
     */
@@ -101,7 +103,7 @@ public interface GoogleComputeEngineApi {
    MachineTypeApi getMachineTypeApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Network features
+    * Provides access to Network features
     *
     * @param projectName the name of the project
     */
@@ -110,7 +112,7 @@ public interface GoogleComputeEngineApi {
    NetworkApi getNetworkApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Operation features
+    * Provides access to Operation features
     *
     * @param projectName the name of the project
     */
@@ -119,13 +121,13 @@ public interface GoogleComputeEngineApi {
    OperationApi getOperationApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides synchronous access to Project features
+    * Provides access to Project features
     */
    @Delegate
    ProjectApi getProjectApi();
 
    /**
-    * Provides synchronous access to Zone features
+    * Provides access to Zone features
     *
     * @param projectName the name of the project
     */

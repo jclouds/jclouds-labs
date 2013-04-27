@@ -19,19 +19,43 @@
 
 package org.jclouds.googlecomputeengine.features;
 
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_READONLY_SCOPE;
+import static org.jclouds.googlecomputeengine.GoogleComputeEngineConstants.COMPUTE_SCOPE;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404;
+import org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.domain.ListPage;
 import org.jclouds.googlecomputeengine.domain.Operation;
+import org.jclouds.googlecomputeengine.functions.internal.ParseOperations;
 import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.oauth.v2.config.OAuthScopes;
+import org.jclouds.oauth.v2.filters.OAuthAuthenticator;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.SkipEncoding;
+import org.jclouds.rest.annotations.Transform;
 
 /**
- * Provides synchronous access to Operations via their REST API.
- * <p/>
+ * Provides access to Operations via their REST API.
  *
  * @author David Alves
  * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/operations"/>
  */
+@SkipEncoding({'/', '='})
+@RequestFilters(OAuthAuthenticator.class)
 public interface OperationApi {
 
    /**
@@ -40,24 +64,49 @@ public interface OperationApi {
     * @param operationName name of the operation resource to return.
     * @return If successful, this method returns an Operation resource
     */
-   public Operation get(String operationName);
+   @Named("Operations:get")
+   @GET
+   @Path("/operations/{operation}")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   Operation get(@PathParam("operation") String operationName);
 
    /**
     * Deletes the specified operation resource.
     *
     * @param operationName name of the operation resource to delete.
     */
-   public void delete(String operationName);
+   @Named("Operations:delete")
+   @DELETE
+   @Path("/operations/{operation}")
+   @OAuthScopes(COMPUTE_SCOPE)
+   @Fallback(NullOnNotFoundOr404.class)
+   void delete(@PathParam("operation") String operationName);
 
    /**
     * @see OperationApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public ListPage<Operation> listFirstPage();
+   @Named("Operations:list")
+   @GET
+   @Path("/operations")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @ResponseParser(ParseOperations.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<Operation> listFirstPage();
 
    /**
     * @see OperationApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public ListPage<Operation> listAtMarker(@Nullable String marker);
+   @Named("Operations:list")
+   @GET
+   @Path("/operations")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @ResponseParser(ParseOperations.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<Operation> listAtMarker(@QueryParam("pageToken") @Nullable String marker);
 
    /**
     * Retrieves the listFirstPage of operation resources contained within the specified project.
@@ -70,13 +119,28 @@ public interface OperationApi {
     * @see ListOptions
     * @see org.jclouds.googlecomputeengine.domain.ListPage
     */
-   public ListPage<Operation> listAtMarker(@Nullable String marker, ListOptions listOptions);
-
+   @Named("Operations:list")
+   @GET
+   @Path("/operations")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @ResponseParser(ParseOperations.class)
+   @Fallback(EmptyIterableWithMarkerOnNotFoundOr404.class)
+   ListPage<Operation> listAtMarker(@QueryParam("pageToken") @Nullable String marker,
+                                                      ListOptions listOptions);
 
    /**
     * @see OperationApi#list(org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public PagedIterable<Operation> list();
+   @Named("Operations:list")
+   @GET
+   @Path("/operations")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @ResponseParser(ParseOperations.class)
+   @Transform(ParseOperations.ToPagedIterable.class)
+   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   PagedIterable<Operation> list();
 
    /**
     * A paged version of OperationApi#listFirstPage()
@@ -85,5 +149,14 @@ public interface OperationApi {
     * @see PagedIterable
     * @see OperationApi#listAtMarker(String, org.jclouds.googlecomputeengine.options.ListOptions)
     */
-   public PagedIterable<Operation> list(ListOptions listOptions);
+   @Named("Operations:list")
+   @GET
+   @Path("/operations")
+   @OAuthScopes(COMPUTE_READONLY_SCOPE)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @ResponseParser(ParseOperations.class)
+   @Transform(ParseOperations.ToPagedIterable.class)
+   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   PagedIterable<Operation> list(ListOptions listOptions);
+
 }

@@ -18,38 +18,18 @@
  */
 package org.jclouds.googlecomputeengine.config;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.base.Supplier;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Suppliers.compose;
+
+import java.net.URI;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.jclouds.domain.Credentials;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
-import org.jclouds.googlecomputeengine.GoogleComputeEngineAsyncApi;
 import org.jclouds.googlecomputeengine.domain.Operation;
-import org.jclouds.googlecomputeengine.features.DiskApi;
-import org.jclouds.googlecomputeengine.features.DiskAsyncApi;
-import org.jclouds.googlecomputeengine.features.FirewallApi;
-import org.jclouds.googlecomputeengine.features.FirewallAsyncApi;
-import org.jclouds.googlecomputeengine.features.ImageApi;
-import org.jclouds.googlecomputeengine.features.ImageAsyncApi;
-import org.jclouds.googlecomputeengine.features.InstanceApi;
-import org.jclouds.googlecomputeengine.features.InstanceAsyncApi;
-import org.jclouds.googlecomputeengine.features.KernelApi;
-import org.jclouds.googlecomputeengine.features.KernelAsyncApi;
-import org.jclouds.googlecomputeengine.features.MachineTypeApi;
-import org.jclouds.googlecomputeengine.features.MachineTypeAsyncApi;
-import org.jclouds.googlecomputeengine.features.NetworkApi;
-import org.jclouds.googlecomputeengine.features.NetworkAsyncApi;
-import org.jclouds.googlecomputeengine.features.OperationApi;
-import org.jclouds.googlecomputeengine.features.OperationAsyncApi;
-import org.jclouds.googlecomputeengine.features.ProjectApi;
-import org.jclouds.googlecomputeengine.features.ProjectAsyncApi;
-import org.jclouds.googlecomputeengine.features.ZoneApi;
-import org.jclouds.googlecomputeengine.features.ZoneAsyncApi;
 import org.jclouds.googlecomputeengine.handlers.GoogleComputeEngineErrorHandler;
 import org.jclouds.googlecomputeengine.predicates.OperationDonePredicate;
 import org.jclouds.http.HttpErrorHandler;
@@ -60,40 +40,25 @@ import org.jclouds.http.annotation.ServerError;
 import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.location.Provider;
-import org.jclouds.rest.ConfiguresRestClient;
-import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.net.URI;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.base.Suppliers.compose;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Splitter;
+import com.google.common.base.Supplier;
+import com.google.common.collect.Iterables;
+import com.google.inject.Provides;
+import com.google.inject.TypeLiteral;
 
 /**
  * Configures the GoogleCompute connection.
  *
  * @author David Alves
  */
-@ConfiguresRestClient
-public class GoogleComputeEngineRestClientModule extends RestClientModule<GoogleComputeEngineApi, GoogleComputeEngineAsyncApi> {
-   public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>>builder()
-           .put(DiskApi.class, DiskAsyncApi.class)
-           .put(FirewallApi.class, FirewallAsyncApi.class)
-           .put(ImageApi.class, ImageAsyncApi.class)
-           .put(InstanceApi.class, InstanceAsyncApi.class)
-           .put(KernelApi.class, KernelAsyncApi.class)
-           .put(MachineTypeApi.class, MachineTypeAsyncApi.class)
-           .put(NetworkApi.class, NetworkAsyncApi.class)
-           .put(OperationApi.class, OperationAsyncApi.class)
-           .put(ProjectApi.class, ProjectAsyncApi.class)
-           .put(ZoneApi.class, ZoneAsyncApi.class)
-           .build();
-
-   public GoogleComputeEngineRestClientModule() {
-      super(DELEGATE_MAP);
+@ConfiguresHttpApi
+public class GoogleComputeEngineHttpApiModule extends HttpApiModule<GoogleComputeEngineApi> {
+   public GoogleComputeEngineHttpApiModule() {
    }
 
    @Override
@@ -164,9 +129,4 @@ public class GoogleComputeEngineRestClientModule extends RestClientModule<Google
          }
       };
    }
-
-//   @Override
-//   protected void installLocations() {
-//      install(new LocationModule());
-//   }
 }

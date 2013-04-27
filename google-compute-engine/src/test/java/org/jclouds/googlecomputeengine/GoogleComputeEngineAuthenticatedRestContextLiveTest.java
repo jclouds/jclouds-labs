@@ -19,17 +19,14 @@
 
 package org.jclouds.googlecomputeengine;
 
-import com.google.common.reflect.TypeToken;
-import org.jclouds.oauth.v2.BaseOauthAuthenticatedRestContextLiveTest;
-import org.jclouds.rest.RestContext;
+import org.jclouds.oauth.v2.internal.BaseOAuthAuthenticatedApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
  * @author David Alves
  */
 @Test(groups = "live")
-public class GoogleComputeEngineAuthenticatedRestContextLiveTest extends BaseOauthAuthenticatedRestContextLiveTest {
-
+public class GoogleComputeEngineAuthenticatedRestContextLiveTest extends BaseOAuthAuthenticatedApiLiveTest<GoogleComputeEngineApi> {
 
    public GoogleComputeEngineAuthenticatedRestContextLiveTest() {
       provider = "google-compute-engine";
@@ -38,11 +35,5 @@ public class GoogleComputeEngineAuthenticatedRestContextLiveTest extends BaseOau
    @Override
    public String getScopes() {
       return GoogleComputeEngineConstants.COMPUTE_SCOPE;
-   }
-
-
-   @Override
-   protected TypeToken<RestContext<GoogleComputeEngineApi, GoogleComputeEngineAsyncApi>> contextType() {
-      return GoogleComputeEngineApiMetadata.CONTEXT_TOKEN;
    }
 }
