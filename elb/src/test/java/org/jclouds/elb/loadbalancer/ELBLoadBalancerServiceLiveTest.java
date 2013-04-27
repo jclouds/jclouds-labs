@@ -18,20 +18,30 @@
  */
 package org.jclouds.elb.loadbalancer;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertEquals;
+
+import java.net.Proxy;
+import java.net.URI;
 
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.elb.ELBApi;
-import org.jclouds.elb.ELBAsyncApi;
 import org.jclouds.elb.domain.LoadBalancer;
 import org.jclouds.loadbalancer.BaseLoadBalancerServiceLiveTest;
-import org.jclouds.rest.RestContext;
+import org.jclouds.predicates.SocketOpen;
+import org.jclouds.proxy.ProxyForURI;
+import org.jclouds.rest.ApiContext;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.TypeLiteral;
 
 /**
  * 
@@ -50,7 +60,7 @@ public class ELBLoadBalancerServiceLiveTest extends BaseLoadBalancerServiceLiveT
 
    @Override
    protected void validateNodesInLoadBalancer() {
-      RestContext<ELBApi, ELBAsyncApi> elbContext = view.unwrap();
+      ApiContext<ELBApi> elbContext = view.unwrap();
       // TODO create a LoadBalancer object and an appropriate list method so that this
       // does not have to be EC2 specific code
       ELBApi elbApi = elbContext.getApi();
@@ -67,4 +77,15 @@ public class ELBLoadBalancerServiceLiveTest extends BaseLoadBalancerServiceLiveT
       }
    }
 
+   @Override
+   protected void buildSocketTester() {
+      SocketOpen socketOpen = Guice.createInjector(new AbstractModule(){
+         @Override
+         protected void configure() {
+            bind(new TypeLiteral<Function<URI, Proxy>>() {
+            }).to(ProxyForURI.class);
+         }
+      }).getInstance(SocketOpen.class);
+      socketTester = retry(socketOpen, 60, 1, SECONDS);
+   }
 }

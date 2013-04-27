@@ -113,6 +113,6 @@ public class LoadBalancerApiLiveTest extends BaseELBApiLiveTest {
    }
 
    protected LoadBalancerApi api() {
-      return context.getApi().getLoadBalancerApi();
+      return api.getLoadBalancerApi();
    }
 }

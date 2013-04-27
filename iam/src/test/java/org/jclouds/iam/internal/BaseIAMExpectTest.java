@@ -21,8 +21,8 @@ package org.jclouds.iam.internal;
 import java.util.TimeZone;
 
 import org.jclouds.date.DateService;
-import org.jclouds.iam.config.IAMRestClientModule;
-import org.jclouds.rest.ConfiguresRestClient;
+import org.jclouds.iam.config.IAMHttpApiModule;
+import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 import com.google.inject.Module;
@@ -38,8 +38,8 @@ public class BaseIAMExpectTest<T> extends BaseRestApiExpectTest<T> {
       TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"));
    }
 
-   @ConfiguresRestClient
-   private static final class TestIAMRestClientModule extends IAMRestClientModule {
+   @ConfiguresHttpApi
+   private static final class TestIAMHttpApiModule extends IAMHttpApiModule {
 
       @Override
       protected String provideTimeStamp(final DateService dateService) {
@@ -49,6 +49,6 @@ public class BaseIAMExpectTest<T> extends BaseRestApiExpectTest<T> {
 
    @Override
    protected Module createModule() {
-      return new TestIAMRestClientModule();
+      return new TestIAMHttpApiModule();
    }
 }

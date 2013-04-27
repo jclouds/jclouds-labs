@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 
 import org.jclouds.collect.IterableWithMarker;
-import org.jclouds.collect.internal.CallerArg0ToPagedIterable;
+import org.jclouds.collect.internal.Arg0ToPagedIterable;
 import org.jclouds.rds.RDSApi;
 import org.jclouds.rds.domain.SecurityGroup;
 import org.jclouds.rds.features.SecurityGroupApi;
@@ -31,12 +31,13 @@ import org.jclouds.rds.options.ListSecurityGroupsOptions;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 
 /**
  * @author Adrian Cole
  */
 @Beta
-public class SecurityGroupsToPagedIterable extends CallerArg0ToPagedIterable<SecurityGroup, SecurityGroupsToPagedIterable> {
+public class SecurityGroupsToPagedIterable extends Arg0ToPagedIterable.FromCaller<SecurityGroup, SecurityGroupsToPagedIterable> {
 
    private final RDSApi api;
 
@@ -46,8 +47,9 @@ public class SecurityGroupsToPagedIterable extends CallerArg0ToPagedIterable<Sec
    }
 
    @Override
-   protected Function<Object, IterableWithMarker<SecurityGroup>> markerToNextForCallingArg0(final String arg0) {
-      final SecurityGroupApi securityGroupApi = api.getSecurityGroupApiForRegion(arg0);
+   protected Function<Object, IterableWithMarker<SecurityGroup>> markerToNextForArg0(Optional<Object> arg0) {
+      final String region = arg0.isPresent() ? arg0.get().toString() : null;
+      final SecurityGroupApi securityGroupApi = api.getSecurityGroupApiForRegion(region);
       return new Function<Object, IterableWithMarker<SecurityGroup>>() {
 
          @Override
@@ -57,9 +59,8 @@ public class SecurityGroupsToPagedIterable extends CallerArg0ToPagedIterable<Sec
 
          @Override
          public String toString() {
-            return "listSecurityGroupsInRegion(" + arg0 + ")";
+            return "listSecurityGroupsInRegion(" + region + ")";
          }
       };
    }
-
 }

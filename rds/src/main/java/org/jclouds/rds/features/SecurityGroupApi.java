@@ -18,20 +18,40 @@
  */
 package org.jclouds.rds.features;
 
+import static org.jclouds.aws.reference.FormParameters.ACTION;
+
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rds.domain.SecurityGroup;
+import org.jclouds.rds.functions.SecurityGroupsToPagedIterable;
 import org.jclouds.rds.options.ListSecurityGroupsOptions;
+import org.jclouds.rds.xml.DescribeDBSecurityGroupsResultHandler;
+import org.jclouds.rds.xml.SecurityGroupHandler;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
  * Provides access to Amazon RDS via the Query API
  * <p/>
  * 
  * @see <a href="http://docs.amazonwebservices.com/AmazonRDS/latest/APIReference" >doc</a>
- * @see SecurityGroupAsyncApi
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface SecurityGroupApi {
    /**
     * Creates a new DB Security Group. DB Security Groups control access to a DB Instance.
@@ -46,7 +66,13 @@ public interface SecurityGroupApi {
     * 
     * @return the new security group
     */
-   SecurityGroup createWithNameAndDescription(String name, String description);
+   @Named("CreateDBSecurityGroup")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "CreateDBSecurityGroup")
+   SecurityGroup createWithNameAndDescription(@FormParam("DBSecurityGroupName") String name,
+            @FormParam("DBSecurityGroupDescription") String description);
 
    /**
     * Creates a new DB Security Group. DB Security Groups control access to a DB Instance.
@@ -64,7 +90,13 @@ public interface SecurityGroupApi {
     *           The description for the DB Security Group.
     * @return the new security group
     */
-   SecurityGroup createInVPCWithNameAndDescription(String vpcId, String name, String description);
+   @Named("CreateDBSecurityGroup")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "CreateDBSecurityGroup")
+   SecurityGroup createInVPCWithNameAndDescription(@FormParam("EC2VpcId") String vpcId,
+            @FormParam("DBSecurityGroupName") String name, @FormParam("DBSecurityGroupDescription") String description);
 
    /**
     * Retrieves information about the specified {@link SecurityGroup}.
@@ -73,8 +105,27 @@ public interface SecurityGroupApi {
     *           Name of the security group to get information about.
     * @return null if not found
     */
+   @Named("DescribeDBSecurityGroups")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = "Action", values = "DescribeDBSecurityGroups")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   SecurityGroup get(String name);
+   SecurityGroup get(@FormParam("DBSecurityGroupName") String name);
+
+   /**
+    * Returns a list of {@link SecurityGroup}s.
+    * 
+    * @return the response object
+    */
+   @Named("DescribeDBSecurityGroups")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeDBSecurityGroupsResultHandler.class)
+   @Transform(SecurityGroupsToPagedIterable.class)
+   @FormParams(keys = "Action", values = "DescribeDBSecurityGroups")
+   PagedIterable<SecurityGroup> list();
 
    /**
     * Returns a list of {@link SecurityGroup}s.
@@ -87,14 +138,12 @@ public interface SecurityGroupApi {
     * 
     * @return the response object
     */
+   @Named("DescribeDBSecurityGroups")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeDBSecurityGroupsResultHandler.class)
+   @FormParams(keys = "Action", values = "DescribeDBSecurityGroups")
    IterableWithMarker<SecurityGroup> list(ListSecurityGroupsOptions options);
-
-   /**
-    * Returns a list of {@link SecurityGroup}s.
-    * 
-    * @return the response object
-    */
-   PagedIterable<SecurityGroup> list();
 
    /**
     * Enables ingress to a DBSecurityGroup to an IP range, if the application accessing your
@@ -106,7 +155,13 @@ public interface SecurityGroupApi {
     *           The IP range to authorize.
     * @return updated security group, noting the authorization status may not be complete
     */
-   SecurityGroup authorizeIngressToIPRange(String name, String CIDR);
+   @Named("AuthorizeDBSecurityGroupIngress")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "AuthorizeDBSecurityGroupIngress")
+   SecurityGroup authorizeIngressToIPRange(@FormParam("DBSecurityGroupName") String name,
+            @FormParam("CIDRIP") String CIDR);
 
    /**
     * Enables ingress to a DBSecurityGroup if the application using the database is running on EC2
@@ -126,8 +181,15 @@ public interface SecurityGroupApi {
     *           EC2SecurityGroupName parameter. The AWS Access Key ID is not an acceptable value.
     * @return updated security group, noting the authorization status may not be complete
     */
-   SecurityGroup authorizeIngressToEC2SecurityGroupOfOwner(String name, String ec2SecurityGroupName,
-            String ec2SecurityGroupOwnerId);
+   @Named("AuthorizeDBSecurityGroupIngress")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "AuthorizeDBSecurityGroupIngress")
+   SecurityGroup authorizeIngressToEC2SecurityGroupOfOwner(
+            @FormParam("DBSecurityGroupName") String name,
+            @FormParam("EC2SecurityGroupName") String ec2SecurityGroupName,
+            @FormParam("EC2SecurityGroupOwnerId") String ec2SecurityGroupOwnerId);
 
    /**
     * Enables ingress to a DBSecurityGroup if the application using the database is running on VPC
@@ -144,7 +206,13 @@ public interface SecurityGroupApi {
     *           Id of the EC2 Security Group to authorize.
     * @return updated security group, noting the authorization status may not be complete
     */
-   SecurityGroup authorizeIngressToVPCSecurityGroup(String name, String vpcSecurityGroupId);
+   @Named("AuthorizeDBSecurityGroupIngress")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "AuthorizeDBSecurityGroupIngress")
+   SecurityGroup authorizeIngressToVPCSecurityGroup(@FormParam("DBSecurityGroupName") String name,
+            @FormParam("EC2SecurityGroupId") String vpcSecurityGroupId);
 
    /**
     * Revokes ingress from a DBSecurityGroup for previously authorized IP range. 
@@ -155,7 +223,13 @@ public interface SecurityGroupApi {
     *           The IP range to revoke.
     * @return updated security group, noting the authorization status may not be complete
     */
-   SecurityGroup revokeIngressFromIPRange(String name, String CIDR);
+   @Named("RevokeDBSecurityGroupIngress")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "RevokeDBSecurityGroupIngress")
+   SecurityGroup revokeIngressFromIPRange(@FormParam("DBSecurityGroupName") String name,
+            @FormParam("CIDRIP") String CIDR);
 
    /**
     * Revokes ingress from a DBSecurityGroup for previously authorized EC2 Security Group. 
@@ -169,8 +243,15 @@ public interface SecurityGroupApi {
     *           EC2SecurityGroupName parameter. The AWS Access Key ID is not an acceptable value.
     * @return updated security group, noting the authorization status may not be complete
     */
-   SecurityGroup revokeIngressFromEC2SecurityGroupOfOwner(String name, String ec2SecurityGroupName,
-            String ec2SecurityGroupOwnerId);
+   @Named("RevokeDBSecurityGroupIngress")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "RevokeDBSecurityGroupIngress")
+   SecurityGroup revokeIngressFromEC2SecurityGroupOfOwner(
+            @FormParam("DBSecurityGroupName") String name,
+            @FormParam("EC2SecurityGroupName") String ec2SecurityGroupName,
+            @FormParam("EC2SecurityGroupOwnerId") String ec2SecurityGroupOwnerId);
 
    /**
     * Revokes ingress from a DBSecurityGroup for previously authorized VPC Security Group. 
@@ -181,8 +262,14 @@ public interface SecurityGroupApi {
     *           Id of the EC2 Security Group to revoke.
     * @return updated security group, noting the authorization status may not be complete
     */
-   SecurityGroup revokeIngressFromVPCSecurityGroup(String name, String vpcSecurityGroupId);
-
+   @Named("RevokeDBSecurityGroupIngress")
+   @POST
+   @Path("/")
+   @XMLResponseParser(SecurityGroupHandler.class)
+   @FormParams(keys = ACTION, values = "RevokeDBSecurityGroupIngress")
+   SecurityGroup revokeIngressFromVPCSecurityGroup(@FormParam("DBSecurityGroupName") String name,
+            @FormParam("EC2SecurityGroupId") String vpcSecurityGroupId);
+   
    /**
     * Deletes a DB security group.
     * 
@@ -201,6 +288,10 @@ public interface SecurityGroupApi {
     * 
     *           You cannot delete the default security group.
     */
-   void delete(String name);
-
+   @Named("DeleteDBSecurityGroup")
+   @POST
+   @Path("/")
+   @Fallback(VoidOnNotFoundOr404.class)
+   @FormParams(keys = ACTION, values = "DeleteDBSecurityGroup")
+   void delete(@FormParam("DBSecurityGroupName") String name);
 }

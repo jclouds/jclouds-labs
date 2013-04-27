@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 
 import org.jclouds.collect.IterableWithMarker;
-import org.jclouds.collect.internal.CallerArg0ToPagedIterable;
+import org.jclouds.collect.internal.Arg0ToPagedIterable;
 import org.jclouds.rds.RDSApi;
 import org.jclouds.rds.domain.SubnetGroup;
 import org.jclouds.rds.features.SubnetGroupApi;
@@ -31,12 +31,13 @@ import org.jclouds.rds.options.ListSubnetGroupsOptions;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 
 /**
  * @author Adrian Cole
  */
 @Beta
-public class SubnetGroupsToPagedIterable extends CallerArg0ToPagedIterable<SubnetGroup, SubnetGroupsToPagedIterable> {
+public class SubnetGroupsToPagedIterable extends Arg0ToPagedIterable.FromCaller<SubnetGroup, SubnetGroupsToPagedIterable> {
 
    private final RDSApi api;
 
@@ -46,8 +47,9 @@ public class SubnetGroupsToPagedIterable extends CallerArg0ToPagedIterable<Subne
    }
 
    @Override
-   protected Function<Object, IterableWithMarker<SubnetGroup>> markerToNextForCallingArg0(final String arg0) {
-      final SubnetGroupApi subnetGroupApi = api.getSubnetGroupApiForRegion(arg0);
+   protected Function<Object, IterableWithMarker<SubnetGroup>> markerToNextForArg0(Optional<Object> arg0) {
+      final String region = arg0.isPresent() ? arg0.get().toString() : null;
+      final SubnetGroupApi subnetGroupApi = api.getSubnetGroupApiForRegion(region);
       return new Function<Object, IterableWithMarker<SubnetGroup>>() {
 
          @Override
@@ -57,9 +59,8 @@ public class SubnetGroupsToPagedIterable extends CallerArg0ToPagedIterable<Subne
 
          @Override
          public String toString() {
-            return "listSubnetGroupsInRegion(" + arg0 + ")";
+            return "listSubnetGroupsInRegion(" + region + ")";
          }
       };
    }
-
 }

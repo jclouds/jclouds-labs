@@ -18,29 +18,17 @@
  */
 package org.jclouds.rds.internal;
 
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.rds.RDSApiMetadata;
-import org.jclouds.rds.RDSAsyncApi;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.rds.RDSApi;
-import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * 
  * @author Adrian Cole
  */
 @Test(groups = "live")
-public class BaseRDSApiLiveTest extends BaseContextLiveTest<RestContext<RDSApi, RDSAsyncApi>> {
-
+public class BaseRDSApiLiveTest extends BaseApiLiveTest<RDSApi> {
    public BaseRDSApiLiveTest() {
       provider = "rds";
    }
-   
-   @Override
-   protected TypeToken<RestContext<RDSApi, RDSAsyncApi>> contextType() {
-      return RDSApiMetadata.CONTEXT_TOKEN;
-   }
-
 }

@@ -54,8 +54,8 @@ public class SecurityGroupApiLiveTest extends BaseRDSApiLiveTest {
 
    @BeforeClass(groups = "live")
    @Override
-   public void setupContext() {
-      super.setupContext();
+   public void setup() {
+      super.setup();
       ipRangesAuthorized = retry(new Predicate<SecurityGroup>() {
          public boolean apply(SecurityGroup input) {
             return Iterables.all(api().get(input.getName()).getIPRanges(), new Predicate<Authorization>() {
@@ -115,9 +115,9 @@ public class SecurityGroupApiLiveTest extends BaseRDSApiLiveTest {
 
    @Override
    @AfterClass(groups = "live")
-   protected void tearDownContext() {
+   protected void tearDown() {
       api().delete(SECURITYGROUP);
-      super.tearDownContext();
+      super.tearDown();
    }
 
    static void checkSecurityGroup(SecurityGroup securityGroup) {
@@ -159,6 +159,6 @@ public class SecurityGroupApiLiveTest extends BaseRDSApiLiveTest {
    }
 
    protected SecurityGroupApi api() {
-      return context.getApi().getSecurityGroupApi();
+      return api.getSecurityGroupApi();
    }
 }

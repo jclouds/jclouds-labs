@@ -18,41 +18,21 @@
  */
 package org.jclouds.iam;
 
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.rest.RestContext;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertNotNull;
 
-import com.google.common.reflect.TypeToken;
+import org.jclouds.iam.internal.BaseIAMApiLiveTest;
+import org.testng.annotations.Test;
 
 /**
  * Tests behavior of {@code IAM}.
  * 
  * @author Adrian Cole
  */
-public class IAMApiLiveTest extends BaseContextLiveTest<RestContext<? extends IAMApi, ? extends IAMAsyncApi>> {
+@Test(groups = "live", singleThreaded = true, testName = "IAMApiLiveTest")
+public class IAMApiLiveTest extends BaseIAMApiLiveTest {
 
-   public IAMApiLiveTest() {
-      provider = "iam";
+   protected void testGetCurrentUser() {
+      assertNotNull(api.getCurrentUser());
    }
-
-   private IAMApi api;
-
-   @Override
-   @BeforeClass(groups = { "integration", "live" })
-   public void setupContext() {
-      super.setupContext();
-      api = context.getApi();
-   }
-
-   @Override
-   protected TypeToken<RestContext<? extends IAMApi, ? extends IAMAsyncApi>> contextType() {
-      return IAMApiMetadata.CONTEXT_TOKEN;
-   }
-
-   @Test
-   protected void testWired() {
-      api.getCurrentUser();
-  }
 
 }

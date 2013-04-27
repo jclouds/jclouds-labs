@@ -25,10 +25,10 @@ import java.util.Map;
 
 import org.jclouds.aws.domain.Region;
 import org.jclouds.date.DateService;
-import org.jclouds.elb.config.ELBRestClientModule;
+import org.jclouds.elb.config.ELBHttpApiModule;
 import org.jclouds.location.config.LocationModule;
 import org.jclouds.location.suppliers.RegionIdToURISupplier;
-import org.jclouds.rest.ConfiguresRestClient;
+import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 import org.jclouds.util.Suppliers2;
 
@@ -46,8 +46,8 @@ public class BaseELBExpectTest<T> extends BaseRestApiExpectTest<T> {
       provider = "elb";
    }
    
-   @ConfiguresRestClient
-   private static final class TestELBRestClientModule extends ELBRestClientModule {
+   @ConfiguresHttpApi
+   private static final class TestELBHttpApiModule extends ELBHttpApiModule {
 
       @Override
       protected void installLocations() {
@@ -73,6 +73,6 @@ public class BaseELBExpectTest<T> extends BaseRestApiExpectTest<T> {
 
    @Override
    protected Module createModule() {
-      return new TestELBRestClientModule();
+      return new TestELBHttpApiModule();
    }
 }

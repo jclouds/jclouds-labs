@@ -18,7 +18,10 @@
  */
 package org.jclouds.elb;
 
+import java.io.Closeable;
 import java.util.Set;
+
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.elb.features.AvailabilityZoneApi;
 import org.jclouds.elb.features.InstanceApi;
 import org.jclouds.elb.features.LoadBalancerApi;
@@ -28,6 +31,8 @@ import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpointOrProviderIfNull;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.VirtualHost;
 
 import com.google.common.annotations.Beta;
 import com.google.inject.Provides;
@@ -37,10 +42,11 @@ import com.google.inject.Provides;
  * <p/>
  * 
  * @author Adrian Cole
- * @see ELBAsyncApi
  */
 @Beta
-public interface ELBApi {
+@RequestFilters(FormSigner.class)
+@VirtualHost
+public interface ELBApi extends Closeable {
    /**
     * 
     * @return the Region codes configured
@@ -50,7 +56,7 @@ public interface ELBApi {
    Set<String> getConfiguredRegions();
 
    /**
-    * Provides synchronous access to LoadBalancer features.
+    * Provides access to LoadBalancer features.
     */
    @Delegate
    LoadBalancerApi getLoadBalancerApi();
@@ -60,7 +66,7 @@ public interface ELBApi {
             @EndpointParam(parser = RegionToEndpointOrProviderIfNull.class) @Nullable String region);
 
    /**
-    * Provides synchronous access to Policy features.
+    * Provides access to Policy features.
     */
    @Delegate
    PolicyApi getPolicyApi();
@@ -70,7 +76,7 @@ public interface ELBApi {
             @EndpointParam(parser = RegionToEndpointOrProviderIfNull.class) @Nullable String region);
 
    /**
-    * Provides synchronous access to Instance features.
+    * Provides access to Instance features.
     */
    @Delegate
    InstanceApi getInstanceApi();
@@ -80,7 +86,7 @@ public interface ELBApi {
             @EndpointParam(parser = RegionToEndpointOrProviderIfNull.class) @Nullable String region);
    
    /**
-    * Provides synchronous access to Zone features.
+    * Provides access to Zone features.
     */
    @Delegate
    AvailabilityZoneApi getAvailabilityZoneApi();

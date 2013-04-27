@@ -18,30 +18,17 @@
  */
 package org.jclouds.iam.internal;
 
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.iam.IAMApiMetadata;
-import org.jclouds.iam.IAMAsyncApi;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.iam.IAMApi;
-import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * 
  * @author Adrian Cole
  */
 @Test(groups = "live")
-public class BaseIAMApiLiveTest extends
-         BaseContextLiveTest<RestContext<? extends IAMApi, ? extends IAMAsyncApi>> {
-
+public class BaseIAMApiLiveTest extends BaseApiLiveTest<IAMApi> {
    public BaseIAMApiLiveTest() {
       provider = "iam";
    }
-
-   @Override
-   protected TypeToken<RestContext<? extends IAMApi, ? extends IAMAsyncApi>> contextType() {
-      return IAMApiMetadata.CONTEXT_TOKEN;
-   }
-
 }
