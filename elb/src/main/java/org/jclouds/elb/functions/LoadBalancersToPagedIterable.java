@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 
 import org.jclouds.collect.IterableWithMarker;
-import org.jclouds.collect.internal.CallerArg0ToPagedIterable;
+import org.jclouds.collect.internal.Arg0ToPagedIterable;
 import org.jclouds.elb.ELBApi;
 import org.jclouds.elb.domain.LoadBalancer;
 import org.jclouds.elb.features.LoadBalancerApi;
@@ -31,12 +31,13 @@ import org.jclouds.elb.options.ListLoadBalancersOptions;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 
 /**
  * @author Adrian Cole
  */
 @Beta
-public class LoadBalancersToPagedIterable extends CallerArg0ToPagedIterable<LoadBalancer, LoadBalancersToPagedIterable> {
+public class LoadBalancersToPagedIterable extends Arg0ToPagedIterable.FromCaller<LoadBalancer, LoadBalancersToPagedIterable> {
 
    private final ELBApi api;
 
@@ -46,8 +47,9 @@ public class LoadBalancersToPagedIterable extends CallerArg0ToPagedIterable<Load
    }
 
    @Override
-   protected Function<Object, IterableWithMarker<LoadBalancer>> markerToNextForCallingArg0(final String arg0) {
-      final LoadBalancerApi loadBalancerApi = api.getLoadBalancerApiForRegion(arg0);
+   protected Function<Object, IterableWithMarker<LoadBalancer>> markerToNextForArg0(Optional<Object> arg0) {
+      final String region = arg0.isPresent() ? arg0.get().toString() : null;
+      final LoadBalancerApi loadBalancerApi = api.getLoadBalancerApiForRegion(region);
       return new Function<Object, IterableWithMarker<LoadBalancer>>() {
 
          @Override
@@ -57,9 +59,8 @@ public class LoadBalancersToPagedIterable extends CallerArg0ToPagedIterable<Load
 
          @Override
          public String toString() {
-            return "listLoadBalancersInRegion(" + arg0 + ")";
+            return "listLoadBalancersInRegion(" + region + ")";
          }
       };
    }
-
 }
