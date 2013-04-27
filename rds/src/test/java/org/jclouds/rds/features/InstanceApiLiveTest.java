@@ -26,10 +26,13 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.net.Proxy;
+import java.net.URI;
 import java.util.logging.Logger;
 
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.predicates.SocketOpen;
+import org.jclouds.proxy.ProxyForURI;
 import org.jclouds.rds.domain.Authorization;
 import org.jclouds.rds.domain.Authorization.Status;
 import org.jclouds.rds.domain.Instance;
@@ -42,9 +45,13 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.net.HostAndPort;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.TypeLiteral;
 
 /**
  * @author Adrian Cole
@@ -61,10 +68,16 @@ public class InstanceApiLiveTest extends BaseRDSApiLiveTest {
 
    @BeforeClass(groups = "live")
    @Override
-   public void setupContext() {
-      super.setupContext();
+   public void setup() {
+      super.setup();
       securityGroup = createSecurityGroupAndAuthorizeIngressToAll(INSTANCE);
-      SocketOpen socketOpen = context.utils().injector().getInstance(SocketOpen.class);
+      SocketOpen socketOpen = Guice.createInjector(new AbstractModule(){
+         @Override
+         protected void configure() {
+            bind(new TypeLiteral<Function<URI, Proxy>>() {
+            }).to(ProxyForURI.class);
+         }
+      }).getInstance(SocketOpen.class);
       socketTester = retry(socketOpen, 180, 1, 1, SECONDS);
       instanceAvailable = retry(new Predicate<Instance>() {
          public boolean apply(Instance input) {
@@ -153,13 +166,13 @@ public class InstanceApiLiveTest extends BaseRDSApiLiveTest {
 
    @Override
    @AfterClass(groups = "live")
-   protected void tearDownContext() {
+   protected void tearDown() {
       try {
          api().delete(INSTANCE);
       } finally {
          sgApi().delete(INSTANCE);
       }
-      super.tearDownContext();
+      super.tearDown();
    }
 
    private void checkInstance(Instance instance) {
@@ -199,10 +212,10 @@ public class InstanceApiLiveTest extends BaseRDSApiLiveTest {
    }
 
    protected InstanceApi api() {
-      return context.getApi().getInstanceApi();
+      return api.getInstanceApi();
    }
 
    protected SecurityGroupApi sgApi() {
-      return context.getApi().getSecurityGroupApi();
+      return api.getSecurityGroupApi();
    }
 }

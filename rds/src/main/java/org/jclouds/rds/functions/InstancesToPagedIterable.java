@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 
 import org.jclouds.collect.IterableWithMarker;
-import org.jclouds.collect.internal.CallerArg0ToPagedIterable;
+import org.jclouds.collect.internal.Arg0ToPagedIterable;
 import org.jclouds.rds.RDSApi;
 import org.jclouds.rds.domain.Instance;
 import org.jclouds.rds.features.InstanceApi;
@@ -31,12 +31,13 @@ import org.jclouds.rds.options.ListInstancesOptions;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 
 /**
  * @author Adrian Cole
  */
 @Beta
-public class InstancesToPagedIterable extends CallerArg0ToPagedIterable<Instance, InstancesToPagedIterable> {
+public class InstancesToPagedIterable extends Arg0ToPagedIterable.FromCaller<Instance, InstancesToPagedIterable> {
 
    private final RDSApi api;
 
@@ -46,8 +47,9 @@ public class InstancesToPagedIterable extends CallerArg0ToPagedIterable<Instance
    }
 
    @Override
-   protected Function<Object, IterableWithMarker<Instance>> markerToNextForCallingArg0(final String arg0) {
-      final InstanceApi instanceApi = api.getInstanceApiForRegion(arg0);
+   protected Function<Object, IterableWithMarker<Instance>> markerToNextForArg0(Optional<Object> arg0) {
+      final String region = arg0.isPresent() ? arg0.get().toString() : null;
+      final InstanceApi instanceApi = api.getInstanceApiForRegion(region);
       return new Function<Object, IterableWithMarker<Instance>>() {
 
          @Override
@@ -57,9 +59,8 @@ public class InstancesToPagedIterable extends CallerArg0ToPagedIterable<Instance
 
          @Override
          public String toString() {
-            return "listInstancesInRegion(" + arg0 + ")";
+            return "listInstancesInRegion(" + region + ")";
          }
       };
    }
-
 }

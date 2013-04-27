@@ -16,23 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.rds.internal;
+package org.jclouds.rds.config;
 
-import java.util.Properties;
 
-import org.jclouds.rds.RDSAsyncApi;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.http.HttpResponse;
-
-import com.google.common.base.Function;
-import com.google.inject.Module;
+import org.jclouds.aws.config.FormSigningHttpApiModule;
+import org.jclouds.rds.RDSApi;
+import org.jclouds.rest.ConfiguresHttpApi;
 
 /**
+ * Configures the RDS connection.
  * 
  * @author Adrian Cole
  */
-public class BaseRDSAsyncApiExpectTest extends BaseRDSExpectTest<RDSAsyncApi> {
-   public RDSAsyncApi createApi(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {
-      return createInjector(fn, module, props).getInstance(RDSAsyncApi.class);
+@ConfiguresHttpApi
+public class RDSHttpApiModule extends FormSigningHttpApiModule<RDSApi> {
+   public RDSHttpApiModule() {
    }
 }

@@ -18,21 +18,43 @@
  */
 package org.jclouds.rds.features;
 
+import static org.jclouds.aws.reference.FormParameters.ACTION;
+
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rds.RDSFallbacks.NullOnStateDeletingNotFoundOr404;
+import org.jclouds.rds.binders.BindInstanceRequestToFormParams;
 import org.jclouds.rds.domain.Instance;
 import org.jclouds.rds.domain.InstanceRequest;
+import org.jclouds.rds.functions.InstancesToPagedIterable;
 import org.jclouds.rds.options.ListInstancesOptions;
+import org.jclouds.rds.xml.DescribeDBInstancesResultHandler;
+import org.jclouds.rds.xml.InstanceHandler;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
  * Provides access to Amazon RDS via the Query API
  * <p/>
  * 
  * @see <a href="http://docs.amazonwebservices.com/AmazonRDS/latest/APIReference" >doc</a>
- * @see InstanceAsyncApi
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface InstanceApi {
    /**
     * Creates a new DB instance in a random, system-chosen Availability Zone in the endpoint's
@@ -44,7 +66,13 @@ public interface InstanceApi {
     *           parameters to create the instance with
     * @return new instance being created
     */
-   Instance create(String id, InstanceRequest instanceRequest);
+   @Named("CreateDBInstance")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceHandler.class)
+   @FormParams(keys = ACTION, values = "CreateDBInstance")
+   Instance create(@FormParam("DBInstanceIdentifier") String id,
+            @BinderParam(BindInstanceRequestToFormParams.class) InstanceRequest instanceRequest);
 
    /**
     * Creates a new DB instance in the specified {@code availabilityZone}
@@ -57,7 +85,14 @@ public interface InstanceApi {
     *           The EC2 Availability Zone that the database instance will be created in
     * @return new instance being created
     */
-   Instance createInAvailabilityZone(String id, InstanceRequest instanceRequest, String availabilityZone);
+   @Named("CreateDBInstance")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceHandler.class)
+   @FormParams(keys = ACTION, values = "CreateDBInstance")
+   Instance createInAvailabilityZone(@FormParam("DBInstanceIdentifier") String id,
+            @BinderParam(BindInstanceRequestToFormParams.class) InstanceRequest instanceRequest,
+            @FormParam("AvailabilityZone") String availabilityZone);
 
    /**
     * Creates a Multi-AZ deployment. This is not compatible with Microsoft SQL Server.
@@ -68,7 +103,13 @@ public interface InstanceApi {
     *           parameters to create the instance with
     * @return new instance being created
     */
-   Instance createMultiAZ(String id, InstanceRequest instanceRequest);
+   @Named("CreateDBInstance")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceHandler.class)
+   @FormParams(keys = { ACTION, "MultiAZ" }, values = { "CreateDBInstance", "true" })
+   Instance createMultiAZ(@FormParam("DBInstanceIdentifier") String id,
+            @BinderParam(BindInstanceRequestToFormParams.class) InstanceRequest instanceRequest);
 
    /**
     * Retrieves information about the specified instance.
@@ -79,8 +120,27 @@ public interface InstanceApi {
     * 
     * @return null if not found
     */
+   @Named("DescribeDBInstances")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceHandler.class)
+   @FormParams(keys = "Action", values = "DescribeDBInstances")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   Instance get(String id);
+   Instance get(@FormParam("DBInstanceIdentifier") String id);
+
+   /**
+    * Returns information about provisioned RDS instances.
+    * 
+    * @return the response object
+    */
+   @Named("DescribeDBInstances")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeDBInstancesResultHandler.class)
+   @Transform(InstancesToPagedIterable.class)
+   @FormParams(keys = "Action", values = "DescribeDBInstances")
+   PagedIterable<Instance> list();
 
    /**
     * Returns information about provisioned RDS instances. If there are none, the action returns an
@@ -94,14 +154,12 @@ public interface InstanceApi {
     * 
     * @return the response object
     */
+   @Named("DescribeDBInstances")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeDBInstancesResultHandler.class)
+   @FormParams(keys = "Action", values = "DescribeDBInstances")
    IterableWithMarker<Instance> list(ListInstancesOptions options);
-
-   /**
-    * Returns information about provisioned RDS instances.
-    * 
-    * @return the response object
-    */
-   PagedIterable<Instance> list();
 
    /**
     * Deletes the specified Instance, skipping final snapshot.
@@ -117,7 +175,13 @@ public interface InstanceApi {
     *           case sensitive.
     * @return final state of instance or null if not found
     */
-   Instance delete(String id);
+   @Named("DeleteDBInstance")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceHandler.class)
+   @Fallback(NullOnStateDeletingNotFoundOr404.class)
+   @FormParams(keys = { ACTION, "SkipFinalSnapshot" }, values = { "DeleteDBInstance", "true" })
+   Instance delete(@FormParam("DBInstanceIdentifier") String id);
 
    /**
     * Deletes the specified Instance.
@@ -137,5 +201,12 @@ public interface InstanceApi {
     *           to false.
     * @return final state of instance or null if not found
     */
-   Instance deleteAndSaveSnapshot(String id, String snapshotId);
+   @Named("DeleteDBInstance")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstanceHandler.class)
+   @Fallback(NullOnStateDeletingNotFoundOr404.class)
+   @FormParams(keys = ACTION, values = "DeleteDBInstance")
+   Instance deleteAndSaveSnapshot(@FormParam("DBInstanceIdentifier") String id,
+            @FormParam("FinalDBSnapshotIdentifier") String snapshotId);
 }
