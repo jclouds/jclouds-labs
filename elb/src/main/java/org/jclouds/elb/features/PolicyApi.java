@@ -19,20 +19,42 @@
 package org.jclouds.elb.features;
 
 import java.util.Set;
+
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
+import org.jclouds.elb.binders.BindPolicyTypeNamesToIndexedFormParams;
 import org.jclouds.elb.domain.Policy;
 import org.jclouds.elb.domain.PolicyType;
 import org.jclouds.elb.options.ListPoliciesOptions;
+import org.jclouds.elb.xml.DescribeLoadBalancerPoliciesResultHandler;
+import org.jclouds.elb.xml.DescribeLoadBalancerPolicyTypesResultHandler;
+import org.jclouds.elb.xml.PolicyHandler;
+import org.jclouds.elb.xml.PolicyTypeHandler;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
  * Provides access to Amazon ELB via the Query API
  * <p/>
  * 
- * @see <a href="http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference" />
+ * @see <a href="http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference" >doc</a>
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface PolicyApi {
-
+   
    /**
     * Retrieves information about the specified policy.
     * 
@@ -40,8 +62,28 @@ public interface PolicyApi {
     *           Name of the policy to get information about.
     * @return null if not found
     */
+   @Named("DescribeLoadBalancerPolicies")
+   @POST
+   @Path("/")
+   @XMLResponseParser(PolicyHandler.class)
+   @FormParams(keys = "Action", values = "DescribeLoadBalancerPolicies")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   Policy get(String name);
+   Policy get(@FormParam("PolicyNames.member.1") String name);
+   
+   /**
+    * returns descriptions of the specified sample policies, or descriptions of all the sample
+    * policies.
+    * 
+    * @return the response object
+    */
+   @Named("DescribeLoadBalancerPolicies")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeLoadBalancerPoliciesResultHandler.class)
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   @FormParams(keys = "Action", values = "DescribeLoadBalancerPolicies")
+   Set<Policy> list();
 
    /**
     * Returns detailed descriptions of the policies.
@@ -57,15 +99,13 @@ public interface PolicyApi {
     * 
     * @return the response object
     */
+   @Named("DescribeLoadBalancerPolicies")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeLoadBalancerPoliciesResultHandler.class)
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   @FormParams(keys = "Action", values = "DescribeLoadBalancerPolicies")
    Set<Policy> list(ListPoliciesOptions options);
-
-   /**
-    * returns descriptions of the specified sample policies, or descriptions of all the sample
-    * policies.
-    * 
-    * @return the response object
-    */
-   Set<Policy> list();
 
    /**
     * Retrieves information about the specified policy type.
@@ -74,9 +114,15 @@ public interface PolicyApi {
     *           Name of the policy type to get information about.
     * @return null if not found
     */
+   @Named("DescribeLoadBalancerPolicyTypes")
+   @POST
+   @Path("/")
+   @XMLResponseParser(PolicyTypeHandler.class)
+   @FormParams(keys = "Action", values = "DescribeLoadBalancerPolicyTypes")
+   @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   PolicyType getType(String name);
-
+   PolicyType getType(@FormParam("PolicyTypeNames.member.1") String name);
+   
    /**
     * Returns meta-information on the specified LoadBalancer policies defined by the Elastic Load
     * Balancing service. The policy types that are returned from this action can be used in a
@@ -85,6 +131,12 @@ public interface PolicyApi {
     * 
     * @return the response object
     */
+   @Named("DescribeLoadBalancerPolicyTypes")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeLoadBalancerPolicyTypesResultHandler.class)
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   @FormParams(keys = "Action", values = "DescribeLoadBalancerPolicyTypes")
    Set<PolicyType> listTypes();
 
    /**
@@ -92,6 +144,12 @@ public interface PolicyApi {
     * 
     * @see #listTypes()
     */
-   Set<PolicyType> listTypes(Iterable<String> names);
-
+   @Named("DescribeLoadBalancerPolicyTypes")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeLoadBalancerPolicyTypesResultHandler.class)
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   @FormParams(keys = "Action", values = "DescribeLoadBalancerPolicyTypes")
+   Set<PolicyType> listTypes(@BinderParam(BindPolicyTypeNamesToIndexedFormParams.class) Iterable<String> names);
+   
 }

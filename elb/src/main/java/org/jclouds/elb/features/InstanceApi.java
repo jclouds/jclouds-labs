@@ -18,17 +18,38 @@
  */
 package org.jclouds.elb.features;
 
+import static org.jclouds.aws.reference.FormParameters.ACTION;
+
 import java.util.Set;
+
+import javax.inject.Named;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import org.jclouds.aws.filters.FormSigner;
+import org.jclouds.elb.binders.BindInstanceIdsToIndexedFormParams;
 import org.jclouds.elb.domain.InstanceHealth;
+import org.jclouds.elb.xml.DescribeInstanceHealthResultHandler;
+import org.jclouds.elb.xml.InstancesResultHandler;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.FormParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.VirtualHost;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
  * Provides access to Amazon ELB via the Query API
  * <p/>
  * 
- * @see <a href="http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference" />
- * @see InstanceAsyncApi
+ * @see <a href="http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference"
+ *      >doc</a>
  * @author Adrian Cole
  */
+@RequestFilters(FormSigner.class)
+@VirtualHost
 public interface InstanceApi {
 
    /**
@@ -46,7 +67,14 @@ public interface InstanceApi {
     * 
     * @return state of all instances of the load balancer
     */
-   Set<InstanceHealth> getHealthOfInstancesOfLoadBalancer(String loadBalancerName);
+   @Named("DescribeInstanceHealth")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeInstanceHealthResultHandler.class)
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   @FormParams(keys = "Action", values = "DescribeInstanceHealth")
+   Set<InstanceHealth> getHealthOfInstancesOfLoadBalancer(
+            @FormParam("LoadBalancerName") String loadBalancerName);
 
    /**
     * Returns the current state of the instances of the specified LoadBalancer.
@@ -65,7 +93,16 @@ public interface InstanceApi {
     * 
     * @return state of all instances of the load balancer
     */
-   Set<InstanceHealth> getHealthOfInstancesOfLoadBalancer(Iterable<String> instanceIds, String loadBalancerName);
+   @Named("DescribeInstanceHealth")
+   @POST
+   @Path("/")
+   @XMLResponseParser(DescribeInstanceHealthResultHandler.class)
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   @FormParams(keys = "Action", values = "DescribeInstanceHealth")
+   Set<InstanceHealth> getHealthOfInstancesOfLoadBalancer(
+            @BinderParam(BindInstanceIdsToIndexedFormParams.class) Iterable<String> instanceIds,
+            @FormParam("LoadBalancerName") String loadBalancerName);
+
 
    /**
     * Adds new instances to the LoadBalancer.
@@ -106,9 +143,27 @@ public interface InstanceApi {
     * 
     * @return instanceIds registered with load balancer
     */
-   Set<String> registerInstancesWithLoadBalancer(Iterable<String> instanceIds, String loadBalancerName);
+   @Named("RegisterInstancesWithLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstancesResultHandler.class)
+   @FormParams(keys = ACTION, values = "RegisterInstancesWithLoadBalancer")
+   Set<String> registerInstancesWithLoadBalancer(
+            @BinderParam(BindInstanceIdsToIndexedFormParams.class) Iterable<String> instanceIds,
+            @FormParam("LoadBalancerName") String loadBalancerName);
    
-   Set<String> registerInstanceWithLoadBalancer(String instanceId, String loadBalancerName);
+
+   /**
+    * @see InstanceApi#registerInstanceWithLoadBalancer
+    */
+   @Named("RegisterInstancesWithLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstancesResultHandler.class)
+   @FormParams(keys = ACTION, values = "RegisterInstancesWithLoadBalancer")
+   Set<String> registerInstanceWithLoadBalancer(
+            @FormParam("Instances.member.1.InstanceId") String instanceId,
+            @FormParam("LoadBalancerName") String loadBalancerName);
 
    /**
     * Deregisters instances from the LoadBalancer. Once the instance is deregistered, it will stop
@@ -126,8 +181,24 @@ public interface InstanceApi {
     * 
     * @return instanceIds still registered with load balancer
     */
-   Set<String> deregisterInstancesFromLoadBalancer(Iterable<String> instanceIds, String loadBalancerName);
+   @Named("DeregisterInstancesFromLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstancesResultHandler.class)
+   @FormParams(keys = ACTION, values = "DeregisterInstancesFromLoadBalancer")
+   Set<String> deregisterInstancesFromLoadBalancer(
+            @BinderParam(BindInstanceIdsToIndexedFormParams.class) Iterable<String> instanceIds,
+            @FormParam("LoadBalancerName") String loadBalancerName);
 
-   Set<String> deregisterInstanceFromLoadBalancer(String instanceId, String loadBalancerName);
-
+   /**
+    * @see InstanceApi#deregisterInstancesFromLoadBalancer
+    */
+   @Named("DeregisterInstancesFromLoadBalancer")
+   @POST
+   @Path("/")
+   @XMLResponseParser(InstancesResultHandler.class)
+   @FormParams(keys = ACTION, values = "DeregisterInstancesFromLoadBalancer")
+   Set<String> deregisterInstanceFromLoadBalancer(
+            @FormParam("Instances.member.1.InstanceId") String instanceId,
+            @FormParam("LoadBalancerName") String loadBalancerName);
 }

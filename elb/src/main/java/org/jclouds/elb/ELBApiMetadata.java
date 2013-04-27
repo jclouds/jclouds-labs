@@ -25,14 +25,12 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.elb.config.ELBRestClientModule;
+import org.jclouds.elb.config.ELBHttpApiModule;
 import org.jclouds.elb.loadbalancer.config.ELBLoadBalancerContextModule;
 import org.jclouds.loadbalancer.LoadBalancerServiceContext;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
 /**
@@ -40,36 +38,31 @@ import com.google.inject.Module;
  * 
  * @author Adrian Cole
  */
-public class ELBApiMetadata extends BaseRestApiMetadata {
-   
-   public static final TypeToken<RestContext<ELBApi, ELBAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<ELBApi, ELBAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class ELBApiMetadata extends BaseHttpApiMetadata<ELBApi> {
 
    @Override
    public Builder toBuilder() {
-      return new Builder(getApi(), getAsyncApi()).fromApiMetadata(this);
+      return new Builder().fromApiMetadata(this);
    }
 
    public ELBApiMetadata() {
-      this(new Builder(ELBApi.class, ELBAsyncApi.class));
+      this(new Builder());
    }
 
    protected ELBApiMetadata(Builder builder) {
-      super(builder);
+      super(Builder.class.cast(builder));
    }
    
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(PROPERTY_AUTH_TAG, "AWS");
       properties.setProperty(PROPERTY_HEADER_TAG, "amz");
       return properties;
    }
    
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<ELBApi, Builder> {
 
-      protected Builder(Class<?> api, Class<?> asyncApi) {
-         super(api, asyncApi);
+      protected Builder() {
          id("elb")
          .name("Amazon Elastic Load Balancing Api")
          .identityName("Access Key ID")
@@ -79,7 +72,7 @@ public class ELBApiMetadata extends BaseRestApiMetadata {
          .defaultEndpoint("https://elasticloadbalancing.us-east-1.amazonaws.com")
          .documentation(URI.create("http://docs.amazonwebservices.com/ElasticLoadBalancing/latest/APIReference"))
          .view(LoadBalancerServiceContext.class)
-         .defaultModules(ImmutableSet.<Class<? extends Module>>of(ELBRestClientModule.class, ELBLoadBalancerContextModule.class));
+         .defaultModules(ImmutableSet.<Class<? extends Module>>of(ELBHttpApiModule.class, ELBLoadBalancerContextModule.class));
       }
 
       @Override

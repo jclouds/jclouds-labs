@@ -103,6 +103,6 @@ public class PolicyApiLiveTest extends BaseELBApiLiveTest {
    }
 
    protected PolicyApi api() {
-      return context.getApi().getPolicyApi();
+      return api.getPolicyApi();
    }
 }
