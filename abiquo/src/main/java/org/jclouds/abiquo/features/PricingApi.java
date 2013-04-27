@@ -18,6 +18,31 @@
  */
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
+
 import com.abiquo.server.core.pricing.CostCodeCurrenciesDto;
 import com.abiquo.server.core.pricing.CostCodeDto;
 import com.abiquo.server.core.pricing.CostCodesDto;
@@ -35,11 +60,12 @@ import com.abiquo.server.core.pricing.PricingTiersDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/APIReference">
  *      http://community.abiquo.com/display/ABI20/APIReference</a>
- * @see PricingAsyncApi
  * @author Ignasi Barrera
  * @author Susana Acedo
  */
-public interface PricingApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+@Path("/config")
+public interface PricingApi extends Closeable {
 
    /*********************** Currency ********************** */
 
@@ -48,6 +74,11 @@ public interface PricingApi {
     * 
     * @return The list of currencies
     */
+   @Named("currency:list")
+   @GET
+   @Path("/currencies")
+   @Consumes(CurrenciesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    CurrenciesDto listCurrencies();
 
    /**
@@ -57,7 +88,13 @@ public interface PricingApi {
     *           The id of the currency
     * @return The currency
     */
-   CurrencyDto getCurrency(Integer currencyId);
+   @Named("currency:get")
+   @GET
+   @Path("/currencies/{currency}")
+   @Consumes(CurrencyDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   CurrencyDto getCurrency(@PathParam("currency") Integer currencyId);
 
    /**
     * Create a new currency
@@ -66,7 +103,13 @@ public interface PricingApi {
     *           The currency to be created.
     * @return The created currency.
     */
-   CurrencyDto createCurrency(CurrencyDto currency);
+   @Named("currency:create")
+   @POST
+   @Path("/currencies")
+   @Produces(CurrencyDto.BASE_MEDIA_TYPE)
+   @Consumes(CurrencyDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   CurrencyDto createCurrency(@BinderParam(BindToXMLPayload.class) CurrencyDto currency);
 
    /**
     * Updates an existing currency
@@ -75,7 +118,12 @@ public interface PricingApi {
     *           The new attributes for the currency
     * @return The updated currency
     */
-   CurrencyDto updateCurrency(final CurrencyDto currency);
+   @Named("currency:update")
+   @PUT
+   @Produces(CurrencyDto.BASE_MEDIA_TYPE)
+   @Consumes(CurrencyDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   CurrencyDto updateCurrency(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CurrencyDto currency);
 
    /**
     * Deletes an existing currency
@@ -83,7 +131,9 @@ public interface PricingApi {
     * @param currency
     *           The currency to delete
     */
-   void deleteCurrency(final CurrencyDto currency);
+   @Named("currency:delete")
+   @DELETE
+   void deleteCurrency(@EndpointLink("edit") @BinderParam(BindToPath.class) CurrencyDto currency);
 
    /*********************** CostCode ********************** */
 
@@ -92,6 +142,11 @@ public interface PricingApi {
     * 
     * @return The list of costcodes
     */
+   @Named("costcode:list")
+   @GET
+   @Path("/costcodes")
+   @Consumes(CostCodesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    CostCodesDto listCostCodes();
 
    /**
@@ -101,7 +156,13 @@ public interface PricingApi {
     *           The id of the costcode
     * @return The costcode
     */
-   CostCodeDto getCostCode(Integer costcodeId);
+   @Named("costcode:get")
+   @GET
+   @Path("/costcodes/{costcode}")
+   @Consumes(CostCodeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   CostCodeDto getCostCode(@PathParam("costcode") Integer costcodeId);
 
    /**
     * Create a new costcode
@@ -110,7 +171,13 @@ public interface PricingApi {
     *           The costcode to be created.
     * @return The created costcode.
     */
-   CostCodeDto createCostCode(CostCodeDto costcode);
+   @Named("costcode:create")
+   @POST
+   @Path("/costcodes")
+   @Produces(CostCodeDto.BASE_MEDIA_TYPE)
+   @Consumes(CostCodeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   CostCodeDto createCostCode(@BinderParam(BindToXMLPayload.class) CostCodeDto costcode);
 
    /**
     * Updates an existing costcode
@@ -119,7 +186,12 @@ public interface PricingApi {
     *           The new attributes for the costcode
     * @return The updated costcode
     */
-   CostCodeDto updateCostCode(CostCodeDto costcode);
+   @Named("costcode:update")
+   @PUT
+   @Produces(CostCodeDto.BASE_MEDIA_TYPE)
+   @Consumes(CostCodeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   CostCodeDto updateCostCode(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CostCodeDto costcode);
 
    /**
     * Deletes an existing costcode
@@ -127,7 +199,9 @@ public interface PricingApi {
     * @param currency
     *           The costcode to delete
     */
-   void deleteCostCode(CostCodeDto costcode);
+   @Named("costcode:delete")
+   @DELETE
+   void deleteCostCode(@EndpointLink("edit") @BinderParam(BindToPath.class) CostCodeDto costcode);
 
    /*********************** PricingTemplate ********************** */
 
@@ -136,6 +210,11 @@ public interface PricingApi {
     * 
     * @return The list of pricingtemplates
     */
+   @Named("pricingtemplate:list")
+   @GET
+   @Path("/pricingtemplates")
+   @Consumes(PricingTemplatesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
    PricingTemplatesDto listPricingTemplates();
 
    /**
@@ -145,7 +224,13 @@ public interface PricingApi {
     *           The id of the pricingtemplate
     * @return The pricingtemplate
     */
-   PricingTemplateDto getPricingTemplate(Integer pricingTemplateId);
+   @Named("pricingtemplate:get")
+   @GET
+   @Path("/pricingtemplates/{pricingtemplate}")
+   @Consumes(PricingTemplateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   PricingTemplateDto getPricingTemplate(@PathParam("pricingtemplate") Integer pricingTemplateId);
 
    /**
     * Create a new pricing template
@@ -154,7 +239,13 @@ public interface PricingApi {
     *           The pricingtemplate to be created
     * @return The created pricingtemplate
     */
-   PricingTemplateDto createPricingTemplate(PricingTemplateDto pricingtemplate);
+   @Named("pricingtemplate:create")
+   @POST
+   @Path("/pricingtemplates")
+   @Produces(PricingTemplateDto.BASE_MEDIA_TYPE)
+   @Consumes(PricingTemplateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PricingTemplateDto createPricingTemplate(@BinderParam(BindToXMLPayload.class) PricingTemplateDto pricingtemplate);
 
    /**
     * Updates an existing pricing template
@@ -163,7 +254,13 @@ public interface PricingApi {
     *           The new attributes for the pricingtemplate
     * @return The updated pricingtemplate
     */
-   PricingTemplateDto updatePricingTemplate(PricingTemplateDto pricingtemplate);
+   @Named("pricingtemplate:update")
+   @PUT
+   @Produces(PricingTemplateDto.BASE_MEDIA_TYPE)
+   @Consumes(PricingTemplateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PricingTemplateDto updatePricingTemplate(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) PricingTemplateDto pricingtemplate);
 
    /**
     * Deletes an existing pricingtemplate
@@ -171,7 +268,9 @@ public interface PricingApi {
     * @param pricingtemplate
     *           The pricingtemplate to delete
     */
-   void deletePricingTemplate(PricingTemplateDto pricingtemplate);
+   @Named("pricingtemplate:delete")
+   @DELETE
+   void deletePricingTemplate(@EndpointLink("edit") @BinderParam(BindToPath.class) PricingTemplateDto pricingtemplate);
 
    /*********************** CostCodeCurrency ********************** */
 
@@ -182,7 +281,14 @@ public interface PricingApi {
     *           The id of the costcodecurrency
     * @return The costcodecurrency
     */
-   CostCodeCurrenciesDto getCostCodeCurrencies(Integer costcodeId, Integer currencyId);
+   @Named("costcodecurrency:get")
+   @GET
+   @Path("/costcodes/{costcode}/currencies")
+   @Consumes(CostCodeCurrenciesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   CostCodeCurrenciesDto getCostCodeCurrencies(@PathParam("costcode") Integer costcodeId,
+         @QueryParam("idCurrency") Integer currencyId);
 
    /**
     * Updates cost code currencies
@@ -191,7 +297,14 @@ public interface PricingApi {
     *           The new attributes for the costcodecurrencies
     * @return The updated costcodecurrencies
     */
-   CostCodeCurrenciesDto updateCostCodeCurrencies(Integer costcodeId, CostCodeCurrenciesDto costcodeCurrencies);
+   @Named("costcodecurrency:update")
+   @PUT
+   @Path("/costcodes/{costcode}/currencies")
+   @Produces(CostCodeCurrenciesDto.BASE_MEDIA_TYPE)
+   @Consumes(CostCodeCurrenciesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   CostCodeCurrenciesDto updateCostCodeCurrencies(@PathParam("costcode") Integer costcodeId,
+         @BinderParam(BindToXMLPayload.class) CostCodeCurrenciesDto costcodecurrencies);
 
    /*********************** PricingTemplateCostCode ********************** */
 
@@ -201,7 +314,13 @@ public interface PricingApi {
     * @param pricingTemplateId
     * @return pricingcostcodes
     */
-   PricingCostCodesDto getPricingCostCodes(Integer pricingTemplateId);
+   @Named("pricingcostcode:get")
+   @GET
+   @Path("/pricingtemplates/{pricingtemplate}/costcodes")
+   @Consumes(PricingCostCodesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   PricingCostCodesDto getPricingCostCodes(@PathParam("pricingtemplate") Integer pricingTemplateId);
 
    /**
     * Get the given pricing cost code
@@ -210,7 +329,14 @@ public interface PricingApi {
     *           the id of the pricing cost code
     * @return The pricingcostcode
     */
-   PricingCostCodeDto getPricingCostCode(Integer pricingTemplateId, Integer pricingCostCodeId);
+   @Named("pricingcostcode:get")
+   @GET
+   @Path("/pricingtemplates/{pricingtemplate}/costcodes/{costcode}")
+   @Consumes(PricingCostCodeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   PricingCostCodeDto getPricingCostCode(@PathParam("pricingtemplate") Integer pricingTemplateId,
+         @PathParam("costcode") Integer pricingCostcodeId);
 
    /**
     * Updates an existing pricingcostcode
@@ -219,8 +345,15 @@ public interface PricingApi {
     *           The new attributes for the pricingcostcode
     * @return The updated pricingcostcode
     */
-   PricingCostCodeDto updatePricingCostCode(PricingCostCodeDto pricingCostCode, Integer pricingTemplateId,
-         Integer pricingCostCodeId);
+   @Named("pricingcostcode:update")
+   @PUT
+   @Path("/pricingtemplates/{pricingtemplate}/costcodes/{costcode}")
+   @Produces(PricingCostCodeDto.BASE_MEDIA_TYPE)
+   @Consumes(PricingCostCodeDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PricingCostCodeDto updatePricingCostCode(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) PricingCostCodeDto pricingcostcode,
+         @PathParam("pricingtemplate") Integer pricingTemplateId, @PathParam("costcode") Integer pricingCostcodeId);
 
    /*********************** PricingTemplateTier ********************** */
 
@@ -230,7 +363,13 @@ public interface PricingApi {
     * @param pricingTemplateId
     * @return pricingtiers
     */
-   PricingTiersDto getPricingTiers(Integer pricingTemplateId);
+   @Named("pricingtier:get")
+   @GET
+   @Path("/pricingtemplates/{pricingtemplate}/tiers")
+   @Consumes(PricingTiersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   PricingTiersDto getPricingTiers(@PathParam("pricingtemplate") Integer pricingTemplateId);
 
    /**
     * Get the given pricing tier
@@ -239,7 +378,14 @@ public interface PricingApi {
     *           The id of the pricing tier
     * @return The pricingtier
     */
-   PricingTierDto getPricingTier(Integer pricingTemplateId, Integer pricingTierId);
+   @Named("pricingtier:get")
+   @GET
+   @Path("/pricingtemplates/{pricingtemplate}/tiers/{tier}")
+   @Consumes(PricingTierDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   PricingTierDto getPricingTier(@PathParam("pricingtemplate") Integer pricingTemplateId,
+         @PathParam("tier") Integer pricingTierId);
 
    /**
     * Updates an existing pricing tier
@@ -248,5 +394,13 @@ public interface PricingApi {
     *           The new attributes for the pricing tier
     * @return The updated pricing tier
     */
-   PricingTierDto updatePricingTier(PricingTierDto pricingTier, Integer pricingTemplateId, Integer pricingTierId);
+   @Named("pricingtier:update")
+   @PUT
+   @Path("/pricingtemplates/{pricingtemplate}/tiers/{tier}")
+   @Produces(PricingTierDto.BASE_MEDIA_TYPE)
+   @Consumes(PricingTierDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   PricingTierDto updatePricingTier(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) PricingTierDto pricingtier,
+         @PathParam("pricingtemplate") Integer pricingTemplateId, @PathParam("tier") Integer pricingTierId);
 }

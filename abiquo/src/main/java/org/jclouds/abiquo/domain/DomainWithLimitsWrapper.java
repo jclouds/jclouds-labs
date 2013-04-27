@@ -20,8 +20,7 @@
 package org.jclouds.abiquo.domain;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.transport.SingleResourceWithLimitsDto;
 
@@ -33,7 +32,7 @@ import com.abiquo.model.transport.SingleResourceWithLimitsDto;
  */
 public abstract class DomainWithLimitsWrapper<T extends SingleResourceWithLimitsDto> extends DomainWrapper<T> {
 
-   protected DomainWithLimitsWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final T target) {
+   protected DomainWithLimitsWrapper(final ApiContext<AbiquoApi> context, final T target) {
       super(context, target);
    }
 

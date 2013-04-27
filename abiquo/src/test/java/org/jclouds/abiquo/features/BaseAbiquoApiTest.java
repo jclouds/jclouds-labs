@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoApiMetadata;
-import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.config.AbiquoHttpApiModule;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.http.HttpRequest;
@@ -40,11 +40,11 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.google.inject.Module;
 
 /**
- * Tests annotation parsing of {@code AbiquoAsyncApi}.
+ * Base class for Abiquo api tests.
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoAsyncApiTest<T> extends BaseAsyncClientTest<T> {
+public abstract class BaseAbiquoApiTest<T> extends BaseAsyncClientTest<T> {
    private XMLParser xml;
 
    @BeforeClass
@@ -63,7 +63,7 @@ public abstract class BaseAbiquoAsyncApiTest<T> extends BaseAsyncClientTest<T> {
 
    @Override
    protected Module createModule() {
-      return new AbiquoRestClientModule();
+      return new AbiquoHttpApiModule();
    }
 
    @Override

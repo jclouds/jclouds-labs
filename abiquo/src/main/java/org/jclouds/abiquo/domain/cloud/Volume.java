@@ -22,14 +22,13 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
@@ -46,7 +45,6 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
  *      href="http://community.abiquo.com/display/ABI20/Volume+Resource">
  *      http://community.abiquo.com/display/ABI20/Volume+Resource</a>
  */
-@EnterpriseEdition
 public class Volume extends DomainWrapper<VolumeManagementDto> {
    /** The default state for volumes. */
    public static final VolumeState DEFAULT_STATE = VolumeState.DETACHED;
@@ -60,7 +58,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected Volume(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VolumeManagementDto target) {
+   protected Volume(final ApiContext<AbiquoApi> context, final VolumeManagementDto target) {
       super(context, target);
    }
 
@@ -119,13 +117,13 @@ public class Volume extends DomainWrapper<VolumeManagementDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final VirtualDatacenter virtualDatacenter, final Tier tier) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final VirtualDatacenter virtualDatacenter,
+         final Tier tier) {
       return new Builder(context, virtualDatacenter, tier);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -137,8 +135,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto> {
 
       private Tier tier;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenter virtualDatacenter,
-            final Tier tier) {
+      public Builder(final ApiContext<AbiquoApi> context, final VirtualDatacenter virtualDatacenter, final Tier tier) {
          super();
          checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE + VirtualDatacenter.class);
          checkNotNull(tier, ValidationErrors.NULL_RESOURCE + Tier.class);

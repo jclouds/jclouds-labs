@@ -74,7 +74,7 @@ public abstract class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiv
    protected void initializeContext() {
       super.initializeContext();
       String templateId = buildTemplate(client.templateBuilder()).getImage().getId();
-      view.getUtils().getCredentialStore().put("image#" + templateId, loginCredentials);
+      view.utils().credentialStore().put("image#" + templateId, loginCredentials);
    }
 
    @Override

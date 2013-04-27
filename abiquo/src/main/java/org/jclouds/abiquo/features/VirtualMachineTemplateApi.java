@@ -19,8 +19,34 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.abiquo.binders.AppendToPath;
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
+import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -35,11 +61,12 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see VirtualMachineTemplateAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public interface VirtualMachineTemplateApi {
+@RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
+@Path("/admin/enterprises")
+public interface VirtualMachineTemplateApi extends Closeable {
    /*********************** Virtual Machine Template ***********************/
 
    /**
@@ -53,7 +80,13 @@ public interface VirtualMachineTemplateApi {
     * @return The list of virtual machine templates for the enterprise in the
     *         datacenter repository.
     */
-   VirtualMachineTemplatesDto listVirtualMachineTemplates(Integer enterpriseId, Integer datacenterRepositoryId);
+   @Named("template:list")
+   @GET
+   @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
+   @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineTemplatesDto listVirtualMachineTemplates(@PathParam("enterprise") Integer enterpriseId,
+         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 
    /**
     * List all virtual machine templates for an enterprise in a datacenter
@@ -68,8 +101,13 @@ public interface VirtualMachineTemplateApi {
     * @return The filtered list of virtual machine templates for the enterprise
     *         in the datacenter repository.
     */
-   VirtualMachineTemplatesDto listVirtualMachineTemplates(Integer enterpriseId, Integer datacenterRepositoryId,
-         VirtualMachineTemplateOptions options);
+   @Named("template:list")
+   @GET
+   @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
+   @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineTemplatesDto listVirtualMachineTemplates(@PathParam("enterprise") Integer enterpriseId,
+         @PathParam("datacenterrepository") Integer datacenterRepositoryId, VirtualMachineTemplateOptions options);
 
    /**
     * Get the given virtual machine template.
@@ -83,8 +121,15 @@ public interface VirtualMachineTemplateApi {
     * @return The virtual machine template or <code>null</code> if it does not
     *         exist.
     */
-   VirtualMachineTemplateDto getVirtualMachineTemplate(Integer enterpriseId, Integer datacenterRepositoryId,
-         Integer virtualMachineTemplateId);
+   @Named("template:get")
+   @GET
+   @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates/{virtualmachinetemplate}")
+   @Consumes(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   VirtualMachineTemplateDto getVirtualMachineTemplate(@PathParam("enterprise") Integer enterpriseId,
+         @PathParam("datacenterrepository") Integer datacenterRepositoryId,
+         @PathParam("virtualmachinetemplate") Integer virtualMachineTemplateId);
 
    /**
     * Updates an existing virtual machine template.
@@ -93,7 +138,13 @@ public interface VirtualMachineTemplateApi {
     *           The new attributes for the template.
     * @return The updated template.
     */
-   VirtualMachineTemplateDto updateVirtualMachineTemplate(VirtualMachineTemplateDto template);
+   @Named("template:update")
+   @PUT
+   @Produces(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
+   @Consumes(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachineTemplateDto updateVirtualMachineTemplate(
+         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineTemplateDto template);
 
    /**
     * Deletes an existing virtual machine template.
@@ -101,7 +152,10 @@ public interface VirtualMachineTemplateApi {
     * @param template
     *           The virtual machine template to delete.
     */
-   void deleteVirtualMachineTemplate(VirtualMachineTemplateDto template);
+   @Named("template:delete")
+   @DELETE
+   void deleteVirtualMachineTemplate(
+         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
    /**
     * Creates a persistent virtual machine template from other virtual machine
@@ -115,8 +169,15 @@ public interface VirtualMachineTemplateApi {
     *           datacenter and original template.
     * @return Response message to the persistent request.
     */
-   AcceptedRequestDto<String> createPersistentVirtualMachineTemplate(Integer enterpriseId,
-         Integer datacenterRepositoryId, VirtualMachineTemplatePersistentDto persistentOptions);
+   @Named("template:createpersistent")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineTemplatePersistentDto.BASE_MEDIA_TYPE)
+   @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
+   @JAXBResponseParser
+   AcceptedRequestDto<String> createPersistentVirtualMachineTemplate(@PathParam("enterprise") Integer enterpriseId,
+         @PathParam("datacenterrepository") Integer datacenterRepositoryId,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineTemplatePersistentDto persistentOptions);
 
    /**
     * List all the conversions for a virtual machine template.
@@ -125,7 +186,12 @@ public interface VirtualMachineTemplateApi {
     *           , The virtual machine template of the conversions.
     * @return The list of conversions for the virtual machine template.
     */
-   ConversionsDto listConversions(VirtualMachineTemplateDto template);
+   @Named("conversion:list")
+   @GET
+   @Consumes(ConversionsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   ConversionsDto listConversions(
+         @EndpointLink("conversions") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
    /**
     * List conversions for a virtual machine template.
@@ -138,7 +204,13 @@ public interface VirtualMachineTemplateApi {
     * @return The list of conversions for the virtual machine template with the
     *         applied constrains.
     */
-   ConversionsDto listConversions(VirtualMachineTemplateDto template, ConversionOptions options);
+   @Named("conversion:list")
+   @GET
+   @Consumes(ConversionsDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   ConversionsDto listConversions(
+         @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
+         ConversionOptions options);
 
    /**
     * Get the conversions for a virtual machine template and the desired target
@@ -151,7 +223,14 @@ public interface VirtualMachineTemplateApi {
     * @return The conversions for the virtual machine template with the desired
     *         target disk format type.
     */
-   ConversionDto getConversion(VirtualMachineTemplateDto template, DiskFormatType targetFormat);
+   @Named("conversion:get")
+   @GET
+   @Consumes(ConversionDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   ConversionDto getConversion(
+         @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
+         @BinderParam(AppendToPath.class) DiskFormatType targetFormat);
 
    /**
     * Starts a V2V conversion of the current virtual machine template, or
@@ -166,6 +245,13 @@ public interface VirtualMachineTemplateApi {
     * @return an accepted request with a link to track the progress of the
     *         conversion tasks.
     */
-   AcceptedRequestDto<String> requestConversion(VirtualMachineTemplateDto template, DiskFormatType targetFormat,
-         ConversionDto conversion);
+   @Named("conversion:request")
+   @PUT
+   @ResponseParser(ReturnTaskReferenceOrNull.class)
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(ConversionDto.BASE_MEDIA_TYPE)
+   AcceptedRequestDto<String> requestConversion(
+         @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
+         @BinderParam(AppendToPath.class) DiskFormatType targetFormat,
+         @BinderParam(BindToXMLPayload.class) ConversionDto conversion);
 }

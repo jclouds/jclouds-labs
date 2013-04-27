@@ -47,17 +47,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code PricingAsyncApi}.
+ * Tests annotation parsing of {@code PricingApi}.
  * 
  * @author Ignasi Barrera
  * @author Susana Acedo
  */
-@Test(groups = "unit", singleThreaded = true, testName = "PricingAsyncApiTest")
-public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi> {
+@Test(groups = "unit", singleThreaded = true, testName = "PricingApiTest")
+public class PricingApiTest extends BaseAbiquoApiTest<PricingApi> {
    /*********************** Currency ***********************/
 
    public void testListCurrencies() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "listCurrencies");
+      Invokable<?, ?> method = method(PricingApi.class, "listCurrencies");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/currencies HTTP/1.1");
@@ -72,7 +72,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testGetCurrency() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getCurrency", Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getCurrency", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/currencies/1 HTTP/1.1");
@@ -87,7 +87,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testCreateCurrency() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "createCurrency", CurrencyDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "createCurrency", CurrencyDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.currencyPost())));
 
@@ -104,7 +104,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testUpdateCurrency() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "updateCurrency", CurrencyDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "updateCurrency", CurrencyDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.currencyPut())));
 
@@ -121,7 +121,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testDeleteCurrency() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "deleteCurrency", CurrencyDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "deleteCurrency", CurrencyDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.currencyPut())));
 
@@ -139,7 +139,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    /*********************** Cost Code ***********************/
 
    public void testListCostCodes() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "listCostCodes");
+      Invokable<?, ?> method = method(PricingApi.class, "listCostCodes");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/costcodes HTTP/1.1");
@@ -154,7 +154,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testGetCostCode() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getCostCode", Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getCostCode", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/costcodes/1 HTTP/1.1");
@@ -169,7 +169,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testCreateCostCode() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "createCostCode", CostCodeDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "createCostCode", CostCodeDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.costcodePost())));
 
@@ -186,7 +186,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testUpdateCostCode() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "updateCostCode", CostCodeDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "updateCostCode", CostCodeDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.costcodePut())));
 
@@ -203,7 +203,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testDeleteCostCode() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "deleteCostCode", CostCodeDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "deleteCostCode", CostCodeDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.costcodePut())));
 
@@ -221,7 +221,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    /*********************** Pricing Template ***********************/
 
    public void testListPricingTemplates() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "listPricingTemplates");
+      Invokable<?, ?> method = method(PricingApi.class, "listPricingTemplates");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/pricingtemplates HTTP/1.1");
@@ -236,7 +236,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testGetPricingTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getPricingTemplate", Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getPricingTemplate", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/pricingtemplates/1 HTTP/1.1");
@@ -251,7 +251,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testCreatePricingTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "createPricingTemplate", PricingTemplateDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "createPricingTemplate", PricingTemplateDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.pricingtemplatePost())));
 
@@ -268,7 +268,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testUpdatePricingTemplate() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "updatePricingTemplate", PricingTemplateDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "updatePricingTemplate", PricingTemplateDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.pricingtemplatePut())));
 
@@ -285,7 +285,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testDeletePricingTemplate() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "deletePricingTemplate", PricingTemplateDto.class);
+      Invokable<?, ?> method = method(PricingApi.class, "deletePricingTemplate", PricingTemplateDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.pricingtemplatePut())));
 
@@ -303,7 +303,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    /*********************** Cost Code Currency ***********************/
 
    public void testGetCostCodeCurrencies() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getCostCodeCurrencies", Integer.class, Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getCostCodeCurrencies", Integer.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1, 1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/costcodes/1/currencies?idCurrency=1 HTTP/1.1");
@@ -318,7 +318,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testUpdateCostCodeCurrencies() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "updateCostCodeCurrencies", Integer.class,
+      Invokable<?, ?> method = method(PricingApi.class, "updateCostCodeCurrencies", Integer.class,
             CostCodeCurrenciesDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(1, PricingResources.costcodecurrencyPut())));
@@ -338,7 +338,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    /*********************** Pricing Cost Code ***********************/
 
    public void testGetPricingCostCodes() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getPricingCostCodes", Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getPricingCostCodes", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/pricingtemplates/1/costcodes HTTP/1.1");
@@ -353,7 +353,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testGetPricingCostCode() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getPricingCostCode", Integer.class, Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getPricingCostCode", Integer.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1, 1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/pricingtemplates/1/costcodes/1 HTTP/1.1");
@@ -368,7 +368,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testUpdatePricingCostCode() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "updatePricingCostCode", PricingCostCodeDto.class,
+      Invokable<?, ?> method = method(PricingApi.class, "updatePricingCostCode", PricingCostCodeDto.class,
             Integer.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.pricingCostcodePut(), 1, 1)));
@@ -388,7 +388,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    /*********************** Pricing Tier ***************************/
 
    public void testGetPricingTiers() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getPricingTiers", Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getPricingTiers", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/pricingtemplates/1/tiers HTTP/1.1");
@@ -403,7 +403,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testGetPricingTier() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "getPricingTier", Integer.class, Integer.class);
+      Invokable<?, ?> method = method(PricingApi.class, "getPricingTier", Integer.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1, 1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/config/pricingtemplates/1/tiers/1 HTTP/1.1");
@@ -418,7 +418,7 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
    }
 
    public void testUpdatePricingTier() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(PricingAsyncApi.class, "updatePricingTier", PricingTierDto.class, Integer.class,
+      Invokable<?, ?> method = method(PricingApi.class, "updatePricingTier", PricingTierDto.class, Integer.class,
             Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(PricingResources.pricingTierPut(), 1, 2)));

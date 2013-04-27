@@ -31,14 +31,13 @@ import java.net.URI;
 
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplateInVirtualDatacenter;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Volume;
 import org.jclouds.domain.Location;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -57,7 +56,7 @@ import com.google.common.base.Function;
 public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
    @SuppressWarnings("unchecked")
    public void testVirtualMachineTemplateToHardware() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
       VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
             vdcToLocation);
@@ -101,7 +100,7 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
 
    @SuppressWarnings("unchecked")
    public void testConvertWithoutEditLink() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
       VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
             vdcToLocation);
@@ -130,7 +129,7 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
    @SuppressWarnings("unchecked")
    @Test(expectedExceptions = NullPointerException.class)
    public void testConvertWithoutId() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
       VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
             vdcToLocation);
@@ -143,7 +142,7 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
 
    @SuppressWarnings("unchecked")
    public void testConvertWithoutCpu() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
       VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
             vdcToLocation);
@@ -171,7 +170,7 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
 
    @SuppressWarnings("unchecked")
    public void testConvertWithoutRam() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
       VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
             vdcToLocation);
@@ -198,7 +197,7 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
 
    @SuppressWarnings("unchecked")
    public void testConvertWithoutHd() {
-      RestContext<AbiquoApi, AbiquoAsyncApi> context = EasyMock.createMock(RestContext.class);
+      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
       Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
       VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
             vdcToLocation);

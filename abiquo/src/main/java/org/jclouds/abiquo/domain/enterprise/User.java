@@ -26,14 +26,13 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
@@ -72,7 +71,7 @@ public class User extends DomainWrapper<UserDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected User(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final UserDto target) {
+   protected User(final ApiContext<AbiquoApi> context, final UserDto target) {
       super(context, target);
    }
 
@@ -127,7 +126,7 @@ public class User extends DomainWrapper<UserDto> {
          return this.getEnterprise().listVirtualDatacenters();
       }
 
-      ListVirtualDatacenters listVirtualDatacenters = context.getUtils().getInjector()
+      ListVirtualDatacenters listVirtualDatacenters = context.utils().injector()
             .getInstance(ListVirtualDatacenters.class);
       return ImmutableList.copyOf(listVirtualDatacenters.execute(ids));
    }
@@ -205,13 +204,12 @@ public class User extends DomainWrapper<UserDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Enterprise enterprise,
-         final Role role) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final Enterprise enterprise, final Role role) {
       return new Builder(context, enterprise, role);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private Enterprise enterprise;
 
@@ -235,7 +233,7 @@ public class User extends DomainWrapper<UserDto> {
 
       private String authType = DEFAULT_AUTH_TYPE;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Enterprise enterprise, final Role role) {
+      public Builder(final ApiContext<AbiquoApi> context, final Enterprise enterprise, final Role role) {
          super();
          checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
          checkNotNull(role, ValidationErrors.NULL_RESOURCE + Role.class);

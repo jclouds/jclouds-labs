@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -40,11 +39,10 @@ import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.abiquo.predicates.LinkPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.abiquo.strategy.cloud.ListAttachedNics;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -91,8 +89,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
    /**
     * Constructor to be used only by the builder.
     */
-   protected VirtualMachine(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final VirtualMachineWithNodeExtendedDto target) {
+   protected VirtualMachine(final ApiContext<AbiquoApi> context, final VirtualMachineWithNodeExtendedDto target) {
       super(context, target);
    }
 
@@ -235,10 +232,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_APPLIANCE);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<VirtualApplianceDto> parser = new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(),
+      ParseXMLWithJAXB<VirtualApplianceDto> parser = new ParseXMLWithJAXB<VirtualApplianceDto>(context.utils().xml(),
             TypeLiteral.get(VirtualApplianceDto.class));
 
       return wrap(context, VirtualAppliance.class, parser.apply(response));
@@ -316,7 +312,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
    public List<Ip<?, ?>> listAttachedNics() {
       // The strategy will refresh the vm. There is no need to do it here
-      ListAttachedNics strategy = context.getUtils().getInjector().getInstance(ListAttachedNics.class);
+      ListAttachedNics strategy = context.utils().injector().getInstance(ListAttachedNics.class);
       return ImmutableList.copyOf(strategy.execute(this));
    }
 
@@ -503,7 +499,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
       // available
       if (task != null) {
          VirtualMachineState originalState = target.getState();
-         VirtualMachineMonitor monitor = context.getUtils().getInjector().getInstance(MonitoringService.class)
+         VirtualMachineMonitor monitor = context.utils().injector().getInstance(MonitoringService.class)
                .getVirtualMachineMonitor();
          monitor.awaitState(originalState, this);
       }
@@ -564,13 +560,13 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template) {
+   public static Builder builder(final ApiContext<AbiquoApi> context, final VirtualAppliance virtualAppliance,
+         final VirtualMachineTemplate template) {
       return new Builder(context, virtualAppliance, template);
    }
 
    public static class Builder {
-      private final RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private final ApiContext<AbiquoApi> context;
 
       private VirtualAppliance virtualAppliance;
 
@@ -602,7 +598,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
       private boolean dvd;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualAppliance virtualAppliance,
+      public Builder(final ApiContext<AbiquoApi> context, final VirtualAppliance virtualAppliance,
             final VirtualMachineTemplate template) {
          super();
          checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);

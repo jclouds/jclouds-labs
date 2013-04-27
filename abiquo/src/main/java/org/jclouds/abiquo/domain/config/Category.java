@@ -19,10 +19,9 @@
 
 package org.jclouds.abiquo.domain.config;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.appslibrary.CategoryDto;
 
@@ -47,7 +46,7 @@ public class Category extends DomainWrapper<CategoryDto> {
     * Constructor to be used only by the builder. This resource cannot be
     * created.
     */
-   private Category(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final CategoryDto target) {
+   private Category(final ApiContext<AbiquoApi> context, final CategoryDto target) {
       super(context, target);
    }
 
@@ -86,12 +85,12 @@ public class Category extends DomainWrapper<CategoryDto> {
 
    // Builder
 
-   public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+   public static Builder builder(final ApiContext<AbiquoApi> context) {
       return new Builder(context);
    }
 
    public static class Builder {
-      private RestContext<AbiquoApi, AbiquoAsyncApi> context;
+      private ApiContext<AbiquoApi> context;
 
       private String name;
 
@@ -99,7 +98,7 @@ public class Category extends DomainWrapper<CategoryDto> {
 
       private Boolean defaultCategory = DEFAULT_DEFAULT_CATEGORY;
 
-      public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context) {
+      public Builder(final ApiContext<AbiquoApi> context) {
          super();
          this.context = context;
       }

@@ -26,14 +26,13 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
-import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.google.common.collect.Lists;
 
 /**
  * Live tests for the {@link ListVirtualMachines} strategy.
@@ -47,7 +46,7 @@ public class ListVirtualMachinesLiveApiTest extends BaseAbiquoStrategyLiveApiTes
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListVirtualMachines.class);
+      this.strategy = env.context.utils().injector().getInstance(ListVirtualMachines.class);
    }
 
    public void testExecute() {

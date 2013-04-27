@@ -19,10 +19,9 @@
 
 package org.jclouds.abiquo.domain.task;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.task.Job.JobState;
 import com.abiquo.server.core.task.Job.JobType;
@@ -37,7 +36,7 @@ public class AsyncJob extends DomainWrapper<JobDto> {
    /**
     * Constructor to be used only by the builder.
     */
-   protected AsyncJob(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final JobDto target) {
+   protected AsyncJob(final ApiContext<AbiquoApi> context, final JobDto target) {
       super(context, target);
    }
 

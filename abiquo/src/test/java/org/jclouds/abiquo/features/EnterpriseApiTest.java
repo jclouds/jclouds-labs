@@ -58,17 +58,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
 /**
- * Tests annotation parsing of {@code EnterpriseAsyncApi}
+ * Tests annotation parsing of {@code ConfigApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Test(groups = "unit", testName = "EnterpriseAsyncApiTest")
-public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsyncApi> {
+@Test(groups = "unit", testName = "EnterpriseApiTest")
+public class EnterpriseApiTest extends BaseAbiquoApiTest<EnterpriseApi> {
    /*********************** Enterprise ********************** */
 
    public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listEnterprises");
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises");
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
 
       assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises HTTP/1.1");
@@ -85,7 +85,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    public void testListEnterprisesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
       EnterpriseOptions options = EnterpriseOptions.builder().has("abi").orderBy(OrderBy.NAME).ascendant(true).build();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listEnterprises", EnterpriseOptions.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises", EnterpriseOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(options)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises?has=abi&by=name&asc=true HTTP/1.1");
@@ -102,7 +102,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    public void testListEnterprisesByDatacenter() throws SecurityException, NoSuchMethodException, IOException {
       EnterpriseOptions options = EnterpriseOptions.builder().startWith(0).limit(25).network(true).build();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listEnterprises", DatacenterDto.class,
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises", DatacenterDto.class,
             EnterpriseOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(InfrastructureResources.datacenterPut(), options)));
@@ -120,7 +120,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testCreateEnterprise() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "createEnterprise", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "createEnterprise", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePost())));
 
@@ -137,7 +137,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testGetEnterprise() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "getEnterprise", Integer.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "getEnterprise", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises/1 HTTP/1.1");
@@ -152,7 +152,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testUpdateEnterprise() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "updateEnterprise", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "updateEnterprise", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -169,7 +169,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testDeleteEnterprise() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "deleteEnterprise", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "deleteEnterprise", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -185,7 +185,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListAllowedDatacenters() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listAllowedDatacenters", Integer.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listAllowedDatacenters", Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1)));
 
       assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters?idEnterprise=1 HTTP/1.1");
@@ -200,7 +200,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListVirtualDatacentersFromEnterprise() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listVirtualDatacenters", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listVirtualDatacenters", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -219,7 +219,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** Enterprise Properties ********************** */
 
    public void testGetEnterpriseProperties() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "getEnterpriseProperties", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "getEnterpriseProperties", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -235,8 +235,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testUpdateEnterpriseProperties() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "updateEnterpriseProperties",
-            EnterprisePropertiesDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "updateEnterpriseProperties", EnterprisePropertiesDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePropertiesPut())));
 
@@ -259,8 +258,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
       DatacenterDto datacenter = InfrastructureResources.datacenterPut();
       DatacenterLimitsDto limits = EnterpriseResources.datacenterLimitsPost();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "createLimits", EnterpriseDto.class,
-            DatacenterDto.class, DatacenterLimitsDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "createLimits", EnterpriseDto.class, DatacenterDto.class,
+            DatacenterLimitsDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(enterprise, datacenter, limits)));
 
@@ -283,7 +282,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
       EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
       DatacenterDto datacenter = InfrastructureResources.datacenterPut();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "getLimits", EnterpriseDto.class, DatacenterDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "getLimits", EnterpriseDto.class, DatacenterDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(enterprise, datacenter)));
 
@@ -304,7 +303,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    public void testUpdateLimits() throws SecurityException, NoSuchMethodException, IOException {
       EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "updateLimits", DatacenterLimitsDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "updateLimits", DatacenterLimitsDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.datacenterLimitsPut(enterprise))));
 
@@ -323,7 +322,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    public void testDeleteLimits() throws SecurityException, NoSuchMethodException {
       EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "deleteLimits", DatacenterLimitsDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "deleteLimits", DatacenterLimitsDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.datacenterLimitsPut(enterprise))));
 
@@ -339,7 +338,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListLimitsEnterprise() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listLimits", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listLimits", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -357,7 +356,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** User ***********************/
 
    public void testGetUser() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "getUser", EnterpriseDto.class, Integer.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "getUser", EnterpriseDto.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut(), 1)));
 
@@ -373,7 +372,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListUsers() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listUsers", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listUsers", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -392,7 +391,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
       EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
       UserDto user = EnterpriseResources.userPost();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "createUser", EnterpriseDto.class, UserDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "createUser", EnterpriseDto.class, UserDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(enterprise, user)));
 
@@ -409,7 +408,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testUpdateUser() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "updateUser", UserDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "updateUser", UserDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.userPut())));
 
@@ -426,7 +425,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testDeleteUser() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "deleteUser", UserDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "deleteUser", UserDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.userPut())));
 
@@ -442,7 +441,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListVirtualMachinesByUser() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listVirtualMachines", UserDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listVirtualMachines", UserDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.userPut())));
 
@@ -461,7 +460,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** Datacenter Repository ********************** */
 
    public void testGetDatacenterRepository() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "getDatacenterRepository", EnterpriseDto.class,
+      Invokable<?, ?> method = method(EnterpriseApi.class, "getDatacenterRepository", EnterpriseDto.class,
             Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(
             EnterpriseResources.enterprisePut(), InfrastructureResources.datacenterPut().getId())));
@@ -478,8 +477,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testRefreshTemplateRepository() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "refreshTemplateRepository", Integer.class,
-            Integer.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "refreshTemplateRepository", Integer.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(
             EnterpriseResources.enterprisePut().getId(), InfrastructureResources.datacenterPut().getId())));
 
@@ -498,7 +496,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** External Network ********************** */
 
    public void testListExternalNetworks() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listExternalNetworks", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listExternalNetworks", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -516,7 +514,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** Cloud ********************** */
 
    public void testListVirtualMachines() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listVirtualMachines", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listVirtualMachines", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -532,7 +530,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListVirtualAppliances() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listVirtualAppliances", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listVirtualAppliances", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -550,7 +548,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** Machine ********************** */
 
    public void testListReservedMachines() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listReservedMachines", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listReservedMachines", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -568,7 +566,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    /*********************** Template definition list ***********************/
 
    public void testListTemplateDefinitionLists() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listTemplateDefinitionLists", EnterpriseDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listTemplateDefinitionLists", EnterpriseDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
 
@@ -588,7 +586,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
       EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
       TemplateDefinitionListDto template = EnterpriseResources.templateListPost();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "createTemplateDefinitionList", EnterpriseDto.class,
+      Invokable<?, ?> method = method(EnterpriseApi.class, "createTemplateDefinitionList", EnterpriseDto.class,
             TemplateDefinitionListDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(enterprise, template)));
@@ -609,7 +607,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    public void testUpdateTemplateDefinitionList() throws SecurityException, NoSuchMethodException, IOException {
       TemplateDefinitionListDto template = EnterpriseResources.templateListPut();
 
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "updateTemplateDefinitionList",
+      Invokable<?, ?> method = method(EnterpriseApi.class, "updateTemplateDefinitionList",
             TemplateDefinitionListDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(template)));
 
@@ -627,7 +625,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testDeleteTemplateDefinitionList() throws SecurityException, NoSuchMethodException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "deleteTemplateDefinitionList",
+      Invokable<?, ?> method = method(EnterpriseApi.class, "deleteTemplateDefinitionList",
             TemplateDefinitionListDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.templateListPut())));
@@ -645,7 +643,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testGetTemplateDefinitionList() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "getTemplateDefinitionList", EnterpriseDto.class,
+      Invokable<?, ?> method = method(EnterpriseApi.class, "getTemplateDefinitionList", EnterpriseDto.class,
             Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.enterprisePut(), 1)));
@@ -663,8 +661,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
    }
 
    public void testListTemplateListStatus() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseAsyncApi.class, "listTemplateListStatus",
-            TemplateDefinitionListDto.class, DatacenterDto.class);
+      Invokable<?, ?> method = method(EnterpriseApi.class, "listTemplateListStatus", TemplateDefinitionListDto.class,
+            DatacenterDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
             ImmutableList.<Object> of(EnterpriseResources.templateListPut(), InfrastructureResources.datacenterPut())));
 

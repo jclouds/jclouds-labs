@@ -22,13 +22,11 @@ package org.jclouds.abiquo.domain.network;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
@@ -46,7 +44,7 @@ public class UnmanagedIp extends AbstractPublicIp<UnmanagedIpDto, UnmanagedNetwo
    /**
     * Constructor to be used only by the builder.
     */
-   protected UnmanagedIp(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final UnmanagedIpDto target) {
+   protected UnmanagedIp(final ApiContext<AbiquoApi> context, final UnmanagedIpDto target) {
       super(context, target);
    }
 
@@ -57,10 +55,9 @@ public class UnmanagedIp extends AbstractPublicIp<UnmanagedIpDto, UnmanagedNetwo
       RESTLink link = checkNotNull(target.searchLink(ParentLinkName.UNMANAGED_NETWORK),
             ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.UNMANAGED_NETWORK);
 
-      ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-      HttpResponse response = utils.getAbiquoHttpClient().get(link);
+      HttpResponse response = context.getApi().get(link);
 
-      ParseXMLWithJAXB<VLANNetworkDto> parser = new ParseXMLWithJAXB<VLANNetworkDto>(utils.getXml(),
+      ParseXMLWithJAXB<VLANNetworkDto> parser = new ParseXMLWithJAXB<VLANNetworkDto>(context.utils().xml(),
             TypeLiteral.get(VLANNetworkDto.class));
 
       return wrap(context, UnmanagedNetwork.class, parser.apply(response));

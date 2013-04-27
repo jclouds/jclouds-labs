@@ -20,7 +20,7 @@
 package org.jclouds.abiquo.domain.cloud.options;
 
 import org.jclouds.abiquo.domain.options.search.FilterOptions.BaseFilterOptionsBuilder;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+
 import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
@@ -28,7 +28,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
  * 
  * @author Ignasi Barrera
  */
-@EnterpriseEdition
 public class VolumeOptions extends BaseHttpRequestOptions {
    public static Builder builder() {
       return new Builder();

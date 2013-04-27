@@ -38,10 +38,10 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoRestApiExpectTest<S> extends BaseRestApiExpectTest<S> {
+public abstract class BaseAbiquoApiExpectTest<S> extends BaseRestApiExpectTest<S> {
    protected final String basicAuth = "Basic aWRlbnRpdHk6Y3JlZGVudGlhbA==";
 
-   public BaseAbiquoRestApiExpectTest() {
+   public BaseAbiquoApiExpectTest() {
       provider = "abiquo";
    }
 

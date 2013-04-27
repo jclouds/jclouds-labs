@@ -33,7 +33,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -51,13 +50,14 @@ import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.jclouds.collect.Memoized;
+import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.logging.Logger;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
@@ -80,7 +80,7 @@ public class AbiquoComputeServiceAdapter
    @Named(ComputeServiceConstants.COMPUTE_LOGGER)
    protected Logger logger = Logger.NULL;
 
-   private final RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   private final ApiContext<AbiquoApi> context;
 
    private final AdministrationService adminService;
 
@@ -93,9 +93,8 @@ public class AbiquoComputeServiceAdapter
    private final Supplier<Map<Integer, Datacenter>> regionMap;
 
    @Inject
-   public AbiquoComputeServiceAdapter(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-         final AdministrationService adminService, final CloudService cloudService,
-         final MonitoringService monitoringService,
+   public AbiquoComputeServiceAdapter(final ApiContext<AbiquoApi> context, final AdministrationService adminService,
+         final CloudService cloudService, final MonitoringService monitoringService,
          final FindCompatibleVirtualDatacenters compatibleVirtualDatacenters,
          @Memoized final Supplier<Map<Integer, Datacenter>> regionMap) {
       this.context = checkNotNull(context, "context");

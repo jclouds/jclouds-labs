@@ -27,7 +27,6 @@ import static org.testng.Assert.assertTrue;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.predicates.infrastructure.MachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
-import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -43,7 +42,7 @@ public class ListMachinesLiveApiTest extends BaseAbiquoStrategyLiveApiTest {
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListMachines.class);
+      this.strategy = env.context.utils().injector().getInstance(ListMachines.class);
    }
 
    public void testExecute() {

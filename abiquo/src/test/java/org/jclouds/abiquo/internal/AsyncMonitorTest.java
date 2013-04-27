@@ -38,7 +38,7 @@ import org.easymock.EasyMock;
 import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.abiquo.internal.BaseMonitoringService.AsyncMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -498,7 +498,7 @@ public class AsyncMonitorTest {
    @SuppressWarnings("unchecked")
    private AsyncMonitor<Object> mockMonitor(final ScheduledExecutorService scheduler, final Object object,
          final Function<Object, MonitorStatus> function, final EventBus eventBus) {
-      BaseMonitoringService monitorService = new BaseMonitoringService(EasyMock.createMock(RestContext.class),
+      BaseMonitoringService monitorService = new BaseMonitoringService(EasyMock.createMock(ApiContext.class),
             scheduler, 100L, eventBus);
 
       return monitorService.new AsyncMonitor<Object>(object, function);

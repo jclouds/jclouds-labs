@@ -28,7 +28,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
-import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -44,7 +43,7 @@ public class ListVirtualMachineTemplatesLiveApiTest extends BaseAbiquoStrategyLi
    @Override
    @BeforeClass(groups = "api")
    protected void setupStrategy() {
-      this.strategy = env.context.getUtils().getInjector().getInstance(ListVirtualMachineTemplates.class);
+      this.strategy = env.context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
    }
 
    public void testExecute() {

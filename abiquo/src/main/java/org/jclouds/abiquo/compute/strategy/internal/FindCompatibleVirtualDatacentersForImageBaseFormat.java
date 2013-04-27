@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.compute.strategy.FindCompatibleVirtualDatacenters;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -34,7 +33,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -54,12 +53,12 @@ import com.google.common.base.Predicate;
  */
 @Singleton
 public class FindCompatibleVirtualDatacentersForImageBaseFormat implements FindCompatibleVirtualDatacenters {
-   private final RestContext<AbiquoApi, AbiquoAsyncApi> context;
+   private final ApiContext<AbiquoApi> context;
 
    private final CloudService cloudService;
 
    @Inject
-   public FindCompatibleVirtualDatacentersForImageBaseFormat(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+   public FindCompatibleVirtualDatacentersForImageBaseFormat(final ApiContext<AbiquoApi> context,
          final CloudService cloudService) {
       this.context = checkNotNull(context, "context");
       this.cloudService = checkNotNull(cloudService, "cloudService");

@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.monitor.MonitorStatus;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.task.TaskDto;
@@ -76,7 +76,7 @@ public class AsyncTaskStatusMonitorTest {
    private static class MockAsyncTask extends AsyncTask {
       @SuppressWarnings("unchecked")
       public MockAsyncTask() {
-         super(EasyMock.createMock(RestContext.class), new TaskDto());
+         super(EasyMock.createMock(ApiContext.class), new TaskDto());
       }
 
       @Override
