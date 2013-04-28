@@ -61,8 +61,7 @@
         <test.fgcp-de.image.authenticate-sudo />
         <jclouds.osgi.export>org.jclouds.fujitsu.fgcp*;version="${project.version}"</jclouds.osgi.export>
         <jclouds.osgi.import>
-          org.jclouds.labs*;version="${project.version}",
-          org.jclouds.providers*;version="${jclouds.version}",
+          org.jclouds*;version="${jclouds.version}",
           *
         </jclouds.osgi.import>
     </properties>
@@ -72,31 +71,31 @@
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
             <artifactId>jclouds-sshj</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
             <artifactId>jclouds-log4j</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

@@ -50,7 +50,6 @@
 
       <jclouds.osgi.export>org.jclouds.elb*;version="${project.version}"</jclouds.osgi.export>
       <jclouds.osgi.import>
-        org.jclouds.labs*;version="${project.version}",
         org.jclouds*;version="${jclouds.version}",
         *
       </jclouds.osgi.import>
@@ -60,51 +59,51 @@
         <dependency>
             <groupId>org.jclouds.api</groupId>
             <artifactId>sts</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-loadbalancer</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds.provider</groupId>
             <artifactId>aws-ec2</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
             <artifactId>jclouds-sshj</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-loadbalancer</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
             <artifactId>jclouds-slf4j</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

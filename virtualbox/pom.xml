@@ -44,7 +44,6 @@
     <test.virtualbox.template>osFamily=UBUNTU,osVersionMatches=12.04.1,os64Bit=true,osArchMatches=amd64,loginUser=toor:password,authenticateSudo=true</test.virtualbox.template>
     <jclouds.osgi.export>org.jclouds.virtualbox*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>
-      org.jclouds.labs*;version="${project.version}",
       org.jclouds*;version="${jclouds.version}",
       org.eclipse.jetty*;version="[7.5,9)",
       javax.servlet*;version="[2.5,3)",
@@ -56,7 +55,7 @@
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>org.virtualbox</groupId>
@@ -66,7 +65,7 @@
     <dependency>
       <groupId>org.jclouds.api</groupId>
       <artifactId>byon</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -81,12 +80,12 @@
     <dependency>
       <groupId>org.jclouds.driver</groupId>
       <artifactId>jclouds-sshj</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jclouds.driver</groupId>
       <artifactId>jclouds-slf4j</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -96,14 +95,14 @@
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
