@@ -47,7 +47,6 @@
     <jclouds.osgi.import>
       org.jclouds.blobstore.internal;version="${jclouds.version}",
       org.jclouds.rest.internal;version="${jclouds.version}",
-      org.jclouds.labs*;version="${project.version}",
       org.jclouds*;version="${jclouds.version}",
       *
     </jclouds.osgi.import>
@@ -57,26 +56,26 @@
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-blobstore</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-blobstore</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jclouds.driver</groupId>
       <artifactId>jclouds-slf4j</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

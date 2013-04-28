@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jclouds.labs</groupId>
@@ -61,32 +61,32 @@
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
             <artifactId>jclouds-slf4j</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
             <artifactId>jclouds-sshj</artifactId>
-            <version>1.6.0-SNAPSHOT</version>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
