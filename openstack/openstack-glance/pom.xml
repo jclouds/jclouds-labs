@@ -47,7 +47,6 @@
     <jclouds.osgi.export>org.jclouds.openstack.glance.v1_0*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>
       org.jclouds.rest.internal;version="${jclouds.version}",
-      org.jclouds.labs*;version="${project.version}",
       org.jclouds*;version="${jclouds.version}",
       *
     </jclouds.osgi.import>
@@ -57,31 +56,31 @@
     <dependency>
       <groupId>org.jclouds.api</groupId>
       <artifactId>openstack-keystone</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jclouds.api</groupId>
       <artifactId>openstack-keystone</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jclouds.driver</groupId>
       <artifactId>jclouds-slf4j</artifactId>
-      <version>1.6.0-SNAPSHOT</version>
+      <version>${jclouds.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
