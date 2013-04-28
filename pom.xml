@@ -28,7 +28,7 @@
     </parent>
     <groupId>org.jclouds.labs</groupId>
     <artifactId>jclouds-labs</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>jclouds labs</name>
 
@@ -36,7 +36,7 @@
         <connection>scm:git:git://github.com/jclouds/jclouds-labs.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/jclouds/jclouds-labs.git</developerConnection>
         <url>https://github.com/jclouds/jclouds-labs</url>
-        <tag>jclouds-labs-1.6.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
