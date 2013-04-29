@@ -40,7 +40,7 @@
     </scm>
 
     <properties>
-        <jclouds.version>1.6.0</jclouds.version>
+        <jclouds.version>1.6.1-SNAPSHOT</jclouds.version>
     </properties>
 
     <repositories>
