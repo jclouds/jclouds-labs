@@ -68,7 +68,6 @@
        <module>fgcp-de</module>
        <module>abiquo</module>
        <module>aws</module>
-       <module>openstack</module>
        <module>google</module>
     </modules>
 
