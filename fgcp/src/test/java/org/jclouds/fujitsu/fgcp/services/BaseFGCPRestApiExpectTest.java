@@ -20,6 +20,7 @@ package org.jclouds.fujitsu.fgcp.services;
 
 import static org.testng.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Calendar;
@@ -37,47 +38,54 @@ import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.rest.ConfiguresRestClient;
 import org.jclouds.rest.internal.BaseRestClientExpectTest;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.io.Resources;
 import com.google.inject.Module;
 
 /**
  * @author Dies Koper
  */
 public class BaseFGCPRestApiExpectTest extends
-		BaseRestClientExpectTest<FGCPApi> {
+      BaseRestClientExpectTest<FGCPApi> {
 
    public BaseFGCPRestApiExpectTest() {
-		provider = "fgcp";
+      provider = "fgcp";
 
       // self-signed dummy cert:
       // keytool -genkey -alias test-fgcp -keyalg RSA -keysize 1024 -validity 5475 -dname "CN=localhost" -keystore jclouds-test-fgcp.p12 -storepass jcloudsjclouds -storetype pkcs12
-		String cert = "/certs/jclouds-test-fgcp.p12";
-		URL url = this.getClass().getResource(cert);
-		assertNotNull(url, cert + " not found");
+      // openssl pkcs12 -nodes -in jclouds-test-fgcp.p12 -out jclouds-test-fgcp.pem
+      String cert = "/certs/jclouds-test-fgcp.pem";
+      URL url = this.getClass().getResource(cert);
+      assertNotNull(url, cert + " not found");
 
-		identity = url.getFile();
-		credential = "jcloudsjclouds";
-	}
+      try {
+         credential = Resources.toString(url, Charsets.UTF_8);
+      } catch (IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+   }
 
-	@ConfiguresRestClient
-	protected static final class TestFGCPRestClientModule extends
-			FGCPRestClientModule {
+   @ConfiguresRestClient
+   protected static final class TestFGCPRestClientModule extends
+         FGCPRestClientModule {
 
-		@Override
-		protected Calendar provideCalendar() {
-			// pick country/TZ with no DST just in case to maintain constant
-			// time wherever the tests are run.
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT-9"),
-					Locale.JAPAN);
-			cal.setTimeInMillis(1234567890);
-			return cal;
-		}
-	}
+      @Override
+      protected Calendar provideCalendar() {
+         // pick country/TZ with no DST just in case to maintain constant
+         // time wherever the tests are run.
+         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT-9"),
+               Locale.JAPAN);
+         cal.setTimeInMillis(1234567890);
+         return cal;
+      }
+   }
 
-	@Override
-	protected Module createModule() {
-		return new TestFGCPRestClientModule();
-	}
+   @Override
+   protected Module createModule() {
+      return new TestFGCPRestClientModule();
+   }
 
    @Override
    protected ProviderMetadata createProviderMetadata() {

@@ -19,6 +19,7 @@
 package org.jclouds.fujitsu.fgcp;
 
 import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
+
 import java.util.Properties;
 
 import org.jclouds.compute.config.ComputeServiceProperties;
