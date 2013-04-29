@@ -23,25 +23,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jclouds.labs</groupId>
-        <artifactId>jclouds-labs</artifactId>
+        <artifactId>jclouds-labs-aws</artifactId>
         <version>1.7.0-SNAPSHOT</version>
     </parent>
 
-    <!-- TODO: when out of labs, switch to org.jclouds.api -->
+    <!-- TODO: when out of labs, switch to org.jclouds.provider -->
     <groupId>org.jclouds.labs</groupId>
-    <artifactId>rds</artifactId>
-    <name>jcloud rds api</name>
-    <description>jclouds components to access an implementation of Relational Database Service</description>
+    <artifactId>aws-rds</artifactId>
+    <name>jclouds Amazon Relational Database Service provider</name>
+    <description>Relational Database Service implementation targeted to Amazon Web Services</description>
     <packaging>bundle</packaging>
 
     <properties>
-        <test.rds.endpoint>https://rds.us-east-1.amazonaws.com</test.rds.endpoint>
-        <test.rds.api-version>2012-04-23</test.rds.api-version>
-        <test.rds.build-version />
-        <test.rds.identity>${test.aws.identity}</test.rds.identity>
-        <test.rds.credential>${test.aws.credential}</test.rds.credential>
+        <test.aws-rds.endpoint>https://rds.us-east-1.amazonaws.com</test.aws-rds.endpoint>
+        <test.aws-rds.api-version>2012-04-23</test.aws-rds.api-version>
+        <test.aws-rds.build-version />
+        <test.aws-rds.identity>${test.aws.identity}</test.aws-rds.identity>
+        <test.aws-rds.credential>${test.aws.credential}</test.aws-rds.credential>
 
-      <jclouds.osgi.export>org.jclouds.rds*;version="${project.version}"</jclouds.osgi.export>
+      <jclouds.osgi.export>org.jclouds.aws.rds*;version="${project.version}"</jclouds.osgi.export>
       <jclouds.osgi.import>
         org.jclouds.labs*;version="${project.version}",
         org.jclouds*;version="${jclouds.version}",
@@ -51,9 +51,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jclouds.api</groupId>
-            <artifactId>sts</artifactId>
-            <version>${jclouds.version}</version>
+            <groupId>org.jclouds.labs</groupId>
+            <artifactId>rds</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds.labs</groupId>
+            <artifactId>rds</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
@@ -92,11 +99,11 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <test.rds.endpoint>${test.rds.endpoint}</test.rds.endpoint>
-                                        <test.rds.api-version>${test.rds.api-version}</test.rds.api-version>
-                                        <test.rds.build-version>${test.rds.build-version}</test.rds.build-version>
-                                        <test.rds.identity>${test.rds.identity}</test.rds.identity>
-                                        <test.rds.credential>${test.rds.credential}</test.rds.credential>
+                                        <test.aws-rds.endpoint>${test.aws-rds.endpoint}</test.aws-rds.endpoint>
+                                        <test.aws-rds.api-version>${test.aws-rds.api-version}</test.aws-rds.api-version>
+                                        <test.aws-rds.build-version>${test.aws-rds.build-version}</test.aws-rds.build-version>
+                                        <test.aws-rds.identity>${test.aws-rds.identity}</test.aws-rds.identity>
+                                        <test.aws-rds.credential>${test.aws-rds.credential}</test.aws-rds.credential>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -108,4 +115,3 @@
     </profiles>
 
 </project>
-

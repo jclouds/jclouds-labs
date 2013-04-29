@@ -23,41 +23,41 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jclouds.labs</groupId>
-        <artifactId>jclouds-labs</artifactId>
+        <artifactId>jclouds-labs-aws</artifactId>
         <version>1.7.0-SNAPSHOT</version>
     </parent>
 
     <!-- TODO: when out of labs, switch to org.jclouds.provider -->
     <groupId>org.jclouds.labs</groupId>
-    <artifactId>aws-rds</artifactId>
-    <name>jclouds Amazon Relational Database Service provider</name>
-    <description>Relational Database Service implementation targeted to Amazon Web Services</description>
+    <artifactId>aws-iam</artifactId>
+    <name>jclouds Amazon Identity and Access Management (IAM) provider</name>
+    <description>Identity and Access Management (IAM) to Amazon Web Services</description>
     <packaging>bundle</packaging>
 
     <properties>
-        <test.aws-rds.endpoint>https://rds.us-east-1.amazonaws.com</test.aws-rds.endpoint>
-        <test.aws-rds.api-version>2012-04-23</test.aws-rds.api-version>
-        <test.aws-rds.build-version />
-        <test.aws-rds.identity>${test.aws.identity}</test.aws-rds.identity>
-        <test.aws-rds.credential>${test.aws.credential}</test.aws-rds.credential>
+        <test.aws-iam.endpoint>https://iam.amazonaws.com</test.aws-iam.endpoint>
+        <test.aws-iam.api-version>2010-05-08</test.aws-iam.api-version>
+        <test.aws-iam.build-version />
+        <test.aws-iam.identity>${test.aws.identity}</test.aws-iam.identity>
+        <test.aws-iam.credential>${test.aws.credential}</test.aws-iam.credential>
 
-      <jclouds.osgi.export>org.jclouds.aws.rds*;version="${project.version}"</jclouds.osgi.export>
-      <jclouds.osgi.import>
-        org.jclouds.labs*;version="${project.version}",
-        org.jclouds*;version="${jclouds.version}",
-        *
-      </jclouds.osgi.import>
+        <jclouds.osgi.export>org.jclouds.aws.iam*;version="${project.version}"</jclouds.osgi.export>
+        <jclouds.osgi.import>
+          org.jclouds.labs*;version="${project.version}",
+          org.jclouds*;version="${jclouds.version}",
+          *
+        </jclouds.osgi.import>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.jclouds.labs</groupId>
-            <artifactId>rds</artifactId>
+            <artifactId>iam</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jclouds.labs</groupId>
-            <artifactId>rds</artifactId>
+            <artifactId>iam</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
@@ -71,13 +71,8 @@
         </dependency>
         <dependency>
             <groupId>org.jclouds.driver</groupId>
-            <artifactId>jclouds-slf4j</artifactId>
+            <artifactId>jclouds-log4j</artifactId>
             <version>${jclouds.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -99,11 +94,11 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <test.aws-rds.endpoint>${test.aws-rds.endpoint}</test.aws-rds.endpoint>
-                                        <test.aws-rds.api-version>${test.aws-rds.api-version}</test.aws-rds.api-version>
-                                        <test.aws-rds.build-version>${test.aws-rds.build-version}</test.aws-rds.build-version>
-                                        <test.aws-rds.identity>${test.aws-rds.identity}</test.aws-rds.identity>
-                                        <test.aws-rds.credential>${test.aws-rds.credential}</test.aws-rds.credential>
+                                        <test.aws-iam.endpoint>${test.aws-iam.endpoint}</test.aws-iam.endpoint>
+                                        <test.aws-iam.api-version>${test.aws-iam.api-version}</test.aws-iam.api-version>
+                                        <test.aws-iam.build-version>${test.aws-iam.build-version}</test.aws-iam.build-version>
+                                        <test.aws-iam.identity>${test.aws-iam.identity}</test.aws-iam.identity>
+                                        <test.aws-iam.credential>${test.aws-iam.credential}</test.aws-iam.credential>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>

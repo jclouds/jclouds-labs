@@ -59,22 +59,17 @@
     <modules>
        <module>virtualbox</module>
        <module>vcloud-director</module>
-       <module>elb</module>
-       <module>aws-elb</module>
        <module>dmtf</module>
        <module>cdmi</module>
        <module>joyent-cloudapi</module>
        <module>joyentcloud</module>
        <module>google-compute-engine</module>
-       <module>iam</module>
-       <module>aws-iam</module>
-       <module>rds</module>
-       <module>aws-rds</module>
        <module>fgcp</module>
        <module>fgcp-au</module>
        <module>fgcp-de</module>
        <module>abiquo</module>
        <module>oauth</module>
+       <module>aws</module>
        <module>openstack</module>
     </modules>
 
