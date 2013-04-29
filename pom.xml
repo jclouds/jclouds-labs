@@ -63,14 +63,13 @@
        <module>cdmi</module>
        <module>joyent-cloudapi</module>
        <module>joyentcloud</module>
-       <module>google-compute-engine</module>
        <module>fgcp</module>
        <module>fgcp-au</module>
        <module>fgcp-de</module>
        <module>abiquo</module>
-       <module>oauth</module>
        <module>aws</module>
        <module>openstack</module>
+       <module>google</module>
     </modules>
 
     <build>
