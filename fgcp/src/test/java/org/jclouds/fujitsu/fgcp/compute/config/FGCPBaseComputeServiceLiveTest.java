@@ -33,12 +33,14 @@ public abstract class FGCPBaseComputeServiceLiveTest extends
             overrides.setProperty(Constants.PROPERTY_PROXY_USER, parts[parts.length - 4]);
             overrides.setProperty(Constants.PROPERTY_PROXY_PASSWORD, parts[parts.length - 3]);
          }
+
+         overrides.setProperty(Constants.PROPERTY_PROXY_FOR_SOCKETS, "false");
       }
    
       // enables peer verification using the CAs bundled with the JRE (or
       // value of javax.net.ssl.trustStore if set)
       overrides.setProperty(Constants.PROPERTY_TRUST_ALL_CERTS, "false");
-   
+
       return overrides;
    }
 
