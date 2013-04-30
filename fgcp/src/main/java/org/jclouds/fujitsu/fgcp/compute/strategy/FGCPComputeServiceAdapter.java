@@ -24,9 +24,7 @@ import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.util.Predicates2.retry;
 
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -41,7 +39,6 @@ import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.fujitsu.fgcp.FGCPApi;
-import org.jclouds.fujitsu.fgcp.FGCPAsyncApi;
 import org.jclouds.fujitsu.fgcp.compute.functions.ResourceIdToFirewallId;
 import org.jclouds.fujitsu.fgcp.compute.functions.ResourceIdToSystemId;
 import org.jclouds.fujitsu.fgcp.compute.predicates.ServerStarted;
@@ -58,16 +55,11 @@ import org.jclouds.fujitsu.fgcp.domain.VSystemWithDetails;
 import org.jclouds.logging.Logger;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * Defines the connection between the {@link org.jclouds.fujitsu.fgcp.FGCPApi}
  * implementation and the jclouds {@link org.jclouds.compute.ComputeService}.
- * Bound in FGCPComputeServiceAdapter.
  * 
  * @author Dies Koper
  */
@@ -80,7 +72,6 @@ public class FGCPComputeServiceAdapter implements
    protected Logger logger = Logger.NULL;
 
    private final FGCPApi api;
-   private final FGCPAsyncApi asyncApi;
    protected Predicate<String> serverStopped = null;
    protected Predicate<String> serverStarted = null;
    protected Predicate<String> serverCreated = null;
@@ -89,12 +80,11 @@ public class FGCPComputeServiceAdapter implements
    protected ResourceIdToSystemId toSystemId = null;
 
    @Inject
-   public FGCPComputeServiceAdapter(FGCPApi api, FGCPAsyncApi asyncApi,
-         ServerStopped serverStopped, ServerStarted serverStarted, SystemStatusNormal systemNormal,
+   public FGCPComputeServiceAdapter(FGCPApi api, ServerStopped serverStopped,
+         ServerStarted serverStarted, SystemStatusNormal systemNormal,
          Timeouts timeouts, ResourceIdToFirewallId toFirewallId,
          ResourceIdToSystemId toSystemId) {
       this.api = checkNotNull(api, "api");
-      this.asyncApi = checkNotNull(asyncApi, "asyncApi");
       this.serverStopped = retry(checkNotNull(serverStopped), timeouts.nodeSuspended);
       this.serverStarted = retry(checkNotNull(serverStarted), timeouts.nodeRunning);
       this.serverCreated = retry(checkNotNull(serverStopped), timeouts.nodeRunning);
@@ -120,14 +110,12 @@ public class FGCPComputeServiceAdapter implements
       checkState(serverStarted.apply(id), "could not start %s after creation", id);
       VServerMetadata server = getNode(id);
 
-      //do we need this?
+      // do we need this?
       server.setTemplate(template);
-      String user = template.getImage().getOperatingSystem().getFamily() == OsFamily.WINDOWS ? "Administrator"
-            : "root";
+      String user = template.getImage().getOperatingSystem().getFamily() == OsFamily.WINDOWS ? "Administrator" : "root";
 
-      return new NodeAndInitialCredentials<VServerMetadata>(server,
-            id, LoginCredentials.builder().identity(user)
-                  .password(server.getInitialPassword()).build());
+      return new NodeAndInitialCredentials<VServerMetadata>(server, id, LoginCredentials.builder().identity(user)
+            .password(server.getInitialPassword()).build());
    }
 
    /**
@@ -172,38 +160,28 @@ public class FGCPComputeServiceAdapter implements
       Builder builder = VServerMetadata.builder();
       builder.id(id);
 
-      List<ListenableFuture<?>> futures = Lists.newArrayList();
-
-      futures.add(asyncApi.getVirtualServerApi().getDetails(id));
-      futures.add(asyncApi.getVirtualServerApi().getStatus(id));
-      futures.add(asyncApi.getVirtualServerApi().getInitialPassword(id));
       // mapped public ips?
-      String fwId = toFirewallId.apply(id);
-//      futures.add(asyncApi.getBuiltinServerApi().getConfiguration(fwId,
-//            BuiltinServerConfiguration.SLB_RULE));
-      try {
-         List<Object> results = Futures.successfulAsList(futures).get();
-         VServerWithDetails server = (VServerWithDetails) results.get(0);
-         VServerStatus status = (VServerStatus) results.get(1);
-         System.out.println("getNode(" + id + ")'s getDetails: " + status +" - " + server);
-         if (server == null) {
-            server = api.getVirtualServerApi().getDetails(id);
-            System.out.println("getNode(" + id + ")'s getDetails(2) returns: " + server);
-         }
-         builder.serverWithDetails(server);
-         builder.status(status == null ? VServerStatus.UNRECOGNIZED : status);
-//         System.out.println("status in adapter#getNode: " 
-//         + (VServerStatus) results.get(1) 
-//         +" for " 
-//         + server.getId());
-         builder.initialPassword((String) results.get(2));
-//         SLB slb = ((BuiltinServer) results.get(4)).;
-//         slb.
-      } catch (InterruptedException e) {
-         throw Throwables.propagate(e);
-      } catch (ExecutionException e) {
-         throw Throwables.propagate(e);
+//      String fwId = toFirewallId.apply(id);
+      // futures.add(asyncApi.getBuiltinServerApi().getConfiguration(fwId,
+      // BuiltinServerConfiguration.SLB_RULE));
+
+      VServerWithDetails server = api.getVirtualServerApi().getDetails(id);
+      VServerStatus status = api.getVirtualServerApi().getStatus(id);
+      logger.info("%s [%s] - %s", id, status, server);
+      if (server == null) {
+         server = api.getVirtualServerApi().getDetails(id);
+         logger.warn("!!!!!!!!!! server returned null. 2nd try: %s", server);
       }
+      builder.serverWithDetails(server);
+      builder.status(status == null ? VServerStatus.UNRECOGNIZED : status);
+      // System.out.println("status in adapter#getNode: "
+      // + (VServerStatus) results.get(1)
+      // +" for "
+      // + server.getId());
+      builder.initialPassword(api.getVirtualServerApi().getInitialPassword(id));
+      // SLB slb = ((BuiltinServer) results.get(4)).;
+      // slb.
+
       return builder.build();
    }
 
@@ -212,40 +190,26 @@ public class FGCPComputeServiceAdapter implements
     */
    @Override
    public Iterable<VServerMetadata> listNodes() {
-      ImmutableSet.Builder<VServerMetadata> servers = ImmutableSet
-            .<VServerMetadata> builder();
+      ImmutableSet.Builder<VServerMetadata> servers = ImmutableSet.<VServerMetadata> builder();
 
       Set<VSystem> systems = api.getVirtualDCApi().listVirtualSystems();
-      List<ListenableFuture<VSystemWithDetails>> futures = Lists.newArrayList();
       for (VSystem system : systems) {
 
-         futures.add(asyncApi.getVirtualSystemApi().getDetails(
-               system.getId()));
-      }
-      try {
-         for (VSystemWithDetails system : Futures.successfulAsList(futures)
-               .get()) {
+         VSystemWithDetails systemDetails = api.getVirtualSystemApi().getDetails(system.getId());
 
-            if (system != null) {
+         for (VServerWithVNICs server : systemDetails.getServers()) {
 
-               for (VServerWithVNICs server : system.getServers()) {
+            // skip FW (S-0001) and SLBs (>0 for SLB)
+            // TODO: rewrite to use serverType instead
+            if (!server.getId().endsWith("-S-0001") && server.getVnics().iterator().next().getNicNo() == 0) {
 
-                  // skip FW (S-0001) and SLBs (>0 for SLB)
-                  if (!server.getId().endsWith("-S-0001") && server.getVnics().iterator().next().getNicNo() == 0) {
-
-                     servers.add(getNode(server.getId()));
-//                    Builder builder = VServerMetadata.builder();
-//                    builder.server(server);
-//                    builder.status(VServerStatus.UNRECOGNIZED);
-//                    servers.add(builder.build());
-                  }
-               }
+               servers.add(getNode(server.getId()));
+               // Builder builder = VServerMetadata.builder();
+               // builder.server(server);
+               // builder.status(VServerStatus.UNRECOGNIZED);
+               // servers.add(builder.build());
             }
          }
-      } catch (InterruptedException e) {
-         throw Throwables.propagate(e);
-      } catch (ExecutionException e) {
-         throw Throwables.propagate(e);
       }
 
       return servers.build();

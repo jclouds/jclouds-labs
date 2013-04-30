@@ -18,6 +18,8 @@
  */
 package org.jclouds.fujitsu.fgcp;
 
+import java.io.Closeable;
+
 import org.jclouds.fujitsu.fgcp.services.AdditionalDiskApi;
 import org.jclouds.fujitsu.fgcp.services.DiskImageApi;
 import org.jclouds.fujitsu.fgcp.services.FirewallApi;
@@ -30,11 +32,12 @@ import org.jclouds.fujitsu.fgcp.services.VirtualSystemApi;
 import org.jclouds.rest.annotations.Delegate;
 
 /**
- * Provides synchronous access to FGCP services.
+ * Provides access to FGCP services.
  * 
  * @author Dies Koper
  */
-public interface FGCPApi {
+public interface FGCPApi extends Closeable {
+   public static final String VERSION = "2012-02-18";
 
    @Delegate
    VirtualDCApi getVirtualDCApi();

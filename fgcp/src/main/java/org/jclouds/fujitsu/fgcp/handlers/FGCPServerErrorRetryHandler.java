@@ -38,8 +38,7 @@ import com.google.inject.Singleton;
  * @author Dies Koper
  */
 @Singleton
-public class FGCPServerErrorRetryHandler implements
-      HttpRetryHandler {
+public class FGCPServerErrorRetryHandler implements HttpRetryHandler {
    private final BackoffLimitedRetryHandler backoffHandler;
 
    @Inject
