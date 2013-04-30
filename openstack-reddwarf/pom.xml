@@ -28,7 +28,6 @@
   </parent>
 
   <!-- TODO: when out of labs, switch to org.jclouds.api -->
-  <groupId>org.jclouds.labs</groupId>
   <artifactId>openstack-reddwarf</artifactId>
   <name>jclouds openstack-reddwarf api</name>
   <description>jclouds components to access an implementation of OpenStack RedDwarf</description>

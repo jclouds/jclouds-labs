@@ -24,6 +24,7 @@ import java.util.List;
 import org.jclouds.openstack.v2_0.domain.Link;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -34,7 +35,7 @@ import com.google.common.collect.ImmutableList;
 public class Flavor implements Comparable<Flavor>{
 
     private final int id;
-    private final String name;
+    private final Optional<String> name;
     private final int ram;
     private final List<Link> links;
 
@@ -42,8 +43,8 @@ public class Flavor implements Comparable<Flavor>{
         "id", "name", "ram", "links"
     })
     protected Flavor(int id, String name, int ram, List<Link> links) {
-        this.id = id;
-        this.name = checkNotNull(name, "name required");
+        this.id = checkNotNull(id);
+        this.name = Optional.fromNullable(name);
         this.ram = ram;
         this.links = links;
     }
@@ -59,7 +60,7 @@ public class Flavor implements Comparable<Flavor>{
      * @return the name of this flavor
      */
     public String getName() {
-        return this.name;
+        return this.name.orNull();
     }
 
     /**
