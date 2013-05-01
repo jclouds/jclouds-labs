@@ -52,6 +52,9 @@ public abstract class FGCPBaseTemplateBuilderLiveTest extends BaseTemplateBuilde
             case CENTOS:
                return ("".equals(input.version) && input.is64Bit) || (input.version.matches("5.[46]") && input.is64Bit)
                      || input.version.equals("6.[2]");
+            case RHEL:
+               return ("".equals(input.version) && input.is64Bit) || (input.version.matches("5.[78]") && input.is64Bit)
+                     || input.version.equals("6.[3]");
             case WINDOWS:
                return ("".equals(input.version) && input.is64Bit)
                      || (input.version.equals("2008 R2 SE") || input.version.equals("2008 R2 EE")) && input.is64Bit;
