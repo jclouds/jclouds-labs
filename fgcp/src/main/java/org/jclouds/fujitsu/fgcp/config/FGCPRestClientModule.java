@@ -18,7 +18,6 @@
  */
 package org.jclouds.fujitsu.fgcp.config;
 
-import java.security.KeyStore;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -29,6 +28,7 @@ import javax.net.ssl.SSLContext;
 import org.jclouds.date.TimeStamp;
 import org.jclouds.fujitsu.fgcp.FGCPApi;
 import org.jclouds.fujitsu.fgcp.FGCPAsyncApi;
+import org.jclouds.fujitsu.fgcp.FGCPCredentials;
 import org.jclouds.fujitsu.fgcp.handlers.FGCPServerErrorRetryHandler;
 import org.jclouds.fujitsu.fgcp.handlers.ResponseNotSuccessHandler;
 import org.jclouds.fujitsu.fgcp.http.ChangeReturnCodeTo500IfErrorJavaUrlHttpCommandExecutorService;
@@ -53,7 +53,7 @@ import org.jclouds.fujitsu.fgcp.services.VirtualServerApi;
 import org.jclouds.fujitsu.fgcp.services.VirtualServerAsyncApi;
 import org.jclouds.fujitsu.fgcp.services.VirtualSystemApi;
 import org.jclouds.fujitsu.fgcp.services.VirtualSystemAsyncApi;
-import org.jclouds.fujitsu.fgcp.suppliers.KeyStoreSupplier;
+import org.jclouds.fujitsu.fgcp.suppliers.FGCPCredentialsSupplier;
 import org.jclouds.fujitsu.fgcp.suppliers.SSLContextWithKeysSupplier;
 import org.jclouds.fujitsu.fgcp.xml.FGCPJAXBParser;
 import org.jclouds.http.HttpErrorHandler;
@@ -133,11 +133,9 @@ public class FGCPRestClientModule extends
    protected void configure() {
       super.configure();
       bind(XMLParser.class).to(FGCPJAXBParser.class);
+      bind(new TypeLiteral<Supplier<FGCPCredentials>>() {}).to(FGCPCredentialsSupplier.class);
       bind(new TypeLiteral<Supplier<SSLContext>>() {
       }).to(new TypeLiteral<SSLContextWithKeysSupplier>() {
-      });
-      bind(new TypeLiteral<Supplier<KeyStore>>() {
-      }).to(new TypeLiteral<KeyStoreSupplier>() {
       });
       bind(HostnameVerifier.class).to(LogToMapHostnameVerifier.class);
       bind(JavaUrlHttpCommandExecutorService.class).to(ChangeReturnCodeTo500IfErrorJavaUrlHttpCommandExecutorService.class);

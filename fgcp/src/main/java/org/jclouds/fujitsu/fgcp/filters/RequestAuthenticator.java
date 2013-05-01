@@ -25,13 +25,10 @@ import static com.google.common.io.BaseEncoding.base64;
 import static org.jclouds.http.utils.Queries.queryParser;
 
 import java.security.InvalidKeyException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.security.UnrecoverableKeyException;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -47,7 +44,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Constants;
 import org.jclouds.date.TimeStamp;
-import org.jclouds.domain.Credentials;
+import org.jclouds.fujitsu.fgcp.FGCPCredentials;
 import org.jclouds.fujitsu.fgcp.reference.RequestParameters;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
@@ -67,7 +64,8 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Multimap;
 
 /**
- * Generates and signs the access key id and adds the mandatory http header and request parameters to the request.
+ * Generates and signs the access key id and adds the mandatory http header and
+ * request parameters to the request.
  * 
  * @author Dies Koper
  */
@@ -77,22 +75,20 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
    @Resource
    @Named(Constants.LOGGER_SIGNATURE)
    private Logger signatureLog = Logger.NULL;
-   
-   private final Supplier<Credentials> creds;
-   private final LoadingCache<Credentials, Signature> signerCache;
+
+   private final Supplier<FGCPCredentials> creds;
+   private final LoadingCache<FGCPCredentials, Signature> signerCache;
    private final Provider<Calendar> calendarProvider;
    private final HttpUtils utils;
    private final String apiVersion;
 
-   private final static String signatureVersion = "1.0";
-   private final static String signatureMethod = "SHA1withRSA";
+   final static String SIGNATURE_VERSION = "1.0";
+   final static String SIGNATURE_METHOD = "SHA1withRSA";
 
    @Inject
-   public RequestAuthenticator(@TimeStamp Provider<Calendar> calendarProvider,
-         SignatureForCredentials loader,
-         @org.jclouds.location.Provider Supplier<Credentials> creds,
-         HttpUtils utils, SignatureWire signatureWire,
-         @ApiVersion String apiVersion) {
+   public RequestAuthenticator(Supplier<FGCPCredentials> creds,
+         SignatureForCredentials loader, @TimeStamp Provider<Calendar> calendarProvider, HttpUtils utils,
+         SignatureWire signatureWire, @ApiVersion String apiVersion) {
       this.calendarProvider = checkNotNull(calendarProvider);
       this.creds = checkNotNull(creds, "creds");
       // throw out the signature related to old keys
@@ -102,34 +98,21 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
    }
 
    /**
-    * it is relatively expensive to create a new signing key. cache the relationship between current credentials so that
-    * the signer is only recalculated once.
+    * It is relatively expensive to create a new signing key. Cache the
+    * relationship between current credentials so that the signer is only
+    * recalculated once.
     */
    @VisibleForTesting
-   static class SignatureForCredentials extends CacheLoader<Credentials, Signature> {
-      private final Supplier<KeyStore> keyStore;
-
-      @Inject
-      public SignatureForCredentials(Supplier<KeyStore> keyStore) {
-         this.keyStore = checkNotNull(keyStore, "keyStore");
-      }
+   static class SignatureForCredentials extends CacheLoader<FGCPCredentials, Signature> {
 
       @Override
-      public Signature load(Credentials in) {
-         String keyPassword = checkNotNull(in.credential,
-               "credential supplier returned null for credential (keyPassword)");
+      public Signature load(FGCPCredentials creds) {
+         PrivateKey privateKey = checkNotNull(creds.privateKey, "fgcpcredential's privateKey is null");
          try {
-            Signature signer = Signature.getInstance(signatureMethod);
-            KeyStore keyStore = checkNotNull(this.keyStore.get(), "keyStore");
-            String alias = keyStore.aliases().nextElement(); // there should be only one private key
-            PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPassword.toCharArray());
+            Signature signer = Signature.getInstance(RequestAuthenticator.SIGNATURE_METHOD);
             signer.initSign(privateKey);
             return signer;
          } catch (NoSuchAlgorithmException e) {
-            throw propagate(e);
-         } catch (KeyStoreException e) {
-            throw propagate(e);
-         } catch (UnrecoverableKeyException e) {
             throw propagate(e);
          } catch (InvalidKeyException e) {
             throw propagate(e);
@@ -150,8 +133,7 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
             .getLanguage() : Locale.ENGLISH.getLanguage();
 
       if (HttpMethod.GET.equals(request.getMethod())) {
-         request = addQueryParamsToRequest(request, accessKeyId, signature,
-               lang);
+         request = addQueryParamsToRequest(request, accessKeyId, signature, lang);
       } else {
 
          String payload = request.getPayload().getRawContent().toString();
@@ -174,28 +156,23 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
    }
 
    @VisibleForTesting
-   HttpRequest addQueryParamsToRequest(HttpRequest request, String accessKeyId,
-         String signature, String lang) {
+   HttpRequest addQueryParamsToRequest(HttpRequest request, String accessKeyId, String signature, String lang) {
       // url encode "+" (which comes from base64 encoding) or else it may be
       // converted into a %20 (space) which the API endpoint doesn't
       // expect/accept.
       accessKeyId = accessKeyId.replace("+", "%2B");
       signature = signature.replace("+", "%2B");
 
-      Multimap<String, String> decodedParams = queryParser().apply(
-            request.getEndpoint().getRawQuery());
-      Builder<?> builder = request.toBuilder()
-            .endpoint(request.getEndpoint())
-            .method(request.getMethod());
+      Multimap<String, String> decodedParams = queryParser().apply(request.getEndpoint().getRawQuery());
+      Builder<?> builder = request.toBuilder().endpoint(request.getEndpoint()).method(request.getMethod());
       if (!decodedParams.containsKey("Version")) {
          builder.addQueryParam(RequestParameters.VERSION, apiVersion);
       }
-      builder.addQueryParam(RequestParameters.LOCALE, lang)
-            .addQueryParam(RequestParameters.ACCESS_KEY_ID, accessKeyId)
-            // the addition of another param causes %2B's in prev. params to
-            // convert to %20. Needs to be addressed if there are cases where
-            // accessKeyId contains %2B's.
-            // So signature should be added last:
+      builder.addQueryParam(RequestParameters.LOCALE, lang).addQueryParam(RequestParameters.ACCESS_KEY_ID, accessKeyId)
+      // the addition of another param causes %2B's in prev. params to
+      // convert to %20. Needs to be addressed if there are cases where
+      // accessKeyId contains %2B's.
+      // So signature should be added last:
             .addQueryParam(RequestParameters.SIGNATURE, signature);
 
       return builder.build();
@@ -228,9 +205,8 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
       String timezone = cal.getTimeZone().getDisplayName(Locale.ENGLISH);
       String expires = String.valueOf(cal.getTime().getTime());
 
-      String signatureData = String.format("%s&%s&%s&%s", timezone, expires, signatureVersion, signatureMethod);
-      String accessKeyId = base64().withSeparator("\n", 61).encode(
-            signatureData.getBytes(UTF_8));
+      String signatureData = String.format("%s&%s&%s&%s", timezone, expires, SIGNATURE_VERSION, SIGNATURE_METHOD);
+      String accessKeyId = base64().withSeparator("\n", 61).encode(signatureData.getBytes(UTF_8));
 
       return accessKeyId;
    }
