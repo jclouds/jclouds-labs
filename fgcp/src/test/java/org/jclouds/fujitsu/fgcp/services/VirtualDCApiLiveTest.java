@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.jclouds.fujitsu.fgcp.domain.ServerType;
 import org.jclouds.fujitsu.fgcp.domain.VSystem;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
 /**
@@ -35,20 +34,12 @@ import org.testng.annotations.Test;
 @Test(groups = "live", enabled = true, singleThreaded = true, testName = "VirtualDCApiLiveTest")
 public class VirtualDCApiLiveTest extends BaseFGCPApiLiveTest {
 
-   private VirtualDCApi api;
-
-   @BeforeGroups(groups = { "live" })
-   public void setupContext() {
-      super.setupContext();
-      api = fgcpContext.getApi().getVirtualDCApi();
-   }
-
    public void testListVirtualSystems() {
 /*      Properties overrides = setupProperties();
       RestContext<FGCPClient, FGCPAsyncClientTest> context = new RestContextFactory().createContext(provider, ImmutableSet.<Module> of(new Log4JLoggingModule()),
             overrides);*/
 
-      Set<VSystem> vsysSet = api.listVirtualSystems();
+      Set<VSystem> vsysSet = api.getVirtualDCApi().listVirtualSystems();
       assertNotNull(vsysSet, "vsysSet");
       assertTrue(vsysSet.size() > 0, "vsysSet.size() should be greater than 0");
       for (VSystem vsys : vsysSet) {
@@ -57,7 +48,7 @@ public class VirtualDCApiLiveTest extends BaseFGCPApiLiveTest {
    }
 
 /*   public void testCreateVirtualSystem() {
-      String vsysId = api.createVirtualSystem("abc", "def");
+      String vsysId = vdcApi.createVirtualSystem("abc", "def");
 
       assertNotNull(vsysId, "vsysId");
       assertNotEquals("", vsysId, "vsysId is empty (\"\")");
@@ -65,7 +56,7 @@ public class VirtualDCApiLiveTest extends BaseFGCPApiLiveTest {
    }*/
 
    public void testListServerTypes() {
-      Set<ServerType> serverTypes = api.listServerTypes();
+      Set<ServerType> serverTypes = api.getVirtualDCApi().listServerTypes();
 
       assertNotNull(serverTypes, "serverTypes");
       assertEquals(4, serverTypes.size(), "serverTypes.size should return 4, not " + serverTypes.size());

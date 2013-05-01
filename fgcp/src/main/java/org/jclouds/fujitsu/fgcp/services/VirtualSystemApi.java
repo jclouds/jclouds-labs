@@ -18,7 +18,18 @@
  */
 package org.jclouds.fujitsu.fgcp.services;
 
+import java.io.Closeable;
 import java.util.Set;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.fujitsu.fgcp.FGCPApi;
+import org.jclouds.fujitsu.fgcp.binders.BindAlsoToSystemId;
+import org.jclouds.fujitsu.fgcp.compute.functions.SingleElementResponseToElement;
 import org.jclouds.fujitsu.fgcp.domain.BuiltinServer;
 import org.jclouds.fujitsu.fgcp.domain.PublicIP;
 import org.jclouds.fujitsu.fgcp.domain.VDisk;
@@ -26,45 +37,152 @@ import org.jclouds.fujitsu.fgcp.domain.VServer;
 import org.jclouds.fujitsu.fgcp.domain.VSystem;
 import org.jclouds.fujitsu.fgcp.domain.VSystemStatus;
 import org.jclouds.fujitsu.fgcp.domain.VSystemWithDetails;
+import org.jclouds.fujitsu.fgcp.filters.RequestAuthenticator;
+import org.jclouds.fujitsu.fgcp.reference.RequestParameters;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.PayloadParams;
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+
 
 /**
  * API relating to virtual systems.
  * 
  * @author Dies Koper
  */
-public interface VirtualSystemApi {
+@RequestFilters(RequestAuthenticator.class)
+@QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)
+@PayloadParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)
+@Consumes(MediaType.TEXT_XML)
+public interface VirtualSystemApi extends Closeable {
 
-   void destroy(String id);
+   @Named("DestroyVSYS")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "DestroyVSYS")
+   void destroy(@QueryParam("vsysId") String id);
 
-   VSystemStatus getStatus(String id);
+   @Named("GetVSYSStatus")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "GetVSYSStatus")
+   @Transform(SingleElementResponseToElement.class)
+   VSystemStatus getStatus(@QueryParam("vsysId") String id);
 
-   VSystem get(String id);
+   @Named("GetVSYSAttributes")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "GetVSYSAttributes")
+   @Transform(SingleElementResponseToElement.class)
+   VSystem get(@QueryParam("vsysId") String id);
 
-   VSystemWithDetails getDetails(String id);
+   @Named("GetVSYSConfiguration")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "GetVSYSConfiguration")
+   @Transform(SingleElementResponseToElement.class)
+   VSystemWithDetails getDetails(
+         @QueryParam("vsysId") String id);
 
-   void update(String id, String name, String value);
+   @Named("UpdateVSYSAttribute")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "UpdateVSYSAttribute")
+   void update(@QueryParam("vsysId") String id,
+         @QueryParam("attributeName") String name,
+         @QueryParam("attributeValue") String value);
 
-   void updateConfiguration(String id, String name, String value);
+   @Named("UpdateVSYSConfiguration")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "UpdateVSYSConfiguration")
+   void updateConfiguration(@QueryParam("vsysId") String id,
+         @QueryParam("configurationName") String name,
+         @QueryParam("configurationValue") String value);
 
-   String createServer(String name, String type, String diskImageId,
-         String networkId);
+   @Named("CreateVServer")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "CreateVServer")
+   @Transform(SingleElementResponseToElement.class)
+   String createServer(
+         @QueryParam("vserverName") String name,
+         @QueryParam("vserverType") String type,
+         @QueryParam("diskImageId") String diskImageId,
+         @BinderParam(BindAlsoToSystemId.class) @QueryParam("networkId") String networkId);
 
-   Set<VServer> listServers(String id);
+   @Named("ListVServer")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "ListVServer")
+   Set<VServer> listServers(@QueryParam("vsysId") String id);
 
-   String createBuiltinServer(String name, String networkId);
+   @Named("CreateVDisk")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "CreateVDisk")
+   @Transform(SingleElementResponseToElement.class)
+   String createDisk(@QueryParam("vsysId") String id,
+         @QueryParam("vdiskName") String name, @QueryParam("size") int size);
 
-   Set<BuiltinServer> listBuiltinServers(String id, String type);
+   @Named("ListVDisk")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "ListVDisk")
+   Set<VDisk> listDisks(@QueryParam("vsysId") String id);
 
-   String createDisk(String id, String name, int size);
+   @Named("AllocatePublicIP")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "AllocatePublicIP")
+   void allocatePublicIP(@QueryParam("vsysId") String id);
 
-   Set<VDisk> listDisks(String id);
+   /**
+    *
+    * @return
+    * @see VirtualDCApi#listPublicIPs()
+    */
+   @Named("ListPublicIP")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "ListPublicIP")
+   @Transform(SingleElementResponseToElement.class)
+   Set<PublicIP> listPublicIPs(
+         @QueryParam("vsysId") String id);
 
-   void allocatePublicIP(String id);
+   @Named("CreateEFM")
+   @GET
+   @JAXBResponseParser
+   // SLB is the only built-in server that can currently be created so
+   // hard-code it
+   @QueryParams(keys = { "Action", "efmType" }, values = { "CreateEFM", "SLB" })
+   @Transform(SingleElementResponseToElement.class)
+   String createBuiltinServer(
+         @QueryParam("efmName") String name,
+         @BinderParam(BindAlsoToSystemId.class) @QueryParam("networkId") String networkId);
 
-   Set<PublicIP> listPublicIPs(String id);
+   @Named("ListEFM")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "ListEFM")
+   Set<BuiltinServer> listBuiltinServers(
+         @QueryParam("vsysId") String id, @QueryParam("efmType") String type);
 
-   String standByConsole(String id, String networkId);
+   @Named("StandByConsole")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "StandByConsole")
+   @Transform(SingleElementResponseToElement.class)
+   String standByConsole(@QueryParam("vsysId") String id,
+         @QueryParam("networkId") String networkId);
 
-   void registerAsPrivateVSYSDescriptor(String id,
-         String vsysDescriptorXMLFilePath);
+   @Named("RegisterPrivateVSYSDescriptor")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "RegisterPrivateVSYSDescriptor")
+   void registerAsPrivateVSYSDescriptor(
+         @QueryParam("vsysId") String id,
+         @QueryParam("vsysDescriptorXMLFilePath") String vsysDescriptorXMLFilePath);
 }

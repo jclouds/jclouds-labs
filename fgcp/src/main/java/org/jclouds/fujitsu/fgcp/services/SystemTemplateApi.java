@@ -18,22 +18,66 @@
  */
 package org.jclouds.fujitsu.fgcp.services;
 
+import java.io.Closeable;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.fujitsu.fgcp.FGCPApi;
+import org.jclouds.fujitsu.fgcp.compute.functions.SingleElementResponseToElement;
 import org.jclouds.fujitsu.fgcp.domain.VSystemDescriptor;
+import org.jclouds.fujitsu.fgcp.filters.RequestAuthenticator;
+import org.jclouds.fujitsu.fgcp.reference.RequestParameters;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.PayloadParams;
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.Transform;
+
 
 /**
- * API relating to system templates, also referred to as virtual system
- * descriptors.
+ * API relating to system templates, also referred to as virtual
+ * system descriptors.
  * 
  * @author Dies Koper
  */
-public interface SystemTemplateApi {
+@RequestFilters(RequestAuthenticator.class)
+@QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)
+@PayloadParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)
+@Consumes(MediaType.TEXT_XML)
+public interface SystemTemplateApi extends Closeable {
 
-   VSystemDescriptor get(String id);
+   @Named("GetVSYSDescriptorConfiguration")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "GetVSYSDescriptorConfiguration")
+   @Transform(SingleElementResponseToElement.class)
+   VSystemDescriptor get(
+         @QueryParam("vsysDescriptorId") String id);
 
-   void update(String id, String localeId, String name, String value);
+   @Named("UpdateVSYSDescriptorAttribute")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "UpdateVSYSDescriptorAttribute")
+   void update(@QueryParam("vsysDescriptorId") String id,
+         @QueryParam("updateLcId") String localeId,
+         @QueryParam("attributeName") String name,
+         @QueryParam("attributeValue") String value);
 
-   void deregister(String id);
+   @Named("UnregisterVSYSDescriptor")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "UnregisterVSYSDescriptor")
+   void deregister(
+         @QueryParam("vsysDescriptorId") String id);
 
-   void deregisterPrivateTemplate(String id);
-
+   @Named("UnregisterPrivateVSYSDescriptor")
+   @GET
+   @JAXBResponseParser
+   @QueryParams(keys = "Action", values = "UnregisterPrivateVSYSDescriptor")
+   void deregisterPrivateTemplate(
+         @QueryParam("vsysDescriptorId") String id);
 }

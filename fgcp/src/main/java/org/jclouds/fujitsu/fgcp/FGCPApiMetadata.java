@@ -27,8 +27,8 @@ import org.jclouds.Constants;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.fujitsu.fgcp.compute.config.FGCPComputeServiceContextModule;
-import org.jclouds.fujitsu.fgcp.config.FGCPRestClientModule;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.fujitsu.fgcp.config.FGCPHttpApiModule;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
@@ -38,7 +38,7 @@ import com.google.inject.Module;
  * 
  * @author Dies Koper
  */
-public class FGCPApiMetadata extends BaseRestApiMetadata {
+public class FGCPApiMetadata extends BaseHttpApiMetadata<FGCPApi> {
 
    @Override
    public Builder toBuilder() {
@@ -54,7 +54,7 @@ public class FGCPApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       // enables peer verification using the CAs bundled with the JRE (or
       // value of javax.net.ssl.trustStore if set)
       properties.setProperty(Constants.PROPERTY_TRUST_ALL_CERTS, "false");
@@ -66,17 +66,16 @@ public class FGCPApiMetadata extends BaseRestApiMetadata {
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<FGCPApi, Builder> {
 
       protected Builder() {
-         super(FGCPApi.class, FGCPAsyncApi.class);
          id("fgcp")
                .name("Fujitsu Global Cloud Platform (FGCP)")
-               .identityName("User certificate (PEM file)")
-               .credentialName("User certificate password")
+               .identityName("user name (not used)")
+               .credentialName("PEM converted from UserCert.p12")
                .documentation(
                      URI.create("https://globalcloud.fujitsu.com.au/portala/ctrl/aboutSopManual"))
-               .version(FGCPAsyncApi.VERSION)
+               .version(FGCPApi.VERSION)
                .defaultEndpoint(
                      "https://api.globalcloud.fujitsu.com.au/ovissapi/endpoint")
                .defaultProperties(FGCPApiMetadata.defaultProperties())
@@ -84,7 +83,7 @@ public class FGCPApiMetadata extends BaseRestApiMetadata {
                .defaultModules(
                      ImmutableSet.<Class<? extends Module>> of(
                            FGCPComputeServiceContextModule.class,
-                           FGCPRestClientModule.class));
+                           FGCPHttpApiModule.class));
       }
 
       @Override

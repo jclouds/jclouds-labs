@@ -21,10 +21,9 @@ package org.jclouds.fujitsu.fgcp.services;
 import java.util.Properties;
 
 import org.jclouds.Constants;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.fujitsu.fgcp.FGCPApi;
-import org.jclouds.fujitsu.fgcp.FGCPAsyncApi;
-import org.jclouds.rest.RestContext;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.BeforeGroups;
 
@@ -33,9 +32,7 @@ import com.google.inject.Module;
 /**
  * @author Dies Koper
  */
-public class BaseFGCPApiLiveTest extends BaseComputeServiceContextLiveTest {
-
-   protected RestContext<FGCPApi, FGCPAsyncApi> fgcpContext;
+public class BaseFGCPApiLiveTest extends BaseApiLiveTest<FGCPApi> {
 
    public BaseFGCPApiLiveTest() {
       provider = "fgcp";
@@ -69,17 +66,5 @@ public class BaseFGCPApiLiveTest extends BaseComputeServiceContextLiveTest {
       overrides.setProperty(Constants.PROPERTY_TRUST_ALL_CERTS, "false");
 
       return overrides;
-   }
-
-   @BeforeGroups(groups = { "integration", "live" })
-   @Override
-   public void setupContext() {
-      super.setupContext();
-      fgcpContext = view.unwrap();
-   }
-
-   @Override
-   protected Module getSshModule() {
-      return new SshjSshClientModule();
    }
 }
