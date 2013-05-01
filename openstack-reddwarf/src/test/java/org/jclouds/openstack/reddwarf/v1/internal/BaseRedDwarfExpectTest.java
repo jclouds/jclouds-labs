@@ -70,4 +70,11 @@ public class BaseRedDwarfExpectTest<T> extends BaseRestApiExpectTest<T> {
                         .addHeader("Accept", MediaType.APPLICATION_JSON)
                         .addHeader("X-Auth-Token", authToken);
    }
+   
+   protected HttpRequest.Builder<?> authenticatedPOST() {
+      return HttpRequest.builder()
+                        .method("POST")
+                        .addHeader("Accept", MediaType.APPLICATION_JSON)
+                        .addHeader("X-Auth-Token", authToken);
+   }
 }

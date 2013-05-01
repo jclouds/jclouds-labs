@@ -26,6 +26,7 @@ import org.jclouds.location.Zone;
 import org.jclouds.location.functions.ZoneToEndpoint;
 import org.jclouds.openstack.keystone.v2_0.domain.Tenant;
 import org.jclouds.openstack.reddwarf.v1.features.FlavorApi;
+import org.jclouds.openstack.reddwarf.v1.features.InstanceApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
@@ -51,6 +52,13 @@ public interface RedDwarfApi extends Closeable{
     */
    @Delegate
    FlavorApi getFlavorApiForZone(
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   
+   /**
+    * Provides access to Instance features.
+    */
+   @Delegate
+   InstanceApi getInstanceApiForZone(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
    
    /**
