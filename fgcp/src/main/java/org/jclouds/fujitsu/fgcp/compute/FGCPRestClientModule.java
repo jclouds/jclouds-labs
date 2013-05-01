@@ -28,7 +28,8 @@ import javax.net.ssl.SSLContext;
 import org.jclouds.date.TimeStamp;
 import org.jclouds.fujitsu.fgcp.FGCPApi;
 import org.jclouds.fujitsu.fgcp.FGCPAsyncApi;
-import org.jclouds.fujitsu.fgcp.handlers.FGCPRetryIfNotProxyAuthenticationFailureHandler;
+import org.jclouds.fujitsu.fgcp.handlers.FGCPServerErrorRetryHandler;
+import org.jclouds.fujitsu.fgcp.handlers.ResponseNotSuccessHandler;
 import org.jclouds.fujitsu.fgcp.location.SystemAndNetworkSegmentToLocationSupplier;
 import org.jclouds.fujitsu.fgcp.services.AdditionalDiskApi;
 import org.jclouds.fujitsu.fgcp.services.AdditionalDiskAsyncApi;
@@ -53,8 +54,11 @@ import org.jclouds.fujitsu.fgcp.services.VirtualSystemAsyncApi;
 import org.jclouds.fujitsu.fgcp.suppliers.KeyStoreSupplier;
 import org.jclouds.fujitsu.fgcp.suppliers.SSLContextWithKeysSupplier;
 import org.jclouds.fujitsu.fgcp.xml.FGCPJAXBParser;
+import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpRetryHandler;
 import org.jclouds.http.annotation.ClientError;
+import org.jclouds.http.annotation.Redirection;
+import org.jclouds.http.annotation.ServerError;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
 import org.jclouds.location.suppliers.LocationsSupplier;
 import org.jclouds.location.suppliers.implicit.FirstNetwork;
@@ -107,9 +111,18 @@ public class FGCPRestClientModule extends
    }
 
    @Override
+   protected void bindErrorHandlers() {
+      bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(ResponseNotSuccessHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(ResponseNotSuccessHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(ResponseNotSuccessHandler.class);
+   }
+
+   @Override
    protected void bindRetryHandlers() {
       bind(HttpRetryHandler.class).annotatedWith(ClientError.class).to(
-            FGCPRetryIfNotProxyAuthenticationFailureHandler.class);
+            FGCPServerErrorRetryHandler.class);
+      bind(HttpRetryHandler.class).annotatedWith(ServerError.class).to(
+            FGCPServerErrorRetryHandler.class);
    }
 
    @Override

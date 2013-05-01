@@ -19,13 +19,15 @@
 package org.jclouds.fujitsu.fgcp.xml.internal;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Base class with fields for the elements that FGCP XML responses specify.
  * 
  * @author Dies Koper
  */
-public abstract class StatusResponse implements StatusQuerable {
+@XmlRootElement(name = "OViSSResponse")
+public class StatusResponse implements StatusQuerable {
    @XmlElement(required = true)
    private String responseMessage;
    @XmlElement(required = true)

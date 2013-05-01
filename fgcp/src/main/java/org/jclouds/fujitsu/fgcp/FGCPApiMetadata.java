@@ -58,8 +58,11 @@ public class FGCPApiMetadata extends BaseRestApiMetadata {
       // enables peer verification using the CAs bundled with the JRE (or
       // value of javax.net.ssl.trustStore if set)
       properties.setProperty(Constants.PROPERTY_TRUST_ALL_CERTS, "false");
-      // properties.setProperty("jclouds.ssh.max-retries", "5");
-      // properties.setProperty("jclouds.ssh.retry-auth", "true");
+      // create/delete operations on resources in the same system in FGCP are not
+      // allowed to run simultaneously: the 2nd operation will get an error.
+      // Tuning retry parameters accordingly:
+      properties.setProperty(Constants.PROPERTY_RETRY_DELAY_START, "10000L"); // 10 sec.
+      properties.setProperty(Constants.PROPERTY_MAX_RETRIES, "100"); // means 1000s (17min) timeout
       return properties;
    }
 

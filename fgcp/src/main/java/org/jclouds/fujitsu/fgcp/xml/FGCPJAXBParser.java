@@ -28,8 +28,6 @@ import javax.xml.bind.Unmarshaller;
 
 import org.jclouds.fujitsu.fgcp.domain.VServerWithDetails;
 import org.jclouds.fujitsu.fgcp.xml.internal.ListServerTypeResponse;
-import org.jclouds.fujitsu.fgcp.xml.internal.StatusQuerable;
-import org.jclouds.http.HttpException;
 import org.jclouds.xml.XMLParser;
 
 /**
@@ -75,11 +73,6 @@ public class FGCPJAXBParser implements XMLParser {
          response = (T) unmarshaller.unmarshal(reader);
       } catch (Exception ex) {
          throw new IOException("Could not unmarshal document", ex);
-      }
-
-      if (((StatusQuerable) response).isError()) {
-         throw new HttpException(
-               ((StatusQuerable) response).getResponseMessage());
       }
 
       return response;
