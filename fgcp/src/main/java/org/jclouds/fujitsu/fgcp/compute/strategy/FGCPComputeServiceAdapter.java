@@ -19,6 +19,7 @@
 package org.jclouds.fujitsu.fgcp.compute.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.util.Predicates2.retry;
@@ -43,6 +44,7 @@ import org.jclouds.fujitsu.fgcp.FGCPApi;
 import org.jclouds.fujitsu.fgcp.FGCPAsyncApi;
 import org.jclouds.fujitsu.fgcp.compute.functions.ResourceIdToFirewallId;
 import org.jclouds.fujitsu.fgcp.compute.functions.ResourceIdToSystemId;
+import org.jclouds.fujitsu.fgcp.compute.predicates.ServerStarted;
 import org.jclouds.fujitsu.fgcp.compute.predicates.ServerStopped;
 import org.jclouds.fujitsu.fgcp.compute.predicates.SystemStatusNormal;
 import org.jclouds.fujitsu.fgcp.compute.strategy.VServerMetadata.Builder;
@@ -80,6 +82,7 @@ public class FGCPComputeServiceAdapter implements
    private final FGCPApi api;
    private final FGCPAsyncApi asyncApi;
    protected Predicate<String> serverStopped = null;
+   protected Predicate<String> serverStarted = null;
    protected Predicate<String> serverCreated = null;
    protected Predicate<String> systemNormal = null;
    protected ResourceIdToFirewallId toFirewallId = null;
@@ -87,12 +90,13 @@ public class FGCPComputeServiceAdapter implements
 
    @Inject
    public FGCPComputeServiceAdapter(FGCPApi api, FGCPAsyncApi asyncApi,
-         ServerStopped serverStopped, SystemStatusNormal systemNormal,
+         ServerStopped serverStopped, ServerStarted serverStarted, SystemStatusNormal systemNormal,
          Timeouts timeouts, ResourceIdToFirewallId toFirewallId,
          ResourceIdToSystemId toSystemId) {
       this.api = checkNotNull(api, "api");
       this.asyncApi = checkNotNull(asyncApi, "asyncApi");
       this.serverStopped = retry(checkNotNull(serverStopped), timeouts.nodeSuspended);
+      this.serverStarted = retry(checkNotNull(serverStarted), timeouts.nodeRunning);
       this.serverCreated = retry(checkNotNull(serverStopped), timeouts.nodeRunning);
       this.systemNormal = retry(checkNotNull(systemNormal), timeouts.nodeTerminated);
       this.toFirewallId = checkNotNull(toFirewallId, "ResourceIdToFirewallId");
@@ -105,18 +109,15 @@ public class FGCPComputeServiceAdapter implements
    @Override
    public NodeAndInitialCredentials<VServerMetadata> createNodeWithGroupEncodedIntoName(
          String group, String name, Template template) {
-      // Find vsys (how? create new? default to first found?)
-      // Target network DMZ/SECURE1/SECURE2 (how? default to DMZ?)
-      // Determine remaining params: [vserverType,diskImageId,networkId]
-      // what if no vsys exists yet? Location.AU(.contractId) creates 3? tier
-      // skeleton vsys and DMZ is picked?
       String id = api.getVirtualSystemApi().createServer(name,
             template.getHardware().getName(), template.getImage().getId(),
             template.getLocation().getId());
 
       // wait until fully created (i.e. transitions to stopped status)
-      serverCreated.apply(id);
+      checkState(serverCreated.apply(id), "node %s not reaching STOPPED state after creation", id);
       resumeNode(id);
+      // wait until fully started
+      checkState(serverStarted.apply(id), "could not start %s after creation", id);
       VServerMetadata server = getNode(id);
 
       //do we need this?
@@ -266,10 +267,13 @@ public class FGCPComputeServiceAdapter implements
     */
    @Override
    public void destroyNode(String id) {
+      // ensure it is stopped first
+      suspendNode(id);
+      checkState(serverStopped.apply(id), "could not stop %s before destroying it", id);
       api.getVirtualServerApi().destroy(id);
-      // wait until fully destroyed
+      // wait until vsys completes reconfiguration
       String systemId = toSystemId.apply(id);
-      systemNormal.apply(systemId);
+      checkState(systemNormal.apply(systemId), "system %s not returning to NORMAL", systemId);
    }
 
    /**
@@ -278,8 +282,7 @@ public class FGCPComputeServiceAdapter implements
    @Override
    public void rebootNode(String id) {
       suspendNode(id);
-      // wait until fully stopped
-      serverStopped.apply(id);
+      checkState(serverStopped.apply(id), "could not stop %s before restarting it", id);
       resumeNode(id);
    }
 
