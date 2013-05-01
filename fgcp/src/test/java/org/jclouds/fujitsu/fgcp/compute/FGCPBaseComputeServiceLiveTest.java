@@ -1,4 +1,4 @@
-package org.jclouds.fujitsu.fgcp.compute.config;
+package org.jclouds.fujitsu.fgcp.compute;
 
 import java.util.Properties;
 

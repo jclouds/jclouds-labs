@@ -16,13 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.fujitsu.fgcp.compute;
+package org.jclouds.fujitsu.fgcp.config;
 
 import java.security.KeyStore;
 import java.util.Calendar;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 
 import org.jclouds.date.TimeStamp;
@@ -30,6 +31,7 @@ import org.jclouds.fujitsu.fgcp.FGCPApi;
 import org.jclouds.fujitsu.fgcp.FGCPAsyncApi;
 import org.jclouds.fujitsu.fgcp.handlers.FGCPServerErrorRetryHandler;
 import org.jclouds.fujitsu.fgcp.handlers.ResponseNotSuccessHandler;
+import org.jclouds.fujitsu.fgcp.http.ChangeReturnCodeTo500IfErrorJavaUrlHttpCommandExecutorService;
 import org.jclouds.fujitsu.fgcp.location.SystemAndNetworkSegmentToLocationSupplier;
 import org.jclouds.fujitsu.fgcp.services.AdditionalDiskApi;
 import org.jclouds.fujitsu.fgcp.services.AdditionalDiskAsyncApi;
@@ -59,6 +61,8 @@ import org.jclouds.http.HttpRetryHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
+import org.jclouds.http.config.SSLModule.LogToMapHostnameVerifier;
+import org.jclouds.http.internal.JavaUrlHttpCommandExecutorService;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
 import org.jclouds.location.suppliers.LocationsSupplier;
 import org.jclouds.location.suppliers.implicit.FirstNetwork;
@@ -75,7 +79,7 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Configures the FGCP connection. This module is added in FGCPContextBuilder.
- * 
+ *
  * @author Dies Koper
  */
 @ConfiguresRestClient
@@ -135,6 +139,8 @@ public class FGCPRestClientModule extends
       bind(new TypeLiteral<Supplier<KeyStore>>() {
       }).to(new TypeLiteral<KeyStoreSupplier>() {
       });
+      bind(HostnameVerifier.class).to(LogToMapHostnameVerifier.class);
+      bind(JavaUrlHttpCommandExecutorService.class).to(ChangeReturnCodeTo500IfErrorJavaUrlHttpCommandExecutorService.class);
    }
 
    @Provides

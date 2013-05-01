@@ -26,8 +26,8 @@ import java.util.Properties;
 import org.jclouds.Constants;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.ComputeServiceContext;
-import org.jclouds.fujitsu.fgcp.compute.FGCPRestClientModule;
 import org.jclouds.fujitsu.fgcp.compute.config.FGCPComputeServiceContextModule;
+import org.jclouds.fujitsu.fgcp.config.FGCPRestClientModule;
 import org.jclouds.rest.internal.BaseRestApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
