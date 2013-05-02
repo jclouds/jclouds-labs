@@ -1,0 +1,34 @@
+{
+    defaultEndpoint: "stub",
+    credentialName: null,
+    builderVersion: "",
+    defaultProperties: {
+        jclouds.max-connections-per-host: "0",
+        jclouds.user-threads: "0",
+        jclouds.connection-timeout: "60000",
+        jclouds.max-connections-per-context: "20",
+        jclouds.iso3166-codes: "",
+        jclouds.max-connection-reuse: "75",
+        jclouds.payloads.pretty-print: "true",
+        jclouds.scheduler-threads: "10",
+        jclouds.io-worker-threads: "20",
+        jclouds.max-session-failures: "2",
+        jclouds.session-interval: "60",
+        jclouds.so-timeout: "60000"
+},
+version: "",
+id: "stub",
+defaultCredential: "stub",
+defaultIdentity: "stub",
+views: [
+"org.jclouds.compute.ComputeServiceContext"
+],
+name: "in-memory (Stub) API",
+documentation: "http://www.jclouds.org/documentation/userguide/compute",
+context: "interface org.jclouds.Context",
+identityName: "Unused",
+endpointName: "https endpoint",
+defaultModules: [
+"org.jclouds.compute.stub.config.StubComputeServiceContextModule"
+]
+}
