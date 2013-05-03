@@ -1,14 +1,14 @@
-/**
- * Licensed to jclouds, Inc. (jclouds) under one or more
- * contributor license agreements.  See the NOTICE file
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
- * regarding copyright ownership.  jclouds licenses this file
+ * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
+ * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -52,8 +52,8 @@ public class InstanceApiLiveTest extends BaseRedDwarfApiLiveTest {
         for (String zone : api.getConfiguredZones()) {
             List<Instance> zoneList = Lists.newArrayList();
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-            zoneList.add(instanceApi.create("1", 1, "first"));
-            Instance second = instanceApi.create("1", 1, "second");
+            zoneList.add(instanceApi.create("1", 1, "first_instance_testing"));
+            Instance second = instanceApi.create("1", 1, "second_instance_testing");
             InstancePredicates.awaitAvailable(instanceApi).apply(second);
             instanceApi.enableRoot(second.getId());
             zoneList.add(second);            
@@ -119,9 +119,14 @@ public class InstanceApiLiveTest extends BaseRedDwarfApiLiveTest {
     public void testGetRootStatus() {
         for (String zone : api.getConfiguredZones()) {
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-            Iterator<Instance> iterator = instanceApi.list().iterator(); 
-            Instance first = iterator.next();
-            Instance second = iterator.next();
+            Iterator<Instance> iterator = instanceApi.list().iterator();
+            Instance first, second;
+            do{
+               first = iterator.next(); 
+            } while(!first.getName().contains("instance_testing"));
+            do{
+               second = iterator.next(); 
+            } while(!second.getName().contains("instance_testing"));
             assertTrue(instanceApi.isRooted(first.getId()) || instanceApi.isRooted(second.getId()));
         }
     }

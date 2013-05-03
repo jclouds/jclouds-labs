@@ -19,10 +19,13 @@
 package org.jclouds.openstack.reddwarf.v1.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.List;
 import java.util.Map;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 /**
@@ -30,22 +33,24 @@ import com.google.inject.Inject;
  * 
  * @author Zack Shoylev
  */
-public class ParsePasswordFromRootedInstance implements Function<HttpResponse, String> {
+public class ParseDatabaseListForUser implements Function<HttpResponse, FluentIterable<String>> {
 
-    private final ParseJson<Map<String, Map<String, String>>> json;
+    private final ParseJson<Map<String, List<Map<String, String>>>> json;
 
     @Inject
-    ParsePasswordFromRootedInstance(ParseJson<Map<String, Map<String, String>>> json) {
+    ParseDatabaseListForUser(ParseJson<Map<String, List<Map<String, String>>>> json) {
         this.json = checkNotNull(json, "json");
     }
 
     /**
      * Extracts the user password from the json response
      */
-    public String apply(HttpResponse from) {
-        Map<String, Map<String, String>> result = json.apply(from);
-        if(result.get("user") == null) 
-            return null;
-        return result.get("user").get("password");
+    public FluentIterable<String> apply(HttpResponse from) {
+        List<String> resultDatabases = Lists.newArrayList();
+        Map<String, List<Map<String, String>>> result = json.apply(from);
+        for(Map<String, String> database : result.get("databases")) {
+            resultDatabases.add(database.get("name"));
+        }
+        return FluentIterable.from(resultDatabases);
     }
 }
