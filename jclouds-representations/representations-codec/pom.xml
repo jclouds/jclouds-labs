@@ -23,14 +23,14 @@ under the License.
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.jclouds.labs</groupId>
+        <groupId>org.apache.jclouds.labs</groupId>
         <artifactId>jclouds-represetations</artifactId>
         <version>1.7.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jclouds.labs.representations</groupId>
+    <groupId>org.apache.jclouds.labs.representations</groupId>
     <artifactId>representations-codec</artifactId>
     <packaging>bundle</packaging>
     <name>jclouds :: representations :: codec</name>
@@ -50,25 +50,25 @@ under the License.
 
     <dependencies>
         <dependency>
-            <groupId>org.jclouds.labs.representations</groupId>
+            <groupId>org.apache.jclouds.labs.representations</groupId>
             <artifactId>representations-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.jclouds</groupId>
+            <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.jclouds</groupId>
+            <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.jclouds</groupId>
+            <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-blobstore</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -80,7 +80,7 @@ under the License.
         </dependency>
 
         <dependency>
-            <groupId>org.jclouds</groupId>
+            <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
