@@ -22,22 +22,22 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>jclouds-labs</artifactId>
-        <groupId>org.apache.jclouds.labs</groupId>
-        <version>1.7.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-
+  <parent>
+    <artifactId>jclouds-labs</artifactId>
     <groupId>org.apache.jclouds.labs</groupId>
-    <artifactId>jclouds-represetations</artifactId>
-    <packaging>pom</packaging>
-    <name>jclouds :: represetations</name>
-    <description>Representations objects for jclouds domain objects</description>
+    <version>1.7.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <modules>
-        <module>representations-core</module>
-        <module>representations-codec</module>
-    </modules>
+  <groupId>org.apache.jclouds.labs</groupId>
+  <artifactId>jclouds-represetations</artifactId>
+  <packaging>pom</packaging>
+  <name>jclouds :: represetations</name>
+  <description>Representations objects for jclouds domain objects</description>
+
+  <modules>
+    <module>representations-core</module>
+    <module>representations-codec</module>
+  </modules>
 
 </project>

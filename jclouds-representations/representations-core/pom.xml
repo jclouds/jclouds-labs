@@ -22,50 +22,50 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>org.apache.jclouds.labs</groupId>
-        <artifactId>jclouds-represetations</artifactId>
-        <version>1.7.0-SNAPSHOT</version>
-        <relativePath>..</relativePath>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.jclouds.labs</groupId>
+    <artifactId>jclouds-represetations</artifactId>
+    <version>1.7.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.apache.jclouds.labs.representations</groupId>
-    <artifactId>representations-core</artifactId>
-    <name>jclouds :: representations :: core</name>
-    <packaging>bundle</packaging>
+  <groupId>org.apache.jclouds.labs.representations</groupId>
+  <artifactId>representations-core</artifactId>
+  <name>jclouds :: representations :: core</name>
+  <packaging>bundle</packaging>
 
-    <properties>
-        <jclouds.osgi.import>*</jclouds.osgi.import>
-        <jclouds.osgi.export>
-            org.jclouds*;version=${project.version};-noimport:=true
-        </jclouds.osgi.export>
-    </properties>
+  <properties>
+    <jclouds.osgi.import>*</jclouds.osgi.import>
+    <jclouds.osgi.export>
+      org.jclouds*;version=${project.version};-noimport:=true
+    </jclouds.osgi.export>
+  </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>14.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jclouds</groupId>
-            <artifactId>jclouds-core</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>14.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.2.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jclouds</groupId>
+      <artifactId>jclouds-core</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>
