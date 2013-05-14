@@ -45,6 +45,16 @@ under the License.
 
   <repositories>
     <repository>
+      <id>apache-snapshots</id>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
       <id>sonatype-nexus-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
       <releases>
@@ -87,6 +97,7 @@ under the License.
           </execution>
         </executions>
         <configuration>
+          <excludeSubProjects>false</excludeSubProjects>
           <excludes>
             <exclude>**/BUILD.txt</exclude>
             <exclude>**/CHANGES.txt</exclude>
@@ -94,6 +105,7 @@ under the License.
             <exclude>**/README.md</exclude>
             <exclude>.git/**</exclude>
             <exclude>**/.gitignore</exclude>
+            <exclude>**/.gitattributes</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/*.log*</exclude>
             <exclude>**/TODO</exclude>
@@ -105,6 +117,12 @@ under the License.
             <exclude>**/.settings/**</exclude>
             <exclude>**/.checkstyle</exclude>
             <exclude>**/target/**</exclude>
+            <exclude>**/*ViewMBeanFactory</exclude>
+            <exclude>**/*ProviderMetadata</exclude>
+            <exclude>**/*ApiMetadata</exclude>
+            <exclude>**/src/test/resources/**/*</exclude>
+            <exclude>**/jaxb.index</exclude>
+            <exclude>**/*readme</exclude>
             <exclude>.repository/**</exclude>
             <!-- binary -->
           </excludes>
@@ -118,7 +136,7 @@ under the License.
           <strictCheck>true</strictCheck>
           <encoding>${sourceEncoding}</encoding>
           <aggregate>true</aggregate>
-          <header>project/src/etc/header.txt</header>
+          <header>src/etc/header.txt</header>
           <mapping>
             <clj>SEMICOLON_STYLE</clj>
           </mapping>
