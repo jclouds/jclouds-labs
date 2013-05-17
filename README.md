@@ -5,6 +5,5 @@ Repository for incubator providers and APIs
 
 License
 -------
-Copyright (C) 2009-2012 jclouds, Inc.
 
 Licensed under the Apache License, Version 2.0
