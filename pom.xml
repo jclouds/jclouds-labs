@@ -111,10 +111,6 @@
             <exclude>**/README.md</exclude>
             <exclude>**/README.txt</exclude>
 
-            <!-- temporarily exclude shell script fragments -->
-            <exclude>**/*sh</exclude>
-            <exclude>**/*cmd</exclude>
-
             <!-- reference data lists -->
             <exclude>**/*json</exclude>
             <exclude>**/*readme</exclude>
@@ -185,10 +181,6 @@
             <exclude>**/CHANGES.txt</exclude>
             <exclude>**/README.md</exclude>
             <exclude>**/README.txt</exclude>
-
-            <!-- temporarily exclude shell script fragments -->
-            <exclude>**/*sh</exclude>
-            <exclude>**/*cmd</exclude>
 
             <!-- reference data lists -->
             <exclude>**/*json</exclude>
