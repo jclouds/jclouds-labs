@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CreateVServerResponse xmlns="http://apioviss.jp.fujitsu.com">
-  <responseMessage>The status of Instance[UZXC0GRT-ZG8ZJCJ07] is [RECONFIG_ING].</responseMessage>
+  <responseMessage>The status of Instance[ABCDEFGH-A123B456CE] is [RECONFIG_ING].</responseMessage>
   <responseStatus>ILLEGAL_STATE</responseStatus>
 </CreateVServerResponse>

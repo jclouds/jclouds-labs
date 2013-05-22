@@ -83,7 +83,7 @@ public class SystemAndNetworkSegmentToLocationSupplier implements LocationsSuppl
          for (VNet net : systemWithDetails.getNetworks()) {
 
             locations.add(new LocationBuilder().scope(LocationScope.NETWORK).parent(systemLocation)
-                  .description(net.getNetworkId().replaceFirst(".+(DMZ|SECURE.)", "\\1")).id(net.getNetworkId())
+                  .description(net.getNetworkId().replaceFirst(".+-N-", "")).id(net.getNetworkId())
                   .build());
          }
       }

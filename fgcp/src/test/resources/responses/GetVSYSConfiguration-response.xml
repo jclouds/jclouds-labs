@@ -41,7 +41,7 @@
         </vnics>
         <vserverId>ABCDEFGH-I123J456K-S-0001</vserverId>
         <vserverName>Firewall</vserverName>
-        <vserverType>economy</vserverType>
+        <vserverType>firewall</vserverType>
       </vserver>
       <vserver>
         <creator>ABCDEFGH</creator>
