@@ -35,7 +35,6 @@ import org.jclouds.domain.Credentials;
 import org.jclouds.fujitsu.fgcp.FGCPCredentials;
 import org.jclouds.io.Payloads;
 import org.jclouds.location.Provider;
-import org.jclouds.rest.AuthorizationException;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
@@ -90,9 +89,9 @@ public class FGCPCredentialsSupplier implements Supplier<FGCPCredentials> {
          } catch (IOException e) {
             throw Throwables.propagate(e);
          } catch (GeneralSecurityException e) {
-            throw new AuthorizationException("security exception parsing pem. " + e.getMessage(), e);
+            throw new IllegalArgumentException("security exception parsing pem. " + e.getMessage(), e);
          } catch (IllegalArgumentException e) {
-            throw new AuthorizationException("cannot parse pk. " + e.getMessage(), e);
+            throw new IllegalArgumentException("not a valid pem: cannot parse pk. " + e.getMessage(), e);
          }
       }
 
@@ -148,7 +147,7 @@ public class FGCPCredentialsSupplier implements Supplier<FGCPCredentials> {
       try {
          return keyCache.getUnchecked(checkNotNull(creds.get(), "credential supplier returned null"));
       } catch (UncheckedExecutionException e) {
-         throw new AuthorizationException(e.getCause());
+         throw Throwables.propagate(e.getCause());
       }
    }
 
