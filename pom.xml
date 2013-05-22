@@ -93,7 +93,6 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <inherited>false</inherited>
         <executions>
           <execution>
             <phase>package</phase>
@@ -103,7 +102,6 @@
           </execution>
         </executions>
         <configuration>
-          <excludeSubProjects>false</excludeSubProjects>
           <excludes>
             <!-- expectation files for unit tests -->
             <exclude>**/src/test/resources/**</exclude>
