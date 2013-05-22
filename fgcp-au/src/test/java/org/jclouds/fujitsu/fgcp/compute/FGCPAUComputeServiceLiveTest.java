@@ -16,10 +16,8 @@
  */
 package org.jclouds.fujitsu.fgcp.compute;
 
-
 import org.jclouds.fujitsu.fgcp.compute.FGCPBaseComputeServiceLiveTest;
 import org.testng.annotations.Test;
-
 
 /**
  * @author Dies Koper
@@ -29,6 +27,7 @@ import org.testng.annotations.Test;
 public class FGCPAUComputeServiceLiveTest extends FGCPBaseComputeServiceLiveTest {
 
    @Override
+   @Test(enabled = false)
    public void setServiceDefaults() {
       provider = "fgcp-au";
    }

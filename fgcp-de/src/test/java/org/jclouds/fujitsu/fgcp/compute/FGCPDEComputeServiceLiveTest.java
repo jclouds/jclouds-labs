@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 public class FGCPDEComputeServiceLiveTest extends FGCPBaseComputeServiceLiveTest {
 
    @Override
+   @Test(enabled = false)
    public void setServiceDefaults() {
       provider = "fgcp-de";
    }
