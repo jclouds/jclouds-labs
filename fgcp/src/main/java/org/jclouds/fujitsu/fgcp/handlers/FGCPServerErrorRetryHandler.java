@@ -25,7 +25,6 @@ import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpRetryHandler;
 import org.jclouds.http.HttpUtils;
-import org.jclouds.http.handlers.BackoffLimitedRetryHandler;
 import org.jclouds.logging.Logger;
 
 import com.google.inject.Singleton;
@@ -37,7 +36,7 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class FGCPServerErrorRetryHandler implements HttpRetryHandler {
-   private final BackoffLimitedRetryHandler backoffHandler;
+   private final HttpRetryHandler backoffHandler;
 
    @Inject
    @Named(Constants.PROPERTY_MAX_RETRIES)
@@ -46,7 +45,7 @@ public class FGCPServerErrorRetryHandler implements HttpRetryHandler {
    protected Logger logger = Logger.NULL;
 
    @Inject
-   public FGCPServerErrorRetryHandler(BackoffLimitedRetryHandler backoffHandler) {
+   public FGCPServerErrorRetryHandler(FGCPBackoffLimitedRetryHandler backoffHandler) {
       this.backoffHandler = backoffHandler;
    }
 

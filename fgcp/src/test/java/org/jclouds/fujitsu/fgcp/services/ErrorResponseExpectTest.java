@@ -22,7 +22,6 @@ import static org.testng.Assert.fail;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
-import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
@@ -45,11 +44,11 @@ public class ErrorResponseExpectTest extends BaseFGCPRestApiExpectTest {
          api.createServer("vm1", "economy", "IMG_A1B2C3_1234567890ABCD", "ABCDEFGH-A123B456CE-N-DMZ");
          fail("should have thrown an exception");
       } catch (IllegalStateException e) {
-         assertTrue(e.getMessage().contains("RECONFIG_ING"));
+         assertTrue(e.getMessage().contains("RECONFIG_ING"), e.getMessage());
       }
    }
 
-   public void testAuthenticationErrorDueToCertFromDifferentRegion() {
+   public void testAuthorizationErrorDueToCertFromDifferentRegion() {
       HttpRequest request = buildGETWithQuery("Action=CreateVServer" + "&vserverName=vm1" + "&vserverType=economy"
             + "&diskImageId=IMG_A1B2C3_1234567890ABCD" + "&networkId=ABCDEFGH-A123B456CE-N-DMZ"
             + "&vsysId=ABCDEFGH-A123B456CE");
@@ -65,6 +64,36 @@ public class ErrorResponseExpectTest extends BaseFGCPRestApiExpectTest {
       }
    }
 
+   public void testIllegalStateDueToStartingRunningServer() {
+      HttpRequest request = buildGETWithQuery("Action=StartVServer" + "&vserverId=ABCDEFGH-A123B456CE-S-0004"
+            + "&vsysId=ABCDEFGH-A123B456CE");
+      HttpResponse response = HttpResponse.builder().statusCode(500)
+            .payload(payloadFromResource("/IllegalState_RUNNING-response.xml")).build();
+      VirtualServerApi api = requestSendsResponse(request, response).getVirtualServerApi();
+
+      try {
+         api.start("ABCDEFGH-A123B456CE-S-0004");
+         fail("should have thrown an exception");
+      } catch (IllegalStateException e) {
+         assertTrue(e.getMessage().contains("RUNNING"), e.getMessage());
+      }
+   }
+
+   public void testIllegalStateDueToStoppingStoppedServer() {
+      HttpRequest request = buildGETWithQuery("Action=StopVServer" + "&vserverId=ABCDEFGH-A123B456CE-S-0004"
+            + "&vsysId=ABCDEFGH-A123B456CE");
+      HttpResponse response = HttpResponse.builder().statusCode(500)
+            .payload(payloadFromResource("/IllegalState_ALREADY_STOPPED-response.xml")).build();
+      VirtualServerApi api = requestSendsResponse(request, response).getVirtualServerApi();
+
+      try {
+         api.stop("ABCDEFGH-A123B456CE-S-0004");
+         fail("should have thrown an exception");
+      } catch (IllegalStateException e) {
+         assertTrue(e.getMessage().contains("ALREADY_STOPPED"), e.getMessage());
+      }
+   }
+
    public void testErrorDueToWrongResourceId() {
       HttpRequest request = buildGETWithQuery("Action=CreateVServer" + "&vserverName=vm1" + "&vserverType=economy"
             + "&diskImageId=IMG_DOES_NOT_EXIST" + "&networkId=ABCDEFGH-A123B456CE-N-DMZ"
@@ -77,7 +106,7 @@ public class ErrorResponseExpectTest extends BaseFGCPRestApiExpectTest {
          api.createServer("vm1", "economy", "IMG_DOES_NOT_EXIST", "ABCDEFGH-A123B456CE-N-DMZ");
          fail("should have thrown an exception");
       } catch (ResourceNotFoundException e) {
-         assertTrue(e.getMessage().contains("RESOURCE_NOT_FOUND"));
+         assertTrue(e.getMessage().contains("RESOURCE_NOT_FOUND"), e.getMessage());
       }
    }
 

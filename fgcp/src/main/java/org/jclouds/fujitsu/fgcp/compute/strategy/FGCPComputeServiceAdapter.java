@@ -41,16 +41,17 @@ import org.jclouds.fujitsu.fgcp.compute.functions.ResourceIdToFirewallId;
 import org.jclouds.fujitsu.fgcp.compute.functions.ResourceIdToSystemId;
 import org.jclouds.fujitsu.fgcp.compute.predicates.ServerStarted;
 import org.jclouds.fujitsu.fgcp.compute.predicates.ServerStopped;
-import org.jclouds.fujitsu.fgcp.compute.predicates.SystemStatusNormal;
 import org.jclouds.fujitsu.fgcp.compute.strategy.VServerMetadata.Builder;
 import org.jclouds.fujitsu.fgcp.domain.DiskImage;
 import org.jclouds.fujitsu.fgcp.domain.ServerType;
+import org.jclouds.fujitsu.fgcp.domain.VServer;
 import org.jclouds.fujitsu.fgcp.domain.VServerStatus;
 import org.jclouds.fujitsu.fgcp.domain.VServerWithDetails;
 import org.jclouds.fujitsu.fgcp.domain.VServerWithVNICs;
 import org.jclouds.fujitsu.fgcp.domain.VSystem;
 import org.jclouds.fujitsu.fgcp.domain.VSystemWithDetails;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.ResourceNotFoundException;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
@@ -73,20 +74,18 @@ public class FGCPComputeServiceAdapter implements
    protected Predicate<String> serverStopped = null;
    protected Predicate<String> serverStarted = null;
    protected Predicate<String> serverCreated = null;
-   protected Predicate<String> systemNormal = null;
    protected ResourceIdToFirewallId toFirewallId = null;
    protected ResourceIdToSystemId toSystemId = null;
 
    @Inject
    public FGCPComputeServiceAdapter(FGCPApi api, ServerStopped serverStopped,
-         ServerStarted serverStarted, SystemStatusNormal systemNormal,
-         Timeouts timeouts, ResourceIdToFirewallId toFirewallId,
+         ServerStarted serverStarted, Timeouts timeouts,
+         ResourceIdToFirewallId toFirewallId,
          ResourceIdToSystemId toSystemId) {
       this.api = checkNotNull(api, "api");
       this.serverStopped = retry(checkNotNull(serverStopped), timeouts.nodeSuspended);
       this.serverStarted = retry(checkNotNull(serverStarted), timeouts.nodeRunning);
       this.serverCreated = retry(checkNotNull(serverStopped), timeouts.nodeRunning);
-      this.systemNormal = retry(checkNotNull(systemNormal), timeouts.nodeTerminated);
       this.toFirewallId = checkNotNull(toFirewallId, "ResourceIdToFirewallId");
       this.toSystemId = checkNotNull(toSystemId, "ResourceIdToSystemId");
    }
@@ -104,8 +103,7 @@ public class FGCPComputeServiceAdapter implements
       // wait until fully created (i.e. transitions to stopped status)
       checkState(serverCreated.apply(id), "node %s not reaching STOPPED state after creation", id);
       resumeNode(id);
-      // wait until fully started
-      checkState(serverStarted.apply(id), "could not start %s after creation", id);
+      // don't wait until fully started, template "optionToNotBlock" takes care of that
       VServerMetadata server = getNode(id);
 
       // do we need this?
@@ -158,29 +156,32 @@ public class FGCPComputeServiceAdapter implements
       Builder builder = VServerMetadata.builder();
       builder.id(id);
 
-      // mapped public ips?
-//      String fwId = toFirewallId.apply(id);
-      // futures.add(asyncApi.getBuiltinServerApi().getConfiguration(fwId,
-      // BuiltinServerConfiguration.SLB_RULE));
+      try {
+         VServerWithDetails server = api.getVirtualServerApi().getDetails(id);
+         // skip FWs and SLBs
+         if (isFWorSLB(server)) {
+            return null;
+         }
+         VServerStatus status = api.getVirtualServerApi().getStatus(id);
+         logger.trace("Node %s [%s] - %s", id, status, server);
+         builder.serverWithDetails(server);
+         builder.status(status);
+         builder.initialPassword(api.getVirtualServerApi().getInitialPassword(id));
 
-      VServerWithDetails server = api.getVirtualServerApi().getDetails(id);
-      VServerStatus status = api.getVirtualServerApi().getStatus(id);
-      logger.info("%s [%s] - %s", id, status, server);
-      if (server == null) {
-         server = api.getVirtualServerApi().getDetails(id);
-         logger.warn("!!!!!!!!!! server returned null. 2nd try: %s", server);
+         // mapped public ips?
+//       String fwId = toFirewallId.apply(id);
+       // futures.add(asyncApi.getBuiltinServerApi().getConfiguration(fwId,
+       // BuiltinServerConfiguration.FW_RULE));
+      } catch (ResourceNotFoundException e) {
+         return null;
       }
-      builder.serverWithDetails(server);
-      builder.status(status == null ? VServerStatus.UNRECOGNIZED : status);
-      // System.out.println("status in adapter#getNode: "
-      // + (VServerStatus) results.get(1)
-      // +" for "
-      // + server.getId());
-      builder.initialPassword(api.getVirtualServerApi().getInitialPassword(id));
-      // SLB slb = ((BuiltinServer) results.get(4)).;
-      // slb.
 
       return builder.build();
+   }
+
+   private boolean isFWorSLB(VServer server) {
+      String serverType = server.getType();
+      return "firewall".equals(serverType) || "slb".equals(serverType);
    }
 
    /**
@@ -197,15 +198,9 @@ public class FGCPComputeServiceAdapter implements
 
          for (VServerWithVNICs server : systemDetails.getServers()) {
 
-            // skip FW (S-0001) and SLBs (>0 for SLB)
-            // TODO: rewrite to use serverType instead
-            if (!server.getId().endsWith("-S-0001") && server.getVnics().iterator().next().getNicNo() == 0) {
-
+            // skip FWs and SLBs
+            if (!isFWorSLB(server)) {
                servers.add(getNode(server.getId()));
-               // Builder builder = VServerMetadata.builder();
-               // builder.server(server);
-               // builder.status(VServerStatus.UNRECOGNIZED);
-               // servers.add(builder.build());
             }
          }
       }
@@ -233,9 +228,6 @@ public class FGCPComputeServiceAdapter implements
       suspendNode(id);
       checkState(serverStopped.apply(id), "could not stop %s before destroying it", id);
       api.getVirtualServerApi().destroy(id);
-      // wait until vsys completes reconfiguration
-      String systemId = toSystemId.apply(id);
-      checkState(systemNormal.apply(systemId), "system %s not returning to NORMAL", systemId);
    }
 
    /**
@@ -253,7 +245,13 @@ public class FGCPComputeServiceAdapter implements
     */
    @Override
    public void resumeNode(String id) {
-      api.getVirtualServerApi().start(id);
+      try {
+         api.getVirtualServerApi().start(id);
+      } catch (IllegalStateException ise) {
+         if (!(ise.getMessage().contains("ALREADY_STARTED") || ise.getMessage().contains("STARTING"))) {
+            throw ise;
+         }
+      }
    }
 
    /**
@@ -261,6 +259,33 @@ public class FGCPComputeServiceAdapter implements
     */
    @Override
    public void suspendNode(String id) {
-      api.getVirtualServerApi().stop(id);
+      try {
+         api.getVirtualServerApi().stop(id);
+      } catch (IllegalStateException ise) {
+         if (ise.getMessage().contains("ALREADY_STOPPED") || ise.getMessage().contains("STOPPING")) {
+            logger.trace("suspendNode({0}) - {1}", id, ise.getMessage());
+            // ignore as it has/will reach the desired destination state
+         } else if (ise.getMessage().contains("STARTING")) {
+            // wait till running, then try to stop again
+            logger.trace("suspendNode({0}) - {1} - waiting to reach RUNNING state", id, ise.getMessage());
+            checkState(serverStarted.apply(id), "starting %s didn't reach RUNNING state", id);
+            logger.trace("suspendNode({0}) - now RUNNING, trying to stop again", id);
+            try {
+               api.getVirtualServerApi().stop(id);
+            } catch (IllegalStateException e) {
+               if (e.getMessage().contains("ALREADY_STOPPED") || e.getMessage().contains("STOPPING")) {
+                  logger.trace("suspendNode({0}) - {1}", id, e.getMessage());
+                  // ignore as it has/will reach the desired destination state
+               } else {
+                  throw e;
+               }
+            }
+         } else {
+            throw ise;
+         }
+      } catch (RuntimeException e) {
+         logger.error(e, "suspendNode({0}) - exception occurred!", id);
+         throw e;
+      }
    }
 }

@@ -48,7 +48,7 @@ public class ResponseNotSuccessHandler implements HttpErrorHandler {
    private static final Pattern RESOURCE_NOT_FOUND_PATTERN = Pattern.compile(".*RESOURCE_NOT_FOUND.*");
    private static final Pattern NOT_IMPLEMENTED_PATTERN = Pattern.compile(".*NOTFOUND: API to the Version.*");
    private static final Pattern ILLEGAL_STATE_PATTERN = Pattern
-         .compile(".*(NEVER_BOOTED|ALREADY_STARTED|ILLEGAL_STATE).*");
+         .compile(".*(NEVER_BOOTED|ALREADY_STARTED|ALREADY_STOPPED|ILLEGAL_STATE).*");
    private static final Pattern ILLEGAL_ARGUMENT_PATTERN = Pattern
          .compile(".*(SERVER_NAME_ALREADY_EXISTS|VALIDATION_ERROR).*");
 
