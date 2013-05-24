@@ -30,20 +30,20 @@ import com.google.inject.Inject;
  */
 public class ParsePasswordFromRootedInstance implements Function<HttpResponse, String> {
 
-    private final ParseJson<Map<String, Map<String, String>>> json;
+   private final ParseJson<Map<String, Map<String, String>>> json;
 
-    @Inject
-    ParsePasswordFromRootedInstance(ParseJson<Map<String, Map<String, String>>> json) {
-        this.json = checkNotNull(json, "json");
-    }
+   @Inject
+   ParsePasswordFromRootedInstance(ParseJson<Map<String, Map<String, String>>> json) {
+      this.json = checkNotNull(json, "json");
+   }
 
-    /**
-     * Extracts the user password from the json response
-     */
-    public String apply(HttpResponse from) {
-        Map<String, Map<String, String>> result = json.apply(from);
-        if(result.get("user") == null) 
-            return null;
-        return result.get("user").get("password");
-    }
+   /**
+    * Extracts the user password from the json response
+    */
+   public String apply(HttpResponse from) {
+      Map<String, Map<String, String>> result = json.apply(from);
+      if(result.get("user") == null) 
+         return null;
+      return result.get("user").get("password");
+   }
 }

@@ -24,6 +24,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Zone;
 import org.jclouds.location.functions.ZoneToEndpoint;
 import org.jclouds.openstack.keystone.v2_0.domain.Tenant;
+import org.jclouds.openstack.reddwarf.v1.features.DatabaseApi;
 import org.jclouds.openstack.reddwarf.v1.features.FlavorApi;
 import org.jclouds.openstack.reddwarf.v1.features.InstanceApi;
 import org.jclouds.openstack.reddwarf.v1.features.UserApi;
@@ -66,6 +67,14 @@ public interface RedDwarfApi extends Closeable{
    @Delegate
    @Path("/instances/{instanceId}")
    UserApi getUserApiForInstanceInZone(@PathParam("instanceId") String instanceId, 
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   
+   /**
+    * Provides access to Database features.
+    */
+   @Delegate
+   @Path("/instances/{instanceId}")
+   DatabaseApi getDatabaseApiForInstanceInZone(@PathParam("instanceId") String instanceId, 
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
    
    /**

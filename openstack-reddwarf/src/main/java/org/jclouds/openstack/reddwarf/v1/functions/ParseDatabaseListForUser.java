@@ -27,28 +27,28 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 /**
- * This parses the password
+ * This parses the list of databases
  * 
  * @author Zack Shoylev
  */
 public class ParseDatabaseListForUser implements Function<HttpResponse, FluentIterable<String>> {
 
-    private final ParseJson<Map<String, List<Map<String, String>>>> json;
+   private final ParseJson<Map<String, List<Map<String, String>>>> json;
 
-    @Inject
-    ParseDatabaseListForUser(ParseJson<Map<String, List<Map<String, String>>>> json) {
-        this.json = checkNotNull(json, "json");
-    }
+   @Inject
+   ParseDatabaseListForUser(ParseJson<Map<String, List<Map<String, String>>>> json) {
+      this.json = checkNotNull(json, "json");
+   }
 
-    /**
-     * Extracts the user password from the json response
-     */
-    public FluentIterable<String> apply(HttpResponse from) {
-        List<String> resultDatabases = Lists.newArrayList();
-        Map<String, List<Map<String, String>>> result = json.apply(from);
-        for(Map<String, String> database : result.get("databases")) {
-            resultDatabases.add(database.get("name"));
-        }
-        return FluentIterable.from(resultDatabases);
-    }
+   /**
+    * Parses the database list from the json response
+    */
+   public FluentIterable<String> apply(HttpResponse from) {
+      List<String> resultDatabases = Lists.newArrayList();
+      Map<String, List<Map<String, String>>> result = json.apply(from);
+      for(Map<String, String> database : result.get("databases")) {
+         resultDatabases.add(database.get("name"));
+      }
+      return FluentIterable.from(resultDatabases);
+   }
 }

@@ -118,8 +118,8 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_testing"))continue;
-            assertTrue(userApi.list(instance.getId()).size() >=1);
-            for(User user : userApi.list(instance.getId())){
+            assertTrue(userApi.list().size() >=1);
+            for(User user : userApi.list()){
                checkUser(user);      
             }
          }  
@@ -134,8 +134,8 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_testing"))continue;
-            assertTrue(userApi.list(instance.getId()).size() >=1);
-            for(User user : userApi.list(instance.getId())){
+            assertTrue(userApi.list().size() >=1);
+            for(User user : userApi.list()){
                User userFromGet = userApi.get(user.getName());
                assertEquals(userFromGet.getName(), user.getName());
                assertEquals(userFromGet.getDatabases(), user.getDatabases());     
@@ -152,8 +152,8 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_testing"))continue;
-            assertTrue(userApi.list(instance.getId()).size() >=1);
-            for(User user : userApi.list(instance.getId())){
+            assertTrue(userApi.list().size() >=1);
+            for(User user : userApi.list()){
                assertTrue(userApi.getDatabaseList(user.getName()).size()>0);
             }
          }  
@@ -168,8 +168,8 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_testing"))continue;
-            assertTrue(userApi.list(instance.getId()).size() >=1);
-            for(User user : userApi.list(instance.getId())){
+            assertTrue(userApi.list().size() >=1);
+            for(User user : userApi.list()){
                userApi.grant(user.getName(), "dbA");
                userApi.grant(user.getName(), ImmutableList.of(
                      "dbB", 

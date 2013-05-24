@@ -294,7 +294,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/reddwarf_user_list.json")).build()
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
-      Set<User> users = api.list("instanceId-1234-5678").toSet();
+      Set<User> users = api.list().toSet();
       assertEquals(users.size(), 4);
       assertEquals(users.iterator().next().getDatabases().size(), 0);
       assertEquals(users.iterator().next().getName(), "dbuser1");
@@ -309,7 +309,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/reddwarf_user_list.json")).build()
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
-      Set<User> users = api.list("instanceId-1234-5678").toSet();
+      Set<User> users = api.list().toSet();
       assertEquals(users.size(), 0);
    }
    

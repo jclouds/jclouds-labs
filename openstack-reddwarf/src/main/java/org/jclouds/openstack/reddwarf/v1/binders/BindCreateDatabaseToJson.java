@@ -17,47 +17,42 @@
 package org.jclouds.openstack.reddwarf.v1.binders;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.openstack.reddwarf.v1.domain.User;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 
 /**
  * @author Zack Shoylev
  */
-public class BindCreateUserToJson implements MapBinder {
+public class BindCreateDatabaseToJson implements MapBinder {
 
    @Inject
    private BindToJsonPayload jsonBinder;
 
-   @SuppressWarnings("unchecked")
-   @Override    
+   @Override
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
-      Set<User> users = Sets.newHashSet();
-      if( postParams.get("name") != null ) {
-         Set<String> databases = Sets.newHashSet();
-         databases.add((String) postParams.get("databaseName"));
-         User user = User.builder()
-               .name((String) postParams.get("name"))
-               .password((String) postParams.get("password"))
-               .databases(databases)
-               .build();
-         users.add(user);
+      Builder<String, String> databaseBuilder = ImmutableMap.builder();
+
+      databaseBuilder.put("name", (String) postParams.get("database"));
+
+      if (postParams.get("character_set") != null) {
+         databaseBuilder.put("character_set", (String) postParams.get("character_set"));
       }
-      else if( postParams.get("users") != null ) {
-         users = (Set<User>) postParams.get("users");
+      if (postParams.get("collate") != null) {
+         databaseBuilder.put("collate", (String) postParams.get("collate"));
       }
-      return jsonBinder.bindToRequest(request, ImmutableMap.of("users", users));
+
+      return jsonBinder.bindToRequest(request, ImmutableMap.of("databases", ImmutableSet.of(databaseBuilder.build())));
    }
 
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object toBind) {
-      throw new IllegalStateException("Create user is a POST operation");
-   }    
+      throw new IllegalStateException("Create database is a POST operation");
+   }
 }

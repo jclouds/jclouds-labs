@@ -34,153 +34,153 @@ import com.google.common.collect.Maps;
  * @author Zack Shoylev
  */
 public class User implements Comparable<User>{
-    private final String name;
-    private final String password;
-    private final List<Map<String,String>> databases;
+   private final String name;
+   private final String password;
+   private final List<Map<String,String>> databases;
 
-    @ConstructorProperties({
-        "name", "password", "databases"
-    })
-    protected User(String name, String password, List<Map<String,String>> databases) {
-        this.name = checkNotNull(name, "name required");
-        this.password = password;
-        if(databases == null)this.databases = Lists.newArrayList();
-        else {
-            this.databases = databases;
-        }
-    }    
+   @ConstructorProperties({
+      "name", "password", "databases"
+   })
+   protected User(String name, String password, List<Map<String,String>> databases) {
+      this.name = checkNotNull(name, "name required");
+      this.password = password;
+      if(databases == null)this.databases = Lists.newArrayList();
+      else {
+         this.databases = databases;
+      }
+   }    
 
-    protected User(String name, String password, Set<String> databases) {
-        this.name = checkNotNull(name, "name required");
-        this.password = password;
-        if(databases == null)this.databases = Lists.newArrayList();
-        else {
-            List<Map<String,String>> databaseList = Lists.newArrayList();
-            for(String databaseName : databases) {
-                Map<String,String> singleDatabase = Maps.newHashMap();
-                singleDatabase.put("name", databaseName);
-                databaseList.add(singleDatabase);
-            }
-            this.databases = ImmutableList.copyOf(databaseList);
-        }
-    }   
+   protected User(String name, String password, Set<String> databases) {
+      this.name = checkNotNull(name, "name required");
+      this.password = password;
+      if(databases == null)this.databases = Lists.newArrayList();
+      else {
+         List<Map<String,String>> databaseList = Lists.newArrayList();
+         for(String databaseName : databases) {
+            Map<String,String> singleDatabase = Maps.newHashMap();
+            singleDatabase.put("name", databaseName);
+            databaseList.add(singleDatabase);
+         }
+         this.databases = ImmutableList.copyOf(databaseList);
+      }
+   }   
 
-    /**
-     * @return the name of this user
-     * @see User.Builder#name(String)
-     */
-    public String getName() {
-        return this.name;
-    }
+   /**
+    * @return the name of this user
+    * @see User.Builder#name(String)
+    */
+   public String getName() {
+      return this.name;
+   }
 
-    /**
-     * @return the password for this user
-     * @see User.Builder#password(String)
-     */
-    public String getPassword() {
-        return this.password;
-    }
+   /**
+    * @return the password for this user
+    * @see User.Builder#password(String)
+    */
+   public String getPassword() {
+      return this.password;
+   }
 
-    /**
-     * @return the databases for this user
-     * @see User.Builder#databases(String)
-     */
-    public List<String> getDatabases() {
-        List<String> databaseList = Lists.newArrayList();
-        for(Map<String,String> database : this.databases) {
-            databaseList.add(database.get("name"));
-        }
-        return ImmutableList.copyOf(databaseList);
-    }
+   /**
+    * @return the databases for this user
+    * @see User.Builder#databases(String)
+    */
+   public List<String> getDatabases() {
+      List<String> databaseList = Lists.newArrayList();
+      for(Map<String,String> database : this.databases) {
+         databaseList.add(database.get("name"));
+      }
+      return ImmutableList.copyOf(databaseList);
+   }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(name, password, databases);
-    }
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(name, password, databases);
+   }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        User that = User.class.cast(obj);
-        return Objects.equal(this.name, that.name) && 
-                Objects.equal(this.password, that.password) &&
-                Objects.equal(this.databases, that.databases);
-    }
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (obj == null || getClass() != obj.getClass()) return false;
+      User that = User.class.cast(obj);
+      return Objects.equal(this.name, that.name) && 
+            Objects.equal(this.password, that.password) &&
+            Objects.equal(this.databases, that.databases);
+   }
 
-    protected ToStringHelper string() {
-        return Objects.toStringHelper(this)
-                .add("name", name)
-                .add("password", password)
-                .add("databases", databases);
-    }
+   protected ToStringHelper string() {
+      return Objects.toStringHelper(this)
+            .add("name", name)
+            .add("password", password)
+            .add("databases", databases);
+   }
 
-    @Override
-    public String toString() {
-        return string().toString();
-    }
+   @Override
+   public String toString() {
+      return string().toString();
+   }
 
-    public static Builder builder() { 
-        return new Builder();
-    }
+   public static Builder builder() { 
+      return new Builder();
+   }
 
-    public Builder toBuilder() { 
-        return new Builder().fromUser(this);
-    }
+   public Builder toBuilder() { 
+      return new Builder().fromUser(this);
+   }
 
-    public static class Builder {
-        protected String name;
-        protected String password;
-        protected Set<String> databases;
+   public static class Builder {
+      protected String name;
+      protected String password;
+      protected Set<String> databases;
 
-        /** 
-         * @param name The name of this user
-         * @return The builder object
-         * @see User#getName()
-         */
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
+      /** 
+       * @param name The name of this user
+       * @return The builder object
+       * @see User#getName()
+       */
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
 
-        /** 
-         * @param name The password for this user
-         * @return The builder object
-         * @see User#getPassword()
-         */
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
+      /** 
+       * @param name The password for this user
+       * @return The builder object
+       * @see User#getPassword()
+       */
+      public Builder password(String password) {
+         this.password = password;
+         return this;
+      }
 
-        /** 
-         * @param name The databases for this user
-         * @return The builder object
-         * @see User#getDatabases()
-         */
-        public Builder databases(Set<String> databases) {
-            this.databases = databases;
-            return this;
-        }
+      /** 
+       * @param name The databases for this user
+       * @return The builder object
+       * @see User#getDatabases()
+       */
+      public Builder databases(Set<String> databases) {
+         this.databases = databases;
+         return this;
+      }
 
-        /**
-         * 
-         * @return A new User object
-         */
-        public User build() {
-            return new User(name, password, databases);
-        }
+      /**
+       * 
+       * @return A new User object
+       */
+      public User build() {
+         return new User(name, password, databases);
+      }
 
-        public Builder fromUser(User in) {
-            return this
-                    .name(in.getName())
-                    .password(in.getPassword())
-                    .databases(ImmutableSet.copyOf( in.getDatabases() ));
-        }        
-    }
+      public Builder fromUser(User in) {
+         return this
+               .name(in.getName())
+               .password(in.getPassword())
+               .databases(ImmutableSet.copyOf( in.getDatabases() ));
+      }        
+   }
 
-    @Override
-    public int compareTo(User that) {
-        return this.getName().compareTo(that.getName());
-    }
+   @Override
+   public int compareTo(User that) {
+      return this.getName().compareTo(that.getName());
+   }
 }

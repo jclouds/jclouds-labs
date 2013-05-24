@@ -66,7 +66,6 @@ public interface UserApi {
     * A user is granted all privileges on the specified databases.
     * The following user name is reserved and cannot be used for creating users: root.
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @param users List of users to be created
     * @return true if successful
     */
@@ -81,7 +80,6 @@ public interface UserApi {
    /**
     * Create a database user by name, password, and database name. Simpler overload for {@link #create(String, Set)} 
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @param userName Name of the user for the database.
     * @param password User password for database access.
     * @param databaseName Name of the database that the user can access.
@@ -99,7 +97,6 @@ public interface UserApi {
     * This operation grants access for the specified user to a database for the specified instance.
     * The user is granted all privileges.
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @param userName The name of the specified user.
     * @param databases List of the databases that the user should be granted access to.
     * @return true if successful
@@ -116,7 +113,6 @@ public interface UserApi {
     * This operation grants access for the specified user to a database for the specified instance. Simpler overload for {@link #create(String, Set)}
     * The user is granted all privileges.
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @param userName Name of the user for the database.
     * @param databaseName Name of the database that the user can access.
     * @return true if successful
@@ -133,7 +129,6 @@ public interface UserApi {
     * This operation grants access for the specified user to a database for the specified instance.
     * The user is granted all privileges.
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @param userName Name of the user for the database.
     * @param databaseName Name of the database that the user can access.
     * @return true if successful
@@ -148,7 +143,6 @@ public interface UserApi {
    /**
     * This operation deletes the specified user for the specified database instance.
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @param userName The name for the specified user.
     * @return true if successful
     */
@@ -163,16 +157,15 @@ public interface UserApi {
     * This operation lists the users in the specified database instance.
     * This operation does not return the system users (database administrators that administer the health of the database). Also, this operation returns the "root" user only if "root" user has been enabled.
     *
-    * @param instanceId The instance ID for the specified database instance.
     * @return The list of Users
     */
-   @Named("user:list/{instanceId}")
+   @Named("user:list")
    @GET
    @Path("/users")
    @SelectJson("users")
    @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
-   FluentIterable<User> list(@PathParam("instanceId") String instanceId);
+   FluentIterable<User> list();
    
    /**
     * This operation shows a list of all databases a user has access to.

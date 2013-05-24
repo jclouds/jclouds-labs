@@ -32,247 +32,247 @@ import com.google.common.collect.ImmutableList;
  * @author Zack Shoylev
  */
 public class Instance implements Comparable<Instance>{
-    
-    private final String id;
-    private final String name;
-    private final Flavor flavor;
-    private final Volume volume;
-    private final Status status;
-    private final List<Link> links;
 
-    @ConstructorProperties({
-        "id", "name", "flavor", "volume", "status", "links"
-    })
-    protected Instance(String id, String name, Flavor flavor, Volume volume, Status status, List<Link> links) {
-        this.id = checkNotNull(id, "id required");
-        this.name = name;
-        this.flavor = checkNotNull(flavor, "flavor required");
-        this.volume =  checkNotNull(volume, "volume required");
-        checkArgument(volume.getSize() > 0, "Size must be greater than 0");
-        this.status = checkNotNull(status, "status required");
-        this.links = checkNotNull(links, "links required");
-    }
+   private final String id;
+   private final String name;
+   private final Flavor flavor;
+   private final Volume volume;
+   private final Status status;
+   private final List<Link> links;
 
-    /**
-     * @return the id of this instance
-     */
-    public String getId() {
-        return this.id;
-    }
-    
-    /**
-     * @return the name of this instance
-     * @see Instance.Builder#name(String)
-     */
-    public String getName() {
-        return this.name;
-    }
+   @ConstructorProperties({
+      "id", "name", "flavor", "volume", "status", "links"
+   })
+   protected Instance(String id, String name, Flavor flavor, Volume volume, Status status, List<Link> links) {
+      this.id = checkNotNull(id, "id required");
+      this.name = name;
+      this.flavor = checkNotNull(flavor, "flavor required");
+      this.volume =  checkNotNull(volume, "volume required");
+      checkArgument(volume.getSize() > 0, "Size must be greater than 0");
+      this.status = checkNotNull(status, "status required");
+      this.links = checkNotNull(links, "links required");
+   }
 
-    /**
-     * @return the flavor of this instance
-     * @see Instance.Builder#flavor(Flavor)
-     */
-    public Flavor getFlavor() {
-        return this.flavor;
-    }
+   /**
+    * @return the id of this instance
+    */
+   public String getId() {
+      return this.id;
+   }
 
-    /**
-     * @return the volume size for this instance in gigabytes (GB)
-     * @see Instance.Builder#size(int)
-     */
-    public int getSize() {
-        return this.volume.getSize();
-    }
-    
-    /**
-     * @return the status for this instance
-     * @see Instance.Builder#status(Instance.Status)
-     */
-    public Status getStatus() {
-        return this.status;
-    }
-    
-    /**
-     * @return the Links for this instance
-     * @see Instance.Builder#links(ImmutableList)
-     */
-    public List<Link> getLinks() {
-        return this.links;
-    }
-    
-    /**
-     * Lists possible Instance status
-     * @author zack-shoylev
-     *
-     */
-    public enum Status {
-        /**
-         * The database instance is being provisioned.
-         * */
-        BUILD, 
-        /**
-         * The database instance is rebooting.
-         */
-        REBOOT,
-        /**
-         * The database instance is online and available to take requests.
-         * */
-        ACTIVE,
-        /**
-         * The database instance is unresponsive at the moment.
-         */
-        BLOCKED,
-        /**
-         * The database instance is being resized at the moment.
-         */
-        RESIZE,
-        /**
-         * The database instance is terminating services. Also, SHUTDOWN is returned if for any reason the instance is shut down but not the actual server.
-         */
-        SHUTDOWN, 
-        /**
-         * Unrecognized status response
-         */
-        UNRECOGNIZED;
+   /**
+    * @return the name of this instance
+    * @see Instance.Builder#name(String)
+    */
+   public String getName() {
+      return this.name;
+   }
 
-        public String value() {
-           return name();
-        }
+   /**
+    * @return the flavor of this instance
+    * @see Instance.Builder#flavor(Flavor)
+    */
+   public Flavor getFlavor() {
+      return this.flavor;
+   }
 
-        @Override
-        public String toString() {
-           return value();
-        }
+   /**
+    * @return the volume size for this instance in gigabytes (GB)
+    * @see Instance.Builder#size(int)
+    */
+   public int getSize() {
+      return this.volume.getSize();
+   }
 
-        public static Status fromValue(String status) {
-           try {
-              return valueOf(checkNotNull(status, "type"));
-           } catch (IllegalArgumentException e) {
-              return UNRECOGNIZED;
-           }
-        }
-     }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, name, volume.getSize(), flavor, status, links);
-    }
+   /**
+    * @return the status for this instance
+    * @see Instance.Builder#status(Instance.Status)
+    */
+   public Status getStatus() {
+      return this.status;
+   }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Instance that = Instance.class.cast(obj);
-        return Objects.equal(this.id, that.id);
-    }
+   /**
+    * @return the Links for this instance
+    * @see Instance.Builder#links(ImmutableList)
+    */
+   public List<Link> getLinks() {
+      return this.links;
+   }
 
-    protected ToStringHelper string() {
-        return Objects.toStringHelper(this)
-                .add("id", id).add("name", name).add("flavor", flavor).add("volume size", volume.getSize()).add("links", links);
-    }
+   /**
+    * Lists possible Instance status
+    * @author zack-shoylev
+    *
+    */
+   public enum Status {
+      /**
+       * The database instance is being provisioned.
+       * */
+      BUILD, 
+      /**
+       * The database instance is rebooting.
+       */
+      REBOOT,
+      /**
+       * The database instance is online and available to take requests.
+       * */
+      ACTIVE,
+      /**
+       * The database instance is unresponsive at the moment.
+       */
+      BLOCKED,
+      /**
+       * The database instance is being resized at the moment.
+       */
+      RESIZE,
+      /**
+       * The database instance is terminating services. Also, SHUTDOWN is returned if for any reason the instance is shut down but not the actual server.
+       */
+      SHUTDOWN, 
+      /**
+       * Unrecognized status response
+       */
+      UNRECOGNIZED;
 
-    @Override
-    public String toString() {
-        return string().toString();
-    }
+      public String value() {
+         return name();
+      }
 
-    public static Builder builder() { 
-        return new Builder();
-    }
+      @Override
+      public String toString() {
+         return value();
+      }
 
-    public Builder toBuilder() { 
-        return new Builder().fromInstance(this);
-    }
-    
-    public static class Builder {
-        protected String id;
-        protected String name;
-        protected int size;
-        protected Flavor flavor;
-        protected Status status;
-        protected ImmutableList<Link> links;
-        
-        /** 
-         * @param id The id of this instance
-         * @return The builder object
-         * @see Instance#getId()
-         */
-        public Builder id(String id) {
-            this.id = id;
-            return this;
-        }
-        
-        /** 
-         * @param name The name of this instance
-         * @return The builder object
-         * @see Instance#getName()
-         */
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-        
-        /** 
-         * @param size Specifies the volume size in gigabytes (GB).
-         * @return The builder object
-         * @see Instance#getSize()
-         */
-        public Builder size(int size) {
-            this.size = size;
-            return this;
-        }
+      public static Status fromValue(String status) {
+         try {
+            return valueOf(checkNotNull(status, "type"));
+         } catch (IllegalArgumentException e) {
+            return UNRECOGNIZED;
+         }
+      }
+   }
 
-        /** 
-         * @param flavor The Flavor of this instance as specified in the response from the List Flavors API call.
-         * @return The builder object
-         * @see Instance#getFlavor()
-         */
-        public Builder flavor(Flavor flavor) {
-            this.flavor = flavor;
-            return this;
-        }
-        
-        /** 
-         * @param status The status of this instance
-         * @return The builder object
-         * @see Instance#getStatus()
-         */
-        public Builder status(Status status) {
-            this.status = status;
-            return this;
-        }
-        
-        /** 
-         * @param links The links to this instance
-         * @return The builder object
-         * @see Instance#getLinks()
-         */
-        public Builder links(ImmutableList<Link> links) {
-            this.links = links;
-            return this;
-        }
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(id, name, volume.getSize(), flavor, status, links);
+   }
 
-        /**
-         * 
-         * @return A new Instance object
-         */
-        public Instance build() {
-            return new Instance(id, name, flavor, new Volume(size), status, links);
-        }
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (obj == null || getClass() != obj.getClass()) return false;
+      Instance that = Instance.class.cast(obj);
+      return Objects.equal(this.id, that.id);
+   }
 
-        public Builder fromInstance(Instance in) {
-            return this
-                    .id(in.getId())
-                    .name(in.getName())
-                    .flavor(in.getFlavor())
-                    .size(in.getSize())
-                    .status(in.getStatus())
-                    .links(links);
-        }        
-    }
-    
-    @Override
-    public int compareTo(Instance that) {
-        return this.getId().compareTo(that.getId());
-    }   
+   protected ToStringHelper string() {
+      return Objects.toStringHelper(this)
+            .add("id", id).add("name", name).add("flavor", flavor).add("volume size", volume.getSize()).add("links", links);
+   }
+
+   @Override
+   public String toString() {
+      return string().toString();
+   }
+
+   public static Builder builder() { 
+      return new Builder();
+   }
+
+   public Builder toBuilder() { 
+      return new Builder().fromInstance(this);
+   }
+
+   public static class Builder {
+      protected String id;
+      protected String name;
+      protected int size;
+      protected Flavor flavor;
+      protected Status status;
+      protected ImmutableList<Link> links;
+
+      /** 
+       * @param id The id of this instance
+       * @return The builder object
+       * @see Instance#getId()
+       */
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
+
+      /** 
+       * @param name The name of this instance
+       * @return The builder object
+       * @see Instance#getName()
+       */
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
+
+      /** 
+       * @param size Specifies the volume size in gigabytes (GB).
+       * @return The builder object
+       * @see Instance#getSize()
+       */
+      public Builder size(int size) {
+         this.size = size;
+         return this;
+      }
+
+      /** 
+       * @param flavor The Flavor of this instance as specified in the response from the List Flavors API call.
+       * @return The builder object
+       * @see Instance#getFlavor()
+       */
+      public Builder flavor(Flavor flavor) {
+         this.flavor = flavor;
+         return this;
+      }
+
+      /** 
+       * @param status The status of this instance
+       * @return The builder object
+       * @see Instance#getStatus()
+       */
+      public Builder status(Status status) {
+         this.status = status;
+         return this;
+      }
+
+      /** 
+       * @param links The links to this instance
+       * @return The builder object
+       * @see Instance#getLinks()
+       */
+      public Builder links(ImmutableList<Link> links) {
+         this.links = links;
+         return this;
+      }
+
+      /**
+       * 
+       * @return A new Instance object
+       */
+      public Instance build() {
+         return new Instance(id, name, flavor, new Volume(size), status, links);
+      }
+
+      public Builder fromInstance(Instance in) {
+         return this
+               .id(in.getId())
+               .name(in.getName())
+               .flavor(in.getFlavor())
+               .size(in.getSize())
+               .status(in.getStatus())
+               .links(links);
+      }        
+   }
+
+   @Override
+   public int compareTo(Instance that) {
+      return this.getId().compareTo(that.getId());
+   }   
 }
