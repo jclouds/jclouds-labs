@@ -33,8 +33,8 @@
 
     <properties>
         <jclouds.osgi.import>
-            org.jclouds.blobstore*;version="${project.version}";resolution:=optional,
-            org.jclouds.compute*;version="${project.version}";resolution:=optional,
+            org.jclouds.blobstore*;version="${jclouds.version}";resolution:=optional,
+            org.jclouds.compute*;version="${jclouds.version}";resolution:=optional,
             *
         </jclouds.osgi.import>
         <jclouds.osgi.export>
@@ -54,19 +54,19 @@
         <dependency>
             <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>${project.version}</version>
+            <version>${jclouds.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-compute</artifactId>
-            <version>${project.version}</version>
+            <version>${jclouds.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-blobstore</artifactId>
-            <version>${project.version}</version>
+            <version>${jclouds.version}</version>
         </dependency>
 
         <dependency>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>${project.version}</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

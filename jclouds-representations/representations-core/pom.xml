@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.apache.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
-            <version>${project.version}</version>
+            <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
