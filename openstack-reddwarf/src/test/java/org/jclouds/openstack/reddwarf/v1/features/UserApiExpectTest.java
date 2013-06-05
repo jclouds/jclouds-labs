@@ -76,6 +76,38 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
       boolean result = api.create("dbuser1", "password", "databaseA");
       assertFalse(result);
    }
+   
+   public void testCreateUserSimpleWithHost() {
+      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users");
+      UserApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint) // bad naming convention, you should not be able to change the method to POST
+            .method("POST")
+            .payload(payloadFromResourceWithContentType("/user_create_with_host_simple_request.json", MediaType.APPLICATION_JSON))
+            .build(),
+            HttpResponse.builder().statusCode(202).build() // response
+            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+
+      boolean result = api.create("dbuser1", "password", "192.168.64.64", "databaseA");
+      assertTrue(result);
+   }
+   
+   public void testCreateUserSimpleWithHostFail() {
+      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users");
+      UserApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint) // bad naming convention, you should not be able to change the method to POST
+            .method("POST")
+            .payload(payloadFromResourceWithContentType("/user_create_with_host_simple_request.json", MediaType.APPLICATION_JSON))
+            .build(),
+            HttpResponse.builder().statusCode(404).build() // response
+            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+
+      boolean result = api.create("dbuser1", "password", "192.168.64.64", "databaseA");
+      assertFalse(result);
+   }
 
    public void testCreateUser() {
       URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users");
@@ -99,7 +131,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
       databases3.add( "databaseD" );
       User user1 = User.builder().databases( databases1 ).name("dbuser1").password("password").build();
       User user2 = User.builder().databases( databases2 ).name("dbuser2").password("password").build();
-      User user3 = User.builder().databases( databases3 ).name("dbuser3").password("password").build();
+      User user3 = User.builder().databases( databases3 ).name("dbuser3").password("password").host("192.168.64.64").build();
       Set<User> users = Sets.newHashSet();
       users.add(user1);
       users.add(user2);
@@ -131,7 +163,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
       databases3.add( "databaseD" );
       User user1 = User.builder().databases( databases1 ).name("dbuser1").password("password").build();
       User user2 = User.builder().databases( databases2 ).name("dbuser2").password("password").build();
-      User user3 = User.builder().databases( databases3 ).name("dbuser3").password("password").build();
+      User user3 = User.builder().databases( databases3 ).name("dbuser3").password("password").host("192.168.64.64").build();
       Set<User> users = Sets.newHashSet();
       users.add(user1);
       users.add(user2);
@@ -296,7 +328,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
 
       Set<User> users = api.list().toSet();
       assertEquals(users.size(), 4);
-      assertEquals(users.iterator().next().getDatabases().size(), 0);
+      assertTrue(users.iterator().next().getDatabases().isEmpty());
       assertEquals(users.iterator().next().getName(), "dbuser1");
    }
    
@@ -310,7 +342,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
       Set<User> users = api.list().toSet();
-      assertEquals(users.size(), 0);
+      assertTrue(users.isEmpty());
    }
    
    public void testUserGetDatabaseList() {
@@ -337,7 +369,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
       Set<String> databases = api.getDatabaseList("dbuser1").toSet();
-      assertEquals(databases.size(), 0);
+      assertTrue(databases.isEmpty());
    }
    
    public void testGetUser() {
@@ -351,6 +383,7 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
 
       User user = api.get("exampleuser");
       assertEquals(user.getName(), "exampleuser");
+      assertEquals(user.getHost(), "%");
       assertEquals(user.getDatabases().size(), 2);
       assertEquals(user.getDatabases().iterator().next(), "databaseA");
    }
@@ -365,6 +398,36 @@ public class UserApiExpectTest extends BaseRedDwarfApiExpectTest {
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
       User user = api.get("exampleuser");
+      assertNull(user);
+   }
+   
+   public void testGetUserWithHostname() {
+      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users/exampleuser%40192.168.64.64");
+      UserApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint).build(),
+            HttpResponse.builder().statusCode(200).payload(payloadFromResource("/user_get_withhost.json")).build()
+      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+
+      User user = api.get("exampleuser", "192.168.64.64");
+      assertEquals(user.getName(), "exampleuser");
+      assertEquals(user.getHost(), "192.168.64.64");
+      assertEquals(user.getIdentifier(), "exampleuser@192.168.64.64");
+      assertEquals(user.getDatabases().size(), 2);
+      assertEquals(user.getDatabases().iterator().next(), "databaseA");
+   }
+   
+   public void testGetUserWithHostnameFail() {
+      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users/exampleuser%40192.168.64.64");
+      UserApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint).build(),
+            HttpResponse.builder().statusCode(404).payload(payloadFromResource("/user_get_withhost.json")).build()
+      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+
+      User user = api.get("exampleuser", "192.168.64.64");
       assertNull(user);
    }
 }

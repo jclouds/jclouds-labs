@@ -92,6 +92,23 @@ public interface UserApi {
    @Fallback(FalseOnNotFoundOr404.class)
    @MapBinder(BindCreateUserToJson.class)
    boolean create(@PayloadParam("name") String userName, @PayloadParam("password") String password, @PayloadParam("databaseName") String databaseName);
+   
+   /**
+    * Create a database user by name, password, and database name. Simpler overload for {@link #create(String, Set)} 
+    *
+    * @param userName Name of the user for the database.
+    * @param password User password for database access.
+    * @param host Specifies the host from which a user is allowed to connect to the database. Possible values are a string containing an IPv4 address or "%" to allow connecting from any host. Refer to Section 3.11.1, “User Access Restriction by Host” for details. If host is not specified, it defaults to "%".
+    * @param databaseName Name of the database that the user can access.
+    * @return true if successful
+    */
+   @Named("user:create")
+   @POST
+   @Path("/users")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(FalseOnNotFoundOr404.class)
+   @MapBinder(BindCreateUserToJson.class)
+   boolean create(@PayloadParam("name") String userName, @PayloadParam("password") String password, @PayloadParam("host") String host, @PayloadParam("databaseName") String databaseName);
 
    /**
     * This operation grants access for the specified user to a database for the specified instance.
@@ -174,7 +191,7 @@ public interface UserApi {
     * @param userName The name for the specified user.
     * @return The list of Users
     */
-   @Named("user:getDatabaseList/{instanceId}/{name}")
+   @Named("user:getDatabaseList/{name}")
    @GET
    @Path("/users/{name}/databases")
    @ResponseParser(ParseDatabaseListForUser.class)
@@ -183,18 +200,33 @@ public interface UserApi {
    FluentIterable<String> getDatabaseList(@PathParam("name") String userName);
       
    /**
-    * Returns a User by name
+    * Returns a User by identifier
     *
-    * @param instanceId The instance ID for the specified database instance.
-    * @param userName The name for the specified user.
+    * @param name The name or identifier for the specified user.
     * @return User or Null on not found
     */
-   @Named("user:list/{instanceId}/{userName}")
+   @Named("user:get/{name}")
    @GET
    @Path("/users/{name}")
    @SelectJson("user")
    @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   User get(@PathParam("name") String userName);
+   User get(@PathParam("name") String name);
+   
+   /**
+    * Returns a User by name and allowed host
+    *
+    * @param name The name for the specified user.
+    * @param host The associated hostname
+    * @return User or Null on not found
+    */
+   @Named("user:get/{name}@{hostname}")
+   @GET
+   @Path("/users/{name}@{hostname}")
+   @SelectJson("user")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
+   User get(@PathParam("name") String name, @PathParam("hostname") String hostname);
 }

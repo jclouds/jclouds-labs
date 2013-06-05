@@ -156,6 +156,6 @@ public class DatabaseApiExpectTest extends BaseRedDwarfApiExpectTest {
       ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
       Set<String> databases = api.list().toSet();
-      assertEquals(databases.size(), 0);
+      assertTrue(databases.isEmpty());
    }
 }

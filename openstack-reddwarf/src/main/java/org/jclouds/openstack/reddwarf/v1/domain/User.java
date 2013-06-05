@@ -36,25 +36,36 @@ import com.google.common.collect.Maps;
 public class User implements Comparable<User>{
    private final String name;
    private final String password;
+   private final String host;
    private final List<Map<String,String>> databases;
 
    @ConstructorProperties({
-      "name", "password", "databases"
+      "name", "password", "host", "databases"
    })
-   protected User(String name, String password, List<Map<String,String>> databases) {
+   protected User(String name, String password, String host, List<Map<String,String>> databases) {
       this.name = checkNotNull(name, "name required");
       this.password = password;
-      if(databases == null)this.databases = Lists.newArrayList();
+      this.host = host;
+      // Set databases to an empty list instead of null
+      if(databases == null) {
+         this.databases = Lists.newArrayList();
+      }
       else {
          this.databases = databases;
       }
    }    
 
-   protected User(String name, String password, Set<String> databases) {
+   protected User(String name, String password, String host, Set<String> databases) {
       this.name = checkNotNull(name, "name required");
       this.password = password;
-      if(databases == null)this.databases = Lists.newArrayList();
+      this.host = host;
+      // Set databases to an empty list instead of null
+      if(databases == null) {
+         this.databases = Lists.newArrayList();
+      }
       else {
+         // Using List<Map<String,String>> as the internal representation makes it easy to serialize properly
+         // with less code; this code is to present databases as List<String> to the user
          List<Map<String,String>> databaseList = Lists.newArrayList();
          for(String databaseName : databases) {
             Map<String,String> singleDatabase = Maps.newHashMap();
@@ -66,19 +77,38 @@ public class User implements Comparable<User>{
    }   
 
    /**
-    * @return the name of this user
+    * @return the name of this user. The name is not a unique or even sufficient identifier in some cases.
+    * @see User#getIdentifier()
     * @see User.Builder#name(String)
     */
    public String getName() {
       return this.name;
-   }
-
+   }   
+   
    /**
     * @return the password for this user
     * @see User.Builder#password(String)
     */
    public String getPassword() {
       return this.password;
+   }
+   
+   /**
+    * @return the host for this user
+    * @see User.Builder#host(String)
+    */
+   public String getHost() {
+      return this.host;
+   }
+   
+   /**
+    * @return a unique identifier for this user. In most cases, this is just the name. If the user is restricted to connections from a specific host, the hostname must be appended to the user name with a "@"
+    */
+   public String getIdentifier() {
+      if(host==null || "%".equals(host))
+         return name;
+      else 
+         return name + "@" + host;
    }
 
    /**
@@ -105,6 +135,7 @@ public class User implements Comparable<User>{
       User that = User.class.cast(obj);
       return Objects.equal(this.name, that.name) && 
             Objects.equal(this.password, that.password) &&
+            Objects.equal(this.host, that.host) &&
             Objects.equal(this.databases, that.databases);
    }
 
@@ -112,6 +143,7 @@ public class User implements Comparable<User>{
       return Objects.toStringHelper(this)
             .add("name", name)
             .add("password", password)
+            .add("host", host)
             .add("databases", databases);
    }
 
@@ -131,8 +163,9 @@ public class User implements Comparable<User>{
    public static class Builder {
       protected String name;
       protected String password;
+      protected String host;
       protected Set<String> databases;
-
+      
       /** 
        * @param name The name of this user
        * @return The builder object
@@ -152,6 +185,16 @@ public class User implements Comparable<User>{
          this.password = password;
          return this;
       }
+      
+      /** 
+       * @param host Specifies the host from which a user is allowed to connect to the database. Possible values are a string containing an IPv4 address or "%" to allow connecting from any host. Refer to Section 3.11.1, “User Access Restriction by Host” for details. If host is not specified, it defaults to "%".
+       * @return The builder object
+       * @see User#getHost()
+       */
+      public Builder host(String host) {
+         this.host = host;
+         return this;
+      }
 
       /** 
        * @param name The databases for this user
@@ -168,13 +211,14 @@ public class User implements Comparable<User>{
        * @return A new User object
        */
       public User build() {
-         return new User(name, password, databases);
+         return new User(name, password, host, databases);
       }
 
       public Builder fromUser(User in) {
          return this
                .name(in.getName())
                .password(in.getPassword())
+               .host(in.getHost())
                .databases(ImmutableSet.copyOf( in.getDatabases() ));
       }        
    }

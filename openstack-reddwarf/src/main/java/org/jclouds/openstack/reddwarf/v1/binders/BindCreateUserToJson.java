@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.openstack.reddwarf.v1.domain.User;
+import org.jclouds.openstack.reddwarf.v1.domain.User.Builder;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
@@ -42,12 +43,17 @@ public class BindCreateUserToJson implements MapBinder {
       Set<User> users = Sets.newHashSet();
       if( postParams.get("name") != null ) {
          Set<String> databases = Sets.newHashSet();
-         databases.add((String) postParams.get("databaseName"));
-         User user = User.builder()
-               .name((String) postParams.get("name"))
-               .password((String) postParams.get("password"))
-               .databases(databases)
-               .build();
+         if(postParams.get("databaseName")!=null)
+            databases.add((String) postParams.get("databaseName"));
+         
+         Builder builder = User.builder();
+         builder.name((String) postParams.get("name"))
+                .password((String) postParams.get("password"));
+         
+         builder.host((String) postParams.get("host"));
+         builder.databases(databases);
+         
+         User user = builder.build();
          users.add(user);
       }
       else if( postParams.get("users") != null ) {

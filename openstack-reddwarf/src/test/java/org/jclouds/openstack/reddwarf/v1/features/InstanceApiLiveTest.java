@@ -21,6 +21,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertFalse;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ import com.google.common.collect.Maps;
 /**
  * @author Zack Shoylev
  */
-@Test(groups = "live", testName = "InstanceApiLiveTest")
+@Test(groups = "live", testName = "InstanceApiLiveTest", singleThreaded = true)
 public class InstanceApiLiveTest extends BaseRedDwarfApiLiveTest {
 
     private static Map<String,List<Instance>> created = Maps.newHashMap();
@@ -49,8 +50,8 @@ public class InstanceApiLiveTest extends BaseRedDwarfApiLiveTest {
         for (String zone : api.getConfiguredZones()) {
             List<Instance> zoneList = Lists.newArrayList();
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-            zoneList.add(instanceApi.create("1", 1, "first_instance_testing"));
-            Instance second = instanceApi.create("1", 1, "second_instance_testing");
+            zoneList.add(instanceApi.create("1", 1, "first_instance_testing_" + zone));
+            Instance second = instanceApi.create("1", 1, "second_instance_testing_" + zone);
             InstancePredicates.awaitAvailable(instanceApi).apply(second);
             instanceApi.enableRoot(second.getId());
             zoneList.add(second);            
@@ -81,7 +82,7 @@ public class InstanceApiLiveTest extends BaseRedDwarfApiLiveTest {
         for (String zone : api.getConfiguredZones()) {
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);
             FluentIterable<Instance> response = instanceApi.list(); 
-            assertTrue(response.size() > 0 );
+            assertFalse(response.isEmpty());
             for (Instance instance : response) {
                 checkInstance(instance);
             }  

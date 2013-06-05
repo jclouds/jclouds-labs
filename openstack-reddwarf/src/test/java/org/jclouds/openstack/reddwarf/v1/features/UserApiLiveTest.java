@@ -59,8 +59,8 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          // create instances
          List<Instance> instanceList = Lists.newArrayList();
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-         Instance first = instanceApi.create("1", 1, "first_user_testing");
-         Instance second = instanceApi.create("1", 1, "second_user_testing");
+         Instance first = instanceApi.create("1", 1, "first_user_reddwarf_live_testing_" + zone);
+         Instance second = instanceApi.create("1", 1, "second_user_reddwarf_live_testing_" + zone);
          instanceList.add(first);
          instanceList.add(second);
          InstancePredicates.awaitAvailable(instanceApi).apply(first);
@@ -72,19 +72,20 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
                .password(UUID.randomUUID().toString())
                .databases(ImmutableSet.of(
                      "u1db1", 
-                     "u1db1")).build();
+                     "u1db2")).build();
          User user2 = User.builder()
                .name("user2")
                .password(UUID.randomUUID().toString())
                .databases(ImmutableSet.of(
                      "u2db1", 
-                     "u2db1")).build();
+                     "u2db2")).build();
          User user3 = User.builder()
                .name("user3")
                .password(UUID.randomUUID().toString())
+               .host("173.203.44.122")
                .databases(ImmutableSet.of(
                      "u3db1", 
-                     "u3db1")).build();
+                     "u3db2")).build();
          UserApi userApiFirst = api.getUserApiForInstanceInZone(first.getId(), zone);
          UserApi userApiSecond = api.getUserApiForInstanceInZone(second.getId(), zone);
          userApiFirst.create(ImmutableSet.of(user1, user2));
@@ -107,7 +108,8 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
 
    private void checkUser(User user) {
       assertNotNull(user.getName(), "Name cannot be null for " + user);
-      checkArgument(user.getDatabases().size() > 0, "Number of databases must not be 0");
+      assertNotNull(user.getHost(), "Host cannot be null (should be '%' if default) for " + user);
+      checkArgument(!user.getDatabases().isEmpty(), "Number of databases must not be 0");
    }
 
    @Test
@@ -117,7 +119,7 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          assertTrue(instanceApi.list().size() >= 2);
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
-            if(!instance.getName().contains("user_testing"))continue;
+            if(!instance.getName().contains("user_reddwarf_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
             for(User user : userApi.list()){
                checkUser(user);      
@@ -133,12 +135,15 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          assertTrue(instanceApi.list().size() >= 2);
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
-            if(!instance.getName().contains("user_testing"))continue;
+            if(!instance.getName().contains("user_reddwarf_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
             for(User user : userApi.list()){
-               User userFromGet = userApi.get(user.getName());
+               User userFromGet = userApi.get(user.getIdentifier());
                assertEquals(userFromGet.getName(), user.getName());
-               assertEquals(userFromGet.getDatabases(), user.getDatabases());     
+               assertEquals(userFromGet.getHost(), user.getHost());
+               assertEquals(userFromGet.getIdentifier(), user.getIdentifier());
+               assertEquals(userFromGet.getDatabases(), user.getDatabases());
+               assertEquals(userFromGet, user);
             }
          }  
       } 
@@ -151,10 +156,10 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          assertTrue(instanceApi.list().size() >= 2 );
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
-            if(!instance.getName().contains("user_testing"))continue;
+            if(!instance.getName().contains("user_reddwarf_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
             for(User user : userApi.list()){
-               assertTrue(userApi.getDatabaseList(user.getName()).size()>0);
+               assertFalse(userApi.getDatabaseList(user.getIdentifier()).isEmpty());
             }
          }  
       } 
@@ -167,24 +172,24 @@ public class UserApiLiveTest extends BaseRedDwarfApiLiveTest {
          assertTrue(instanceApi.list().size() >= 2);
          for(Instance instance : instanceApi.list() ) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
-            if(!instance.getName().contains("user_testing"))continue;
+            if(!instance.getName().contains("user_reddwarf_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
             for(User user : userApi.list()){
-               userApi.grant(user.getName(), "dbA");
-               userApi.grant(user.getName(), ImmutableList.of(
+               userApi.grant(user.getIdentifier(), "dbA");
+               userApi.grant(user.getIdentifier(), ImmutableList.of(
                      "dbB", 
                      "dbC"));
 
-               Set<String> databases = userApi.getDatabaseList(user.getName()).toSet();
+               Set<String> databases = userApi.getDatabaseList(user.getIdentifier()).toSet();
                assertTrue(databases.contains("dbA"));
                assertTrue(databases.contains("dbB"));
                assertTrue(databases.contains("dbC"));
 
-               userApi.revoke(user.getName(), "dbA");
-               userApi.revoke(user.getName(), "dbB");
-               userApi.revoke(user.getName(), "dbC");
+               userApi.revoke(user.getIdentifier(), "dbA");
+               userApi.revoke(user.getIdentifier(), "dbB");
+               userApi.revoke(user.getIdentifier(), "dbC");
 
-               databases = userApi.getDatabaseList(user.getName()).toSet();
+               databases = userApi.getDatabaseList(user.getIdentifier()).toSet();
                assertFalse(databases.contains("dbA"));
                assertFalse(databases.contains("dbB"));
                assertFalse(databases.contains("dbC"));

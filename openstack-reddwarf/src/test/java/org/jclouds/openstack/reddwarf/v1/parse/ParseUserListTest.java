@@ -48,15 +48,17 @@ public class ParseUserListTest extends BaseSetParserTest<User> {
       return ImmutableSet
             .of(User.builder()
                   .name("dbuser1")
+                  .host("%")
                   .build(),
                   User.builder()
                   .name("dbuser2")
+                  .host("%")
                   .databases( ImmutableSet.of( 
                           "databaseB",
                           "databaseC") )
                   .build(),
-                  User.builder().name("dbuser3").build(),
-                  User.builder().name("demouser").databases(
+                  User.builder().name("dbuser3").host("%").build(),
+                  User.builder().name("demouser").host("%").databases(
                           ImmutableSet.of("sampledb"))
                           .build()
                   );

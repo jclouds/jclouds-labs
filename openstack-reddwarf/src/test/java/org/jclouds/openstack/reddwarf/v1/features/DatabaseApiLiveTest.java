@@ -51,8 +51,8 @@ public class DatabaseApiLiveTest extends BaseRedDwarfApiLiveTest {
          // create instances
          List<Instance> instanceList = Lists.newArrayList();
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-         Instance first = instanceApi.create("1", 1, "first_database_testing");
-         Instance second = instanceApi.create("1", 1, "second_database_testing");
+         Instance first = instanceApi.create("1", 1, "first_database_testing_" + zone);
+         Instance second = instanceApi.create("1", 1, "second_database_testing_" + zone);
          instanceList.add(first);
          instanceList.add(second);
          InstancePredicates.awaitAvailable(instanceApi).apply(first);
