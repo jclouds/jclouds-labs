@@ -94,6 +94,8 @@ public class InstanceApiLiveTest extends BaseRedDwarfApiLiveTest {
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);           
             for (Instance instance : instanceApi.list()) {
                 Instance instanceFromGet = instanceApi.get(instance.getId());
+                assertNotNull(instanceFromGet.getHostname());
+                assertNull(instance.getHostname());
                 assertEquals(instanceFromGet.getId(), instance.getId());
                 assertEquals(instanceFromGet.getName(), instance.getName());
                 assertEquals(instanceFromGet.getStatus(), instance.getStatus());

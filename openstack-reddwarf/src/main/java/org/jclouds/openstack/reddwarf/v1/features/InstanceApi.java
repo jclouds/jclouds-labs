@@ -59,9 +59,14 @@ import com.google.common.collect.FluentIterable;
 public interface InstanceApi {
     
    /**
-    * Same as {@link #create(String, int, String)} but name is left empty
+    * Same as {@link #create(String, int, String)} but accept an integer Flavor ID
+    *
+    * @param flavor The flavor ID
+    * @param volumeSize The size in GB of the instance volume
+    * @param name The name of the instance
+    * @return The instance created.
     * 
-    * @see org.jclouds.openstack.reddwarf.v1.domain.Instance#create(String, int)
+    * @see InstanceApi#create(String, int, String)
     */
    @Named("instance:create")
    @POST
@@ -69,13 +74,14 @@ public interface InstanceApi {
    @SelectJson("instance")
    @Consumes(MediaType.APPLICATION_JSON)
    @MapBinder(BindCreateInstanceToJson.class)
-   Instance create(@PayloadParam("flavorRef") String flavor, @PayloadParam("size") int volumeSize);
+   Instance create(@PayloadParam("flavorRef") int flavor, @PayloadParam("size") int volumeSize, @PayloadParam("name") String name);
 
    /**
     * Create a database instance by flavor type and volume size
     *
-    * @param flavor The flavor URL or flavor id
+    * @param flavor The flavor URL or flavor id as string
     * @param volumeSize The size in GB of the instance volume
+    * @param name The name of the instance
     * @return The instance created.
     */
    @Named("instance:create")

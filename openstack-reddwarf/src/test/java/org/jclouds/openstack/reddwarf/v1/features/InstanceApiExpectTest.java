@@ -53,23 +53,6 @@ public class InstanceApiExpectTest extends BaseRedDwarfApiExpectTest {
         assertEquals(instance.getName(), "json_rack_instance");  
     }
     
-    public void testCreateInstanceWithNoName() {
-        URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances");
-        InstanceApi api = requestsSendResponses(
-                keystoneAuthWithUsernameAndPasswordAndTenantName,
-                responseWithKeystoneAccess,
-                authenticatedGET().endpoint(endpoint) // bad naming convention, you should not be able to change the method to POST
-                .method("POST")
-                .payload(payloadFromResourceWithContentType("/instance_noname_create_request.json", MediaType.APPLICATION_JSON))
-                .build(),
-                HttpResponse.builder().statusCode(200).payload(payloadFromResource("/instance_create.json")).build() // response
-                ).getInstanceApiForZone("RegionOne");
-
-        Instance instance = api.create("1", 2);
-        assertEquals(instance.getSize(),2);
-        assertEquals(instance.getName(), "json_rack_instance");  
-    }
-    
     @Test(expectedExceptions = ResourceNotFoundException.class)
     public void testCreateInstanceFail() {
         URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances");
@@ -84,22 +67,6 @@ public class InstanceApiExpectTest extends BaseRedDwarfApiExpectTest {
                 ).getInstanceApiForZone("RegionOne");
 
         api.create("1", 2, "json_rack_instance");
-    }
-    
-    @Test(expectedExceptions = ResourceNotFoundException.class)
-    public void testCreateInstanceWithNoNameFail() {
-        URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances");
-        InstanceApi api = requestsSendResponses(
-                keystoneAuthWithUsernameAndPasswordAndTenantName,
-                responseWithKeystoneAccess,
-                authenticatedGET().endpoint(endpoint) // bad naming convention, you should not be able to change the method to POST
-                .method("POST")
-                .payload(payloadFromResourceWithContentType("/instance_noname_create_request.json", MediaType.APPLICATION_JSON))
-                .build(),
-                HttpResponse.builder().statusCode(404).payload(payloadFromResource("/instance_create.json")).build() // response
-                ).getInstanceApiForZone("RegionOne");
-
-        api.create("1", 2);
     }
     
     public void testDeleteInstance() {
@@ -167,6 +134,7 @@ public class InstanceApiExpectTest extends BaseRedDwarfApiExpectTest {
       assertEquals(instance.getName(), "json_rack_instance");
       assertEquals(instance.getId(), "44b277eb-39be-4921-be31-3d61b43651d7");
       assertEquals(instance.getLinks().size(), 2);
+      assertEquals(instance.getHostname(), "e09ad9a3f73309469cf1f43d11e79549caf9acf2.rackspaceclouddb.com");
    }
    
    public void testGetInstanceFail() {

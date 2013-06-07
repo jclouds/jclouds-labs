@@ -20,6 +20,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.beans.ConstructorProperties;
 import java.util.List;
+
+import org.jclouds.openstack.reddwarf.v1.features.InstanceApi;
 import org.jclouds.openstack.reddwarf.v1.internal.Volume;
 import org.jclouds.openstack.v2_0.domain.Link;
 import com.google.common.base.Objects;
@@ -39,18 +41,20 @@ public class Instance implements Comparable<Instance>{
    private final Volume volume;
    private final Status status;
    private final List<Link> links;
+   private final String hostname;
 
    @ConstructorProperties({
-      "id", "name", "flavor", "volume", "status", "links"
+      "id", "name", "flavor", "volume", "status", "links", "hostname"
    })
-   protected Instance(String id, String name, Flavor flavor, Volume volume, Status status, List<Link> links) {
+   protected Instance(String id, String name, Flavor flavor, Volume volume, Status status, List<Link> links, String hostname) {
       this.id = checkNotNull(id, "id required");
-      this.name = name;
+      this.name = checkNotNull(name, "name required");
       this.flavor = checkNotNull(flavor, "flavor required");
       this.volume =  checkNotNull(volume, "volume required");
       checkArgument(volume.getSize() > 0, "Size must be greater than 0");
       this.status = checkNotNull(status, "status required");
       this.links = checkNotNull(links, "links required");
+      this.hostname = hostname; // Hostname is sometimes null. See Instance#getHostname() for details
    }
 
    /**
@@ -98,6 +102,14 @@ public class Instance implements Comparable<Instance>{
     */
    public List<Link> getLinks() {
       return this.links;
+   }
+   
+   /**
+    * @return the hostname of this instance. The hostname is null unless this Instance was obtained with {@link InstanceApi#get(String)}
+    * @see Instance.Builder#hostname(String)
+    */
+   public String getHostname() {
+      return this.hostname;
    }
 
    /**
@@ -155,7 +167,7 @@ public class Instance implements Comparable<Instance>{
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(id, name, volume.getSize(), flavor, status, links);
+      return Objects.hashCode(id, name, volume.getSize(), flavor, status, links, hostname);
    }
 
    @Override
@@ -168,7 +180,7 @@ public class Instance implements Comparable<Instance>{
 
    protected ToStringHelper string() {
       return Objects.toStringHelper(this)
-            .add("id", id).add("name", name).add("flavor", flavor).add("volume size", volume.getSize()).add("links", links);
+            .add("id", id).add("name", name).add("flavor", flavor).add("volume size", volume.getSize()).add("links", links).add("hostname", hostname);
    }
 
    @Override
@@ -191,6 +203,7 @@ public class Instance implements Comparable<Instance>{
       protected Flavor flavor;
       protected Status status;
       protected ImmutableList<Link> links;
+      protected String hostname;
 
       /** 
        * @param id The id of this instance
@@ -251,13 +264,23 @@ public class Instance implements Comparable<Instance>{
          this.links = links;
          return this;
       }
+      
+      /** 
+       * @param name The hostname of this instance
+       * @return The builder object
+       * @see Instance#getHostname()
+       */
+      public Builder hostname(String hostname) {
+         this.hostname = hostname;
+         return this;
+      }
 
       /**
        * 
        * @return A new Instance object
        */
       public Instance build() {
-         return new Instance(id, name, flavor, new Volume(size), status, links);
+         return new Instance(id, name, flavor, new Volume(size), status, links, hostname);
       }
 
       public Builder fromInstance(Instance in) {
@@ -267,7 +290,8 @@ public class Instance implements Comparable<Instance>{
                .flavor(in.getFlavor())
                .size(in.getSize())
                .status(in.getStatus())
-               .links(links);
+               .links(links)
+               .hostname(hostname);
       }        
    }
 

@@ -1,8 +1,0 @@
-{
-    "instance":{
-        "volume":{
-            "size":2
-        },
-        "flavorRef":"1"
-    }
-}
