@@ -95,8 +95,14 @@
         <configuration>
           <excludes>
             <!-- expectation files for unit tests -->
-            <exclude>**/src/test/resources/**</exclude>
-
+            <exclude>**/src/test/resources/**/*.sh</exclude>
+            <exclude>**/src/test/resources/**/*.bat</exclude>
+            <exclude>**/src/test/resources/**/*.cmd</exclude>
+            <exclude>**/src/test/resources/**/*.txt</exclude>
+            <exclude>**/src/test/resources/**/*.gz</exclude>
+            <exclude>**/src/test/resources/**/*.xml</exclude>
+            <exclude>**/src/test/resources/**/*.iso</exclude>
+            
             <!-- prevent duplicating license -->
             <exclude>**/LICENSE.txt</exclude>
             <exclude>**/header.txt</exclude>
