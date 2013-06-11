@@ -123,6 +123,7 @@
             <exclude>**/CHANGES.txt</exclude>
             <exclude>**/README.md</exclude>
             <exclude>**/README.txt</exclude>
+            <exclude>**/DEPENDENCIES</exclude>
 
             <!-- reference data lists -->
             <exclude>**/*json</exclude>
