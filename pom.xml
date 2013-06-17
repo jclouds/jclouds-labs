@@ -28,7 +28,7 @@
   <artifactId>jclouds-labs</artifactId>
   <version>1.6.1-incubating</version>
   <packaging>pom</packaging>
-  <name>jclouds labs</name>
+  <name>Apache jclouds labs</name>
 
   <scm>
     <connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-jclouds-labs.git</connection>
