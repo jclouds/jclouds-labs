@@ -27,7 +27,7 @@
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>jclouds-labs-openstack</artifactId>
   <packaging>pom</packaging>
-  <name>jclouds labs openstack</name>
+  <name>Apache jclouds labs openstack</name>
 
   <scm>
     <connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-jclouds-labs-openstack.git</connection>
