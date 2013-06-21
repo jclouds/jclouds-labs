@@ -55,9 +55,9 @@ public class CloudDatabasesUSProviderMetadataExpectTest extends BaseRedDwarfApiE
             .payload(payloadFromResourceWithContentType("/access_rax_us.json", "application/json"))
             .build();
 
-      RedDwarfApi whenNovaRegionExists = requestSendsResponse(authenticate, authenticationResponse);
+      RedDwarfApi whenRegionExists = requestSendsResponse(authenticate, authenticationResponse);
 
-      assertEquals(whenNovaRegionExists.getConfiguredZones(), ImmutableSet.of("ORD", "DFW"));
+      assertEquals(whenRegionExists.getConfiguredZones(), ImmutableSet.of("ORD", "DFW", "SYD"));
 
    }
 
