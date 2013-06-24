@@ -25,12 +25,12 @@
       <version>1.7.0-SNAPSHOT</version>
   </parent>
   
-  <!-- TODO: when out of labs, switch to org.jclouds.provider; update dependencies when RedDwarf is moved to jclouds -->
+  <!-- TODO: when out of labs, switch to org.jclouds.provider; update dependencies when Trove is moved to jclouds -->
   
   <groupId>org.apache.jclouds.provider</groupId>
   <artifactId>rackspace-clouddatabases-us</artifactId>
   <name>jclouds Rackspace Cloud Databases US provider</name>
-  <description>OpenStack RedDwarf implementation targeted to Rackspace Cloud Databases US</description>
+  <description>OpenStack Trove implementation targeted to Rackspace Cloud Databases US</description>
   <packaging>bundle</packaging>
 
   <properties>
@@ -57,7 +57,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds.labs</groupId>
-      <artifactId>openstack-reddwarf</artifactId>
+      <artifactId>openstack-trove</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -79,7 +79,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds.labs</groupId>
-      <artifactId>openstack-reddwarf</artifactId>
+      <artifactId>openstack-trove</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>

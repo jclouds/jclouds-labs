@@ -16,7 +16,7 @@
  */
 package org.jclouds.rackspace.clouddatabases.us.features;
 
-import org.jclouds.openstack.reddwarf.v1.features.UserApiLiveTest;
+import org.jclouds.openstack.trove.v1.features.UserApiLiveTest;
 import org.testng.annotations.Test;
 
 /**

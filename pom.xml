@@ -66,7 +66,7 @@
   <modules>
     <module>openstack-glance</module>
     <module>openstack-quantum</module>
-    <module>openstack-reddwarf</module>
+    <module>openstack-trove</module>
     <module>openstack-swift</module>
     <module>rackspace-clouddatabases-us</module>
     <module>rackspace-clouddatabases-uk</module>

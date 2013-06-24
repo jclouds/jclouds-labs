@@ -16,7 +16,7 @@
  */
 package org.jclouds.rackspace.clouddatabases.us;
 
-import org.jclouds.openstack.reddwarf.v1.RedDwarfApiMetadata;
+import org.jclouds.openstack.trove.v1.TroveApiMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadataTest;
 import org.testng.annotations.Test;
 
@@ -27,6 +27,6 @@ import org.testng.annotations.Test;
 public class CloudDatabasesUSProviderTest extends BaseProviderMetadataTest {
 
    public CloudDatabasesUSProviderTest() {
-      super(new CloudDatabasesUSProviderMetadata(), new RedDwarfApiMetadata());
+      super(new CloudDatabasesUSProviderMetadata(), new TroveApiMetadata());
    }
 }

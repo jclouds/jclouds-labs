@@ -26,9 +26,9 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
-import org.jclouds.openstack.reddwarf.v1.RedDwarfApiMetadata;
-import org.jclouds.openstack.reddwarf.v1.config.RedDwarfHttpApiModule;
-import org.jclouds.openstack.reddwarf.v1.config.RedDwarfParserModule;
+import org.jclouds.openstack.trove.v1.TroveApiMetadata;
+import org.jclouds.openstack.trove.v1.config.TroveHttpApiModule;
+import org.jclouds.openstack.trove.v1.config.TroveParserModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
@@ -76,7 +76,7 @@ public class CloudDatabasesUKProviderMetadata extends BaseProviderMetadata {
       protected Builder(){
          id("rackspace-clouddatabases-uk")
          .name("Rackspace Clouddatabases UK")
-         .apiMetadata(new RedDwarfApiMetadata().toBuilder()
+         .apiMetadata(new TroveApiMetadata().toBuilder()
                   .identityName("${userName}")
                   .credentialName("${apiKey}")
                   .defaultEndpoint("https://lon.api.rackspacecloud.com/v2.0/")
@@ -86,8 +86,8 @@ public class CloudDatabasesUKProviderMetadata extends BaseProviderMetadata {
                                               .add(CloudIdentityAuthenticationApiModule.class)
                                               .add(CloudIdentityAuthenticationModule.class)
                                               .add(ZoneModule.class)
-                                              .add(RedDwarfParserModule.class)
-                                              .add(RedDwarfHttpApiModule.class).build())
+                                              .add(TroveParserModule.class)
+                                              .add(TroveHttpApiModule.class).build())
                   .build())
          .homepage(URI.create("http://www.rackspace.com/cloud/public/databases/"))
          .console(URI.create("https://mycloud.rackspace.com"))

@@ -20,8 +20,8 @@ import static org.testng.Assert.assertEquals;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
-import org.jclouds.openstack.reddwarf.v1.RedDwarfApi;
-import org.jclouds.openstack.reddwarf.v1.internal.BaseRedDwarfApiExpectTest;
+import org.jclouds.openstack.trove.v1.TroveApi;
+import org.jclouds.openstack.trove.v1.internal.BaseTroveApiExpectTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
@@ -32,7 +32,7 @@ import com.google.common.collect.ImmutableSet;
  * @author Zack Shoylev
  */
 @Test(groups = "unit", testName = "CloudDatabasesUSProviderMetadataExpectTest")
-public class CloudDatabasesUSProviderMetadataExpectTest extends BaseRedDwarfApiExpectTest {
+public class CloudDatabasesUSProviderMetadataExpectTest extends BaseTroveApiExpectTest {
 
    public CloudDatabasesUSProviderMetadataExpectTest() {
       this.provider = "rackspace-clouddatabases-us";
@@ -55,7 +55,7 @@ public class CloudDatabasesUSProviderMetadataExpectTest extends BaseRedDwarfApiE
             .payload(payloadFromResourceWithContentType("/access_rax_us.json", "application/json"))
             .build();
 
-      RedDwarfApi whenRegionExists = requestSendsResponse(authenticate, authenticationResponse);
+      TroveApi whenRegionExists = requestSendsResponse(authenticate, authenticationResponse);
 
       assertEquals(whenRegionExists.getConfiguredZones(), ImmutableSet.of("ORD", "DFW", "SYD"));
 
