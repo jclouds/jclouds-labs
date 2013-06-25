@@ -82,7 +82,7 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
       assertEquals(hardware.getName(), template.getName());
       assertEquals(hardware.getUri(), URI.create("http://foo/bar"));
 
-      assertEquals(hardware.getRam(), template.getRamRequired());
+      assertEquals(hardware.getRam(), template.getRamRequired().intValue());
       assertEquals(hardware.getProcessors().size(), 1);
       assertEquals(hardware.getProcessors().get(0).getCores(), (double) template.getCpuRequired());
       assertEquals(hardware.getProcessors().get(0).getSpeed(),
@@ -135,91 +135,6 @@ public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {
       VirtualDatacenter vdc = wrap(context, VirtualDatacenter.class, new VirtualDatacenterDto());
 
       function.apply(new VirtualMachineTemplateInVirtualDatacenter(template, vdc));
-   }
-
-   @SuppressWarnings("unchecked")
-   public void testConvertWithoutCpu() {
-      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
-      Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
-      VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
-            vdcToLocation);
-
-      VirtualMachineTemplateDto dto = new VirtualMachineTemplateDto();
-      dto.setId(5);
-      dto.setName("Template");
-      dto.setDescription("Template description");
-      dto.setHdRequired(50L * 1024 * 1024 * 1024); // 50 GB
-      dto.setRamRequired(2048);
-      VirtualMachineTemplate template = wrap(context, VirtualMachineTemplate.class, dto);
-
-      VirtualDatacenterDto vdcDto = new VirtualDatacenterDto();
-      vdcDto.setId(6);
-      vdcDto.setHypervisorType(HypervisorType.VMX_04);
-      VirtualDatacenter vdc = wrap(context, VirtualDatacenter.class, vdcDto);
-
-      Hardware hardware = function.apply(new VirtualMachineTemplateInVirtualDatacenter(template, vdc));
-
-      verify(vdcToLocation);
-
-      assertEquals(hardware.getProcessors().size(), 1);
-      assertEquals(hardware.getProcessors().get(0).getCores(), 0D);
-   }
-
-   @SuppressWarnings("unchecked")
-   public void testConvertWithoutRam() {
-      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
-      Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
-      VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
-            vdcToLocation);
-
-      VirtualMachineTemplateDto dto = new VirtualMachineTemplateDto();
-      dto.setId(5);
-      dto.setName("Template");
-      dto.setDescription("Template description");
-      dto.setHdRequired(50L * 1024 * 1024 * 1024); // 50 GB
-      dto.setCpuRequired(5);
-      VirtualMachineTemplate template = wrap(context, VirtualMachineTemplate.class, dto);
-
-      VirtualDatacenterDto vdcDto = new VirtualDatacenterDto();
-      vdcDto.setId(6);
-      vdcDto.setHypervisorType(HypervisorType.VMX_04);
-      VirtualDatacenter vdc = wrap(context, VirtualDatacenter.class, vdcDto);
-
-      Hardware hardware = function.apply(new VirtualMachineTemplateInVirtualDatacenter(template, vdc));
-
-      verify(vdcToLocation);
-
-      assertEquals(hardware.getRam(), 0);
-   }
-
-   @SuppressWarnings("unchecked")
-   public void testConvertWithoutHd() {
-      ApiContext<AbiquoApi> context = EasyMock.createMock(ApiContext.class);
-      Function<VirtualDatacenter, Location> vdcToLocation = mockVirtualDatacenterToLocation();
-      VirtualMachineTemplateInVirtualDatacenterToHardware function = new VirtualMachineTemplateInVirtualDatacenterToHardware(
-            vdcToLocation);
-
-      // VirtualMachineTemplate domain object does not have a builder, it is
-      // read only
-      VirtualMachineTemplateDto dto = new VirtualMachineTemplateDto();
-      dto.setId(5);
-      dto.setName("Template");
-      dto.setDescription("Template description");
-      dto.setCpuRequired(5);
-      dto.setRamRequired(2048);
-      VirtualMachineTemplate template = wrap(context, VirtualMachineTemplate.class, dto);
-
-      VirtualDatacenterDto vdcDto = new VirtualDatacenterDto();
-      vdcDto.setId(6);
-      vdcDto.setHypervisorType(HypervisorType.VMX_04);
-      VirtualDatacenter vdc = wrap(context, VirtualDatacenter.class, vdcDto);
-
-      Hardware hardware = function.apply(new VirtualMachineTemplateInVirtualDatacenter(template, vdc));
-
-      verify(vdcToLocation);
-
-      assertEquals(hardware.getVolumes().size(), 1);
-      assertEquals(hardware.getVolumes().get(0).getSize(), 0F);
    }
 
    @SuppressWarnings("unchecked")

@@ -38,7 +38,6 @@ public class ConfigResources {
    public static LicenseDto licensePost() {
       LicenseDto license = new LicenseDto();
       license.setCode(readLicense("license/expired"));
-      license.setCustomerid("3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c");
       return license;
    }
 
@@ -80,7 +79,6 @@ public class ConfigResources {
       StringBuilder buffer = new StringBuilder();
       buffer.append("<license>");
       buffer.append(link("/admin/enterprises/config/licenses/1", "edit"));
-      buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
       buffer.append("<code>" + readLicense("license/expired") + "</code>");
       buffer.append("<id>1</id>");
       buffer.append("</license>");
@@ -90,7 +88,6 @@ public class ConfigResources {
    public static String licensePostPayload() {
       StringBuilder buffer = new StringBuilder();
       buffer.append("<license>");
-      buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
       buffer.append("<code>" + readLicense("license/expired") + "</code>");
       buffer.append("</license>");
       return buffer.toString();

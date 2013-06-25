@@ -301,7 +301,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
 
    // Delegate methods
 
-   public int getCpuRequired() {
+   public Integer getCpuRequired() {
       return target.getCpuRequired();
    }
 
@@ -317,7 +317,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
       return target.getDescription();
    }
 
-   public long getDiskFileSize() {
+   public Long getDiskFileSize() {
       return target.getDiskFileSize();
    }
 
@@ -325,7 +325,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
       return DiskFormatType.valueOf(target.getDiskFormatType());
    }
 
-   public long getHdRequired() {
+   public Long getHdRequired() {
       return target.getHdRequired();
    }
 
@@ -337,7 +337,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
       return target.getPath();
    }
 
-   public int getRamRequired() {
+   public Integer getRamRequired() {
       return target.getRamRequired();
    }
 

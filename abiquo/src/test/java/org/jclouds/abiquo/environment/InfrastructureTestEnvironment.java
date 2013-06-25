@@ -66,6 +66,7 @@ import org.jclouds.abiquo.util.Config;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.google.common.collect.Iterables;
+import com.google.common.io.LineProcessor;
 import com.google.common.io.Resources;
 
 /**
@@ -460,8 +461,22 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
 
    public static String readLicense() throws IOException {
       URL url = CloudTestEnvironment.class.getResource("/license/expired");
+      return Resources.readLines(url, Charset.defaultCharset(), new LineProcessor<String>() {
+         StringBuilder sb = new StringBuilder();
 
-      return Resources.toString(url, Charset.defaultCharset());
+         @Override
+         public String getResult() {
+            return sb.toString();
+         }
+
+         @Override
+         public boolean processLine(String line) throws IOException {
+            if (!line.startsWith("#")) {
+               sb.append(line);
+            }
+            return true;
+         }
+      });
    }
 
    public RemoteService findRemoteService(final RemoteServiceType type) {

@@ -341,20 +341,12 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto> {
       return target.getError();
    }
 
-   public int getHighDisponibility() {
-      return target.getHighDisponibility();
-   }
-
    public Integer getId() {
       return target.getId();
    }
 
    public String getName() {
       return target.getName();
-   }
-
-   public int getPublicApp() {
-      return target.getPublicApp();
    }
 
    public void setHighDisponibility(final int highDisponibility) {

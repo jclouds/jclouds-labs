@@ -20,6 +20,8 @@ import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.model.enumerator.OSType;
+import com.abiquo.model.enumerator.VMTemplateState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
@@ -63,6 +65,17 @@ public class TemplateResources {
             + "/datacenterrepositories/1/virtualmachinetemplates/1/conversions"));
       template.addLink(new RESTLink("tasks", "http://localhost/api/admin/enterprises/1"
             + "/datacenterrepositories/1/virtualmachinetemplates/1/tasks"));
+      template.addLink(new RESTLink("diskfile", "http://somewhere.com/file.vmdk"));
+      template.setDiskFormatType("RAW");
+      template.setOsType(OSType.MACOS);
+      template.setLoginUser("myuser");
+      template.setLoginPassword("mypass");
+      template.setState(VMTemplateState.DONE);
+      template.setCpuRequired(1);
+      template.setRamRequired(1);
+      template.setHdRequired(20l);
+      template.setDiskFileSize(30l);
+
       template.setCostCode(0);
       return template;
    }
@@ -76,13 +89,20 @@ public class TemplateResources {
             "conversions"));
 
       buffer.append(link("/admin/enterprises/1" + "/datacenterrepositories/1/virtualmachinetemplates/1/tasks", "tasks"));
+      buffer.append(link(new RESTLink("diskfile", "http://somewhere.com/file.vmdk")));
       buffer.append("<id>1</id>");
       buffer.append("<name>Template</name>");
       buffer.append("<description>Description</description>");
-      buffer.append("<diskFileSize>0</diskFileSize>");
-      buffer.append("<cpuRequired>0</cpuRequired>");
-      buffer.append("<ramRequired>0</ramRequired>");
-      buffer.append("<hdRequired>0</hdRequired>");
+      buffer.append("<diskFormatType>RAW</diskFormatType>");
+      buffer.append("<osType>MACOS</osType>");
+      buffer.append("<loginUser>myuser</loginUser>");
+      buffer.append("<loginPassword>mypass</loginPassword>");
+      buffer.append("<state>DONE</state>");
+
+      buffer.append("<diskFileSize>30</diskFileSize>");
+      buffer.append("<cpuRequired>1</cpuRequired>");
+      buffer.append("<ramRequired>1</ramRequired>");
+      buffer.append("<hdRequired>20</hdRequired>");
       buffer.append("<shared>false</shared>");
       buffer.append("<costCode>0</costCode>");
       buffer.append("<chefEnabled>false</chefEnabled>");
