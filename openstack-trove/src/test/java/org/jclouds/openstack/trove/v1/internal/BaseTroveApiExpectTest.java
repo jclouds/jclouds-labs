@@ -19,7 +19,7 @@ package org.jclouds.openstack.trove.v1.internal;
 import org.jclouds.openstack.trove.v1.TroveApi;
 
 /**
- * Base class for writing Flavor Rest Api Expect tests
+ * Base class for writing Trove Rest Api Expect tests
  * 
  * @author Everett Toews
  */

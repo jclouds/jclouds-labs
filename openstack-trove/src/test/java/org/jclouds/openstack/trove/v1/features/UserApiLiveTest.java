@@ -31,7 +31,7 @@ import java.util.UUID;
 import org.jclouds.openstack.trove.v1.domain.Instance;
 import org.jclouds.openstack.trove.v1.domain.User;
 import org.jclouds.openstack.trove.v1.internal.BaseTroveApiLiveTest;
-import org.jclouds.openstack.trove.v1.predicates.InstancePredicates;
+import org.jclouds.openstack.trove.v1.internal.TroveUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -44,7 +44,7 @@ import com.google.common.collect.Maps;
 /**
  * @author Zack Shoylev
  */
-@Test(groups = "live", testName = "UserApiLiveTest", singleThreaded = true)
+@Test(groups = "live", testName = "UserApiLiveTest")
 public class UserApiLiveTest extends BaseTroveApiLiveTest {
 
    // zone to instance
@@ -55,16 +55,14 @@ public class UserApiLiveTest extends BaseTroveApiLiveTest {
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
+      TroveUtils utils= new TroveUtils(api);
       for (String zone : api.getConfiguredZones()) {
          // create instances
          List<Instance> instanceList = Lists.newArrayList();
-         InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-         Instance first = instanceApi.create("1", 1, "first_user_trove_live_testing_" + zone);
-         Instance second = instanceApi.create("1", 1, "second_user_trove_live_testing_" + zone);
+         Instance first = utils.getWorkingInstance(zone, "first_user_trove_live_testing_" + zone, "1", 1);
+         Instance second = utils.getWorkingInstance(zone, "second_user_trove_live_testing_" + zone, "1", 1);
          instanceList.add(first);
          instanceList.add(second);
-         InstancePredicates.awaitAvailable(instanceApi).apply(first);
-         InstancePredicates.awaitAvailable(instanceApi).apply(second);        
          instancesToDelete.put(zone, instanceList);
          // create users
          User user1 = User.builder()
@@ -117,7 +115,7 @@ public class UserApiLiveTest extends BaseTroveApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
-         for(Instance instance : instanceApi.list() ) {
+         for(Instance instance : instancesToDelete.get(zone)) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_trove_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
@@ -133,7 +131,7 @@ public class UserApiLiveTest extends BaseTroveApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
-         for(Instance instance : instanceApi.list() ) {
+         for(Instance instance : instancesToDelete.get(zone)) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_trove_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
@@ -154,7 +152,7 @@ public class UserApiLiveTest extends BaseTroveApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2 );
-         for(Instance instance : instanceApi.list() ) {
+         for(Instance instance : instancesToDelete.get(zone)) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_trove_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
@@ -170,7 +168,7 @@ public class UserApiLiveTest extends BaseTroveApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
-         for(Instance instance : instanceApi.list() ) {
+         for(Instance instance : instancesToDelete.get(zone)) {
             UserApi userApi = api.getUserApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("user_trove_live_testing"))continue;
             assertTrue(userApi.list().size() >=1);
@@ -201,7 +199,7 @@ public class UserApiLiveTest extends BaseTroveApiLiveTest {
    @Test
    public void testGetUserWhenNotFound() {
       for (String zone : api.getConfiguredZones()) {
-         String instanceId = api.getInstanceApiForZone(zone).list().iterator().next().getId(); 
+         String instanceId = instancesToDelete.get(zone).iterator().next().getId();
          UserApi userApi = api.getUserApiForInstanceInZone(instanceId, zone);
          assertNull(userApi.get("9999"));
       }

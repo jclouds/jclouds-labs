@@ -18,14 +18,13 @@ package org.jclouds.openstack.trove.v1.features;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
 
 import org.jclouds.openstack.trove.v1.domain.Instance;
 import org.jclouds.openstack.trove.v1.internal.BaseTroveApiLiveTest;
-import org.jclouds.openstack.trove.v1.predicates.InstancePredicates;
+import org.jclouds.openstack.trove.v1.internal.TroveUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -36,7 +35,7 @@ import com.google.common.collect.Maps;
 /**
  * @author Zack Shoylev
  */
-@Test(groups = "live", testName = "DatabaseApiLiveTest", singleThreaded = true)
+@Test(groups = "live", testName = "DatabaseApiLiveTest")
 public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
 
    // zone to instance
@@ -47,16 +46,14 @@ public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
+      TroveUtils utils = new TroveUtils(api);
       for (String zone : api.getConfiguredZones()) {
          // create instances
          List<Instance> instanceList = Lists.newArrayList();
-         InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-         Instance first = instanceApi.create("1", 1, "first_database_testing_" + zone);
-         Instance second = instanceApi.create("1", 1, "second_database_testing_" + zone);
+         Instance first = utils.getWorkingInstance(zone, "first_database_testing_" + zone, "1", 1);
+         Instance second = utils.getWorkingInstance(zone, "second_database_testing_" + zone, "1", 1);
          instanceList.add(first);
          instanceList.add(second);
-         InstancePredicates.awaitAvailable(instanceApi).apply(first);
-         InstancePredicates.awaitAvailable(instanceApi).apply(second);        
          instancesToDelete.put(zone, instanceList);
          
          DatabaseApi databaseApiFirst = api.getDatabaseApiForInstanceInZone(first.getId(), zone);
@@ -85,7 +82,7 @@ public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
-         for(Instance instance : instanceApi.list() ) {
+         for(Instance instance : instancesToDelete.get(zone)) {
             DatabaseApi databaseApi = api.getDatabaseApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("database_testing"))continue;
             assertTrue(databaseApi.list().size() >=1);
@@ -101,18 +98,15 @@ public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
-         for(Instance instance : instanceApi.list() ) {
+         for(Instance instance : instancesToDelete.get(zone)) {
             DatabaseApi databaseApi = api.getDatabaseApiForInstanceInZone(instance.getId(), zone);
             if(!instance.getName().contains("database_testing"))continue;
             assertTrue(databaseApi.list().size() >=1);
             for(String database : databaseApi.list()){
                assertNotNull(database);
                assertTrue(database.equals("livetest_db1") || database.equals("livetest_db2") || database.equals("livetest_db3") );
-               assertEquals(instanceApi.get(instance.getId()).getStatus(), Instance.Status.ACTIVE);
                assertTrue(databaseApi.delete(database));
-               assertEquals(instanceApi.get(instance.getId()).getStatus(), Instance.Status.ACTIVE);
                assertTrue(databaseApi.create(database));
-               assertEquals(instanceApi.get(instance.getId()).getStatus(), Instance.Status.ACTIVE);
             }
          }  
       }   

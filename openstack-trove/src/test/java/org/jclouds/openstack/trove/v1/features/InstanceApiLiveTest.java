@@ -18,19 +18,22 @@ package org.jclouds.openstack.trove.v1.features;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.jclouds.openstack.trove.v1.domain.Instance;
 import org.jclouds.openstack.trove.v1.internal.BaseTroveApiLiveTest;
-import org.jclouds.openstack.trove.v1.predicates.InstancePredicates;
+import org.jclouds.openstack.trove.v1.internal.TroveUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,7 +41,7 @@ import com.google.common.collect.Maps;
 /**
  * @author Zack Shoylev
  */
-@Test(groups = "live", testName = "InstanceApiLiveTest", singleThreaded = true)
+@Test(groups = "live", testName = "InstanceApiLiveTest")
 public class InstanceApiLiveTest extends BaseTroveApiLiveTest {
 
     private static Map<String,List<Instance>> created = Maps.newHashMap();
@@ -47,12 +50,12 @@ public class InstanceApiLiveTest extends BaseTroveApiLiveTest {
     @BeforeClass(groups = { "integration", "live" })
     public void setup() {
         super.setup();
+        TroveUtils utils= new TroveUtils(api);
         for (String zone : api.getConfiguredZones()) {
             List<Instance> zoneList = Lists.newArrayList();
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);
-            zoneList.add(instanceApi.create("1", 1, "first_instance_testing_" + zone));
-            Instance second = instanceApi.create("1", 1, "second_instance_testing_" + zone);
-            InstancePredicates.awaitAvailable(instanceApi).apply(second);
+            zoneList.add(utils.getWorkingInstance(zone, "first_instance_testing_" + zone, "1", 1));
+            Instance second = utils.getWorkingInstance(zone, "second_instance_testing_" + zone, "1", 1);
             instanceApi.enableRoot(second.getId());
             zoneList.add(second);            
             created.put(zone, zoneList);

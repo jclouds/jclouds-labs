@@ -128,7 +128,9 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <threadCount>1</threadCount>
+                  <forkCount>5</forkCount>
+                  <reuseForks>true</reuseForks>
+                  <parallel>classes</parallel>
                   <systemPropertyVariables>
                     <test.rackspace-clouddatabases-us.endpoint>${test.rackspace-clouddatabases-us.endpoint}</test.rackspace-clouddatabases-us.endpoint>
                     <test.rackspace-clouddatabases-us.api-version>${test.rackspace-clouddatabases-us.api-version}</test.rackspace-clouddatabases-us.api-version>

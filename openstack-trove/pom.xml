@@ -106,6 +106,9 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
+                  <forkCount>5</forkCount>
+                  <reuseForks>true</reuseForks>
+                  <parallel>classes</parallel>
                   <systemPropertyVariables>
                     <test.openstack-trove.endpoint>${test.openstack-trove.endpoint}</test.openstack-trove.endpoint>
                     <test.openstack-trove.api-version>${test.openstack-trove.api-version}</test.openstack-trove.api-version>
