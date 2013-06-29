@@ -16,16 +16,16 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
-import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link StorageDevice} domain class.
@@ -43,8 +43,12 @@ public class StoragePoolLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testUpdate() {
       try {
-         Tier tier3 = env.datacenter.findTier(TierPredicates.name("Default Tier 3"));
-         assertNotNull(tier3);
+         Tier tier3 = find(env.datacenter.listTiers(), new Predicate<Tier>() {
+            @Override
+            public boolean apply(Tier input) {
+               return input.getName().equals("Default Tier 3");
+            }
+         });
          env.storagePool.setTier(tier3);
          env.storagePool.update();
 
@@ -59,26 +63,26 @@ public class StoragePoolLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testListStoragePool() {
       Iterable<StoragePool> storagePools = env.storageDevice.listStoragePools();
-      assertEquals(Iterables.size(storagePools), 1);
+      assertEquals(size(storagePools), 1);
 
-      storagePools = env.storageDevice.listStoragePools(StoragePoolPredicates.name(env.storagePool.getName()));
-      assertEquals(Iterables.size(storagePools), 1);
+      storagePools = filter(env.storageDevice.listStoragePools(), name(env.storagePool.getName()));
+      assertEquals(size(storagePools), 1);
 
-      storagePools = env.storageDevice.listStoragePools(StoragePoolPredicates.name(env.storagePool.getName() + "FAIL"));
-      assertEquals(Iterables.size(storagePools), 0);
-   }
-
-   public void testFindStoragePool() {
-      StoragePool storagePool = env.storageDevice
-            .findStoragePool(StoragePoolPredicates.name(env.storagePool.getName()));
-      assertNotNull(storagePool);
-
-      storagePool = env.storageDevice.findStoragePool(StoragePoolPredicates.name(env.storagePool.getName() + "FAIL"));
-      assertNull(storagePool);
+      storagePools = filter(env.storageDevice.listStoragePools(), name(env.storagePool.getName() + "FAIL"));
+      assertEquals(size(storagePools), 0);
    }
 
    public void testRefreshStoragePool() {
       env.storagePool.refresh();
+   }
+
+   private static Predicate<StoragePool> name(final String name) {
+      return new Predicate<StoragePool>() {
+         @Override
+         public boolean apply(StoragePool input) {
+            return input.getName().equals(name);
+         }
+      };
    }
 
 }

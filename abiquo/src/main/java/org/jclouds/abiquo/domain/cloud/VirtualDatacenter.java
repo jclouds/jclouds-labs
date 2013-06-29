@@ -17,7 +17,7 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
 
@@ -30,11 +30,9 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
-import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.ApiContext;
@@ -56,8 +54,6 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Represents a virtual datacenter.
@@ -140,8 +136,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      DatacenterResource- RetrieveaDatacenter</a>
     */
    public Datacenter getDatacenter() {
-      Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-      datacenter = getEnterprise().findAllowedDatacenter(DatacenterPredicates.id(datacenterId));
+      final Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
+      datacenter = find(getEnterprise().listAllowedDatacenters(), new Predicate<Datacenter>() {
+         @Override
+         public boolean apply(Datacenter input) {
+            return input.getId().equals(datacenterId);
+         }
+      });
       return datacenter;
    }
 
@@ -177,40 +178,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
    }
 
    /**
-    * Lists all the virtual appliances in the virtual datacenter that match the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list of virtual appliances in the virtual datacenter that
-    *         match the given filter.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances"
-    *      >http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource
-    *      # VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
-    */
-   public List<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter) {
-      return ImmutableList.copyOf(filter(listVirtualAppliances(), filter));
-   }
-
-   /**
-    * Gets the first virtual appliance in the virtual datacenter that match the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return the first virtual appliance in the virtual datacenter that match
-    *         the given filter or <code>null</code> if none is found.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances"
-    *      >http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource
-    *      # VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
-    */
-   public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter) {
-      return Iterables.getFirst(filter(listVirtualAppliances(), filter), null);
-   }
-
-   /**
     * Gets the virtual appliance with the given id in the current virtual
     * datacenter.
     * 
@@ -236,40 +203,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
    public List<Tier> listStorageTiers() {
       TiersDto tiers = context.getApi().getCloudApi().listStorageTiers(target);
       return wrap(context, Tier.class, tiers.getCollection());
-   }
-
-   /**
-    * Lists the storage tiers that are available to the virtual datacenter and
-    * match the given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list of storage tiers that are available to the virtual
-    *         datacenter and match the given filter.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers"
-    *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+
-    *      Resource# VirtualDatacenterResource-Retrieveenabledtiers</a>
-    */
-   public List<Tier> listStorageTiers(final Predicate<Tier> filter) {
-      return ImmutableList.copyOf(filter(listStorageTiers(), filter));
-   }
-
-   /**
-    * Finds the first the storage tier that is available to the virtual
-    * datacenter and matches the given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The first the storage tier that is available to the virtual
-    *         datacenter and matches the given filter.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers"
-    *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+
-    *      Resource# VirtualDatacenterResource-Retrieveenabledtiers</a>
-    */
-   public Tier findStorageTier(final Predicate<Tier> filter) {
-      return Iterables.getFirst(filter(listStorageTiers(), filter), null);
    }
 
    /**
@@ -299,40 +232,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
       return wrap(context, Volume.class, volumes.getCollection());
    }
 
-   /**
-    * Lists all persistent volumes in the virtual datacenter that match the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list of all persistent volumes in the virtual datacenter that
-    *         match the given filter.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes"
-    *      > http://community.abiquo.com/display/ABI20/Volume+Resource#
-    *      VolumeResource- Retrievethelistofvolumes</a>
-    */
-   public List<Volume> listVolumes(final Predicate<Volume> filter) {
-      return ImmutableList.copyOf(filter(listVolumes(), filter));
-   }
-
-   /**
-    * Finds the first persistent volume in the virtual datacenter that matches
-    * the given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The first persistent volumes in the virtual datacenter that
-    *         matches the given filter.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes"
-    *      > http://community.abiquo.com/display/ABI20/Volume+Resource#
-    *      VolumeResource- Retrievethelistofvolumes</a>
-    */
-   public Volume findVolume(final Predicate<Volume> filter) {
-      return Iterables.getFirst(filter(listVolumes(), filter), null);
-   }
-
    public Volume getVolume(final Integer id) {
       VolumeManagementDto volume = context.getApi().getCloudApi().getVolume(target, id);
       return wrap(context, Volume.class, volume);
@@ -347,14 +246,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
    public List<HardDisk> listHardDisks() {
       DisksManagementDto hardDisks = context.getApi().getCloudApi().listHardDisks(target);
       return wrap(context, HardDisk.class, hardDisks.getCollection());
-   }
-
-   public List<HardDisk> listHardDisks(final Predicate<HardDisk> filter) {
-      return ImmutableList.copyOf(filter(listHardDisks(), filter));
-   }
-
-   public HardDisk findHardDisk(final Predicate<HardDisk> filter) {
-      return Iterables.getFirst(filter(listHardDisks(), filter), null);
    }
 
    public HardDisk getHardDisk(final Integer id) {
@@ -387,22 +278,11 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
       return wrap(context, PrivateNetwork.class, networks.getCollection());
    }
 
-   public List<PrivateNetwork> listPrivateNetworks(final Predicate<Network<PrivateIp>> filter) {
-      return ImmutableList.copyOf(filter(listPrivateNetworks(), filter));
-   }
-
-   public PrivateNetwork findPrivateNetwork(final Predicate<Network<PrivateIp>> filter) {
-      return Iterables.getFirst(filter(listPrivateNetworks(), filter), null);
-   }
-
    public PrivateNetwork getPrivateNetwork(final Integer id) {
       VLANNetworkDto network = context.getApi().getCloudApi().getPrivateNetwork(target, id);
       return wrap(context, PrivateNetwork.class, network);
    }
 
-   /**
-    * TODO needs to be in the wiki
-    */
    public List<VirtualMachineTemplate> listAvailableTemplates() {
       VirtualMachineTemplatesDto templates = context.getApi().getCloudApi().listAvailableTemplates(target);
 
@@ -413,14 +293,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
       VirtualMachineTemplatesDto templates = context.getApi().getCloudApi().listAvailableTemplates(target, options);
 
       return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
-   }
-
-   public List<VirtualMachineTemplate> listAvailableTemplates(final Predicate<VirtualMachineTemplate> filter) {
-      return ImmutableList.copyOf(filter(listAvailableTemplates(), filter));
-   }
-
-   public VirtualMachineTemplate findAvailableTemplate(final Predicate<VirtualMachineTemplate> filter) {
-      return Iterables.getFirst(filter(listAvailableTemplates(), filter), null);
    }
 
    public VirtualMachineTemplate getAvailableTemplate(final Integer id) {
@@ -452,18 +324,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     */
    public List<PublicIp> listAvailablePublicIps() {
       IpOptions options = IpOptions.builder().build();
-
       PublicIpsDto ips = context.getApi().getCloudApi().listAvailablePublicIps(target, options);
-
       return wrap(context, PublicIp.class, ips.getCollection());
-   }
-
-   public List<PublicIp> listAvailablePublicIps(final Predicate<PublicIp> filter) {
-      return ImmutableList.copyOf(filter(listAvailablePublicIps(), filter));
-   }
-
-   public PublicIp findAvailablePublicIp(final Predicate<PublicIp> filter) {
-      return Iterables.getFirst(filter(listAvailablePublicIps(), filter), null);
    }
 
    /**
@@ -476,18 +338,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     */
    public List<PublicIp> listPurchasedPublicIps() {
       IpOptions options = IpOptions.builder().build();
-
       PublicIpsDto ips = context.getApi().getCloudApi().listPurchasedPublicIps(target, options);
-
       return wrap(context, PublicIp.class, ips.getCollection());
-   }
-
-   public List<PublicIp> listPurchasedPublicIps(final Predicate<PublicIp> filter) {
-      return ImmutableList.copyOf(filter(listPurchasedPublicIps(), filter));
-   }
-
-   public PublicIp findPurchasedPublicIp(final Predicate<PublicIp> filter) {
-      return Iterables.getFirst(filter(listPurchasedPublicIps(), filter), null);
    }
 
    public void purchasePublicIp(final PublicIp ip) {

@@ -77,11 +77,6 @@ public class ListVirtualAppliances implements ListRootEntities<VirtualAppliance>
       return execute(userExecutor);
    }
 
-   @Override
-   public Iterable<VirtualAppliance> execute(final Predicate<VirtualAppliance> selector) {
-      return execute(userExecutor, selector);
-   }
-
    private Iterable<VirtualApplianceDto> listConcurrentVirtualAppliances(final ListeningExecutorService executor,
          final Iterable<VirtualDatacenter> vdcs) {
       ListenableFuture<List<VirtualAppliancesDto>> futures = allAsList(transform(vdcs,

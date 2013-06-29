@@ -77,11 +77,6 @@ public class ListMachines implements ListRootEntities<Machine> {
       return execute(userExecutor);
    }
 
-   @Override
-   public Iterable<Machine> execute(final Predicate<Machine> selector) {
-      return execute(userExecutor, selector);
-   }
-
    public Iterable<Machine> execute(ListeningExecutorService executor) {
       // Find machines in concurrent requests
       DatacentersDto result = context.getApi().getInfrastructureApi().listDatacenters();

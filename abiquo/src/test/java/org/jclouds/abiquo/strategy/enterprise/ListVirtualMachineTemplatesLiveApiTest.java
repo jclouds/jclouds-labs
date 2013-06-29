@@ -17,12 +17,10 @@
 package org.jclouds.abiquo.strategy.enterprise;
 
 import static com.google.common.collect.Iterables.size;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.testng.annotations.BeforeClass;
@@ -46,21 +44,6 @@ public class ListVirtualMachineTemplatesLiveApiTest extends BaseAbiquoStrategyLi
    public void testExecute() {
       Iterable<VirtualMachineTemplate> templates = strategy.execute(env.defaultEnterprise);
       assertNotNull(templates);
-      assertTrue(size(templates) > 0);
-   }
-
-   public void testExecutePredicateWithoutResults() {
-      Iterable<VirtualMachineTemplate> templates = strategy.execute(env.defaultEnterprise,
-            VirtualMachineTemplatePredicates.name("UNEXISTING"));
-      assertNotNull(templates);
-      assertEquals(size(templates), 0);
-   }
-
-   public void testExecutePredicateWithResults() {
-      Iterable<VirtualMachineTemplate> templates = strategy.execute(env.defaultEnterprise,
-            VirtualMachineTemplatePredicates.name(env.template.getName()));
-      assertNotNull(templates);
-      // Repository can have multiple templates with the same name
       assertTrue(size(templates) > 0);
    }
 }

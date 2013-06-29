@@ -16,13 +16,14 @@
  */
 package org.jclouds.abiquo.domain.config;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.config.CategoryPredicates;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link Category} domain class.
@@ -35,10 +36,12 @@ public class CategoryLiveApiTest extends BaseAbiquoApiLiveApiTest {
       Category category = Category.builder(env.context.getApiContext()).name(PREFIX + "-test-category").build();
       category.save();
 
-      Category apiCategory = env.context.getAdministrationService().findCategory(
-            CategoryPredicates.name(PREFIX + "-test-category"));
-      assertNotNull(apiCategory);
-      assertEquals(category.getName(), apiCategory.getName());
+      Category apiCategory = find(env.context.getAdministrationService().listCategories(), new Predicate<Category>() {
+         @Override
+         public boolean apply(Category input) {
+            return input.getName().equals(PREFIX + "-test-category");
+         }
+      });
 
       apiCategory.delete();
    }
@@ -54,11 +57,12 @@ public class CategoryLiveApiTest extends BaseAbiquoApiLiveApiTest {
       category.setName(PREFIX + "-test-category-updated");
       category.update();
 
-      Category apiCategory = env.context.getAdministrationService().findCategory(
-            CategoryPredicates.name(PREFIX + "-test-category-updated"));
-
-      assertNotNull(apiCategory);
-      assertEquals(PREFIX + "-test-category-updated", apiCategory.getName());
+      find(env.context.getAdministrationService().listCategories(), new Predicate<Category>() {
+         @Override
+         public boolean apply(Category input) {
+            return input.getName().equals(PREFIX + "-test-category-updated");
+         }
+      });
 
       category.setName(name);
       category.update();

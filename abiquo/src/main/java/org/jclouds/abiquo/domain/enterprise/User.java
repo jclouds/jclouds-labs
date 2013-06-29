@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -36,9 +35,7 @@ import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -128,14 +125,6 @@ public class User extends DomainWrapper<UserDto> {
       return ImmutableList.copyOf(listVirtualDatacenters.execute(ids));
    }
 
-   public List<VirtualDatacenter> listPermittedVirtualDatacenters(final Predicate<VirtualDatacenter> filter) {
-      return ImmutableList.copyOf(filter(listPermittedVirtualDatacenters(), filter));
-   }
-
-   public VirtualDatacenter findPermittedVirtualDatacenter(final Predicate<VirtualDatacenter> filter) {
-      return Iterables.getFirst(filter(listPermittedVirtualDatacenters(), filter), null);
-   }
-
    /**
     * Give access to all virtualdatacenters in the enterprise (requires update).
     */
@@ -189,14 +178,6 @@ public class User extends DomainWrapper<UserDto> {
    public List<VirtualMachine> listMachines() {
       VirtualMachinesWithNodeExtendedDto machines = context.getApi().getEnterpriseApi().listVirtualMachines(target);
       return wrap(context, VirtualMachine.class, machines.getCollection());
-   }
-
-   public List<VirtualMachine> listMachines(final Predicate<VirtualMachine> filter) {
-      return ImmutableList.copyOf(filter(listMachines(), filter));
-   }
-
-   public VirtualMachine findMachine(final Predicate<VirtualMachine> filter) {
-      return Iterables.getFirst(filter(listMachines(), filter), null);
    }
 
    // Builder

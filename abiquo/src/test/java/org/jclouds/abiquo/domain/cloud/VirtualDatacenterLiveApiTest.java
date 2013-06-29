@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
@@ -33,12 +34,11 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link VirtualDatacenter} domain class.
@@ -130,15 +130,24 @@ public class VirtualDatacenterLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testPurchaseIp() {
-      PublicIp publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
+      final PublicIp publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
       assertNotNull(publicIp);
       env.virtualDatacenter.purchasePublicIp(publicIp);
 
-      PublicIp apiIp = env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.<PublicIp> address(publicIp.getIp()));
-      assertNotNull(apiIp);
+      PublicIp apiIp = find(env.virtualDatacenter.listPurchasedPublicIps(), new Predicate<PublicIp>() {
+         @Override
+         public boolean apply(PublicIp input) {
+            return input.getIp().equals(publicIp.getIp());
+         }
+      });
 
       env.virtualDatacenter.releasePublicIp(apiIp);
-      apiIp = env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.<PublicIp> address(publicIp.getIp()));
+      apiIp = find(env.virtualDatacenter.listPurchasedPublicIps(), new Predicate<PublicIp>() {
+         @Override
+         public boolean apply(PublicIp input) {
+            return input.getIp().equals(publicIp.getIp());
+         }
+      }, null);
       assertNull(apiIp);
    }
 
@@ -156,16 +165,6 @@ public class VirtualDatacenterLiveApiTest extends BaseAbiquoApiLiveApiTest {
       assertFalse(templates.isEmpty());
 
       template = templates.get(0);
-   }
-
-   @Test(dependsOnMethods = "testGetAvailableTemplates")
-   public void testFindAvailableTemplate() {
-      VirtualMachineTemplate templateFound = env.virtualDatacenter
-            .findAvailableTemplate(VirtualMachineTemplatePredicates.id(template.getId()));
-
-      assertNotNull(template);
-      assertNotNull(templateFound);
-      assertEquals(templateFound.getId(), template.getId());
    }
 
    @Test(dependsOnMethods = "testGetAvailableTemplates")

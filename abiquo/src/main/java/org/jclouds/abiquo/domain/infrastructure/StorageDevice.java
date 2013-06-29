@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
@@ -25,7 +24,6 @@ import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
-
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.ApiContext;
 
@@ -34,9 +32,6 @@ import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Adds high level functionality to {@link StorageDeviceDto}. The Storage Device
@@ -140,39 +135,6 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
    }
 
    /**
-    * Retrieve a filtered list of storage pools in this device (synchronized
-    * with the device).
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
-    *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#
-    *      StoragePoolResource- Retrievestoragepools</a>
-    * @return Filtered synchronized list of storage pools in this device.
-    */
-   public List<StoragePool> listRemoteStoragePools(final Predicate<StoragePool> filter) {
-      return ImmutableList.copyOf(filter(listRemoteStoragePools(), filter));
-   }
-
-   /**
-    * Retrieve the first storage pool matching the filter within the list of
-    * storage pools in this device (synchronized with the device).
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
-    *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#
-    *      StoragePoolResource- Retrievestoragepools</a>
-    * @return First storage pool (synchronized) matching the filter or
-    *         <code>null</code> if there is none.
-    */
-   public StoragePool findRemoteStoragePool(final Predicate<StoragePool> filter) {
-      return Iterables.getFirst(filter(listRemoteStoragePools(), filter), null);
-   }
-
-   /**
     * Retrieve the list of storage pools in this device from Abiquo database
     * (may not be synchronized with the device).
     * 
@@ -186,39 +148,6 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
       StoragePoolsDto storagePools = context.getApi().getInfrastructureApi()
             .listStoragePools(target, StoragePoolOptions.builder().sync(false).build());
       return wrap(context, StoragePool.class, storagePools.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of storage pools in this device from Abiquo
-    * database (may not be synchronized with the device).
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
-    *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#
-    *      StoragePoolResource- Retrievestoragepools</a>
-    * @return Filtered unsynchronized list of storage pools in this device.
-    */
-   public List<StoragePool> listStoragePools(final Predicate<StoragePool> filter) {
-      return ImmutableList.copyOf(filter(listStoragePools(), filter));
-   }
-
-   /**
-    * Retrieve the first storage pool matching the filter within the list of
-    * storage pools in this device (unsynchronized with the device).
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
-    *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#
-    *      StoragePoolResource- Retrievestoragepools</a>
-    * @return First storage pool (unsynchronized) matching the filter or
-    *         <code>null</code> if there is none.
-    */
-   public StoragePool findStoragePool(final Predicate<StoragePool> filter) {
-      return Iterables.getFirst(filter(listStoragePools(), filter), null);
    }
 
    /**
@@ -260,39 +189,6 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto> {
 
       TiersDto dto = context.getApi().getInfrastructureApi().listTiers(datacenter);
       return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of tiers in the datacenter using this device.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers"
-    *      >
-    *      http://community.abiquo.com/display/ABI20/TierResource#TierResource-
-    *      Retrievethelistoftiers </a>
-    * @return Filtered list of tiers in the datacenter using this device.
-    */
-   public List<Tier> listTiersFromDatacenter(final Predicate<Tier> filter) {
-      return ImmutableList.copyOf(filter(listTiersFromDatacenter(), filter));
-   }
-
-   /**
-    * Retrieve the first tier matching the filter within the list of tiers in
-    * the datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
-    *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#
-    *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
-    * @return First tier matching the filter or <code>null</code> if there is
-    *         none.
-    */
-   public Tier findTierInDatacenter(final Predicate<Tier> filter) {
-      return Iterables.getFirst(filter(listTiersFromDatacenter(), filter), null);
    }
 
    public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {

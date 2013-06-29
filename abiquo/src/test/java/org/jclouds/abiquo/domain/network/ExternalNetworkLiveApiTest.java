@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -29,13 +30,13 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
-import org.jclouds.abiquo.predicates.network.NetworkPredicates;
+import org.jclouds.abiquo.predicates.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link ExternalNetwork} domain class.
@@ -91,8 +92,12 @@ public class ExternalNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
       assertEquals(externalNetwork.getSecondaryDNS(), "8.8.8.8");
 
       // Refresh the external network
-      ExternalNetwork en = env.enterprise.findExternalNetwork(env.datacenter,
-            NetworkPredicates.<ExternalIp> name(externalNetwork.getName()));
+      ExternalNetwork en = find(env.enterprise.listExternalNetworks(env.datacenter), new Predicate<ExternalNetwork>() {
+         @Override
+         public boolean apply(ExternalNetwork input) {
+            return input.getName().equals(externalNetwork.getName());
+         }
+      });
 
       assertEquals(en.getId(), externalNetwork.getId());
       assertEquals(en.getName(), "External network Updated");
@@ -141,7 +146,7 @@ public class ExternalNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testGetNetworkFromIp() {
-      ExternalIp ip = externalNetwork.findIp(IpPredicates.<ExternalIp> notUsed());
+      ExternalIp ip = find(externalNetwork.listIps(), IpPredicates.<ExternalIp> notUsed());
       ExternalNetwork network = ip.getNetwork();
 
       assertEquals(network.getId(), externalNetwork.getId());

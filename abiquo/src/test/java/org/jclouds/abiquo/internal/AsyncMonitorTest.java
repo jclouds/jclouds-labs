@@ -32,9 +32,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.abiquo.internal.BaseMonitoringService.AsyncMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.events.MonitorEvent;
 import org.jclouds.rest.ApiContext;
 import org.testng.annotations.Test;
 

@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.Date;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
-import org.jclouds.abiquo.domain.config.CostCode;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
@@ -49,10 +47,6 @@ import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
-import com.abiquo.server.core.pricing.CostCodeDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -223,32 +217,6 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
    }
 
    /**
-    * List all the conversions for the virtual machine template matching the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list all the conversions for the virtual machine template
-    *         matching the given filter.
-    */
-   public List<Conversion> listConversions(final Predicate<Conversion> filter) {
-      return ImmutableList.copyOf(filter(listConversions(), filter));
-   }
-
-   /**
-    * Gets a single conversion in the virtual machine template matching the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The conversion or <code>null</code> if none matched the given
-    *         filter.
-    */
-   public Conversion findConversion(final Predicate<Conversion> filter) {
-      return Iterables.getFirst(filter(listConversions(), filter), null);
-   }
-
-   /**
     * List conversions for a virtual machine template.
     * 
     * @see API: <a href=
@@ -291,12 +259,6 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
             .requestConversion(target, diskFormat, request);
 
       return taskRef == null ? null : getTask(taskRef);
-   }
-
-   public CostCode getCostCode() {
-      Integer costcodeId = target.getIdFromLink(ParentLinkName.COST_CODE);
-      CostCodeDto costcode = context.getApi().getPricingApi().getCostCode(costcodeId);
-      return wrap(context, CostCode.class, costcode);
    }
 
    // Delegate methods

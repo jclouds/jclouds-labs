@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -29,7 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
+import org.jclouds.abiquo.predicates.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -135,7 +136,7 @@ public class PublicNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testGetNetworkFromIp() {
-      PublicIp ip = publicNetwork.findIp(IpPredicates.<PublicIp> notUsed());
+      PublicIp ip = find(publicNetwork.listIps(), IpPredicates.<PublicIp> notUsed());
       PublicNetwork network = ip.getNetwork();
 
       assertEquals(network.getId(), publicNetwork.getId());

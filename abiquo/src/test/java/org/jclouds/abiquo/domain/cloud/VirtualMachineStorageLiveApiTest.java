@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -27,8 +28,9 @@ import java.util.List;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link VirtualMachine} storage operations.
@@ -110,7 +112,12 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    private Volume createVolume() {
-      Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name(env.tier.getName()));
+      Tier tier = find(env.virtualDatacenter.listStorageTiers(), new Predicate<Tier>() {
+         @Override
+         public boolean apply(Tier input) {
+            return input.getName().equals(env.tier.getName());
+         }
+      });
 
       Volume volume = Volume.builder(env.context.getApiContext(), env.virtualDatacenter, tier)
             .name(PREFIX + "Hawaian volume").sizeInMb(32).build();

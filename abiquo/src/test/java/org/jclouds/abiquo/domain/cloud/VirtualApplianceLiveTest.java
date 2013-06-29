@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.getLast;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
@@ -27,12 +28,12 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.internal.BaseAbiquoLiveApiTest;
-import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualApplianceState;
 import com.abiquo.server.core.cloud.VirtualMachineState;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 
@@ -109,9 +110,15 @@ public class VirtualApplianceLiveTest extends BaseAbiquoLiveApiTest {
 
    @Test(dependsOnMethods = "testUndeployVirtualAppliance")
    public void testDeleteVirtualAppliance() {
+      final String name = vapp.getName();
       vapp.delete();
-      assertNull(view.getCloudService().findVirtualAppliance(
-            VirtualAppliancePredicates.name(PREFIX + "Virtual Appliance Updated")));
+
+      assertNull(find(view.getCloudService().listVirtualAppliances(), new Predicate<VirtualAppliance>() {
+         @Override
+         public boolean apply(VirtualAppliance input) {
+            return input.getName().equals(name);
+         }
+      }, null));
    }
 
    private static Ordering<VirtualMachineTemplate> templateBySize() {

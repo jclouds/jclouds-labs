@@ -18,8 +18,6 @@ package org.jclouds.abiquo.strategy;
 
 import org.jclouds.abiquo.domain.DomainWrapper;
 
-import com.google.common.base.Predicate;
-
 /**
  * List all entities of the given type.
  * 
@@ -27,6 +25,4 @@ import com.google.common.base.Predicate;
  */
 public interface ListRootEntities<T extends DomainWrapper<?>> {
    Iterable<T> execute();
-
-   Iterable<T> execute(Predicate<T> selector);
 }

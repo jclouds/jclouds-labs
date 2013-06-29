@@ -16,8 +16,6 @@
  */
 package org.jclouds.abiquo.domain.enterprise;
 
-import static com.google.common.collect.Iterables.filter;
-
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
@@ -30,10 +28,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
-import org.jclouds.abiquo.domain.network.ExternalIp;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
-import org.jclouds.abiquo.domain.network.Network;
-import org.jclouds.abiquo.domain.network.UnmanagedIp;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 import org.jclouds.http.HttpResponse;
@@ -142,40 +137,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    }
 
    /**
-    * Retrieve a filtered list of virtual datacenters by this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvitualdatacentersbyanEnterprise"
-    *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#
-    *      EnterpriseResource-
-    *      RetrievealistofvitualdatacentersbyanEnterprise</a>
-    * @return Filtered list of virtual datacenters in this enterprise.
-    */
-   public List<VirtualDatacenter> listVirtualDatacenters(final Predicate<VirtualDatacenter> filter) {
-      return ImmutableList.copyOf(filter(listVirtualDatacenters(), filter));
-   }
-
-   /**
-    * Retrieve a the first virtual datacenter matching the filter within the
-    * list of virtual datacenters by this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvitualdatacentersbyanEnterprise"
-    *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#
-    *      EnterpriseResource-
-    *      RetrievealistofvitualdatacentersbyanEnterprise</a>
-    * @return First virtual datacenter matching the filter or <code>null</code>
-    *         if the is none.
-    */
-   public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter) {
-      return Iterables.getFirst(filter(listVirtualDatacenters(), filter), null);
-   }
-
-   /**
     * Retrieve the list of template definition lists of the enterprise.
     * 
     * @see API: <a href=
@@ -188,41 +149,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    public List<TemplateDefinitionList> listTemplateDefinitionLists() {
       TemplateDefinitionListsDto dto = context.getApi().getEnterpriseApi().listTemplateDefinitionLists(target);
       return wrap(context, TemplateDefinitionList.class, dto.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of template definition lists from this
-    * enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
-    *      > http://community.abiquo.com/display/ABI20/
-    *      TemplateDefinitionListResource#
-    *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
-    * @return Filtered list of template definition lists of the enterprise.
-    */
-   public List<TemplateDefinitionList> listTemplateDefinitionLists(final Predicate<TemplateDefinitionList> filter) {
-      return ImmutableList.copyOf(filter(listTemplateDefinitionLists(), filter));
-   }
-
-   /**
-    * Retrieve the first template definition list matching the filter within the
-    * list.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
-    *      > http://community.abiquo.com/display/ABI20/
-    *      TemplateDefinitionListResource#
-    *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
-    * @return First template definition list matching the filter or
-    *         <code>null</code> if the is none.
-    */
-   public TemplateDefinitionList findTemplateDefinitionList(final Predicate<TemplateDefinitionList> filter) {
-      return Iterables.getFirst(filter(listTemplateDefinitionLists(), filter), null);
    }
 
    /**
@@ -259,38 +185,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    }
 
    /**
-    * Retrieve a filtered list of datacenter limits by enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#DatacenterLimitsResource-Retrievelimitsbyenterprise"
-    *      > http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#
-    *      DatacenterLimitsResource-Retrievelimitsbyenterprise</a>
-    * @return Filtered list of datacenter limits by enterprise.
-    */
-   public List<Limits> listLimits(final Predicate<Limits> filter) {
-      return ImmutableList.copyOf(filter(listLimits(), filter));
-   }
-
-   /**
-    * Retrieve the first datacenter limits matching the filter within the list
-    * of datacenter limits by enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#DatacenterLimitsResource-Retrievelimitsbyenterprise"
-    *      > http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#
-    *      DatacenterLimitsResource-Retrievelimitsbyenterprise</a>
-    * @return First datacenter limits matching the filter or <code>null</code>
-    *         if there is none.
-    */
-   public Limits findLimits(final Predicate<Limits> filter) {
-      return Iterables.getFirst(filter(listLimits(), filter), null);
-   }
-
-   /**
     * Retrieve the defined properties of the given enterprise.
     * 
     * @see API: <a href=
@@ -321,40 +215,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    }
 
    /**
-    * Retrieve a filtered list of users of this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
-    *      >
-    *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-
-    *      Retrievealistofusers </a>
-    * @return Filtered list of users of this enterprise.
-    */
-   public List<User> listUsers(final Predicate<User> filter) {
-      return ImmutableList.copyOf(filter(listUsers(), filter));
-   }
-
-   /**
-    * Retrieve the first user matching the filter within the list of users of
-    * this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
-    *      >
-    *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-
-    *      Retrievealistofusers </a>
-    * @return First user matching the filter or <code>null</code> if there is
-    *         none.
-    */
-   public User findUser(final Predicate<User> filter) {
-      return Iterables.getFirst(filter(listUsers(), filter), null);
-   }
-
-   /**
     * Retrieve a single user.
     * 
     * @param id
@@ -381,44 +241,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
       return wrap(context, Role.class, dto.getCollection());
    }
 
-   /**
-    * Retrieve a filtered list of roles defined by this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @return Filtered list of roles by this enterprise.
-    */
-   public List<Role> listRoles(final Predicate<Role> filter) {
-      return ImmutableList.copyOf(filter(listRoles(), filter));
-   }
-
-   /**
-    * Retrieve the first role matching the filter within the list of roles
-    * defined by this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @return First role matching the filter or <code>null</code> if there is
-    *         none.
-    */
-   public Role findRole(final Predicate<Role> filter) {
-      return Iterables.getFirst(filter(listRoles(), filter), null);
-   }
-
    public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter) {
       VirtualMachineTemplatesDto dto = context.getApi().getVirtualMachineTemplateApi()
             .listVirtualMachineTemplates(target.getId(), datacenter.getId());
       return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
-   }
-
-   public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter,
-         final Predicate<VirtualMachineTemplate> filter) {
-      return ImmutableList.copyOf(filter(listTemplatesInRepository(datacenter), filter));
-   }
-
-   public VirtualMachineTemplate findTemplateInRepository(final Datacenter datacenter,
-         final Predicate<VirtualMachineTemplate> filter) {
-      return Iterables.getFirst(filter(listTemplatesInRepository(datacenter), filter), null);
    }
 
    public VirtualMachineTemplate getTemplateInRepository(final Datacenter datacenter, final Integer id) {
@@ -432,27 +258,9 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
       return ImmutableList.copyOf(strategy.execute(this));
    }
 
-   public List<VirtualMachineTemplate> listTemplates(final Predicate<VirtualMachineTemplate> filter) {
-      ListVirtualMachineTemplates strategy = context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
-      return ImmutableList.copyOf(strategy.execute(this, filter));
-   }
-
-   public VirtualMachineTemplate findTemplate(final Predicate<VirtualMachineTemplate> filter) {
-      ListVirtualMachineTemplates strategy = context.utils().injector().getInstance(ListVirtualMachineTemplates.class);
-      return Iterables.getFirst(strategy.execute(this, filter), null);
-   }
-
    public List<Datacenter> listAllowedDatacenters() {
       DatacentersDto datacenters = context.getApi().getEnterpriseApi().listAllowedDatacenters(target.getId());
       return wrap(context, Datacenter.class, datacenters.getCollection());
-   }
-
-   public List<Datacenter> listAllowedDatacenters(final Predicate<Datacenter> filter) {
-      return ImmutableList.copyOf(filter(listAllowedDatacenters(), filter));
-   }
-
-   public Datacenter findAllowedDatacenter(final Predicate<Datacenter> filter) {
-      return Iterables.getFirst(filter(listAllowedDatacenters(), filter), null);
    }
 
    /**
@@ -472,15 +280,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
       return wrap(context, ExternalNetwork.class, parser.apply(response).getCollection());
    }
 
-   public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter,
-         final Predicate<Network<ExternalIp>> filter) {
-      return ImmutableList.copyOf(filter(listExternalNetworks(datacenter), filter));
-   }
-
-   public ExternalNetwork findExternalNetwork(final Datacenter datacenter, final Predicate<Network<ExternalIp>> filter) {
-      return Iterables.getFirst(filter(listExternalNetworks(datacenter), filter), null);
-   }
-
    public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter) {
       DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
@@ -492,16 +291,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
             TypeLiteral.get(VLANNetworksDto.class));
 
       return wrap(context, UnmanagedNetwork.class, parser.apply(response).getCollection());
-   }
-
-   public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter,
-         final Predicate<Network<UnmanagedIp>> filter) {
-      return ImmutableList.copyOf(filter(listUnmanagedNetworks(datacenter), filter));
-   }
-
-   public UnmanagedNetwork findUnmanagedNetwork(final Datacenter datacenter,
-         final Predicate<Network<UnmanagedIp>> filter) {
-      return Iterables.getFirst(filter(listUnmanagedNetworks(datacenter), filter), null);
    }
 
    /**
@@ -520,40 +309,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    }
 
    /**
-    * Retrieve a filtered list of virtual appliances by this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievethelistofvirtualappliancesbyanEnterprise"
-    *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#
-    *      EnterpriseResource-
-    *      RetrievethelistofvirtualappliancesbyanEnterprise</a>
-    * @return Filtered list of virtual appliances by this enterprise.
-    */
-   public List<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter) {
-      return ImmutableList.copyOf(filter(listVirtualAppliances(), filter));
-   }
-
-   /**
-    * Retrieve the first virtual appliance matching the filter within the list
-    * of virtual appliances in this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievethelistofvirtualappliancesbyanEnterprise"
-    *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#
-    *      EnterpriseResource-
-    *      RetrievethelistofvirtualappliancesbyanEnterprise</a>
-    * @return First virtual machine matching the filter or <code>null</code> if
-    *         the is none.
-    */
-   public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter) {
-      return Iterables.getFirst(filter(listVirtualAppliances(), filter), null);
-   }
-
-   /**
     * Retrieve the list of virtual machines by this enterprise.
     * 
     * @see API: <a href=
@@ -567,49 +322,9 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
       return wrap(context, VirtualMachine.class, machines.getCollection());
    }
 
-   /**
-    * Retrieve a filtered list of virtual machines by this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvirtualmachinesbyanEnterprise"
-    *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#
-    *      EnterpriseResource- RetrievealistofvirtualmachinesbyanEnterprise</a>
-    * @return Filtered list of virtual machines by this enterprise.
-    */
-   public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter) {
-      return ImmutableList.copyOf(filter(listVirtualMachines(), filter));
-   }
-
-   /**
-    * Retrieve the first virtual machine matching the filter within the list of
-    * virtual machines in this enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvirtualmachinesbyanEnterprise"
-    *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#
-    *      EnterpriseResource- RetrievealistofvirtualmachinesbyanEnterprise</a>
-    * @return First virtual machine matching the filter or <code>null</code> if
-    *         the is none.
-    */
-   public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter) {
-      return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
-   }
-
    public List<Machine> listReservedMachines() {
       MachinesDto machines = context.getApi().getEnterpriseApi().listReservedMachines(target);
       return wrap(context, Machine.class, machines.getCollection());
-   }
-
-   public List<VirtualMachine> listReservedMachines(final Predicate<VirtualMachine> filter) {
-      return ImmutableList.copyOf(filter(listVirtualMachines(), filter));
-   }
-
-   public VirtualMachine findReservedMachine(final Predicate<VirtualMachine> filter) {
-      return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
    }
 
    // Actions

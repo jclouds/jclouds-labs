@@ -18,8 +18,6 @@ package org.jclouds.abiquo.predicates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Arrays;
-
 import com.abiquo.model.rest.RESTLink;
 import com.google.common.base.Predicate;
 
@@ -29,13 +27,12 @@ import com.google.common.base.Predicate;
  * @author Ignasi Barrera
  */
 public class LinkPredicates {
-   public static Predicate<RESTLink> rel(final String... rels) {
-      checkNotNull(rels, "rels must be defined");
-
+   public static Predicate<RESTLink> rel(final String rel) {
+      checkNotNull(rel, "rel must be defined");
       return new Predicate<RESTLink>() {
          @Override
          public boolean apply(final RESTLink link) {
-            return Arrays.asList(rels).contains(link.getRel());
+            return link.getRel().equals(rel);
          }
       };
    }

@@ -19,7 +19,7 @@ package org.jclouds.abiquo.compute.strategy.internal;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
-import static org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates.compatibleWithTemplateOrConversions;
+import static org.jclouds.abiquo.predicates.VirtualDatacenterPredicates.compatibleWithTemplateOrConversions;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,7 +30,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.services.CloudService;
-import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
+import org.jclouds.abiquo.predicates.VirtualDatacenterPredicates;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.ApiContext;
 
@@ -67,8 +67,8 @@ public class FindCompatibleVirtualDatacentersForImageAndConversions implements F
       datacenterDto.setId(template.unwrap().getIdFromLink(ParentLinkName.DATACENTER_REPOSITORY));
       Datacenter datacenter = wrap(context, Datacenter.class, datacenterDto);
 
-      Iterable<VirtualDatacenter> vdcs = cloudService.listVirtualDatacenters(VirtualDatacenterPredicates
-            .datacenter(datacenter));
+      Iterable<VirtualDatacenter> vdcs = filter(cloudService.listVirtualDatacenters(),
+            VirtualDatacenterPredicates.datacenter(datacenter));
 
       return filter(vdcs, compatibleWithTemplateOrConversions(template));
    }

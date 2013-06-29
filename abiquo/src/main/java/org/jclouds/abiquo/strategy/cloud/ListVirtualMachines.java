@@ -79,11 +79,6 @@ public class ListVirtualMachines implements ListRootEntities<VirtualMachine> {
       return execute(userExecutor);
    }
 
-   @Override
-   public Iterable<VirtualMachine> execute(final Predicate<VirtualMachine> selector) {
-      return execute(userExecutor, selector);
-   }
-
    public Iterable<VirtualMachine> execute(ListeningExecutorService executor) {
       return execute(executor, VirtualMachineOptions.builder().disablePagination().build());
    }

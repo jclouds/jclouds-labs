@@ -16,9 +16,9 @@
  */
 package org.jclouds.abiquo.domain.admin;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
 import java.util.List;
@@ -30,12 +30,11 @@ import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
-import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.PrivilegeDto;
 import com.abiquo.server.core.enterprise.RoleDto;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 /**
@@ -73,28 +72,33 @@ public class RoleLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testCreateEnterpriseRole() {
-      Role entRole = Role.Builder.fromRole(env.role).build();
+      final Role entRole = Role.Builder.fromRole(env.role).build();
       entRole.setName(entRole.getName() + "enterprise");
       entRole.setEnterprise(env.enterprise);
       entRole.save();
 
-      entRole = env.enterprise.findRole(RolePredicates.name(entRole.getName()));
-
-      assertNotNull(entRole);
+      find(env.enterprise.listRoles(), new Predicate<Role>() {
+         @Override
+         public boolean apply(Role input) {
+            return input.getName().equals(entRole.getName());
+         }
+      });
    }
 
    public void testAddPrivilege() {
       PrivilegeDto dto = env.configApi.getPrivilege(8);
-      Privilege privilege = DomainWrapper.wrap(env.context.getApiContext(), Privilege.class, dto);
+      final Privilege privilege = DomainWrapper.wrap(env.context.getApiContext(), Privilege.class, dto);
       List<Privilege> privileges = Lists.newArrayList(env.role.listPrivileges());
       privileges.add(privilege);
 
       env.role.setPrivileges(privileges);
-
       env.role.update();
 
-      privilege = env.role.findPrivileges(PrivilegePredicates.name(dto.getName()));
-
-      assertNotNull(privilege);
+      find(env.role.listPrivileges(), new Predicate<Privilege>() {
+         @Override
+         public boolean apply(Privilege input) {
+            return input.getName().equals(privilege.getName());
+         }
+      });
    }
 }

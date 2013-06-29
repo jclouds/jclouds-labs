@@ -23,7 +23,6 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
-import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -49,27 +48,14 @@ public class ListVirtualDatacentersLiveApiTest extends BaseAbiquoStrategyLiveApi
       assertTrue(size(vdcs) > 0);
    }
 
-   public void testExecutePredicateWithoutResults() {
-      Iterable<VirtualDatacenter> vdcs = strategy.execute(VirtualDatacenterPredicates.name("UNEXISTING"));
-      assertNotNull(vdcs);
-      assertEquals(size(vdcs), 0);
-   }
-
-   public void testExecutePredicateWithResults() {
-      Iterable<VirtualDatacenter> vdcs = strategy.execute(VirtualDatacenterPredicates.name(env.virtualDatacenter
-            .getName()));
-      assertNotNull(vdcs);
-      assertEquals(size(vdcs), 1);
-   }
-
-   public void testExecutePredicateOptionsWithResults() {
+   public void testExecuteOptionsWithResults() {
       Iterable<VirtualDatacenter> vdcs = strategy.execute(VirtualDatacenterOptions.builder()
             .datacenterId(env.datacenter.getId()).enterpriseId(env.defaultEnterprise.getId()).build());
       assertNotNull(vdcs);
       assertEquals(size(vdcs), 1);
    }
 
-   public void testExecutePredicateOptionsWithoutResults() {
+   public void testExecuteOptionsWithoutResults() {
       Iterable<VirtualDatacenter> vdcs = strategy.execute(VirtualDatacenterOptions.builder()
             .enterpriseId(env.enterprise.getId()).build());
       assertNotNull(vdcs);

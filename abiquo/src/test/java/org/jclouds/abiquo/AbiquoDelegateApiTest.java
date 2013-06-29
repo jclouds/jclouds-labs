@@ -51,7 +51,6 @@ public class AbiquoDelegateApiTest extends BaseAbiquoApiTest<AbiquoApi> {
       assertNotNull(syncApi.getCloudApi());
       assertNotNull(syncApi.getVirtualMachineTemplateApi());
       assertNotNull(syncApi.getTaskApi());
-      assertNotNull(syncApi.getPricingApi());
    }
 
    @Override

@@ -38,13 +38,6 @@ public abstract class BaseAbiquoApiLiveApiTest extends BaseAbiquoLiveApiTest {
       setupEnvironment();
    }
 
-   // @BeforeSuite(groups = "ucs", dependsOnMethods = "setupContext")
-   protected void setupUcsEnvironment() throws Exception {
-      if (env != null) {
-         env.createUcsRack();
-      }
-   }
-
    @Override
    @AfterSuite(groups = "api")
    protected void tearDownContext() {

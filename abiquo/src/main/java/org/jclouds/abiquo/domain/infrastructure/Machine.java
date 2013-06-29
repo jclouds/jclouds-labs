@@ -17,17 +17,14 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
-import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
-import org.jclouds.abiquo.predicates.infrastructure.NetworkInterfacePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.http.HttpResponse;
@@ -35,6 +32,7 @@ import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.MachineIpmiState;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
@@ -42,12 +40,10 @@ import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.network.NetworkInterfacesDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -60,7 +56,13 @@ import com.google.inject.TypeLiteral;
  *      href="http://community.abiquo.com/display/ABI20/MachineResource">
  *      http://community.abiquo.com/display/ABI20/MachineResource</a>
  */
-public class Machine extends AbstractPhysicalMachine {
+public class Machine extends DomainWrapper<MachineDto> {
+   /** The default virtual ram used in MB. */
+   protected static final int DEFAULT_VRAM_USED = 1;
+
+   /** The default virtual cpu used in MB. */
+   protected static final int DEFAULT_VCPU_USED = 1;
+
    /** The rack where the machine belongs. */
    protected Rack rack;
 
@@ -91,12 +93,25 @@ public class Machine extends AbstractPhysicalMachine {
       target = context.getApi().getInfrastructureApi().createMachine(rack.unwrap(), target);
    }
 
-   @Override
+   public void delete() {
+      context.getApi().getInfrastructureApi().deleteMachine(target);
+      target = null;
+   }
+
+   public void update() {
+      target = context.getApi().getInfrastructureApi().updateMachine(target);
+   }
+
    public MachineState check() {
       MachineStateDto dto = context.getApi().getInfrastructureApi().checkMachineState(target, true);
       MachineState state = dto.getState();
       target.setState(state);
       return state;
+   }
+
+   public MachineIpmiState checkIpmi() {
+      MachineIpmiStateDto dto = context.getApi().getInfrastructureApi().checkMachineIpmiState(target);
+      return dto.getState();
    }
 
    // Parent access
@@ -123,24 +138,12 @@ public class Machine extends AbstractPhysicalMachine {
 
    // Children access
 
-   @Override
    public List<Datastore> getDatastores() {
       return wrap(context, Datastore.class, target.getDatastores().getCollection());
    }
 
-   @Override
-   public Datastore findDatastore(final String name) {
-      return find(getDatastores(), DatastorePredicates.name(name), null);
-   }
-
-   @Override
    public List<NetworkInterface> getNetworkInterfaces() {
       return wrap(context, NetworkInterface.class, target.getNetworkInterfaces().getCollection());
-   }
-
-   @Override
-   public NetworkInterface findNetworkInterface(final String name) {
-      return find(getNetworkInterfaces(), NetworkInterfacePredicates.name(name), null);
    }
 
    /**
@@ -160,30 +163,10 @@ public class Machine extends AbstractPhysicalMachine {
       return wrap(context, VirtualMachine.class, vms.getCollection());
    }
 
-   /**
-    * Gets the list of virtual machines in the physical machine matching the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list of virtual machines in the physical machine matching the
-    *         given filter.
-    */
-   public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter) {
-      return ImmutableList.copyOf(filter(listVirtualMachines(), filter));
-   }
-
-   /**
-    * Gets a single virtual machine in the physical machine matching the given
-    * filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The virtual machine or <code>null</code> if none matched the given
-    *         filter.
-    */
-   public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter) {
-      return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
+   public VirtualMachine getVirtualMachine(final Integer virtualMachineId) {
+      VirtualMachineWithNodeExtendedDto vm = context.getApi().getInfrastructureApi()
+            .getVirtualMachine(target, virtualMachineId);
+      return wrap(context, VirtualMachine.class, vm);
    }
 
    /**
@@ -202,34 +185,6 @@ public class Machine extends AbstractPhysicalMachine {
       VirtualMachinesWithNodeExtendedDto vms = context.getApi().getInfrastructureApi()
             .listVirtualMachinesByMachine(target, options);
       return wrap(context, VirtualMachine.class, vms.getCollection());
-   }
-
-   /**
-    * Gets the list of virtual machines in the physical machine matching the
-    * given filter synchronizing virtual machines from remote hypervisor with
-    * abiquo's database.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list of remote virtual machines in the physical machine
-    *         matching the given filter.
-    */
-   public List<VirtualMachine> listRemoteVirtualMachines(final Predicate<VirtualMachine> filter) {
-      return ImmutableList.copyOf(filter(listVirtualMachines(), filter));
-   }
-
-   /**
-    * Gets a single virtual machine in the physical machine matching the given
-    * filter synchronizing virtual machines from remote hypervisor with abiquo's
-    * database.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The virtual machine or <code>null</code> if none matched the given
-    *         filter.
-    */
-   public VirtualMachine findRemoteVirtualMachine(final Predicate<VirtualMachine> filter) {
-      return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
    }
 
    /**
@@ -508,14 +463,165 @@ public class Machine extends AbstractPhysicalMachine {
 
    // Delegate methods
 
+   public Integer getId() {
+      return target.getId();
+   }
+
+   public String getIp() {
+      return target.getIp();
+   }
+
+   public String getIpmiIp() {
+      return target.getIpmiIP();
+   }
+
+   public String getIpmiPassword() {
+      return target.getIpmiPassword();
+   }
+
+   public Integer getIpmiPort() {
+      return target.getIpmiPort();
+   }
+
+   public String getIpmiUser() {
+      return target.getIpmiUser();
+   }
+
+   public String getIpService() {
+      return target.getIpService();
+   }
+
+   public String getName() {
+      return target.getName();
+   }
+
+   public String getPassword() {
+      return target.getPassword();
+   }
+
+   public Integer getPort() {
+      return target.getPort();
+   }
+
+   public MachineState getState() {
+      return target.getState();
+   }
+
+   public HypervisorType getType() {
+      return target.getType();
+   }
+
+   public String getUser() {
+      return target.getUser();
+   }
+
+   public Integer getVirtualCpuCores() {
+      return target.getVirtualCpuCores();
+   }
+
+   public Integer getVirtualCpusUsed() {
+      return target.getVirtualCpusUsed();
+   }
+
+   public Integer getVirtualRamInMb() {
+      return target.getVirtualRamInMb();
+   }
+
+   public Integer getVirtualRamUsedInMb() {
+      return target.getVirtualRamUsedInMb();
+   }
+
+   public void setDatastores(final List<Datastore> datastores) {
+      DatastoresDto datastoresDto = new DatastoresDto();
+      datastoresDto.getCollection().addAll(DomainWrapper.unwrap(datastores));
+      target.setDatastores(datastoresDto);
+   }
+
+   public void setDescription(final String description) {
+      target.setDescription(description);
+   }
+
+   public void setIp(final String ip) {
+      target.setIp(ip);
+   }
+
+   public void setIpmiIp(final String ipmiIp) {
+      target.setIpmiIP(ipmiIp);
+   }
+
+   public void setIpmiPassword(final String ipmiPassword) {
+      target.setIpmiPassword(ipmiPassword);
+   }
+
+   public void setIpmiPort(final Integer ipmiPort) {
+      target.setIpmiPort(ipmiPort);
+   }
+
+   public void setIpmiUser(final String ipmiUser) {
+      target.setIpmiUser(ipmiUser);
+   }
+
+   public void setIpService(final String ipService) {
+      target.setIpService(ipService);
+   }
+
+   public void setName(final String name) {
+      target.setName(name);
+   }
+
+   public void setPassword(final String password) {
+      target.setPassword(password);
+   }
+
+   public void setPort(final Integer port) {
+      target.setPort(port);
+   }
+
+   public void setState(final MachineState state) {
+      target.setState(state);
+   }
+
+   public void setType(final HypervisorType type) {
+      target.setType(type);
+   }
+
+   public void setUser(final String user) {
+      target.setUser(user);
+   }
+
+   public void setVirtualCpuCores(final Integer virtualCpuCores) {
+      target.setVirtualCpuCores(virtualCpuCores);
+   }
+
+   public void setVirtualCpusUsed(final Integer virtualCpusUsed) {
+      target.setVirtualCpusUsed(virtualCpusUsed);
+   }
+
+   public void setVirtualRamInMb(final Integer virtualRamInMb) {
+      target.setVirtualRamInMb(virtualRamInMb);
+   }
+
+   public void setVirtualRamUsedInMb(final Integer virtualRamUsedInMb) {
+      target.setVirtualRamUsedInMb(virtualRamUsedInMb);
+   }
+
+   public String getDescription() {
+      return target.getDescription();
+   }
+
    public void setRack(final Rack rack) {
       this.rack = rack;
    }
 
-   public VirtualMachine getVirtualMachine(final Integer virtualMachineId) {
-      VirtualMachineWithNodeExtendedDto vm = context.getApi().getInfrastructureApi()
-            .getVirtualMachine(target, virtualMachineId);
-      return wrap(context, VirtualMachine.class, vm);
+   @Override
+   public String toString() {
+      return "Machine [id=" + getId() + ", ip=" + getIp() + ", ipmiIp=" + getIpmiIp() + ", ipmiPassword="
+            + getIpmiPassword() + ", ipmiPort=" + getIpmiPort() + ", ipmiUser=" + getIpmiUser() + ", ipService="
+            + getIpService() + ", name=" + getName() + ", password=" + getPassword() + ", port=" + getPort()
+            + ", state=" + getState() + ", type=" + getType() + ", user=" + getUser() + ", virtualCpuCores="
+            + getVirtualCpuCores() + ", virtualCpusUsed=" + getVirtualCpusUsed() + ", getVirtualRamInMb()="
+            + getVirtualRamInMb() + ", virtualRamUsedInMb=" + getVirtualRamUsedInMb() + ", description="
+            + getDescription() + "]";
    }
 
 }

@@ -16,14 +16,16 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link StorageDevice} domain class.
@@ -42,20 +44,28 @@ public class TierLiveApiTest extends BaseAbiquoApiLiveApiTest {
       tier.setName("Updated tier");
       tier.update();
 
-      // Recover the updated tier
-      Tier updated = env.datacenter.findTier(TierPredicates.name("Updated tier"));
-      assertEquals(updated.getName(), "Updated tier");
+      // Verify the tier has been updated
+      find(env.datacenter.listTiers(), name("Updated tier"));
 
-      // Set original name
+      // Restore the original name
       tier.setName(previousName);
       tier.update();
    }
 
    public void testListTiers() {
       Iterable<Tier> tiers = env.datacenter.listTiers();
-      assertEquals(Iterables.size(tiers), 4);
+      assertEquals(size(tiers), 4);
 
-      tiers = env.datacenter.listTiers(TierPredicates.name("FAIL"));
-      assertEquals(Iterables.size(tiers), 0);
+      tiers = filter(env.datacenter.listTiers(), name("FAIL"));
+      assertEquals(size(tiers), 0);
+   }
+
+   private static Predicate<Tier> name(final String name) {
+      return new Predicate<Tier>() {
+         @Override
+         public boolean apply(Tier input) {
+            return input.getName().equals(name);
+         }
+      };
    }
 }

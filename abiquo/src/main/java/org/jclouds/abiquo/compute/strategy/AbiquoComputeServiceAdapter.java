@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.transform;
 
 import java.util.List;
@@ -43,9 +44,7 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
-import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
+import org.jclouds.abiquo.predicates.IpPredicates;
 import org.jclouds.collect.Memoized;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
@@ -120,7 +119,13 @@ public class AbiquoComputeServiceAdapter
             .getId()));
 
       // Load the virtual appliance or create it if it does not exist
-      VirtualAppliance vapp = vdc.findVirtualAppliance(VirtualAppliancePredicates.name(tag));
+      VirtualAppliance vapp = find(vdc.listVirtualAppliances(), new Predicate<VirtualAppliance>() {
+         @Override
+         public boolean apply(VirtualAppliance input) {
+            return input.getName().equals(tag);
+         }
+      }, null);
+
       if (vapp == null) {
          vapp = VirtualAppliance.builder(context, vdc).name(tag).build();
          vapp.save();
@@ -143,7 +148,7 @@ public class AbiquoComputeServiceAdapter
       // If no public ip is available in the virtual datacenter, the virtual
       // machine will be assigned by default an ip address in the default
       // private VLAN for the virtual datacenter
-      PublicIp publicIp = vdc.findPurchasedPublicIp(IpPredicates.<PublicIp> notUsed());
+      PublicIp publicIp = find(vdc.listPurchasedPublicIps(), IpPredicates.<PublicIp> notUsed(), null);
       if (publicIp != null) {
          List<PublicIp> ips = Lists.newArrayList();
          ips.add(publicIp);
@@ -189,7 +194,12 @@ public class AbiquoComputeServiceAdapter
    @Override
    public VirtualMachineTemplate getImage(final String id) {
       Enterprise enterprise = adminService.getCurrentEnterprise();
-      return enterprise.findTemplate(VirtualMachineTemplatePredicates.id(Integer.valueOf(id)));
+      return find(enterprise.listTemplates(), new Predicate<VirtualMachineTemplate>() {
+         @Override
+         public boolean apply(VirtualMachineTemplate input) {
+            return input.getId().equals(id);
+         }
+      }, null);
    }
 
    @Override
@@ -199,7 +209,7 @@ public class AbiquoComputeServiceAdapter
 
    @Override
    public VirtualMachine getNode(final String id) {
-      return cloudService.findVirtualMachine(vmId(id));
+      return find(cloudService.listVirtualMachines(), vmId(id), null);
    }
 
    @Override

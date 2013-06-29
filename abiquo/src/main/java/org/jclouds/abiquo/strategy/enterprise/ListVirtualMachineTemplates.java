@@ -75,12 +75,6 @@ public class ListVirtualMachineTemplates implements ListEntities<VirtualMachineT
       return execute(userExecutor, parent);
    }
 
-   @Override
-   public Iterable<VirtualMachineTemplate> execute(final Enterprise parent,
-         final Predicate<VirtualMachineTemplate> selector) {
-      return execute(userExecutor, parent, selector);
-   }
-
    public Iterable<VirtualMachineTemplate> execute(ListeningExecutorService executor, final Enterprise parent) {
       // Find virtual machine templates in concurrent requests
       Iterable<Datacenter> dcs = parent.listAllowedDatacenters();

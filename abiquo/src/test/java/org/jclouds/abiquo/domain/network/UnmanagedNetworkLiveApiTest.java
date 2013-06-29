@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -30,13 +31,13 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
-import org.jclouds.abiquo.predicates.network.NetworkPredicates;
+import org.jclouds.abiquo.predicates.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link UnmanagedNetwork} domain class.
@@ -93,8 +94,13 @@ public class UnmanagedNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
       assertEquals(unmanagedNetwork.getSecondaryDNS(), "8.8.8.8");
 
       // Refresh the unmanaged network
-      UnmanagedNetwork en = env.enterprise.findUnmanagedNetwork(env.datacenter,
-            NetworkPredicates.<UnmanagedIp> name(unmanagedNetwork.getName()));
+      UnmanagedNetwork en = find(env.enterprise.listUnmanagedNetworks(env.datacenter),
+            new Predicate<UnmanagedNetwork>() {
+               @Override
+               public boolean apply(UnmanagedNetwork input) {
+                  return input.getName().equals(unmanagedNetwork.getName());
+               }
+            });
 
       assertEquals(en.getId(), unmanagedNetwork.getId());
       assertEquals(en.getName(), "Unmanaged network Updated");
@@ -143,7 +149,7 @@ public class UnmanagedNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testGetNetworkFromIp() {
-      UnmanagedIp ip = unmanagedNetwork.findIp(IpPredicates.<UnmanagedIp> notUsed());
+      UnmanagedIp ip = find(unmanagedNetwork.listIps(), IpPredicates.<UnmanagedIp> notUsed(), null);
       // Unmanaged networks do not have IPs until attached to VMs
       assertNull(ip);
    }

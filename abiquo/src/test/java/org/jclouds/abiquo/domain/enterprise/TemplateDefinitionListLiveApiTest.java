@@ -16,6 +16,8 @@
  */
 package org.jclouds.abiquo.domain.enterprise;
 
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -23,10 +25,11 @@ import static org.testng.Assert.assertNull;
 import java.util.List;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.enterprise.TemplateDefinitionListPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link TemplateDefinitionList} domain class.
@@ -41,10 +44,15 @@ public class TemplateDefinitionListLiveApiTest extends BaseAbiquoApiLiveApiTest 
       list.setName(list.getName() + "Updated");
       list.update();
 
-      List<TemplateDefinitionList> lists = env.enterprise.listTemplateDefinitionLists(TemplateDefinitionListPredicates
-            .name("myListUpdated"));
+      Iterable<TemplateDefinitionList> lists = filter(env.enterprise.listTemplateDefinitionLists(),
+            new Predicate<TemplateDefinitionList>() {
+               @Override
+               public boolean apply(TemplateDefinitionList input) {
+                  return input.getName().equals("myListUpdated");
+               }
+            });
 
-      assertEquals(lists.size(), 1);
+      assertEquals(size(lists), 1);
    }
 
    public void testListStates() {

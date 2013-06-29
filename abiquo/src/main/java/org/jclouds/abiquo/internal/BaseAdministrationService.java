@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.getFirst;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
@@ -57,9 +56,7 @@ import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
-import com.google.common.collect.Iterables;
 
 /**
  * Provides high level Abiquo administration operations.
@@ -99,16 +96,6 @@ public class BaseAdministrationService implements AdministrationService {
    }
 
    @Override
-   public Iterable<Datacenter> listDatacenters(final Predicate<Datacenter> filter) {
-      return filter(listDatacenters(), filter);
-   }
-
-   @Override
-   public Datacenter findDatacenter(final Predicate<Datacenter> filter) {
-      return getFirst(listDatacenters(filter), null);
-   }
-
-   @Override
    public Datacenter getDatacenter(final Integer datacenterId) {
       DatacenterDto datacenter = context.getApi().getInfrastructureApi().getDatacenter(datacenterId);
       return wrap(context, Datacenter.class, datacenter);
@@ -121,32 +108,12 @@ public class BaseAdministrationService implements AdministrationService {
       return listMachines.execute();
    }
 
-   @Override
-   public Iterable<Machine> listMachines(final Predicate<Machine> filter) {
-      return listMachines.execute(filter);
-   }
-
-   @Override
-   public Machine findMachine(final Predicate<Machine> filter) {
-      return Iterables.getFirst(listMachines(filter), null);
-   }
-
    /*********************** Enterprise ***********************/
 
    @Override
    public Iterable<Enterprise> listEnterprises() {
       EnterprisesDto result = context.getApi().getEnterpriseApi().listEnterprises();
       return wrap(context, Enterprise.class, result.getCollection());
-   }
-
-   @Override
-   public Iterable<Enterprise> listEnterprises(final Predicate<Enterprise> filter) {
-      return filter(listEnterprises(), filter);
-   }
-
-   @Override
-   public Enterprise findEnterprise(final Predicate<Enterprise> filter) {
-      return Iterables.getFirst(listEnterprises(filter), null);
    }
 
    @Override
@@ -175,16 +142,6 @@ public class BaseAdministrationService implements AdministrationService {
    }
 
    @Override
-   public Iterable<Role> listRoles(final Predicate<Role> filter) {
-      return filter(listRoles(), filter);
-   }
-
-   @Override
-   public Role findRole(final Predicate<Role> filter) {
-      return getFirst(listRoles(filter), null);
-   }
-
-   @Override
    public Role getRole(final Integer roleId) {
       RoleDto role = context.getApi().getAdminApi().getRole(roleId);
       return wrap(context, Role.class, role);
@@ -196,16 +153,6 @@ public class BaseAdministrationService implements AdministrationService {
    public Iterable<Privilege> listPrivileges() {
       PrivilegesDto result = context.getApi().getConfigApi().listPrivileges();
       return wrap(context, Privilege.class, result.getCollection());
-   }
-
-   @Override
-   public Iterable<Privilege> listPrivileges(final Predicate<Privilege> filter) {
-      return filter(listPrivileges(), filter);
-   }
-
-   @Override
-   public Privilege findPrivilege(final Predicate<Privilege> filter) {
-      return getFirst(listPrivileges(filter), null);
    }
 
    @Override
@@ -241,32 +188,12 @@ public class BaseAdministrationService implements AdministrationService {
       return wrap(context, License.class, result.getCollection());
    }
 
-   @Override
-   public Iterable<License> listLicenses(final Predicate<License> filter) {
-      return filter(listLicenses(), filter);
-   }
-
-   @Override
-   public License findLicense(final Predicate<License> filter) {
-      return getFirst(listLicenses(filter), null);
-   }
-
    /*********************** System Properties ***********************/
 
    @Override
    public Iterable<SystemProperty> listSystemProperties() {
       SystemPropertiesDto result = context.getApi().getConfigApi().listSystemProperties();
       return wrap(context, SystemProperty.class, result.getCollection());
-   }
-
-   @Override
-   public Iterable<SystemProperty> listSystemProperties(final Predicate<SystemProperty> filter) {
-      return filter(listSystemProperties(), filter);
-   }
-
-   @Override
-   public SystemProperty findSystemProperty(final Predicate<SystemProperty> filter) {
-      return getFirst(listSystemProperties(filter), null);
    }
 
    @Override
@@ -287,16 +214,6 @@ public class BaseAdministrationService implements AdministrationService {
    public Iterable<Category> listCategories() {
       CategoriesDto result = context.getApi().getConfigApi().listCategories();
       return wrap(context, Category.class, result.getCollection());
-   }
-
-   @Override
-   public Iterable<Category> listCategories(final Predicate<Category> filter) {
-      return filter(listCategories(), filter);
-   }
-
-   @Override
-   public Category findCategory(final Predicate<Category> filter) {
-      return Iterables.getFirst(listCategories(filter), null);
    }
 
    @Override

@@ -16,7 +16,9 @@
  */
 package org.jclouds.abiquo.domain.enterprise;
 
-import static org.jclouds.abiquo.predicates.enterprise.UserPredicates.nick;
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -26,10 +28,10 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.UserDto;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 /**
@@ -69,7 +71,7 @@ public class UserLiveApiTest extends BaseAbiquoApiLiveApiTest {
       env.user.setRole(env.anotherRole);
       env.user.update();
 
-      Role role2 = env.enterprise.findUser(UserPredicates.nick(env.user.getNick())).getRole();
+      Role role2 = find(env.enterprise.listUsers(), nick(env.user.getNick())).getRole();
 
       assertEquals(env.anotherRole.getId(), role2.getId());
       assertEquals(role2.getName(), "Another role");
@@ -82,16 +84,25 @@ public class UserLiveApiTest extends BaseAbiquoApiLiveApiTest {
       Iterable<User> users = env.enterprise.listUsers();
       assertEquals(Iterables.size(users), 2);
 
-      users = env.enterprise.listUsers(nick(env.user.getNick()));
-      assertEquals(Iterables.size(users), 1);
+      users = filter(env.enterprise.listUsers(), nick(env.user.getNick()));
+      assertEquals(size(users), 1);
 
-      users = env.enterprise.listUsers(nick(env.user.getName() + "FAIL"));
-      assertEquals(Iterables.size(users), 0);
+      users = filter(env.enterprise.listUsers(), nick(env.user.getName() + "FAIL"));
+      assertEquals(size(users), 0);
    }
 
    public void testGetCurrentUser() {
       User user = env.context.getAdministrationService().getCurrentUser();
       assertNotNull(user);
       assertEquals(user.getNick(), env.context.getApiContext().getIdentity());
+   }
+
+   private static Predicate<User> nick(final String nick) {
+      return new Predicate<User>() {
+         @Override
+         public boolean apply(User input) {
+            return input.getNick().equals(nick);
+         }
+      };
    }
 }

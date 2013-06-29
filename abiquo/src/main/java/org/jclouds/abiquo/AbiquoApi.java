@@ -18,6 +18,7 @@ package org.jclouds.abiquo;
 
 import java.io.Closeable;
 
+import javax.inject.Named;
 import javax.ws.rs.GET;
 
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
@@ -28,7 +29,6 @@ import org.jclouds.abiquo.features.ConfigApi;
 import org.jclouds.abiquo.features.EnterpriseApi;
 import org.jclouds.abiquo.features.EventApi;
 import org.jclouds.abiquo.features.InfrastructureApi;
-import org.jclouds.abiquo.features.PricingApi;
 import org.jclouds.abiquo.features.TaskApi;
 import org.jclouds.abiquo.features.VirtualMachineTemplateApi;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -110,18 +110,13 @@ public interface AbiquoApi extends Closeable {
    EventApi getEventApi();
 
    /**
-    * Provides synchronous access to Pricing features.
-    */
-   @Delegate
-   PricingApi getPricingApi();
-
-   /**
     * Perform a GET request to the given link.
     * 
     * @param link
     *           The link to get.
     * @return The response.
     */
+   @Named("link:get")
    @GET
    @Fallback(NullOnNotFoundOr404.class)
    HttpResponse get(@BinderParam(BindLinkToPathAndAcceptHeader.class) final RESTLink link);

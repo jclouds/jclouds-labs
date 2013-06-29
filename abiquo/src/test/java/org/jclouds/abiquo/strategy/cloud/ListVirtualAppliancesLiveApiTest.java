@@ -17,12 +17,10 @@
 package org.jclouds.abiquo.strategy.cloud;
 
 import static com.google.common.collect.Iterables.size;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
-import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -46,18 +44,5 @@ public class ListVirtualAppliancesLiveApiTest extends BaseAbiquoStrategyLiveApiT
       Iterable<VirtualAppliance> vapps = strategy.execute();
       assertNotNull(vapps);
       assertTrue(size(vapps) > 0);
-   }
-
-   public void testExecutePredicateWithoutResults() {
-      Iterable<VirtualAppliance> vapps = strategy.execute(VirtualAppliancePredicates.name("UNEXISTING"));
-      assertNotNull(vapps);
-      assertEquals(size(vapps), 0);
-   }
-
-   public void testExecutePredicateWithResults() {
-      Iterable<VirtualAppliance> vapps = strategy.execute(VirtualAppliancePredicates.name(env.virtualAppliance
-            .getName()));
-      assertNotNull(vapps);
-      assertEquals(size(vapps), 1);
    }
 }

@@ -21,12 +21,9 @@ import static org.jclouds.abiquo.domain.DomainUtils.link;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
-import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
-import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -46,18 +43,6 @@ public class InfrastructureResources {
 
    public static RackDto rackPost() {
       RackDto rack = new RackDto();
-      rack.setName("Aloha");
-      rack.setShortDescription("A hawaian rack");
-      rack.setHaEnabled(false);
-      rack.setVlanIdMin(6);
-      rack.setVlanIdMax(3024);
-      rack.setVlanPerVdcReserved(6);
-      rack.setNrsq(80);
-      return rack;
-   }
-
-   public static UcsRackDto managedRackPost() {
-      UcsRackDto rack = new UcsRackDto();
       rack.setName("Aloha");
       rack.setShortDescription("A hawaian rack");
       rack.setHaEnabled(false);
@@ -134,46 +119,6 @@ public class InfrastructureResources {
       rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
       rack.addLink(new RESTLink("machines", "http://localhost/api/admin/datacenters/1/racks/1/machines"));
       return rack;
-   }
-
-   public static UcsRackDto managedRackPut() {
-      UcsRackDto rack = managedRackPost();
-      rack.setId(1);
-      rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
-      rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
-      rack.addLink(new RESTLink("fsm", "http://localhost/api/admin/datacenters/1/racks/1/fsm"));
-      rack.addLink(new RESTLink("logicservers", "http://localhost/api/admin/datacenters/1/racks/1/logicservers"));
-      rack.addLink(new RESTLink("ls-templates", "http://localhost/api/admin/datacenters/1/racks/1/lstemplates"));
-      rack.addLink(new RESTLink("organizations", "http://localhost/api/admin/datacenters/1/racks/1/organizations"));
-      rack.addLink(new RESTLink("ls-associate",
-            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate"));
-      rack.addLink(new RESTLink("ls-associateclone",
-            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/assocclone"));
-      rack.addLink(new RESTLink("ls-associatetemplate",
-            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associatetemplate"));
-      rack.addLink(new RESTLink("ls-clone", "http://localhost/api/admin/datacenters/1/racks/1/logicservers/clone"));
-      rack.addLink(new RESTLink("ls-delete", "http://localhost/api/admin/datacenters/1/racks/1/logicservers/delete"));
-      rack.addLink(new RESTLink("ls-dissociate",
-            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/dissociate"));
-      return rack;
-   }
-
-   public static LogicServerDto logicServerPut() {
-      LogicServerDto logicServer = new LogicServerDto();
-      logicServer.setName("server");
-      logicServer.setAssociated("associated");
-      logicServer.setType("instance");
-
-      return logicServer;
-   }
-
-   public static OrganizationDto organizationPut() {
-      OrganizationDto org = new OrganizationDto();
-      org.setName("org");
-      org.setDn("org-root/org-Finance");
-      org.setLevel("1");
-
-      return org;
    }
 
    public static TierDto tierPut() {
@@ -266,20 +211,6 @@ public class InfrastructureResources {
       buffer.append("<vlanIdMin>6</vlanIdMin>");
       buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
       buffer.append("</rack>");
-      return buffer.toString();
-   }
-
-   public static String managedRackPostPayload() {
-      StringBuilder buffer = new StringBuilder();
-      buffer.append("<ucsrack>");
-      buffer.append("<haEnabled>false</haEnabled>");
-      buffer.append("<name>Aloha</name>");
-      buffer.append("<nrsq>80</nrsq>");
-      buffer.append("<shortDescription>A hawaian rack</shortDescription>");
-      buffer.append("<vlanIdMax>3024</vlanIdMax>");
-      buffer.append("<vlanIdMin>6</vlanIdMin>");
-      buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
-      buffer.append("</ucsrack>");
       return buffer.toString();
    }
 
@@ -399,33 +330,6 @@ public class InfrastructureResources {
       buffer.append("<vlanIdMin>6</vlanIdMin>");
       buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
       buffer.append("</rack>");
-      return buffer.toString();
-   }
-
-   public static String managedRackPutPayload() {
-      StringBuilder buffer = new StringBuilder();
-      buffer.append("<ucsrack>");
-      buffer.append(link("/admin/datacenters/1", "datacenter"));
-      buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
-      buffer.append(link("/admin/datacenters/1/racks/1/fsm", "fsm"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
-      buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
-      buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associate", "ls-associate"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers/assocclone", "ls-associateclone"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associatetemplate", "ls-associatetemplate"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers/clone", "ls-clone"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers/delete", "ls-delete"));
-      buffer.append(link("/admin/datacenters/1/racks/1/logicservers/dissociate", "ls-dissociate"));
-      buffer.append("<haEnabled>false</haEnabled>");
-      buffer.append("<id>1</id>");
-      buffer.append("<name>Aloha</name>");
-      buffer.append("<nrsq>80</nrsq>");
-      buffer.append("<shortDescription>A hawaian rack</shortDescription>");
-      buffer.append("<vlanIdMax>3024</vlanIdMax>");
-      buffer.append("<vlanIdMin>6</vlanIdMin>");
-      buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
-      buffer.append("</ucsrack>");
       return buffer.toString();
    }
 

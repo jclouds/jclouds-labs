@@ -38,7 +38,6 @@ import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Datastore;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
-import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.NetworkInterface;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
@@ -55,17 +54,10 @@ import org.jclouds.abiquo.features.ConfigApi;
 import org.jclouds.abiquo.features.EnterpriseApi;
 import org.jclouds.abiquo.features.InfrastructureApi;
 import org.jclouds.abiquo.features.services.AdministrationService;
-import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
-import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
-import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
-import org.jclouds.abiquo.predicates.infrastructure.StorageDeviceMetadataPredicates;
-import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
-import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.jclouds.abiquo.util.Config;
 
 import com.abiquo.model.enumerator.HypervisorType;
-import com.abiquo.model.enumerator.RemoteServiceType;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 import com.google.common.io.LineProcessor;
 import com.google.common.io.Resources;
 
@@ -124,8 +116,6 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
 
    public Role anotherRole;
 
-   public ManagedRack ucsRack;
-
    public InfrastructureTestEnvironment(final AbiquoContext context) {
       super();
       this.context = context;
@@ -173,7 +163,6 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       deleteStoragePool();
       deleteStorageDevice();
       deleteMachine();
-      deleteUcsRack();
       deleteRack();
       deleteDatacenter();
       deleteEnterprise();
@@ -209,14 +198,26 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       HypervisorType type = HypervisorType.valueOf(Config.get("abiquo.hypervisor.type"));
       String user = Config.get("abiquo.hypervisor.user");
       String pass = Config.get("abiquo.hypervisor.pass");
+      final String vswitchName = Config.get("abiquo.hypervisor.vswitch");
+      final String datastoreName = Config.get("abiquo.hypervisor.datastore");
 
       machine = datacenter.discoverSingleMachine(ip, type, user, pass);
 
       NetworkServiceType nst = datacenter.defaultNetworkServiceType();
-      NetworkInterface vswitch = machine.findAvailableVirtualSwitch(Config.get("abiquo.hypervisor.vswitch"));
+      NetworkInterface vswitch = find(machine.getNetworkInterfaces(), new Predicate<NetworkInterface>() {
+         @Override
+         public boolean apply(NetworkInterface input) {
+            return input.getName().equals(vswitchName);
+         }
+      });
       vswitch.setNetworkServiceType(nst);
 
-      Datastore datastore = machine.findDatastore(Config.get("abiquo.hypervisor.datastore"));
+      Datastore datastore = find(machine.getDatastores(), new Predicate<Datastore>() {
+         @Override
+         public boolean apply(Datastore input) {
+            return input.getName().equals(datastoreName);
+         }
+      });
       datastore.setEnabled(true);
 
       machine.setRack(rack);
@@ -230,27 +231,19 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       assertNotNull(rack.getId());
    }
 
-   public void createUcsRack() {
-      String ip = Config.get("abiquo.ucs.address");
-      Integer port = Integer.parseInt(Config.get("abiquo.ucs.port"));
-      String user = Config.get("abiquo.ucs.user");
-      String pass = Config.get("abiquo.ucs.pass");
-
-      ucsRack = ManagedRack.builder(context.getApiContext(), datacenter).ipAddress(ip).port(port).user(user)
-            .name("ucs rack").password(pass).build();
-
-      ucsRack.save();
-      assertNotNull(ucsRack.getId());
-   }
-
    protected void createStorageDevice() {
       String ip = Config.get("abiquo.storage.address");
-      String type = Config.get("abiquo.storage.type");
+      final String type = Config.get("abiquo.storage.type");
       String user = Config.get("abiquo.storage.user");
       String pass = Config.get("abiquo.storage.pass");
 
       List<StorageDeviceMetadata> devices = datacenter.listSupportedStorageDevices();
-      StorageDeviceMetadata metadata = Iterables.find(devices, StorageDeviceMetadataPredicates.type(type));
+      StorageDeviceMetadata metadata = find(devices, new Predicate<StorageDeviceMetadata>() {
+         @Override
+         public boolean apply(StorageDeviceMetadata input) {
+            return input.getType().equals(type);
+         }
+      });
 
       storageDevice = StorageDevice.builder(context.getApiContext(), datacenter) //
             .name(PREFIX + "Storage Device")//
@@ -266,10 +259,20 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
    }
 
    protected void createStoragePool() {
-      String pool = Config.get("abiquo.storage.pool");
+      final String pool = Config.get("abiquo.storage.pool");
 
-      storagePool = storageDevice.findRemoteStoragePool(StoragePoolPredicates.name(pool));
-      tier = datacenter.findTier(TierPredicates.name("Default Tier 1"));
+      storagePool = find(storageDevice.listRemoteStoragePools(), new Predicate<StoragePool>() {
+         @Override
+         public boolean apply(StoragePool input) {
+            return input.getName().equals(pool);
+         }
+      });
+      tier = find(datacenter.listTiers(), new Predicate<Tier>() {
+         @Override
+         public boolean apply(Tier input) {
+            return input.getName().equals("Default Tier 1");
+         }
+      });
 
       storagePool.setTier(tier);
       storagePool.save();
@@ -278,8 +281,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
    }
 
    protected void createUsers() {
-      Role userRole = administrationService.findRole(RolePredicates.name("USER"));
-      Role enterpriseAdminRole = administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
+      Iterable<Role> roles = administrationService.listRoles();
+      Role userRole = find(roles, role("USER"));
+      Role enterpriseAdminRole = find(roles, role("ENTERPRISE_ADMIN"));
 
       user = User.builder(context.getApiContext(), enterprise, userRole).name(randomName(), randomName())
             .nick("jclouds").authType("ABIQUO").description(randomName()).email(randomName() + "@abiquo.com")
@@ -370,14 +374,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
          String nick = user.getNick();
          user.delete();
          // Nick is unique in an enterprise
-         assertNull(enterprise.findUser(UserPredicates.nick(nick)));
+         assertNull(find(enterprise.listUsers(), nick(nick), null));
       }
 
       if (enterpriseAdmin != null) {
          String nick = enterpriseAdmin.getNick();
          enterpriseAdmin.delete();
          // Nick is unique in an enterprise
-         assertNull(enterprise.findUser(UserPredicates.nick(nick)));
+         assertNull(find(enterprise.listUsers(), nick(nick), null));
       }
    }
 
@@ -419,14 +423,6 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
          Integer idRack = rack.getId();
          rack.delete();
          assertNull(infrastructureApi.getRack(datacenter.unwrap(), idRack));
-      }
-   }
-
-   protected void deleteUcsRack() {
-      if (ucsRack != null && datacenter != null) {
-         Integer idRack = ucsRack.getId();
-         ucsRack.delete();
-         assertNull(infrastructureApi.getManagedRack(datacenter.unwrap(), idRack));
       }
    }
 
@@ -479,7 +475,21 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       });
    }
 
-   public RemoteService findRemoteService(final RemoteServiceType type) {
-      return find(remoteServices, RemoteServicePredicates.type(type));
+   private static Predicate<Role> role(final String role) {
+      return new Predicate<Role>() {
+         @Override
+         public boolean apply(Role input) {
+            return input.getName().equals(role);
+         }
+      };
+   }
+
+   private static Predicate<User> nick(final String nick) {
+      return new Predicate<User>() {
+         @Override
+         public boolean apply(User input) {
+            return input.getNick().equals(nick);
+         }
+      };
    }
 }

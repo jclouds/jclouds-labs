@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -29,11 +30,10 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
-import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link Volume} domain class.
@@ -44,7 +44,12 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 public class VolumeLiveApiTest extends BaseAbiquoApiLiveApiTest {
    public void testCreateVolume() {
       // We need the vdc-relative tier
-      Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name(env.tier.getName()));
+      Tier tier = find(env.virtualDatacenter.listStorageTiers(), new Predicate<Tier>() {
+         @Override
+         public boolean apply(Tier input) {
+            return input.getName().equals(env.tier.getName());
+         }
+      });
 
       Volume volume = Volume.builder(env.context.getApiContext(), env.virtualDatacenter, tier)
             .name(PREFIX + "Hawaian volume").sizeInMb(32).build();
@@ -71,8 +76,7 @@ public class VolumeLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    @Test(dependsOnMethods = "testFilterVolumes")
    public void testUpdateVolume() {
-      Volume volume = env.virtualDatacenter.findVolume(VolumePredicates.name(PREFIX + "Hawaian volume"));
-      assertNotNull(volume);
+      Volume volume = find(env.virtualDatacenter.listVolumes(), volumeName(PREFIX + "Hawaian volume"));
 
       volume.setName("Hawaian volume updated");
       AsyncTask task = volume.update();
@@ -94,9 +98,7 @@ public class VolumeLiveApiTest extends BaseAbiquoApiLiveApiTest {
       newVdc.save();
       assertNotNull(newVdc.getId());
 
-      Volume volume = env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume updated"));
-      assertNotNull(volume);
-
+      Volume volume = find(env.virtualDatacenter.listVolumes(), volumeName("Hawaian volume updated"));
       volume.moveTo(newVdc);
 
       // Check that the underlying Dto has been updated to the new VDC
@@ -115,13 +117,21 @@ public class VolumeLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    @Test(dependsOnMethods = "testMoveVolume")
    public void testDeleteVolume() {
-      Volume volume = env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume updated"));
-      assertNotNull(volume);
+      Volume volume = find(env.virtualDatacenter.listVolumes(), volumeName("Hawaian volume updated"));
 
       Integer id = volume.getId();
       volume.delete();
 
       assertNull(env.virtualDatacenter.getVolume(id));
+   }
+
+   private static Predicate<Volume> volumeName(final String name) {
+      return new Predicate<Volume>() {
+         @Override
+         public boolean apply(Volume input) {
+            return input.getName().equals(name);
+         }
+      };
    }
 
 }

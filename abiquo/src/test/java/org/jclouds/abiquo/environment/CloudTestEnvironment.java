@@ -17,6 +17,7 @@
 package org.jclouds.abiquo.environment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -33,14 +34,12 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudApi;
 import org.jclouds.abiquo.features.services.EventService;
-import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
-import org.jclouds.abiquo.predicates.network.NetworkPredicates;
 import org.testng.collections.Lists;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 
@@ -127,7 +126,12 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment {
    }
 
    protected void findDefaultEnterprise() {
-      defaultEnterprise = context.getAdministrationService().findEnterprise(EnterprisePredicates.name("Abiquo"));
+      defaultEnterprise = find(context.getAdministrationService().listEnterprises(), new Predicate<Enterprise>() {
+         @Override
+         public boolean apply(Enterprise input) {
+            return input.getName().equals("Abiquo");
+         }
+      });
    }
 
    protected void createVirtualDatacenter() {
@@ -142,8 +146,12 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment {
       virtualDatacenter.save();
       assertNotNull(virtualDatacenter.getId());
 
-      privateNetwork = virtualDatacenter
-            .findPrivateNetwork(NetworkPredicates.<PrivateIp> name(privateNetwork.getName()));
+      privateNetwork = find(virtualDatacenter.listPrivateNetworks(), new Predicate<PrivateNetwork>() {
+         @Override
+         public boolean apply(PrivateNetwork input) {
+            return input.getName().equals(privateNetwork.getName());
+         }
+      });
    }
 
    protected void createVirtualAppliance() {

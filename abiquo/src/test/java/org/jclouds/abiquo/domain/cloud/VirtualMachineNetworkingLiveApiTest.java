@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -36,11 +37,11 @@ import org.jclouds.abiquo.domain.network.UnmanagedIp;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 /**
@@ -73,9 +74,12 @@ public class VirtualMachineNetworkingLiveApiTest extends BaseAbiquoApiLiveApiTes
       publicIpInfrastructure = env.virtualDatacenter.listAvailablePublicIps().get(0);
       env.virtualDatacenter.purchasePublicIp(publicIpInfrastructure);
 
-      publicIpCloud = env.virtualDatacenter.findPurchasedPublicIp(IpPredicates
-            .<PublicIp> address(publicIpInfrastructure.getIp()));
-      assertNotNull(publicIpCloud);
+      publicIpCloud = find(env.virtualDatacenter.listPurchasedPublicIps(), new Predicate<PublicIp>() {
+         @Override
+         public boolean apply(PublicIp input) {
+            return input.getIp().equals(publicIpInfrastructure.getIp());
+         }
+      });
    }
 
    @AfterClass
@@ -87,9 +91,15 @@ public class VirtualMachineNetworkingLiveApiTest extends BaseAbiquoApiLiveApiTes
       assertEquals(nics.size(), 1);
       assertEquals(nics.get(0).getId(), privateIp.getId());
 
-      String address = publicIpCloud.getIp();
+      final String address = publicIpCloud.getIp();
       env.virtualDatacenter.releasePublicIp(publicIpCloud);
-      assertNull(env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.<PublicIp> address(address)));
+
+      assertNull(find(env.virtualDatacenter.listPurchasedPublicIps(), new Predicate<PublicIp>() {
+         @Override
+         public boolean apply(PublicIp input) {
+            return input.getIp().equals(address);
+         }
+      }, null));
    }
 
    // TODO: Infrastructure edit link for public ips can not be used to attach

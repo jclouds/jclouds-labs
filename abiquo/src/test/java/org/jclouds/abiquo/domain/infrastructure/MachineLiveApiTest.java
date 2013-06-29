@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -32,7 +33,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
 
@@ -40,6 +40,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link Machine} domain class.
@@ -50,8 +51,12 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 public class MachineLiveApiTest extends BaseAbiquoApiLiveApiTest {
    public void testDiscoverMachineWithouRemoteService() {
       // Delete node collector
-      RemoteService nc = env.datacenter.findRemoteService(RemoteServicePredicates
-            .type(RemoteServiceType.NODE_COLLECTOR));
+      RemoteService nc = find(env.datacenter.listRemoteServices(), new Predicate<RemoteService>() {
+         @Override
+         public boolean apply(RemoteService input) {
+            return input.getType().equals(RemoteServiceType.NODE_COLLECTOR);
+         }
+      });
       nc.delete();
 
       try {
@@ -101,18 +106,6 @@ public class MachineLiveApiTest extends BaseAbiquoApiLiveApiTest {
       // Recover the same machine and compare states
       MachineDto machine = env.infrastructureApi.getMachine(env.rack.unwrap(), env.machine.getId());
       assertEquals(machine.getState(), state);
-   }
-
-   public void testFindDatastore() {
-      Datastore datastore = env.machine.getDatastores().get(0);
-      Datastore found = env.machine.findDatastore(datastore.getName());
-      assertEquals(found.getName(), datastore.getName());
-   }
-
-   public void testFindAvailableVirtualSwitch() {
-      String vswitch = Config.get("abiquo.hypervisor.vswitch");
-      NetworkInterface found = env.machine.findAvailableVirtualSwitch(vswitch);
-      assertEquals(found.getName(), vswitch);
    }
 
    public void testGetRack() {

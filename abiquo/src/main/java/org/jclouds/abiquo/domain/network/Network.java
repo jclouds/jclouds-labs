@@ -25,16 +25,14 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
+import org.jclouds.abiquo.predicates.IpPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Adds generic high level functionality to {@link VLANNetworkDto}.
@@ -67,20 +65,8 @@ public abstract class Network<T extends Ip<?, ?>> extends DomainWrapper<VLANNetw
       return listIps(IpOptions.builder().disablePagination().build());
    }
 
-   public List<T> listIps(final Predicate<T> filter) {
-      return ImmutableList.copyOf(filter(listIps(), filter));
-   }
-
-   public T findIp(final Predicate<T> filter) {
-      return Iterables.getFirst(filter(listIps(), filter), null);
-   }
-
    public List<T> listUnusedIps() {
-      return listIps(IpPredicates.<T> notUsed());
-   }
-
-   public T findUnusedIp(final Predicate<T> filter) {
-      return Iterables.getFirst(filter(listUnusedIps(), filter), null);
+      return ImmutableList.copyOf(filter(listIps(), IpPredicates.<T> notUsed()));
    }
 
    // Builder

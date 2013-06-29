@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
@@ -25,15 +24,11 @@ import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
-
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Adds high level functionality to {@link RoleDto}.
@@ -135,14 +130,6 @@ public class Role extends DomainWrapper<RoleDto> {
       PrivilegesDto dto = context.getApi().getAdminApi().listPrivileges(target);
 
       return wrap(context, Privilege.class, dto.getCollection());
-   }
-
-   public List<Privilege> listPrivileges(final Predicate<Privilege> filter) {
-      return ImmutableList.copyOf(filter(listPrivileges(), filter));
-   }
-
-   public Privilege findPrivileges(final Predicate<Privilege> filter) {
-      return Iterables.getFirst(filter(listPrivileges(), filter), null);
    }
 
    // Builder

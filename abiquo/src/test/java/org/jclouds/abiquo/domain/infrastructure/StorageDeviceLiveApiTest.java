@@ -16,16 +16,15 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
-import org.jclouds.abiquo.predicates.infrastructure.StorageDevicePredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link StorageDevice} domain class.
@@ -49,24 +48,22 @@ public class StorageDeviceLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testListStorageDevices() {
       Iterable<StorageDevice> storageDevices = env.datacenter.listStorageDevices();
-      assertEquals(Iterables.size(storageDevices), 1);
+      assertEquals(size(storageDevices), 1);
 
-      storageDevices = env.datacenter.listStorageDevices(StorageDevicePredicates.name(env.storageDevice.getName()));
-      assertEquals(Iterables.size(storageDevices), 1);
+      storageDevices = filter(env.datacenter.listStorageDevices(), name(env.storageDevice.getName()));
+      assertEquals(size(storageDevices), 1);
 
-      storageDevices = env.datacenter.listStorageDevices(StorageDevicePredicates.name(env.storageDevice.getName()
-            + "FAIL"));
-      assertEquals(Iterables.size(storageDevices), 0);
+      storageDevices = filter(env.datacenter.listStorageDevices(), name(env.storageDevice.getName() + "FAIL"));
+      assertEquals(size(storageDevices), 0);
    }
 
-   public void testFindStorageDevice() {
-      StorageDevice storageDevice = env.datacenter.findStorageDevice(StorageDevicePredicates.name(env.storageDevice
-            .getName()));
-      assertNotNull(storageDevice);
-
-      storageDevice = env.datacenter.findStorageDevice(StorageDevicePredicates.name(env.storageDevice.getName()
-            + "FAIL"));
-      assertNull(storageDevice);
+   private static Predicate<StorageDevice> name(final String name) {
+      return new Predicate<StorageDevice>() {
+         @Override
+         public boolean apply(StorageDevice input) {
+            return input.getName().equals(name);
+         }
+      };
    }
 
 }

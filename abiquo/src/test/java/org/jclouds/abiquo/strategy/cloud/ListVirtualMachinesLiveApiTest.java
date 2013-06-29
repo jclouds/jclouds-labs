@@ -17,14 +17,12 @@
 package org.jclouds.abiquo.strategy.cloud;
 
 import static com.google.common.collect.Iterables.size;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveApiTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -50,19 +48,6 @@ public class ListVirtualMachinesLiveApiTest extends BaseAbiquoStrategyLiveApiTes
       Iterable<VirtualMachine> vms = strategy.execute();
       assertNotNull(vms);
       assertTrue(size(vms) > 0);
-   }
-
-   public void testExecutePredicateWithoutResults() {
-      Iterable<VirtualMachine> vms = strategy.execute(VirtualMachinePredicates.internalName("UNEXISTING"));
-      assertNotNull(vms);
-      assertEquals(size(vms), 0);
-   }
-
-   public void testExecutePredicateWithResults() {
-      Iterable<VirtualMachine> vms = strategy.execute(VirtualMachinePredicates.internalName(env.virtualMachine
-            .getInternalName()));
-      assertNotNull(vms);
-      assertEquals(size(vms), 1);
    }
 
    public void testExecuteWhenExceedsPagination() {

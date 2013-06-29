@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -285,40 +284,16 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
       return wrap(context, HardDisk.class, hardDisks.getCollection());
    }
 
-   public List<HardDisk> listAttachedHardDisks(final Predicate<HardDisk> filter) {
-      return ImmutableList.copyOf(filter(listAttachedHardDisks(), filter));
-   }
-
-   public HardDisk findAttachedHardDisk(final Predicate<HardDisk> filter) {
-      return Iterables.getFirst(filter(listAttachedHardDisks(), filter), null);
-   }
-
    public List<Volume> listAttachedVolumes() {
       refresh();
       VolumesManagementDto volumes = context.getApi().getCloudApi().listAttachedVolumes(target);
       return wrap(context, Volume.class, volumes.getCollection());
    }
 
-   public List<Volume> listAttachedVolumes(final Predicate<Volume> filter) {
-      return ImmutableList.copyOf(filter(listAttachedVolumes(), filter));
-   }
-
-   public Volume findAttachedVolume(final Predicate<Volume> filter) {
-      return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
-   }
-
    public List<Ip<?, ?>> listAttachedNics() {
       // The strategy will refresh the vm. There is no need to do it here
       ListAttachedNics strategy = context.utils().injector().getInstance(ListAttachedNics.class);
       return ImmutableList.copyOf(strategy.execute(this));
-   }
-
-   public List<Ip<?, ?>> listAttachedNics(final Predicate<Ip<?, ?>> filter) {
-      return ImmutableList.copyOf(filter(listAttachedNics(), filter));
-   }
-
-   public Ip<?, ?> findAttachedNic(final Predicate<Ip<?, ?>> filter) {
-      return Iterables.getFirst(filter(listAttachedNics(), filter), null);
    }
 
    // Actions

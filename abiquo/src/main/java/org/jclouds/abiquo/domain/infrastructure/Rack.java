@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
@@ -30,9 +29,6 @@ import org.jclouds.rest.ApiContext;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Adds high level functionality to {@link RackDto}. Represents unmanaged racks
@@ -134,35 +130,6 @@ public class Rack extends DomainWrapper<RackDto> {
    public List<Machine> listMachines() {
       MachinesDto machines = context.getApi().getInfrastructureApi().listMachines(target);
       return wrap(context, Machine.class, machines.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of physical machines in this rack.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
-    *      > http://community.abiquo.com/display/ABI20/MachineResource#
-    *      MachineResource- RetrievealistofMachines</a>
-    */
-   public List<Machine> listMachines(final Predicate<Machine> filter) {
-      return ImmutableList.copyOf(filter(listMachines(), filter));
-   }
-
-   /**
-    * Retrieve the first physical machine matching the filter within the list of
-    * machines in this rack.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
-    *      > http://community.abiquo.com/display/ABI20/MachineResource#
-    *      MachineResource- RetrievealistofMachines</a>
-    */
-   public Machine findMachine(final Predicate<Machine> filter) {
-      return Iterables.getFirst(filter(listMachines(), filter), null);
    }
 
    /**

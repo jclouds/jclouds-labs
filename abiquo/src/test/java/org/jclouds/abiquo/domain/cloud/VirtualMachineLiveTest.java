@@ -16,6 +16,7 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.getLast;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
@@ -34,13 +35,12 @@ import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.internal.BaseAbiquoLiveApiTest;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachinePredicates;
-import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
@@ -99,8 +99,12 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
       AsyncTask task = vm.update();
       assertNull(task);
 
-      VirtualMachine updated = vapp.findVirtualMachine(VirtualMachinePredicates.nameLabel(PREFIX + "VM Kane Updated"));
-      assertNotNull(updated);
+      find(vapp.listVirtualMachines(), new Predicate<VirtualMachine>() {
+         @Override
+         public boolean apply(VirtualMachine input) {
+            return input.getNameLabel().equals(PREFIX + "VM Kane Updated");
+         }
+      });
    }
 
    @Test(dependsOnMethods = "testUpdateVirtualMachineWhenNotDeployed")
@@ -123,13 +127,19 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
 
    @Test(dependsOnMethods = "testChangeVirtualMachineState")
    public void testReconfigure() {
-      Ip<?, ?> ip = getLast(vdc.getDefaultNetwork().listUnusedIps());
+      final Ip<?, ?> ip = getLast(vdc.getDefaultNetwork().listUnusedIps());
 
       AsyncTask task = vm.setNics(Lists.<Ip<?, ?>> newArrayList(ip));
       assertNotNull(task);
 
       monitoringService.getVirtualMachineMonitor().awaitState(MAX_WAIT, TimeUnit.MINUTES, VirtualMachineState.OFF, vm);
-      assertNotNull(vm.findAttachedNic(IpPredicates.address(ip.getIp())));
+
+      find(vm.listAttachedNics(), new Predicate<Ip<?, ?>>() {
+         @Override
+         public boolean apply(Ip<?, ?> input) {
+            return input.getIp().equals(ip.getIp());
+         }
+      });
    }
 
    @Test(dependsOnMethods = "testReconfigure")

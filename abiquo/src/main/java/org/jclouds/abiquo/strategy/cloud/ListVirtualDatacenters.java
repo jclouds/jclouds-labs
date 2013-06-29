@@ -73,11 +73,6 @@ public class ListVirtualDatacenters implements ListRootEntities<VirtualDatacente
       return execute(userExecutor);
    }
 
-   @Override
-   public Iterable<VirtualDatacenter> execute(final Predicate<VirtualDatacenter> selector) {
-      return execute(userExecutor, selector);
-   }
-
    public Iterable<VirtualDatacenter> execute(final VirtualDatacenterOptions virtualDatacenterOptions) {
       VirtualDatacentersDto result = context.getApi().getCloudApi().listVirtualDatacenters(virtualDatacenterOptions);
       return wrap(context, VirtualDatacenter.class, result.getCollection());

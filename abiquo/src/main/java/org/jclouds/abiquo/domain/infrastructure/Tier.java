@@ -16,22 +16,16 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
-import static com.google.common.collect.Iterables.filter;
-
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Adds high level functionality to {@link TierDto}. The Tier Resource offers
@@ -82,38 +76,6 @@ public class Tier extends DomainWrapper<TierDto> {
    public List<StoragePool> listStoragePools() {
       StoragePoolsDto storagePools = context.getApi().getInfrastructureApi().listStoragePools(target);
       return wrap(context, StoragePool.class, storagePools.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of storage pools in this tier.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
-    *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#
-    *      StoragePoolResource- Retrievestoragepools</a>
-    * @return Filtered list of storage pools in this tier.
-    */
-   public List<StoragePool> listStoragePools(final Predicate<StoragePool> filter) {
-      return ImmutableList.copyOf(filter(listStoragePools(), filter));
-   }
-
-   /**
-    * Retrieve the first storage pool matching the filter within the list of
-    * pools in this tier.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
-    *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#
-    *      StoragePoolResource- Retrievestoragepools</a>
-    * @return First storage pool matching the filter or <code>null</code> if
-    *         there is none.
-    */
-   public StoragePool findStoragePool(final Predicate<StoragePool> filter) {
-      return Iterables.getFirst(filter(listStoragePools(), filter), null);
    }
 
    // Parent access

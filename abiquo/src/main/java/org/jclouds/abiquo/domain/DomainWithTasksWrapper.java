@@ -16,8 +16,6 @@
  */
 package org.jclouds.abiquo.domain;
 
-import static com.google.common.collect.Iterables.filter;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -28,9 +26,6 @@ import org.jclouds.rest.ApiContext;
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
 import com.abiquo.server.core.task.TasksDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 
@@ -59,13 +54,5 @@ public abstract class DomainWithTasksWrapper<T extends SingleResourceTransportDt
       }.reverse());
 
       return tasks;
-   }
-
-   public List<AsyncTask> listTasks(final Predicate<AsyncTask> filter) {
-      return ImmutableList.copyOf(filter(listTasks(), filter));
-   }
-
-   public AsyncTask findTask(final Predicate<AsyncTask> filter) {
-      return Iterables.getFirst(filter(listTasks(), filter), null);
    }
 }

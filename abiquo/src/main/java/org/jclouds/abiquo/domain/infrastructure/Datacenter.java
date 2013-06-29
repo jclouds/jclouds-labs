@@ -16,9 +16,7 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
-import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
-import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Iterables.transform;
 
 import java.util.List;
@@ -35,7 +33,7 @@ import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.NetworkServiceType;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
-import org.jclouds.abiquo.predicates.network.NetworkServiceTypePredicates;
+import org.jclouds.abiquo.predicates.NetworkServiceTypePredicates;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -57,8 +55,6 @@ import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
-import com.abiquo.server.core.infrastructure.UcsRackDto;
-import com.abiquo.server.core.infrastructure.UcsRacksDto;
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypesDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
@@ -69,7 +65,6 @@ import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -183,38 +178,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    }
 
    /**
-    * Retrieve a filtered list of unmanaged racks in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
-    *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource
-    *      - RetrievealistofRacks</a>
-    * @return Filtered list of unmanaged racks in this datacenter.
-    */
-   public List<Rack> listRacks(final Predicate<Rack> filter) {
-      return ImmutableList.copyOf(filter(listRacks(), filter));
-   }
-
-   /**
-    * Retrieve the first unmanaged rack matching the filter within the list of
-    * racks in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
-    *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource
-    *      - RetrievealistofRacks</a>
-    * @return First unmanaged rack matching the filter or <code>null</code> if
-    *         the is none.
-    */
-   public Rack findRack(final Predicate<Rack> filter) {
-      return getFirst(filter(listRacks(), filter), null);
-   }
-
-   /**
     * Retrieve a single unmanaged rack.
     * 
     * @param id
@@ -233,70 +196,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    }
 
    /**
-    * Retrieve the list of managed racks in this datacenter.
-    * 
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
-    *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource
-    *      - RetrievealistofUCSracks</a>
-    * @return List of managed racks in this datacenter.
-    */
-   public List<ManagedRack> listManagedRacks() {
-      UcsRacksDto racks = context.getApi().getInfrastructureApi().listManagedRacks(target);
-      return wrap(context, ManagedRack.class, racks.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of managed racks in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
-    *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource
-    *      - RetrievealistofUCSracks</a>
-    * @return Filtered list of managed racks in this datacenter.
-    */
-   public List<ManagedRack> listManagedRacks(final Predicate<ManagedRack> filter) {
-      return ImmutableList.copyOf(filter(listManagedRacks(), filter));
-   }
-
-   /**
-    * Retrieve the first managed rack matching the filter within the list of
-    * racks in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
-    *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource
-    *      - RetrievealistofUCSracks</a>
-    * @return First managed rack matching the filter or <code>null</code> if
-    *         there is none.
-    */
-   public ManagedRack findManagedRack(final Predicate<ManagedRack> filter) {
-      return getFirst(filter(listManagedRacks(), filter), null);
-   }
-
-   /**
-    * Retrieve a single managed rack.
-    * 
-    * @param id
-    *           Unique ID of the rack in this datacenter.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack"
-    *      >
-    *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-
-    *      RetrieveaUCSRack</a>
-    * @return Unmanaged rack with the given id or <code>null</code> if it does
-    *         not exist.
-    */
-   public ManagedRack getManagedRack(final Integer id) {
-      UcsRackDto rack = context.getApi().getInfrastructureApi().getManagedRack(target, id);
-      return wrap(context, ManagedRack.class, rack);
-   }
-
-   /**
     * Retrieve the list of supported storage devices.
     * <p>
     * This method will get the list of the storage devices that are supported in
@@ -312,34 +211,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    }
 
    /**
-    * Retrieve the list of supported storage devices matching the filter.
-    * <p>
-    * This method will get the list of the storage devices that are supported in
-    * the datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @return List of supported storage devices. This list has only the default
-    *         information for the storage devices, such as the management and
-    *         iscsi ports, or the default credentials to access the device.
-    */
-   public List<StorageDeviceMetadata> listSupportedStorageDevices(final Predicate<StorageDeviceMetadata> filter) {
-      return ImmutableList.copyOf(filter(listSupportedStorageDevices(), filter));
-   }
-
-   /**
-    * Retrieve a single supported storage devices matching the filter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @return First supported storage device matching the filter or
-    *         <code>null</code> if there is none.
-    */
-   public StorageDeviceMetadata findSupportedStorageDevice(final Predicate<StorageDeviceMetadata> filter) {
-      return getFirst(filter(listSupportedStorageDevices(), filter), null);
-   }
-
-   /**
     * Retrieve the list of storage devices in this datacenter.
     * 
     * @see API: <a href=
@@ -351,38 +222,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    public List<StorageDevice> listStorageDevices() {
       StorageDevicesDto devices = context.getApi().getInfrastructureApi().listStorageDevices(target);
       return wrap(context, StorageDevice.class, devices.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of storage devices in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
-    *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#
-    *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
-    * @return Filtered list of storage devices in this datacenter.
-    */
-   public List<StorageDevice> listStorageDevices(final Predicate<StorageDevice> filter) {
-      return ImmutableList.copyOf(filter(listStorageDevices(), filter));
-   }
-
-   /**
-    * Retrieve the first storage device matching the filter within the list of
-    * devices in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
-    *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#
-    *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
-    * @return First storage device matching the filter or <code>null</code> if
-    *         there is none.
-    */
-   public StorageDevice findStorageDevice(final Predicate<StorageDevice> filter) {
-      return getFirst(filter(listStorageDevices(), filter), null);
    }
 
    /**
@@ -412,30 +251,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    public List<NetworkServiceType> listNetworkServiceTypes() {
       NetworkServiceTypesDto dtos = context.getApi().getInfrastructureApi().listNetworkServiceTypes(target);
       return wrap(context, NetworkServiceType.class, dtos.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of network service types in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @return Filtered list of storage devices in this datacenter.
-    */
-   public List<NetworkServiceType> listNetworkServiceTypes(final Predicate<NetworkServiceType> filter) {
-      return ImmutableList.copyOf(filter(listNetworkServiceTypes(), filter));
-   }
-
-   /**
-    * Retrieve the first network service type matching the filter within the
-    * list of nsts in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @return First network service type matching the filter or
-    *         <code>null</code> if there is none.
-    */
-   public NetworkServiceType findNetworkServiceType(final Predicate<NetworkServiceType> filter) {
-      return getFirst(filter(listNetworkServiceTypes(), filter), null);
    }
 
    /**
@@ -476,38 +291,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
       return wrap(context, RemoteService.class, remoteServices.getCollection());
    }
 
-   /**
-    * Retrieve a filtered list of remote services of this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-RetrievealistofRemoteServices"
-    *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#
-    *      RemoteServiceResource- RetrievealistofRemoteServices</a>
-    * @return Filtered list of remote services in this datacenter.
-    */
-   public List<RemoteService> listRemoteServices(final Predicate<RemoteService> filter) {
-      return ImmutableList.copyOf(filter(listRemoteServices(), filter));
-   }
-
-   /**
-    * Retrieve the first remote service matching the filter within the list of
-    * remote services in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-RetrievealistofRemoteServices"
-    *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#
-    *      RemoteServiceResource- RetrievealistofRemoteServices</a>
-    * @return First remote service matching the filter or <code>null</code> if
-    *         there is none.
-    */
-   public RemoteService findRemoteService(final Predicate<RemoteService> filter) {
-      return getFirst(filter(listRemoteServices(), filter), null);
-   }
-
    private void createRemoteServices() {
       createRemoteService(RemoteServiceType.BPM_SERVICE);
       createRemoteService(RemoteServiceType.DHCP_SERVICE);
@@ -539,42 +322,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    }
 
    /**
-    * Retrieve a filtered list of datacenter limits by enterprises. The
-    * Datacenter Limits resource allows you to assign datacenters and allocated
-    * resources in them to be used by an enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievelimitsbydatacenter"
-    *      > http://community.abiquo.com/display/ABI20/DatacenterResource#
-    *      DatacenterResource- Retrievelimitsbydatacenter</a>
-    * @return Filtered list of datacenter limits by all enterprises.
-    */
-   public List<Limits> listLimits(final Predicate<Limits> filter) {
-      return ImmutableList.copyOf(filter(listLimits(), filter));
-   }
-
-   /**
-    * Retrieve the first datacenter limits matching the filter within the list
-    * of datacenter limits by enterprise. The Datacenter Limits resource allows
-    * you to assign datacenters and allocated resources in them to be used by an
-    * enterprise.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievelimitsbydatacenter"
-    *      > http://community.abiquo.com/display/ABI20/DatacenterResource#
-    *      DatacenterResource- Retrievelimitsbydatacenter</a>
-    * @return First datacenter limits matching the filter or <code>null</code>
-    *         if there is none.
-    */
-   public Limits findLimits(final Predicate<Limits> filter) {
-      return getFirst(filter(listLimits(), filter), null);
-   }
-
-   /**
     * Retrieve the list of tiers in ths datacenter.
     * 
     * @see API: <a href=
@@ -587,39 +334,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    public List<Tier> listTiers() {
       TiersDto dto = context.getApi().getInfrastructureApi().listTiers(this.unwrap());
       return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of tiers in this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers"
-    *      >
-    *      http://community.abiquo.com/display/ABI20/TierResource#TierResource-
-    *      Retrievethelistoftiers </a>
-    * @return Filtered list of tiers in this datacenter.
-    */
-   public List<Tier> listTiers(final Predicate<Tier> filter) {
-      return ImmutableList.copyOf(filter(listTiers(), filter));
-   }
-
-   /**
-    * Retrieve the first tier matching the filter within the list of tiers in
-    * this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
-    *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#
-    *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
-    * @return First tier matching the filter or <code>null</code> if there is
-    *         none.
-    */
-   public Tier findTier(final Predicate<Tier> filter) {
-      return getFirst(filter(listTiers(), filter), null);
    }
 
    /**
@@ -639,38 +353,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
    }
 
    /**
-    * Retrieve a filtered list of public, external and unmanaged networks in
-    * this datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
-    *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#
-    *      PublicNetworkResource- Getthelistofpublicnetworks</a>
-    */
-   public List<Network<?>> listNetworks(final Predicate<Network<?>> filter) {
-      return ImmutableList.copyOf(filter(listNetworks(), filter));
-   }
-
-   /**
-    * Retrieve the first network matching the filter within the list of
-    * networks.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
-    *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#
-    *      PublicNetworkResource- Getthelistofpublicnetworks</a>
-    * @return Filtered list of public, external and unmanaged networks in this
-    *         datacenter.
-    */
-   public Network<?> findNetwork(final Predicate<Network<?>> filter) {
-      return getFirst(filter(listNetworks(), filter), null);
-   }
-
-   /**
     * Retrieve the list of networks of this datacenter matching the given type.
     * 
     * @param type
@@ -685,43 +367,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
       NetworkOptions options = NetworkOptions.builder().type(type).build();
       VLANNetworksDto networks = context.getApi().getInfrastructureApi().listNetworks(target, options);
       return Network.wrapNetworks(context, networks.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of networks of this datacenter matching the given
-    * type.
-    * 
-    * @param type
-    *           Network type filter.
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
-    *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#
-    *      PublicNetworkResource- Getthelistofpublicnetworks</a>
-    * @return Filtered list of networks of this datacenter matching the given
-    *         type.
-    */
-   public List<Network<?>> listNetworks(final NetworkType type, final Predicate<Network<?>> filter) {
-      return ImmutableList.copyOf(filter(listNetworks(type), filter));
-   }
-
-   /**
-    * Retrieve the first network of the given type matching the filter.
-    * 
-    * @param type
-    *           Network type filter.
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
-    *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#
-    *      PublicNetworkResource- Getthelistofpublicnetworks</a>
-    * @return First network of the given type matching the filter or
-    *         <code>null</code> if there is none.
-    */
-   public Network<?> findNetwork(final NetworkType type, final Predicate<Network<?>> filter) {
-      return getFirst(filter(listNetworks(type), filter), null);
    }
 
    /**
@@ -781,40 +426,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     */
    public List<HypervisorType> listAvailableHypervisors() {
       HypervisorTypesDto types = context.getApi().getInfrastructureApi().getHypervisorTypes(target);
-
       return getHypervisorTypes(types);
-   }
-
-   /**
-    * Retrieve a filtered list of available hypervisor types in the datacenter.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveavailablehypervisortypes"
-    *      http://community.abiquo.com/display/ABI20/DatacenterResource#
-    *      DatacenterResource- Retrieveavailablehypervisortypes</a>
-    * @return Filtered list of available hypervisor types in the datacenter.
-    */
-   public List<HypervisorType> listAvailableHypervisors(final Predicate<HypervisorType> filter) {
-      return ImmutableList.copyOf(filter(listAvailableHypervisors(), filter));
-   }
-
-   /**
-    * Retrieve the first hypervisor type matching the filter within the list of
-    * types.
-    * 
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveavailablehypervisortypes"
-    *      > http://community.abiquo.com/display/ABI20/DatacenterResource#
-    *      DatacenterResource- Retrieveavailablehypervisortypes</a>
-    * @return First hypervisor type matching the filter or <code>null</code> if
-    *         there is none.
-    */
-   public HypervisorType findHypervisor(final Predicate<HypervisorType> filter) {
-      return getFirst(filter(listAvailableHypervisors(), filter), null);
    }
 
    private List<HypervisorType> getHypervisorTypes(final HypervisorTypesDto dtos) {
@@ -1079,48 +691,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
       VirtualMachineTemplatesDto dto = context.getApi().getVirtualMachineTemplateApi()
             .listVirtualMachineTemplates(enterprise.getId(), target.getId());
       return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
-   }
-
-   /**
-    * Retrieve a filtered list of virtual machine templates in the repository of
-    * this datacenter.
-    * 
-    * @param enterprise
-    *           Owner of the templates.
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates"
-    *      > http://community.abiquo.com/display/ABI20/
-    *      VirtualMachineTemplateResource#
-    *      VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates</a>
-    * @return Filtered list of virtual machine templates in the repository of
-    *         this datacenter.
-    */
-   public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise,
-         final Predicate<VirtualMachineTemplate> filter) {
-      return ImmutableList.copyOf(filter(listTemplatesInRepository(enterprise), filter));
-   }
-
-   /**
-    * Retrieve the first virtual machine template within the list of templates
-    * of this datacenter from the given enterprise.
-    * 
-    * @param enterprise
-    *           Owner of the templates.
-    * @param filter
-    *           Filter to be applied to the list.
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates"
-    *      > http://community.abiquo.com/display/ABI20/
-    *      VirtualMachineTemplateResource#
-    *      VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates</a>
-    * @return First virtual machine template matching the filter or
-    *         <code>null</code> if there is none.
-    */
-   public VirtualMachineTemplate findTemplateInRepository(final Enterprise enterprise,
-         final Predicate<VirtualMachineTemplate> filter) {
-      return getFirst(filter(listTemplatesInRepository(enterprise), filter), null);
    }
 
    /**

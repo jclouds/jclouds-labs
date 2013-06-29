@@ -24,7 +24,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.internal.BaseCloudService;
 
-import com.google.common.base.Predicate;
 import com.google.inject.ImplementedBy;
 
 /**
@@ -53,17 +52,6 @@ public interface CloudService {
    Iterable<VirtualDatacenter> listVirtualDatacenters(final Enterprise enterprise);
 
    /**
-    * Get the list of virtual datacenters matching the given filter.
-    */
-   Iterable<VirtualDatacenter> listVirtualDatacenters(final Predicate<VirtualDatacenter> filter);
-
-   /**
-    * Get the first virtual datacenter that matches the given filter or
-    * <code>null</code> if none is found.
-    */
-   VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter);
-
-   /**
     * Get the virtual datacenter with the given id.
     */
    VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId);
@@ -80,16 +68,6 @@ public interface CloudService {
     */
    Iterable<VirtualAppliance> listVirtualAppliances();
 
-   /**
-    * Get the list of the virtual appliances matching the given filter.
-    */
-   Iterable<VirtualAppliance> listVirtualAppliances(Predicate<VirtualAppliance> filter);
-
-   /**
-    * Get the first virtual appliance that matches the given filter.
-    */
-   VirtualAppliance findVirtualAppliance(Predicate<VirtualAppliance> filter);
-
    /*********************** Virtual Machine ***********************/
 
    /**
@@ -97,13 +75,4 @@ public interface CloudService {
     */
    Iterable<VirtualMachine> listVirtualMachines();
 
-   /**
-    * Get the list of the virtual machines matching the given filter.
-    */
-   Iterable<VirtualMachine> listVirtualMachines(Predicate<VirtualMachine> filter);
-
-   /**
-    * Get the first virtual machine that matches the given filter.
-    */
-   VirtualMachine findVirtualMachine(Predicate<VirtualMachine> filter);
 }

@@ -18,13 +18,13 @@ package org.jclouds.abiquo.features.services;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
 import org.jclouds.abiquo.monitor.ConversionMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
+import org.jclouds.abiquo.monitor.handlers.AbstractEventHandler;
 
 import com.google.common.base.Function;
 import com.google.inject.ImplementedBy;

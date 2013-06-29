@@ -39,15 +39,12 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendMachineIdToPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
-import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
-import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
-import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
@@ -68,24 +65,16 @@ import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
-import com.abiquo.server.core.infrastructure.FsmsDto;
-import com.abiquo.server.core.infrastructure.LogicServerDto;
-import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
-import com.abiquo.server.core.infrastructure.OrganizationDto;
-import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
-import com.abiquo.server.core.infrastructure.UcsRackDto;
-import com.abiquo.server.core.infrastructure.UcsRacksDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
@@ -538,280 +527,6 @@ public interface InfrastructureApi extends Closeable {
    @DELETE
    void deleteRack(@EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
-   /*********************** Managed Rack **********************/
-
-   /**
-    * List all managed racks for a datacenter.
-    * 
-    * @param datacenter
-    *           The datacenter.
-    * @return The list of managed racks for the datacenter.
-    */
-   @Named("ucs:listracks")
-   @GET
-   @Consumes(UcsRacksDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   UcsRacksDto listManagedRacks(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
-
-   /**
-    * Create a new managed rack in a datacenter.
-    * 
-    * @param datacenter
-    *           The datacenter.
-    * @param rack
-    *           The managed rack to be created.
-    * @return The created rack.
-    */
-   @Named("ucs:createrack")
-   @POST
-   @Produces(UcsRackDto.BASE_MEDIA_TYPE)
-   @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   UcsRackDto createManagedRack(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-         @BinderParam(BindToXMLPayload.class) UcsRackDto rack);
-
-   /**
-    * Get the given managed rack from the given datacenter.
-    * 
-    * @param datacenter
-    *           The datacenter.
-    * @param rackId
-    *           The id of the rack.
-    * @return The rack or <code>null</code> if it does not exist.
-    */
-   @Named("ucs:getrack")
-   @GET
-   @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
-   UcsRackDto getManagedRack(@EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-         @BinderParam(AppendToPath.class) Integer rackId);
-
-   /**
-    * Updates an existing managed rack from the given datacenter.
-    * 
-    * @param rack
-    *           The new attributes for the rack.
-    * @return The updated rack.
-    */
-   @Named("ucs:updaterack")
-   @PUT
-   @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
-   @Produces(UcsRackDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   UcsRackDto updateManagedRack(@EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UcsRackDto rack);
-
-   /**
-    * List all service profiles of the ucs rack.
-    * 
-    * @param rack
-    *           The ucs rack.
-    * @return The list of service profiles for the rack.
-    */
-   @Named("ucs:listserviceprofiles")
-   @GET
-   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   LogicServersDto listServiceProfiles(@EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
-
-   /**
-    * List service profiles of the ucs rack with filtering options.
-    * 
-    * @param rack
-    *           The ucs rack.
-    * @param options
-    *           Optional query params.
-    * @return The list of service profiles for the rack.
-    */
-   @Named("ucs:listserviceprofiles")
-   @GET
-   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   LogicServersDto listServiceProfiles(@EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack,
-         FilterOptions options);
-
-   /**
-    * List all service profile templates of the ucs rack.
-    * 
-    * @param rack
-    *           The ucs rack.
-    * @return The list of service profile templates for the rack.
-    */
-   @Named("ucs:listserviceprofiletemplates")
-   @GET
-   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   LogicServersDto listServiceProfileTemplates(
-         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack);
-
-   /**
-    * List all service profile templates of the ucs rack with options.
-    * 
-    * @param rack
-    *           The ucs rack.
-    * @param options
-    *           Optional query params.
-    * @return The list of service profile templates for the rack.
-    */
-   @Named("ucs:listserviceproviletemplates")
-   @GET
-   @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   LogicServersDto listServiceProfileTemplates(
-         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack, FilterOptions options);
-
-   /**
-    * List all organizations of the ucs rack.
-    * 
-    * @param rack
-    *           The ucs rack.
-    * @return The list of organizations for the rack.
-    */
-   @Named("ucs:listorganizations")
-   @GET
-   @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   OrganizationsDto listOrganizations(@EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack);
-
-   /**
-    * List all organizations of the ucs rack with options.
-    * 
-    * @param rack
-    *           The ucs rack.
-    * @param options
-    *           Optional query params.
-    * @return The list of organizations for the rack.
-    */
-   @Named("ucs:listorganizations")
-   @GET
-   @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   OrganizationsDto listOrganizations(@EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
-         FilterOptions options);
-
-   /**
-    * Clone a service profile.
-    * 
-    * @param rack
-    *           The managed rack where the service profile will be created.
-    * @param logicServer
-    *           The original logic server.
-    * @param organization
-    *           The organization to be associated.
-    * @param newName
-    *           The name of the new service profile.
-    */
-   @Named("ucs:clonelogicserver")
-   @POST
-   void cloneLogicServer(@EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
-         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
-         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
-         @QueryParam("newName") String newName);
-
-   /**
-    * Delete a service profile.
-    * 
-    * @param rack
-    *           The managed rack where the service profile will be created.
-    * @param logicServer
-    *           The original logic server.
-    */
-   @Named("ucs:deletelogicserver")
-   @POST
-   void deleteLogicServer(@EndpointLink("ls-delete") @BinderParam(BindToPath.class) UcsRackDto rack,
-         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
-
-   /**
-    * Associate a service profile with a blade.
-    * 
-    * @param rack
-    *           The managed rack where the service profile is.
-    * @param logicServer
-    *           The logic server.
-    * @param organization
-    *           The organization to be associated.
-    * @param bladeName
-    *           The name of the blade.
-    */
-   @Named("ucs:associatelogicserver")
-   @POST
-   void associateLogicServer(@EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
-         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
-         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
-         @QueryParam("bladeDn") String bladeName);
-
-   /**
-    * Associate a service profile with a blade instantiating a service profile
-    * template.
-    * 
-    * @param rack
-    *           The managed rack where the service profile is.
-    * @param logicServer
-    *           The logic server.
-    * @param organization
-    *           The organization to be associated.
-    * @param newName
-    *           Name of the new service profile.
-    * @param bladeName
-    *           The name of the blade.
-    */
-   @Named("ucs:associatetemplate")
-   @POST
-   void associateTemplate(@EndpointLink("ls-associatetemplate") @BinderParam(BindToPath.class) UcsRackDto rack,
-         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
-         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
-         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
-
-   /**
-    * Clone a service profile and associate it with a blade.
-    * 
-    * @param rack
-    *           The managed rack where the service profile is.
-    * @param logicServer
-    *           The logic server.
-    * @param organization
-    *           The organization to be associated.
-    * @param newName
-    *           Name of the new service profile.
-    * @param bladeName
-    *           The name of the blade.
-    */
-   @Named("ucs:cloneandassociatelogicserver")
-   @POST
-   void cloneAndAssociateLogicServer(@EndpointLink("ls-associateclone") @BinderParam(BindToPath.class) UcsRackDto rack,
-         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
-         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
-         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
-
-   /**
-    * Dissociate a service profile from a blade.
-    * 
-    * @param rack
-    *           The managed rack where the service profile is.
-    * @param logicServer
-    *           The logic server.
-    */
-   @Named("ucs:dissociatelogicserver")
-   @POST
-   void dissociateLogicServer(@EndpointLink("ls-dissociate") @BinderParam(BindToPath.class) UcsRackDto rack,
-         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
-
-   /**
-    * Get FSM list of an entity
-    * 
-    * @param rack
-    *           The managed rack where the entity belongs.
-    * @param dn
-    *           Distinguished name of the entity.
-    * @param fsm
-    *           The fsm.
-    */
-   @Named("ucs:listfsms")
-   @GET
-   @Consumes(FsmsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   FsmsDto listFsms(@EndpointLink("fsm") @BinderParam(BindToPath.class) UcsRackDto rack, @QueryParam("dn") String dn);
-
    /*********************** Remote Service ********************** */
 
    /**
@@ -1037,74 +752,6 @@ public interface InfrastructureApi extends Closeable {
    @Consumes(MachinesDto.BASE_MEDIA_TYPE)
    @JAXBResponseParser
    MachinesDto listMachines(@EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack);
-
-   /*********************** Blade ***********************/
-
-   /**
-    * Power off a physical machine in a UCS rack.
-    * 
-    * @param machine
-    *           The physical machine.
-    */
-   @Named("machine:poweroff")
-   @PUT
-   void powerOff(@EndpointLink("poweroff") @BinderParam(BindToPath.class) MachineDto machine);
-
-   /**
-    * Power on a physical machine in a UCS rack.
-    * 
-    * @param machine
-    *           The physical machine.
-    */
-   @Named("machine:poweron")
-   @PUT
-   void powerOn(@EndpointLink("poweron") @BinderParam(BindToPath.class) MachineDto machine);
-
-   /**
-    * Get the logic server associated with a machine in a Cisco UCS rack.
-    * 
-    * @param machine
-    *           The physical machine.
-    * @return The logic server.
-    */
-   @Named("machine:getlogicserver")
-   @GET
-   @Consumes(LogicServerDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   LogicServerDto getLogicServer(@EndpointLink("logicserver") @BinderParam(BindToPath.class) MachineDto machine);
-
-   /**
-    * Turn off locator led of a physical machine in a UCS rack.
-    * 
-    * @param machine
-    *           The physical machine.
-    */
-   @Named("machine:ledon")
-   @POST
-   void ledOn(@EndpointLink("ledon") @BinderParam(BindToPath.class) MachineDto machine);
-
-   /**
-    * Light locator led of a physical machine in a UCS rack.
-    * 
-    * @param machine
-    *           The physical machine.
-    */
-   @Named("machine:ledoff")
-   @POST
-   void ledOff(@EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
-
-   /**
-    * Get led locator info from a physical machine in a UCS rack.
-    * 
-    * @param machine
-    *           The physical machine.
-    * @return Led locator information.
-    */
-   @Named("machine:getlocatorled")
-   @GET
-   @Consumes(BladeLocatorLedDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   BladeLocatorLedDto getLocatorLed(@EndpointLink("led") @BinderParam(BindToPath.class) MachineDto machine);
 
    /**
     * List all virtual machines in a physical machine.

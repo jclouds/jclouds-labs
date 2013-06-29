@@ -16,10 +16,11 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
-import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.type;
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
@@ -35,7 +36,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link RemoteService} domain class.
@@ -46,7 +47,7 @@ import com.google.common.collect.Iterables;
 public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {
    public void testUpdate() {
       // Update the remote service
-      RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.VIRTUAL_FACTORY));
+      RemoteService rs = find(env.datacenter.listRemoteServices(), type(RemoteServiceType.VIRTUAL_FACTORY));
       rs.setUri(rs.getUri());
       rs.update();
 
@@ -58,7 +59,7 @@ public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testDelete() {
-      RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.BPM_SERVICE));
+      RemoteService rs = find(env.datacenter.listRemoteServices(), type(RemoteServiceType.BPM_SERVICE));
       rs.delete();
 
       // Recover the deleted remote service
@@ -76,12 +77,12 @@ public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testIsAvailableNonCheckeable() {
-      RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.DHCP_SERVICE));
+      RemoteService rs = find(env.datacenter.listRemoteServices(), type(RemoteServiceType.DHCP_SERVICE));
       assertTrue(rs.isAvailable());
    }
 
    public void testIsAvailable() {
-      RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.NODE_COLLECTOR));
+      RemoteService rs = find(env.datacenter.listRemoteServices(), type(RemoteServiceType.NODE_COLLECTOR));
       assertTrue(rs.isAvailable());
    }
 
@@ -98,15 +99,19 @@ public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testListRemoteServices() {
       Iterable<RemoteService> remoteServices = env.datacenter.listRemoteServices();
-      assertEquals(Iterables.size(remoteServices), env.remoteServices.size());
+      assertEquals(size(remoteServices), env.remoteServices.size());
 
-      remoteServices = env.datacenter.listRemoteServices(type(RemoteServiceType.NODE_COLLECTOR));
-      assertEquals(Iterables.size(remoteServices), 1);
+      remoteServices = filter(env.datacenter.listRemoteServices(), type(RemoteServiceType.NODE_COLLECTOR));
+      assertEquals(size(remoteServices), 1);
    }
 
-   public void testFindRemoteService() {
-      RemoteService remoteService = env.datacenter.findRemoteService(type(RemoteServiceType.NODE_COLLECTOR));
-      assertNotNull(remoteService);
+   private static Predicate<RemoteService> type(final RemoteServiceType type) {
+      return new Predicate<RemoteService>() {
+         @Override
+         public boolean apply(RemoteService input) {
+            return input.getType().equals(type);
+         }
+      };
    }
 
 }

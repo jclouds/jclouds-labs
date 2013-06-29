@@ -19,7 +19,6 @@ package org.jclouds.abiquo.domain.exception;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
-import static org.jclouds.abiquo.predicates.ErrorPredicates.code;
 
 import java.util.List;
 
@@ -27,6 +26,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.abiquo.model.transport.error.ErrorDto;
 import com.abiquo.model.transport.error.ErrorsDto;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -110,5 +110,14 @@ public class AbiquoException extends RuntimeException {
    @Override
    public String getMessage() {
       return errors.toString();
+   }
+
+   private static Predicate<ErrorDto> code(final String code) {
+      return new Predicate<ErrorDto>() {
+         @Override
+         public boolean apply(ErrorDto input) {
+            return input.getCode().equals(code);
+         }
+      };
    }
 }

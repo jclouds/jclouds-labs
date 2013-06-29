@@ -16,16 +16,15 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
-import static org.jclouds.abiquo.predicates.infrastructure.RackPredicates.name;
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.RackDto;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link Rack} domain class.
@@ -47,21 +46,22 @@ public class RackLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testListRacks() {
       Iterable<Rack> racks = env.datacenter.listRacks();
-      assertEquals(Iterables.size(racks), 1);
+      assertEquals(size(racks), 1);
 
-      racks = env.datacenter.listRacks(name(env.rack.getName()));
-      assertEquals(Iterables.size(racks), 1);
+      racks = filter(env.datacenter.listRacks(), name(env.rack.getName()));
+      assertEquals(size(racks), 1);
 
-      racks = env.datacenter.listRacks(name(env.rack.getName() + "FAIL"));
-      assertEquals(Iterables.size(racks), 0);
+      racks = filter(env.datacenter.listRacks(), name(env.rack.getName() + "FAIL"));
+      assertEquals(size(racks), 0);
    }
 
-   public void testFindRack() {
-      Rack rack = env.datacenter.findRack(name(env.rack.getName()));
-      assertNotNull(rack);
-
-      rack = env.datacenter.findRack(name(env.rack.getName() + "FAIL"));
-      assertNull(rack);
+   private static Predicate<Rack> name(final String name) {
+      return new Predicate<Rack>() {
+         @Override
+         public boolean apply(Rack input) {
+            return input.getName().equals(name);
+         }
+      };
    }
 
 }

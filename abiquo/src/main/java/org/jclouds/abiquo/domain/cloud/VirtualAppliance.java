@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
@@ -39,9 +38,6 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Represents a virtual appliance.
@@ -162,32 +158,6 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto> {
    public List<VirtualMachine> listVirtualMachines(final VirtualMachineOptions options) {
       VirtualMachinesWithNodeExtendedDto vms = context.getApi().getCloudApi().listVirtualMachines(target, options);
       return wrap(context, VirtualMachine.class, vms.getCollection());
-   }
-
-   /**
-    * Gets the list of virtual machines in the virtual appliance matching the
-    * given filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The list of virtual machines in the virtual appliance matching the
-    *         given filter.
-    */
-   public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter) {
-      return ImmutableList.copyOf(filter(listVirtualMachines(), filter));
-   }
-
-   /**
-    * Gets a single virtual machine in the virtual appliance matching the given
-    * filter.
-    * 
-    * @param filter
-    *           The filter to apply.
-    * @return The virtual machine or <code>null</code> if none matched the given
-    *         filter.
-    */
-   public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter) {
-      return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
    }
 
    /**

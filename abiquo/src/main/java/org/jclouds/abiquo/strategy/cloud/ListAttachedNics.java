@@ -17,7 +17,6 @@
 package org.jclouds.abiquo.strategy.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
@@ -40,7 +39,6 @@ import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
@@ -64,11 +62,6 @@ public class ListAttachedNics implements ListEntities<Ip<?, ?>, VirtualMachine> 
       parent.refresh();
       Iterable<RESTLink> nicLinks = LinkUtils.filterNicLinks(parent.unwrap().getLinks());
       return listIps(nicLinks);
-   }
-
-   @Override
-   public Iterable<Ip<?, ?>> execute(final VirtualMachine parent, final Predicate<Ip<?, ?>> selector) {
-      return filter(execute(parent), selector);
    }
 
    private Iterable<Ip<?, ?>> listIps(final Iterable<RESTLink> nicLinks) {

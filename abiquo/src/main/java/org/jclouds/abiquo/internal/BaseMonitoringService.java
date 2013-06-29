@@ -29,17 +29,17 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
-import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
-import org.jclouds.abiquo.events.monitor.CompletedEvent;
-import org.jclouds.abiquo.events.monitor.FailedEvent;
-import org.jclouds.abiquo.events.monitor.TimeoutEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
 import org.jclouds.abiquo.monitor.ConversionMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
+import org.jclouds.abiquo.monitor.events.CompletedEvent;
+import org.jclouds.abiquo.monitor.events.FailedEvent;
+import org.jclouds.abiquo.monitor.events.TimeoutEvent;
+import org.jclouds.abiquo.monitor.handlers.AbstractEventHandler;
+import org.jclouds.abiquo.monitor.handlers.BlockingEventHandler;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ApiContext;
 
