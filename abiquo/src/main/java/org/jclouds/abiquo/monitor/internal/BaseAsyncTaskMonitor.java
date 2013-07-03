@@ -58,22 +58,22 @@ public class BaseAsyncTaskMonitor extends BaseMonitoringService implements Async
    }
 
    @Override
-   public void awaitCompletion(final AsyncTask... tasks) {
+   public void awaitCompletion(final AsyncTask<?, ?>... tasks) {
       awaitCompletion(taskMonitor, tasks);
    }
 
    @Override
-   public void monitor(final AsyncTask... tasks) {
+   public void monitor(final AsyncTask<?, ?>... tasks) {
       monitor(taskMonitor, tasks);
    }
 
    @Override
-   public void awaitCompletion(final Long maxWait, final TimeUnit timeUnit, final AsyncTask... tasks) {
+   public void awaitCompletion(final Long maxWait, final TimeUnit timeUnit, final AsyncTask<?, ?>... tasks) {
       awaitCompletion(maxWait, timeUnit, taskMonitor, tasks);
    }
 
    @Override
-   public void monitor(final Long maxWait, final TimeUnit timeUnit, final AsyncTask... tasks) {
+   public void monitor(final Long maxWait, final TimeUnit timeUnit, final AsyncTask<?, ?>... tasks) {
       monitor(maxWait, timeUnit, taskMonitor, tasks);
    }
 

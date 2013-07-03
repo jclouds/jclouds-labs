@@ -18,7 +18,6 @@ package org.jclouds.abiquo.domain.config;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.enterprise.PrivilegeDto;

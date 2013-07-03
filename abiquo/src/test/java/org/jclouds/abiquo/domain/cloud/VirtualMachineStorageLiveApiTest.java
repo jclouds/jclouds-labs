@@ -26,7 +26,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.List;
 
 import org.jclouds.abiquo.domain.infrastructure.Tier;
-import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.Test;
 
@@ -48,7 +48,7 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
       // Since the virtual machine is not deployed, this should not generate a
       // task
-      AsyncTask task = env.virtualMachine.attachVolumes(volume);
+      VirtualMachineTask task = env.virtualMachine.attachVolumes(volume);
       assertNull(task);
 
       List<Volume> attached = env.virtualMachine.listAttachedVolumes();
@@ -67,7 +67,7 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
    public void detachAllVolumes() {
       // Since the virtual machine is not deployed, this should not generate a
       // task
-      AsyncTask task = env.virtualMachine.attachVolumes(volume);
+      VirtualMachineTask task = env.virtualMachine.attachVolumes(volume);
       assertNull(task);
 
       env.virtualMachine.detachAllVolumes();
@@ -82,7 +82,7 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
       // Since the virtual machine is not deployed, this should not generate a
       // task
-      AsyncTask task = env.virtualMachine.attachHardDisks(hardDisk);
+      VirtualMachineTask task = env.virtualMachine.attachHardDisks(hardDisk);
       assertNull(task);
 
       List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
@@ -101,7 +101,7 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
    public void detachAllHardDisks() {
       // Since the virtual machine is not deployed, this should not generate a
       // task
-      AsyncTask task = env.virtualMachine.attachHardDisks(hardDisk);
+      VirtualMachineTask task = env.virtualMachine.attachHardDisks(hardDisk);
       assertNull(task);
 
       env.virtualMachine.detachAllHardDisks();

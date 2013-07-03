@@ -33,7 +33,7 @@ import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypesDto;
 
 /**
- * xpect tests for the {@link InfrastructureApi} class.
+ * Expect tests for the {@link InfrastructureApi} class.
  * 
  * @author Ignasi Barrera
  */

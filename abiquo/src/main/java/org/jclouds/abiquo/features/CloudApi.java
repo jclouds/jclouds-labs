@@ -72,6 +72,7 @@ import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineInstanceDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
@@ -840,6 +841,27 @@ public interface CloudApi extends Closeable {
    @JAXBResponseParser
    AcceptedRequestDto<String> rebootVirtualMachine(
          @EndpointLink("reset") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+   /**
+    * Take a snapshot of the given virtual machine.
+    * <p>
+    * This will create a new virtual machine template in the appliance library
+    * based on the given virtual machine.
+    * 
+    * @param virtualMachine
+    *           The virtual machine to snapshot.
+    * @param snapshotConfig
+    *           The configuration of the snapshot.
+    * @return The task reference to the snapshot process.
+    */
+   @Named("vm:snapshot")
+   @POST
+   @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+   @Produces(VirtualMachineInstanceDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   AcceptedRequestDto<String> snapshotVirtualMachine(
+         @EndpointLink("instance") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+         @BinderParam(BindToXMLPayload.class) VirtualMachineInstanceDto snapshotConfig);
 
    /******************* Virtual Machine Template ***********************/
 

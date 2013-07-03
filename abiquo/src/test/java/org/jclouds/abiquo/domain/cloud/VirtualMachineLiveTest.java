@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.Ip;
-import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.internal.BaseAbiquoLiveApiTest;
 import org.testng.annotations.AfterClass;
@@ -96,7 +96,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
    @Test(dependsOnMethods = "testCreateVirtualMachine")
    public void testUpdateVirtualMachineWhenNotDeployed() {
       vm.setNameLabel(PREFIX + "VM Kane Updated");
-      AsyncTask task = vm.update();
+      VirtualMachineTask task = vm.update();
       assertNull(task);
 
       find(vapp.listVirtualMachines(), new Predicate<VirtualMachine>() {
@@ -109,7 +109,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
 
    @Test(dependsOnMethods = "testUpdateVirtualMachineWhenNotDeployed")
    public void testDeployVirtualMachine() {
-      AsyncTask task = vm.deploy(true);
+      VirtualMachineTask task = vm.deploy(true);
       assertNotNull(task);
 
       monitoringService.getVirtualMachineMonitor().awaitCompletionDeploy(MAX_WAIT, TimeUnit.MINUTES, vm);
@@ -118,7 +118,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
 
    @Test(dependsOnMethods = "testDeployVirtualMachine")
    public void testChangeVirtualMachineState() {
-      AsyncTask task = vm.changeState(VirtualMachineState.OFF);
+      VirtualMachineTask task = vm.changeState(VirtualMachineState.OFF);
       assertNotNull(task);
 
       monitoringService.getVirtualMachineMonitor().awaitState(MAX_WAIT, TimeUnit.MINUTES, VirtualMachineState.OFF, vm);
@@ -129,7 +129,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
    public void testReconfigure() {
       final Ip<?, ?> ip = getLast(vdc.getDefaultNetwork().listUnusedIps());
 
-      AsyncTask task = vm.setNics(Lists.<Ip<?, ?>> newArrayList(ip));
+      VirtualMachineTask task = vm.setNics(Lists.<Ip<?, ?>> newArrayList(ip));
       assertNotNull(task);
 
       monitoringService.getVirtualMachineMonitor().awaitState(MAX_WAIT, TimeUnit.MINUTES, VirtualMachineState.OFF, vm);
@@ -144,7 +144,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
 
    @Test(dependsOnMethods = "testReconfigure")
    public void testUndeployVirtualMachine() {
-      AsyncTask task = vm.undeploy();
+      VirtualMachineTask task = vm.undeploy();
       assertNotNull(task);
 
       monitoringService.getVirtualMachineMonitor().awaitCompletionUndeploy(MAX_WAIT, TimeUnit.MINUTES, vm);
@@ -161,7 +161,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
          vm.setCpu(ent.getCpuCountHardLimit() + 1);
       }
 
-      AsyncTask task = vm.update();
+      VirtualMachineTask task = vm.update();
       assertNull(task);
 
       try {

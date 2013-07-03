@@ -39,6 +39,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplateInVirtualDatacenter;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
@@ -150,7 +151,7 @@ public class AbiquoComputeServiceAdapter
       // private VLAN for the virtual datacenter
       PublicIp publicIp = find(vdc.listPurchasedPublicIps(), IpPredicates.<PublicIp> notUsed(), null);
       if (publicIp != null) {
-         List<PublicIp> ips = Lists.newArrayList();
+         List<Ip<?, ?>> ips = Lists.newArrayList();
          ips.add(publicIp);
          vm.setNics(ips);
       }

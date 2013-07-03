@@ -33,12 +33,12 @@ import com.google.common.base.Function;
  * @author Ignasi Barrera
  */
 @Singleton
-public class AsyncTaskStatusMonitor implements Function<AsyncTask, MonitorStatus> {
+public class AsyncTaskStatusMonitor implements Function<AsyncTask<?, ?>, MonitorStatus> {
    @Resource
    protected Logger logger = Logger.NULL;
 
    @Override
-   public MonitorStatus apply(final AsyncTask asyncTask) {
+   public MonitorStatus apply(final AsyncTask<?, ?> asyncTask) {
       checkNotNull(asyncTask, "asyncTask");
 
       try {

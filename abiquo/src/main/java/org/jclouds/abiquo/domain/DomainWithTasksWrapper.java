@@ -26,6 +26,8 @@ import org.jclouds.rest.ApiContext;
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
 import com.abiquo.server.core.task.TasksDto;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 
@@ -41,18 +43,21 @@ public abstract class DomainWithTasksWrapper<T extends SingleResourceTransportDt
       super(context, target);
    }
 
-   public List<AsyncTask> listTasks() {
+   public List<AsyncTask<?, ?>> listTasks() {
       TasksDto result = context.getApi().getTaskApi().listTasks(target);
-      List<AsyncTask> tasks = wrap(context, AsyncTask.class, result.getCollection());
+      List<AsyncTask<?, ?>> tasks = Lists.newArrayList();
+      for (TaskDto dto : result.getCollection()) {
+         tasks.add(newTask(context, dto));
+      }
 
       // Return the most recent task first
-      Collections.sort(tasks, new Ordering<AsyncTask>() {
+      Collections.sort(tasks, new Ordering<AsyncTask<?, ?>>() {
          @Override
-         public int compare(final AsyncTask left, final AsyncTask right) {
+         public int compare(final AsyncTask<?, ?> left, final AsyncTask<?, ?> right) {
             return Longs.compare(left.getTimestamp(), right.getTimestamp());
          }
       }.reverse());
 
-      return tasks;
+      return ImmutableList.copyOf(tasks);
    }
 }
