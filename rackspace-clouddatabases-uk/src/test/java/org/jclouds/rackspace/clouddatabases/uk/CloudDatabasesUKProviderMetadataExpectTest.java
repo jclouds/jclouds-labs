@@ -43,7 +43,7 @@ public class CloudDatabasesUKProviderMetadataExpectTest extends BaseTroveApiExpe
    public void testCanGetConfiguredZones() {
       
       HttpRequest authenticate = HttpRequest.builder().method("POST")
-            .endpoint("https://lon.api.rackspacecloud.com/v2.0/tokens")
+            .endpoint("https://lon.identity.api.rackspacecloud.com/v2.0/tokens")
             .addHeader("Accept", "application/json")
             .payload(payloadFromStringWithContentType(
                      "{\"auth\":{\"RAX-KSKEY:apiKeyCredentials\":{\"username\":\"myUsername\",\"apiKey\":\"myApiKey\"}}}"

@@ -79,7 +79,7 @@ public class CloudDatabasesUKProviderMetadata extends BaseProviderMetadata {
          .apiMetadata(new TroveApiMetadata().toBuilder()
                   .identityName("${userName}")
                   .credentialName("${apiKey}")
-                  .defaultEndpoint("https://lon.api.rackspacecloud.com/v2.0/")
+                  .defaultEndpoint("https://lon.identity.api.rackspacecloud.com/v2.0")
                   .endpointName("identity service url ending in /v2.0/")
                   .documentation(URI.create("http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/overview.html"))
                   .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
@@ -93,7 +93,7 @@ public class CloudDatabasesUKProviderMetadata extends BaseProviderMetadata {
          .console(URI.create("https://mycloud.rackspace.com"))
          .linkedServices("rackspace-cloudservers-uk", "cloudfiles-uk")
          .iso3166Codes("GB-SLG")
-         .endpoint("https://lon.api.rackspacecloud.com/v2.0/")
+         .endpoint("https://lon.identity.api.rackspacecloud.com/v2.0")
          .defaultProperties(CloudDatabasesUKProviderMetadata.defaultProperties());
       }
 
