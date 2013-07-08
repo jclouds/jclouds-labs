@@ -215,7 +215,10 @@ public class AbiquoComputeServiceAdapter
 
    @Override
    public void destroyNode(final String id) {
+      VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
       VirtualMachine vm = getNode(id);
+      vm.undeploy(true);
+      monitor.awaitCompletionUndeploy(vm);
       vm.delete();
    }
 
