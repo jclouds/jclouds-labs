@@ -35,6 +35,7 @@ import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.trove.v1.binders.BindCreateUserToJson;
 import org.jclouds.openstack.trove.v1.binders.BindGrantUserToJson;
 import org.jclouds.openstack.trove.v1.domain.User;
+import org.jclouds.openstack.trove.v1.filters.EncodeDotsForUserGet;
 import org.jclouds.openstack.trove.v1.functions.ParseDatabaseListForUser;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -208,6 +209,7 @@ public interface UserApi {
    @Named("user:get/{name}")
    @GET
    @Path("/users/{name}")
+   @RequestFilters(EncodeDotsForUserGet.class)
    @SelectJson("user")
    @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
@@ -224,6 +226,7 @@ public interface UserApi {
    @Named("user:get/{name}@{hostname}")
    @GET
    @Path("/users/{name}@{hostname}")
+   @RequestFilters(EncodeDotsForUserGet.class)
    @SelectJson("user")
    @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)

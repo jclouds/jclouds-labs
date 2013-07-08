@@ -402,7 +402,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
    }
    
    public void testGetUserWithHostname() {
-      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users/exampleuser%40192.168.64.64");
+      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users/example%2euser%40192%2e168%2e64%2e64");
       UserApi api = requestsSendResponses(
             keystoneAuthWithUsernameAndPasswordAndTenantName,
             responseWithKeystoneAccess,
@@ -410,16 +410,16 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/user_get_withhost.json")).build()
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
-      User user = api.get("exampleuser", "192.168.64.64");
-      assertEquals(user.getName(), "exampleuser");
+      User user = api.get("example.user", "192.168.64.64");
+      assertEquals(user.getName(), "example.user");
       assertEquals(user.getHost(), "192.168.64.64");
-      assertEquals(user.getIdentifier(), "exampleuser@192.168.64.64");
+      assertEquals(user.getIdentifier(), "example.user@192.168.64.64");
       assertEquals(user.getDatabases().size(), 2);
       assertEquals(user.getDatabases().iterator().next(), "databaseA");
    }
    
    public void testGetUserWithHostnameFail() {
-      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users/exampleuser%40192.168.64.64");
+      URI endpoint = URI.create("http://172.16.0.1:8776/v1/3456/instances/instanceId-1234-5678/users/example%2euser%40192%2e168%2e64%2e64");
       UserApi api = requestsSendResponses(
             keystoneAuthWithUsernameAndPasswordAndTenantName,
             responseWithKeystoneAccess,
@@ -427,7 +427,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/user_get_withhost.json")).build()
       ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
 
-      User user = api.get("exampleuser", "192.168.64.64");
+      User user = api.get("example.user", "192.168.64.64");
       assertNull(user);
    }
 }

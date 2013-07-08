@@ -1,6 +1,6 @@
 {
    "user": {
-      "name": "exampleuser",
+      "name": "example.user",
       "host": "192.168.64.64",
       "databases": [
          {
