@@ -25,6 +25,7 @@ import static com.google.common.collect.Iterables.transform;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 import javax.inject.Named;
@@ -53,6 +54,7 @@ import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.reference.ComputeServiceConstants;
+import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ApiContext;
 
@@ -89,17 +91,20 @@ public class AbiquoComputeServiceAdapter
 
    private final Supplier<Map<Integer, Datacenter>> regionMap;
 
+   private final Timeouts timeouts;
+
    @Inject
    public AbiquoComputeServiceAdapter(final ApiContext<AbiquoApi> context, final AdministrationService adminService,
          final CloudService cloudService, final MonitoringService monitoringService,
          final FindCompatibleVirtualDatacenters compatibleVirtualDatacenters,
-         @Memoized final Supplier<Map<Integer, Datacenter>> regionMap) {
+         @Memoized final Supplier<Map<Integer, Datacenter>> regionMap, Timeouts timeouts) {
       this.context = checkNotNull(context, "context");
       this.adminService = checkNotNull(adminService, "adminService");
       this.cloudService = checkNotNull(cloudService, "cloudService");
       this.monitoringService = checkNotNull(monitoringService, "monitoringService");
       this.compatibleVirtualDatacenters = checkNotNull(compatibleVirtualDatacenters, "compatibleVirtualDatacenters");
       this.regionMap = checkNotNull(regionMap, "regionMap");
+      this.timeouts = checkNotNull(timeouts, "timeouts");
    }
 
    @Override
@@ -218,7 +223,7 @@ public class AbiquoComputeServiceAdapter
       VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
       VirtualMachine vm = getNode(id);
       vm.undeploy(true);
-      monitor.awaitCompletionUndeploy(vm);
+      monitor.awaitCompletionUndeploy(timeouts.nodeTerminated, TimeUnit.MILLISECONDS, vm);
       vm.delete();
    }
 
@@ -227,7 +232,7 @@ public class AbiquoComputeServiceAdapter
       VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
       VirtualMachine vm = getNode(id);
       vm.reboot();
-      monitor.awaitState(VirtualMachineState.ON, vm);
+      monitor.awaitState(timeouts.nodeRunning, TimeUnit.MILLISECONDS, VirtualMachineState.ON, vm);
    }
 
    @Override
@@ -235,7 +240,7 @@ public class AbiquoComputeServiceAdapter
       VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
       VirtualMachine vm = getNode(id);
       vm.changeState(VirtualMachineState.ON);
-      monitor.awaitState(VirtualMachineState.ON, vm);
+      monitor.awaitState(timeouts.nodeRunning, TimeUnit.MILLISECONDS, VirtualMachineState.ON, vm);
    }
 
    @Override
@@ -243,7 +248,7 @@ public class AbiquoComputeServiceAdapter
       VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
       VirtualMachine vm = getNode(id);
       vm.changeState(VirtualMachineState.PAUSED);
-      monitor.awaitState(VirtualMachineState.PAUSED, vm);
+      monitor.awaitState(timeouts.nodeSuspended, TimeUnit.MILLISECONDS, VirtualMachineState.PAUSED, vm);
    }
 
    @Override
