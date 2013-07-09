@@ -60,6 +60,7 @@ import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.SinceApiVersion;
 import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -618,6 +619,19 @@ public interface CloudApi extends Closeable {
          @EndpointLink("price") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
    /*********************** Virtual Machine ***********************/
+
+   /**
+    * List all virtual machines available to the current user.
+    * 
+    * @return The list of all virtual machines available to the current user.
+    */
+   @SinceApiVersion("2.4")
+   @Named("vm:listall")
+   @GET
+   @Path("/virtualmachines")
+   @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   VirtualMachinesWithNodeExtendedDto listAllVirtualMachines();
 
    /**
     * List all virtual machines for a virtual appliance.

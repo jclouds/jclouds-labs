@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<virtualmachineswithnodeextended>
+    <virtualmachinewithnodeextended>
+        <link rel="deploy" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy" />
+        <link rel="disks" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/disks" />
+        <link rel="edit" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1" />
+        <link rel="state" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state" />
+        <link rel="reset" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/reset" />
+        <link rel="tasks" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks" />
+        <link rel="undeploy" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy" />
+        <link rel="persistent" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/persistent" />
+        <link rel="virtualappliance" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1" />
+        <link rel="virtualmachinetemplate" href="/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1" />
+        <link rel="nics" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics" />
+        <link rel="volumes" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes" />
+        <link rel="configurations" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/configurations" />
+        <cpu>0</cpu>
+        <hdInBytes>0</hdInBytes>
+        <highDisponibility>0</highDisponibility>
+        <id>1</id>
+        <idState>0</idState>
+        <idType>0</idType>
+        <name>VM</name>
+        <ram>0</ram>
+        <vdrpPort>0</vdrpPort>
+    </virtualmachinewithnodeextended>
+</virtualmachineswithnodeextended>

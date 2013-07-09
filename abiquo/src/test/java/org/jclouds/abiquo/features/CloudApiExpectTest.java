@@ -18,6 +18,7 @@
  */
 package org.jclouds.abiquo.features;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
@@ -31,6 +32,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineInstanceDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 
 /**
  * Expect tests for the {@link CloudApi} class.
@@ -39,6 +41,29 @@ import com.abiquo.server.core.cloud.VirtualMachineInstanceDto;
  */
 @Test(groups = "unit", testName = "CloudApiExpectTest")
 public class CloudApiExpectTest extends BaseAbiquoApiExpectTest<CloudApi> {
+
+   public void testListAllVirtualMachinesWhenResponseIs2xx() {
+      CloudApi api = requestSendsResponse(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/cloud/virtualmachines")) //
+                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Accept", normalize(VirtualMachinesWithNodeExtendedDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/all-vms.xml",
+                              normalize(VirtualMachinesWithNodeExtendedDto.MEDIA_TYPE))) //
+                  .build());
+
+      VirtualMachinesWithNodeExtendedDto vms = api.listAllVirtualMachines();
+      assertEquals(vms.getCollection().size(), 1);
+      assertEquals(vms.getCollection().get(0).getId(), Integer.valueOf(1));
+      assertEquals(vms.getCollection().get(0).getName(), "VM");
+      assertNotNull(vms.getCollection().get(0).getEditLink());
+   }
 
    public void testSnapshotVirtualMachineReturns2xx() {
       CloudApi api = requestSendsResponse(

@@ -16,12 +16,15 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.util.List;
@@ -36,6 +39,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
+import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link VirtualMachine} domain class.
@@ -44,6 +48,20 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
  */
 @Test(groups = "api", testName = "VirtualMachineLiveApiTest")
 public class VirtualMachineLiveApiTest extends BaseAbiquoApiLiveApiTest {
+   public void testListAllVirtualMachines() {
+      Iterable<VirtualMachine> vms = env.context.getCloudService().listVirtualMachines();
+      assertTrue(size(vms) > 1);
+
+      // Verify that the VM created in the setup exists. This call will throw
+      // a NoSuchElementException if no macthing VM is found
+      find(vms, new Predicate<VirtualMachine>() {
+         @Override
+         public boolean apply(VirtualMachine input) {
+            return input.getId().equals(env.virtualMachine.getId());
+         }
+      });
+   }
+
    public void testHasDataFromNode() {
       assertNotNull(env.virtualMachine.getNameLabel());
       assertNotNull(env.virtualMachine.getInternalName());

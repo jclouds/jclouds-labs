@@ -34,10 +34,10 @@ import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
-import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.google.common.annotations.VisibleForTesting;
 
 /**
@@ -49,24 +49,20 @@ import com.google.common.annotations.VisibleForTesting;
 @Singleton
 public class BaseCloudService implements CloudService {
    @VisibleForTesting
-   protected ApiContext<AbiquoApi> context;
+   protected final ApiContext<AbiquoApi> context;
 
    @VisibleForTesting
    protected final ListVirtualDatacenters listVirtualDatacenters;
 
    @VisibleForTesting
-   protected ListVirtualAppliances listVirtualAppliances;
-
-   @VisibleForTesting
-   protected ListVirtualMachines listVirtualMachines;
+   protected final ListVirtualAppliances listVirtualAppliances;
 
    @Inject
    protected BaseCloudService(final ApiContext<AbiquoApi> context, final ListVirtualDatacenters listVirtualDatacenters,
-         final ListVirtualAppliances listVirtualAppliances, final ListVirtualMachines listVirtualMachines) {
+         final ListVirtualAppliances listVirtualAppliances) {
       this.context = checkNotNull(context, "context");
       this.listVirtualDatacenters = checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
       this.listVirtualAppliances = checkNotNull(listVirtualAppliances, "listVirtualAppliances");
-      this.listVirtualMachines = checkNotNull(listVirtualMachines, "listVirtualMachines");
    }
 
    /*********************** Virtual Datacenter ********************** */
@@ -108,6 +104,7 @@ public class BaseCloudService implements CloudService {
 
    @Override
    public Iterable<VirtualMachine> listVirtualMachines() {
-      return listVirtualMachines.execute();
+      VirtualMachinesWithNodeExtendedDto vms = context.getApi().getCloudApi().listAllVirtualMachines();
+      return wrap(context, VirtualMachine.class, vms.getCollection());
    }
 }

@@ -35,6 +35,5 @@ public class BaseCloudServiceTest extends BaseInjectionTest {
       assertNotNull(service.context);
       assertNotNull(service.listVirtualDatacenters);
       assertNotNull(service.listVirtualAppliances);
-      assertNotNull(service.listVirtualMachines);
    }
 }
