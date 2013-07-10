@@ -210,7 +210,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .addHeader("X-Auth-Token", authToken)
             .payload(payloadFromStringWithContentType("somedata", MediaType.APPLICATION_OCTET_STREAM)).build();
 
-      HttpResponse createResponse = HttpResponse.builder().statusCode(401)
+      HttpResponse createResponse = HttpResponse.builder().statusCode(403)
             .payload(payloadFromResource("/image.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
@@ -247,7 +247,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
 
-      HttpResponse createResponse = HttpResponse.builder().statusCode(401)
+      HttpResponse createResponse = HttpResponse.builder().statusCode(403)
             .payload(payloadFromResource("/image.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
