@@ -33,7 +33,6 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.abiquo.fallbacks.MovedVolume;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
@@ -1208,7 +1207,7 @@ public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {
       GeneratedHttpRequest request = processor.apply(Invocation.create(
             method,
             ImmutableList.<Object> of(CloudResources.virtualDatacenterPut(), VolumeOptions.builder().has("vol")
-                  .orderBy(OrderBy.NAME).ascendant(true).build())));
+                  .orderBy("name").ascendant(true).build())));
 
       assertRequestLineEquals(request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/volumes?has=vol&by=name&asc=true HTTP/1.1");

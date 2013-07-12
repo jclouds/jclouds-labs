@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jclouds.abiquo.domain.options.search.FilterOptions.BaseFilterOptionsBuilder;
+import org.jclouds.abiquo.domain.options.FilterOptions.BaseFilterOptionsBuilder;
 import org.jclouds.http.options.BaseHttpRequestOptions;
 
 import com.abiquo.model.enumerator.ComponentType;

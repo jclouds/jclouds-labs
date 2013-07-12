@@ -25,7 +25,6 @@ import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
-import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.fallbacks.MapHttp4xxCodesToExceptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
@@ -80,7 +79,7 @@ public class EnterpriseApiTest extends BaseAbiquoApiTest<EnterpriseApi> {
    }
 
    public void testListEnterprisesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      EnterpriseOptions options = EnterpriseOptions.builder().has("abi").orderBy(OrderBy.NAME).ascendant(true).build();
+      EnterpriseOptions options = EnterpriseOptions.builder().has("abi").orderBy("name").ascendant(true).build();
 
       Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises", EnterpriseOptions.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(options)));
