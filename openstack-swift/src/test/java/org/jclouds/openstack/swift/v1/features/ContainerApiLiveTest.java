@@ -26,7 +26,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.FluentIterable;
 
 /**
- * 
  * @author Adrian Cole
  */
 @Test(groups = "live", testName = "ContainerApiLiveTest")
@@ -34,14 +33,14 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
 
    @Test
    public void testListContainers() throws Exception {
-      for (String regionId : api.getConfiguredRegions()) {
-         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
+      for (String regionId : api.configuredRegions()) {
+         ContainerApi containerApi = api.containerApiInRegion(regionId);
          FluentIterable<? extends Container> response = containerApi.list();
          assertNotNull(response);
          for (Container container : response) {
-            assertNotNull(container.getName());
-            assertTrue(container.getCount() >= 0);
-            assertTrue(container.getBytes() >= 0);
+            assertNotNull(container.name());
+            assertTrue(container.objectCount() >= 0);
+            assertTrue(container.bytesUsed() >= 0);
          }
       }
    }

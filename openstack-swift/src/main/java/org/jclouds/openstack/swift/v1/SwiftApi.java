@@ -18,6 +18,7 @@ package org.jclouds.openstack.swift.v1;
 
 import java.io.Closeable;
 import java.util.Set;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
@@ -31,44 +32,27 @@ import org.jclouds.rest.annotations.EndpointParam;
 import com.google.inject.Provides;
 
 /**
- * Provides access to Swift.
- * <p/>
- *
- * @see <a href="http://docs.openstack.org/api/openstack-object-storage/1.0/content">api doc</a>
+ * @see <a
+ *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content">api
+ *      doc</a>
  * @author Adrian Cole
  * @author Zack Shoylev
  */
 public interface SwiftApi extends Closeable {
-   /**
-    * 
-    * @return the Region codes configured
-    */
+
    @Provides
    @Region
-   Set<String> getConfiguredRegions();
+   Set<String> configuredRegions();
 
-   /**
-    * Provides access to Extension features.
-    */
    @Delegate
-   ExtensionApi getExtensionApiForRegion(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ExtensionApi extensionApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
-   /**
-    * Provides access to Account features.
-    */
    @Delegate
-   AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   AccountApi accountApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
-   /**
-    * Provides access to Container features.
-    */
    @Delegate
-   ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ContainerApi containerApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
-   /**
-    * Provides access to Object features.
-    */
    @Delegate
-   ObjectApi getObjectApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ObjectApi objectApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 }

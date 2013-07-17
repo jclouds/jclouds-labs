@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * 
  * @author Adrian Cole
  */
 @Test(groups = "unit", testName = "ParseContainerListTest")
@@ -45,13 +44,13 @@ public class ParseContainerListTest extends BaseSetParserTest<Container> {
       return ImmutableSet
             .of(Container.builder()
                   .name("test_container_1")
-                  .count(2)
-                  .bytes(78)
+                  .objectCount(2)
+                  .bytesUsed(78)
                   .build(),
                 Container.builder()
                   .name("test_container_2")
-                  .count(1)
-                  .bytes(17)
+                  .objectCount(1)
+                  .bytesUsed(17)
                   .build());
    }
 }

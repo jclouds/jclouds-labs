@@ -34,7 +34,6 @@ import org.jclouds.openstack.swift.v1.handlers.SwiftErrorHandler;
 import org.testng.annotations.Test;
 
 /**
- * 
  * @author Adrian Cole
  */
 @Test(groups = "unit", testName = "SwiftErrorHandlerTest")

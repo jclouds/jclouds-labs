@@ -21,8 +21,6 @@ import static org.jclouds.http.HttpUtils.closeClientButKeepContentStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Singleton;
-
 import org.jclouds.blobstore.ContainerNotFoundException;
 import org.jclouds.blobstore.KeyNotFoundException;
 import org.jclouds.http.HttpCommand;
@@ -31,14 +29,7 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
 
-/**
- * This will parse and set an appropriate exception on the command object.
- * 
- * @author Adrian Cole
- * 
- */
 // TODO: is there error spec someplace? let's type errors, etc.
-@Singleton
 public class SwiftErrorHandler implements HttpErrorHandler {
    public static final String PREFIX = "^/v[0-9][^/]*/[a-zA-Z]+_[^/]+/";
    public static final Pattern CONTAINER_PATH = Pattern.compile(PREFIX + "([^/]+)$");

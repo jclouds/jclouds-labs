@@ -16,29 +16,71 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jclouds.openstack.swift.v1.domain.Account;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- * @author Zack Shoylev
- */
-@Test(groups = "live", testName = "ContainerApiLiveTest")
+import com.google.common.collect.ImmutableMap;
+
+@Test(groups = "live", testName = "AccountApiLiveTest")
 public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
 
-   @Test
-   public void testGetAccountMetadata() throws Exception {
-      for (String regionId : api.getConfiguredRegions()) {
-         AccountApi accountApi = api.getAccountApiForRegion(regionId);
+   public void get() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         AccountApi accountApi = api.accountApiInRegion(regionId);
          Account account = accountApi.get();
+
          assertNotNull(account);
-         assertTrue(account.getContainerCount() >= 0);
-         assertTrue(account.getBytesUsed() >= 0);
+         assertTrue(account.containerCount() >= 0);
+         assertTrue(account.objectCount() >= 0);
+         assertTrue(account.bytesUsed() >= 0);
       }
    }
 
+   public void createOrUpdateMetadata() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         AccountApi accountApi = api.accountApiInRegion(regionId);
+
+         Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
+
+         assertTrue(accountApi.createOrUpdateMetadata(meta));
+
+         accountHasMetadata(accountApi, meta);
+      }
+   }
+
+   public void deleteMetadata() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         AccountApi accountApi = api.accountApiInRegion(regionId);
+
+         Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
+
+         assertTrue(accountApi.createOrUpdateMetadata(meta));
+         accountHasMetadata(accountApi, meta);
+
+         assertTrue(accountApi.deleteMetadata(meta));
+         Account account = accountApi.get();
+         for (Entry<String, String> entry : meta.entrySet()) {
+            // note keys are returned in lower-case!
+            assertFalse(account.metadata().containsKey(entry.getKey().toLowerCase()));
+         }
+      }
+   }
+
+   static void accountHasMetadata(AccountApi accountApi, Map<String, String> meta) {
+      Account account = accountApi.get();
+      for (Entry<String, String> entry : meta.entrySet()) {
+         // note keys are returned in lower-case!
+         assertEquals(account.metadata().get(entry.getKey().toLowerCase()), entry.getValue(), //
+               account + " didn't have metadata: " + entry);
+      }
+   }
 }

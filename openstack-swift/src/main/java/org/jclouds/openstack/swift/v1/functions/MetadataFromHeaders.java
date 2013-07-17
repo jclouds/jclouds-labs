@@ -16,25 +16,16 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
+import java.util.Map;
+
 import org.jclouds.http.HttpResponse;
-import org.jclouds.openstack.swift.v1.domain.Account;
 
 import com.google.common.base.Function;
 
-/**
- * This parses {@link Account} from HTTP headers.
- * 
- * @author James Murty
- */
-public class ParseAccountMetadataResponseFromHeaders implements Function<HttpResponse, Account> {
-
-   /**
-    * parses the http response headers to create a new {@link Account} object.
-    */
-   public Account apply(HttpResponse from) {
-      return Account.builder()
-               .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Bytes-Used")))
-               .containerCount(Integer.parseInt(from.getFirstHeaderOrNull("X-Account-Container-Count")))
-               .build();
+/** Extracts metadata entries from http response headers. */
+public class MetadataFromHeaders implements Function<HttpResponse, Map<String, String>> {
+   @Override
+   public Map<String, String> apply(HttpResponse from) {
+      return EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders());
    }
 }

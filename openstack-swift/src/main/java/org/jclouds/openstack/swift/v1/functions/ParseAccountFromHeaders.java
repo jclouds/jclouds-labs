@@ -14,15 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.openstack.swift.v1.internal;
+package org.jclouds.openstack.swift.v1.functions;
 
-import org.jclouds.openstack.swift.v1.SwiftApi;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.openstack.swift.v1.domain.Account;
 
-/**
- * Base class for writing KeyStone Rest Api Expect tests
- * 
- * @author Adrian Cole
- */
-public class BaseSwiftApiExpectTest extends BaseSwiftExpectTest<SwiftApi> {
+import com.google.common.base.Function;
 
+public class ParseAccountFromHeaders implements Function<HttpResponse, Account> {
+
+   @Override
+   public Account apply(HttpResponse from) {
+      return Account.builder() //
+            .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Bytes-Used"))) //
+            .containerCount(Integer.parseInt(from.getFirstHeaderOrNull("X-Account-Container-Count"))) //
+            .objectCount(Integer.parseInt(from.getFirstHeaderOrNull("X-Account-Object-Count"))) //
+            .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
+   }
 }

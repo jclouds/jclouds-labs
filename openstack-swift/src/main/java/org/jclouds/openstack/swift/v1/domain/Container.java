@@ -26,16 +26,75 @@ import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
 /**
- * retrieve a list of existing storage containers ordered by name. The sort order for the name is
- * based on a binary comparison, a single built-in collating sequence that compares string data
- * using SQLite's memcmp() function, regardless of text encoding.
- * 
- * @author Adrian Cole
  * @see <a
  *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/s_listcontainers.html">api
  *      doc</a>
  */
 public class Container implements Comparable<Container> {
+
+   private final String name;
+   private final long objectCount;
+   private final long bytesUsed;
+
+   @ConstructorProperties({ "name", "count", "bytes" })
+   protected Container(String name, long objectCount, long bytesUsed) {
+      this.name = checkNotNull(name, "name");
+      this.objectCount = objectCount;
+      this.bytesUsed = bytesUsed;
+   }
+
+   public String name() {
+      return name;
+   }
+
+   public long objectCount() {
+      return objectCount;
+   }
+
+   public long bytesUsed() {
+      return bytesUsed;
+   }
+
+   @Override
+   public boolean equals(Object object) {
+      if (this == object) {
+         return true;
+      }
+      if (object instanceof Container) {
+         final Container that = Container.class.cast(object);
+         return equal(name(), that.name()) //
+               && equal(objectCount(), that.objectCount()) //
+               && equal(bytesUsed(), that.bytesUsed());
+      } else {
+         return false;
+      }
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(name(), objectCount(), bytesUsed());
+   }
+
+   @Override
+   public String toString() {
+      return string().toString();
+   }
+
+   protected ToStringHelper string() {
+      return toStringHelper("") //
+            .add("name", name()) //
+            .add("objectCount", objectCount()) //
+            .add("bytesUsed", bytesUsed());
+   }
+
+   @Override
+   public int compareTo(Container that) {
+      if (that == null)
+         return 1;
+      if (this == that)
+         return 0;
+      return this.name().compareTo(that.name());
+   }
 
    public static Builder builder() {
       return new Builder();
@@ -47,11 +106,11 @@ public class Container implements Comparable<Container> {
 
    public static class Builder {
       protected String name;
-      protected int count;
-      protected int bytes;
+      protected long objectCount;
+      protected long bytesUsed;
 
       /**
-       * @see Container#getName()
+       * @see Container#name()
        */
       public Builder name(String name) {
          this.name = checkNotNull(name, "name");
@@ -59,99 +118,29 @@ public class Container implements Comparable<Container> {
       }
 
       /**
-       * @see Container#getCount()
+       * @see Container#objectCount()
        */
-      public Builder count(int count) {
-         this.count = count;
+      public Builder objectCount(long objectCount) {
+         this.objectCount = objectCount;
          return this;
       }
 
       /**
-       * @see Container#getBytes()
+       * @see Container#bytesUsed()
        */
-      public Builder bytes(int bytes) {
-         this.bytes = bytes;
+      public Builder bytesUsed(long bytesUsed) {
+         this.bytesUsed = bytesUsed;
          return this;
       }
 
       public Container build() {
-         return new Container(name, count, bytes);
+         return new Container(name, objectCount, bytesUsed);
       }
 
       public Builder fromContainer(Container from) {
-         return name(from.getName()).count(from.getCount()).bytes(from.getBytes());
+         return name(from.name()) //
+               .objectCount(from.objectCount()) //
+               .bytesUsed(from.bytesUsed());
       }
    }
-  
-   protected String name;
-   protected int count;
-   protected int bytes;
-
-   @ConstructorProperties({"name", "count", "bytes"})
-   protected Container(String name, int count, int bytes) {
-      this.name = checkNotNull(name, "name");
-      this.count = count;
-      this.bytes = bytes;
-   }
-
-   /**
-    * 
-    * @return the name of the container
-    */
-   public String getName() {
-      return name;
-   }
-
-   /**
-    * 
-    * @return the number of objects in the container
-    */
-   public int getCount() {
-      return count;
-   }
-
-   /**
-    * @return the total bytes stored in this container
-    */
-   public int getBytes() {
-      return bytes;
-   }
-
-   @Override
-   public boolean equals(Object object) {
-      if (this == object) {
-         return true;
-      }
-      if (object instanceof Container) {
-         final Container other = Container.class.cast(object);
-         return equal(getName(), other.getName()) && equal(getCount(), other.getCount())
-                  && equal(getBytes(), other.getBytes());
-      } else {
-         return false;
-      }
-   }
-
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(getName(), getCount(), getBytes());
-   }
-
-   @Override
-   public String toString() {
-      return string().toString();
-   }
-
-   protected ToStringHelper string() {
-      return toStringHelper("").add("name", getName()).add("count", getCount()).add("bytes", getBytes());
-   }
-
-   @Override
-   public int compareTo(Container that) {
-      if (that == null)
-         return 1;
-      if (this == that)
-         return 0;
-      return this.getName().compareTo(that.getName());
-   }
-
 }

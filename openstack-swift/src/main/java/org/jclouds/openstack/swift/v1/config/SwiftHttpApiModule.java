@@ -41,8 +41,6 @@ import com.google.common.collect.Multimap;
 import com.google.inject.Provides;
 
 /**
- * Configures the Swift connection.
- * 
  * @author Adrian Cole
  * @author Zack Shoylev
  */
@@ -73,7 +71,7 @@ public class SwiftHttpApiModule extends HttpApiModule<SwiftApi> {
             .build(new CacheLoader<String, Set<? extends Extension>>() {
                @Override
                public Set<? extends Extension> load(String key) throws Exception {
-                  return swiftApi.get().getExtensionApiForRegion(key).list();
+                  return swiftApi.get().extensionApiInRegion(key).list();
                }
             });
    }

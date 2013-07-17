@@ -17,15 +17,11 @@
 package org.jclouds.openstack.swift.v1.internal;
 
 import java.util.Properties;
+
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 
-/**
- * Tests behavior of {@code SwiftApi}
- * 
- * @author Adrian Cole
- */
 public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
 
    public BaseSwiftApiLiveTest() {
