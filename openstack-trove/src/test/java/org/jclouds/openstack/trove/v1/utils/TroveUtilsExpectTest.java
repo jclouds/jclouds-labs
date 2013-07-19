@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.openstack.trove.v1.internal;
+package org.jclouds.openstack.trove.v1.utils;
 
 import static org.testng.Assert.assertEquals;
 
@@ -27,6 +27,7 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.trove.v1.TroveApi;
 import org.jclouds.openstack.trove.v1.domain.Instance;
+import org.jclouds.openstack.trove.v1.internal.BaseTroveApiExpectTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;

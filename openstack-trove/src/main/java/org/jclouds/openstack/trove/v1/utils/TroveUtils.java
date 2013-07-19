@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.openstack.trove.v1.internal;
+package org.jclouds.openstack.trove.v1.utils;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

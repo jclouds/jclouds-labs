@@ -31,7 +31,7 @@ import java.util.UUID;
 import org.jclouds.openstack.trove.v1.domain.Instance;
 import org.jclouds.openstack.trove.v1.domain.User;
 import org.jclouds.openstack.trove.v1.internal.BaseTroveApiLiveTest;
-import org.jclouds.openstack.trove.v1.internal.TroveUtils;
+import org.jclouds.openstack.trove.v1.utils.TroveUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
