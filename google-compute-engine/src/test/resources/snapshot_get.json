@@ -1,0 +1,11 @@
+{
+   "kind": "compute#snapshot",
+   "id": "13050421646334304999",
+   "creationTimestamp": "2012-11-25T01:38:48.306",
+   "selfLink": "https://www.googleapis.com/compute/v1beta15/projects/myproject/global/snapshots/testsnap1",
+   "name": "testsnap1",
+   "sizeGb": "1",
+   "status": "READY",
+   "sourceDisk": "https://www.googleapis.com/compute/v1beta15/projects/myproject/zones/us-central1-a/disks/testimage1",
+   "sourceDiskId": "13050421646334304115"
+}

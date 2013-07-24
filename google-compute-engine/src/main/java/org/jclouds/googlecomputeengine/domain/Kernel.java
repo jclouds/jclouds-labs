@@ -16,17 +16,17 @@
  */
 package org.jclouds.googlecomputeengine.domain;
 
-import com.google.common.annotations.Beta;
-
 import java.beans.ConstructorProperties;
 import java.net.URI;
 import java.util.Date;
+
+import com.google.common.annotations.Beta;
 
 /**
  * Represents a kernel.
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/kernels"/>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/kernels"/>
  */
 @Beta
 public final class Kernel extends Resource {

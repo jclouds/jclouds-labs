@@ -45,7 +45,7 @@ import org.jclouds.rest.annotations.SkipEncoding;
  * Provides access to Projects via their REST API.
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/projects"/>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/projects"/>
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(OAuthAuthenticator.class)
@@ -89,6 +89,6 @@ public interface ProjectApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Produces(MediaType.APPLICATION_JSON)
    Operation setCommonInstanceMetadata(@PathParam("project") String projectName,
-                                                         @BinderParam(MetadataBinder.class)
-                                                         Map<String, String> commonInstanceMetadata);
+                                       @BinderParam(MetadataBinder.class)
+                                       Map<String, String> commonInstanceMetadata);
 }

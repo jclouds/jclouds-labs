@@ -16,6 +16,29 @@
  */
 package org.jclouds.googlecomputeengine.config;
 
+import static org.jclouds.googlecomputeengine.domain.Firewall.Rule;
+
+import java.beans.ConstructorProperties;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+
+import javax.inject.Singleton;
+
+import org.jclouds.googlecomputeengine.domain.Firewall;
+import org.jclouds.googlecomputeengine.domain.Instance;
+import org.jclouds.googlecomputeengine.domain.InstanceTemplate;
+import org.jclouds.googlecomputeengine.domain.Operation;
+import org.jclouds.googlecomputeengine.domain.Project;
+import org.jclouds.googlecomputeengine.options.FirewallOptions;
+import org.jclouds.json.config.GsonModule;
+import org.jclouds.oauth.v2.domain.ClaimSet;
+import org.jclouds.oauth.v2.domain.Header;
+import org.jclouds.oauth.v2.json.ClaimSetTypeAdapter;
+import org.jclouds.oauth.v2.json.HeaderTypeAdapter;
+
 import com.google.common.collect.ForwardingMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Range;
@@ -30,27 +53,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import org.jclouds.googlecomputeengine.domain.Firewall;
-import org.jclouds.googlecomputeengine.domain.Instance;
-import org.jclouds.googlecomputeengine.domain.InstanceTemplate;
-import org.jclouds.googlecomputeengine.domain.Operation;
-import org.jclouds.googlecomputeengine.domain.Project;
-import org.jclouds.googlecomputeengine.options.FirewallOptions;
-import org.jclouds.json.config.GsonModule;
-import org.jclouds.oauth.v2.domain.ClaimSet;
-import org.jclouds.oauth.v2.domain.Header;
-import org.jclouds.oauth.v2.json.ClaimSetTypeAdapter;
-import org.jclouds.oauth.v2.json.HeaderTypeAdapter;
-
-import javax.inject.Singleton;
-import java.beans.ConstructorProperties;
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
-
-import static org.jclouds.googlecomputeengine.domain.Firewall.Rule;
 
 /**
  * @author David Alves
@@ -81,7 +83,7 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
    /**
     * Parser for operations that unwraps errors avoiding an extra intermediate object.
     *
-    * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13/operations"/>
+    * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15/operations"/>
     */
    @Singleton
    private static class OperationTypeAdapter implements JsonDeserializer<Operation> {
@@ -107,16 +109,16 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
          @ConstructorProperties({
                  "id", "creationTimestamp", "selfLink", "name", "description", "targetLink", "targetId",
                  "clientOperationId", "status", "statusMessage", "user", "progress", "insertTime", "startTime",
-                 "endTime", "httpErrorStatusCode", "httpErrorMessage", "operationType"
+                 "endTime", "httpErrorStatusCode", "httpErrorMessage", "operationType", "region", "zone"
          })
          private OperationInternal(String id, Date creationTimestamp, URI selfLink, String name,
                                    String description, URI targetLink, String targetId, String clientOperationId,
                                    Status status, String statusMessage, String user, int progress, Date insertTime,
                                    Date startTime, Date endTime, int httpErrorStatusCode, String httpErrorMessage,
-                                   String operationType) {
+                                   String operationType, URI region, URI zone) {
             super(id, creationTimestamp, selfLink, name, description, targetLink, targetId, clientOperationId,
                     status, statusMessage, user, progress, insertTime, startTime, endTime, httpErrorStatusCode,
-                    httpErrorMessage, operationType, null);
+                    httpErrorMessage, operationType, null, region, zone);
          }
       }
    }
@@ -162,9 +164,7 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
             super(template.getMachineType());
             name(template.getName());
             description(template.getDescription());
-            zone(template.getZone());
             image(template.getImage());
-            tags(template.getTags());
             serviceAccounts(template.getServiceAccounts());
             networkInterfaces(template.getNetworkInterfaces());
          }
@@ -205,7 +205,7 @@ public class GoogleComputeEngineParserModule extends AbstractModule {
                  "status", "statusMessage", "zone", "networkInterfaces", "metadata", "serviceAccounts"
          })
          private InstanceInternal(String id, Date creationTimestamp, URI selfLink, String name, String description,
-                                  Set<String> tags, URI image, URI machineType, Status status, String statusMessage,
+                                  Tags tags, URI image, URI machineType, Status status, String statusMessage,
                                   URI zone, Set<NetworkInterface> networkInterfaces, Metadata metadata,
                                   Set<ServiceAccount> serviceAccounts) {
             super(id, creationTimestamp, selfLink, name, description, tags, image, machineType,

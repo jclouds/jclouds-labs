@@ -16,13 +16,14 @@
  */
 package org.jclouds.googlecomputeengine.parse;
 
-import com.google.common.collect.ImmutableMap;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
+
 import org.jclouds.googlecomputeengine.config.GoogleComputeEngineParserModule;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineParseTest;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author David Alves

@@ -19,17 +19,20 @@ package org.jclouds.googlecomputeengine.features;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
+import org.jclouds.googlecomputeengine.domain.Image;
 import org.jclouds.googlecomputeengine.domain.Instance;
 import org.jclouds.googlecomputeengine.domain.InstanceTemplate;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiLiveTest;
 import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
@@ -46,19 +49,35 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    private static final int TIME_WAIT = 600;
 
    private InstanceTemplate instance;
-   
+
    @Override
    protected GoogleComputeEngineApi create(Properties props, Iterable<Module> modules) {
       GoogleComputeEngineApi api = super.create(props, modules);
+      URI imageUri = api.getImageApiForProject("google")
+              .list(new ListOptions.Builder().filter("name eq gcel.*"))
+              .concat()
+              .filter(new Predicate<Image>() {
+                 @Override
+                 public boolean apply(Image input) {
+                    // filter out only images with deprecation state that isn't "DEPRECATED"
+                    if (input.getDeprecated().isPresent() && input.getDeprecated().get().getState().isPresent()) {
+                       return input.getDeprecated().get().getState().get().equals("DEPRECATED");
+                    }
+                    return true;
+                 }
+              })
+              .first()
+              .get()
+              .getSelfLink();
       instance = InstanceTemplate.builder()
-            .forMachineType(getDefaultMachineTypekUrl(userProject.get()))
-            .addNetworkInterface(getNetworkUrl(userProject.get(), INSTANCE_NETWORK_NAME),
-                    Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
-            .addMetadata("mykey", "myvalue")
-            .addTag("atag")
-            .description("a description")
-            .addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE, getDiskUrl(userProject.get(), DISK_NAME))
-            .zone(getDefaultZoneUrl(userProject.get()));
+              .forMachineType(getDefaultMachineTypeUrl(userProject.get()))
+              .addNetworkInterface(getNetworkUrl(userProject.get(), INSTANCE_NETWORK_NAME),
+                      Instance.NetworkInterface.AccessConfig.Type.ONE_TO_ONE_NAT)
+              .addMetadata("mykey", "myvalue")
+              .description("a description")
+              .addDisk(InstanceTemplate.PersistentDisk.Mode.READ_WRITE, getDiskUrl(userProject.get(), DISK_NAME))
+              .image(imageUri);
+
       return api;
    }
 
@@ -70,20 +89,20 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    public void testInsertInstance() {
 
       // need to create the network first
-      assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).createInIPv4Range
+      assertGlobalOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).createInIPv4Range
               (INSTANCE_NETWORK_NAME, IPV4_RANGE), TIME_WAIT);
 
-      assertOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).createInZone
-              ("instance-live-test-disk", 1, getDefaultZoneUrl(userProject.get())), TIME_WAIT);
+      assertZoneOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).createInZone
+              ("instance-live-test-disk", 10, DEFAULT_ZONE_NAME), TIME_WAIT);
 
-      assertOperationDoneSucessfully(api().createInZone(INSTANCE_NAME, instance, DEFAULT_ZONE_NAME), TIME_WAIT);
+      assertZoneOperationDoneSucessfully(api().createInZone(INSTANCE_NAME, DEFAULT_ZONE_NAME, instance), TIME_WAIT);
 
    }
 
    @Test(groups = "live", dependsOnMethods = "testInsertInstance")
    public void testGetInstance() {
 
-      Instance instance = api().get(INSTANCE_NAME);
+      Instance instance = api().getInZone(DEFAULT_ZONE_NAME, INSTANCE_NAME);
       assertNotNull(instance);
       assertInstanceEquals(instance, this.instance);
    }
@@ -91,7 +110,7 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    @Test(groups = "live", dependsOnMethods = "testInsertInstance")
    public void testListInstance() {
 
-      PagedIterable<Instance> instances = api().list(new ListOptions.Builder()
+      PagedIterable<Instance> instances = api().listInZone(DEFAULT_ZONE_NAME, new ListOptions.Builder()
               .filter("name eq " + INSTANCE_NAME));
 
       List<Instance> instancesAsList = Lists.newArrayList(instances.concat());
@@ -105,16 +124,15 @@ public class InstanceApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    @Test(groups = "live", dependsOnMethods = "testListInstance")
    public void testDeleteInstance() {
 
-      assertOperationDoneSucessfully(api().delete(INSTANCE_NAME), TIME_WAIT);
-      assertOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).delete(DISK_NAME),
+      assertZoneOperationDoneSucessfully(api().deleteInZone(DEFAULT_ZONE_NAME, INSTANCE_NAME), TIME_WAIT);
+      assertZoneOperationDoneSucessfully(api.getDiskApiForProject(userProject.get()).deleteInZone(DEFAULT_ZONE_NAME, DISK_NAME),
               TIME_WAIT);
-      assertOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).delete
+      assertGlobalOperationDoneSucessfully(api.getNetworkApiForProject(userProject.get()).delete
               (INSTANCE_NETWORK_NAME), TIME_WAIT);
    }
 
    private void assertInstanceEquals(Instance result, InstanceTemplate expected) {
       assertEquals(result.getName(), expected.getName());
-      assertEquals(result.getTags(), expected.getTags());
       assertEquals(result.getMetadata(), expected.getMetadata());
    }
 }

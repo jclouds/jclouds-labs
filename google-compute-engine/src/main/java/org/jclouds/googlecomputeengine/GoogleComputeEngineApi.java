@@ -23,14 +23,15 @@ import javax.ws.rs.PathParam;
 
 import org.jclouds.googlecomputeengine.features.DiskApi;
 import org.jclouds.googlecomputeengine.features.FirewallApi;
+import org.jclouds.googlecomputeengine.features.GlobalOperationApi;
 import org.jclouds.googlecomputeengine.features.ImageApi;
 import org.jclouds.googlecomputeengine.features.InstanceApi;
 import org.jclouds.googlecomputeengine.features.KernelApi;
 import org.jclouds.googlecomputeengine.features.MachineTypeApi;
 import org.jclouds.googlecomputeengine.features.NetworkApi;
-import org.jclouds.googlecomputeengine.features.OperationApi;
 import org.jclouds.googlecomputeengine.features.ProjectApi;
 import org.jclouds.googlecomputeengine.features.ZoneApi;
+import org.jclouds.googlecomputeengine.features.ZoneOperationApi;
 import org.jclouds.rest.annotations.Delegate;
 
 import com.google.common.annotations.Beta;
@@ -41,7 +42,7 @@ import com.google.common.annotations.Beta;
  * <p/>
  *
  * @author David Alves
- * @see <a href="https://developers.google.com/compute/docs/reference/v1beta13">api doc</a>
+ * @see <a href="https://developers.google.com/compute/docs/reference/v1beta15">api doc</a>
  */
 @Beta
 public interface GoogleComputeEngineApi extends Closeable {
@@ -63,6 +64,15 @@ public interface GoogleComputeEngineApi extends Closeable {
    @Delegate
    @Path("/projects/{project}")
    FirewallApi getFirewallApiForProject(@PathParam("project") String projectName);
+
+   /**
+    * Provides access to Global Operation features
+    *
+    * @param projectName the name of the project
+    */
+   @Delegate
+   @Path("/projects/{project}")
+   GlobalOperationApi getGlobalOperationApiForProject(@PathParam("project") String projectName);
 
    /**
     * Provides access to Image features
@@ -110,15 +120,6 @@ public interface GoogleComputeEngineApi extends Closeable {
    NetworkApi getNetworkApiForProject(@PathParam("project") String projectName);
 
    /**
-    * Provides access to Operation features
-    *
-    * @param projectName the name of the project
-    */
-   @Delegate
-   @Path("/projects/{project}")
-   OperationApi getOperationApiForProject(@PathParam("project") String projectName);
-
-   /**
     * Provides access to Project features
     */
    @Delegate
@@ -133,5 +134,13 @@ public interface GoogleComputeEngineApi extends Closeable {
    @Path("/projects/{project}")
    ZoneApi getZoneApiForProject(@PathParam("project") String projectName);
 
+   /**
+    * Provides access to Zone Operation features
+    *
+    * @param projectName the name of the project
+    */
+   @Delegate
+   @Path("/projects/{project}")
+   ZoneOperationApi getZoneOperationApiForProject(@PathParam("project") String projectName);
 
 }

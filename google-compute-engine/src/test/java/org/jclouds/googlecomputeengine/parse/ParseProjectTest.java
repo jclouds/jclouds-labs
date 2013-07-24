@@ -16,15 +16,17 @@
  */
 package org.jclouds.googlecomputeengine.parse;
 
-import com.google.common.collect.ImmutableMap;
+import java.net.URI;
+import java.util.Date;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
+
 import org.jclouds.googlecomputeengine.domain.Project;
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineParseTest;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
-import java.net.URI;
-import java.util.Date;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author David Alves
@@ -43,7 +45,7 @@ public class ParseProjectTest extends BaseGoogleComputeEngineParseTest<Project> 
       return Project.builder()
               .id("13024414184846275913")
               .creationTimestamp(new Date(Long.parseLong("1351109596252")))
-              .selfLink(URI.create("https://www.googleapis.com/compute/v1beta13/projects/myproject"))
+              .selfLink(URI.create("https://www.googleapis.com/compute/v1beta15/projects/myproject"))
               .name("myproject")
               .description("")
               .commonInstanceMetadata(

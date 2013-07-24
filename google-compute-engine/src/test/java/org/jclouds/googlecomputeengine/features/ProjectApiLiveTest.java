@@ -20,13 +20,6 @@ package org.jclouds.googlecomputeengine.features;
  * @author David Alves
  */
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import org.jclouds.googlecomputeengine.domain.Operation;
-import org.jclouds.googlecomputeengine.domain.Project;
-import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiLiveTest;
-import org.testng.annotations.Test;
-
 import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Predicates.not;
 import static org.testng.Assert.assertEquals;
@@ -35,6 +28,14 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
+
+import org.jclouds.googlecomputeengine.domain.Operation;
+import org.jclouds.googlecomputeengine.domain.Project;
+import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiLiveTest;
+import org.testng.annotations.Test;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 /**
  * @author David Alves
@@ -68,7 +69,7 @@ public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
    @Test(groups = "live", dependsOnMethods = "testGetProjectWhenExists")
    public void addItemToMetadata() {
       this.initialMetadataSize = project.getCommonInstanceMetadata().size();
-      assertOperationDoneSucessfully(addItemToMetadata(projectApi(), userProject.get(), METADATA_ITEM_KEY,
+      assertGlobalOperationDoneSucessfully(addItemToMetadata(projectApi(), userProject.get(), METADATA_ITEM_KEY,
               METADATA_ITEM_VALUE), 20);
       this.project = projectApi().get(userProject.get());
       assertNotNull(project);
@@ -80,7 +81,7 @@ public class ProjectApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
 
    @Test(groups = "live", dependsOnMethods = "addItemToMetadata")
    public void testDeleteItemFromMetadata() {
-      assertOperationDoneSucessfully(deleteItemFromMetadata(projectApi(), userProject.get(), METADATA_ITEM_KEY), 20);
+      assertGlobalOperationDoneSucessfully(deleteItemFromMetadata(projectApi(), userProject.get(), METADATA_ITEM_KEY), 20);
       this.project = projectApi().get(userProject.get());
       assertNotNull(project);
       assertFalse(project.getCommonInstanceMetadata().containsKey(METADATA_ITEM_KEY));
