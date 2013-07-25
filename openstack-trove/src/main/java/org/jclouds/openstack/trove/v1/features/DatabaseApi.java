@@ -66,13 +66,12 @@ public interface DatabaseApi {
    boolean create(@PayloadParam("database") String database);
    
    /**
-    * Create database
     * This operation creates a new database within the specified instance.
     * 
     * @param database The name of the database to be created
     * @param character_set Optional. Set of symbols and encodings. The default character set is utf8.
     * @param collate Optional. Set of rules for comparing characters in a character set. The default value for collate is utf8_general_ci.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("database:create")
    @POST
@@ -86,7 +85,7 @@ public interface DatabaseApi {
     * This operation deletes the specified database for the specified database instance.
     *
     * @param databaseName The name for the specified database.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("databases:delete")
    @DELETE
@@ -98,7 +97,7 @@ public interface DatabaseApi {
    /**
     * This operation lists the databases for the specified database instance.
     *
-    * @return The list of Databases
+    * @return The list of Databases.
     */
    @Named("database:list")
    @GET

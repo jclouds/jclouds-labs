@@ -65,7 +65,7 @@ public class User implements Comparable<User>{
       }
       else {
          // Using List<Map<String,String>> as the internal representation makes it easy to serialize properly
-         // with less code; this code is to present databases as List<String> to the user
+         // with less code; this code is to present databases as List<String> to the user.
          List<Map<String,String>> databaseList = Lists.newArrayList();
          for(String databaseName : databases) {
             Map<String,String> singleDatabase = Maps.newHashMap();
@@ -86,7 +86,7 @@ public class User implements Comparable<User>{
    }   
    
    /**
-    * @return the password for this user
+    * @return the password for this user.
     * @see User.Builder#password(String)
     */
    public String getPassword() {
@@ -94,7 +94,7 @@ public class User implements Comparable<User>{
    }
    
    /**
-    * @return the host for this user
+    * @return the host for this user.
     * @see User.Builder#host(String)
     */
    public String getHost() {
@@ -102,7 +102,7 @@ public class User implements Comparable<User>{
    }
    
    /**
-    * @return a unique identifier for this user. In most cases, this is just the name. If the user is restricted to connections from a specific host, the hostname must be appended to the user name with a "@"
+    * @return a unique identifier for this user. In most cases, this is just the name. If the user is restricted to connections from a specific host, the hostname must be appended to the user name with a "@".
     */
    public String getIdentifier() {
       if(host==null || "%".equals(host))
@@ -112,7 +112,7 @@ public class User implements Comparable<User>{
    }
 
    /**
-    * @return the databases for this user
+    * @return the databases for this user.
     * @see User.Builder#databases(String)
     */
    public List<String> getDatabases() {
@@ -167,8 +167,8 @@ public class User implements Comparable<User>{
       protected Set<String> databases;
       
       /** 
-       * @param name The name of this user
-       * @return The builder object
+       * @param name The name of this user.
+       * @return The builder object.
        * @see User#getName()
        */
       public Builder name(String name) {
@@ -177,8 +177,8 @@ public class User implements Comparable<User>{
       }
 
       /** 
-       * @param name The password for this user
-       * @return The builder object
+       * @param name The password for this user.
+       * @return The builder object.
        * @see User#getPassword()
        */
       public Builder password(String password) {
@@ -187,8 +187,12 @@ public class User implements Comparable<User>{
       }
       
       /** 
-       * @param host Specifies the host from which a user is allowed to connect to the database. Possible values are a string containing an IPv4 address or "%" to allow connecting from any host. Refer to Section 3.11.1, “User Access Restriction by Host” for details. If host is not specified, it defaults to "%".
-       * @return The builder object
+       * @param host Specifies the host from which a user is allowed to connect to the database. 
+       * Possible values are a string containing an IPv4 address or "%" to allow connecting from any host. 
+       * Refer to Section 3.11.1, “User Access Restriction by Host” in the Rackspace Cloud Databases Developer Guide for details.
+       * If host is not specified, it defaults to "%".
+       * @return The builder object.
+       * @see <a href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/user_access_restrict_by_host-dle387.html">User Access Restriction by Host</a>
        * @see User#getHost()
        */
       public Builder host(String host) {
@@ -197,8 +201,8 @@ public class User implements Comparable<User>{
       }
 
       /** 
-       * @param name The databases for this user
-       * @return The builder object
+       * @param name The databases for this user.
+       * @return The builder object.
        * @see User#getDatabases()
        */
       public Builder databases(Set<String> databases) {
@@ -208,7 +212,7 @@ public class User implements Comparable<User>{
 
       /**
        * 
-       * @return A new User object
+       * @return A new User object.
        */
       public User build() {
          return new User(name, password, host, databases);

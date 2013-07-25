@@ -59,11 +59,11 @@ import com.google.common.collect.FluentIterable;
 public interface InstanceApi {
     
    /**
-    * Same as {@link #create(String, int, String)} but accept an integer Flavor ID
+    * Same as {@link #create(String, int, String)} but accept an integer Flavor ID.
     *
-    * @param flavor The flavor ID
-    * @param volumeSize The size in GB of the instance volume
-    * @param name The name of the instance
+    * @param flavor The flavor ID.
+    * @param volumeSize The size in GB of the instance volume.
+    * @param name The name of the instance.
     * @return The instance created.
     * 
     * @see InstanceApi#create(String, int, String)
@@ -77,11 +77,11 @@ public interface InstanceApi {
    Instance create(@PayloadParam("flavorRef") int flavor, @PayloadParam("size") int volumeSize, @PayloadParam("name") String name);
 
    /**
-    * Create a database instance by flavor type and volume size
+    * Create a database instance by flavor type and volume size.
     *
-    * @param flavor The flavor URL or flavor id as string
-    * @param volumeSize The size in GB of the instance volume
-    * @param name The name of the instance
+    * @param flavor The flavor URL or flavor id as string.
+    * @param volumeSize The size in GB of the instance volume.
+    * @param name The name of the instance.
     * @return The instance created.
     */
    @Named("instance:create")
@@ -93,9 +93,10 @@ public interface InstanceApi {
    Instance create(@PayloadParam("flavorRef") String flavor, @PayloadParam("size") int volumeSize, @PayloadParam("name") String name);
    
    /**
-    * Deletes an Instance by id
+    * Deletes an Instance by id.
     *
-    * @return true if successful
+    * @param instanceId The instance id.
+    * @return true if successful.
     */
    @Named("instances:delete/{id}")
    @DELETE
@@ -105,9 +106,10 @@ public interface InstanceApi {
    boolean delete(@PathParam("id") String instanceId);
    
    /**
-    * Enables root for an instance
+    * Enables root for an instance.
     *
-    * @return String password
+    * @param instanceId The instance id.
+    * @return String The password for the root user.
     */
    @Named("instances/{id}/root")
    @POST
@@ -118,10 +120,11 @@ public interface InstanceApi {
    String enableRoot(@PathParam("id") String instanceId);
    
    /**
-    * Checks to see if root is enabled for an instance
+    * Checks to see if root is enabled for an instance.
     *
+    * @param instanceId The instance id.
     * @throws ResourceNotFoundException
-    * @return boolean
+    * @return boolean True if root is enabled.
     */
    @Named("instances/{id}/root")
    @GET
@@ -133,7 +136,7 @@ public interface InstanceApi {
    /**
     * Returns a summary list of Instances.
     *
-    * @return The list of Instances
+    * @return The list of Instances.
     */
    @Named("instance:list")
    @GET
@@ -144,9 +147,10 @@ public interface InstanceApi {
    FluentIterable<Instance> list();
       
    /**
-    * Returns an Instance by id
+    * Returns an Instance by id.
     *
-    * @return Instance or Null on not found
+    * @param instanceId The instance id.
+    * @return Instance or Null on not found.
     */
    @Named("instances:get/{id}")
    @GET

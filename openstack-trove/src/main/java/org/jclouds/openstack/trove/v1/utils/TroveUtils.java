@@ -32,8 +32,7 @@ import com.google.common.util.concurrent.Uninterruptibles;
 /**
  * @author Zack Shoylev
  * 
- *         Helper methods for dealing with instances that get created with
- *         errors
+ * Helper methods for dealing with instances that get created with errors.
  */
 public class TroveUtils {
    private final TroveApi api;
@@ -45,19 +44,19 @@ public class TroveUtils {
    }
 
    /**
-    * Create an ACTIVE operational instance
+    * Create an ACTIVE operational instance.
     * 
     * @see InstanceApi#create(String, int, String)
     * 
     * @param zone
-    *           The instance zone or region
+    *           The instance zone or region.
     * @param name
-    *           Instance name
+    *           Instance name.
     * @param flavorId
-    *           Id of the flavor to be used when creating the instance
+    *           Id of the flavor to be used when creating the instance.
     * @param size
-    *           Size of the instance
-    * @return Instance object in active state or NULL
+    *           Size of the instance.
+    * @return Instance object in active state or NULL.
     */
    public Instance getWorkingInstance(String zone, String name, String flavorId, int size) {
       InstanceApi instanceApi = api.getInstanceApiForZone(zone);
@@ -84,6 +83,12 @@ public class TroveUtils {
       return null;
    }
 
+   /**
+    * This will return a small working instance.
+    * 
+    * @param zone The zone where the instance should be created.
+    * @return A working database instance.
+    */
    public Instance getWorkingInstance(String zone) {
       return getWorkingInstance(zone, UUID.randomUUID().toString(), "1", 1);
    }

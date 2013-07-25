@@ -63,12 +63,14 @@ import com.google.common.collect.FluentIterable;
 public interface UserApi {
     
    /**
-    * Create database users
+    * Create database users.
     * A user is granted all privileges on the specified databases.
     * The following user name is reserved and cannot be used for creating users: root.
+    * This method can be used to create users with access restrictions by host
     *
-    * @param users List of users to be created
-    * @return true if successful
+    * @param users List of users to be created.
+    * @return true if successful.
+    * @see <a href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/user_access_restrict_by_host-dle387.html">User Access Restriction by Host</a>
     */
    @Named("user:create")
    @POST
@@ -79,12 +81,12 @@ public interface UserApi {
    boolean create(@PayloadParam("users") Set<User> users);
    
    /**
-    * Create a database user by name, password, and database name. Simpler overload for {@link #create(String, Set)} 
+    * Create a database user by name, password, and database name. Simpler overload for {@link #create(String, Set)}.
     *
     * @param userName Name of the user for the database.
     * @param password User password for database access.
     * @param databaseName Name of the database that the user can access.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("user:create")
    @POST
@@ -95,13 +97,13 @@ public interface UserApi {
    boolean create(@PayloadParam("name") String userName, @PayloadParam("password") String password, @PayloadParam("databaseName") String databaseName);
    
    /**
-    * Create a database user by name, password, and database name. Simpler overload for {@link #create(String, Set)} 
+    * Create a database user by name, password, and database name. Simpler overload for {@link #create(String, Set)}.
     *
     * @param userName Name of the user for the database.
     * @param password User password for database access.
     * @param host Specifies the host from which a user is allowed to connect to the database. Possible values are a string containing an IPv4 address or "%" to allow connecting from any host. Refer to Section 3.11.1, “User Access Restriction by Host” for details. If host is not specified, it defaults to "%".
     * @param databaseName Name of the database that the user can access.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("user:create")
    @POST
@@ -117,7 +119,7 @@ public interface UserApi {
     *
     * @param userName The name of the specified user.
     * @param databases List of the databases that the user should be granted access to.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("user:grant")
    @PUT
@@ -128,12 +130,12 @@ public interface UserApi {
    boolean grant(@PathParam("name") String userName, @PayloadParam("databases") List<String> databases);
    
    /**
-    * This operation grants access for the specified user to a database for the specified instance. Simpler overload for {@link #create(String, Set)}
+    * This operation grants access for the specified user to a database for the specified instance. Simpler overload for {@link #create(String, Set)}.
     * The user is granted all privileges.
     *
     * @param userName Name of the user for the database.
     * @param databaseName Name of the database that the user can access.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("user:grant")
    @PUT
@@ -149,7 +151,7 @@ public interface UserApi {
     *
     * @param userName Name of the user for the database.
     * @param databaseName Name of the database that the user can access.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("user:revoke")
    @DELETE
@@ -162,7 +164,7 @@ public interface UserApi {
     * This operation deletes the specified user for the specified database instance.
     *
     * @param userName The name for the specified user.
-    * @return true if successful
+    * @return true if successful.
     */
    @Named("users:delete/{name}")
    @DELETE
@@ -175,7 +177,7 @@ public interface UserApi {
     * This operation lists the users in the specified database instance.
     * This operation does not return the system users (database administrators that administer the health of the database). Also, this operation returns the "root" user only if "root" user has been enabled.
     *
-    * @return The list of Users
+    * @return The list of Users.
     */
    @Named("user:list")
    @GET
@@ -186,11 +188,11 @@ public interface UserApi {
    FluentIterable<User> list();
    
    /**
-    * This operation shows a list of all databases a user has access to.
+    * This operation shows a list of all databases to which a user has access.
     *
     * @param instanceId The instance ID for the specified database instance.
     * @param userName The name for the specified user.
-    * @return The list of Users
+    * @return The list of Users.
     */
    @Named("user:getDatabaseList/{name}")
    @GET
@@ -201,10 +203,10 @@ public interface UserApi {
    FluentIterable<String> getDatabaseList(@PathParam("name") String userName);
       
    /**
-    * Returns a User by identifier
+    * Returns a User by identifier.
     *
     * @param name The name or identifier for the specified user.
-    * @return User or Null on not found
+    * @return User or Null on not found.
     */
    @Named("user:get/{name}")
    @GET
@@ -217,11 +219,11 @@ public interface UserApi {
    User get(@PathParam("name") String name);
    
    /**
-    * Returns a User by name and allowed host
+    * Returns a User by name and allowed host.
     *
     * @param name The name for the specified user.
-    * @param host The associated hostname
-    * @return User or Null on not found
+    * @param host The associated hostname.
+    * @return User or Null on not found.
     */
    @Named("user:get/{name}@{hostname}")
    @GET

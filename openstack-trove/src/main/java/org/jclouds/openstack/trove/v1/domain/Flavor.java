@@ -49,21 +49,21 @@ public class Flavor implements Comparable<Flavor>{
    }
 
    /**
-    * @return the id of this flavor
+    * @return the id of this flavor.
     */
    public int getId() {
       return this.id;
    }
 
    /**
-    * @return the name of this flavor
+    * @return the name of this flavor.
     */
    public String getName() {
       return this.name.orNull();
    }
 
    /**
-    * @return the RAM amount for this flavor
+    * @return the RAM amount for this flavor.
     */
    public int getRam() {
       return this.ram;

@@ -58,14 +58,14 @@ public class Instance implements Comparable<Instance>{
    }
 
    /**
-    * @return the id of this instance
+    * @return the id of this instance.
     */
    public String getId() {
       return this.id;
    }
 
    /**
-    * @return the name of this instance
+    * @return the name of this instance.
     * @see Instance.Builder#name(String)
     */
    public String getName() {
@@ -73,7 +73,7 @@ public class Instance implements Comparable<Instance>{
    }
 
    /**
-    * @return the flavor of this instance
+    * @return the flavor of this instance.
     * @see Instance.Builder#flavor(Flavor)
     */
    public Flavor getFlavor() {
@@ -81,7 +81,7 @@ public class Instance implements Comparable<Instance>{
    }
 
    /**
-    * @return the volume size for this instance in gigabytes (GB)
+    * @return the volume size for this instance in gigabytes (GB).
     * @see Instance.Builder#size(int)
     */
    public int getSize() {
@@ -89,7 +89,7 @@ public class Instance implements Comparable<Instance>{
    }
 
    /**
-    * @return the status for this instance
+    * @return the status for this instance.
     * @see Instance.Builder#status(Instance.Status)
     */
    public Status getStatus() {
@@ -97,7 +97,7 @@ public class Instance implements Comparable<Instance>{
    }
 
    /**
-    * @return the Links for this instance
+    * @return the Links for this instance.
     * @see Instance.Builder#links(ImmutableList)
     */
    public List<Link> getLinks() {
@@ -105,7 +105,7 @@ public class Instance implements Comparable<Instance>{
    }
    
    /**
-    * @return the hostname of this instance. The hostname is null unless this Instance was obtained with {@link InstanceApi#get(String)}
+    * @return the hostname of this instance. The hostname is null unless this Instance was obtained with {@link InstanceApi#get(String)}.
     * @see Instance.Builder#hostname(String)
     */
    public String getHostname() {
@@ -113,7 +113,7 @@ public class Instance implements Comparable<Instance>{
    }
 
    /**
-    * Lists possible Instance status
+    * Lists possible Instance status.
     * @author zack-shoylev
     *
     */
@@ -143,7 +143,7 @@ public class Instance implements Comparable<Instance>{
        */
       SHUTDOWN, 
       /**
-       * Unrecognized status response
+       * Unrecognized status response.
        */
       UNRECOGNIZED;
 
@@ -206,8 +206,8 @@ public class Instance implements Comparable<Instance>{
       protected String hostname;
 
       /** 
-       * @param id The id of this instance
-       * @return The builder object
+       * @param id The id of this instance.
+       * @return The builder object.
        * @see Instance#getId()
        */
       public Builder id(String id) {
@@ -216,8 +216,8 @@ public class Instance implements Comparable<Instance>{
       }
 
       /** 
-       * @param name The name of this instance
-       * @return The builder object
+       * @param name The name of this instance.
+       * @return The builder object.
        * @see Instance#getName()
        */
       public Builder name(String name) {
@@ -227,7 +227,7 @@ public class Instance implements Comparable<Instance>{
 
       /** 
        * @param size Specifies the volume size in gigabytes (GB).
-       * @return The builder object
+       * @return The builder object.
        * @see Instance#getSize()
        */
       public Builder size(int size) {
@@ -237,7 +237,7 @@ public class Instance implements Comparable<Instance>{
 
       /** 
        * @param flavor The Flavor of this instance as specified in the response from the List Flavors API call.
-       * @return The builder object
+       * @return The builder object.
        * @see Instance#getFlavor()
        */
       public Builder flavor(Flavor flavor) {
@@ -246,8 +246,8 @@ public class Instance implements Comparable<Instance>{
       }
 
       /** 
-       * @param status The status of this instance
-       * @return The builder object
+       * @param status The status of this instance.
+       * @return The builder object.
        * @see Instance#getStatus()
        */
       public Builder status(Status status) {
@@ -256,8 +256,8 @@ public class Instance implements Comparable<Instance>{
       }
 
       /** 
-       * @param links The links to this instance
-       * @return The builder object
+       * @param links The links to this instance.
+       * @return The builder object.
        * @see Instance#getLinks()
        */
       public Builder links(ImmutableList<Link> links) {
@@ -266,8 +266,8 @@ public class Instance implements Comparable<Instance>{
       }
       
       /** 
-       * @param name The hostname of this instance
-       * @return The builder object
+       * @param name The hostname of this instance.
+       * @return The builder object.
        * @see Instance#getHostname()
        */
       public Builder hostname(String hostname) {
@@ -277,7 +277,7 @@ public class Instance implements Comparable<Instance>{
 
       /**
        * 
-       * @return A new Instance object
+       * @return A new Instance object.
        */
       public Instance build() {
          return new Instance(id, name, flavor, new Volume(size), status, links, hostname);

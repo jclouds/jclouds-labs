@@ -41,6 +41,8 @@ import com.google.inject.Provides;
  */
 public interface TroveApi extends Closeable{
    /**
+    * Provides a set of all zones available.
+    * 
     * @return the Zone codes configured
     */
    @Provides
@@ -78,7 +80,7 @@ public interface TroveApi extends Closeable{
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
    
    /**
-    * Provides the Tenant
+    * Provides the Tenant.
     */
    @Provides 
    Optional<Tenant> getCurrentTenantId();

@@ -52,7 +52,7 @@ public interface FlavorApi {
    /**
     * Returns a summary list of Flavors.
     *
-    * @return The list of Flavors
+    * @return The list of Flavors.
     */
    @Named("flavor:list")
    @GET
@@ -63,9 +63,10 @@ public interface FlavorApi {
    FluentIterable<Flavor> list();
    
    /**
-    * Returns a Flavor by id
+    * Returns a Flavor by id.
     *
-    * @return Flavor
+    * @param flavorId The id of the Flavor.
+    * @return Flavor The Flavor for the specified id.
     */
    @Named("flavors:get/{id}")
    @GET
@@ -76,9 +77,10 @@ public interface FlavorApi {
    Flavor get(@PathParam("id") int flavorId);
    
    /**
-    * Returns a list of Flavors by Account ID (Tenant Id)
+    * Returns a list of Flavors by Account ID (Tenant Id).
     *
-    * @return The list of Flavors for Account/Tenant Id
+    * @param flavorId The id of the tenant.
+    * @return The list of Flavors for Account/Tenant Id.
     */
    @Named("flavors:get/{id}")
    @GET

@@ -43,7 +43,7 @@ import com.google.common.base.Predicate;
  * }
  * </pre>
  * 
- * You can also use the static convenience methods as so.
+ * You can also use the static convenience methods as follows.
  * 
  * <pre>
  * {@code
@@ -73,7 +73,7 @@ public class InstancePredicates {
     * Wait until an Instance no longer exists.
     * 
     * @param instanceApi The InstanceApi in the zone where your Instance resides.
-    * @return RetryablePredicate That will check the whether the Instance exists 
+    * @return RetryablePredicate That will check whether the Instance exists.
     * every 5 seconds for a maxiumum of 10 minutes.
     */
    public static Predicate<Instance> awaitDeleted(InstanceApi instanceApi) {
@@ -81,6 +81,15 @@ public class InstancePredicates {
       return retry(deletedPredicate, 600, 5, 5, SECONDS);
    }
    
+   /**
+    * Wait until instance is in the status specified.
+    * 
+    * @param instanceApi The InstanceApi in the zone where your Instance resides.
+    * @param status Wait until instance in in this status.
+    * @param maxWaitInSec Maximum time to wait.
+    * @param periodInSec Interval between retries.
+    * @return RetryablePredicate That will check whether the Instance exists.
+    */
    public static Predicate<Instance> awaitStatus(
          InstanceApi instanceApi, Instance.Status status, long maxWaitInSec, long periodInSec) {
       StatusUpdatedPredicate statusPredicate = new StatusUpdatedPredicate(instanceApi, status);
@@ -97,7 +106,7 @@ public class InstancePredicates {
       }
 
       /**
-       * @return boolean Return true when the instance reaches status, false otherwise
+       * @return boolean Return true when the instance reaches status, false otherwise.
        */
       @Override
       public boolean apply(Instance instance) {
@@ -123,7 +132,7 @@ public class InstancePredicates {
       }
 
       /**
-       * @return boolean Return true when the snapshot is deleted, false otherwise
+       * @return boolean Return true when the snapshot is deleted, false otherwise.
        */
       @Override
       public boolean apply(Instance instance) {
