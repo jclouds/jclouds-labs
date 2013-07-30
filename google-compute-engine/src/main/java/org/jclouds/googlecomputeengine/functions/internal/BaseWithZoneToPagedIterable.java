@@ -49,7 +49,7 @@ public abstract class BaseWithZoneToPagedIterable<T, I extends BaseWithZoneToPag
 
       Optional<Object> project = tryFind(request.getCaller().get().getArgs(), instanceOf(String.class));
 
-      Optional<Object> zone = tryFind(request.getCaller().get().getArgs(), instanceOf(String.class));
+      Optional<Object> zone = tryFind(request.getInvocation().getArgs(), instanceOf(String.class));
 
       Optional<Object> listOptions = tryFind(request.getInvocation().getArgs(), instanceOf(ListOptions.class));
 
