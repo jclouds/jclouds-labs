@@ -16,12 +16,19 @@
  */
 package org.jclouds.abiquo.domain.enterprise;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.ApiContext;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Adds high level functionality to {@link DatacenterLimitsDto}.
@@ -57,8 +64,8 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto> {
 
    // Builder
 
-   public static Builder builder(final ApiContext<AbiquoApi> context) {
-      return new Builder(context);
+   public static Builder builder(final ApiContext<AbiquoApi> context, Datacenter datacenter) {
+      return new Builder(context, datacenter);
    }
 
    public static class Builder extends LimitsBuilder<Builder> {
@@ -68,9 +75,11 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto> {
 
       protected Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
 
-      public Builder(final ApiContext<AbiquoApi> context) {
-         super();
-         this.context = context;
+      protected Datacenter datacenter;
+
+      public Builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
+         this.context = checkNotNull(context, "missing context object");
+         this.datacenter = checkNotNull(datacenter, "missing datacenter object");
       }
 
       public Builder repositoryLimits(final long soft, final long hard) {
@@ -90,13 +99,18 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto> {
          dto.setRepositoryHardLimitsInMb(repositoryHard);
          dto.setRepositorySoftLimitsInMb(repositorySoft);
 
+         // Establish the relation with the physical datacenter
+         dto.addLink(new RESTLink(ParentLinkName.DATACENTER, checkNotNull(datacenter.unwrap().getEditLink(),
+                 "missing edit link").getHref()));
+
          Limits limits = new Limits(context, dto);
 
          return limits;
       }
 
       public static Builder fromEnterprise(final Limits in) {
-         return Limits.builder(in.context).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+         return Limits.builder(in.context, in.getDatacenter())
+               .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
                .storageLimits(in.getStorageSoft(), in.getStorageHard())
@@ -131,6 +145,13 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto> {
 
    public void setRepositorySoft(final long repositorySoft) {
       target.setRepositorySoftLimitsInMb(repositorySoft);
+   }
+
+   public Datacenter getDatacenter() {
+      Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
+      checkNotNull(datacenterId, ValidationErrors.MISSING_REQUIRED_LINK);
+      DatacenterDto dto = context.getApi().getInfrastructureApi().getDatacenter(datacenterId);
+      return wrap(context, Datacenter.class, dto);
    }
 
    @Override
