@@ -360,7 +360,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
 
       try {
          // Create new limits
-         Limits limits = Limits.builder(context).build();
+         Limits limits = Limits.builder(context, datacenter).build();
 
          // Save new limits
          dto = context.getApi().getEnterpriseApi().createLimits(target, datacenter.unwrap(), limits.unwrap());
