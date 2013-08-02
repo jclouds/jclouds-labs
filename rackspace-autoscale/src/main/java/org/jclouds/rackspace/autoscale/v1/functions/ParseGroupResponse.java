@@ -1,0 +1,151 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.jclouds.rackspace.autoscale.v1.functions;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseJson;
+import org.jclouds.openstack.v2_0.domain.Link;
+import org.jclouds.openstack.v2_0.domain.Link.Relation;
+import org.jclouds.rackspace.autoscale.v1.domain.Group;
+import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
+import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
+import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration.LaunchConfigurationType;
+import org.jclouds.rackspace.autoscale.v1.domain.LoadBalancer;
+import org.jclouds.rackspace.autoscale.v1.domain.Personality;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+
+/**
+ * This parses the group response and decouples domain objects from the json object returned by the service.
+ * @author Zack Shoylev
+ */
+public class ParseGroupResponse implements Function<HttpResponse, Group> {
+
+   private final ParseJson<Map<String, Object>> json;
+
+   @Inject
+   ParseGroupResponse(ParseJson<Map<String, Object>> json) {
+      this.json = checkNotNull(json, "json");
+   }
+
+   /**
+    * Extracts the user password from the json response
+    */
+   @SuppressWarnings("unchecked")
+   public Group apply(HttpResponse from) {
+      Map<String, Object> result = json.apply(from);
+
+      Map<String, Object> group = (Map<String, Object>) result.get("group");
+      Map<String, Object> groupConfigurationMap = (Map<String, Object>) group.get("groupConfiguration");
+      Map<String, Object> launchConfigurationMap = (Map<String, Object>) group.get("launchConfiguration");
+      List<ScalingPolicyResponse> scalingPoliciesList = Lists.newArrayList();
+      Map<String, Object> args = (Map<String, Object>) launchConfigurationMap.get("args");
+      Map<String, Object> server = (Map<String, Object>) args.get("server");      
+
+      List<Personality> personalities = Lists.newArrayList();
+      List<String> networks = Lists.newArrayList();
+      for(Map<String,String> jsonPersonality : (List<Map<String,String>>) server.get("personality")) {
+         personalities.add(Personality.builder().path(jsonPersonality.get("path")).contents(jsonPersonality.get("contents")).build());
+      }
+
+      for(Map<String,String> jsonNetwork : (List<Map<String,String>>) server.get("networks")) {
+         networks.add(jsonNetwork.get("uuid"));
+      }
+
+      List<LoadBalancer> loadBalancers = Lists.newArrayList();
+      for(Map<String,Double> jsonLoadBalancer : (List<Map<String,Double>>) args.get("loadBalancers")) {
+         loadBalancers.add(
+               LoadBalancer.builder().id( ((Double)jsonLoadBalancer.get("loadBalancerId")).intValue() ).port( ((Double)jsonLoadBalancer.get("port")).intValue() ).build()
+               );
+      }
+
+      LaunchConfiguration launchConfiguration = LaunchConfiguration.builder()
+            .loadBalancers(loadBalancers)
+            .serverName((String) server.get("name"))
+            .serverImageRef((String) server.get("imageRef"))
+            .serverFlavorRef((String) server.get("flavorRef"))
+            .serverDiskConfig((String) server.get("OS-DCF:diskConfig"))
+            .serverMetadata((Map<String, String>) server.get("metadata"))
+            .personalities(personalities)
+            .networks(networks)
+            .type(LaunchConfigurationType.getByValue((String) launchConfigurationMap.get("type")).get())
+            .build();
+
+      GroupConfiguration groupConfiguration = GroupConfiguration.builder()
+            .cooldown(((Double) groupConfigurationMap.get("cooldown")).intValue())
+            .minEntities(((Double) groupConfigurationMap.get("minEntities")).intValue())
+            .maxEntities(((Double) groupConfigurationMap.get("maxEntities")).intValue())
+            .name((String) groupConfigurationMap.get("name"))
+            .metadata((Map<String, String>) groupConfigurationMap.get("metadata"))
+            .build();
+
+      for(Map<String, Object> scalingPolicyMap : (List<Map<String, Object>>) group.get("scalingPolicies")) {
+         ScalingPolicyTargetType targetType = null;
+         for(String key : scalingPolicyMap.keySet()) {
+            if(ScalingPolicyTargetType.getByValue(key).isPresent()) {
+               targetType = ScalingPolicyTargetType.getByValue(key).get();
+               break;
+            }  
+         }
+
+         List<Link> links = Lists.newArrayList();
+         for(Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
+            Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
+            links.add(link);
+         }
+
+         ScalingPolicyResponse scalingPolicyResponse = 
+               new ScalingPolicyResponse(
+                     (String)scalingPolicyMap.get("name"),
+                     ScalingPolicyType.getByValue((String)scalingPolicyMap.get("type")).get(),
+                     ((Double)scalingPolicyMap.get("cooldown")).intValue(),
+                     ((Double)scalingPolicyMap.get(targetType.toString())).intValue(),
+                     targetType,
+                     ImmutableList.copyOf(links),
+                     (String) scalingPolicyMap.get("id")
+                     );
+         scalingPoliciesList.add(scalingPolicyResponse);
+      }
+
+      List<Link> links = Lists.newArrayList();
+      for(Map<String, String> linkMap : (List<Map<String, String>>) group.get("links")) {
+         Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
+         links.add(link);
+      }
+
+      String groupId = (String) group.get("id");
+      return Group.builder()
+            .id(groupId)
+            .scalingPolicy(scalingPoliciesList)
+            .groupConfiguration(groupConfiguration)
+            .launchConfiguration(launchConfiguration)
+            .links(links)
+            .build();
+   }
+}
