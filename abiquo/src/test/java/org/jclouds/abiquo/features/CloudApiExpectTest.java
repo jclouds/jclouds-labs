@@ -47,7 +47,7 @@ public class CloudApiExpectTest extends BaseAbiquoApiExpectTest<CloudApi> {
             HttpRequest.builder() //
                   .method("GET") //
                   .endpoint(URI.create("http://localhost/api/cloud/virtualmachines")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(VirtualMachinesWithNodeExtendedDto.MEDIA_TYPE)) //
                   .build(),
             HttpResponse
@@ -72,7 +72,7 @@ public class CloudApiExpectTest extends BaseAbiquoApiExpectTest<CloudApi> {
                   .method("POST")
                   .endpoint(
                         URI.create("http://localhost/api/admin/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/instance")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(AcceptedRequestDto.MEDIA_TYPE)) //
                   .payload(
                         payloadFromResourceWithContentType("/payloads/vm-snapshot.xml",

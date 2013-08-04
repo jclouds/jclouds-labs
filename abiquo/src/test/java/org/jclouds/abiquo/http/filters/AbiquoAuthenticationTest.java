@@ -16,20 +16,16 @@
  */
 package org.jclouds.abiquo.http.filters;
 
-import static com.google.common.base.Suppliers.ofInstance;
-import static org.jclouds.http.filters.BasicAuthentication.basic;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 
-import javax.ws.rs.core.HttpHeaders;
-
-import org.jclouds.domain.Credentials;
 import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Suppliers;
+import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link AbiquoAuthentication} filter.
@@ -39,45 +35,21 @@ import org.testng.annotations.Test;
 @Test(groups = "unit", testName = "AbiquoAuthenticationTest")
 public class AbiquoAuthenticationTest {
 
-   public void testBasicAuthentication() throws NoSuchAlgorithmException, CertificateException {
+   @Test(expectedExceptions = NullPointerException.class, expectedExceptionsMessageRegExp = "missing authentication token")
+   public void testAuthenticateWithoutToken() {
       HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
-
-      AbiquoAuthentication filter = new AbiquoAuthentication(ofInstance(new Credentials("identity", "credential")),
-            false);
-      HttpRequest filtered = filter.filter(request);
-      HttpRequest expected = request.toBuilder()
-            .replaceHeader(HttpHeaders.AUTHORIZATION, basic("identity", "credential")).build();
-
-      assertFalse(filtered.getHeaders().containsKey(HttpHeaders.COOKIE));
-      assertEquals(filtered, expected);
-   }
-
-   @Test(expectedExceptions = NullPointerException.class)
-   public void testBasicAuthenticationWithoutIdentity() throws NoSuchAlgorithmException, CertificateException {
-      HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
-
-      AbiquoAuthentication filter = new AbiquoAuthentication(ofInstance(new Credentials(null, "credential")), false);
+      AbiquoAuthentication filter = new AbiquoAuthentication(Suppliers.<String> ofInstance(null));
       filter.filter(request);
    }
 
-   @Test(expectedExceptions = NullPointerException.class)
-   public void testBasicAuthenticationWithoutCredential() throws NoSuchAlgorithmException, CertificateException {
+   public void testAuthenticateWithToken() {
       HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
+      AbiquoAuthentication filter = new AbiquoAuthentication(Suppliers.<String> ofInstance("the-token"));
 
-      AbiquoAuthentication filter = new AbiquoAuthentication(ofInstance(new Credentials("identity", null)), false);
-      filter.filter(request);
-   }
-
-   public void testTokenAuthentication() throws NoSuchAlgorithmException, CertificateException {
-      HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
-
-      AbiquoAuthentication filter = new AbiquoAuthentication(ofInstance(new Credentials("token-identity", "token")),
-            true);
       HttpRequest filtered = filter.filter(request);
-      HttpRequest expected = request.toBuilder()
-            .replaceHeader(HttpHeaders.COOKIE, AbiquoAuthentication.tokenAuth("token")).build();
+      HttpRequest expected = request.toBuilder().replaceHeader(HttpHeaders.COOKIE, "auth=the-token").build();
 
-      assertFalse(filtered.getHeaders().containsKey(HttpHeaders.AUTHORIZATION));
+      assertTrue(filtered.getHeaders().containsKey(HttpHeaders.COOKIE));
       assertEquals(filtered, expected);
    }
 }

@@ -18,12 +18,13 @@ package org.jclouds.abiquo;
 
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
 import static org.jclouds.abiquo.config.AbiquoProperties.ASYNC_TASK_MONITOR_DELAY;
-import static org.jclouds.abiquo.config.AbiquoProperties.CREDENTIAL_IS_TOKEN;
+import static org.jclouds.abiquo.config.AbiquoProperties.CREDENTIAL_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
+import org.jclouds.abiquo.config.AbiquoAuthenticationModule;
 import org.jclouds.abiquo.config.AbiquoHttpApiModule;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.concurrent.config.ScheduledExecutorServiceModule;
@@ -60,7 +61,7 @@ public class AbiquoApiMetadata extends BaseHttpApiMetadata<AbiquoApi> {
       // The default polling delay between AsyncTask monitor requests
       properties.setProperty(ASYNC_TASK_MONITOR_DELAY, "5000");
       // By default the provided credential is not a token
-      properties.setProperty(CREDENTIAL_IS_TOKEN, "false");
+      properties.setProperty(CREDENTIAL_TYPE, "password");
       return properties;
    }
 
@@ -81,7 +82,8 @@ public class AbiquoApiMetadata extends BaseHttpApiMetadata<AbiquoApi> {
                .defaultProperties(AbiquoApiMetadata.defaultProperties())
                .defaultModules(
                      ImmutableSet.<Class<? extends Module>> of(AbiquoHttpApiModule.class,
-                           AbiquoComputeServiceContextModule.class, ScheduledExecutorServiceModule.class));
+                           AbiquoAuthenticationModule.class, AbiquoComputeServiceContextModule.class,
+                           ScheduledExecutorServiceModule.class));
       }
 
       @Override

@@ -16,30 +16,21 @@
  */
 package org.jclouds.abiquo.config;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
+
 /**
- * Configuration properties and constants used in Abiquo connections.
+ * Qualifies an authentication object.
  * 
  * @author Ignasi Barrera
  */
-public interface AbiquoProperties {
-   /**
-    * Credential type to be used to authenticate against the Abiquo Api.
-    * <p>
-    * Valid values: password, token (deprecated).
-    */
-   public static final String CREDENTIAL_TYPE = "abiquo.credential-type";
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target(value = { ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
+@Qualifier
+public @interface Authentication {
 
-   /**
-    * The delay (in ms) used between requests by the
-    * <code>MonitoringService<code>
-    * when monitoring asynchronous task state.
-    * <p>
-    * Default value: 5000 ms
-    */
-   public static final String ASYNC_TASK_MONITOR_DELAY = "abiquo.monitor-delay";
-
-   /**
-    * The name of the Abiquo logger.
-    */
-   public static final String ABIQUO_LOGGER = "jclouds.abiquo";
 }

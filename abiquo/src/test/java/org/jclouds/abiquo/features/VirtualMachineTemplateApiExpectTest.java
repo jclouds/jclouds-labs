@@ -45,7 +45,7 @@ public class VirtualMachineTemplateApiExpectTest extends BaseAbiquoApiExpectTest
                   .method("GET")
                   .endpoint(
                         URI.create("http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(VirtualMachineTemplatesDto.MEDIA_TYPE)) //
                   .addQueryParam("limit", "1") //
                   .addQueryParam("has", "text") //

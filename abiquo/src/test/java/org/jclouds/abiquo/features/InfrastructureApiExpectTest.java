@@ -45,7 +45,7 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
             HttpRequest.builder() //
                   .method("GET") //
                   .endpoint(URI.create("http://localhost/api/admin/datacenters/1/networkservicetypes")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(NetworkServiceTypesDto.MEDIA_TYPE)) //
                   .build(),
             HttpResponse
@@ -71,7 +71,7 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
             HttpRequest.builder() //
                   .method("GET") //
                   .endpoint(URI.create("http://localhost/api/admin/datacenters/1/networkservicetypes/1")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(NetworkServiceTypeDto.MEDIA_TYPE)) //
                   .build(),
             HttpResponse
@@ -96,7 +96,7 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
       InfrastructureApi api = requestSendsResponse(HttpRequest.builder() //
             .method("GET") //
             .endpoint(URI.create("http://localhost/api/admin/datacenters/1/networkservicetypes/1")) //
-            .addHeader("Authorization", basicAuth) //
+            .addHeader("Cookie", tokenAuth) //
             .addHeader("Accept", normalize(NetworkServiceTypeDto.MEDIA_TYPE)) //
             .build(), //
             HttpResponse.builder().statusCode(404).build());
@@ -113,7 +113,7 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
             HttpRequest.builder() //
                   .method("POST") //
                   .endpoint(URI.create("http://localhost/api/admin/datacenters/1/networkservicetypes")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(NetworkServiceTypeDto.MEDIA_TYPE))
                   //
                   .payload(
@@ -147,7 +147,7 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
             HttpRequest.builder() //
                   .method("PUT") //
                   .endpoint(URI.create("http://localhost/api/admin/datacenters/1/networkservicetypes/1")) //
-                  .addHeader("Authorization", basicAuth) //
+                  .addHeader("Cookie", tokenAuth) //
                   .addHeader("Accept", normalize(NetworkServiceTypeDto.MEDIA_TYPE))
                   //
                   .payload(
@@ -179,7 +179,7 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
       InfrastructureApi api = requestSendsResponse(HttpRequest.builder() //
             .method("DELETE") //
             .endpoint(URI.create("http://localhost/api/admin/datacenters/1/networkservicetypes/1")) //
-            .addHeader("Authorization", basicAuth) //
+            .addHeader("Cookie", tokenAuth) //
             .build(), //
             HttpResponse.builder().statusCode(204).build());
 

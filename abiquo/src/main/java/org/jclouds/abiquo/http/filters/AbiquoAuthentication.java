@@ -17,22 +17,18 @@
 package org.jclouds.abiquo.http.filters;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.abiquo.config.AbiquoProperties.CREDENTIAL_IS_TOKEN;
-import static org.jclouds.http.filters.BasicAuthentication.basic;
+import static org.jclouds.abiquo.config.AbiquoAuthenticationModule.AUTH_TOKEN_NAME;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.ws.rs.core.HttpHeaders;
 
-import org.jclouds.domain.Credentials;
+import org.jclouds.abiquo.config.Authentication;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-import org.jclouds.location.Provider;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Supplier;
+import com.google.common.net.HttpHeaders;
 
 /**
  * Authenticates using Basic Authentication or a generated token from previous
@@ -42,30 +38,19 @@ import com.google.common.base.Supplier;
  */
 @Singleton
 public class AbiquoAuthentication implements HttpRequestFilter {
-   /** The name of the authentication token. */
-   public static final String AUTH_TOKEN_NAME = "auth";
-
-   protected Supplier<Credentials> creds;
-   protected boolean credentialIsToken;
+   private final Supplier<String> authTokenProvider;
 
    @Inject
-   public AbiquoAuthentication(@Provider Supplier<Credentials> creds,
-         @Named(CREDENTIAL_IS_TOKEN) boolean credentialIsToken) {
-      this.creds = checkNotNull(creds, "creds");
-      this.credentialIsToken = credentialIsToken;
+   public AbiquoAuthentication(@Authentication Supplier<String> authTokenProvider) {
+      this.authTokenProvider = checkNotNull(authTokenProvider, "authTokenProvider must not be null");
    }
 
    @Override
-   public HttpRequest filter(final HttpRequest request) throws HttpException {
-      Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
-      String header = credentialIsToken ? tokenAuth(currentCreds.credential) : basic(currentCreds.identity,
-            currentCreds.credential);
-      return request.toBuilder()
-            .replaceHeader(credentialIsToken ? HttpHeaders.COOKIE : HttpHeaders.AUTHORIZATION, header).build();
+   public HttpRequest filter(HttpRequest request) throws HttpException {
+      return request.toBuilder().replaceHeader(HttpHeaders.COOKIE, tokenAuth(authTokenProvider.get())).build();
    }
 
-   @VisibleForTesting
-   static String tokenAuth(final String token) {
-      return AUTH_TOKEN_NAME + "=" + checkNotNull(token, "token");
+   private static String tokenAuth(final String token) {
+      return AUTH_TOKEN_NAME + "=" + checkNotNull(token, "missing authentication token");
    }
 }

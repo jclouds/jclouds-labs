@@ -18,16 +18,23 @@ package org.jclouds.abiquo.features;
 
 import java.util.Properties;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.AbiquoApiMetadata;
+import org.jclouds.abiquo.functions.auth.GetTokenFromApi;
 import org.jclouds.apis.ApiMetadata;
+import org.jclouds.domain.Credentials;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.rest.HttpClient;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 import com.google.common.base.Function;
+import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 
 /**
@@ -36,7 +43,7 @@ import com.google.inject.Module;
  * @author Ignasi Barrera
  */
 public abstract class BaseAbiquoApiExpectTest<S> extends BaseRestApiExpectTest<S> {
-   protected final String basicAuth = "Basic aWRlbnRpdHk6Y3JlZGVudGlhbA==";
+   protected final String tokenAuth = "auth=mock-token";
 
    public BaseAbiquoApiExpectTest() {
       provider = "abiquo";
@@ -48,6 +55,16 @@ public abstract class BaseAbiquoApiExpectTest<S> extends BaseRestApiExpectTest<S
    }
 
    @Override
+   protected Module createModule() {
+      return new AbstractModule() {
+         @Override
+         protected void configure() {
+            bind(GetTokenFromApi.class).to(MockTokenFromApi.class);
+         }
+      };
+   }
+
+   @Override
    public S createClient(final Function<HttpRequest, HttpResponse> fn, final Module module, final Properties props) {
       return clientFrom(createInjector(fn, module, props).getInstance(AbiquoApi.class));
    }
@@ -56,6 +73,19 @@ public abstract class BaseAbiquoApiExpectTest<S> extends BaseRestApiExpectTest<S
 
    protected String normalize(final String mediatType) {
       return MediaType.valueOf(mediatType).toString();
+   }
+
+   @Singleton
+   private static class MockTokenFromApi extends GetTokenFromApi {
+      @Inject
+      public MockTokenFromApi(ProviderMetadata provider, HttpClient http) {
+         super(provider, http);
+      }
+
+      @Override
+      public String apply(Credentials input) {
+         return "mock-token";
+      }
    }
 
 }
