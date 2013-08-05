@@ -19,10 +19,8 @@ package org.jclouds.abiquo.compute.options;
 import org.jclouds.compute.options.TemplateOptions;
 
 /**
- * Contains options supported by the
- * {@link ComputeService#createNodesInGroup(String, int, TemplateOptions)} and
- * {@link ComputeService#createNodesInGroup(String, int, TemplateOptions)}
- * operations on the <em>Abiquo</em> provider.
+ * Contains options supported by the ComputeService on the <em>Abiquo</em>
+ * provider.
  * 
  * @author Ignasi Barrera
  */

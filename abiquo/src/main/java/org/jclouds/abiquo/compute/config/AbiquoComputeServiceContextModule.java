@@ -18,11 +18,12 @@ package org.jclouds.abiquo.compute.config;
 
 import org.jclouds.abiquo.compute.functions.DatacenterToLocation;
 import org.jclouds.abiquo.compute.functions.VirtualDatacenterToLocation;
-import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToImage;
 import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateInVirtualDatacenterToHardware;
+import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToImage;
 import org.jclouds.abiquo.compute.functions.VirtualMachineToNodeMetadata;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.compute.strategy.AbiquoComputeServiceAdapter;
+import org.jclouds.abiquo.compute.strategy.CreateGroupBeforeCreatingNodes;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -34,6 +35,7 @@ import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.options.TemplateOptions;
+import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.domain.Location;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
 import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
@@ -69,6 +71,7 @@ public class AbiquoComputeServiceContextModule
       }).to(VirtualDatacenterToLocation.class);
       bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstZone.class).in(Scopes.SINGLETON);
       bind(TemplateOptions.class).to(AbiquoTemplateOptions.class);
+      bind(CreateNodesInGroupThenAddToSet.class).to(CreateGroupBeforeCreatingNodes.class);
       install(new LocationsFromComputeServiceAdapterModule<VirtualMachine, VirtualMachineTemplateInVirtualDatacenter, VirtualMachineTemplate, VirtualDatacenter>() {
       });
    }

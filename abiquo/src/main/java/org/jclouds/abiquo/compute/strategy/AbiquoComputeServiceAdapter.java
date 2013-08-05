@@ -16,14 +16,15 @@
  */
 package org.jclouds.abiquo.compute.strategy;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Iterables.tryFind;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +34,6 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
-import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -60,6 +60,7 @@ import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
@@ -70,6 +71,8 @@ import com.google.inject.Inject;
  * jclouds {@link ComputeService}.
  * 
  * @author Ignasi Barrera
+ * 
+ * @see CreateGroupBeforeCreatingNodes
  */
 @Singleton
 public class AbiquoComputeServiceAdapter
@@ -108,8 +111,15 @@ public class AbiquoComputeServiceAdapter
    }
 
    @Override
-   public NodeAndInitialCredentials<VirtualMachine> createNodeWithGroupEncodedIntoName(final String tag,
+   public NodeAndInitialCredentials<VirtualMachine> createNodeWithGroupEncodedIntoName(final String group,
          final String name, final Template template) {
+      checkArgument(template instanceof VirtualApplianceCachingTemplate,
+            "A VirtualApplianceCachingTemplate is required");
+      return createNodeWithGroupEncodedIntoName(name, VirtualApplianceCachingTemplate.class.cast(template));
+   }
+
+   protected NodeAndInitialCredentials<VirtualMachine> createNodeWithGroupEncodedIntoName(final String name,
+         final VirtualApplianceCachingTemplate template) {
       AbiquoTemplateOptions options = template.getOptions().as(AbiquoTemplateOptions.class);
       Enterprise enterprise = adminService.getCurrentEnterprise();
 
@@ -120,27 +130,10 @@ public class AbiquoComputeServiceAdapter
       VirtualMachineTemplate virtualMachineTemplate = enterprise.getTemplateInRepository(datacenter,
             Integer.valueOf(template.getImage().getId()));
 
-      // Get the zone where the template will be deployed
-      VirtualDatacenter vdc = cloudService.getVirtualDatacenter(Integer.valueOf(template.getHardware().getLocation()
-            .getId()));
-
-      // Load the virtual appliance or create it if it does not exist
-      VirtualAppliance vapp = find(vdc.listVirtualAppliances(), new Predicate<VirtualAppliance>() {
-         @Override
-         public boolean apply(VirtualAppliance input) {
-            return input.getName().equals(tag);
-         }
-      }, null);
-
-      if (vapp == null) {
-         vapp = VirtualAppliance.builder(context, vdc).name(tag).build();
-         vapp.save();
-      }
-
       Integer overrideCores = options.getOverrideCores();
       Integer overrideRam = options.getOverrideRam();
 
-      VirtualMachine vm = VirtualMachine.builder(context, vapp, virtualMachineTemplate) //
+      VirtualMachine vm = VirtualMachine.builder(context, template.getVirtualAppliance(), virtualMachineTemplate) //
             .nameLabel(name) //
             .cpu(overrideCores != null ? overrideCores : totalCores(template.getHardware())) //
             .ram(overrideRam != null ? overrideRam : template.getHardware().getRam()) //
@@ -150,15 +143,17 @@ public class AbiquoComputeServiceAdapter
       vm.save();
 
       // Once the virtual machine is created, override the default network
-      // settings if needed
+      // settings if needed.
       // If no public ip is available in the virtual datacenter, the virtual
       // machine will be assigned by default an ip address in the default
-      // private VLAN for the virtual datacenter
-      PublicIp publicIp = find(vdc.listPurchasedPublicIps(), IpPredicates.<PublicIp> notUsed(), null);
-      if (publicIp != null) {
-         List<Ip<?, ?>> ips = Lists.newArrayList();
-         ips.add(publicIp);
-         vm.setNics(ips);
+      // private VLAN for the virtual datacenter.
+      Optional<PublicIp> publicIp = tryFind(template.getVirtualDatacenter().listPurchasedPublicIps(),
+            IpPredicates.<PublicIp> notUsed());
+      if (publicIp.isPresent()) {
+         logger.debug(">> Found available public ip %s", publicIp.get().getIp());
+         vm.setNics(Lists.<Ip<?, ?>> newArrayList(publicIp.get()));
+      } else {
+         logger.debug(">> No available public ip found. Using a private ip");
       }
 
       // This is an async operation, but jclouds already waits until the node is
@@ -199,8 +194,7 @@ public class AbiquoComputeServiceAdapter
 
    @Override
    public VirtualMachineTemplate getImage(final String id) {
-      Enterprise enterprise = adminService.getCurrentEnterprise();
-      return find(enterprise.listTemplates(), new Predicate<VirtualMachineTemplate>() {
+      return find(listImages(), new Predicate<VirtualMachineTemplate>() {
          @Override
          public boolean apply(VirtualMachineTemplate input) {
             return input.getId().equals(id);

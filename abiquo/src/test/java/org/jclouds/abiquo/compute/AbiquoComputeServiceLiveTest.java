@@ -53,25 +53,10 @@ public abstract class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiv
    }
 
    @Override
-   public void setServiceDefaults() {
-      System.setProperty("test.abiquo.template",
-            "imageNameMatches=ubuntu_server_ssh_iptables,loginUser=user:abiquo,authenticateSudo=true");
-   }
-
-   @Override
    protected Properties setupProperties() {
       Properties overrides = super.setupProperties();
       overrides.put(Constants.PROPERTY_MAX_RETRIES, "0");
-      overrides.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
-      overrides.put("jclouds.timeouts.CloudApi.listVirtualMachines", "60000");
       return overrides;
-   }
-
-   @Override
-   protected void initializeContext() {
-      super.initializeContext();
-      String templateId = buildTemplate(client.templateBuilder()).getImage().getId();
-      view.utils().credentialStore().put("image#" + templateId, loginCredentials);
    }
 
    @Override
@@ -94,11 +79,6 @@ public abstract class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiv
          // assert hardware.getRam() > 0 : hardware;
          assertEquals(hardware.getType(), ComputeType.HARDWARE);
       }
-   }
-
-   @Override
-   public void testOptionToNotBlock() throws Exception {
-      // By default the provider blocks until the node is running
    }
 
    // Abiquo does not set the hostname
