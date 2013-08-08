@@ -26,13 +26,13 @@ import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.abiquo.domain.enterprise.options.UserOptions;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.UserDto;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 /**
  * Live integration tests for the {@link User} domain class.
@@ -82,13 +82,23 @@ public class UserLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testListUser() {
       Iterable<User> users = env.enterprise.listUsers();
-      assertEquals(Iterables.size(users), 2);
+      assertEquals(size(users), 2);
 
       users = filter(env.enterprise.listUsers(), nick(env.user.getNick()));
       assertEquals(size(users), 1);
 
       users = filter(env.enterprise.listUsers(), nick(env.user.getName() + "FAIL"));
       assertEquals(size(users), 0);
+   }
+   
+   public void testListUserWithOptions() {
+      Iterable<User> users = env.enterprise.listUsers(UserOptions.builder()
+            .limit(1).startWith(0).build());
+      assertEquals(size(users),  1);
+
+      users = env.enterprise.listUsers(UserOptions.builder()
+            .limit(1).page(2).build());
+      assertEquals(size(users),  1);
    }
 
    public void testGetCurrentUser() {

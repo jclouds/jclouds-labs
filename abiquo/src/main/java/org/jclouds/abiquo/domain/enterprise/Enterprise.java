@@ -25,6 +25,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
+import org.jclouds.abiquo.domain.enterprise.options.UserOptions;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
@@ -206,11 +207,31 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
     *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
     *      >
     *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-
-    *      Retrievealistofusers </a>
+    *      Retrievealistofusers</a>
     * @return List of users of this enterprise.
     */
    public List<User> listUsers() {
-      UsersDto dto = context.getApi().getEnterpriseApi().listUsers(this.unwrap());
+      // Delegate the retrieval of users to the options-enabled version of the
+      // method, with pagination disabled
+      return listUsers(UserOptions.builder().disablePagination().build());
+   }
+
+   /**
+    * Retrieve the list of users of this enterprise, allowing pagination
+    * 
+    * @param options
+    *           User options
+    * @see API: <a href=
+    *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
+    *      >
+    *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-
+    *      Retrievealistofusers</a>
+    * @return List of users of this enterprise, according to the specified 
+    * pagination options
+    */
+   public List<User> listUsers(final UserOptions options) {
+      UsersDto dto = context.getApi().getEnterpriseApi().listUsers(
+            this.unwrap(), options);
       return wrap(context, User.class, dto.getCollection());
    }
 

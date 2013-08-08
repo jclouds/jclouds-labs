@@ -34,6 +34,7 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
+import org.jclouds.abiquo.domain.enterprise.options.UserOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
@@ -328,6 +329,22 @@ public interface EnterpriseApi extends Closeable {
    @Consumes(UsersDto.BASE_MEDIA_TYPE)
    @JAXBResponseParser
    UsersDto listUsers(@EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+   
+   /**
+    * List filtered users by enterprise.
+    * 
+    * @param enterprise
+    *           The given enterprise.
+    * @param options
+    *           Filtering options.
+    * @return The list of Users.
+    */
+   @Named("user:list")
+   @GET
+   @Consumes(UsersDto.BASE_MEDIA_TYPE)
+   @JAXBResponseParser
+   UsersDto listUsers(@EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+         UserOptions options);
 
    /**
     * Create a new user in the given enterprise.
