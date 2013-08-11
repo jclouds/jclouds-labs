@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <users>
-	<link rel="first" href="http://10.7.3.10:80/api/admin/enterprises/1/users?limit=1"/>
-	<link rel="previous" href="http://10.7.3.10:80/api/admin/enterprises/1/users?startwith=0&amp;limit=1"/>
-	<link rel="last" href="http://10.7.3.10:80/api/admin/enterprises/1/users?startwith=2&amp;limit=1"/>
+	<link rel="first" href="http://10.7.3.10:80/api/admin/enterprises/1/users?limit=2"/>
+	<link rel="previous" href="http://10.7.3.10:80/api/admin/enterprises/1/users?startwith=0&amp;limit=2"/>
+    <link rel="next" href="http://10.7.3.10:80/api/admin/enterprises/1/users?startwith=3&amp;limit=2"/>
+	<link rel="last" href="http://10.7.3.10:80/api/admin/enterprises/1/users?startwith=1&amp;limit=2"/>
 	<totalSize>3</totalSize>
     <user>
 		<link rel="edit" type="application/vnd.abiquo.user+xml" href="http://localhost/api/admin/enterprises/1/users/3"/>

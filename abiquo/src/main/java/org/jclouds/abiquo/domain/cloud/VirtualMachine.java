@@ -300,19 +300,19 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
    // Children access
 
-   public List<HardDisk> listAttachedHardDisks() {
+   public Iterable<HardDisk> listAttachedHardDisks() {
       refresh();
       DisksManagementDto hardDisks = context.getApi().getCloudApi().listAttachedHardDisks(target);
       return wrap(context, HardDisk.class, hardDisks.getCollection());
    }
 
-   public List<Volume> listAttachedVolumes() {
+   public Iterable<Volume> listAttachedVolumes() {
       refresh();
       VolumesManagementDto volumes = context.getApi().getCloudApi().listAttachedVolumes(target);
       return wrap(context, Volume.class, volumes.getCollection());
    }
 
-   public List<Ip<?, ?>> listAttachedNics() {
+   public Iterable<Ip<?, ?>> listAttachedNics() {
       // The strategy will refresh the vm. There is no need to do it here
       ListAttachedNics strategy = context.utils().injector().getInstance(ListAttachedNics.class);
       return ImmutableList.copyOf(strategy.execute(this));

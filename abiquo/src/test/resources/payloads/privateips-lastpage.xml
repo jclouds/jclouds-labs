@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<privateips>
+    <link href="http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips" rel="first" />
+    <link href="http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips?startwith=0" rel="previous" />
+    <link href="http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips?startwith=1" rel="last" />
+    <totalSize>2</totalSize>
+    <privateip>
+        <link href="http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1" rel="privatenetwork" title="JC--privatenetwork-test" type="application/vnd.abiquo.vlan+xml" />
+        <link href="http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips/3311" rel="self" title="privateip" type="application/vnd.abiquo.privateip+xml" />
+        <link href="http://localhost/api/cloud/virtualdatacenters/1" rel="virtualdatacenter" title="Aloha updated" type="application/vnd.abiquo.virtualdatacenter+xml" />
+        <id>2</id>
+        <ip>192.168.1.1</ip>
+        <mac>00:50:56:11:d4:a2</mac>
+        <name>00505611d4a2_host</name>
+        <networkName>JC--privatenetwork-test</networkName>
+    </privateip>
+</privateips>

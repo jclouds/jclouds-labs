@@ -17,13 +17,13 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.isEmpty;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
-
-import java.util.List;
 
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
@@ -32,7 +32,6 @@ import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.common.base.Predicate;
 
 /**
@@ -64,14 +63,11 @@ public class VolumeLiveApiTest extends BaseAbiquoApiLiveApiTest {
       VolumeOptions validOptions = VolumeOptions.builder().has("hawa").build();
       VolumeOptions invalidOptions = VolumeOptions.builder().has("cacatua").build();
 
-      List<VolumeManagementDto> volumes = env.cloudApi.listVolumes(env.virtualDatacenter.unwrap(), validOptions)
-            .getCollection();
+      Iterable<Volume> volumes = env.virtualDatacenter.listVolumes(validOptions);
+      assertEquals(size(volumes), 1);
 
-      assertEquals(volumes.size(), 1);
-
-      volumes = env.cloudApi.listVolumes(env.virtualDatacenter.unwrap(), invalidOptions).getCollection();
-
-      assertEquals(volumes.size(), 0);
+      volumes = env.virtualDatacenter.listVolumes(invalidOptions);
+      assertTrue(isEmpty(volumes));
    }
 
    @Test(dependsOnMethods = "testFilterVolumes")

@@ -35,7 +35,6 @@ import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
@@ -112,7 +111,7 @@ public class User extends DomainWrapper<UserDto> {
       target = context.getApi().getEnterpriseApi().updateUser(target);
    }
 
-   public List<VirtualDatacenter> listPermittedVirtualDatacenters() {
+   public Iterable<VirtualDatacenter> listPermittedVirtualDatacenters() {
       List<Integer> ids = extractAvailableDatacenters();
 
       // null value means all virtual datacenters all allowed
@@ -122,7 +121,7 @@ public class User extends DomainWrapper<UserDto> {
 
       ListVirtualDatacenters listVirtualDatacenters = context.utils().injector()
             .getInstance(ListVirtualDatacenters.class);
-      return ImmutableList.copyOf(listVirtualDatacenters.execute(ids));
+      return listVirtualDatacenters.execute(ids);
    }
 
    /**
@@ -175,7 +174,7 @@ public class User extends DomainWrapper<UserDto> {
     *      > http://community.abiquo.com/display/ABI20/User+resource#
     *      Userresource- Retrievethelistofvirtualmachinesbyuser</a>
     */
-   public List<VirtualMachine> listMachines() {
+   public Iterable<VirtualMachine> listMachines() {
       VirtualMachinesWithNodeExtendedDto machines = context.getApi().getEnterpriseApi().listVirtualMachines(target);
       return wrap(context, VirtualMachine.class, machines.getCollection());
    }

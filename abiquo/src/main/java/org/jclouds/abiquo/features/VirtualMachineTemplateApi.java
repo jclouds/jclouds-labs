@@ -32,17 +32,21 @@ import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
+import org.jclouds.abiquo.functions.pagination.ParseVirtualMachineTemplates;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.Transform;
 import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.model.enumerator.DiskFormatType;
@@ -81,8 +85,9 @@ public interface VirtualMachineTemplateApi extends Closeable {
    @GET
    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
    @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   VirtualMachineTemplatesDto listVirtualMachineTemplates(@PathParam("enterprise") Integer enterpriseId,
+   @ResponseParser(ParseVirtualMachineTemplates.class)
+   @Transform(ParseVirtualMachineTemplates.ToPagedIterable.class)
+   PagedIterable<VirtualMachineTemplateDto> listVirtualMachineTemplates(@PathParam("enterprise") Integer enterpriseId,
          @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 
    /**
@@ -102,8 +107,9 @@ public interface VirtualMachineTemplateApi extends Closeable {
    @GET
    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
    @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   VirtualMachineTemplatesDto listVirtualMachineTemplates(@PathParam("enterprise") Integer enterpriseId,
+   @ResponseParser(ParseVirtualMachineTemplates.class)
+   PaginatedCollection<VirtualMachineTemplateDto, VirtualMachineTemplatesDto> listVirtualMachineTemplates(
+         @PathParam("enterprise") Integer enterpriseId,
          @PathParam("datacenterrepository") Integer datacenterRepositoryId, VirtualMachineTemplateOptions options);
 
    /**

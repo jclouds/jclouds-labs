@@ -19,12 +19,12 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.find;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
+import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
@@ -32,19 +32,20 @@ import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.StatefulInclusion;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
@@ -54,6 +55,7 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 
 /**
  * Represents a virtual datacenter.
@@ -172,7 +174,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      >http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource
     *      # VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
     */
-   public List<VirtualAppliance> listVirtualAppliances() {
+   public Iterable<VirtualAppliance> listVirtualAppliances() {
       VirtualAppliancesDto vapps = context.getApi().getCloudApi().listVirtualAppliances(target);
       return wrap(context, VirtualAppliance.class, vapps.getCollection());
    }
@@ -200,7 +202,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+
     *      Resource# VirtualDatacenterResource-Retrieveenabledtiers</a>
     */
-   public List<Tier> listStorageTiers() {
+   public Iterable<Tier> listStorageTiers() {
       TiersDto tiers = context.getApi().getCloudApi().listStorageTiers(target);
       return wrap(context, Tier.class, tiers.getCollection());
    }
@@ -227,9 +229,15 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      > http://community.abiquo.com/display/ABI20/Volume+Resource#
     *      VolumeResource- Retrievethelistofvolumes</a>
     */
-   public List<Volume> listVolumes() {
-      VolumesManagementDto volumes = context.getApi().getCloudApi().listVolumes(target);
-      return wrap(context, Volume.class, volumes.getCollection());
+   public Iterable<Volume> listVolumes() {
+      PagedIterable<VolumeManagementDto> volumes = context.getApi().getCloudApi().listVolumes(target);
+      return wrap(context, Volume.class, volumes.concat());
+   }
+
+   public Iterable<Volume> listVolumes(VolumeOptions options) {
+      PaginatedCollection<VolumeManagementDto, VolumesManagementDto> volumes = context.getApi().getCloudApi()
+            .listVolumes(target, options);
+      return wrap(context, Volume.class, volumes.toPagedIterable().concat());
    }
 
    public Volume getVolume(final Integer id) {
@@ -243,7 +251,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      > http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#
     *      HardDisksResource- GetthelistofHardDisksofaVirtualDatacenter</a>
     */
-   public List<HardDisk> listHardDisks() {
+   public Iterable<HardDisk> listHardDisks() {
       DisksManagementDto hardDisks = context.getApi().getCloudApi().listHardDisks(target);
       return wrap(context, HardDisk.class, hardDisks.getCollection());
    }
@@ -273,7 +281,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      > http://community.abiquo.com/display/ABI20/Private+Network+Resource#
     *      PrivateNetworkResource -RetrievealistofPrivateNetworks</a>
     */
-   public List<PrivateNetwork> listPrivateNetworks() {
+   public Iterable<PrivateNetwork> listPrivateNetworks() {
       VLANNetworksDto networks = context.getApi().getCloudApi().listPrivateNetworks(target);
       return wrap(context, PrivateNetwork.class, networks.getCollection());
    }
@@ -283,35 +291,36 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
       return wrap(context, PrivateNetwork.class, network);
    }
 
-   public List<VirtualMachineTemplate> listAvailableTemplates() {
-      VirtualMachineTemplatesDto templates = context.getApi().getCloudApi().listAvailableTemplates(target);
-
-      return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
+   public Iterable<VirtualMachineTemplate> listAvailableTemplates() {
+      PagedIterable<VirtualMachineTemplateDto> templates = context.getApi().getCloudApi()
+            .listAvailableTemplates(target);
+      return wrap(context, VirtualMachineTemplate.class, templates.concat());
    }
 
-   public List<VirtualMachineTemplate> listAvailableTemplates(final VirtualMachineTemplateOptions options) {
-      VirtualMachineTemplatesDto templates = context.getApi().getCloudApi().listAvailableTemplates(target, options);
-
-      return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
+   public Iterable<VirtualMachineTemplate> listAvailableTemplates(final VirtualMachineTemplateOptions options) {
+      PaginatedCollection<VirtualMachineTemplateDto, VirtualMachineTemplatesDto> templates = context.getApi()
+            .getCloudApi().listAvailableTemplates(target, options);
+      return wrap(context, VirtualMachineTemplate.class, templates.toPagedIterable().concat());
    }
 
    public VirtualMachineTemplate getAvailableTemplate(final Integer id) {
-      VirtualMachineTemplatesDto templates = context.getApi().getCloudApi()
+      PaginatedCollection<VirtualMachineTemplateDto, VirtualMachineTemplatesDto> templates = context.getApi()
+            .getCloudApi()
             .listAvailableTemplates(target, VirtualMachineTemplateOptions.builder().idTemplate(id).build());
 
-      return templates.getCollection().isEmpty() ? null : //
-            wrap(context, VirtualMachineTemplate.class, templates.getCollection().get(0));
+      FluentIterable<VirtualMachineTemplateDto> all = templates.toPagedIterable().concat();
+      return wrap(context, VirtualMachineTemplate.class, all.first().orNull());
    }
 
    public VirtualMachineTemplate getAvailablePersistentTemplate(final Integer id) {
-      VirtualMachineTemplatesDto templates = context
+      PaginatedCollection<VirtualMachineTemplateDto, VirtualMachineTemplatesDto> templates = context
             .getApi()
             .getCloudApi()
             .listAvailableTemplates(target,
                   VirtualMachineTemplateOptions.builder().idTemplate(id).persistent(StatefulInclusion.ALL).build());
 
-      return templates.getCollection().isEmpty() ? null : //
-            wrap(context, VirtualMachineTemplate.class, templates.getCollection().get(0));
+      FluentIterable<VirtualMachineTemplateDto> all = templates.toPagedIterable().concat();
+      return wrap(context, VirtualMachineTemplate.class, all.first().orNull());
    }
 
    /**
@@ -322,10 +331,9 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter
     *      </a>
     */
-   public List<PublicIp> listAvailablePublicIps() {
-      IpOptions options = IpOptions.builder().build();
-      PublicIpsDto ips = context.getApi().getCloudApi().listAvailablePublicIps(target, options);
-      return wrap(context, PublicIp.class, ips.getCollection());
+   public Iterable<PublicIp> listAvailablePublicIps() {
+      PagedIterable<PublicIpDto> ips = context.getApi().getCloudApi().listAvailablePublicIps(target);
+      return wrap(context, PublicIp.class, ips.concat());
    }
 
    /**
@@ -336,10 +344,9 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     *      VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter
     *      </a>
     */
-   public List<PublicIp> listPurchasedPublicIps() {
-      IpOptions options = IpOptions.builder().build();
-      PublicIpsDto ips = context.getApi().getCloudApi().listPurchasedPublicIps(target, options);
-      return wrap(context, PublicIp.class, ips.getCollection());
+   public Iterable<PublicIp> listPurchasedPublicIps() {
+      PagedIterable<PublicIpDto> ips = context.getApi().getCloudApi().listPurchasedPublicIps(target);
+      return wrap(context, PublicIp.class, ips.concat());
    }
 
    public void purchasePublicIp(final PublicIp ip) {

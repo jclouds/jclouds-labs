@@ -17,8 +17,7 @@
 package org.jclouds.abiquo.predicates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.List;
+import static com.google.common.collect.Iterables.isEmpty;
 
 import org.jclouds.abiquo.domain.cloud.Conversion;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -71,8 +70,8 @@ public class VirtualDatacenterPredicates {
             HypervisorType type = vdc.getHypervisorType();
             boolean compatible = type.isCompatible(template.getDiskFormatType());
             if (!compatible) {
-               List<Conversion> compatibleConversions = template.listConversions(type, ConversionState.FINISHED);
-               compatible = compatibleConversions != null && !compatibleConversions.isEmpty();
+               Iterable<Conversion> compatibleConversions = template.listConversions(type, ConversionState.FINISHED);
+               compatible = compatibleConversions != null && !isEmpty(compatibleConversions);
             }
             return compatible;
          }

@@ -17,13 +17,14 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.isEmpty;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
-
-import java.util.List;
 
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.VirtualMachineTask;
@@ -51,16 +52,16 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
       VirtualMachineTask task = env.virtualMachine.attachVolumes(volume);
       assertNull(task);
 
-      List<Volume> attached = env.virtualMachine.listAttachedVolumes();
-      assertEquals(attached.size(), 1);
-      assertEquals(attached.get(0).getId(), volume.getId());
+      Iterable<Volume> attached = env.virtualMachine.listAttachedVolumes();
+      assertEquals(size(attached), 1);
+      assertEquals(get(attached, 0).getId(), volume.getId());
    }
 
    @Test(dependsOnMethods = "testAttachVolumes")
    public void detachVolume() {
       env.virtualMachine.detachVolumes(volume);
-      List<Volume> attached = env.virtualMachine.listAttachedVolumes();
-      assertTrue(attached.isEmpty());
+      Iterable<Volume> attached = env.virtualMachine.listAttachedVolumes();
+      assertTrue(isEmpty(attached));
    }
 
    @Test(dependsOnMethods = "detachVolume")
@@ -71,8 +72,8 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
       assertNull(task);
 
       env.virtualMachine.detachAllVolumes();
-      List<Volume> attached = env.virtualMachine.listAttachedVolumes();
-      assertTrue(attached.isEmpty());
+      Iterable<Volume> attached = env.virtualMachine.listAttachedVolumes();
+      assertTrue(isEmpty(attached));
 
       deleteVolume(volume);
    }
@@ -85,16 +86,16 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
       VirtualMachineTask task = env.virtualMachine.attachHardDisks(hardDisk);
       assertNull(task);
 
-      List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
-      assertEquals(attached.size(), 1);
-      assertEquals(attached.get(0).getId(), hardDisk.getId());
+      Iterable<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
+      assertEquals(size(attached), 1);
+      assertEquals(get(attached, 0).getId(), hardDisk.getId());
    }
 
    @Test(dependsOnMethods = "testAttachHardDisks")
    public void detachHardDisk() {
       env.virtualMachine.detachHardDisks(hardDisk);
-      List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
-      assertTrue(attached.isEmpty());
+      Iterable<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
+      assertTrue(isEmpty(attached));
    }
 
    @Test(dependsOnMethods = "detachHardDisk")
@@ -105,8 +106,8 @@ public class VirtualMachineStorageLiveApiTest extends BaseAbiquoApiLiveApiTest {
       assertNull(task);
 
       env.virtualMachine.detachAllHardDisks();
-      List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
-      assertTrue(attached.isEmpty());
+      Iterable<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
+      assertTrue(isEmpty(attached));
 
       deleteHardDisk(hardDisk);
    }

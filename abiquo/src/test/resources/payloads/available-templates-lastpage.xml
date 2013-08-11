@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtualMachineTemplates>
+    <link href="http://example.com/api/cloud/virtualdatacenters/1/action/templates" rel="first" />
+    <link href="http://example.com/api/cloud/virtualdatacenters/1/action/templates?startwith=0" rel="previous" />
+    <link href="http://example.com/api/cloud/virtualdatacenters/1/action/templates?startwith=1" rel="last" />
+    <totalSize>2</totalSize>
+    <virtualMachineTemplate>
+        <link href="http://example.com/api/config/categories/1" rel="category" title="Others" type="application/vnd.abiquo.category+xml" />
+        <link href="http://example.com/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/16/conversions" rel="conversions" type="application/vnd.abiquo.conversions+xml" />
+        <link href="http://example.com/api/admin/datacenters/1" rel="datacenter" type="application/vnd.abiquo.datacenter+xml" />
+        <link href="http://example.com/api/admin/enterprises/1/datacenterrepositories/1" rel="datacenterrepository" type="application/vnd.abiquo.datacenterrepository+xml" />
+        <link href="http://example.com/am/erepos/1/templates/rs.bcn.abiquo.com%253A9000%252Fovf%252F71%252Fdesc.ovf?format=diskFile" rel="diskfile" />
+        <link href="http://example.com/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/16" rel="edit" title="Abiquo KVM" type="application/vnd.abiquo.virtualmachinetemplate+xml" />
+        <link href="http://example.com/api/admin/enterprises/1" rel="enterprise" type="application/vnd.abiquo.enterprise+xml" />
+        <link href="http://example.com/am/erepos/1/templates/rs.bcn.abiquo.com%253A9000%252Fovf%252F71%252Fdesc.ovf?format=envelope" rel="ovfdocument" />
+        <link href="http://example.com/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/16/tasks" rel="tasks" type="application/vnd.abiquo.tasks+xml" />
+        <link href="http://example.com/am/erepos/1/templates/rs.bcn.abiquo.com%253A9000%252Fovf%252F71%252Fdesc.ovf" rel="template" />
+        <link href="http://rs.bcn.abiquo.com:9000/ovf/71/desc.ovf" rel="templatedefinition" />
+        <link href="http://example.com/am/erepos/1/templates/rs.bcn.abiquo.com%253A9000%252Fovf%252F71%252Fdesc.ovf?format=status" rel="templatestatus" />
+        <id>16</id>
+        <name>Abiquo KVM</name>
+        <description />
+        <osType>UNRECOGNIZED</osType>
+        <osVersion />
+        <path>1/rs.bcn.abiquo.com/abiport9000/ovf/71/KVM-Recursion.qcow2</path>
+        <diskFormatType>QCOW2_SPARSE</diskFormatType>
+        <diskFileSize>320798720</diskFileSize>
+        <cpuRequired>1</cpuRequired>
+        <ramRequired>1024</ramRequired>
+        <hdRequired>4294967296</hdRequired>
+        <shared>false</shared>
+        <state>DONE</state>
+        <costCode>0</costCode>
+        <creationDate>2013-01-16T15:06:14+01:00</creationDate>
+        <creationUser>SYSTEM</creationUser>
+        <chefEnabled>false</chefEnabled>
+        <iconUrl>http://rs.bcn.abiquo.com:9000/public/icons/q.png</iconUrl>
+        <loginUser>user</loginUser>
+        <loginPassword>password</loginPassword>
+        <ethernetDriverType>E1000</ethernetDriverType>
+        <diskControllerType>SCSI</diskControllerType>
+    </virtualMachineTemplate>
+</virtualMachineTemplates>

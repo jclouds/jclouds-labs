@@ -16,11 +16,11 @@
  */
 package org.jclouds.abiquo.domain.network;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.NetworkType;
@@ -84,24 +84,26 @@ public class PrivateNetwork extends Network<PrivateIp> {
       target = context.getApi().getCloudApi().updatePrivateNetwork(target);
    }
 
-   /**
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork"
-    *      > http://community.abiquo.com/display/ABI20/Private+Network+Resource#
-    *      PrivateNetworkResource -RetrievethelistofIPSofthePrivateNetwork</a>
-    */
    @Override
-   public List<PrivateIp> listIps(final IpOptions options) {
-      PrivateIpsDto ips = context.getApi().getCloudApi().listPrivateNetworkIps(target, options);
-      return wrap(context, PrivateIp.class, ips.getCollection());
+   public Iterable<PrivateIp> listIps() {
+      PagedIterable<PrivateIpDto> ips = context.getApi().getCloudApi().listPrivateNetworkIps(target);
+      return wrap(context, PrivateIp.class, ips.concat());
+   }
+
+   @Override
+   public Iterable<PrivateIp> listIps(final IpOptions options) {
+      PaginatedCollection<PrivateIpDto, PrivateIpsDto> ips = context.getApi().getCloudApi()
+            .listPrivateNetworkIps(target, options);
+      return wrap(context, PrivateIp.class, ips.toPagedIterable().concat());
    }
 
    // Override to apply the filter in the server side
    @Override
-   public List<PrivateIp> listUnusedIps() {
-      IpOptions options = IpOptions.builder().disablePagination().free(true).build();
-      PrivateIpsDto ips = context.getApi().getCloudApi().listPrivateNetworkIps(target, options);
-      return wrap(context, PrivateIp.class, ips.getCollection());
+   public Iterable<PrivateIp> listUnusedIps() {
+      IpOptions options = IpOptions.builder().free(true).build();
+      PaginatedCollection<PrivateIpDto, PrivateIpsDto> ips = context.getApi().getCloudApi()
+            .listPrivateNetworkIps(target, options);
+      return wrap(context, PrivateIp.class, ips.toPagedIterable().concat());
    }
 
    @Override

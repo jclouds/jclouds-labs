@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<volumes>
+    <link href="http://example.com/api/cloud/virtualdatacenters/1/volumes" rel="first" />
+    <link href="http://example.com/api/cloud/virtualdatacenters/1/volumes?startwith=1" rel="next" />
+    <link href="http://example.com/api/cloud/virtualdatacenters/1/volumes?startwith=1" rel="last" />
+    <totalSize>2</totalSize>
+    <volume>
+        <link href="http://example.com/api/cloud/virtualdatacenters/1/volumes/1530" rel="edit" type="application/vnd.abiquo.volume+xml" />
+        <link href="http://example.com/api/cloud/virtualdatacenters/1/volumes/1530/action/initiatormappings" rel="initiator mappings" type="application/vnd.abiquo.initiatormappings+xml" />
+        <link href="http://example.com/api/cloud/virtualdatacenters/1/tiers/1" rel="tier" title="Default Tier 1" type="application/vnd.abiquo.tier+xml" />
+        <link href="http://example.com/api/cloud/virtualdatacenters/1" rel="virtualdatacenter" title="Aloha updated" type="application/vnd.abiquo.virtualdatacenter+xml" />
+        <id>1530</id>
+        <name>Hawaian volume updated</name>
+        <state>DETACHED</state>
+        <sizeInMB>32</sizeInMB>
+        <sequence>0</sequence>
+    </volume>
+</volumes>

@@ -1,0 +1,40 @@
+<events>
+    <link rel="first" href="http://localhost/api/events"/>
+    <link rel="next" href="http://localhost/api/events?startwith=1"/>
+    <link rel="last" href="http://localhost/api/events?startwith=1"/>
+    <totalSize>4</totalSize>
+    <event>
+        <actionPerformed>VOLUME_DELETE</actionPerformed>
+        <component>VOLUME</component>
+        <enterprise>Abiquo</enterprise>
+        <id>109</id>
+        <idEnterprise>1</idEnterprise>
+        <idUser>1</idUser>
+        <idVirtualDatacenter>1</idVirtualDatacenter>
+        <idVolume>1786</idVolume>
+        <performedBy>admin</performedBy>
+        <severity>INFO</severity>
+        <stacktrace>Deleting volume &apos;JC-3972c0f8-28b&apos;</stacktrace>
+        <timestamp>2013-01-23T14:07:14Z</timestamp>
+        <user>admin</user>
+        <virtualDatacenter>JC-d0cf5cd6-67b</virtualDatacenter>
+        <volume>JC-3972c0f8-28b</volume>
+    </event>
+    <event>
+        <actionPerformed>VOLUME_MODIFY</actionPerformed>
+        <component>VOLUME</component>
+        <enterprise>Abiquo</enterprise>
+        <id>108</id>
+        <idEnterprise>1</idEnterprise>
+        <idUser>1</idUser>
+        <idVirtualDatacenter>1</idVirtualDatacenter>
+        <idVolume>1786</idVolume>
+        <performedBy>admin</performedBy>
+        <severity>INFO</severity>
+        <stacktrace>Updated size of volume &apos;JC-Event vol&apos; to &apos;32&apos; MB</stacktrace>
+        <timestamp>2013-01-23T14:07:12Z</timestamp>
+        <user>admin</user>
+        <virtualDatacenter>JC-d0cf5cd6-67b</virtualDatacenter>
+        <volume>JC-3972c0f8-28b</volume>
+    </event>
+</events>

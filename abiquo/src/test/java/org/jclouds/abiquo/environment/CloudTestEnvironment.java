@@ -18,13 +18,11 @@ package org.jclouds.abiquo.environment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.isEmpty;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
-
-import java.util.Collections;
-import java.util.List;
 
 import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
@@ -37,7 +35,6 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudApi;
 import org.jclouds.abiquo.features.services.EventService;
-import org.testng.collections.Lists;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
@@ -163,20 +160,10 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment {
    }
 
    protected void createVirtualMachine() {
-      List<VirtualMachineTemplate> templates = virtualDatacenter.listAvailableTemplates();
-      assertFalse(templates.isEmpty());
+      Iterable<VirtualMachineTemplate> templates = virtualDatacenter.listAvailableTemplates();
+      assertFalse(isEmpty(templates));
 
-      List<VirtualMachineTemplate> sorted = Lists.newArrayList(templates);
-
-      // Sort by size to use the smallest one
-      Collections.sort(sorted, new Ordering<VirtualMachineTemplate>() {
-         @Override
-         public int compare(final VirtualMachineTemplate left, final VirtualMachineTemplate right) {
-            return Longs.compare(left.getDiskFileSize(), right.getDiskFileSize());
-         }
-      });
-
-      template = sorted.get(0);
+      template = templateBySize().min(templates);
 
       virtualMachine = VirtualMachine.builder(context.getApiContext(), virtualAppliance, template).cpu(2)
             .nameLabel(PREFIX + "VM Aloha").ram(128).build();
@@ -222,7 +209,15 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment {
          virtualMachine.delete();
          assertNull(cloudApi.getVirtualMachine(virtualAppliance.unwrap(), idVirtualMachine));
       }
+   }
 
+   public static Ordering<VirtualMachineTemplate> templateBySize() {
+      return new Ordering<VirtualMachineTemplate>() {
+         @Override
+         public int compare(final VirtualMachineTemplate left, final VirtualMachineTemplate right) {
+            return Longs.compare(left.getDiskFileSize(), right.getDiskFileSize());
+         }
+      };
    }
 
 }

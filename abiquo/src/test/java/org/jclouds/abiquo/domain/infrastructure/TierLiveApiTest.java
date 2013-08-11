@@ -18,9 +18,9 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.Test;
@@ -37,8 +37,7 @@ import com.google.common.base.Predicate;
 public class TierLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testUpdate() {
-      Tier tier = env.datacenter.listTiers().get(0);
-      assertNotNull(tier);
+      Tier tier = getLast(env.datacenter.listTiers());
 
       String previousName = tier.getName();
       tier.setName("Updated tier");

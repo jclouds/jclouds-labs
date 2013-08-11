@@ -24,6 +24,7 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.internal.BaseAdministrationService;
@@ -63,6 +64,11 @@ public interface AdministrationService {
     * Get the list of all enterprises.
     */
    Iterable<Enterprise> listEnterprises();
+
+   /**
+    * Get the list of all enterprises, filtered with the given options.
+    */
+   Iterable<Enterprise> listEnterprises(EnterpriseOptions options);
 
    /**
     * Get the enterprise with the given id.

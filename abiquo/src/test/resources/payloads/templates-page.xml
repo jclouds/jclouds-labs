@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <virtualMachineTemplates>
-    <link rel="first" href="http://localhost:80/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"/>
-    <link rel="next" href="http://localhost:80/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates?startwith=1"/>
-    <link rel="last" href="http://localhost:80/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates?startwith=1"/>
+    <link rel="first" href="http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"/>
+    <link rel="next" href="http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates?startwith=1"/>
+    <link rel="last" href="http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates?startwith=1"/>
     <totalSize>2</totalSize>
     <virtualMachineTemplate>
-        <link title="Web Servers" rel="category" type="application/vnd.abiquo.category+xml" href="http://localhost:80/api/config/categories/14"/>
-        <link rel="conversions" type="application/vnd.abiquo.conversions+xml" href="http://localhost:80/api/admin/enterprises/152/datacenterrepositories/2/virtualmachinetemplates/151/conversions"/>
-        <link rel="datacenter" type="application/vnd.abiquo.datacenter+xml" href="http://localhost:80/api/admin/datacenters/2"/>
-        <link rel="datacenterrepository" type="application/vnd.abiquo.datacenterrepository+xml" href="http://localhost:80/api/admin/enterprises/152/datacenterrepositories/2"/>
-        <link rel="diskfile" href="http://192.168.0.3:80/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf?format=diskFile"/>
-        <link title="Apache Server" rel="edit" type="application/vnd.abiquo.virtualmachinetemplate+xml" href="http://localhost:80/api/admin/enterprises/152/datacenterrepositories/2/virtualmachinetemplates/151"/>
-        <link rel="enterprise" type="application/vnd.abiquo.enterprise+xml" href="http://localhost:80/api/admin/enterprises/152"/>
-        <link rel="ovfdocument" href="http://192.168.0.3:80/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf?format=envelope"/>
-        <link rel="template" href="http://192.168.0.3:80/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf"/>
+        <link title="Web Servers" rel="category" type="application/vnd.abiquo.category+xml" href="http://localhost/api/config/categories/14"/>
+        <link rel="conversions" type="application/vnd.abiquo.conversions+xml" href="http://localhost/api/admin/enterprises/152/datacenterrepositories/2/virtualmachinetemplates/151/conversions"/>
+        <link rel="datacenter" type="application/vnd.abiquo.datacenter+xml" href="http://localhost/api/admin/datacenters/2"/>
+        <link rel="datacenterrepository" type="application/vnd.abiquo.datacenterrepository+xml" href="http://localhost/api/admin/enterprises/152/datacenterrepositories/2"/>
+        <link rel="diskfile" href="http://localhost/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf?format=diskFile"/>
+        <link title="Apache Server" rel="edit" type="application/vnd.abiquo.virtualmachinetemplate+xml" href="http://localhost/api/admin/enterprises/152/datacenterrepositories/2/virtualmachinetemplates/151"/>
+        <link rel="enterprise" type="application/vnd.abiquo.enterprise+xml" href="http://localhost/api/admin/enterprises/152"/>
+        <link rel="ovfdocument" href="http://localhost/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf?format=envelope"/>
+        <link rel="template" href="http://localhost/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf"/>
         <link rel="templatedefinition" href="http://apache/ubuntu-910-server-x86_64-vmdk5.ovf"/>
-        <link rel="templatestatus" href="http://192.168.0.3:80/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf?format=status"/>
+        <link rel="templatestatus" href="http://localhost/am/erepos/152/templates/apache%252Fubuntu-910-server-x86_64-vmdk5.ovf?format=status"/>
         <id>151</id>
         <name>Apache Server</name>
         <description>Apache Server</description>

@@ -27,8 +27,6 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
@@ -77,7 +75,7 @@ public class VirtualMachineLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testGetTasks() {
-      List<AsyncTask<?, ?>> tasks = env.virtualMachine.listTasks();
+      Iterable<AsyncTask<?, ?>> tasks = env.virtualMachine.listTasks();
       assertNotNull(tasks);
    }
 

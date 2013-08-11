@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enterprises>
+    <link rel="first" href="http://localhost/api/admin/enterprises" />
+    <link rel="previous" href="http://localhost/api/admin/enterprises?startwith=0"/>
+    <link rel="last" href="http://localhost/api/admin/enterprises?startwith=1"/>
+    <totalSize>2</totalSize>
+    <enterprise>
+        <link rel="appslib/templateDefinitionLists" type="application/vnd.abiquo.templatedefinitionlists+xml" href="http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists"/>
+        <link rel="appslib/templateDefinitions" type="application/vnd.abiquo.templatedefinitions+xml" href="http://localhost/api/admin/enterprises/1/appslib/templateDefinitions"/>
+        <link rel="cloud/virtualdatacenters" type="application/vnd.abiquo.virtualdatacenters+xml" href="http://localhost/api/admin/enterprises/1/action/virtualdatacenters"/>
+        <link rel="datacenterrepositories" type="application/vnd.abiquo.datacenterrepositories+xml" href="http://localhost/api/admin/enterprises/1/datacenterrepositories"/>
+        <link rel="edit" type="application/vnd.abiquo.enterprise+xml" href="http://localhost/api/admin/enterprises/1"/>
+        <link rel="externalnetworks" type="application/vnd.abiquo.vlans+xml" href="http://localhost/api/admin/enterprises/1/action/externalnetworks"/>
+        <link rel="ips" href="http://localhost/api/admin/enterprises/1/action/ips"/>
+        <link rel="limits" type="application/vnd.abiquo.limits+xml" href="http://localhost/api/admin/enterprises/1/limits"/>
+        <link rel="properties" type="application/vnd.abiquo.enterpriseproperties+xml" href="http://localhost/api/admin/enterprises/1/properties"/>
+        <link rel="reservedmachines" type="application/vnd.abiquo.machines+xml" href="http://localhost/api/admin/enterprises/1/reservedmachines"/>
+        <link rel="users" type="application/vnd.abiquo.users+xml" href="http://localhost/api/admin/enterprises/1/users"/>
+        <link rel="virtualappliances" type="application/vnd.abiquo.virtualappliances+xml" href="http://localhost/api/admin/enterprises/1/action/virtualappliances"/>
+        <link rel="virtualmachines" type="application/vnd.abiquo.virtualmachines+xml" href="http://localhost/api/admin/enterprises/1/action/virtualmachines"/>
+        <link rel="volumes" type="application/vnd.abiquo.iscsivolumes+xml" href="http://localhost/api/admin/enterprises/1/action/volumes"/>
+        <cpuHard>0</cpuHard>
+        <cpuSoft>0</cpuSoft>
+        <hdHard>0</hdHard>
+        <hdSoft>0</hdSoft>
+        <publicIpsHard>0</publicIpsHard>
+        <publicIpsSoft>0</publicIpsSoft>
+        <ramHard>0</ramHard>
+        <ramSoft>0</ramSoft>
+        <storageHard>0</storageHard>
+        <storageSoft>0</storageSoft>
+        <vlansHard>0</vlansHard>
+        <vlansSoft>0</vlansSoft>
+        <id>2</id>
+        <isReservationRestricted>false</isReservationRestricted>
+        <name>Abiquo</name>
+        <repositoryHard>0</repositoryHard>
+        <repositorySoft>0</repositorySoft>
+    </enterprise>
+</enterprises>

@@ -32,7 +32,6 @@ import org.jclouds.rest.ApiContext;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Adds generic high level functionality to {@link VLANNetworkDto}.
@@ -56,17 +55,14 @@ public abstract class Network<T extends Ip<?, ?>> extends DomainWrapper<VLANNetw
 
    public abstract void delete();
 
-   public abstract List<T> listIps(IpOptions options);
+   public abstract Iterable<T> listIps();
+
+   public abstract Iterable<T> listIps(IpOptions options);
 
    public abstract T getIp(Integer id);
 
-   public List<T> listIps() {
-      // Disable pagination by default
-      return listIps(IpOptions.builder().disablePagination().build());
-   }
-
-   public List<T> listUnusedIps() {
-      return ImmutableList.copyOf(filter(listIps(), IpPredicates.<T> notUsed()));
+   public Iterable<T> listUnusedIps() {
+      return filter(listIps(), IpPredicates.<T> notUsed());
    }
 
    // Builder
@@ -302,12 +298,12 @@ public abstract class Network<T extends Ip<?, ?>> extends DomainWrapper<VLANNetw
       return network;
    }
 
-   public static List<Network<?>> wrapNetworks(final ApiContext<AbiquoApi> context, final List<VLANNetworkDto> dtos) {
-      return ImmutableList.copyOf(transform(dtos, new Function<VLANNetworkDto, Network<?>>() {
+   public static Iterable<Network<?>> wrapNetworks(final ApiContext<AbiquoApi> context, final List<VLANNetworkDto> dtos) {
+      return transform(dtos, new Function<VLANNetworkDto, Network<?>>() {
          @Override
          public Network<?> apply(VLANNetworkDto input) {
             return wrapNetwork(context, input);
          }
-      }));
+      });
    }
 }

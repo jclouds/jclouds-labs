@@ -17,6 +17,7 @@
 package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -24,10 +25,9 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
@@ -36,6 +36,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.google.common.base.Predicate;
 
@@ -59,28 +60,27 @@ public class UnmanagedNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testListIps() {
-      UnmanagedIpsDto ipsDto = env.context.getApiContext().getApi().getInfrastructureApi()
-            .listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
+      PaginatedCollection<UnmanagedIpDto, UnmanagedIpsDto> ipsDto = env.context.getApiContext().getApi()
+            .getInfrastructureApi().listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
       int totalIps = ipsDto.getTotalSize();
 
-      List<UnmanagedIp> ips = unmanagedNetwork.listIps();
-
-      assertEquals(ips.size(), totalIps);
+      Iterable<UnmanagedIp> ips = unmanagedNetwork.listIps();
+      assertEquals(size(ips), totalIps);
    }
 
    public void testListIpsWithOptions() {
-      List<UnmanagedIp> ips = unmanagedNetwork.listIps(IpOptions.builder().limit(5).build());
+      Iterable<UnmanagedIp> ips = unmanagedNetwork.listIps(IpOptions.builder().limit(5).build());
       // Unmanaged networks do not have IPs until attached to VMs
-      assertEquals(ips.size(), 0);
+      assertEquals(size(ips), 0);
    }
 
    public void testListUnusedIps() {
-      UnmanagedIpsDto ipsDto = env.context.getApiContext().getApi().getInfrastructureApi()
-            .listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
+      PaginatedCollection<UnmanagedIpDto, UnmanagedIpsDto> ipsDto = env.context.getApiContext().getApi()
+            .getInfrastructureApi().listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
       int totalIps = ipsDto.getTotalSize();
 
-      List<UnmanagedIp> ips = unmanagedNetwork.listUnusedIps();
-      assertEquals(ips.size(), totalIps);
+      Iterable<UnmanagedIp> ips = unmanagedNetwork.listUnusedIps();
+      assertEquals(size(ips), totalIps);
    }
 
    public void testUpdateBasicInfo() {

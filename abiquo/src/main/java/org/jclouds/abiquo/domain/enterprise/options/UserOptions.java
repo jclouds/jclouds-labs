@@ -54,17 +54,5 @@ public class UserOptions extends BaseHttpRequestOptions implements Cloneable {
       public UserOptions build() {
          return addFilterOptions(this.options);
       }
-
-      // FIXME: This method is overriden to change its behavior until the
-      // issue ABICLOUDPREMIUM-5927 in Abiquo isissue is solved (
-      // (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-5927)
-      // Once its fixed, this method should be deleted
-      @Override
-      public Builder disablePagination() {
-         // Unlike in its parent method, disabling pagination means to set
-         // the limit attribute to the biggest value possible
-         this.limit = Integer.MAX_VALUE;
-         return (Builder) this;
-      }
    }
 }

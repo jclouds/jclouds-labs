@@ -18,11 +18,13 @@ package org.jclouds.abiquo.domain.enterprise.options;
 
 import org.jclouds.abiquo.domain.options.FilterOptions.BaseFilterOptionsBuilder;
 import org.jclouds.http.options.BaseHttpRequestOptions;
+import org.jclouds.rest.annotations.SinceApiVersion;
 
 /**
  * Available options to query enterprises.
  * 
  * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
 public class EnterpriseOptions extends BaseHttpRequestOptions {
    public static Builder builder() {
@@ -39,43 +41,23 @@ public class EnterpriseOptions extends BaseHttpRequestOptions {
    public static class Builder extends BaseFilterOptionsBuilder<Builder> {
       private String idPricingTemplate;
 
+      private String idScope;
+
       private Boolean included;
-
-      private String filter;
-
-      private Integer page;
-
-      private Integer results;
-
-      private Boolean network;
 
       public Builder pricingTemplate(final String idPricingTemplate) {
          this.idPricingTemplate = idPricingTemplate;
          return this;
       }
 
+      @SinceApiVersion("2.3")
+      public Builder scope(final String scope) {
+         this.idScope = scope;
+         return this;
+      }
+
       public Builder included(final boolean included) {
          this.included = included;
-         return this;
-      }
-
-      public Builder filter(final String filter) {
-         this.filter = filter;
-         return this;
-      }
-
-      public Builder network(final boolean network) {
-         this.network = network;
-         return this;
-      }
-
-      public Builder page(final int page) {
-         this.page = page;
-         return this;
-      }
-
-      public Builder results(final int results) {
-         this.results = results;
          return this;
       }
 
@@ -86,24 +68,12 @@ public class EnterpriseOptions extends BaseHttpRequestOptions {
             options.queryParameters.put("idPricingTemplate", String.valueOf(idPricingTemplate));
          }
 
+         if (idScope != null) {
+            options.queryParameters.put("idScope", String.valueOf(idScope));
+         }
+
          if (included != null) {
             options.queryParameters.put("included", String.valueOf(included));
-         }
-
-         if (filter != null) {
-            options.queryParameters.put("filter", String.valueOf(filter));
-         }
-
-         if (page != null) {
-            options.queryParameters.put("page", String.valueOf(page));
-         }
-
-         if (results != null) {
-            options.queryParameters.put("numResults", String.valueOf(results));
-         }
-
-         if (network != null) {
-            options.queryParameters.put("network", String.valueOf(network));
          }
 
          return addFilterOptions(options);

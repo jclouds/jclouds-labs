@@ -21,6 +21,7 @@ import java.util.List;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.internal.BaseCloudService;
 
@@ -74,5 +75,10 @@ public interface CloudService {
     * Get the list of all virtual machines.
     */
    Iterable<VirtualMachine> listVirtualMachines();
+
+   /**
+    * Get the list of all virtual machines filtered with the given options.
+    */
+   Iterable<VirtualMachine> listVirtualMachines(VirtualMachineOptions options);
 
 }

@@ -18,6 +18,7 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.getLast;
+import static org.jclouds.abiquo.environment.CloudTestEnvironment.templateBySize;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -42,8 +43,6 @@ import org.testng.annotations.Test;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Longs;
 
 /**
  * Live integration tests for the {@link VirtualMachine} domain class.
@@ -177,15 +176,6 @@ public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {
       Integer vmId = vm.getId();
       vm.delete();
       assertNull(vapp.getVirtualMachine(vmId));
-   }
-
-   private static Ordering<VirtualMachineTemplate> templateBySize() {
-      return new Ordering<VirtualMachineTemplate>() {
-         @Override
-         public int compare(final VirtualMachineTemplate left, final VirtualMachineTemplate right) {
-            return Longs.compare(left.getDiskFileSize(), right.getDiskFileSize());
-         }
-      };
    }
 
 }

@@ -126,9 +126,8 @@ public class Role extends DomainWrapper<RoleDto> {
     *      > http://community.abiquo.com/display/ABI20/Roles+Resource#
     *      RolesResource- RetrievealistofprivilegesfromaRole</a>
     */
-   public List<Privilege> listPrivileges() {
+   public Iterable<Privilege> listPrivileges() {
       PrivilegesDto dto = context.getApi().getAdminApi().listPrivileges(target);
-
       return wrap(context, Privilege.class, dto.getCollection());
    }
 

@@ -19,7 +19,6 @@ package org.jclouds.abiquo.config;
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -98,9 +97,9 @@ public class AbiquoHttpApiModule extends HttpApiModule<AbiquoApi> {
          final AtomicReference<AuthorizationException> authException,
          @Named(PROPERTY_SESSION_INTERVAL) final long seconds, @Memoized final Supplier<Enterprise> currentEnterprise) {
       Supplier<Map<Integer, Datacenter>> availableRegionsMapSupplier = Suppliers.compose(
-            new Function<List<Datacenter>, Map<Integer, Datacenter>>() {
+            new Function<Iterable<Datacenter>, Map<Integer, Datacenter>>() {
                @Override
-               public Map<Integer, Datacenter> apply(final List<Datacenter> datacenters) {
+               public Map<Integer, Datacenter> apply(final Iterable<Datacenter> datacenters) {
                   // Index available regions by id
                   return Maps.uniqueIndex(datacenters, new Function<Datacenter, Integer>() {
                      @Override
@@ -109,9 +108,9 @@ public class AbiquoHttpApiModule extends HttpApiModule<AbiquoApi> {
                      }
                   });
                }
-            }, new Supplier<List<Datacenter>>() {
+            }, new Supplier<Iterable<Datacenter>>() {
                @Override
-               public List<Datacenter> get() {
+               public Iterable<Datacenter> get() {
                   // Get the list of regions available for the user's tenant
                   return currentEnterprise.get().listAllowedDatacenters();
                }

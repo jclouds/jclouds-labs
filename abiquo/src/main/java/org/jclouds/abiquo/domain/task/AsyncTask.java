@@ -18,8 +18,6 @@ package org.jclouds.abiquo.domain.task;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -93,7 +91,7 @@ public abstract class AsyncTask<T extends DomainWrapper<D>, D extends SingleReso
    /**
     * Get the individual jobs that compose the current task.
     */
-   public List<AsyncJob> getJobs() {
+   public Iterable<AsyncJob> getJobs() {
       return wrap(context, AsyncJob.class, target.getJobs().getCollection());
    }
 

@@ -22,8 +22,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import java.util.List;
-
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -56,7 +54,7 @@ public class TemplateDefinitionListLiveApiTest extends BaseAbiquoApiLiveApiTest 
    }
 
    public void testListStates() {
-      List<TemplateState> states = list.listStatus(env.datacenter);
+      Iterable<TemplateState> states = list.listStatus(env.datacenter);
       assertNotNull(states);
    }
 

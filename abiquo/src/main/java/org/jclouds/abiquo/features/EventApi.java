@@ -23,12 +23,17 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
+import org.jclouds.abiquo.functions.pagination.ParseEvents;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
-import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.Transform;
 
+import com.abiquo.server.core.event.EventDto;
 import com.abiquo.server.core.event.EventsDto;
 
 /**
@@ -50,8 +55,9 @@ public interface EventApi extends Closeable {
    @Named("event:list")
    @GET
    @Consumes(EventsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   EventsDto listEvents();
+   @ResponseParser(ParseEvents.class)
+   @Transform(ParseEvents.ToPagedIterable.class)
+   PagedIterable<EventDto> listEvents();
 
    /**
     * List events using filters.
@@ -61,6 +67,6 @@ public interface EventApi extends Closeable {
    @Named("event:list")
    @GET
    @Consumes(EventsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   EventsDto listEvents(EventOptions options);
+   @ResponseParser(ParseEvents.class)
+   PaginatedCollection<EventDto, EventsDto> listEvents(EventOptions options);
 }

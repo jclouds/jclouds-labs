@@ -19,16 +19,17 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -144,8 +145,9 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto> {
     *      > http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#
     *      VirtualMachineResource -RetrievethelistofVirtualMachines.</a>
     */
-   public List<VirtualMachine> listVirtualMachines() {
-      return listVirtualMachines(VirtualMachineOptions.builder().disablePagination().build());
+   public Iterable<VirtualMachine> listVirtualMachines() {
+      PagedIterable<VirtualMachineWithNodeExtendedDto> vms = context.getApi().getCloudApi().listVirtualMachines(target);
+      return wrap(context, VirtualMachine.class, vms.concat());
    }
 
    /**
@@ -157,9 +159,10 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto> {
     *      > http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#
     *      VirtualMachineResource -RetrievethelistofVirtualMachines.</a>
     */
-   public List<VirtualMachine> listVirtualMachines(final VirtualMachineOptions options) {
-      VirtualMachinesWithNodeExtendedDto vms = context.getApi().getCloudApi().listVirtualMachines(target, options);
-      return wrap(context, VirtualMachine.class, vms.getCollection());
+   public Iterable<VirtualMachine> listVirtualMachines(final VirtualMachineOptions options) {
+      PaginatedCollection<VirtualMachineWithNodeExtendedDto, VirtualMachinesWithNodeExtendedDto> vms = context.getApi()
+            .getCloudApi().listVirtualMachines(target, options);
+      return wrap(context, VirtualMachine.class, vms.toPagedIterable().concat());
    }
 
    /**

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <virtualmachineswithnodeextended>
+    <link href="http://localhost/api/cloud/virtualmachines" rel="first" />
+    <link href="http://localhost/api/cloud/virtualmachines?startwith=2" rel="next" />
+    <link href="http://localhost/api/cloud/virtualmachines?startwith=2" rel="last" />
+    <totalSize>2</totalSize>
     <virtualmachinewithnodeextended>
         <link rel="deploy" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy" />
         <link rel="disks" href="http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/disks" />

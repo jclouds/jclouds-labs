@@ -19,7 +19,6 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -204,7 +203,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     *      ConversionResource- ListConversions</a>
     * @return all the conversions of the virtual machine template
     */
-   public List<Conversion> listConversions() {
+   public Iterable<Conversion> listConversions() {
       ConversionsDto convs = context.getApi().getVirtualMachineTemplateApi().listConversions(target);
       return wrap(context, Conversion.class, convs.getCollection());
    }
@@ -224,7 +223,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     * @return all the conversions of the virtual machine template applying the
     *         constrains
     */
-   public List<Conversion> listConversions(final HypervisorType hypervisor, final ConversionState state) {
+   public Iterable<Conversion> listConversions(final HypervisorType hypervisor, final ConversionState state) {
       ConversionsDto convs = context
             .getApi()
             .getVirtualMachineTemplateApi()

@@ -17,6 +17,7 @@
 package org.jclouds.abiquo.strategy.cloud;
 
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -55,13 +56,10 @@ public class ListAttachedNicsLiveApiTest extends BaseAbiquoStrategyLiveApiTest {
    protected void setupStrategy() {
       this.strategy = env.context.utils().injector().getInstance(ListAttachedNics.class);
 
-      privateIp = env.privateNetwork.listUnusedIps().get(0);
-      assertNotNull(privateIp);
+      privateIp = getLast(env.privateNetwork.listUnusedIps());
+      externalIp = getLast(env.externalNetwork.listUnusedIps());
 
-      externalIp = env.externalNetwork.listUnusedIps().get(0);
-      assertNotNull(externalIp);
-
-      publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
+      publicIp = getLast(env.virtualDatacenter.listAvailablePublicIps());
       env.virtualDatacenter.purchasePublicIp(publicIp);
       publicIp = find(env.virtualDatacenter.listPurchasedPublicIps(), new Predicate<PublicIp>() {
          @Override

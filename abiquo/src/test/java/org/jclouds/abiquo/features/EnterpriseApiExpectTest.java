@@ -17,78 +17,194 @@
 package org.jclouds.abiquo.features;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.domain.enterprise.options.UserOptions;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.HttpRequest.Builder;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisesDto;
+import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Expect tests for the {@link EnterpriseApi} class.
  * 
  * @author Carlos Garcia
+ * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "EnterpriseApiExpectTest")
 public class EnterpriseApiExpectTest extends BaseAbiquoApiExpectTest<EnterpriseApi> {
 
-   private EnterpriseApi buildMockEnterpriseApi(String payloadFile, Builder<?> requestBuilder) {
-      return requestSendsResponse(requestBuilder.build(),
-            HttpResponse.builder().statusCode(200).payload(
-                  payloadFromResourceWithContentType(payloadFile,
-                        normalize(UsersDto.MEDIA_TYPE))) //
-                        .build());
-   }
-
-   public Builder<?> getRequestBuilder() {
-      return HttpRequest.builder() //
-            .method("GET")
-            .endpoint(URI.create("http://localhost/api/admin/enterprises/1/users"))
-            .addHeader("Cookie", tokenAuth)
-            .addHeader("Accept", normalize(UsersDto.MEDIA_TYPE));
-   }
-
    public void testListUsersWithoutPagination() {
-      EnterpriseApi api = buildMockEnterpriseApi("/payloads/usr-list.xml",
-            getRequestBuilder());
+      EnterpriseApi api = requestsSendResponses(
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost/api/admin/enterprises/1/users")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(UsersDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/users-page.xml", normalize(UsersDto.MEDIA_TYPE))) //
+                  .build(),
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost/api/admin/enterprises/1/users")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(UsersDto.MEDIA_TYPE)) //
+                  .addQueryParam("numResults", "2") //
+                  .addQueryParam("page", "1") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/users-lastpage.xml",
+                              normalize(UsersDto.MEDIA_TYPE))) //
+                  .build());
 
       EnterpriseDto enterprise = new EnterpriseDto();
-      enterprise.addLink(new RESTLink("users",
-            "http://localhost/api/admin/enterprises/1/users"));
+      enterprise.addLink(new RESTLink("users", "http://localhost/api/admin/enterprises/1/users"));
 
-      UsersDto users = api.listUsers(enterprise);
-      assertEquals(users.getCollection().size(), 3);
-      assertEquals(users.getCollection().get(0).getNick(), "potter");
-      assertEquals(users.getCollection().get(1).getNick(), "granger");
-      assertEquals(users.getCollection().get(2).getNick(), "ron");
+      PagedIterable<UserDto> result = api.listUsers(enterprise);
+      List<UserDto> all = result.concat().toList();
+
+      assertEquals(all.size(), 3);
+      assertEquals(all.get(0).getId().intValue(), 1);
+      assertEquals(all.get(1).getId().intValue(), 2);
+      assertEquals(all.get(2).getId().intValue(), 3);
    }
 
    public void testListUsersWithPagination() {
-      Builder<?> builder = getRequestBuilder();
-      builder.addQueryParam("numResults", "2"); 
-      builder.addQueryParam("page", "2");
-      EnterpriseApi api = buildMockEnterpriseApi("/payloads/usr-list-page-2.xml", builder);
+      EnterpriseApi api = requestSendsResponse(
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost/api/admin/enterprises/1/users")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(UsersDto.MEDIA_TYPE)) //
+                  .addQueryParam("page", "1") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/users-lastpage.xml",
+                              normalize(UsersDto.MEDIA_TYPE))) //
+                  .build());
 
       EnterpriseDto enterprise = new EnterpriseDto();
-      enterprise.addLink(new RESTLink("users",
-            "http://localhost/api/admin/enterprises/1/users"));
+      enterprise.addLink(new RESTLink("users", "http://localhost/api/admin/enterprises/1/users"));
 
-      UsersDto users = api.listUsers(enterprise, 
-            UserOptions.builder().limit(2).page(2).build());
-      assertEquals(users.getCollection().size(), 1);
-      assertEquals(users.getCollection().get(0).getNick(), "ron");
+      UserOptions options = UserOptions.builder().page(1).build();
+      PaginatedCollection<UserDto, UsersDto> result = api.listUsers(enterprise, options);
+
+      assertEquals(result.size(), 1);
+      assertEquals(result.getTotalSize().intValue(), 3);
+      assertEquals(result.get(0).getId().intValue(), 3);
+      assertNotNull(result.searchLink("first"));
+      assertNotNull(result.searchLink("last"));
+   }
+
+   public void testListEnterprises() {
+      EnterpriseApi api = requestSendsResponse(
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost/api/admin/enterprises")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(EnterprisesDto.MEDIA_TYPE)) //
+                  .addQueryParam("limit", "1") //
+                  .addQueryParam("has", "text") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/enterprises-page.xml",
+                              normalize(EnterprisesDto.MEDIA_TYPE))) //
+                  .build());
+
+      EnterpriseOptions options = EnterpriseOptions.builder().limit(1).has("text").build();
+      PaginatedCollection<EnterpriseDto, EnterprisesDto> result = api.listEnterprises(options);
+
+      assertEquals(result.size(), 1);
+      assertEquals(result.getTotalSize().intValue(), 2);
+      assertEquals(result.get(0).getId().intValue(), 1);
+      assertNotNull(result.searchLink("first"));
+      assertNotNull(result.searchLink("last"));
+   }
+
+   public void testListEnterprisesByDatacenterWithOptions() {
+      EnterpriseApi api = requestSendsResponse(
+            HttpRequest.builder().method("GET")
+                  .endpoint(URI.create("http://localhost/api/admin/datacenters/1/action/enterprises")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(EnterprisesDto.MEDIA_TYPE)) //
+                  .addQueryParam("limit", "1") //
+                  .addQueryParam("has", "text") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/enterprises-page.xml",
+                              normalize(EnterprisesDto.MEDIA_TYPE))) //
+                  .build());
+
+      DatacenterDto datacenter = new DatacenterDto();
+      datacenter.addLink(new RESTLink("enterprises", "http://localhost/api/admin/datacenters/1/action/enterprises"));
+
+      EnterpriseOptions options = EnterpriseOptions.builder().limit(1).has("text").build();
+      PaginatedCollection<EnterpriseDto, EnterprisesDto> result = api.listEnterprises(datacenter, options);
+
+      assertEquals(result.size(), 1);
+      assertEquals(result.getTotalSize().intValue(), 2);
+      assertEquals(result.get(0).getId().intValue(), 1);
+      assertNotNull(result.searchLink("first"));
+      assertNotNull(result.searchLink("last"));
+   }
+
+   public void testListEnterprisesReturns2xx() {
+      EnterpriseApi api = requestsSendResponses(
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost/api/admin/enterprises")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(EnterprisesDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/enterprises-page.xml",
+                              normalize(EnterprisesDto.MEDIA_TYPE))) //
+                  .build(),
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost/api/admin/enterprises")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(EnterprisesDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "1") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/enterprises-lastpage.xml",
+                              normalize(EnterprisesDto.MEDIA_TYPE))) //
+                  .build());
+
+      PagedIterable<EnterpriseDto> result = api.listEnterprises();
+      List<EnterpriseDto> all = result.concat().toList();
+
+      assertEquals(all.size(), 2);
+      assertEquals(all.get(0).getId().intValue(), 1);
+      assertEquals(all.get(1).getId().intValue(), 2);
    }
 
    @Override
    protected EnterpriseApi clientFrom(AbiquoApi api) {
       return api.getEnterpriseApi();
    }
-
 }

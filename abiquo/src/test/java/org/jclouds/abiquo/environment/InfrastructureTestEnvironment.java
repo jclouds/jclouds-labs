@@ -17,6 +17,7 @@
 package org.jclouds.abiquo.environment;
 
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -94,7 +94,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
 
    public UnmanagedNetwork unmanagedNetwork;
 
-   public List<RemoteService> remoteServices;
+   public Iterable<RemoteService> remoteServices;
 
    public Rack rack;
 
@@ -190,7 +190,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       assertNotNull(datacenter.getId());
 
       remoteServices = datacenter.listRemoteServices();
-      assertEquals(remoteServices.size(), 7);
+      assertEquals(size(remoteServices), 7);
    }
 
    protected void createMachine() {
@@ -237,7 +237,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment {
       String user = Config.get("abiquo.storage.user");
       String pass = Config.get("abiquo.storage.pass");
 
-      List<StorageDeviceMetadata> devices = datacenter.listSupportedStorageDevices();
+      Iterable<StorageDeviceMetadata> devices = datacenter.listSupportedStorageDevices();
       StorageDeviceMetadata metadata = find(devices, new Predicate<StorageDeviceMetadata>() {
          @Override
          public boolean apply(StorageDeviceMetadata input) {

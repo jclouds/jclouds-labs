@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -34,12 +35,14 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 import org.jclouds.collect.Memoized;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.appslibrary.CategoriesDto;
@@ -112,8 +115,15 @@ public class BaseAdministrationService implements AdministrationService {
 
    @Override
    public Iterable<Enterprise> listEnterprises() {
-      EnterprisesDto result = context.getApi().getEnterpriseApi().listEnterprises();
-      return wrap(context, Enterprise.class, result.getCollection());
+      PagedIterable<EnterpriseDto> result = context.getApi().getEnterpriseApi().listEnterprises();
+      return wrap(context, Enterprise.class, result.concat());
+   }
+
+   @Override
+   public Iterable<Enterprise> listEnterprises(EnterpriseOptions options) {
+      PaginatedCollection<EnterpriseDto, EnterprisesDto> result = context.getApi().getEnterpriseApi()
+            .listEnterprises(options);
+      return wrap(context, Enterprise.class, result.toPagedIterable().concat());
    }
 
    @Override

@@ -23,11 +23,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.event.Event;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.features.services.EventService;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
+import com.abiquo.server.core.event.EventDto;
 import com.abiquo.server.core.event.EventsDto;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -49,13 +52,13 @@ public class BaseEventService implements EventService {
 
    @Override
    public Iterable<Event> listEvents() {
-      EventsDto result = context.getApi().getEventApi().listEvents();
-      return wrap(context, Event.class, result.getCollection());
+      PagedIterable<EventDto> result = context.getApi().getEventApi().listEvents();
+      return wrap(context, Event.class, result.concat());
    }
 
    @Override
    public Iterable<Event> listEvents(final EventOptions options) {
-      EventsDto result = context.getApi().getEventApi().listEvents(options);
-      return wrap(context, Event.class, result.getCollection());
+      PaginatedCollection<EventDto, EventsDto> result = context.getApi().getEventApi().listEvents(options);
+      return wrap(context, Event.class, result.toPagedIterable().concat());
    }
 }

@@ -21,16 +21,27 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 import java.net.URI;
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
 import com.abiquo.server.core.infrastructure.network.NetworkServiceTypesDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Expect tests for the {@link InfrastructureApi} class.
@@ -189,6 +200,222 @@ public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<Infrast
       nst.addLink(editLink);
 
       api.deleteNetworkServiceType(nst);
+   }
+
+   public void testListPublicIps() {
+      InfrastructureApi api = requestsSendResponses(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/datacenters/1/network/1/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(PublicIpsDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/publicips-page.xml",
+                              normalize(PublicIpsDto.MEDIA_TYPE))) //
+                  .build(),
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/datacenters/1/network/1/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(PublicIpsDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "3") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/publicips-lastpage.xml",
+                              normalize(PublicIpsDto.MEDIA_TYPE))) //
+                  .build());
+
+      VLANNetworkDto vlan = new VLANNetworkDto();
+      vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
+
+      PagedIterable<PublicIpDto> publicIps = api.listPublicIps(vlan);
+      List<PublicIpDto> ips = publicIps.concat().toList();
+
+      assertEquals(ips.size(), 4);
+      assertEquals(ips.get(0).getId().intValue(), 1);
+      assertEquals(ips.get(1).getId().intValue(), 2);
+      assertEquals(ips.get(2).getId().intValue(), 3);
+      assertEquals(ips.get(3).getId().intValue(), 4);
+   }
+
+   public void testListPublicIpsWithPagination() {
+      InfrastructureApi api = requestSendsResponse(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/datacenters/1/network/1/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(PublicIpsDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "3") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/publicips-lastpage.xml",
+                              normalize(PublicIpsDto.MEDIA_TYPE))) //
+                  .build());
+
+      VLANNetworkDto vlan = new VLANNetworkDto();
+      vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
+
+      IpOptions options = IpOptions.builder().startWith(3).build();
+      PaginatedCollection<PublicIpDto, PublicIpsDto> ips = api.listPublicIps(vlan, options);
+
+      assertEquals(ips.size(), 2);
+      assertEquals(ips.getTotalSize().intValue(), 4);
+      assertEquals(ips.get(0).getId().intValue(), 3);
+      assertEquals(ips.get(1).getId().intValue(), 4);
+   }
+
+   public void testListExternalIps() {
+      InfrastructureApi api = requestsSendResponses(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(ExternalIpsDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/externalips-page.xml",
+                              normalize(ExternalIpsDto.MEDIA_TYPE))) //
+                  .build(),
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(ExternalIpsDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "3") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/externalips-lastpage.xml",
+                              normalize(ExternalIpsDto.MEDIA_TYPE))) //
+                  .build());
+
+      VLANNetworkDto vlan = new VLANNetworkDto();
+      vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips"));
+
+      PagedIterable<ExternalIpDto> publicIps = api.listExternalIps(vlan);
+      List<ExternalIpDto> ips = publicIps.concat().toList();
+
+      assertEquals(ips.size(), 4);
+      assertEquals(ips.get(0).getId().intValue(), 1);
+      assertEquals(ips.get(1).getId().intValue(), 2);
+      assertEquals(ips.get(2).getId().intValue(), 3);
+      assertEquals(ips.get(3).getId().intValue(), 4);
+   }
+
+   public void testListExternalIpsWithPagination() {
+      InfrastructureApi api = requestSendsResponse(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(ExternalIpsDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "3") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/externalips-lastpage.xml",
+                              normalize(ExternalIpsDto.MEDIA_TYPE))) //
+                  .build());
+
+      VLANNetworkDto vlan = new VLANNetworkDto();
+      vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips"));
+
+      IpOptions options = IpOptions.builder().startWith(3).build();
+      PaginatedCollection<ExternalIpDto, ExternalIpsDto> ips = api.listExternalIps(vlan, options);
+
+      assertEquals(ips.size(), 2);
+      assertEquals(ips.getTotalSize().intValue(), 4);
+      assertEquals(ips.get(0).getId().intValue(), 3);
+      assertEquals(ips.get(1).getId().intValue(), 4);
+   }
+
+   public void testListUnmanagedIps() {
+      InfrastructureApi api = requestsSendResponses(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(UnmanagedIpsDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/unmanagedips-page.xml",
+                              normalize(UnmanagedIpsDto.MEDIA_TYPE))) //
+                  .build(),
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(UnmanagedIpsDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "3") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/unmanagedips-lastpage.xml",
+                              normalize(UnmanagedIpsDto.MEDIA_TYPE))) //
+                  .build());
+
+      VLANNetworkDto vlan = new VLANNetworkDto();
+      vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips"));
+
+      PagedIterable<UnmanagedIpDto> unmanagedIps = api.listUnmanagedIps(vlan);
+      List<UnmanagedIpDto> ips = unmanagedIps.concat().toList();
+
+      assertEquals(ips.size(), 4);
+      assertEquals(ips.get(0).getId().intValue(), 1);
+      assertEquals(ips.get(1).getId().intValue(), 2);
+      assertEquals(ips.get(2).getId().intValue(), 3);
+      assertEquals(ips.get(3).getId().intValue(), 4);
+   }
+
+   public void testListUnmanagedIpsWithPagination() {
+      InfrastructureApi api = requestSendsResponse(
+            HttpRequest.builder() //
+                  .method("GET") //
+                  .endpoint(URI.create("http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(UnmanagedIpsDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "3") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/unmanagedips-lastpage.xml",
+                              normalize(UnmanagedIpsDto.MEDIA_TYPE))) //
+                  .build());
+
+      VLANNetworkDto vlan = new VLANNetworkDto();
+      vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips"));
+
+      IpOptions options = IpOptions.builder().startWith(3).build();
+      PaginatedCollection<UnmanagedIpDto, UnmanagedIpsDto> ips = api.listUnmanagedIps(vlan, options);
+
+      assertEquals(ips.size(), 2);
+      assertEquals(ips.getTotalSize().intValue(), 4);
+      assertEquals(ips.get(0).getId().intValue(), 3);
+      assertEquals(ips.get(1).getId().intValue(), 4);
    }
 
    @Override

@@ -20,13 +20,17 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
 /**
@@ -59,14 +63,57 @@ public class VirtualMachineTemplateApiExpectTest extends BaseAbiquoApiExpectTest
                   .build());
 
       VirtualMachineTemplateOptions options = VirtualMachineTemplateOptions.builder().limit(1).has("text").build();
-      VirtualMachineTemplatesDto result = api.listVirtualMachineTemplates(1, 1, options);
+      PaginatedCollection<VirtualMachineTemplateDto, VirtualMachineTemplatesDto> result = api
+            .listVirtualMachineTemplates(1, 1, options);
 
-      assertEquals(result.getCollection().size(), 1);
+      assertEquals(result.size(), 1);
       assertEquals(result.getTotalSize().intValue(), 2);
-      assertEquals(result.getCollection().get(0).getId().intValue(), 151);
+      assertEquals(result.get(0).getId().intValue(), 151);
       assertNotNull(result.searchLink("first"));
       assertNotNull(result.searchLink("last"));
       assertNotNull(result.searchLink("next"));
+   }
+
+   public void testListVirtualMachineTemplatesReturns2xx() {
+      VirtualMachineTemplateApi api = requestsSendResponses(
+            HttpRequest
+                  .builder()
+                  .method("GET")
+                  .endpoint(
+                        URI.create("http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(VirtualMachineTemplatesDto.MEDIA_TYPE)) //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/templates-page.xml",
+                              normalize(VirtualMachineTemplatesDto.MEDIA_TYPE))) //
+                  .build(),
+            HttpRequest
+                  .builder()
+                  .method("GET")
+                  .endpoint(
+                        URI.create("http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates")) //
+                  .addHeader("Cookie", tokenAuth) //
+                  .addHeader("Accept", normalize(VirtualMachineTemplatesDto.MEDIA_TYPE)) //
+                  .addQueryParam("startwith", "1") //
+                  .build(),
+            HttpResponse
+                  .builder()
+                  .statusCode(200)
+                  .payload(
+                        payloadFromResourceWithContentType("/payloads/templates-lastpage.xml",
+                              normalize(VirtualMachineTemplatesDto.MEDIA_TYPE))) //
+                  .build());
+
+      PagedIterable<VirtualMachineTemplateDto> result = api.listVirtualMachineTemplates(1, 1);
+      List<VirtualMachineTemplateDto> all = result.concat().toList();
+
+      assertEquals(all.size(), 2);
+      assertEquals(all.get(0).getId().intValue(), 151);
+      assertEquals(all.get(1).getId().intValue(), 152);
    }
 
    @Override

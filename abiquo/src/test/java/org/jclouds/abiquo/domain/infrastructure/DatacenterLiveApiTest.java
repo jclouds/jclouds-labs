@@ -16,13 +16,12 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
-
-import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -71,9 +70,9 @@ public class DatacenterLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testListLimits() {
-      List<Limits> limits = env.datacenter.listLimits();
+      Iterable<Limits> limits = env.datacenter.listLimits();
       assertNotNull(limits);
-      assertTrue(limits.size() > 0);
+      assertTrue(size(limits) > 0);
    }
 
 }

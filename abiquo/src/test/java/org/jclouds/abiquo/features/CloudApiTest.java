@@ -30,9 +30,6 @@ import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
-import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
-import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.fallbacks.MovedVolume;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
@@ -42,12 +39,10 @@ import org.jclouds.reflect.Invocation;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.testng.annotations.Test;
 
-import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -57,13 +52,10 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
-import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
-import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
-import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
@@ -190,44 +182,6 @@ public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {
 
    /*********************** Ips ***********************/
 
-   public void testListAvailablePublicIpsWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      IpOptions options = IpOptions.builder().limit(5).build();
-      Invokable<?, ?> method = method(CloudApi.class, "listAvailablePublicIps", VirtualDatacenterDto.class,
-            IpOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut(), options)));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase?limit=5 HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpsDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListPurchasedPublicIpsWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      IpOptions options = IpOptions.builder().limit(5).build();
-      Invokable<?, ?> method = method(CloudApi.class, "listPurchasedPublicIps", VirtualDatacenterDto.class,
-            IpOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut(), options)));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/publicips/purchased?limit=5 HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpsDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
    public void testPurchasePublicIp() throws SecurityException, NoSuchMethodException, IOException {
       Invokable<?, ?> method = method(CloudApi.class, "purchasePublicIp", PublicIpDto.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
@@ -263,42 +217,6 @@ public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {
    }
 
    /*********************** Available templates ***********************/
-
-   public void testListAvailableTemplates() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listAvailableTemplates", VirtualDatacenterDto.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut())));
-
-      assertRequestLineEquals(request, "GET http://localhost/api/cloud/virtualdatacenters/1/action/templates HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListAvailableTemplatesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listAvailableTemplates", VirtualDatacenterDto.class,
-            VirtualMachineTemplateOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(
-            method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut(), VirtualMachineTemplateOptions.builder()
-                  .hypervisorType(HypervisorType.XENSERVER).categoryName("Firewalls").idTemplate(1).build())));
-
-      assertRequestLineEquals(request, "GET http://localhost/api/cloud/virtualdatacenters/1/action/templates"
-            + "?hypervisorTypeName=XENSERVER&categoryName=Firewalls&idTemplate=1 HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
 
    /*********************** Storage Tiers ***********************/
 
@@ -480,41 +398,6 @@ public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {
 
    /*********************** Private Network IPs ***********************/
 
-   public void testListPrivateNetworkIps() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listPrivateNetworkIps", VLANNetworkDto.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(NetworkResources.privateNetworkPut())));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + PrivateIpsDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListPrivateNetworkIpsWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      IpOptions options = IpOptions.builder().startWith(10).build();
-      Invokable<?, ?> method = method(CloudApi.class, "listPrivateNetworkIps", VLANNetworkDto.class, IpOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(NetworkResources.privateNetworkPut(), options)));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips?startwith=10 HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + PrivateIpsDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
    public void testGetPrivateNetworkIp() throws SecurityException, NoSuchMethodException, IOException {
       Invokable<?, ?> method = method(CloudApi.class, "getPrivateNetworkIp", VLANNetworkDto.class, Integer.class);
       GeneratedHttpRequest request = processor.apply(Invocation.create(method,
@@ -694,43 +577,6 @@ public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {
    }
 
    /*********************** Virtual Machine ***********************/
-
-   public void testListVirtualMachines() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listVirtualMachines", VirtualApplianceDto.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(CloudResources.virtualAppliancePut())));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListVirtualMachinesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listVirtualMachines", VirtualApplianceDto.class,
-            VirtualMachineOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(
-            method,
-            ImmutableList.<Object> of(CloudResources.virtualAppliancePut(), VirtualMachineOptions.builder()
-                  .disablePagination().build())));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines?limit=0 HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
 
    public void testGetVirtualMachine() throws SecurityException, NoSuchMethodException, IOException {
       Invokable<?, ?> method = method(CloudApi.class, "getVirtualMachine", VirtualApplianceDto.class, Integer.class);
@@ -1165,61 +1011,6 @@ public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {
    }
 
    /*********************** Volumes ***********************/
-
-   public void testListVolumes() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listVolumes", VirtualDatacenterDto.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut())));
-
-      assertRequestLineEquals(request, "GET http://localhost/api/cloud/virtualdatacenters/1/volumes HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VolumesManagementDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListVolumesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listVolumes", VirtualDatacenterDto.class, VolumeOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(
-            method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut(), VolumeOptions.builder()
-                  .onlyAvailable(true).build())));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/volumes?available=true HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VolumesManagementDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListVolumesWithFilterOptions() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(CloudApi.class, "listVolumes", VirtualDatacenterDto.class, VolumeOptions.class);
-
-      GeneratedHttpRequest request = processor.apply(Invocation.create(
-            method,
-            ImmutableList.<Object> of(CloudResources.virtualDatacenterPut(), VolumeOptions.builder().has("vol")
-                  .orderBy("name").ascendant(true).build())));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/volumes?has=vol&by=name&asc=true HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VolumesManagementDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
 
    public void testGetVolume() throws SecurityException, NoSuchMethodException, IOException {
       Invokable<?, ?> method = method(CloudApi.class, "getVolume", VirtualDatacenterDto.class, Integer.class);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unmanagedips>
+    <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips" rel="first" />
+    <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips?startwith=0" rel="previous" />
+    <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips?startwith=3" rel="last" />
+    <totalSize>4</totalSize>
+    <unmanagedip>
+        <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2" rel="externalnetwork" title="ExternalNetwork" type="application/vnd.abiquo.vlan+xml" />
+        <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips" rel="ips" type="application/vnd.abiquo.externalips+xml" />
+        <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips/3" rel="self" title="externalip" type="application/vnd.abiquo.externalip+xml" />
+        <id>3</id>
+        <ip>10.0.0.1</ip>
+        <networkName>UnmanagedNetwork</networkName>
+        <available>true</available>
+        <quarantine>false</quarantine>
+        <unmanaged>true</unmanaged>
+    </unmanagedip>
+    <unmanagedip>
+        <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2" rel="externalnetwork" title="ExternalNetwork" type="application/vnd.abiquo.vlan+xml" />
+        <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips" rel="ips" type="application/vnd.abiquo.externalips+xml" />
+        <link href="http://localhost/api/admin/enterprises/2/limits/2/externalnetworks/2/ips/4" rel="self" title="externalip" type="application/vnd.abiquo.externalip+xml" />
+        <id>4</id>
+        <ip>10.0.0.2</ip>
+        <networkName>UnmanagedNetwork</networkName>
+        <available>true</available>
+        <quarantine>false</quarantine>
+        <unmanaged>true</unmanaged>
+    </unmanagedip>
+</unmanagedips>

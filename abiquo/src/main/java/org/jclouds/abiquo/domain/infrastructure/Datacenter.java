@@ -19,8 +19,6 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.transform;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -34,6 +32,7 @@ import org.jclouds.abiquo.domain.network.NetworkServiceType;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.predicates.NetworkServiceTypePredicates;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -43,7 +42,6 @@ import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.enumerator.VlanTagAvailabilityType;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.HypervisorTypeDto;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -65,7 +63,6 @@ import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Adds high level functionality to {@link DatacenterDto}.
@@ -172,7 +169,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      - RetrievealistofRacks</a>
     * @return List of unmanaged racks in this datacenter.
     */
-   public List<Rack> listRacks() {
+   public Iterable<Rack> listRacks() {
       RacksDto racks = context.getApi().getInfrastructureApi().listRacks(target);
       return wrap(context, Rack.class, racks.getCollection());
    }
@@ -205,7 +202,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *         information for the storage devices, such as the management and
     *         iscsi ports, or the default credentials to access the device.
     */
-   public List<StorageDeviceMetadata> listSupportedStorageDevices() {
+   public Iterable<StorageDeviceMetadata> listSupportedStorageDevices() {
       StorageDevicesMetadataDto devices = context.getApi().getInfrastructureApi().listSupportedStorageDevices(target);
       return wrap(context, StorageDeviceMetadata.class, devices.getCollection());
    }
@@ -219,7 +216,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      StorageDeviceResource- Retrievethelistofstoragedevices</a>
     * @return List of storage devices in this datacenter.
     */
-   public List<StorageDevice> listStorageDevices() {
+   public Iterable<StorageDevice> listStorageDevices() {
       StorageDevicesDto devices = context.getApi().getInfrastructureApi().listStorageDevices(target);
       return wrap(context, StorageDevice.class, devices.getCollection());
    }
@@ -248,7 +245,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * 
     * @return List of network services in this datacenter.
     */
-   public List<NetworkServiceType> listNetworkServiceTypes() {
+   public Iterable<NetworkServiceType> listNetworkServiceTypes() {
       NetworkServiceTypesDto dtos = context.getApi().getInfrastructureApi().listNetworkServiceTypes(target);
       return wrap(context, NetworkServiceType.class, dtos.getCollection());
    }
@@ -286,7 +283,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      RemoteServiceResource- RetrievealistofRemoteServices</a>
     * @return List of remote services in this datacenter.
     */
-   public List<RemoteService> listRemoteServices() {
+   public Iterable<RemoteService> listRemoteServices() {
       RemoteServicesDto remoteServices = context.getApi().getInfrastructureApi().listRemoteServices(target);
       return wrap(context, RemoteService.class, remoteServices.getCollection());
    }
@@ -316,7 +313,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      DatacenterResource- Retrievelimitsbydatacenter</a>
     * @return List of datacenter limits by all enterprises.
     */
-   public List<Limits> listLimits() {
+   public Iterable<Limits> listLimits() {
       DatacentersLimitsDto dto = context.getApi().getInfrastructureApi().listLimits(this.unwrap());
       return DomainWrapper.wrap(context, Limits.class, dto.getCollection());
    }
@@ -331,7 +328,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      Retrievethelistoftiers </a>
     * @return List of tiers in this datacenter.
     */
-   public List<Tier> listTiers() {
+   public Iterable<Tier> listTiers() {
       TiersDto dto = context.getApi().getInfrastructureApi().listTiers(this.unwrap());
       return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
    }
@@ -347,7 +344,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return List of public, external and unmanaged networks in this
     *         datacenter.
     */
-   public List<Network<?>> listNetworks() {
+   public Iterable<Network<?>> listNetworks() {
       VLANNetworksDto networks = context.getApi().getInfrastructureApi().listNetworks(target);
       return Network.wrapNetworks(context, networks.getCollection());
    }
@@ -363,7 +360,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      PublicNetworkResource- Getthelistofpublicnetworks</a>
     * @return List of networks of this datacenter matching the given type.
     */
-   public List<Network<?>> listNetworks(final NetworkType type) {
+   public Iterable<Network<?>> listNetworks(final NetworkType type) {
       NetworkOptions options = NetworkOptions.builder().type(type).build();
       VLANNetworksDto networks = context.getApi().getInfrastructureApi().listNetworks(target, options);
       return Network.wrapNetworks(context, networks.getCollection());
@@ -424,18 +421,18 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      DatacenterResource- Retrieveavailablehypervisortypes</a>
     * @return List of available hypervisor types in the datacenter.
     */
-   public List<HypervisorType> listAvailableHypervisors() {
+   public Iterable<HypervisorType> listAvailableHypervisors() {
       HypervisorTypesDto types = context.getApi().getInfrastructureApi().getHypervisorTypes(target);
       return getHypervisorTypes(types);
    }
 
-   private List<HypervisorType> getHypervisorTypes(final HypervisorTypesDto dtos) {
-      return ImmutableList.copyOf(transform(dtos.getCollection(), new Function<HypervisorTypeDto, HypervisorType>() {
+   private Iterable<HypervisorType> getHypervisorTypes(final HypervisorTypesDto dtos) {
+      return transform(dtos.getCollection(), new Function<HypervisorTypeDto, HypervisorType>() {
          @Override
          public HypervisorType apply(HypervisorTypeDto input) {
             return HypervisorType.fromId(input.getId());
          }
-      }));
+      });
    }
 
    /**
@@ -519,7 +516,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#
     *      DatacenterResource- Retrievealistofremotemachineinformation</a>
     */
-   public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
+   public Iterable<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
          final HypervisorType hypervisorType, final String user, final String password) {
       return discoverMultipleMachines(ipFrom, ipTo, hypervisorType, user, password, hypervisorType.defaultPort);
    }
@@ -547,7 +544,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#
     *      DatacenterResource- Retrievealistofremotemachineinformation</a>
     */
-   public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
+   public Iterable<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
          final HypervisorType hypervisorType, final String user, final String password, final int port) {
       MachinesDto dto = context
             .getApi()
@@ -687,10 +684,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto> {
     * @return List of virtual machine templates in the repository of this
     *         datacenter.
     */
-   public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise) {
-      VirtualMachineTemplatesDto dto = context.getApi().getVirtualMachineTemplateApi()
+   public Iterable<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise) {
+      PagedIterable<VirtualMachineTemplateDto> templates = context.getApi().getVirtualMachineTemplateApi()
             .listVirtualMachineTemplates(enterprise.getId(), target.getId());
-      return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
+      return wrap(context, VirtualMachineTemplate.class, templates.concat());
    }
 
    /**

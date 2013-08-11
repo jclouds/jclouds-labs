@@ -24,7 +24,6 @@ import java.io.IOException;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.InfrastructureResources;
-import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.fallbacks.MapHttp4xxCodesToExceptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
@@ -43,9 +42,7 @@ import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
-import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.enterprise.UserDto;
-import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
@@ -62,58 +59,6 @@ import com.google.common.reflect.Invokable;
 @Test(groups = "unit", testName = "EnterpriseApiTest")
 public class EnterpriseApiTest extends BaseAbiquoApiTest<EnterpriseApi> {
    /*********************** Enterprise ********************** */
-
-   public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises");
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.of()));
-
-      assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListEnterprisesWithOptions() throws SecurityException, NoSuchMethodException, IOException {
-      EnterpriseOptions options = EnterpriseOptions.builder().has("abi").orderBy("name").ascendant(true).build();
-
-      Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises", EnterpriseOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(options)));
-
-      assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises?has=abi&by=name&asc=true HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListEnterprisesByDatacenter() throws SecurityException, NoSuchMethodException, IOException {
-      EnterpriseOptions options = EnterpriseOptions.builder().startWith(0).limit(25).network(true).build();
-
-      Invokable<?, ?> method = method(EnterpriseApi.class, "listEnterprises", DatacenterDto.class,
-            EnterpriseOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(InfrastructureResources.datacenterPut(), options)));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/action/enterprises?network=true&startwith=0&limit=25 HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
 
    public void testCreateEnterprise() throws SecurityException, NoSuchMethodException, IOException {
       Invokable<?, ?> method = method(EnterpriseApi.class, "createEnterprise", EnterpriseDto.class);
@@ -363,22 +308,6 @@ public class EnterpriseApiTest extends BaseAbiquoApiTest<EnterpriseApi> {
       assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
       assertSaxResponseParserClassEquals(method, null);
       assertFallbackClassEquals(method, NullOnNotFoundOr404.class);
-
-      checkFilters(request);
-   }
-
-   public void testListUsers() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(EnterpriseApi.class, "listUsers", EnterpriseDto.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method,
-            ImmutableList.<Object> of(EnterpriseResources.enterprisePut())));
-
-      assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises/1/users HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + UsersDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
 
       checkFilters(request);
    }

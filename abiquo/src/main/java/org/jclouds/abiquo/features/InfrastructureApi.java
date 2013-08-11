@@ -39,6 +39,7 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendMachineIdToPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
@@ -46,9 +47,13 @@ import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
+import org.jclouds.abiquo.functions.pagination.ParseExternalIps;
+import org.jclouds.abiquo.functions.pagination.ParsePublicIps;
+import org.jclouds.abiquo.functions.pagination.ParseUnmanagedIps;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.http.functions.ReturnStringIf2xx;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
@@ -56,6 +61,8 @@ import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.SinceApiVersion;
+import org.jclouds.rest.annotations.Transform;
 import org.jclouds.rest.binders.BindToXMLPayload;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -1141,13 +1148,14 @@ public interface InfrastructureApi extends Closeable {
     * @param network
     *           The public network.
     * @return The IPs in the given public network.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("publicnetwork:listips")
    @GET
    @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   PublicIpsDto listPublicIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
+   @ResponseParser(ParsePublicIps.class)
+   @Transform(ParsePublicIps.ToPagedIterable.class)
+   PagedIterable<PublicIpDto> listPublicIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all the IPs in the given public network.
@@ -1157,14 +1165,14 @@ public interface InfrastructureApi extends Closeable {
     * @param options
     *           The filtering options.
     * @return The IPs in the given public network.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("publicnetwork:listips")
    @GET
    @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   PublicIpsDto listPublicIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-         IpOptions options);
+   @ResponseParser(ParsePublicIps.class)
+   PaginatedCollection<PublicIpDto, PublicIpsDto> listPublicIps(
+         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network, IpOptions options);
 
    /**
     * Get the given public ip.
@@ -1174,8 +1182,8 @@ public interface InfrastructureApi extends Closeable {
     * @param ipId
     *           The id of the ip to get.
     * @return The requested ip.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("publicnetwork:getip")
    @GET
    @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
@@ -1189,13 +1197,15 @@ public interface InfrastructureApi extends Closeable {
     * @param network
     *           The external network.
     * @return The IPs in the given external network.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("externalnetwork:listips")
    @GET
    @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   ExternalIpsDto listExternalIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
+   @ResponseParser(ParseExternalIps.class)
+   @Transform(ParseExternalIps.ToPagedIterable.class)
+   PagedIterable<ExternalIpDto> listExternalIps(
+         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all the IPs in the given external network.
@@ -1205,14 +1215,14 @@ public interface InfrastructureApi extends Closeable {
     * @param options
     *           The filtering options.
     * @return The IPs in the given external network.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("externalnetwork:listips")
    @GET
    @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   ExternalIpsDto listExternalIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-         IpOptions options);
+   @ResponseParser(ParseExternalIps.class)
+   PaginatedCollection<ExternalIpDto, ExternalIpsDto> listExternalIps(
+         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network, IpOptions options);
 
    /**
     * Get the given external ip.
@@ -1222,8 +1232,8 @@ public interface InfrastructureApi extends Closeable {
     * @param ipId
     *           The id of the ip to get.
     * @return The requested ip.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("externalnetwork:getip")
    @GET
    @Consumes(ExternalIpDto.BASE_MEDIA_TYPE)
@@ -1237,13 +1247,15 @@ public interface InfrastructureApi extends Closeable {
     * @param network
     *           The unmanaged network.
     * @return The IPs in the given unmanaged network.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("unmanagednetwork:listips")
    @GET
    @Consumes(UnmanagedIpsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   UnmanagedIpsDto listUnmanagedIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
+   @ResponseParser(ParseUnmanagedIps.class)
+   @Transform(ParseUnmanagedIps.ToPagedIterable.class)
+   PagedIterable<UnmanagedIpDto> listUnmanagedIps(
+         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
    /**
     * List all the IPs in the given unmanaged network.
@@ -1253,14 +1265,14 @@ public interface InfrastructureApi extends Closeable {
     * @param options
     *           The filtering options.
     * @return The IPs in the given unmanaged network.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("unmanagednetwork:listips")
    @GET
    @Consumes(UnmanagedIpsDto.BASE_MEDIA_TYPE)
-   @JAXBResponseParser
-   UnmanagedIpsDto listUnmanagedIps(@EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-         IpOptions options);
+   @ResponseParser(ParseUnmanagedIps.class)
+   PaginatedCollection<UnmanagedIpDto, UnmanagedIpsDto> listUnmanagedIps(
+         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network, IpOptions options);
 
    /**
     * Get the given unmanaged ip.
@@ -1270,8 +1282,8 @@ public interface InfrastructureApi extends Closeable {
     * @param ipId
     *           The id of the ip to get.
     * @return The requested ip.
-    * @since 2.3
     */
+   @SinceApiVersion("2.3")
    @Named("unmanagednetwork:getip")
    @GET
    @Consumes(UnmanagedIpDto.BASE_MEDIA_TYPE)

@@ -16,8 +16,6 @@
  */
 package org.jclouds.abiquo.domain.infrastructure;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -73,7 +71,7 @@ public class Tier extends DomainWrapper<TierDto> {
     *      StoragePoolResource- Retrievestoragepools</a>
     * @return List of storage pools in this tier.
     */
-   public List<StoragePool> listStoragePools() {
+   public Iterable<StoragePool> listStoragePools() {
       StoragePoolsDto storagePools = context.getApi().getInfrastructureApi().listStoragePools(target);
       return wrap(context, StoragePool.class, storagePools.getCollection());
    }

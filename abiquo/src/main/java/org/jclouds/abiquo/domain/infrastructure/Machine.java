@@ -17,6 +17,7 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ImmutableList.copyOf;
 
 import java.util.List;
 
@@ -138,11 +139,11 @@ public class Machine extends DomainWrapper<MachineDto> {
 
    // Children access
 
-   public List<Datastore> getDatastores() {
+   public Iterable<Datastore> getDatastores() {
       return wrap(context, Datastore.class, target.getDatastores().getCollection());
    }
 
-   public List<NetworkInterface> getNetworkInterfaces() {
+   public Iterable<NetworkInterface> getNetworkInterfaces() {
       return wrap(context, NetworkInterface.class, target.getNetworkInterfaces().getCollection());
    }
 
@@ -156,7 +157,7 @@ public class Machine extends DomainWrapper<MachineDto> {
     *      MachineResource-
     *      Retrievethelistofvirtualmachinesbymachine'shypervisor</a>
     */
-   public List<VirtualMachine> listVirtualMachines() {
+   public Iterable<VirtualMachine> listVirtualMachines() {
       MachineOptions options = MachineOptions.builder().sync(false).build();
       VirtualMachinesWithNodeExtendedDto vms = context.getApi().getInfrastructureApi()
             .listVirtualMachinesByMachine(target, options);
@@ -180,7 +181,7 @@ public class Machine extends DomainWrapper<MachineDto> {
     *      MachineResource-
     *      Retrievethelistofvirtualmachinesbymachine'shypervisor</a>
     */
-   public List<VirtualMachine> listRemoteVirtualMachines() {
+   public Iterable<VirtualMachine> listRemoteVirtualMachines() {
       MachineOptions options = MachineOptions.builder().sync(true).build();
       VirtualMachinesWithNodeExtendedDto vms = context.getApi().getInfrastructureApi()
             .listVirtualMachinesByMachine(target, options);
@@ -430,11 +431,11 @@ public class Machine extends DomainWrapper<MachineDto> {
          dto.setState(state);
 
          DatastoresDto datastoresDto = new DatastoresDto();
-         datastoresDto.getCollection().addAll(unwrap(datastores));
+         datastoresDto.getCollection().addAll(copyOf(unwrap(datastores)));
          dto.setDatastores(datastoresDto);
 
          NetworkInterfacesDto networkInterfacesDto = new NetworkInterfacesDto();
-         networkInterfacesDto.getCollection().addAll(unwrap(networkInterfaces));
+         networkInterfacesDto.getCollection().addAll(copyOf(unwrap(networkInterfaces)));
          dto.setNetworkInterfaces(networkInterfacesDto);
 
          Machine machine = new Machine(context, dto);
@@ -533,7 +534,7 @@ public class Machine extends DomainWrapper<MachineDto> {
 
    public void setDatastores(final List<Datastore> datastores) {
       DatastoresDto datastoresDto = new DatastoresDto();
-      datastoresDto.getCollection().addAll(DomainWrapper.unwrap(datastores));
+      datastoresDto.getCollection().addAll(copyOf(unwrap(datastores)));
       target.setDatastores(datastoresDto);
    }
 

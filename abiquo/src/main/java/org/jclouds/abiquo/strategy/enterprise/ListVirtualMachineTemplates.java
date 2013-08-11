@@ -17,6 +17,7 @@
 package org.jclouds.abiquo.strategy.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.util.concurrent.Futures.allAsList;
@@ -31,16 +32,15 @@ import javax.inject.Named;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.ListEntities;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -90,21 +90,23 @@ public class ListVirtualMachineTemplates implements ListEntities<VirtualMachineT
 
    private Iterable<VirtualMachineTemplateDto> listConcurrentTemplates(final ListeningExecutorService executor,
          final Enterprise parent, final Iterable<Datacenter> dcs) {
-      ListenableFuture<List<VirtualMachineTemplatesDto>> futures = allAsList(transform(dcs,
-            new Function<Datacenter, ListenableFuture<VirtualMachineTemplatesDto>>() {
+      ListenableFuture<List<Iterable<VirtualMachineTemplateDto>>> futures = allAsList(transform(dcs,
+            new Function<Datacenter, ListenableFuture<Iterable<VirtualMachineTemplateDto>>>() {
                @Override
-               public ListenableFuture<VirtualMachineTemplatesDto> apply(final Datacenter input) {
-                  return executor.submit(new Callable<VirtualMachineTemplatesDto>() {
+               public ListenableFuture<Iterable<VirtualMachineTemplateDto>> apply(final Datacenter input) {
+                  return executor.submit(new Callable<Iterable<VirtualMachineTemplateDto>>() {
                      @Override
-                     public VirtualMachineTemplatesDto call() throws Exception {
-                        return context.getApi().getVirtualMachineTemplateApi()
+                     public Iterable<VirtualMachineTemplateDto> call() throws Exception {
+                        PagedIterable<VirtualMachineTemplateDto> templates = context.getApi()
+                              .getVirtualMachineTemplateApi()
                               .listVirtualMachineTemplates(parent.getId(), input.getId());
+                        return templates.concat();
                      }
                   });
                }
             }));
 
       logger.trace("getting virtual machine templates");
-      return DomainWrapper.join(getUnchecked(futures));
+      return concat(getUnchecked(futures));
    }
 }

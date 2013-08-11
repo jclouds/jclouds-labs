@@ -18,13 +18,13 @@ package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.ApiContext;
@@ -92,16 +92,17 @@ public class PublicNetwork extends Network<PublicIp> {
       target = context.getApi().getInfrastructureApi().updateNetwork(target);
    }
 
-   /**
-    * @see API: <a href=
-    *      "http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork"
-    *      > http://community.abiquo.com/display/ABI20/Public+IPs+Resource#
-    *      PublicIPsResource- ReturnthelistofIPsforaPublicNetwork</a>
-    */
    @Override
-   public List<PublicIp> listIps(final IpOptions options) {
-      PublicIpsDto ips = context.getApi().getInfrastructureApi().listPublicIps(target, options);
-      return wrap(context, PublicIp.class, ips.getCollection());
+   public Iterable<PublicIp> listIps() {
+      PagedIterable<PublicIpDto> ips = context.getApi().getInfrastructureApi().listPublicIps(target);
+      return wrap(context, PublicIp.class, ips.concat());
+   }
+
+   @Override
+   public Iterable<PublicIp> listIps(final IpOptions options) {
+      PaginatedCollection<PublicIpDto, PublicIpsDto> ips = context.getApi().getInfrastructureApi()
+            .listPublicIps(target, options);
+      return wrap(context, PublicIp.class, ips.toPagedIterable().concat());
    }
 
    @Override

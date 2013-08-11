@@ -36,6 +36,7 @@ import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.rest.RESTLink;
@@ -45,7 +46,6 @@ import com.abiquo.model.transport.WrapperDto;
 import com.abiquo.server.core.task.TaskDto;
 import com.abiquo.server.core.task.enums.TaskType;
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.Invokable;
 import com.google.inject.TypeLiteral;
@@ -117,7 +117,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
     * Wraps an object in the given wrapper class.
     */
    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
-         final ApiContext<AbiquoApi> context, final Class<W> wrapperClass, final T target) {
+         final ApiContext<AbiquoApi> context, final Class<W> wrapperClass, @Nullable final T target) {
       if (target == null) {
          return null;
       }
@@ -135,31 +135,31 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
    /**
     * Wrap a collection of objects to the given wrapper class.
     */
-   public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<W> wrap(
-         final ApiContext<AbiquoApi> context, final Class<W> wrapperClass, final Iterable<T> targets) {
+   public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> Iterable<W> wrap(
+         final ApiContext<AbiquoApi> context, final Class<W> wrapperClass, @Nullable final Iterable<T> targets) {
       if (targets == null) {
          return null;
       }
 
-      return ImmutableList.copyOf(transform(targets, new Function<T, W>() {
+      return transform(targets, new Function<T, W>() {
          @Override
          public W apply(final T input) {
             return wrap(context, wrapperClass, input);
          }
-      }));
+      });
    }
 
    /**
     * Unwrap a collection of objects.
     */
-   public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<T> unwrap(
+   public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> Iterable<T> unwrap(
          final Iterable<W> targets) {
-      return ImmutableList.copyOf(transform(targets, new Function<W, T>() {
+      return transform(targets, new Function<W, T>() {
          @Override
          public T apply(final W input) {
             return input.unwrap();
          }
-      }));
+      });
    }
 
    /**

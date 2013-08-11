@@ -18,6 +18,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -87,7 +88,7 @@ public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testCreateRepeated() {
-      RemoteService repeated = Builder.fromRemoteService(env.remoteServices.get(1)).build();
+      RemoteService repeated = Builder.fromRemoteService(get(env.remoteServices, 1)).build();
 
       try {
          repeated.save();
@@ -99,7 +100,7 @@ public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {
 
    public void testListRemoteServices() {
       Iterable<RemoteService> remoteServices = env.datacenter.listRemoteServices();
-      assertEquals(size(remoteServices), env.remoteServices.size());
+      assertEquals(size(remoteServices), size(env.remoteServices));
 
       remoteServices = filter(env.datacenter.listRemoteServices(), type(RemoteServiceType.NODE_COLLECTOR));
       assertEquals(size(remoteServices), 1);

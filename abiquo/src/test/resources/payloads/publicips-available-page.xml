@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<publicips>
+    <link rel="first" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase" />
+    <link rel="next" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase?startwith=3" />
+    <link rel="last" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase?startwith=3" />
+    <totalSize>4</totalSize>
+    <publicip>
+        <link title="publicip" rel="edit" type="application/vnd.abiquo.publicips+xml" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase/1" />
+        <link title="publi" rel="publicnetwork" type="application/vnd.abiquo.vlan+xml" href="http://localhost/api/admin/datacenters/1/network/4" />
+        <link title="PUT" rel="purchase" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/purchased/1" />
+        <link rel="topurchase" type="application/vnd.abiquo.publicips+xml" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase" />
+        <id>1</id>
+        <ip>8.8.8.1</ip>
+        <networkName>publi</networkName>
+        <available>true</available>
+        <quarantine>false</quarantine>
+    </publicip>
+    <publicip>
+        <link title="publicip" rel="edit" type="application/vnd.abiquo.publicips+xml" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase/2" />
+        <link title="publi" rel="publicnetwork" type="application/vnd.abiquo.vlan+xml" href="http://localhost/api/admin/datacenters/1/network/4" />
+        <link title="PUT" rel="purchase" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/purchased/2" />
+        <link rel="topurchase" type="application/vnd.abiquo.publicips+xml" href="http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase" />
+        <id>2</id>
+        <ip>8.8.8.3</ip>
+        <networkName>publi</networkName>
+        <available>true</available>
+        <quarantine>false</quarantine>
+    </publicip>
+</publicips>

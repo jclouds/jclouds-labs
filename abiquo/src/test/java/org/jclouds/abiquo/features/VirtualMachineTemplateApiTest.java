@@ -24,7 +24,6 @@ import java.io.IOException;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.abiquo.domain.TemplateResources;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
-import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
@@ -40,7 +39,6 @@ import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 
@@ -53,48 +51,6 @@ import com.google.common.reflect.Invokable;
 @Test(groups = "unit", testName = "VirtualMachineTemplateApiTest")
 public class VirtualMachineTemplateApiTest extends BaseAbiquoApiTest<VirtualMachineTemplateApi> {
    /*********************** Virtual Machine Template ***********************/
-
-   public void testListVirtualMachineTemplates() throws SecurityException, NoSuchMethodException, IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "listVirtualMachineTemplates", Integer.class,
-            Integer.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(method, ImmutableList.<Object> of(1, 1)));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
-
-   public void testListVirtualMachineTemplatesWithOptions() throws SecurityException, NoSuchMethodException,
-         IOException {
-      Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "listVirtualMachineTemplates", Integer.class,
-            Integer.class, VirtualMachineTemplateOptions.class);
-      GeneratedHttpRequest request = processor.apply(Invocation.create(
-            method,
-            ImmutableList.<Object> of(
-                  1,
-                  1,
-                  VirtualMachineTemplateOptions.builder().hypervisorType(HypervisorType.XENSERVER)
-                        .categoryName("Firewalls").build())));
-
-      assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"
-                  + "?hypervisorTypeName=XENSERVER&categoryName=Firewalls HTTP/1.1");
-      assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
-      assertPayloadEquals(request, null, null, false);
-
-      assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-      assertSaxResponseParserClassEquals(method, null);
-      assertFallbackClassEquals(method, null);
-
-      checkFilters(request);
-   }
 
    public void testGetVirtualMachineTemplate() throws SecurityException, NoSuchMethodException, IOException {
       Invokable<?, ?> method = method(VirtualMachineTemplateApi.class, "getVirtualMachineTemplate", Integer.class,

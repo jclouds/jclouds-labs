@@ -16,6 +16,9 @@
  */
 package org.jclouds.abiquo.domain.enterprise;
 
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.isEmpty;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -23,8 +26,6 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
-
-import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -78,9 +79,9 @@ public class EnterpriseLiveApiTest extends BaseAbiquoApiLiveApiTest {
          assertHasError(ex, Status.CONFLICT, "ENTERPRISE-10");
       }
 
-      List<Datacenter> allowed = enterprise.listAllowedDatacenters();
+      Iterable<Datacenter> allowed = enterprise.listAllowedDatacenters();
       assertNotNull(allowed);
-      assertTrue(allowed.isEmpty());
+      assertTrue(isEmpty(allowed));
 
       enterprise.delete();
    }
@@ -118,9 +119,9 @@ public class EnterpriseLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testListLimits() {
-      List<Limits> allLimits = enterprise.listLimits();
+      Iterable<Limits> allLimits = enterprise.listLimits();
       assertNotNull(allLimits);
-      assertEquals(allLimits.size(), 1);
+      assertEquals(size(allLimits), 1);
    }
 
    public void testUpdateInvalidLimits() {
@@ -146,20 +147,20 @@ public class EnterpriseLiveApiTest extends BaseAbiquoApiLiveApiTest {
    }
 
    public void testListAllowedDatacenters() {
-      List<Datacenter> allowed = enterprise.listAllowedDatacenters();
+      Iterable<Datacenter> allowed = enterprise.listAllowedDatacenters();
 
       assertNotNull(allowed);
-      assertFalse(allowed.isEmpty());
-      assertEquals(allowed.get(0).getId(), env.datacenter.getId());
+      assertFalse(isEmpty(allowed));
+      assertEquals(get(allowed, 0).getId(), env.datacenter.getId());
    }
 
    public void testListVirtualMachines() {
-      List<VirtualMachine> machines = env.defaultEnterprise.listVirtualMachines();
-      assertTrue(machines.size() > 0);
+      Iterable<VirtualMachine> machines = env.defaultEnterprise.listVirtualMachines();
+      assertTrue(size(machines) > 0);
    }
 
    public void testListVirtualAppliances() {
-      List<VirtualAppliance> vapps = env.defaultEnterprise.listVirtualAppliances();
-      assertTrue(vapps.size() > 0);
+      Iterable<VirtualAppliance> vapps = env.defaultEnterprise.listVirtualAppliances();
+      assertTrue(size(vapps) > 0);
    }
 }

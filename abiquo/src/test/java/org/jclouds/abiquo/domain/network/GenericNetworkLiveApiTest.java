@@ -16,11 +16,11 @@
  */
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-
-import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -39,36 +39,36 @@ import com.abiquo.model.enumerator.NetworkType;
 public class GenericNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {
    public void testListDatacenterNetworks() {
       // Make sure all network types are listed
-      List<Network<?>> networks = env.datacenter.listNetworks();
+      Iterable<Network<?>> networks = env.datacenter.listNetworks();
       assertNotNull(networks);
-      assertEquals(networks.size(), 3);
+      assertEquals(size(networks), 3);
    }
 
    public void testListPublicNetworks() {
-      List<Network<?>> networks = env.datacenter.listNetworks(NetworkType.PUBLIC);
+      Iterable<Network<?>> networks = env.datacenter.listNetworks(NetworkType.PUBLIC);
       assertNotNull(networks);
-      assertEquals(networks.size(), 1);
+      assertEquals(size(networks), 1);
 
       // Make sure it can be converted
-      networks.get(0).toPublicNetwork();
+      get(networks, 0).toPublicNetwork();
    }
 
    public void testListExternaletworks() {
-      List<Network<?>> networks = env.datacenter.listNetworks(NetworkType.EXTERNAL);
+      Iterable<Network<?>> networks = env.datacenter.listNetworks(NetworkType.EXTERNAL);
       assertNotNull(networks);
-      assertEquals(networks.size(), 1);
+      assertEquals(size(networks), 1);
 
       // Make sure it can be converted
-      networks.get(0).toExternalNetwork();
+      get(networks, 0).toExternalNetwork();
    }
 
    public void testListUnmanagedNetworks() {
-      List<Network<?>> networks = env.datacenter.listNetworks(NetworkType.UNMANAGED);
+      Iterable<Network<?>> networks = env.datacenter.listNetworks(NetworkType.UNMANAGED);
       assertNotNull(networks);
-      assertEquals(networks.size(), 1);
+      assertEquals(size(networks), 1);
 
       // Make sure it can be converted
-      networks.get(0).toUnmanagedNetwork();
+      get(networks, 0).toUnmanagedNetwork();
    }
 
    public void testListPrivateNetworks() {

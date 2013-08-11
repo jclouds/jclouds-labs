@@ -15,8 +15,8 @@
             <maxHistory>5</maxHistory>
         </rollingPolicy>
     </appender>
-    <appender name="PAYLOADFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>target/test-data/jclouds-payloads.log</file>
+    <appender name="WIREFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/test-data/jclouds-wire.log</file>
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>TRACE</level>
@@ -72,11 +72,11 @@
     <logger name="jclouds.headers">
         <level value="DEBUG" />
         <appender-ref ref="HEADERSFILE" />
-        <appender-ref ref="PAYLOADFILE" />
+        <appender-ref ref="WIREFILE" />
     </logger>
     <logger name="jclouds.wire">
         <level value="DEBUG" />
-        <appender-ref ref="PAYLOADFILE" />
+        <appender-ref ref="WIREFILE" />
     </logger>
     <logger name="jclouds.compute">
         <level value="DEBUG" />

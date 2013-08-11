@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<publicips>
+    <link href="http://localhost/api/admin/datacenters/1/network/1/ips" rel="first" />
+    <link href="http://localhost/api/admin/datacenters/1/network/1/ips?startwith=0" rel="previous" />
+    <link href="http://localhost/api/admin/datacenters/1/network/1/ips?startwith=3" rel="last" />
+    <totalSize>4</totalSize>
+    <publicip>
+        <link href="http://localhost/api/admin/datacenters/1/network/1" rel="publicnetwork" title="JC--publicnetwork-test" type="application/vnd.abiquo.vlan+xml" />
+        <link href="http://localhost/api/admin/datacenters/1/network/1/ips/3" rel="self" title="publicip" type="application/vnd.abiquo.publicip+xml" />
+        <id>3</id>
+        <ip>80.80.80.1</ip>
+        <networkName>JC--publicnetwork-test</networkName>
+        <available>true</available>
+        <quarantine>false</quarantine>
+    </publicip>
+    <publicip>
+        <link href="http://localhost/api/admin/datacenters/1/network/1" rel="publicnetwork" title="JC--publicnetwork-test" type="application/vnd.abiquo.vlan+xml" />
+        <link href="http://localhost/api/admin/datacenters/1/network/1/ips/4" rel="self" title="publicip" type="application/vnd.abiquo.publicip+xml" />
+        <id>4</id>
+        <ip>80.80.80.2</ip>
+        <networkName>JC--publicnetwork-test</networkName>
+        <available>true</available>
+        <quarantine>false</quarantine>
+    </publicip>
+</publicips>

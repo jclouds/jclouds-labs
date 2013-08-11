@@ -25,18 +25,22 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.domain.PaginatedCollection;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -104,7 +108,14 @@ public class BaseCloudService implements CloudService {
 
    @Override
    public Iterable<VirtualMachine> listVirtualMachines() {
-      VirtualMachinesWithNodeExtendedDto vms = context.getApi().getCloudApi().listAllVirtualMachines();
-      return wrap(context, VirtualMachine.class, vms.getCollection());
+      PagedIterable<VirtualMachineWithNodeExtendedDto> vms = context.getApi().getCloudApi().listAllVirtualMachines();
+      return wrap(context, VirtualMachine.class, vms.concat());
+   }
+
+   @Override
+   public Iterable<VirtualMachine> listVirtualMachines(VirtualMachineOptions options) {
+      PaginatedCollection<VirtualMachineWithNodeExtendedDto, VirtualMachinesWithNodeExtendedDto> vms = context.getApi()
+            .getCloudApi().listAllVirtualMachines(options);
+      return wrap(context, VirtualMachine.class, vms.toPagedIterable().concat());
    }
 }
