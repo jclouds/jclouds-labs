@@ -20,7 +20,6 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.features.services.MonitoringService;
-import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.rest.ApiContext;
@@ -57,13 +56,6 @@ public interface AbiquoContext extends ComputeServiceContext {
     * This service provides an entry point to cloud management tasks.
     */
    CloudService getCloudService();
-
-   /**
-    * Returns the search service.
-    * <p>
-    * This service provides an entry point to listing and filtering tasks.
-    */
-   SearchService getSearchService();
 
    /**
     * Returns the monitoring service.
