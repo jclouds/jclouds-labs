@@ -113,7 +113,7 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T> {
             logger.debug("creating lock for %s object(s)", lockedObjects.size());
             completeSignal.await();
          } catch (InterruptedException ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
          }
       } else {
          logger.debug("there is nothing to watch. Ignoring lock.");
