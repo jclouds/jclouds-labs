@@ -20,7 +20,7 @@
     <parent>
         <artifactId>jclouds-management</artifactId>
         <groupId>org.apache.jclouds.labs</groupId>
-        <version>1.6.2-SNAPSHOT</version>
+        <version>1.6.2-incubating</version>
         <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
