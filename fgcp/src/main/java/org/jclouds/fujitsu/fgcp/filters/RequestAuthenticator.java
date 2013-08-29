@@ -155,22 +155,12 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
 
    @VisibleForTesting
    HttpRequest addQueryParamsToRequest(HttpRequest request, String accessKeyId, String signature, String lang) {
-      // url encode "+" (which comes from base64 encoding) or else it may be
-      // converted into a %20 (space) which the API endpoint doesn't
-      // expect/accept.
-      accessKeyId = accessKeyId.replace("+", "%2B");
-      signature = signature.replace("+", "%2B");
-
       Multimap<String, String> decodedParams = queryParser().apply(request.getEndpoint().getRawQuery());
       Builder<?> builder = request.toBuilder().endpoint(request.getEndpoint()).method(request.getMethod());
       if (!decodedParams.containsKey("Version")) {
          builder.addQueryParam(RequestParameters.VERSION, apiVersion);
       }
       builder.addQueryParam(RequestParameters.LOCALE, lang).addQueryParam(RequestParameters.ACCESS_KEY_ID, accessKeyId)
-      // the addition of another param causes %2B's in prev. params to
-      // convert to %20. Needs to be addressed if there are cases where
-      // accessKeyId contains %2B's.
-      // So signature should be added last:
             .addQueryParam(RequestParameters.SIGNATURE, signature);
 
       return builder.build();

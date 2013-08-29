@@ -139,9 +139,7 @@ public class RequestAuthenticatorTest {
             .build();
       HttpRequest newRequest = a.addQueryParamsToRequest(request, accessKeyId, signature, lang);
       assertEquals(newRequest.getRequestLine(),
-      // NOTE: AccessKeyId's "=" becomes a %20 (space) as explained in
-      // addQueryParamsToRequest().
-            "GET https://api.globalcloud.fujitsu.com.au/ovissapi/endpoint?Version=2012-02-18&Locale=en&AccessKeyId=accessKey%20Id&Signature=sign%2Bature HTTP/1.1");
+            "GET https://api.globalcloud.fujitsu.com.au/ovissapi/endpoint?Version=2012-02-18&Locale=en&AccessKeyId=accessKey%2BId&Signature=sign%2Bature HTTP/1.1");
    }
 
    @Test
@@ -158,6 +156,6 @@ public class RequestAuthenticatorTest {
       HttpRequest newRequest = a.addQueryParamsToRequest(request, accessKeyId, signature, lang);
       assertEquals(
             newRequest.getRequestLine(),
-            "GET https://api.globalcloud.fujitsu.com.au/ovissapi/endpoint?Version=2012-02-18&Locale=en&AccessKeyId=accessKeyId%0AWith/And%20And%3D&Signature=signature%0AWith/And%2BAnd%3D HTTP/1.1");
+            "GET https://api.globalcloud.fujitsu.com.au/ovissapi/endpoint?Version=2012-02-18&Locale=en&AccessKeyId=accessKeyId%0AWith/And%2BAnd%3D&Signature=signature%0AWith/And%2BAnd%3D HTTP/1.1");
    }
 }
