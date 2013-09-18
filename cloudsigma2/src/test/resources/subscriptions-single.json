@@ -1,0 +1,22 @@
+{
+    "objects": [
+        {
+            "amount": "30000",
+            "auto_renew": true,
+            "descendants": [],
+            "discount_amount": "10",
+            "discount_percent": "10",
+            "end_time": "2013-04-22T12:00:00+00:00",
+            "id": "28",
+            "period": "31 days, 1:31:53.888650",
+            "price": "0.000003839842975139617919921875",
+            "remaining": "30000",
+            "resource": "dssd",
+            "resource_uri": "/api/2.0/subscriptions/28/",
+            "start_time": "2013-03-22T10:28:06+00:00",
+            "status": "active",
+            "subscribed_object": null,
+            "uuid": "f622f364-bccf-4a36-a1ce-632a81640ad4"
+        }
+    ]
+}

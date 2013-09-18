@@ -1,0 +1,1 @@
+{"objects":[{"name":"test_server_0","cpu":100,"mem":"536870912","vnc_password":"testserver","nics":[],"drives":[]},{"name":"test_server_1","cpu":100,"mem":"536870912","vnc_password":"testserver","nics":[],"drives":[]},{"name":"test_server_2","cpu":100,"mem":"536870912","vnc_password":"testserver","nics":[],"drives":[]}]}

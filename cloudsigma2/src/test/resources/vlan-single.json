@@ -1,0 +1,26 @@
+{
+    "meta": {
+        "description": "test vlan"
+    },
+    "owner": {
+        "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+        "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+    },
+    "resource_uri": "/api/2.0/vlans/96537817-f4b6-496b-a861-e74192d3ccb0/",
+    "servers": [
+        {
+            "uuid" : "81f911f9-5152-4328-8671-02543bafbd0e",
+            "resource_uri" : "/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"
+        },
+        {
+            "uuid" : "19163e1a-a6d6-4e73-8087-157dd302c373",
+            "resource_uri" : "/api/2.0/servers/19163e1a-a6d6-4e73-8087-157dd302c373/"
+        }
+    ],
+    "subscription": {
+        "id": 7272,
+        "resource_uri": "/api/2.0/subscriptions/7272/"
+    },
+    "tags": [],
+    "uuid": "96537817-f4b6-496b-a861-e74192d3ccb0"
+}

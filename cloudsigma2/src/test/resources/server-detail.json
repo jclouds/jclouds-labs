@@ -1,0 +1,120 @@
+{
+    "meta": {
+        "limit": 0,
+        "offset": 0,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "cpu": 1000,
+            "cpus_instead_of_cores": false,
+            "drives": [
+                {
+                    "boot_order": null,
+                    "dev_channel": "0:0",
+                    "device": "ide",
+                    "drive": {
+                        "resource_uri": "/api/2.0/drives/ae78e68c-9daa-4471-8878-0bb87fa80260/",
+                        "uuid": "ae78e68c-9daa-4471-8878-0bb87fa80260"
+                    }
+                },
+                {
+                    "boot_order": 1,
+                    "dev_channel": "0:0",
+                    "device": "virtio",
+                    "drive": {
+                        "resource_uri": "/api/2.0/drives/22826af4-d6c8-4d39-bd41-9cea86df2976/",
+                        "uuid": "22826af4-d6c8-4d39-bd41-9cea86df2976"
+                    }
+                }
+            ],
+            "enable_numa": false,
+            "hv_relaxed": false,
+            "hv_tsc": false,
+            "mem": 268435456,
+            "meta": {
+                "description": "A full server with description"
+            },
+            "name": "test_acc_full_server",
+            "nics": [
+                {
+                    "boot_order": null,
+                    "firewall_policy": null,
+                    "ip_v4_conf": {
+                        "conf": "dhcp",
+                        "ip": null
+                    },
+                    "ip_v6_conf": null,
+                    "mac": "22:a7:a0:0d:43:48",
+                    "model": "virtio",
+                    "runtime": null,
+                    "vlan": null
+                }
+            ],
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "requirements": [],
+            "resource_uri": "/api/2.0/servers/a19a425f-9e92-42f6-89fb-6361203071bb/",
+            "runtime": null,
+            "smp": 1,
+            "status": "stopped",
+            "tags": [
+                "tag_uuid_1",
+                "tag_uuid_2"
+            ],
+            "uuid": "a19a425f-9e92-42f6-89fb-6361203071bb",
+            "vnc_password": "tester"
+        },
+        {
+            "cpu": 1000,
+            "cpus_instead_of_cores": false,
+            "drives": [],
+            "enable_numa": false,
+            "hv_relaxed": false,
+            "hv_tsc": false,
+            "mem": 536870912,
+            "meta": {},
+            "name": "test_server_3",
+            "nics": [],
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "requirements": [],
+            "resource_uri": "/api/2.0/servers/61d61337-884b-4c87-b4de-f7f48f9cfc84/",
+            "runtime": null,
+            "smp": 1,
+            "status": "stopped",
+            "tags": [],
+            "uuid": "61d61337-884b-4c87-b4de-f7f48f9cfc84",
+            "vnc_password": "testserver"
+        },
+        {
+            "cpu": 1000,
+            "cpus_instead_of_cores": false,
+            "drives": [],
+            "enable_numa": false,
+            "hv_relaxed": false,
+            "hv_tsc": false,
+            "mem": 536870912,
+            "meta": {},
+            "name": "test_server_1",
+            "nics": [],
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "requirements": [],
+            "resource_uri": "/api/2.0/servers/33e71c37-0d0a-4a3a-a1ea-dc7265c9a154/",
+            "runtime": null,
+            "smp": 1,
+            "status": "stopped",
+            "tags": [],
+            "uuid": "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154",
+            "vnc_password": "testserver"
+        }
+    ]
+}
+

@@ -1,0 +1,104 @@
+{
+    "meta" : {
+        "limit": 20,
+        "next": null,
+        "offset": 0,
+        "previous": null,
+        "total_count": 2
+    },
+    "objects": [
+        {
+            "meta": {},
+            "name": "New policy",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/fwpolicies/b68dd907-69fc-4b3c-b954-c39d0046525b/",
+            "rules": [
+                {
+                    "action": "accept",
+                    "comment": "Test comment",
+                    "direction": "in",
+                    "dst_ip": "192.168.1.132/32",
+                    "dst_port": "1233",
+                    "ip_proto": "tcp",
+                    "src_ip": "255.255.255.12/32",
+                    "src_port": "321"
+                }
+            ],
+            "servers": [],
+            "uuid": "b68dd907-69fc-4b3c-b954-c39d0046525b"
+        },
+        {
+            "meta": {
+                "description" : "test firewall policy"
+            },
+            "name": "My awesome policy",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/fwpolicies/cf8479b4-c98b-46c8-ab9c-108bb00c8218/",
+            "rules": [
+                {
+                    "action": "drop",
+                    "comment": "Drop traffic from the VM to IP address 23.0.0.0/32",
+                    "direction": "out",
+                    "dst_ip": "23.0.0.0/32",
+                    "dst_port": null,
+                    "ip_proto": null,
+                    "src_ip": null,
+                    "src_port": null
+                },
+                {
+                    "action": "accept",
+                    "comment": "Allow SSH traffic to the VM from our office in Dubai",
+                    "direction": "in",
+                    "dst_ip": null,
+                    "dst_port": "22",
+                    "ip_proto": "tcp",
+                    "src_ip": "172.66.32.0/24",
+                    "src_port": null
+                },
+                {
+                    "action": "drop",
+                    "comment": "Drop all other SSH traffic to the VM",
+                    "direction": "in",
+                    "dst_ip": null,
+                    "dst_port": "22",
+                    "ip_proto": "tcp",
+                    "src_ip": null,
+                    "src_port": null
+                },
+                {
+                    "action": "drop",
+                    "comment": "Drop all UDP traffic to the VM, not originating from 172.66.32.55",
+                    "direction": "in",
+                    "dst_ip": null,
+                    "dst_port": null,
+                    "ip_proto": "udp",
+                    "src_ip": "!172.66.32.55/32",
+                    "src_port": null
+                },
+                {
+                    "action": "drop",
+                    "comment": "Drop any traffic, to the VM with destination port not between 1-1024",
+                    "direction": "in",
+                    "dst_ip": null,
+                    "dst_port": "!1:1024",
+                    "ip_proto": "tcp",
+                    "src_ip": null,
+                    "src_port": null
+                }
+            ],
+            "servers": [
+                {
+                   "uuid" : "81f911f9-5152-4328-8671-02543bafbd0e",
+                    "resource_uri" : "/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"
+                }
+            ],
+            "uuid": "cf8479b4-c98b-46c8-ab9c-108bb00c8218"
+        }
+    ]
+}

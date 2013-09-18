@@ -1,0 +1,19 @@
+{
+    "amount": "5368709120",
+    "auto_renew": false,
+    "descendants": [],
+    "discount_amount": null,
+    "discount_percent": null,
+    "end_time": "2013-05-04T12:00:00+00:00",
+    "id": "5551",
+    "last_notification": null,
+    "period": "19:57:38.127173",
+    "price": "0E-20",
+    "remaining": "5368709120",
+    "resource": "tx",
+    "resource_uri": "/api/2.0/subscriptions/5551/",
+    "start_time": "2013-05-03T16:02:21.872827+00:00",
+    "status": "active",
+    "subscribed_object": null,
+    "uuid": "f77f22de-631c-4983-bdbc-edb50ad0fc30"
+}

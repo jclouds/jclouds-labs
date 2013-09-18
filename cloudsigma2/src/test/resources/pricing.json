@@ -1,0 +1,82 @@
+{
+    "current": {
+        "cpu": 6,
+        "dssd": 1,
+        "ip": 1,
+        "mem": 6,
+        "msft_lwa_00135": 1,
+        "msft_p73_04837": 1,
+        "msft_tfa_00009": 1,
+        "sms": 1,
+        "ssd": 1,
+        "tx": 6,
+        "vlan": 1
+    },
+    "meta": {
+        "limit": 5,
+        "next": "/api/2.0/pricing/?limit=5&offset=5",
+        "offset": 0,
+        "previous": null,
+        "total_count": 284
+    },
+    "next": {
+        "cpu": 6,
+        "dssd": 1,
+        "ip": 1,
+        "mem": 6,
+        "msft_lwa_00135": 1,
+        "msft_p73_04837": 1,
+        "msft_tfa_00009": 1,
+        "sms": 1,
+        "ssd": 1,
+        "tx": 5,
+        "vlan": 1
+    },
+    "objects": [
+        {
+            "currency": "USD",
+            "id": "568",
+            "level": 1,
+            "multiplier": 2783138807808000,
+            "price": "0.28000000000000000000",
+            "resource": "dssd",
+            "unit": "GB/month"
+        },
+        {
+            "currency": "GBP",
+            "id": "567",
+            "level": 1,
+            "multiplier": 2783138807808000,
+            "price": "0.18200000000000000000",
+            "resource": "dssd",
+            "unit": "GB/month"
+        },
+        {
+            "currency": "EUR",
+            "id": "566",
+            "level": 1,
+            "multiplier": 2783138807808000,
+            "price": "0.21000000000000000000",
+            "resource": "dssd",
+            "unit": "GB/month"
+        },
+        {
+            "currency": "CHF",
+            "id": "565",
+            "level": 1,
+            "multiplier": 2783138807808000,
+            "price": "0.26600000000000000000",
+            "resource": "dssd",
+            "unit": "GB/month"
+        },
+        {
+            "currency": "CHF",
+            "id": "304",
+            "level": 0,
+            "multiplier": 2783138807808000,
+            "price": "0.13300000000000000000",
+            "resource": "dssd",
+            "unit": "GB/month"
+        }
+    ]
+}

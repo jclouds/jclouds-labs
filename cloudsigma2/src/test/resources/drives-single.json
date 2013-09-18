@@ -1,0 +1,27 @@
+{
+    "objects": [
+        {
+            "affinities": [
+                "ssd",
+                "sample"
+            ],
+            "allow_multimount": true,
+            "jobs": [],
+            "licenses": [],
+            "media": "disk",
+            "meta": {},
+            "mounted_on": [
+            ],
+            "name": "test_drive_y",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/drives/e96f3c63-6f50-47eb-9401-a56c5ccf6b32/",
+            "size": 1024000000,
+            "status": "unmounted",
+            "tags": [],
+            "uuid": "e96f3c63-6f50-47eb-9401-a56c5ccf6b32"
+        }
+    ]
+}

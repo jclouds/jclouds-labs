@@ -1,0 +1,27 @@
+{
+    "affinities": [],
+    "allow_multimount": false,
+    "arch": "32",
+    "category": [
+        "general"
+    ],
+    "description": "test_description",
+    "favourite": true,
+    "image_type": "install",
+    "install_notes": "test_install_notes",
+    "jobs": [],
+    "licenses": [],
+    "media": "cdrom",
+    "meta": {},
+    "mounted_on": [],
+    "name": "Vyatta-6.5-32bit-Virtualization-ISO",
+    "os": "linux",
+    "owner": null,
+    "paid": false,
+    "resource_uri": "/api/2.0/libdrives/6d53b92c-42dc-472b-a7b6-7021f45f377a/",
+    "size": 1000000000,
+    "status": "mounted",
+    "tags": [],
+    "url": "http://www.vyatta.org/",
+    "uuid": "6d53b92c-42dc-472b-a7b6-7021f45f377a"
+}
