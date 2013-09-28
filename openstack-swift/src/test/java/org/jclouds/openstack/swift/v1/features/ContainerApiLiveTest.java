@@ -24,6 +24,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.testng.annotations.AfterClass;
@@ -118,7 +119,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
    public void setup() {
       super.setup();
       for (String regionId : api.configuredRegions()) {
-         api.containerApiInRegion(regionId).createIfAbsent(name);
+         api.containerApiInRegion(regionId).createIfAbsent(name, new CreateContainerOptions());
       }
    }
 

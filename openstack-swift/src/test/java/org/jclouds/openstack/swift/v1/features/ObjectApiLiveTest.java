@@ -23,11 +23,14 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.http.options.GetOptions;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
@@ -61,6 +64,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
 
    static void checkObject(SwiftObject object) {
       assertNotNull(object.name());
+      assertNotNull(object.uri());
       assertNotNull(object.hash());
       assertTrue(object.lastModified().getTime() <= System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5));
       assertNotNull(object.payload().getContentMetadata().getContentLength());
@@ -82,6 +86,17 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
          assertEquals(object.name(), name);
          checkObject(object);
          assertEquals(toStringAndClose(object.payload().getInput()), "swifty");
+      }
+   }
+
+   public void privateByDefault() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).head(name);
+         try {
+            object.uri().toURL().openStream();
+            fail("shouldn't be able to access " + object);
+         } catch (IOException expected) {
+         }
       }
    }
 
@@ -107,7 +122,6 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
    public void updateMetadata() throws Exception {
       for (String regionId : api.configuredRegions()) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-         ;
 
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
 
@@ -149,7 +163,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
    public void setup() {
       super.setup();
       for (String regionId : api.configuredRegions()) {
-         api.containerApiInRegion(regionId).createIfAbsent(containerName);
+         api.containerApiInRegion(regionId).createIfAbsent(containerName, new CreateContainerOptions());
          api.objectApiInRegionForContainer(regionId, containerName).createOrUpdate(name, newStringPayload("swifty"),
                ImmutableMap.<String, String> of());
       }

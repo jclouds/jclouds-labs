@@ -45,6 +45,7 @@ import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindRemoveOb
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.functions.ETagHeader;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectFromResponse;
+import org.jclouds.openstack.swift.v1.functions.ParseObjectListFromResponse;
 import org.jclouds.rest.Binder;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
@@ -71,6 +72,7 @@ public interface ObjectApi {
    @Named("ListObjects")
    @GET
    @QueryParams(keys = "format", values = "json")
+   @ResponseParser(ParseObjectListFromResponse.class)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @Path("/")
    FluentIterable<SwiftObject> listFirstPage();
@@ -86,6 +88,7 @@ public interface ObjectApi {
    @Named("ListObjects")
    @GET
    @QueryParams(keys = "format", values = "json")
+   @ResponseParser(ParseObjectListFromResponse.class)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @Path("/")
    FluentIterable<SwiftObject> listAt(@QueryParam("marker") String marker);

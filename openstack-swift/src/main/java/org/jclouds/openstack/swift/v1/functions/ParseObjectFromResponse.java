@@ -19,6 +19,8 @@ package org.jclouds.openstack.swift.v1.functions;
 import static com.google.common.net.HttpHeaders.ETAG;
 import static com.google.common.net.HttpHeaders.LAST_MODIFIED;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 
 import org.jclouds.date.DateService;
@@ -39,11 +41,13 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
       this.dates = dates;
    }
 
+   private String uri;
    private String name;
 
    @Override
    public SwiftObject apply(HttpResponse from) {
       return SwiftObject.builder() //
+            .uri(URI.create(uri)) //
             .name(name) //
             .hash(from.getFirstHeaderOrNull(ETAG)) //
             .payload(from.getPayload()) //
@@ -53,6 +57,7 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
 
    @Override
    public ParseObjectFromResponse setContext(HttpRequest request) {
+      this.uri = request.getEndpoint().toString();
       this.name = GeneratedHttpRequest.class.cast(request).getInvocation().getArgs().get(0).toString();
       return this;
    }

@@ -34,6 +34,8 @@ import javax.ws.rs.QueryParam;
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.blobstore.options.CreateContainerOptions;
+import org.jclouds.http.HttpRequest;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindContainerMetadataToHeaders;
@@ -41,6 +43,7 @@ import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindRemoveCo
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.functions.FalseOnAccepted;
 import org.jclouds.openstack.swift.v1.functions.ParseContainerFromHeaders;
+import org.jclouds.rest.Binder;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.QueryParams;
@@ -94,6 +97,10 @@ public interface ContainerApi {
     * 
     * @param containerName
     *           corresponds to {@link Container#name()}.
+    * @param options
+    *           configuration such as <a href=
+    *           "http://docs.openstack.org/api/openstack-object-storage/1.0/content/special-metadata-acls.html"
+    *           >public read access</a>.
     * @see <a
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">
     *      Create Container API</a>
@@ -104,7 +111,20 @@ public interface ContainerApi {
    @PUT
    @ResponseParser(FalseOnAccepted.class)
    @Path("/{containerName}")
-   boolean createIfAbsent(@PathParam("containerName") String containerName);
+   boolean createIfAbsent(@PathParam("containerName") String containerName,
+         @BinderParam(ContainerReadHeader.class) CreateContainerOptions options);
+
+   static class ContainerReadHeader implements Binder {
+      @SuppressWarnings("unchecked")
+      @Override
+      public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+         CreateContainerOptions options = CreateContainerOptions.class.cast(input);
+         if (options.isPublicRead()) {
+            return (R) request.toBuilder().addHeader("x-container-read", ".r:*,.rlistings").build();
+         }
+         return request;
+      }
+   }
 
    /**
     * Gets the {@link Container}.

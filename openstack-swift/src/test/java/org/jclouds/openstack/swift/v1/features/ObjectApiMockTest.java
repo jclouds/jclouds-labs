@@ -23,6 +23,7 @@ import static org.jclouds.io.Payloads.newStringPayload;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.net.URI;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -59,17 +60,22 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
          + "    \"last_modified\":\"2009-02-03T05:26:32.612278\"},\n" //
          + "]";
 
-   ImmutableList<SwiftObject> parsedObjects = ImmutableList.of(//
-         SwiftObject.builder() //
-               .name("test_obj_1") //
-               .hash("4281c348eaf83e70ddce0e07221c3d28") //
-               .payload(payload(14, "application/octet-stream")) //
-               .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build(), //
-         SwiftObject.builder() //
-               .name("test_obj_2") //
-               .hash("b039efe731ad111bc1b0ef221c3849d0") //
-               .payload(payload(64l, "application/octet-stream")) //
-               .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build());
+   protected ImmutableList<SwiftObject> parsedObjectsForUrl(String baseUri) {
+      baseUri += "v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer";
+      return ImmutableList.of(//
+            SwiftObject.builder() //
+                  .name("test_obj_1") //
+                  .uri(URI.create(baseUri + "/test_obj_1")) //
+                  .hash("4281c348eaf83e70ddce0e07221c3d28") //
+                  .payload(payload(14, "application/octet-stream")) //
+                  .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build(), //
+            SwiftObject.builder() //
+                  .name("test_obj_2") //
+                  .uri(URI.create(baseUri + "/test_obj_2")) //
+                  .hash("b039efe731ad111bc1b0ef221c3849d0") //
+                  .payload(payload(64l, "application/octet-stream")) //
+                  .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build());
+   }
 
    public void listFirstPage() throws Exception {
       MockWebServer server = mockSwiftServer();
@@ -80,7 +86,7 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
          ImmutableList<SwiftObject> objects = api.objectApiInRegionForContainer("DFW", "myContainer").listFirstPage()
                .toList();
-         assertEquals(objects, parsedObjects);
+         assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -100,7 +106,7 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
          ImmutableList<SwiftObject> objects = api.objectApiInRegionForContainer("DFW", "myContainer").listAt("test")
                .toList();
-         assertEquals(objects, parsedObjects);
+         assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

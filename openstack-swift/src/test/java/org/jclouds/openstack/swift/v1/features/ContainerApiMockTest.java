@@ -23,6 +23,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
@@ -107,13 +108,33 @@ public class ContainerApiMockTest extends BaseSwiftMockTest {
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer"));
+         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", new CreateContainerOptions()));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         RecordedRequest deleteRequest = server.takeRequest();
-         assertEquals(deleteRequest.getRequestLine(),
+         RecordedRequest createRequest = server.takeRequest();
+         assertEquals(createRequest.getRequestLine(),
                "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer HTTP/1.1");
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void createPublicRead() throws Exception {
+      MockWebServer server = mockSwiftServer();
+      server.enqueue(new MockResponse().setBody(access));
+      server.enqueue(new MockResponse().setResponseCode(201));
+
+      try {
+         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", new CreateContainerOptions().publicRead()));
+
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         RecordedRequest createRequest = server.takeRequest();
+         assertEquals(createRequest.getRequestLine(),
+               "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer HTTP/1.1");
+         assertEquals(createRequest.getHeader("x-container-read"), ".r:*,.rlistings");
       } finally {
          server.shutdown();
       }
@@ -126,12 +147,12 @@ public class ContainerApiMockTest extends BaseSwiftMockTest {
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         assertFalse(api.containerApiInRegion("DFW").createIfAbsent("myContainer"));
+         assertFalse(api.containerApiInRegion("DFW").createIfAbsent("myContainer", new CreateContainerOptions()));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         RecordedRequest deleteRequest = server.takeRequest();
-         assertEquals(deleteRequest.getRequestLine(),
+         RecordedRequest createRequest = server.takeRequest();
+         assertEquals(createRequest.getRequestLine(),
                "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer HTTP/1.1");
       } finally {
          server.shutdown();

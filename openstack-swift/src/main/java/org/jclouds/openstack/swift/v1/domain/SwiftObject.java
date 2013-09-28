@@ -20,13 +20,13 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.beans.ConstructorProperties;
+import java.net.URI;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.io.Payload;
-import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.features.ObjectApi;
 
 import com.google.common.base.Objects;
@@ -41,18 +41,16 @@ import com.google.common.collect.ImmutableMap;
 public class SwiftObject implements Comparable<SwiftObject> {
 
    private final String name;
+   private final URI uri;
    private final String hash;
    private final Date lastModified;
    private final Map<String, String> metadata;
    private final Payload payload;
 
-   @ConstructorProperties({ "name", "hash", "bytes", "content_type", "last_modified" })
-   protected SwiftObject(String name, String hash, long bytes, String contentType, Date lastModified) {
-      this(name, hash, lastModified, ImmutableMap.<String, String> of(), payload(bytes, contentType));
-   }
-
-   protected SwiftObject(String name, String hash, Date lastModified, Map<String, String> metadata, Payload payload) {
+   protected SwiftObject(String name, URI uri, String hash, Date lastModified, Map<String, String> metadata,
+         Payload payload) {
       this.name = checkNotNull(name, "name");
+      this.uri = checkNotNull(uri, "uri of %s", uri);
       this.hash = checkNotNull(hash, "hash of %s", name);
       this.lastModified = checkNotNull(lastModified, "lastModified of %s", name);
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
@@ -61,6 +59,14 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    public String name() {
       return name;
+   }
+
+   /**
+    * http location of the object, accessible if its container is
+    * {@link CreateContainerOptions#publicRead}.
+    */
+   public URI uri() {
+      return uri;
    }
 
    public String hash() {
@@ -100,6 +106,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       if (object instanceof SwiftObject) {
          final SwiftObject that = SwiftObject.class.cast(object);
          return equal(name(), that.name()) //
+               && equal(uri(), that.uri()) //
                && equal(hash(), that.hash());
       } else {
          return false;
@@ -108,7 +115,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name(), hash());
+      return Objects.hashCode(name(), uri(), hash());
    }
 
    @Override
@@ -119,6 +126,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
    protected ToStringHelper string() {
       return toStringHelper("") //
             .add("name", name()) //
+            .add("uri", uri()) //
             .add("hash", hash()) //
             .add("lastModified", lastModified()) //
             .add("metadata", metadata());
@@ -143,6 +151,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    public static class Builder {
       protected String name;
+      protected URI uri;
       protected String hash;
       protected Date lastModified;
       protected Payload payload;
@@ -153,6 +162,14 @@ public class SwiftObject implements Comparable<SwiftObject> {
        */
       public Builder name(String name) {
          this.name = checkNotNull(name, "name");
+         return this;
+      }
+
+      /**
+       * @see SwiftObject#uri()
+       */
+      public Builder uri(URI uri) {
+         this.uri = checkNotNull(uri, "uri");
          return this;
       }
 
@@ -196,24 +213,16 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       public SwiftObject build() {
-         return new SwiftObject(name, hash, lastModified, metadata, payload);
+         return new SwiftObject(name, uri, hash, lastModified, metadata, payload);
       }
 
       public Builder fromObject(SwiftObject from) {
          return name(from.name()) //
+               .uri(from.uri()) //
                .hash(from.hash()) //
                .lastModified(from.lastModified()) //
                .metadata(from.metadata()) //
                .payload(from.payload());
       }
-   }
-
-   private static final byte[] NO_CONTENT = new byte[] {};
-
-   private static Payload payload(long bytes, String contentType) {
-      Payload payload = Payloads.newByteArrayPayload(NO_CONTENT);
-      payload.getContentMetadata().setContentLength(bytes);
-      payload.getContentMetadata().setContentType(contentType);
-      return payload;
    }
 }
