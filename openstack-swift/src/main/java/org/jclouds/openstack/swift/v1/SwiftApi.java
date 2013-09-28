@@ -19,6 +19,9 @@ package org.jclouds.openstack.swift.v1;
 import java.io.Closeable;
 import java.util.Set;
 
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
@@ -50,5 +53,7 @@ public interface SwiftApi extends Closeable {
    ContainerApi containerApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
    @Delegate
-   ObjectApi objectApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   @Path("/{containerName}")
+   ObjectApi objectApiInRegionForContainer(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @PathParam("containerName") String containerName);
 }

@@ -16,19 +16,16 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
+import static com.google.common.net.HttpHeaders.ETAG;
+
 import org.jclouds.http.HttpResponse;
-import org.jclouds.openstack.swift.v1.domain.Account;
 
 import com.google.common.base.Function;
 
-public class ParseAccountFromHeaders implements Function<HttpResponse, Account> {
+public class ETagHeader implements Function<HttpResponse, String> {
 
    @Override
-   public Account apply(HttpResponse from) {
-      return Account.builder() //
-            .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Bytes-Used"))) //
-            .containerCount(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Container-Count"))) //
-            .objectCount(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Object-Count"))) //
-            .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
+   public String apply(HttpResponse from) {
+      return from.getFirstHeaderOrNull(ETAG);
    }
 }

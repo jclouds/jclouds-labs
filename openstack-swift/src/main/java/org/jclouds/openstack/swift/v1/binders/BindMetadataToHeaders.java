@@ -78,6 +78,18 @@ public abstract class BindMetadataToHeaders implements Binder {
       }
    }
 
+   public static class BindObjectMetadataToHeaders extends BindMetadataToHeaders {
+      BindObjectMetadataToHeaders() {
+         super("x-object-meta-");
+      }
+   }
+
+   public static class BindRemoveObjectMetadataToHeaders extends BindMetadataToHeaders.ForRemoval {
+      BindRemoveObjectMetadataToHeaders() {
+         super("x-object-meta-");
+      }
+   }
+
    /**
     * @see <a
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-account-metadata.html">documentation</a>
