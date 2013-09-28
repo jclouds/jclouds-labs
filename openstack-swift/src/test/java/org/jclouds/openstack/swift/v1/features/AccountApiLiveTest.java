@@ -45,13 +45,13 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
       }
    }
 
-   public void createOrUpdateMetadata() throws Exception {
+   public void updateMetadata() throws Exception {
       for (String regionId : api.configuredRegions()) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
 
-         assertTrue(accountApi.createOrUpdateMetadata(meta));
+         assertTrue(accountApi.updateMetadata(meta));
 
          accountHasMetadata(accountApi, meta);
       }
@@ -63,7 +63,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
 
-         assertTrue(accountApi.createOrUpdateMetadata(meta));
+         assertTrue(accountApi.updateMetadata(meta));
          accountHasMetadata(accountApi, meta);
 
          assertTrue(accountApi.deleteMetadata(meta));

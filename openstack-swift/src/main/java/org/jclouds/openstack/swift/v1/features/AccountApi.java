@@ -16,6 +16,8 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
 import java.util.Map;
 
 import javax.inject.Named;
@@ -23,11 +25,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
-import org.jclouds.openstack.swift.v1.binders.BindAccountMetadataToHeaders;
+import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindAccountMetadataToHeaders;
+import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindRemoveAccountMetadataToHeaders;
 import org.jclouds.openstack.swift.v1.domain.Account;
 import org.jclouds.openstack.swift.v1.functions.ParseAccountFromHeaders;
 import org.jclouds.rest.annotations.BinderParam;
@@ -49,6 +51,7 @@ import org.jclouds.rest.annotations.ResponseParser;
  *      Storage Account Services API</a>
  */
 @RequestFilters(AuthenticateRequest.class)
+@Consumes(APPLICATION_JSON)
 public interface AccountApi {
 
    /**
@@ -60,8 +63,7 @@ public interface AccountApi {
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">
     *      Get Account Metadata API</a>
     */
-   @Named("account:get")
-   @Consumes(MediaType.APPLICATION_JSON)
+   @Named("GetAccount")
    @HEAD
    @ResponseParser(ParseAccountFromHeaders.class)
    @Path("/")
@@ -80,12 +82,11 @@ public interface AccountApi {
     * @return <code>true</code> if the Account Metadata was successfully created
     *         or updated, false if not.
     */
-   @Named("account:createOrUpdateMetadata")
-   @Consumes
+   @Named("UpdateAccountMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/")
-   boolean createOrUpdateMetadata(@BinderParam(BindAccountMetadataToHeaders.class) Map<String, String> metadata);
+   boolean updateMetadata(@BinderParam(BindAccountMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
     * Deletes Account metadata.
@@ -100,10 +101,9 @@ public interface AccountApi {
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-account-metadata.html">
     *      Delete Account Metadata API</a>
     */
-   @Named("account:deleteMetadata")
-   @Consumes
+   @Named("DeleteAccountMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/")
-   boolean deleteMetadata(@BinderParam(BindAccountMetadataToHeaders.InRemoval.class) Map<String, String> metadata);
+   boolean deleteMetadata(@BinderParam(BindRemoveAccountMetadataToHeaders.class) Map<String, String> metadata);
 }

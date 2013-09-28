@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jclouds.openstack.swift.v1.SwiftApi;
+import org.jclouds.openstack.swift.v1.domain.Account;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
 import org.testng.annotations.Test;
 
@@ -48,9 +49,12 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         Map<String, String> metadata = api.accountApiInRegion("DFW").get().metadata();
+         Account account = api.accountApiInRegion("DFW").get();
+         assertEquals(account.containerCount(), 3l);
+         assertEquals(account.objectCount(), 42l);
+         assertEquals(account.bytesUsed(), 323479l);
          for (Entry<String, String> entry : metadata.entrySet()) {
-            assertEquals(metadata.get(entry.getKey().toLowerCase()), entry.getValue());
+            assertEquals(account.metadata().get(entry.getKey().toLowerCase()), entry.getValue());
          }
 
          assertEquals(server.getRequestCount(), 2);
@@ -62,7 +66,7 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
       }
    }
 
-   public void createOrUpdateMetadata() throws Exception {
+   public void updateMetadata() throws Exception {
       MockWebServer server = mockSwiftServer();
       server.enqueue(new MockResponse().setBody(access));
       server.enqueue(accountResponse() //
@@ -71,7 +75,7 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         assertTrue(api.accountApiInRegion("DFW").createOrUpdateMetadata(metadata));
+         assertTrue(api.accountApiInRegion("DFW").updateMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

@@ -52,9 +52,52 @@ import com.google.common.collect.ImmutableMultimap.Builder;
  * @see <a
  *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">documentation</a>
  */
-public class BindAccountMetadataToHeaders implements Binder {
+public abstract class BindMetadataToHeaders implements Binder {
 
-   private static final String ACCOUNT_METADATA_PREFIX = "x-account-meta-";
+   public static class BindAccountMetadataToHeaders extends BindMetadataToHeaders {
+      BindAccountMetadataToHeaders() {
+         super("x-account-meta-");
+      }
+   }
+
+   public static class BindRemoveAccountMetadataToHeaders extends BindMetadataToHeaders.ForRemoval {
+      BindRemoveAccountMetadataToHeaders() {
+         super("x-account-meta-");
+      }
+   }
+
+   public static class BindContainerMetadataToHeaders extends BindMetadataToHeaders {
+      BindContainerMetadataToHeaders() {
+         super("x-container-meta-");
+      }
+   }
+
+   public static class BindRemoveContainerMetadataToHeaders extends BindMetadataToHeaders.ForRemoval {
+      BindRemoveContainerMetadataToHeaders() {
+         super("x-container-meta-");
+      }
+   }
+
+   /**
+    * @see <a
+    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-account-metadata.html">documentation</a>
+    */
+   public static abstract class ForRemoval extends BindMetadataToHeaders {
+      ForRemoval(String metadataPrefix) {
+         super(metadataPrefix);
+      }
+
+      @Override
+      protected void putMetadata(Builder<String, String> headers, String key, String value) {
+         headers.put(String.format("x-remove%s", key.substring(1)), "ignored");
+      }
+   }
+
+   private final String metadataPrefix;
+
+   BindMetadataToHeaders(String metadataPrefix) {
+      this.metadataPrefix = metadataPrefix;
+   }
 
    @SuppressWarnings("unchecked")
    @Override
@@ -65,28 +108,17 @@ public class BindAccountMetadataToHeaders implements Binder {
       Builder<String, String> headers = ImmutableMultimap.<String, String> builder();
       for (Entry<String, String> keyVal : metadata.entrySet()) {
          String keyInLowercase = keyVal.getKey().toLowerCase();
-         if (keyVal.getKey().startsWith(ACCOUNT_METADATA_PREFIX)) {
-            putAccountMetadata(headers, keyInLowercase, keyVal.getValue());
+         if (keyVal.getKey().startsWith(metadataPrefix)) {
+            putMetadata(headers, keyInLowercase, keyVal.getValue());
          } else {
-            putAccountMetadata(headers, String.format("%s%s", ACCOUNT_METADATA_PREFIX, keyInLowercase),
-                  keyVal.getValue());
+            putMetadata(headers, String.format("%s%s", metadataPrefix, keyInLowercase), keyVal.getValue());
          }
       }
       return (R) request.toBuilder().replaceHeaders(headers.build()).build();
    }
 
-   protected void putAccountMetadata(Builder<String, String> headers, String key, String value) {
+   protected void putMetadata(Builder<String, String> headers, String key, String value) {
       headers.put(key, value);
    }
 
-   /**
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-account-metadata.html">documentation</a>
-    */
-   public static class InRemoval extends BindAccountMetadataToHeaders {
-      @Override
-      protected void putAccountMetadata(Builder<String, String> headers, String key, String value) {
-         headers.put(String.format("x-remove%s", key.substring(1)), "ignored");
-      }
-   }
 }
