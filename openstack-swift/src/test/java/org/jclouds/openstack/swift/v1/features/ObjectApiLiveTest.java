@@ -30,10 +30,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.http.options.GetOptions;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
+import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

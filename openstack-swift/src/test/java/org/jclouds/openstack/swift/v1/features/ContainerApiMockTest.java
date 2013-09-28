@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import static org.jclouds.openstack.swift.v1.options.CreateContainerOptions.Builder.anybodyRead;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -23,10 +24,10 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
+import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -120,14 +121,14 @@ public class ContainerApiMockTest extends BaseSwiftMockTest {
       }
    }
 
-   public void createPublicRead() throws Exception {
+   public void createWithOptions() throws Exception {
       MockWebServer server = mockSwiftServer();
       server.enqueue(new MockResponse().setBody(access));
       server.enqueue(new MockResponse().setResponseCode(201));
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", new CreateContainerOptions().publicRead()));
+         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", anybodyRead().metadata(metadata)));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -135,6 +136,9 @@ public class ContainerApiMockTest extends BaseSwiftMockTest {
          assertEquals(createRequest.getRequestLine(),
                "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer HTTP/1.1");
          assertEquals(createRequest.getHeader("x-container-read"), ".r:*,.rlistings");
+         for (Entry<String, String> entry : metadata.entrySet()) {
+            assertEquals(createRequest.getHeader("x-container-meta-" + entry.getKey().toLowerCase()), entry.getValue());
+         }
       } finally {
          server.shutdown();
       }

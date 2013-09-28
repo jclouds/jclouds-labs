@@ -24,9 +24,9 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
+import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

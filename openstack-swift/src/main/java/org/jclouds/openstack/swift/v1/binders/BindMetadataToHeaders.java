@@ -52,7 +52,7 @@ import com.google.common.collect.ImmutableMultimap.Builder;
  * @see <a
  *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">documentation</a>
  */
-public abstract class BindMetadataToHeaders implements Binder {
+public class BindMetadataToHeaders implements Binder {
 
    public static class BindAccountMetadataToHeaders extends BindMetadataToHeaders {
       BindAccountMetadataToHeaders() {
@@ -107,8 +107,8 @@ public abstract class BindMetadataToHeaders implements Binder {
 
    private final String metadataPrefix;
 
-   BindMetadataToHeaders(String metadataPrefix) {
-      this.metadataPrefix = metadataPrefix;
+   public BindMetadataToHeaders(String metadataPrefix) {
+      this.metadataPrefix = checkNotNull(metadataPrefix, "metadataPrefix");
    }
 
    @SuppressWarnings("unchecked")
@@ -117,20 +117,24 @@ public abstract class BindMetadataToHeaders implements Binder {
       checkNotNull(request, "request");
       checkArgument(input instanceof Map<?, ?>, "input must be a non-null java.util.Map!");
       Map<String, String> metadata = Map.class.cast(input);
-      Builder<String, String> headers = ImmutableMultimap.<String, String> builder();
-      for (Entry<String, String> keyVal : metadata.entrySet()) {
-         String keyInLowercase = keyVal.getKey().toLowerCase();
-         if (keyVal.getKey().startsWith(metadataPrefix)) {
-            putMetadata(headers, keyInLowercase, keyVal.getValue());
-         } else {
-            putMetadata(headers, String.format("%s%s", metadataPrefix, keyInLowercase), keyVal.getValue());
-         }
-      }
-      return (R) request.toBuilder().replaceHeaders(headers.build()).build();
+      ImmutableMultimap<String, String> headers = toHeaders(metadata);
+      return (R) request.toBuilder().replaceHeaders(headers).build();
    }
 
    protected void putMetadata(Builder<String, String> headers, String key, String value) {
       headers.put(key, value);
    }
 
+   public ImmutableMultimap<String, String> toHeaders(Map<String, String> metadata) {
+      Builder<String, String> builder = ImmutableMultimap.<String, String> builder();
+      for (Entry<String, String> keyVal : metadata.entrySet()) {
+         String keyInLowercase = keyVal.getKey().toLowerCase();
+         if (keyVal.getKey().startsWith(metadataPrefix)) {
+            putMetadata(builder, keyInLowercase, keyVal.getValue());
+         } else {
+            putMetadata(builder, String.format("%s%s", metadataPrefix, keyInLowercase), keyVal.getValue());
+         }
+      }
+      return builder.build();
+   }
 }

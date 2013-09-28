@@ -16,8 +16,8 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
-import static org.jclouds.blobstore.options.CreateContainerOptions.Builder.publicRead;
 import static org.jclouds.io.Payloads.newStringPayload;
+import static org.jclouds.openstack.swift.v1.options.CreateContainerOptions.Builder.anybodyRead;
 import static org.testng.Assert.assertEquals;
 
 import java.io.InputStream;
@@ -39,9 +39,9 @@ public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest {
    private String name = getClass().getSimpleName();
    private String containerName = getClass().getSimpleName() + "Container";
 
-   public void publicReadObjectUri() throws Exception {
+   public void anybodyReadObjectUri() throws Exception {
       for (String regionId : api.configuredRegions()) {
-         api.containerApiInRegion(regionId).createIfAbsent(containerName, publicRead());
+         api.containerApiInRegion(regionId).createIfAbsent(containerName, anybodyRead());
          api.containerApiInRegion(regionId).get(containerName);
 
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
