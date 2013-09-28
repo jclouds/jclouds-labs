@@ -25,7 +25,6 @@ import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.swift.v1.features.AccountApi;
 import org.jclouds.openstack.swift.v1.features.ContainerApi;
 import org.jclouds.openstack.swift.v1.features.ObjectApi;
-import org.jclouds.openstack.v2_0.features.ExtensionApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
@@ -43,9 +42,6 @@ public interface SwiftApi extends Closeable {
    @Provides
    @Region
    Set<String> configuredRegions();
-
-   @Delegate
-   ExtensionApi extensionApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
    @Delegate
    AccountApi accountApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
