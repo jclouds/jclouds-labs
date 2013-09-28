@@ -16,14 +16,22 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Adrian Cole
@@ -31,11 +39,13 @@ import com.google.common.collect.FluentIterable;
 @Test(groups = "live", testName = "ContainerApiLiveTest")
 public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
 
+   private String name = getClass().getSimpleName();
+
    @Test
-   public void testListContainers() throws Exception {
+   public void list() throws Exception {
       for (String regionId : api.configuredRegions()) {
          ContainerApi containerApi = api.containerApiInRegion(regionId);
-         FluentIterable<? extends Container> response = containerApi.list();
+         FluentIterable<Container> response = containerApi.listFirstPage();
          assertNotNull(response);
          for (Container container : response) {
             assertNotNull(container.name());
@@ -43,5 +53,81 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
             assertTrue(container.bytesUsed() >= 0);
          }
       }
+   }
+
+   public void get() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         Container container = api.containerApiInRegion(regionId).get(name);
+         assertEquals(container.name(), name);
+         assertTrue(container.objectCount() == 0);
+         assertTrue(container.bytesUsed() == 0);
+      }
+   }
+
+   public void listAt() throws Exception {
+      String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
+      for (String regionId : api.configuredRegions()) {
+         Container container = api.containerApiInRegion(regionId).listAt(lexicographicallyBeforeName).get(0);
+         assertEquals(container.name(), name);
+         assertTrue(container.objectCount() == 0);
+         assertTrue(container.bytesUsed() == 0);
+      }
+   }
+
+   public void updateMetadata() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         ContainerApi containerApi = api.containerApiInRegion(regionId);
+
+         Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
+
+         assertTrue(containerApi.updateMetadata(name, meta));
+
+         containerHasMetadata(containerApi, name, meta);
+      }
+   }
+
+   public void deleteMetadata() throws Exception {
+      for (String regionId : api.configuredRegions()) {
+         ContainerApi containerApi = api.containerApiInRegion(regionId);
+
+         Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
+
+         assertTrue(containerApi.updateMetadata(name, meta));
+         containerHasMetadata(containerApi, name, meta);
+
+         assertTrue(containerApi.deleteMetadata(name, meta));
+         Container container = containerApi.get(name);
+         for (Entry<String, String> entry : meta.entrySet()) {
+            // note keys are returned in lower-case!
+            assertFalse(container.metadata().containsKey(entry.getKey().toLowerCase()));
+         }
+      }
+   }
+
+   static void containerHasMetadata(ContainerApi containerApi, String name, Map<String, String> meta) {
+      Container container = containerApi.get(name);
+      for (Entry<String, String> entry : meta.entrySet()) {
+         // note keys are returned in lower-case!
+         assertEquals(container.metadata().get(entry.getKey().toLowerCase()), entry.getValue(), //
+               container + " didn't have metadata: " + entry);
+      }
+   }
+
+   @Override
+   @BeforeClass(groups = "live")
+   public void setup() {
+      super.setup();
+      for (String regionId : api.configuredRegions()) {
+         api.containerApiInRegion(regionId).createIfAbsent(name);
+      }
+   }
+
+   @Override
+   @AfterClass(groups = "live")
+   public void tearDown() {
+      for (String regionId : api.configuredRegions()) {
+         api.containerApiInRegion(regionId).deleteIfEmpty(name);
+      }
+      super.tearDown();
    }
 }

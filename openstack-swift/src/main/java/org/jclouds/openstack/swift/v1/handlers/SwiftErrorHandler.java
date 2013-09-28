@@ -65,6 +65,9 @@ public class SwiftErrorHandler implements HttpErrorHandler {
                }
             }
             break;
+         case 409:
+            exception = new IllegalStateException(exception.getMessage(), exception);
+            break;
       }
       command.setException(exception);
    }

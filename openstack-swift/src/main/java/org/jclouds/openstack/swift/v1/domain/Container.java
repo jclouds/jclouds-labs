@@ -21,9 +21,14 @@ import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.jclouds.openstack.swift.v1.features.ContainerApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @see <a
@@ -35,12 +40,14 @@ public class Container implements Comparable<Container> {
    private final String name;
    private final long objectCount;
    private final long bytesUsed;
+   private final Map<String, String> metadata;
 
-   @ConstructorProperties({ "name", "count", "bytes" })
-   protected Container(String name, long objectCount, long bytesUsed) {
+   @ConstructorProperties({ "name", "count", "bytes", "metadata" })
+   protected Container(String name, long objectCount, long bytesUsed, Map<String, String> metadata) {
       this.name = checkNotNull(name, "name");
       this.objectCount = objectCount;
       this.bytesUsed = bytesUsed;
+      this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
    }
 
    public String name() {
@@ -55,6 +62,18 @@ public class Container implements Comparable<Container> {
       return bytesUsed;
    }
 
+   /**
+    * Empty except in {@link ContainerApi#get(String) GetContainer} commands.
+    * 
+    * <h3>Note</h3>
+    * 
+    * In current swift implementations, headers keys are lower-cased. This means
+    * characters such as turkish will probably not work out well.
+    */
+   public Map<String, String> metadata() {
+      return metadata;
+   }
+
    @Override
    public boolean equals(Object object) {
       if (this == object) {
@@ -64,7 +83,8 @@ public class Container implements Comparable<Container> {
          final Container that = Container.class.cast(object);
          return equal(name(), that.name()) //
                && equal(objectCount(), that.objectCount()) //
-               && equal(bytesUsed(), that.bytesUsed());
+               && equal(bytesUsed(), that.bytesUsed()) //
+               && equal(metadata(), that.metadata());
       } else {
          return false;
       }
@@ -72,7 +92,7 @@ public class Container implements Comparable<Container> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name(), objectCount(), bytesUsed());
+      return Objects.hashCode(name(), objectCount(), bytesUsed(), metadata());
    }
 
    @Override
@@ -84,7 +104,8 @@ public class Container implements Comparable<Container> {
       return toStringHelper("") //
             .add("name", name()) //
             .add("objectCount", objectCount()) //
-            .add("bytesUsed", bytesUsed());
+            .add("bytesUsed", bytesUsed()) //
+            .add("metadata", metadata());
    }
 
    @Override
@@ -108,6 +129,7 @@ public class Container implements Comparable<Container> {
       protected String name;
       protected long objectCount;
       protected long bytesUsed;
+      protected Map<String, String> metadata = ImmutableMap.of();
 
       /**
        * @see Container#name()
@@ -133,14 +155,30 @@ public class Container implements Comparable<Container> {
          return this;
       }
 
+      /**
+       * Will lower-case all metadata keys due to a swift implementation
+       * decision.
+       * 
+       * @see Container#metadata()
+       */
+      public Builder metadata(Map<String, String> metadata) {
+         ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String> builder();
+         for (Entry<String, String> entry : checkNotNull(metadata, "metadata").entrySet()) {
+            builder.put(entry.getKey().toLowerCase(), entry.getValue());
+         }
+         this.metadata = builder.build();
+         return this;
+      }
+
       public Container build() {
-         return new Container(name, objectCount, bytesUsed);
+         return new Container(name, objectCount, bytesUsed, metadata);
       }
 
       public Builder fromContainer(Container from) {
          return name(from.name()) //
                .objectCount(from.objectCount()) //
-               .bytesUsed(from.bytesUsed());
+               .bytesUsed(from.bytesUsed()) //
+               .metadata(from.metadata());
       }
    }
 }
