@@ -90,6 +90,26 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
       }
    }
 
+   public void updateTemporaryUrlKey() throws Exception {
+      MockWebServer server = mockSwiftServer();
+      server.enqueue(new MockResponse().setBody(access));
+      server.enqueue(accountResponse());
+
+      try {
+         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         assertTrue(api.accountApiInRegion("DFW").updateTemporaryUrlKey("foobar"));
+
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         RecordedRequest replaceRequest = server.takeRequest();
+         assertEquals(replaceRequest.getRequestLine(),
+               "POST /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/ HTTP/1.1");
+         assertEquals(replaceRequest.getHeader("X-Account-Meta-Temp-URL-Key"), "foobar");
+      } finally {
+         server.shutdown();
+      }
+   }
+
    public void deleteMetadata() throws Exception {
       MockWebServer server = mockSwiftServer();
       server.enqueue(new MockResponse().setBody(access));

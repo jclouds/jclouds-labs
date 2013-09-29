@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -57,6 +58,10 @@ public class Account {
 
    public long bytesUsed() {
       return bytesUsed;
+   }
+
+   public Optional<String> temporaryUrlKey() {
+      return Optional.fromNullable(metadata.get("temp-url-key"));
    }
 
    /**

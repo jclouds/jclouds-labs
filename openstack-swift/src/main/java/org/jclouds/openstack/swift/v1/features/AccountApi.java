@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
@@ -86,6 +87,25 @@ public interface AccountApi {
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/")
    boolean updateMetadata(@BinderParam(BindAccountMetadataToHeaders.class) Map<String, String> metadata);
+
+   /**
+    * Replaces the {@link Account#temporaryUrlKey()}.
+    *
+    * @param metadata
+    *           the Account metadata to create or update.
+    *
+    * @see <a
+    *      href="http://docs.openstack.org/trunk/config-reference/content/object-storage-tempurl.html">
+    *      Temporary URL Documentation</a>
+    *
+    * @return <code>true</code> if the Temporary URL Key was successfully created
+    *         or updated, false if not.
+    */
+   @Named("UpdateAccountMetadata")
+   @POST
+   @Fallback(FalseOnNotFoundOr404.class)
+   @Path("/")
+   boolean updateTemporaryUrlKey(@HeaderParam("X-Account-Meta-Temp-URL-Key") String temporaryUrlKey);
 
    /**
     * Deletes Account metadata.
