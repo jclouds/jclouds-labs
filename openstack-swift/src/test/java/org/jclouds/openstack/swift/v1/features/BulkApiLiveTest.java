@@ -16,7 +16,6 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
-import static com.google.common.base.Preconditions.checkState;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -31,15 +30,12 @@ import org.jboss.shrinkwrap.api.exporter.TarGzExporter;
 import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.domain.BulkDeleteResponse;
 import org.jclouds.openstack.swift.v1.domain.ExtractArchiveResponse;
-import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
-import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -71,7 +67,8 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
          assertEquals(api.containerApiInRegion(regionId).get(containerName).objectCount(), OBJECT_COUNT);
 
          // repeat the command
-         extractResponse = api.bulkApiInRegion(regionId).extractArchive(containerName, Payloads.newPayload(tarGz), "tar.gz");
+         extractResponse = api.bulkApiInRegion(regionId).extractArchive(containerName, Payloads.newPayload(tarGz),
+               "tar.gz");
          assertEquals(extractResponse.created(), OBJECT_COUNT);
          assertTrue(extractResponse.errors().isEmpty());
       }
@@ -99,7 +96,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
          boolean created = api.containerApiInRegion(regionId).createIfAbsent(containerName,
                new CreateContainerOptions());
          if (!created) {
-            deleteAllObjectsInContainer(regionId);
+            deleteAllObjectsInContainer(regionId, containerName);
          }
       }
       GenericArchive files = ShrinkWrap.create(GenericArchive.class, "files.tar.gz");
@@ -119,24 +116,9 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
    @AfterClass(groups = "live")
    public void tearDown() {
       for (String regionId : api.configuredRegions()) {
-         deleteAllObjectsInContainer(regionId);
+         deleteAllObjectsInContainer(regionId, containerName);
          api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
       }
       super.tearDown();
-   }
-
-   void deleteAllObjectsInContainer(String regionId) {
-      ImmutableList<String> pathsToDelete = api.objectApiInRegionForContainer(regionId, containerName)
-            .list(new ListContainerOptions()).transform(new Function<SwiftObject, String>() {
-
-               public String apply(SwiftObject input) {
-                  return containerName + "/" + input.name();
-               }
-
-            }).toList();
-      if (!pathsToDelete.isEmpty()) {
-         BulkDeleteResponse response = api.bulkApiInRegion(regionId).bulkDelete(pathsToDelete);
-         checkState(response.errors().isEmpty(), "Errors deleting paths %s: %s", pathsToDelete, response);
-      }
    }
 }

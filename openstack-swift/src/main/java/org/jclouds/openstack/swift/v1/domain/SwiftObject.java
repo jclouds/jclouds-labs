@@ -51,7 +51,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
          Payload payload) {
       this.name = checkNotNull(name, "name");
       this.uri = checkNotNull(uri, "uri of %s", uri);
-      this.etag = checkNotNull(etag, "etag of %s", name);
+      this.etag = checkNotNull(etag, "etag of %s", name).replace("\"", "");
       this.lastModified = checkNotNull(lastModified, "lastModified of %s", name);
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
       this.payload = checkNotNull(payload, "payload of %s", name);

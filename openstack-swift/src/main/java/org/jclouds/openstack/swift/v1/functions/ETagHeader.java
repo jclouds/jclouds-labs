@@ -26,6 +26,7 @@ public class ETagHeader implements Function<HttpResponse, String> {
 
    @Override
    public String apply(HttpResponse from) {
-      return from.getFirstHeaderOrNull(ETAG);
+      String etag = from.getFirstHeaderOrNull(ETAG);
+      return etag != null ? etag.replace("\"", "") : null;
    }
 }
