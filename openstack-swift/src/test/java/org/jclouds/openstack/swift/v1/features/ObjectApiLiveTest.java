@@ -18,6 +18,7 @@ package org.jclouds.openstack.swift.v1.features;
 
 import static org.jclouds.http.options.GetOptions.Builder.tail;
 import static org.jclouds.io.Payloads.newStringPayload;
+import static org.jclouds.openstack.swift.v1.options.ListContainerOptions.Builder.marker;
 import static org.jclouds.util.Strings2.toStringAndClose;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -34,6 +35,7 @@ import org.jclouds.http.options.GetOptions;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
+import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -54,7 +56,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
    public void list() throws Exception {
       for (String regionId : api.configuredRegions()) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-         FluentIterable<SwiftObject> response = objectApi.listFirstPage();
+         FluentIterable<SwiftObject> response = objectApi.list(new ListContainerOptions());
          assertNotNull(response);
          for (SwiftObject object : response) {
             checkObject(object);
@@ -109,11 +111,11 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
       }
    }
 
-   public void listAt() throws Exception {
+   public void listOptions() throws Exception {
       String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
       for (String regionId : api.configuredRegions()) {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName)
-               .listAt(lexicographicallyBeforeName).get(0);
+               .list(marker(lexicographicallyBeforeName)).get(0);
          assertEquals(object.name(), name);
          checkObject(object);
       }

@@ -29,7 +29,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
@@ -46,6 +45,7 @@ import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.functions.ETagHeader;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectFromResponse;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectListFromResponse;
+import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.jclouds.rest.Binder;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
@@ -75,23 +75,7 @@ public interface ObjectApi {
    @ResponseParser(ParseObjectListFromResponse.class)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @Path("/")
-   FluentIterable<SwiftObject> listFirstPage();
-
-   /**
-    * Lists up to 10,000 objects, starting at {@code marker}.
-    * 
-    * @param marker
-    *           lexicographic position to start list.
-    * 
-    * @return a list of existing storage objects ordered by name.
-    */
-   @Named("ListObjects")
-   @GET
-   @QueryParams(keys = "format", values = "json")
-   @ResponseParser(ParseObjectListFromResponse.class)
-   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
-   @Path("/")
-   FluentIterable<SwiftObject> listAt(@QueryParam("marker") String marker);
+   FluentIterable<SwiftObject> list(ListContainerOptions options);
 
    /**
     * Creates or updates an object.
