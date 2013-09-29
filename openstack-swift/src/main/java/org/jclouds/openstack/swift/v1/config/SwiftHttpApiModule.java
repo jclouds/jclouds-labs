@@ -19,28 +19,16 @@ import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
-import org.jclouds.json.config.GsonModule.DateAdapter;
-import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.handlers.SwiftErrorHandler;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
 
-/**
- * @author Adrian Cole
- * @author Zack Shoylev
- */
 @ConfiguresHttpApi
 public class SwiftHttpApiModule extends HttpApiModule<SwiftApi> {
   
    public SwiftHttpApiModule() {
    }   
-   
-   @Override
-   protected void configure() {
-      bind(DateAdapter.class).to(Iso8601DateAdapter.class);
-      super.configure();
-   }
 
    @Override
    protected void bindErrorHandlers() {

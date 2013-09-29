@@ -45,7 +45,6 @@ import org.jclouds.rest.annotations.ResponseParser;
  * appropriately using a binder/parser.
  * 
  * @see {@link Account}
- * @see metadata
  * @see <a
  *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/storage-account-services.html">
  *      Storage Account Services API</a>

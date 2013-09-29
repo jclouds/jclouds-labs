@@ -26,6 +26,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.swift.v1.features.AccountApi;
+import org.jclouds.openstack.swift.v1.features.BulkApi;
 import org.jclouds.openstack.swift.v1.features.ContainerApi;
 import org.jclouds.openstack.swift.v1.features.ObjectApi;
 import org.jclouds.rest.annotations.Delegate;
@@ -48,6 +49,9 @@ public interface SwiftApi extends Closeable {
 
    @Delegate
    AccountApi accountApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
+   @Delegate
+   BulkApi bulkApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
    @Delegate
    ContainerApi containerApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);

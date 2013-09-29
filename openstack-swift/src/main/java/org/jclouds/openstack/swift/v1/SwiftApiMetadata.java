@@ -18,16 +18,20 @@ package org.jclouds.openstack.swift.v1;
 
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+
 import java.net.URI;
 import java.util.Properties;
+
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.openstack.swift.v1.config.SwiftHttpApiModule;
+import org.jclouds.openstack.swift.v1.config.SwiftTypeAdapters;
 import org.jclouds.openstack.v2_0.ServiceType;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
@@ -63,7 +67,7 @@ public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
 
       protected Builder() {
           id("openstack-swift")
-         .name("OpenStack Swift Diablo+ API")
+         .name("OpenStack Swift Grizzly+ API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
          .credentialName("${password}")
          .documentation(URI.create("http://docs.openstack.org/api/openstack-object-storage/1.0/content/ch_object-storage-dev-overview.html"))
@@ -75,6 +79,7 @@ public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
                                      .add(AuthenticationApiModule.class)
                                      .add(KeystoneAuthenticationModule.class)
                                      .add(RegionModule.class)
+                                     .add(SwiftTypeAdapters.class)
                                      .add(SwiftHttpApiModule.class).build());
       }
       

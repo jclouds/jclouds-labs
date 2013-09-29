@@ -161,7 +161,8 @@ public class Account {
       public Builder fromContainer(Account from) {
          return containerCount(from.containerCount())//
                .objectCount(from.objectCount())//
-               .bytesUsed(from.bytesUsed());
+               .bytesUsed(from.bytesUsed()) //
+               .metadata(from.metadata());
       }
    }
 }
