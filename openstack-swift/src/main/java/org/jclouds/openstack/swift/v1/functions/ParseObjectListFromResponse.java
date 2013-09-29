@@ -71,7 +71,7 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Fluen
          return SwiftObject.builder() //
                .uri(URI.create(String.format("%s%s", containerUri, input.name))) //
                .name(input.name) //
-               .hash(input.hash) //
+               .etag(input.hash) //
                .payload(payload(input.bytes, input.content_type)) //
                .lastModified(input.last_modified).build();
       }

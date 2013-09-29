@@ -67,7 +67,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
    static void checkObject(SwiftObject object) {
       assertNotNull(object.name());
       assertNotNull(object.uri());
-      assertNotNull(object.hash());
+      assertNotNull(object.etag());
       assertTrue(object.lastModified().getTime() <= System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5));
       assertNotNull(object.payload().getContentMetadata().getContentLength());
       assertNotNull(object.payload().getContentMetadata().getContentType());
@@ -166,7 +166,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
       super.setup();
       for (String regionId : api.configuredRegions()) {
          api.containerApiInRegion(regionId).createIfAbsent(containerName, new CreateContainerOptions());
-         api.objectApiInRegionForContainer(regionId, containerName).createOrUpdate(name, newStringPayload("swifty"),
+         api.objectApiInRegionForContainer(regionId, containerName).replace(name, newStringPayload("swifty"),
                ImmutableMap.<String, String> of());
       }
    }

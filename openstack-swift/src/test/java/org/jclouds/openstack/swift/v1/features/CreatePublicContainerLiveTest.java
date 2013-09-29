@@ -45,7 +45,7 @@ public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest {
          api.containerApiInRegion(regionId).get(containerName);
 
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-         objectApi.createOrUpdate(name, newStringPayload("swifty"), ImmutableMap.<String, String> of());
+         objectApi.replace(name, newStringPayload("swifty"), ImmutableMap.<String, String> of());
 
          InputStream publicStream = objectApi.get(name, new GetOptions()).uri().toURL().openStream();
 

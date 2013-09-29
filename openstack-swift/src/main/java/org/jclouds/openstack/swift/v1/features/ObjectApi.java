@@ -90,13 +90,13 @@ public interface ObjectApi {
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">
     *      Create or Update Object API</a>
     * 
-    * @return {@link SwiftObject#hash()} of the object.
+    * @return {@link SwiftObject#etag()} of the object.
     */
    @Named("CreateOrUpdateObject")
    @PUT
    @ResponseParser(ETagHeader.class)
    @Path("/{objectName}")
-   String createOrUpdate(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload,
+   String replace(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload,
          @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
 
    static class SetPayload implements Binder {
@@ -132,7 +132,8 @@ public interface ObjectApi {
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#name()}.
-    * @param options options to control the download.
+    * @param options
+    *           options to control the download.
     * 
     * @return the Object or null, if not found.
     * 

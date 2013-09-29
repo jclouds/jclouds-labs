@@ -42,16 +42,16 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    private final String name;
    private final URI uri;
-   private final String hash;
+   private final String etag;
    private final Date lastModified;
    private final Map<String, String> metadata;
    private final Payload payload;
 
-   protected SwiftObject(String name, URI uri, String hash, Date lastModified, Map<String, String> metadata,
+   protected SwiftObject(String name, URI uri, String etag, Date lastModified, Map<String, String> metadata,
          Payload payload) {
       this.name = checkNotNull(name, "name");
       this.uri = checkNotNull(uri, "uri of %s", uri);
-      this.hash = checkNotNull(hash, "hash of %s", name);
+      this.etag = checkNotNull(etag, "etag of %s", name);
       this.lastModified = checkNotNull(lastModified, "lastModified of %s", name);
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
       this.payload = checkNotNull(payload, "payload of %s", name);
@@ -69,8 +69,12 @@ public class SwiftObject implements Comparable<SwiftObject> {
       return uri;
    }
 
-   public String hash() {
-      return hash;
+   /**
+    * Corresponds to the {@code ETag} header of the response, and is usually the
+    * MD5 checksum of the object
+    */
+   public String etag() {
+      return etag;
    }
 
    public Date lastModified() {
@@ -107,7 +111,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
          final SwiftObject that = SwiftObject.class.cast(object);
          return equal(name(), that.name()) //
                && equal(uri(), that.uri()) //
-               && equal(hash(), that.hash());
+               && equal(etag(), that.etag());
       } else {
          return false;
       }
@@ -115,7 +119,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name(), uri(), hash());
+      return Objects.hashCode(name(), uri(), etag());
    }
 
    @Override
@@ -127,7 +131,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       return toStringHelper("") //
             .add("name", name()) //
             .add("uri", uri()) //
-            .add("hash", hash()) //
+            .add("etag", etag()) //
             .add("lastModified", lastModified()) //
             .add("metadata", metadata());
    }
@@ -152,7 +156,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
    public static class Builder {
       protected String name;
       protected URI uri;
-      protected String hash;
+      protected String etag;
       protected Date lastModified;
       protected Payload payload;
       protected Map<String, String> metadata = ImmutableMap.of();
@@ -174,10 +178,10 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       /**
-       * @see SwiftObject#hash()
+       * @see SwiftObject#etag()
        */
-      public Builder hash(String hash) {
-         this.hash = hash;
+      public Builder etag(String etag) {
+         this.etag = etag;
          return this;
       }
 
@@ -213,13 +217,13 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       public SwiftObject build() {
-         return new SwiftObject(name, uri, hash, lastModified, metadata, payload);
+         return new SwiftObject(name, uri, etag, lastModified, metadata, payload);
       }
 
       public Builder fromObject(SwiftObject from) {
          return name(from.name()) //
                .uri(from.uri()) //
-               .hash(from.hash()) //
+               .etag(from.etag()) //
                .lastModified(from.lastModified()) //
                .metadata(from.metadata()) //
                .payload(from.payload());

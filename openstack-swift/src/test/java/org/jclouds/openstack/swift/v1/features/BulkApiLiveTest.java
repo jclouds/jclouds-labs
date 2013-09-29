@@ -71,7 +71,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
          assertEquals(api.containerApiInRegion(regionId).get(containerName).objectCount(), OBJECT_COUNT);
 
          // repeat the command
-         api.bulkApiInRegion(regionId).extractArchive(containerName, Payloads.newPayload(tarGz), "tar.gz");
+         extractResponse = api.bulkApiInRegion(regionId).extractArchive(containerName, Payloads.newPayload(tarGz), "tar.gz");
          assertEquals(extractResponse.created(), OBJECT_COUNT);
          assertTrue(extractResponse.errors().isEmpty());
       }

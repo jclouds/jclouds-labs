@@ -68,13 +68,13 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
             SwiftObject.builder() //
                   .name("test_obj_1") //
                   .uri(URI.create(baseUri + "/test_obj_1")) //
-                  .hash("4281c348eaf83e70ddce0e07221c3d28") //
+                  .etag("4281c348eaf83e70ddce0e07221c3d28") //
                   .payload(payload(14, "application/octet-stream")) //
                   .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build(), //
             SwiftObject.builder() //
                   .name("test_obj_2") //
                   .uri(URI.create(baseUri + "/test_obj_2")) //
-                  .hash("b039efe731ad111bc1b0ef221c3849d0") //
+                  .etag("b039efe731ad111bc1b0ef221c3849d0") //
                   .payload(payload(64l, "application/octet-stream")) //
                   .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build());
    }
@@ -119,7 +119,7 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
       }
    }
 
-   public void createOrUpdate() throws Exception {
+   public void replace() throws Exception {
       MockWebServer server = mockSwiftServer();
       server.enqueue(new MockResponse().setBody(access));
       server.enqueue(new MockResponse() //
@@ -129,17 +129,17 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
          assertEquals(
-               api.objectApiInRegionForContainer("DFW", "myContainer").createOrUpdate("myObject",
+               api.objectApiInRegionForContainer("DFW", "myContainer").replace("myObject",
                      newStringPayload("swifty"), metadata), "d9f5eb4bba4e2f2f046e54611bc8196b");
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         RecordedRequest createOrUpdate = server.takeRequest();
-         assertEquals(createOrUpdate.getRequestLine(),
+         RecordedRequest replace = server.takeRequest();
+         assertEquals(replace.getRequestLine(),
                "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject HTTP/1.1");
-         assertEquals(new String(createOrUpdate.getBody()), "swifty");
+         assertEquals(new String(replace.getBody()), "swifty");
          for (Entry<String, String> entry : metadata.entrySet()) {
-            assertEquals(createOrUpdate.getHeader("x-object-meta-" + entry.getKey().toLowerCase()), entry.getValue());
+            assertEquals(replace.getHeader("x-object-meta-" + entry.getKey().toLowerCase()), entry.getValue());
          }
       } finally {
          server.shutdown();
@@ -159,7 +159,7 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
          SwiftObject object = api.objectApiInRegionForContainer("DFW", "myContainer").head("myObject");
          assertEquals(object.name(), "myObject");
-         assertEquals(object.hash(), "8a964ee2a5e88be344f36c22562a6486");
+         assertEquals(object.etag(), "8a964ee2a5e88be344f36c22562a6486");
          assertEquals(object.lastModified(), dates.rfc822DateParse("Fri, 12 Jun 2010 13:40:18 GMT"));
          for (Entry<String, String> entry : object.metadata().entrySet()) {
             assertEquals(object.metadata().get(entry.getKey().toLowerCase()), entry.getValue());
@@ -189,7 +189,7 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
          SwiftObject object = api.objectApiInRegionForContainer("DFW", "myContainer").get("myObject", tail(1));
          assertEquals(object.name(), "myObject");
-         assertEquals(object.hash(), "8a964ee2a5e88be344f36c22562a6486");
+         assertEquals(object.etag(), "8a964ee2a5e88be344f36c22562a6486");
          assertEquals(object.lastModified(), dates.rfc822DateParse("Fri, 12 Jun 2010 13:40:18 GMT"));
          for (Entry<String, String> entry : object.metadata().entrySet()) {
             assertEquals(object.metadata().get(entry.getKey().toLowerCase()), entry.getValue());

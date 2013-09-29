@@ -49,7 +49,7 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
       return SwiftObject.builder() //
             .uri(URI.create(uri)) //
             .name(name) //
-            .hash(from.getFirstHeaderOrNull(ETAG)) //
+            .etag(from.getFirstHeaderOrNull(ETAG)) //
             .payload(from.getPayload()) //
             .lastModified(dates.rfc822DateParse(from.getFirstHeaderOrNull(LAST_MODIFIED))) //
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
