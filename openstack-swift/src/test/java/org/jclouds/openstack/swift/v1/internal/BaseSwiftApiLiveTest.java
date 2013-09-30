@@ -18,17 +18,19 @@ package org.jclouds.openstack.swift.v1.internal;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.BulkDeleteResponse;
+import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
 
@@ -44,14 +46,15 @@ public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
    }
 
    protected void deleteAllObjectsInContainer(String regionId, final String containerName) {
-      ImmutableList<String> pathsToDelete = api.objectApiInRegionForContainer(regionId, containerName)
-            .list(new ListContainerOptions()).transform(new Function<SwiftObject, String>() {
-
-               public String apply(SwiftObject input) {
-                  return containerName + "/" + input.name();
-               }
-
-            }).toList();
+      ObjectList objects = api.objectApiInRegionForContainer(regionId, containerName).list(new ListContainerOptions());
+      if (objects == null) {
+         return;
+      }
+      List<String> pathsToDelete = Lists.transform(objects, new Function<SwiftObject, String>() {
+         public String apply(SwiftObject input) {
+            return containerName + "/" + input.name();
+         }
+      });
       if (!pathsToDelete.isEmpty()) {
          BulkDeleteResponse response = api.bulkApiInRegion(regionId).bulkDelete(pathsToDelete);
          checkState(response.errors().isEmpty(), "Errors deleting paths %s: %s", pathsToDelete, response);

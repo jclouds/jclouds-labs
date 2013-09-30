@@ -30,30 +30,27 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
-import org.jclouds.http.HttpRequest;
 import org.jclouds.http.options.GetOptions;
 import org.jclouds.io.Payload;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindObjectMetadataToHeaders;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindRemoveObjectMetadataToHeaders;
+import org.jclouds.openstack.swift.v1.binders.SetPayload;
+import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.functions.ETagHeader;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectFromResponse;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectListFromResponse;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
-import org.jclouds.rest.Binder;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
-
-import com.google.common.collect.FluentIterable;
 
 /**
  * @see <a href=
@@ -67,15 +64,16 @@ public interface ObjectApi {
    /**
     * Lists up to 10,000 objects.
     * 
-    * @return a list of existing storage objects ordered by name.
+    * @return a list of existing storage objects ordered by name or null.
     */
    @Named("ListObjects")
    @GET
    @QueryParams(keys = "format", values = "json")
    @ResponseParser(ParseObjectListFromResponse.class)
-   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
+   @Fallback(NullOnNotFoundOr404.class)
    @Path("/")
-   FluentIterable<SwiftObject> list(ListContainerOptions options);
+   @Nullable
+   ObjectList list(ListContainerOptions options);
 
    /**
     * Creates or updates an object.
@@ -98,14 +96,6 @@ public interface ObjectApi {
    @Path("/{objectName}")
    String replace(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload,
          @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
-
-   static class SetPayload implements Binder {
-      @SuppressWarnings("unchecked")
-      @Override
-      public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-         return (R) request.toBuilder().payload(Payload.class.cast(input)).build();
-      }
-   }
 
    /**
     * Gets the {@link SwiftObject} metadata without its

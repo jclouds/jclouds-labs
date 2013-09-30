@@ -23,6 +23,7 @@ import static org.jclouds.io.Payloads.newStringPayload;
 import static org.jclouds.openstack.swift.v1.options.ListContainerOptions.Builder.marker;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.*;
 
 import java.net.URI;
 import java.util.Map;
@@ -32,6 +33,7 @@ import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.SwiftApi;
+import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
@@ -82,13 +84,16 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
    public void list() throws Exception {
       MockWebServer server = mockSwiftServer();
       server.enqueue(new MockResponse().setBody(access));
-      server.enqueue(new MockResponse().setBody(objectList));
+      server.enqueue(containerResponse() //
+            .addHeader("X-Container-Read", ".r:*,.rlistings") //
+            .setBody(objectList));
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         ImmutableList<SwiftObject> objects = api.objectApiInRegionForContainer("DFW", "myContainer")
-               .list(new ListContainerOptions()).toList();
+         ObjectList objects = api.objectApiInRegionForContainer("DFW", "myContainer").list(new ListContainerOptions());
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
+         assertEquals(objects.container().name(), "myContainer");
+         assertTrue(objects.container().anybodyRead().get());
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -102,12 +107,11 @@ public class ObjectApiMockTest extends BaseSwiftMockTest {
    public void listOptions() throws Exception {
       MockWebServer server = mockSwiftServer();
       server.enqueue(new MockResponse().setBody(access));
-      server.enqueue(new MockResponse().setBody(objectList));
+      server.enqueue(containerResponse().setBody(objectList));
 
       try {
          SwiftApi api = swiftApi(server.getUrl("/").toString());
-         ImmutableList<SwiftObject> objects = api.objectApiInRegionForContainer("DFW", "myContainer")
-               .list(marker("test")).toList();
+         ObjectList objects = api.objectApiInRegionForContainer("DFW", "myContainer").list(marker("test"));
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
 
          assertEquals(server.getRequestCount(), 2);

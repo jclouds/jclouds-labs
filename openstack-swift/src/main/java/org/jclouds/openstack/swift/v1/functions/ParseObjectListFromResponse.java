@@ -27,13 +27,16 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
+import org.jclouds.openstack.swift.v1.domain.Container;
+import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.rest.InvocationContext;
+import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
-public class ParseObjectListFromResponse implements Function<HttpResponse, FluentIterable<SwiftObject>>,
+public class ParseObjectListFromResponse implements Function<HttpResponse, ObjectList>,
       InvocationContext<ParseObjectListFromResponse> {
 
    private static final class InternalObject {
@@ -45,18 +48,21 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Fluen
    }
 
    private final ParseJson<List<InternalObject>> json;
+   private final ParseContainerFromHeaders parseContainer;
 
    @Inject
-   ParseObjectListFromResponse(ParseJson<List<InternalObject>> json) {
+   ParseObjectListFromResponse(ParseJson<List<InternalObject>> json, ParseContainerFromHeaders parseContainer) {
       this.json = json;
+      this.parseContainer = parseContainer;
    }
 
    private ToSwiftObject toSwiftObject;
 
    @Override
-   public FluentIterable<SwiftObject> apply(HttpResponse from) {
-      return FluentIterable.from(json.apply(from)) //
-            .transform(toSwiftObject);
+   public ObjectList apply(HttpResponse from) {
+      List<SwiftObject> objects = Lists.transform(json.apply(from), toSwiftObject);
+      Container container = parseContainer.apply(from);
+      return ObjectList.create(objects, container);
    }
 
    static class ToSwiftObject implements Function<InternalObject, SwiftObject> {
@@ -79,12 +85,13 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Fluen
 
    @Override
    public ParseObjectListFromResponse setContext(HttpRequest request) {
+      parseContainer.name = GeneratedHttpRequest.class.cast(request).getCaller().get().getArgs().get(1).toString();
       String containerUri = request.getEndpoint().toString();
       int queryIndex = containerUri.indexOf('?');
       if (queryIndex != -1) {
          containerUri = containerUri.substring(0, queryIndex);
       }
-      this.toSwiftObject = new ToSwiftObject(containerUri);
+      toSwiftObject = new ToSwiftObject(containerUri);
       return this;
    }
 

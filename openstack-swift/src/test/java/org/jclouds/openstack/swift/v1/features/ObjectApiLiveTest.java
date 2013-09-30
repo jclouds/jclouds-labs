@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.http.options.GetOptions;
+import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
@@ -40,7 +41,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -56,7 +56,8 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
    public void list() throws Exception {
       for (String regionId : api.configuredRegions()) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-         FluentIterable<SwiftObject> response = objectApi.list(new ListContainerOptions());
+         ObjectList response = objectApi.list(new ListContainerOptions());
+         assertEquals(response.container(), api.containerApiInRegion(regionId).get(containerName));
          assertNotNull(response);
          for (SwiftObject object : response) {
             checkObject(object);
