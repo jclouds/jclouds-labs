@@ -16,40 +16,22 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
-import static org.jclouds.io.Payloads.newStringPayload;
 import static org.jclouds.openstack.swift.v1.options.CreateContainerOptions.Builder.anybodyRead;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
-import java.io.InputStream;
-
-import org.jclouds.http.options.GetOptions;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
-import org.jclouds.util.Strings2;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableMap;
-
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "CreatePublicContainerLiveTest")
 public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest {
 
    private String name = getClass().getSimpleName();
-   private String containerName = getClass().getSimpleName() + "Container";
 
-   public void anybodyReadObjectUri() throws Exception {
+   public void anybodyReadUpdatesMetadata() throws Exception {
       for (String regionId : api.configuredRegions()) {
-         api.containerApiInRegion(regionId).createIfAbsent(containerName, anybodyRead());
-         api.containerApiInRegion(regionId).get(containerName);
-
-         ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-         objectApi.replace(name, newStringPayload("swifty"), ImmutableMap.<String, String> of());
-
-         InputStream publicStream = objectApi.get(name, new GetOptions()).uri().toURL().openStream();
-
-         assertEquals(Strings2.toStringAndClose(publicStream), "swifty");
+         api.containerApiInRegion(regionId).createIfAbsent(name, anybodyRead());
+         assertTrue(api.containerApiInRegion(regionId).get(name).anybodyRead().get());
       }
    }
 
@@ -57,8 +39,7 @@ public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest {
    @AfterClass(groups = "live")
    public void tearDown() {
       for (String regionId : api.configuredRegions()) {
-         api.objectApiInRegionForContainer(regionId, containerName).delete(name);
-         api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
+         api.containerApiInRegion(regionId).deleteIfEmpty(name);
       }
       super.tearDown();
    }

@@ -36,9 +36,6 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
-/**
- * @author Adrian Cole
- */
 @Test
 public class ContainerApiMockTest extends BaseSwiftMockTest {
 

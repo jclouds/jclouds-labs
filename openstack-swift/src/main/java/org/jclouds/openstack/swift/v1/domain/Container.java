@@ -25,9 +25,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jclouds.openstack.swift.v1.features.ContainerApi;
+import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -40,13 +42,16 @@ public class Container implements Comparable<Container> {
    private final String name;
    private final long objectCount;
    private final long bytesUsed;
+   private final Optional<Boolean> anybodyRead;
    private final Map<String, String> metadata;
 
-   @ConstructorProperties({ "name", "count", "bytes", "metadata" })
-   protected Container(String name, long objectCount, long bytesUsed, Map<String, String> metadata) {
+   @ConstructorProperties({ "name", "count", "bytes", "anybodyRead", "metadata" })
+   protected Container(String name, long objectCount, long bytesUsed, Optional<Boolean> anybodyRead,
+         Map<String, String> metadata) {
       this.name = checkNotNull(name, "name");
       this.objectCount = objectCount;
       this.bytesUsed = bytesUsed;
+      this.anybodyRead = anybodyRead == null ? Optional.<Boolean> absent() : anybodyRead;
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
    }
 
@@ -60,6 +65,17 @@ public class Container implements Comparable<Container> {
 
    public long bytesUsed() {
       return bytesUsed;
+   }
+
+   /**
+    * Absent except in {@link ContainerApi#get(String) GetContainer} commands.
+    * 
+    * When present, designates that the container is publicly readable.
+    * 
+    * @see CreateContainerOptions#anybodyRead()
+    */
+   public Optional<Boolean> anybodyRead() {
+      return anybodyRead;
    }
 
    /**
@@ -92,7 +108,7 @@ public class Container implements Comparable<Container> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name(), objectCount(), bytesUsed(), metadata());
+      return Objects.hashCode(name(), objectCount(), bytesUsed(), anybodyRead(), metadata());
    }
 
    @Override
@@ -101,10 +117,11 @@ public class Container implements Comparable<Container> {
    }
 
    protected ToStringHelper string() {
-      return toStringHelper("") //
+      return toStringHelper("").omitNullValues() //
             .add("name", name()) //
             .add("objectCount", objectCount()) //
             .add("bytesUsed", bytesUsed()) //
+            .add("anybodyRead", anybodyRead().orNull()) //
             .add("metadata", metadata());
    }
 
@@ -129,6 +146,7 @@ public class Container implements Comparable<Container> {
       protected String name;
       protected long objectCount;
       protected long bytesUsed;
+      protected Optional<Boolean> anybodyRead = Optional.absent();
       protected Map<String, String> metadata = ImmutableMap.of();
 
       /**
@@ -156,6 +174,14 @@ public class Container implements Comparable<Container> {
       }
 
       /**
+       * @see Container#anybodyRead()
+       */
+      public Builder anybodyRead(Boolean anybodyRead) {
+         this.anybodyRead = Optional.fromNullable(anybodyRead);
+         return this;
+      }
+
+      /**
        * Will lower-case all metadata keys due to a swift implementation
        * decision.
        * 
@@ -171,13 +197,14 @@ public class Container implements Comparable<Container> {
       }
 
       public Container build() {
-         return new Container(name, objectCount, bytesUsed, metadata);
+         return new Container(name, objectCount, bytesUsed, anybodyRead, metadata);
       }
 
       public Builder fromContainer(Container from) {
          return name(from.name()) //
                .objectCount(from.objectCount()) //
                .bytesUsed(from.bytesUsed()) //
+               .anybodyRead(from.anybodyRead().orNull()) //
                .metadata(from.metadata());
       }
    }

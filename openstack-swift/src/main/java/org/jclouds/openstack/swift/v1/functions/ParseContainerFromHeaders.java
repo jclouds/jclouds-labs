@@ -27,7 +27,7 @@ import com.google.common.base.Function;
 public class ParseContainerFromHeaders implements Function<HttpResponse, Container>,
       InvocationContext<ParseContainerFromHeaders> {
 
-   private String name;
+   String name;
 
    @Override
    public Container apply(HttpResponse from) {
@@ -35,6 +35,7 @@ public class ParseContainerFromHeaders implements Function<HttpResponse, Contain
             .name(name) //
             .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull("X-Container-Bytes-Used"))) //
             .objectCount(Long.parseLong(from.getFirstHeaderOrNull("X-Container-Object-Count"))) //
+            .anybodyRead(".r:*,.rlistings".equals(from.getFirstHeaderOrNull("X-Container-Read"))) //
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
    }
 
