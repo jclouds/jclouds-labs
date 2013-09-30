@@ -16,19 +16,48 @@
  */
 package org.jclouds.openstack.swift.v1.blobstore.config;
 
-import org.jclouds.blobstore.AsyncBlobStore;
-import org.jclouds.blobstore.BlobStore;
-import org.jclouds.blobstore.attr.ConsistencyModel;
-import org.jclouds.openstack.swift.v1.blobstore.RegionScopedSwiftBlobStore;
-import org.jclouds.openstack.swift.v1.blobstore.internal.SubmissionAsyncBlobStore;
+import javax.inject.Inject;
 
+import org.jclouds.blobstore.BlobStore;
+import org.jclouds.blobstore.BlobStoreContext;
+import org.jclouds.openstack.swift.v1.blobstore.RegionScopedBlobStoreContext;
+import org.jclouds.openstack.swift.v1.blobstore.RegionScopedSwiftBlobStore;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ForwardingObject;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 public class SwiftBlobStoreContextModule extends AbstractModule {
+
    @Override
    protected void configure() {
-      bind(ConsistencyModel.class).toInstance(ConsistencyModel.STRICT);
-      bind(AsyncBlobStore.class).to(SubmissionAsyncBlobStore.class);
-      bind(BlobStore.class).to(RegionScopedSwiftBlobStore.class);
+      bind(BlobStoreContext.class).to(RegionScopedBlobStoreContext.class);
+      install(new FactoryModuleBuilder().build(Factory.class));
+   }
+
+   static interface Factory {
+      RegionScopedSwiftBlobStore create(String in);
+   }
+
+   @Provides
+   Function<String, BlobStore> blobStore(FactoryFunction in) {
+      return in;
+   }
+
+   static class FactoryFunction extends ForwardingObject implements Function<String, BlobStore> {
+      @Inject
+      Factory delegate;
+
+      @Override
+      protected Factory delegate() {
+         return delegate;
+      }
+
+      @Override
+      public BlobStore apply(String in) {
+         return delegate.create(in);
+      }
    }
 }

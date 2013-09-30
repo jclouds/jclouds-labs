@@ -17,8 +17,10 @@
 package org.jclouds.openstack.swift.v1.blobstore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Provider;
@@ -31,30 +33,35 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.Uris;
 import org.jclouds.http.options.GetOptions;
 import org.jclouds.location.Region;
+import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.TemporaryUrlSigner;
 
 import com.google.common.base.Supplier;
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.name.Named;
 
 /**
  * Uses {@link TemporaryUrlSigner} to sign requests for access to blobs. If no
  * interval is supplied, it defaults to a year.
  */
 public class RegionScopedTemporaryUrlBlobSigner implements BlobRequestSigner {
-   private static final long YEAR = TimeUnit.DAYS.toSeconds(365);
-   private final BlobToHttpGetOptions toGetOptions = new BlobToHttpGetOptions();
-
-   private final Supplier<TemporaryUrlSigner> signer;
-   private final Supplier<URI> storageUrl;
-   private final Provider<Long> timestamp;
 
    @Inject
-   protected RegionScopedTemporaryUrlBlobSigner(Supplier<TemporaryUrlSigner> signer, @Region Supplier<URI> storageUrl,
-         @TimeStamp Provider<Long> timestamp) {
-      this.signer = signer;
-      this.storageUrl = storageUrl;
+   protected RegionScopedTemporaryUrlBlobSigner(@Region Supplier<Map<String, Supplier<URI>>> regionToUris,
+         @Named(PROPERTY_SESSION_INTERVAL) long seconds, @TimeStamp Provider<Long> timestamp, SwiftApi api,
+         @Assisted String regionId) {
+      checkNotNull(regionId, "regionId");
       this.timestamp = timestamp;
+      this.signer = TemporaryUrlSigner.checkApiEvery(api.accountApiInRegion(regionId), seconds);
+      this.storageUrl = regionToUris.get().get(regionId).get();
    }
+
+   private static final long YEAR = TimeUnit.DAYS.toSeconds(365);
+   private final BlobToHttpGetOptions toGetOptions = new BlobToHttpGetOptions();
+   private final Provider<Long> timestamp;
+   private final TemporaryUrlSigner signer;
+   private final URI storageUrl;
 
    @Override
    public HttpRequest signGetBlob(String container, String name) {
@@ -89,8 +96,8 @@ public class RegionScopedTemporaryUrlBlobSigner implements BlobRequestSigner {
    private HttpRequest sign(String method, String container, String name, GetOptions options, long expires) {
       checkNotNull(container, "container");
       checkNotNull(name, "name");
-      URI url = Uris.uriBuilder(storageUrl.get()).appendPath(container).appendPath(name).build();
-      String signature = signer.get().sign(method, url.getPath(), expires);
+      URI url = Uris.uriBuilder(storageUrl).appendPath(container).appendPath(name).build();
+      String signature = signer.sign(method, url.getPath(), expires);
       return HttpRequest.builder()
                         .method(method)
                         .endpoint(url)

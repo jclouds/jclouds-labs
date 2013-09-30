@@ -17,29 +17,39 @@
 package org.jclouds.openstack.swift.v1.blobstore;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.tryFind;
+import static com.google.common.collect.Lists.transform;
+import static org.jclouds.blobstore.options.ListContainerOptions.Builder.recursive;
+import static org.jclouds.location.predicates.LocationPredicates.idEquals;
 
 import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.domain.Blob;
+import org.jclouds.blobstore.domain.BlobBuilder;
 import org.jclouds.blobstore.domain.BlobMetadata;
 import org.jclouds.blobstore.domain.MutableBlobMetadata;
 import org.jclouds.blobstore.domain.PageSet;
 import org.jclouds.blobstore.domain.StorageMetadata;
+import org.jclouds.blobstore.domain.StorageType;
+import org.jclouds.blobstore.domain.internal.BlobBuilderImpl;
 import org.jclouds.blobstore.domain.internal.BlobImpl;
 import org.jclouds.blobstore.domain.internal.PageSetImpl;
 import org.jclouds.blobstore.functions.BlobToHttpGetOptions;
-import org.jclouds.blobstore.internal.BaseBlobStore;
 import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.blobstore.options.GetOptions;
 import org.jclouds.blobstore.options.ListContainerOptions;
 import org.jclouds.blobstore.options.PutOptions;
-import org.jclouds.blobstore.strategy.internal.FetchBlobMetadata;
-import org.jclouds.blobstore.util.BlobUtils;
+import org.jclouds.blobstore.strategy.ClearListStrategy;
+import org.jclouds.collect.Memoized;
 import org.jclouds.domain.Location;
+import org.jclouds.io.Payload;
+import org.jclouds.io.payloads.ByteArrayPayload;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.blobstore.functions.ToBlobMetadata;
 import org.jclouds.openstack.swift.v1.blobstore.functions.ToListContainerOptions;
@@ -57,50 +67,57 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.assistedinject.Assisted;
 
-public class RegionScopedSwiftBlobStore extends BaseBlobStore {
-
-   private final BlobToHttpGetOptions toGetOptions = new BlobToHttpGetOptions();
-   private final ToListContainerOptions toListContainerOptions = new ToListContainerOptions();
-
-   private final SwiftApi api;
-   private final Supplier<Location> region;
-   private final ToResourceMetadata toResourceMetadata;
-   private final FetchBlobMetadata fetchMetadata;
+public class RegionScopedSwiftBlobStore implements BlobStore {
 
    @Inject
-   protected RegionScopedSwiftBlobStore(BlobStoreContext context, BlobUtils blobUtils, final Supplier<Location> region,
-         SwiftApi api, FetchBlobMetadata fetchMetadata) {
-      super(context, blobUtils, region, new Supplier<Set<? extends Location>>() {
-         @Override
-         public Set<? extends Location> get() {
-            return ImmutableSet.of(region.get());
-         }
-      });
+   protected RegionScopedSwiftBlobStore(Injector baseGraph, BlobStoreContext context, SwiftApi api,
+         @Memoized Supplier<Set<? extends Location>> locations, @Assisted String regionId) {
+      checkNotNull(regionId, "regionId");
+      Optional<? extends Location> found = tryFind(locations.get(), idEquals(regionId));
+      checkArgument(found.isPresent(), "region %s not in %s", regionId, locations.get());
+      this.region = found.get();
+      this.toResourceMetadata = new ToResourceMetadata(found.get());
+      this.context = context;
       this.api = api;
-      this.toResourceMetadata = new ToResourceMetadata(region);
-      this.region = region;
-      this.fetchMetadata = fetchMetadata;
+      // until we parameterize ClearListStrategy with a factory
+      this.clearList = baseGraph.createChildInjector(new AbstractModule() {
+         @Override
+         protected void configure() {
+            bind(BlobStore.class).toInstance(RegionScopedSwiftBlobStore.this);
+         }
+      }).getInstance(ClearListStrategy.class);
    }
 
-   /** all commands are scoped to a region. */
-   protected String regionId() {
-      return region.get().getId();
+   private final BlobStoreContext context;
+   private final ClearListStrategy clearList;
+   private final SwiftApi api;
+   private final Location region;
+   private final BlobToHttpGetOptions toGetOptions = new BlobToHttpGetOptions();
+   private final ToListContainerOptions toListContainerOptions = new ToListContainerOptions();
+   private final ToResourceMetadata toResourceMetadata;
+
+   @Override
+   public Set<? extends Location> listAssignableLocations() {
+      return ImmutableSet.of(region);
    }
 
    @Override
    public PageSet<? extends StorageMetadata> list() {
       // TODO: there may eventually be >10k containers..
-      FluentIterable<StorageMetadata> containers = api.containerApiInRegion(regionId()).listFirstPage()
+      FluentIterable<StorageMetadata> containers = api.containerApiInRegion(region.getId()).listFirstPage()
             .transform(toResourceMetadata);
       return new PageSetImpl<StorageMetadata>(containers, null);
    }
 
    @Override
    public boolean containerExists(String container) {
-      Container val = api.containerApiInRegion(regionId()).get(container);
+      Container val = api.containerApiInRegion(region.getId()).get(container);
       containerCache.put(container, Optional.fromNullable(val));
       return val != null;
    }
@@ -112,11 +129,11 @@ public class RegionScopedSwiftBlobStore extends BaseBlobStore {
 
    @Override
    public boolean createContainerInLocation(Location location, String container, CreateContainerOptions options) {
-      checkArgument(location == null || location.equals(region.get()), "location must be null or %s", region.get());
+      checkArgument(location == null || location.equals(region), "location must be null or %s", region);
       if (options.isPublicRead()) {
-         return api.containerApiInRegion(regionId()).createIfAbsent(container, ANYBODY_READ);
+         return api.containerApiInRegion(region.getId()).createIfAbsent(container, ANYBODY_READ);
       }
-      return api.containerApiInRegion(regionId()).createIfAbsent(container, BASIC_CONTAINER);
+      return api.containerApiInRegion(region.getId()).createIfAbsent(container, BASIC_CONTAINER);
    }
 
    private static final org.jclouds.openstack.swift.v1.options.CreateContainerOptions BASIC_CONTAINER = new org.jclouds.openstack.swift.v1.options.CreateContainerOptions();
@@ -124,22 +141,35 @@ public class RegionScopedSwiftBlobStore extends BaseBlobStore {
          .anybodyRead();
 
    @Override
-   public PageSet<? extends StorageMetadata> list(String container, ListContainerOptions options) {
-      ObjectApi objectApi = api.objectApiInRegionForContainer(regionId(), container);
+   public PageSet<? extends StorageMetadata> list(String container) {
+      return list(container, ListContainerOptions.NONE);
+   }
+
+   @Override
+   public PageSet<? extends StorageMetadata> list(final String container, ListContainerOptions options) {
+      ObjectApi objectApi = api.objectApiInRegionForContainer(region.getId(), container);
       ObjectList objects = objectApi.list(toListContainerOptions.apply(options));
       if (objects == null) {
          containerCache.put(container, Optional.<Container> absent());
          return new PageSetImpl<StorageMetadata>(ImmutableList.<StorageMetadata> of(), null);
       } else {
          containerCache.put(container, Optional.of(objects.container()));
-         List<MutableBlobMetadata> list = Lists.transform(objects, toBlobMetadata(container));
+         List<? extends StorageMetadata> list = transform(objects, toBlobMetadata(container));
          int limit = Optional.fromNullable(options.getMaxResults()).or(10000);
          String marker = list.size() == limit ? list.get(limit - 1).getName() : null;
-         PageSet<StorageMetadata> pageSet = new PageSetImpl<StorageMetadata>(list, marker);
+         // TODO: we should probably deprecate this option
          if (options.isDetailed()) {
-            return fetchMetadata.setContainerName(container).apply(pageSet);
+            list = transform(list, new Function<StorageMetadata, StorageMetadata>() {
+               @Override
+               public StorageMetadata apply(StorageMetadata input) {
+                  if (input.getType() != StorageType.BLOB) {
+                     return input;
+                  }
+                  return blobMetadata(container, input.getName());
+               }
+            });
          }
-         return pageSet;
+         return new PageSetImpl<StorageMetadata>(list, marker);
       }
    }
 
@@ -158,13 +188,13 @@ public class RegionScopedSwiftBlobStore extends BaseBlobStore {
       if (options.isMultipart()) {
          throw new UnsupportedOperationException();
       }
-      ObjectApi objectApi = api.objectApiInRegionForContainer(regionId(), container);
+      ObjectApi objectApi = api.objectApiInRegionForContainer(region.getId(), container);
       return objectApi.replace(blob.getMetadata().getName(), blob.getPayload(), blob.getMetadata().getUserMetadata());
    }
 
    @Override
    public BlobMetadata blobMetadata(String container, String name) {
-      SwiftObject object = api.objectApiInRegionForContainer(regionId(), container).head(name);
+      SwiftObject object = api.objectApiInRegionForContainer(region.getId(), container).head(name);
       if (object == null) {
          return null;
       }
@@ -172,8 +202,13 @@ public class RegionScopedSwiftBlobStore extends BaseBlobStore {
    }
 
    @Override
+   public Blob getBlob(String container, String key) {
+      return getBlob(container, key, GetOptions.NONE);
+   }
+
+   @Override
    public Blob getBlob(String container, String name, GetOptions options) {
-      ObjectApi objectApi = api.objectApiInRegionForContainer(regionId(), container);
+      ObjectApi objectApi = api.objectApiInRegionForContainer(region.getId(), container);
       SwiftObject object = objectApi.get(name, toGetOptions.apply(options));
       if (object == null) {
          return null;
@@ -185,24 +220,80 @@ public class RegionScopedSwiftBlobStore extends BaseBlobStore {
 
    @Override
    public void removeBlob(String container, String name) {
-      api.objectApiInRegionForContainer(regionId(), container).delete(name);
+      api.objectApiInRegionForContainer(region.getId(), container).delete(name);
    }
 
    @Override
-   protected boolean deleteAndVerifyContainerGone(String container) {
-      api.containerApiInRegion(regionId()).deleteIfEmpty(container);
+   public BlobStoreContext getContext() {
+      return context;
+   }
+
+   @Override
+   public BlobBuilder blobBuilder(String name) {
+      return new BlobBuilderImpl().name(name);
+   }
+
+   @Override
+   public boolean directoryExists(String containerName, String directory) {
+      return api.objectApiInRegionForContainer(region.getId(), containerName) //
+            .head(directory) != null;
+   }
+
+   @Override
+   public void createDirectory(String containerName, String directory) {
+      api.objectApiInRegionForContainer(region.getId(), containerName) //
+            .replace(directory, directoryPayload, ImmutableMap.<String, String> of());
+   }
+
+   private final Payload directoryPayload = new ByteArrayPayload(new byte[] {}) {
+      {
+         getContentMetadata().setContentType("application/directory");
+      }
+   };
+
+   @Override
+   public void deleteDirectory(String containerName, String directory) {
+      api.objectApiInRegionForContainer(region.getId(), containerName).delete(directory);
+   }
+
+   @Override
+   public long countBlobs(String containerName) {
+      Container container = api.containerApiInRegion(region.getId()).get(containerName);
+      // undefined if container doesn't exist, so default to zero
+      return container != null ? container.objectCount() : 0;
+   }
+
+   @Override
+   public void clearContainer(String containerName) {
+      clearContainer(containerName, recursive());
+   }
+
+   @Override
+   public void clearContainer(String containerName, ListContainerOptions options) {
+      // this could be implemented to use bulk delete
+      clearList.execute(containerName, options);
+   }
+
+   @Override
+   public void deleteContainer(String container) {
+      clearContainer(container, recursive());
+      api.containerApiInRegion(region.getId()).deleteIfEmpty(container);
       containerCache.invalidate(container);
-      return true;
    }
 
    protected final LoadingCache<String, Optional<Container>> containerCache = CacheBuilder.newBuilder().build(
          new CacheLoader<String, Optional<Container>>() {
             public Optional<Container> load(String container) {
-               return Optional.fromNullable(api.containerApiInRegion(regionId()).get(container));
+               return Optional.fromNullable(api.containerApiInRegion(region.getId()).get(container));
             }
          });
 
    protected Function<SwiftObject, MutableBlobMetadata> toBlobMetadata(String container) {
       return new ToBlobMetadata(containerCache.getUnchecked(container).get());
+   }
+
+   @Override
+   public long countBlobs(String containerName, ListContainerOptions options) {
+      throw new UnsupportedOperationException();
    }
 }

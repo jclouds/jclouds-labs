@@ -16,63 +16,52 @@
  */
 package org.jclouds.openstack.swift.v1.blobstore.config;
 
-import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
-
-import java.net.URI;
-import java.util.Map;
-
-import javax.inject.Singleton;
+import javax.inject.Inject;
 
 import org.jclouds.blobstore.BlobRequestSigner;
 import org.jclouds.date.TimeStamp;
-import org.jclouds.location.Region;
-import org.jclouds.openstack.swift.v1.SwiftApi;
-import org.jclouds.openstack.swift.v1.TemporaryUrlSigner;
 import org.jclouds.openstack.swift.v1.blobstore.RegionScopedTemporaryUrlBlobSigner;
 
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
+import com.google.common.base.Function;
+import com.google.common.collect.ForwardingObject;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Named;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 public class SignUsingTemporaryUrls extends AbstractModule {
 
    @Override
    protected void configure() {
-      bind(BlobRequestSigner.class).to(RegionScopedTemporaryUrlBlobSigner.class);
+      install(new FactoryModuleBuilder().build(Factory.class));
+   }
+
+   static interface Factory {
+      RegionScopedTemporaryUrlBlobSigner create(String in);
+   }
+
+   @Provides
+   Function<String, BlobRequestSigner> blobRequestSigner(FactoryFunction in) {
+      return in;
+   }
+
+   static class FactoryFunction extends ForwardingObject implements Function<String, BlobRequestSigner> {
+      @Inject
+      Factory delegate;
+
+      @Override
+      protected Factory delegate() {
+         return delegate;
+      }
+
+      @Override
+      public BlobRequestSigner apply(String in) {
+         return delegate.create(in);
+      }
    }
 
    @Provides
    @TimeStamp
    protected Long unixEpochTimestamp() {
       return System.currentTimeMillis() / 1000;
-   }
-
-   @Provides
-   @Singleton
-   Supplier<TemporaryUrlSigner> regionScopedTemporaryUrlSigner(final SwiftApi api,
-         @Region final Supplier<String> defaultRegion, @Named(PROPERTY_SESSION_INTERVAL) final long seconds) {
-      return Suppliers.memoize(new Supplier<TemporaryUrlSigner>() {
-
-         @Override
-         public TemporaryUrlSigner get() {
-            return TemporaryUrlSigner.checkApiEvery(api.accountApiInRegion(defaultRegion.get()), seconds);
-         }
-      });
-   }
-
-   @Provides
-   @Singleton
-   @Region
-   Supplier<URI> storageUrl(@Region final Supplier<String> defaultRegion,
-         @Region final Supplier<Map<String, Supplier<URI>>> regionToUris) {
-      return Suppliers.memoize(new Supplier<URI>() {
-
-         @Override
-         public URI get() {
-            return regionToUris.get().get(defaultRegion.get()).get();
-         }
-      });
    }
 }

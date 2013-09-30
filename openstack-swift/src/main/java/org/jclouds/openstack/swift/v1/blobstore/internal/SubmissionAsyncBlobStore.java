@@ -56,7 +56,7 @@ public class SubmissionAsyncBlobStore extends ForwardingObject implements AsyncB
    private final ListeningExecutorService executor;
 
    @Inject
-   SubmissionAsyncBlobStore(BlobStore blobstore, @Named(PROPERTY_USER_THREADS) ListeningExecutorService executor) {
+   public SubmissionAsyncBlobStore(BlobStore blobstore, @Named(PROPERTY_USER_THREADS) ListeningExecutorService executor) {
       this.blobstore = checkNotNull(blobstore, "blobstore");
       this.executor = checkNotNull(executor, "executor");
    }

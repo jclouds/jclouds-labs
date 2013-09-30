@@ -24,12 +24,11 @@ import org.jclouds.domain.Location;
 import org.jclouds.openstack.swift.v1.domain.Container;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 
 public class ToResourceMetadata implements Function<Container, StorageMetadata> {
-   private Supplier<Location> region;
+   private Location region;
 
-   public ToResourceMetadata(Supplier<Location> region) {
+   public ToResourceMetadata(Location region) {
       this.region = region;
    }
 
@@ -37,7 +36,7 @@ public class ToResourceMetadata implements Function<Container, StorageMetadata> 
    public StorageMetadata apply(Container from) {
       MutableStorageMetadata to = new MutableStorageMetadataImpl();
       to.setName(from.name());
-      to.setLocation(region.get());
+      to.setLocation(region);
       to.setType(StorageType.CONTAINER);
       to.setUserMetadata(from.metadata());
       return to;
