@@ -51,10 +51,12 @@
         <appender-ref ref="FILE" />
     </logger>
 
+<!--
     <logger name="jclouds.wire">
         <level value="DEBUG" />
         <appender-ref ref="WIREFILE" />
     </logger>
+-->
 
     <logger name="jclouds.headers">
         <level value="DEBUG" />
