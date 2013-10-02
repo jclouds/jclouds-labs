@@ -38,7 +38,7 @@ import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import com.google.common.math.DoubleMath;
 import com.google.inject.Inject;
 
 /**
@@ -55,21 +55,24 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
    }
 
    /**
-    * Extracts the user password from the json response
+    * Parses the Group from the response
     */
    @SuppressWarnings("unchecked")
    public Group apply(HttpResponse from) {
+      // This needs to be refactored when the service is in a more final state and changing less often
+      // A lot of the complexity is expected to go away
+
       Map<String, Object> result = json.apply(from);
 
       Map<String, Object> group = (Map<String, Object>) result.get("group");
       Map<String, Object> groupConfigurationMap = (Map<String, Object>) group.get("groupConfiguration");
       Map<String, Object> launchConfigurationMap = (Map<String, Object>) group.get("launchConfiguration");
-      List<ScalingPolicyResponse> scalingPoliciesList = Lists.newArrayList();
+      ImmutableList.Builder<ScalingPolicyResponse> scalingPoliciesList = ImmutableList.builder();
       Map<String, Object> args = (Map<String, Object>) launchConfigurationMap.get("args");
       Map<String, Object> server = (Map<String, Object>) args.get("server");      
 
-      List<Personality> personalities = Lists.newArrayList();
-      List<String> networks = Lists.newArrayList();
+      ImmutableList.Builder<Personality> personalities = ImmutableList.builder();
+      ImmutableList.Builder<String> networks = ImmutableList.builder();
       for(Map<String,String> jsonPersonality : (List<Map<String,String>>) server.get("personality")) {
          personalities.add(Personality.builder().path(jsonPersonality.get("path")).contents(jsonPersonality.get("contents")).build());
       }
@@ -78,7 +81,7 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
          networks.add(jsonNetwork.get("uuid"));
       }
 
-      List<LoadBalancer> loadBalancers = Lists.newArrayList();
+      ImmutableList.Builder<LoadBalancer> loadBalancers = ImmutableList.builder();
       for(Map<String,Double> jsonLoadBalancer : (List<Map<String,Double>>) args.get("loadBalancers")) {
          loadBalancers.add(
                LoadBalancer.builder().id( ((Double)jsonLoadBalancer.get("loadBalancerId")).intValue() ).port( ((Double)jsonLoadBalancer.get("port")).intValue() ).build()
@@ -86,14 +89,14 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
       }
 
       LaunchConfiguration launchConfiguration = LaunchConfiguration.builder()
-            .loadBalancers(loadBalancers)
+            .loadBalancers(loadBalancers.build())
             .serverName((String) server.get("name"))
             .serverImageRef((String) server.get("imageRef"))
             .serverFlavorRef((String) server.get("flavorRef"))
             .serverDiskConfig((String) server.get("OS-DCF:diskConfig"))
             .serverMetadata((Map<String, String>) server.get("metadata"))
-            .personalities(personalities)
-            .networks(networks)
+            .personalities(personalities.build())
+            .networks(networks.build())
             .type(LaunchConfigurationType.getByValue((String) launchConfigurationMap.get("type")).get())
             .build();
 
@@ -114,26 +117,28 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
             }  
          }
 
-         List<Link> links = Lists.newArrayList();
+         ImmutableList.Builder<Link> links = ImmutableList.builder();
          for(Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
             Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
             links.add(link);
          }
+
+         Double d = (Double)scalingPolicyMap.get(targetType.toString()); // GSON only knows double now
 
          ScalingPolicyResponse scalingPolicyResponse = 
                new ScalingPolicyResponse(
                      (String)scalingPolicyMap.get("name"),
                      ScalingPolicyType.getByValue((String)scalingPolicyMap.get("type")).get(),
                      ((Double)scalingPolicyMap.get("cooldown")).intValue(),
-                     ((Double)scalingPolicyMap.get(targetType.toString())).intValue(),
-                     targetType,
-                     ImmutableList.copyOf(links),
-                     (String) scalingPolicyMap.get("id")
+                     DoubleMath.isMathematicalInteger(d) ? Integer.toString(d.intValue()) : Double.toString(d), 
+                           targetType,
+                           ImmutableList.copyOf(links.build()),
+                           (String) scalingPolicyMap.get("id")
                      );
          scalingPoliciesList.add(scalingPolicyResponse);
       }
 
-      List<Link> links = Lists.newArrayList();
+      ImmutableList.Builder<Link> links = ImmutableList.builder();
       for(Map<String, String> linkMap : (List<Map<String, String>>) group.get("links")) {
          Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
          links.add(link);
@@ -142,10 +147,10 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
       String groupId = (String) group.get("id");
       return Group.builder()
             .id(groupId)
-            .scalingPolicy(scalingPoliciesList)
+            .scalingPolicy(scalingPoliciesList.build())
             .groupConfiguration(groupConfiguration)
             .launchConfiguration(launchConfiguration)
-            .links(links)
+            .links(links.build())
             .build();
    }
 }

@@ -30,7 +30,7 @@ import com.google.gson.annotations.SerializedName;
  * @see LaunchConfiguration#getLoadBalancers()
  * @author Zack Shoylev
  */
-public class LoadBalancer { 
+public class LoadBalancer {
    private final int port;
    @SerializedName("loadBalancerId")
    private final int id;

@@ -91,7 +91,7 @@ public class GroupApiExpectTest extends BaseAutoscaleApiExpectTest {
             .type(ScalingPolicyType.WEBHOOK)
             .name("scale up by 1")
             .targetType(ScalingPolicyTargetType.INCREMENTAL)
-            .target(1)
+            .target("1")
             .build();
       scalingPolicies.add(scalingPolicy);
 
@@ -108,7 +108,7 @@ public class GroupApiExpectTest extends BaseAutoscaleApiExpectTest {
       assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getHref().toString(), "https://ord.autoscale.api.rackspacecloud.com/v1.0/829409/groups/6791761b-821a-4d07-820d-0b2afc7dd7f6/policies/dceb14ac-b2b3-4f06-aac9-a5b6cd5d40e1/");
       assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getRelation(), Link.Relation.SELF);
       assertEquals(g.getScalingPolicies().get(0).getCooldown(), 0);
-      assertEquals(g.getScalingPolicies().get(0).getTarget(), 1);
+      assertEquals(g.getScalingPolicies().get(0).getTarget(), "1");
       assertEquals(g.getScalingPolicies().get(0).getTargetType(), ScalingPolicyTargetType.INCREMENTAL);
       assertEquals(g.getScalingPolicies().get(0).getType(), ScalingPolicyType.WEBHOOK);
       assertEquals(g.getScalingPolicies().get(0).getName(), "scale up by 1");
@@ -176,7 +176,7 @@ public class GroupApiExpectTest extends BaseAutoscaleApiExpectTest {
             .type(ScalingPolicyType.WEBHOOK)
             .name("scale up by 1")
             .targetType(ScalingPolicyTargetType.INCREMENTAL)
-            .target(1)
+            .target("1")
             .build();
       scalingPolicies.add(scalingPolicy);
 
@@ -353,5 +353,163 @@ public class GroupApiExpectTest extends BaseAutoscaleApiExpectTest {
 
       boolean success = api.resume("1234567890");
       assertFalse(success);
+   }
+
+   public void testGetGroupConfiguration() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/config");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint).build(),
+            HttpResponse.builder().statusCode(200)
+            .payload(payloadFromResource("/autoscale_groups_configuration_get_response.json")).build())
+            .getGroupApiForZone("DFW");
+
+      GroupConfiguration gc = api.getGroupConfiguration("1234567890");
+      assertEquals(gc.getCooldown(), 60);
+      assertEquals(gc.getMaxEntities(), 100);
+   }
+
+   public void testGetGroupConfigurationFail() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/config");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint).build(),
+            HttpResponse.builder().statusCode(404)
+            .payload(payloadFromResource("/autoscale_groups_configuration_get_response.json")).build())
+            .getGroupApiForZone("DFW");
+
+      GroupConfiguration gc = api.getGroupConfiguration("1234567890");
+      assertEquals(gc, null);
+   }
+
+   public void testGetLaunchConfiguration() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/launch");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint).build(),
+            HttpResponse.builder().statusCode(200)
+            .payload(payloadFromResource("/autoscale_groups_launch_configuration_get_response.json")).build())
+            .getGroupApiForZone("DFW");
+
+      LaunchConfiguration lc = api.getLaunchConfiguration("1234567890");
+      assertEquals(lc.getServerName(), "webhead");
+      assertEquals(lc.getType(), LaunchConfigurationType.LAUNCH_SERVER);
+   }
+
+   public void testGetLaunchConfigurationFail() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/launch");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().endpoint(endpoint).build(),
+            HttpResponse.builder().statusCode(404)
+            .payload(payloadFromResource("/autoscale_groups_launch_configuration_get_response.json")).build())
+            .getGroupApiForZone("DFW");
+
+      LaunchConfiguration lc = api.getLaunchConfiguration("1234567890");
+      assertEquals(lc, null);
+   }
+
+   public void testUpdateGroupConfiguration() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/config");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().method("PUT").endpoint(endpoint)
+            .payload(payloadFromResourceWithContentType("/autoscale_groups_update_configuration_request.json", MediaType.APPLICATION_JSON)).build(),
+            HttpResponse.builder().statusCode(200)
+            .build())
+            .getGroupApiForZone("DFW");
+
+      GroupConfiguration gc = GroupConfiguration.builder()
+            .name("workers")
+            .cooldown(60)
+            .minEntities(5)
+            .maxEntities(100)
+            .metadata(ImmutableMap.of("firstkey", "this is a string", "secondkey", "1"))
+            .build();
+
+      boolean result = api.updateGroupConfiguration("1234567890", gc);
+      assertEquals(result, true);
+   }
+
+   public void testUpdateGroupConfigurationFail() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/config");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().method("PUT").endpoint(endpoint)
+            .payload(payloadFromResourceWithContentType("/autoscale_groups_update_configuration_request.json", MediaType.APPLICATION_JSON)).build(),
+            HttpResponse.builder().statusCode(404)
+            .build())
+            .getGroupApiForZone("DFW");
+
+      GroupConfiguration gc = GroupConfiguration.builder()
+            .name("workers")
+            .cooldown(60)
+            .minEntities(5)
+            .maxEntities(100)
+            .metadata(ImmutableMap.of("firstkey", "this is a string", "secondkey", "1"))
+            .build();
+
+      boolean result = api.updateGroupConfiguration("1234567890", gc);
+      assertFalse(result);
+   }
+
+   public void testUpdateGroupLaunchConfiguration() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/launch");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().method("PUT").endpoint(endpoint)
+            .payload(payloadFromResourceWithContentType("/autoscale_groups_update_launch_configuration_request.json", MediaType.APPLICATION_JSON)).build(),
+            HttpResponse.builder().statusCode(200)
+            .build())
+            .getGroupApiForZone("DFW");
+
+      LaunchConfiguration lc = LaunchConfiguration.builder()
+            .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
+            .serverName("autoscale_server")
+            .serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
+            .serverFlavorRef("2")
+            .serverDiskConfig("AUTO")
+            .serverMetadata(ImmutableMap.of("build_config","core","meta_key_1","meta_value_1","meta_key_2","meta_value_2"))
+            .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111","00000000-0000-0000-0000-000000000000"))
+            .personalities(ImmutableList.of(Personality.builder().path("/root/.csivh").contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
+            .type(LaunchConfigurationType.LAUNCH_SERVER)
+            .build();
+
+      boolean result = api.updateLaunchConfiguration("1234567890", lc);
+      assertEquals(result, true);
+   }
+
+   public void testUpdateGroupLaunchConfigurationFail() {
+      URI endpoint = URI.create("https://dfw.autoscale.api.rackspacecloud.com/v1.0/888888/groups/1234567890/launch");
+      GroupApi api = requestsSendResponses(
+            keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess,
+            authenticatedGET().method("PUT").endpoint(endpoint)
+            .payload(payloadFromResourceWithContentType("/autoscale_groups_update_launch_configuration_request.json", MediaType.APPLICATION_JSON)).build(),
+            HttpResponse.builder().statusCode(404)
+            .build())
+            .getGroupApiForZone("DFW");
+
+      LaunchConfiguration lc = LaunchConfiguration.builder()
+            .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
+            .serverName("autoscale_server")
+            .serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
+            .serverFlavorRef("2")
+            .serverDiskConfig("AUTO")
+            .serverMetadata(ImmutableMap.of("build_config","core","meta_key_1","meta_value_1","meta_key_2","meta_value_2"))
+            .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111","00000000-0000-0000-0000-000000000000"))
+            .personalities(ImmutableList.of(Personality.builder().path("/root/.csivh").contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
+            .type(LaunchConfigurationType.LAUNCH_SERVER)
+            .build();
+
+      boolean result = api.updateLaunchConfiguration("1234567890", lc);
+      assertFalse(result);
    }
 }

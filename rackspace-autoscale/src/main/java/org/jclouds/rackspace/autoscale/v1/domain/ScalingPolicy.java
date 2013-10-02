@@ -40,13 +40,13 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
    private final String name;
    private final ScalingPolicyType type;
    private final int cooldown;
-   private final int target;
+   private final String target;
    private final ScalingPolicyTargetType targetType;
 
    @ConstructorProperties({
       "name", "type", "cooldown", "target", "targetType"
    })
-   protected ScalingPolicy(String name, ScalingPolicyType type, int cooldown, int target, ScalingPolicyTargetType targetType) {
+   protected ScalingPolicy(String name, ScalingPolicyType type, int cooldown, String target, ScalingPolicyTargetType targetType) {
 
       this.name = checkNotNull(name, "name required");
       this.type = type;
@@ -86,7 +86,7 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
     * 
     * @see ScalingPolicy.Builder#target(int)
     */
-   public int getTarget() {
+   public String getTarget() {
       return this.target;
    }
 
@@ -142,7 +142,7 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
       protected String name;
       protected ScalingPolicyType type;
       protected int cooldown;
-      protected int target;
+      protected String target;
       protected ScalingPolicyTargetType targetType;
 
       /** 
@@ -181,7 +181,7 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
        * @return The builder object.
        * @see ScalingPolicy#getTarget()
        */
-      public Builder target(int target) {
+      public Builder target(String target) {
          this.target = target;
          return this;
       }

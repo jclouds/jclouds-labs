@@ -25,7 +25,6 @@ import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERV
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;

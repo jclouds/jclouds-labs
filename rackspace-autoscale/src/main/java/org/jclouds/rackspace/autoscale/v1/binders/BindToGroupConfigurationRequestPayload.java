@@ -16,46 +16,49 @@
  */
 package org.jclouds.rackspace.autoscale.v1.binders;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Map;
 
-import org.jclouds.http.HttpRequest;
-import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
-import org.jclouds.rackspace.autoscale.v1.internal.ParseHelper;
-import org.jclouds.rest.MapBinder;
-import org.jclouds.rest.binders.BindToJsonPayload;
+import javax.inject.Inject;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.Inject;
+import org.jclouds.http.HttpRequest;
+import org.jclouds.json.Json;
+import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
+import org.jclouds.rest.MapBinder;
+
+import com.google.common.collect.Maps;
 
 /**
- * Decouple building the json object from the domain objects structure by using the binder
+ * 
  * @author Zack Shoylev
  */
-public class BindCreateGroupToJson implements MapBinder {
+public class BindToGroupConfigurationRequestPayload implements MapBinder {
 
-   private final BindToJsonPayload jsonBinder;
+   protected final Json jsonBinder;
 
    @Inject
-   private BindCreateGroupToJson(BindToJsonPayload jsonBinder) {
-      this.jsonBinder = jsonBinder;
+   public BindToGroupConfigurationRequestPayload(Json jsonBinder) {
+      this.jsonBinder = checkNotNull(jsonBinder, "jsonBinder");
    }
 
-   @Override    
+   @Override
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
+      GroupConfiguration gc = (GroupConfiguration) postParams.get("groupConfiguration");
+      Map<String, Object> gcMap = Maps.newHashMap();
+      gcMap.put("name", gc.getName());
+      gcMap.put("cooldown", gc.getCooldown());
+      gcMap.put("minEntities", gc.getMinEntities());
+      gcMap.put("maxEntities", gc.getMaxEntities());
+      gcMap.put("metadata", gc.getMetadata());
 
-      ImmutableMap<String, Object> launchConfigurationMap = ParseHelper.buildLaunchConfigurationRequestMap(postParams);
-      GroupConfiguration groupConfiguration = (GroupConfiguration) postParams.get("groupConfiguration");
-      ImmutableList<Map<String, Object>> scalingPoliciesList = ParseHelper.buildScalingPoliciesRequestList(postParams);
-
-      return jsonBinder.bindToRequest(request, ImmutableMap.of(
-            "launchConfiguration", launchConfigurationMap, 
-            "groupConfiguration", groupConfiguration, 
-            "scalingPolicies", scalingPoliciesList));
+      request.setPayload(jsonBinder.toJson(gcMap));
+      request.getPayload().getContentMetadata().setContentType("application/json");
+      return request;
    }
 
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object toBind) {
-      throw new IllegalStateException("Create scaling group is a POST operation");
+      throw new IllegalStateException("Illegal unwrap operation");
    }
 }

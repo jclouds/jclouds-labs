@@ -16,7 +16,7 @@
  */
 package org.jclouds.rackspace.autoscale.us.v1.features;
 
-import org.jclouds.rackspace.autoscale.v1.features.GroupApiLiveTest;
+import org.jclouds.rackspace.autoscale.v1.features.ScalingPolicyApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
@@ -25,8 +25,8 @@ import org.testng.annotations.Test;
  * @author Zack Shoylev
  */
 @Test(groups = "unit", testName = "AutoscaleUSGroupApiLiveTest", singleThreaded = true)
-public class AutoscaleUSGroupApiLiveTest extends GroupApiLiveTest {
-   public AutoscaleUSGroupApiLiveTest() {
+public class AutoscaleUSScalingPolicyApiLiveTest extends ScalingPolicyApiLiveTest {
+   public AutoscaleUSScalingPolicyApiLiveTest() {
       provider = "rackspace-autoscale-us";
    }
 }

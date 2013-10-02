@@ -19,43 +19,34 @@ package org.jclouds.rackspace.autoscale.v1.binders;
 import java.util.Map;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.internal.ParseHelper;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 /**
  * Decouple building the json object from the domain objects structure by using the binder
  * @author Zack Shoylev
  */
-public class BindCreateGroupToJson implements MapBinder {
+public class BindScalingPolicyToJson implements MapBinder {
 
    private final BindToJsonPayload jsonBinder;
 
    @Inject
-   private BindCreateGroupToJson(BindToJsonPayload jsonBinder) {
+   private BindScalingPolicyToJson(BindToJsonPayload jsonBinder) {
       this.jsonBinder = jsonBinder;
    }
 
    @Override    
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
-
-      ImmutableMap<String, Object> launchConfigurationMap = ParseHelper.buildLaunchConfigurationRequestMap(postParams);
-      GroupConfiguration groupConfiguration = (GroupConfiguration) postParams.get("groupConfiguration");
-      ImmutableList<Map<String, Object>> scalingPoliciesList = ParseHelper.buildScalingPoliciesRequestList(postParams);
-
-      return jsonBinder.bindToRequest(request, ImmutableMap.of(
-            "launchConfiguration", launchConfigurationMap, 
-            "groupConfiguration", groupConfiguration, 
-            "scalingPolicies", scalingPoliciesList));
+      ScalingPolicy scalingPolicy = (ScalingPolicy) postParams.get("scalingPolicy");
+      return jsonBinder.bindToRequest(request, ParseHelper.buildScalingPolicyMap(scalingPolicy));
    }
 
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object toBind) {
-      throw new IllegalStateException("Create scaling group is a POST operation");
+      throw new IllegalStateException("Update policy is a POST operation");
    }
 }

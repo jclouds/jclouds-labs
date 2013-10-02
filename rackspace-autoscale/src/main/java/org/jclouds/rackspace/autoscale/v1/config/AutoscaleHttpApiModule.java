@@ -46,12 +46,12 @@ import com.google.inject.Provides;
  */
 @ConfiguresHttpApi
 public class AutoscaleHttpApiModule extends HttpApiModule<AutoscaleApi> {
-   
+
    @Override
    protected void configure() {
       super.configure();
    }
-   
+
    @Provides
    @Singleton
    public Multimap<URI, URI> aliases() {
@@ -64,12 +64,12 @@ public class AutoscaleHttpApiModule extends HttpApiModule<AutoscaleApi> {
       bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(AutoscaleErrorHandler.class);
       bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(AutoscaleErrorHandler.class);
    }
-   
+
    @Provides
    Supplier<Optional<Tenant>> supplyTenant(Supplier<Access> access) {
       return Suppliers.compose(GetTenant.INSTANCE, access);
    }
-   
+
    private static enum GetTenant implements Function<Access, Optional<Tenant>> {
       INSTANCE;
       public Optional<Tenant> apply(Access in){

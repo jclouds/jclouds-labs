@@ -50,12 +50,20 @@ public class GroupState implements Comparable<GroupState> {
    protected GroupState(String id, List<Link> links, int activeCapacity, int pendingCapacity,
          int desiredCapacity, boolean paused, List<GroupInstance> groupInstances) {
       this.id = id;
-      this.links = ImmutableList.copyOf(links);
+      if (links == null) {
+         this.links = ImmutableList.of();
+      } else {
+         this.links = ImmutableList.copyOf(links);
+      }
       this.activeCapacity = activeCapacity;
       this.pendingCapacity = pendingCapacity;
       this.desiredCapacity = desiredCapacity;
       this.paused = paused;
-      this.groupInstances = ImmutableList.copyOf(groupInstances);
+      if (groupInstances == null) {
+         this.groupInstances = ImmutableList.of();
+      } else {
+         this.groupInstances = ImmutableList.copyOf(groupInstances);
+      }
    }
 
    /**

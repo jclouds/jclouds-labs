@@ -40,7 +40,7 @@ public class ScalingPolicyResponse extends ScalingPolicy{
    @ConstructorProperties({
       "name", "type", "cooldown", "target", "targetType", "links", "id"
    })
-   public ScalingPolicyResponse(String name, ScalingPolicyType type, int cooldown, int target, ScalingPolicyTargetType targetType, List<Link> links, String id) {
+   public ScalingPolicyResponse(String name, ScalingPolicyType type, int cooldown, String target, ScalingPolicyTargetType targetType, List<Link> links, String id) {
       super(name, type, cooldown, target, targetType);
       this.id = checkNotNull(id, "id required");
       this.links = ImmutableList.copyOf(checkNotNull(links, "links required"));

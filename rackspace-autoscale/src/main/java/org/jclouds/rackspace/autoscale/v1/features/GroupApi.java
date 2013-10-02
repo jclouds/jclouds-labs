@@ -16,7 +16,6 @@
  */
 package org.jclouds.rackspace.autoscale.v1.features;
 
-
 import java.util.List;
 
 import javax.inject.Named;
@@ -24,6 +23,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -32,11 +32,14 @@ import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.autoscale.v1.binders.BindCreateGroupToJson;
+import org.jclouds.rackspace.autoscale.v1.binders.BindLaunchConfigurationToJson;
+import org.jclouds.rackspace.autoscale.v1.binders.BindToGroupConfigurationRequestPayload;
 import org.jclouds.rackspace.autoscale.v1.domain.Group;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupState;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.functions.ParseGroupLaunchConfigurationResponse;
 import org.jclouds.rackspace.autoscale.v1.functions.ParseGroupResponse;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -98,7 +101,7 @@ public interface GroupApi {
     * @return true if successful.
     * @see GroupApi#pause(String)
     */
-   @Named("Groups:pause/{groupId}")
+   @Named("Groups:resume/{groupId}")
    @POST
    @Path("/groups/{groupId}/resume")
    @Consumes(MediaType.APPLICATION_JSON)
@@ -156,4 +159,58 @@ public interface GroupApi {
    @SelectJson("groups")
    @Consumes(MediaType.APPLICATION_JSON)
    FluentIterable<GroupState> listGroupStates();
+   
+   /**
+    * This operation gets the configuration for the scaling group.
+    * @return The group configuration for the scaling group.
+    * @see GroupConfiguration
+    */
+   @Named("Group:configuration")
+   @GET
+   @Path("/groups/{groupId}/config")
+   @SelectJson("groupConfiguration")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   GroupConfiguration getGroupConfiguration(@PathParam("groupId") String id);
+   
+   /**
+    * This operation updates the configuration for the scaling group.
+    * @return true if successful.
+    * @see GroupConfiguration
+    */
+   @Named("Group:updateConfiguration")
+   @PUT
+   @Path("/groups/{groupId}/config")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(FalseOnNotFoundOr404.class)
+   @MapBinder(BindToGroupConfigurationRequestPayload.class)
+   boolean updateGroupConfiguration(@PathParam("groupId") String id,
+         @PayloadParam("groupConfiguration") GroupConfiguration groupConfiguration);
+   
+   /**
+    * This operation gets the launch configuration for the scaling group.
+    * @return The launch configuration for the scaling group.
+    * @see LaunchConfiguration
+    */
+   @Named("Group:launchConfiguration")
+   @GET
+   @Path("/groups/{groupId}/launch")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   @ResponseParser(ParseGroupLaunchConfigurationResponse.class)
+   LaunchConfiguration getLaunchConfiguration(@PathParam("groupId") String id);
+   
+   /**
+    * This operation updates the launch configuration for the scaling group.
+    * @return true if successful.
+    * @see LaunchConfiguration
+    */
+   @Named("Group:updateLaunchConfiguration")
+   @PUT
+   @Path("/groups/{groupId}/launch")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(FalseOnNotFoundOr404.class)
+   @MapBinder(BindLaunchConfigurationToJson.class)
+   boolean updateLaunchConfiguration(@PathParam("groupId") String id, 
+         @PayloadParam("launchConfiguration") LaunchConfiguration launchConfiguration);
 }
