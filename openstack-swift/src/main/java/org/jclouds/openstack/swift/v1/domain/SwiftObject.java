@@ -32,6 +32,8 @@ import org.jclouds.openstack.swift.v1.features.ObjectApi;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * @see <a
@@ -44,15 +46,17 @@ public class SwiftObject implements Comparable<SwiftObject> {
    private final URI uri;
    private final String etag;
    private final Date lastModified;
+   private final Multimap<String, String> headers;
    private final Map<String, String> metadata;
    private final Payload payload;
 
-   protected SwiftObject(String name, URI uri, String etag, Date lastModified, Map<String, String> metadata,
-         Payload payload) {
+   protected SwiftObject(String name, URI uri, String etag, Date lastModified,
+         Multimap<String, String> headers, Map<String, String> metadata, Payload payload) {
       this.name = checkNotNull(name, "name");
       this.uri = checkNotNull(uri, "uri of %s", uri);
       this.etag = checkNotNull(etag, "etag of %s", name).replace("\"", "");
       this.lastModified = checkNotNull(lastModified, "lastModified of %s", name);
+      this.headers = headers == null ? ImmutableMultimap.<String, String> of() : checkNotNull(headers, "headers of %s", name);
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
       this.payload = checkNotNull(payload, "payload of %s", name);
    }
@@ -79,6 +83,10 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    public Date lastModified() {
       return lastModified;
+   }
+
+   public Multimap<String, String> headers() {
+      return headers;
    }
 
    /**
@@ -159,6 +167,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       protected String etag;
       protected Date lastModified;
       protected Payload payload;
+      protected Multimap<String, String> headers;
       protected Map<String, String> metadata = ImmutableMap.of();
 
       /**
@@ -201,6 +210,11 @@ public class SwiftObject implements Comparable<SwiftObject> {
          return this;
       }
 
+      public Builder headers(Multimap<String, String> headers) {
+         this.headers = headers;
+         return this;
+      }
+
       /**
        * Will lower-case all metadata keys due to a swift implementation
        * decision.
@@ -217,7 +231,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       public SwiftObject build() {
-         return new SwiftObject(name, uri, etag, lastModified, metadata, payload);
+         return new SwiftObject(name, uri, etag, lastModified, headers, metadata, payload);
       }
 
       public Builder fromObject(SwiftObject from) {
@@ -225,6 +239,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
                .uri(from.uri()) //
                .etag(from.etag()) //
                .lastModified(from.lastModified()) //
+               .headers(from.headers()) //
                .metadata(from.metadata()) //
                .payload(from.payload());
       }

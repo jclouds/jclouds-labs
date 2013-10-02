@@ -215,6 +215,7 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
       }
       Blob blob = new BlobImpl(toBlobMetadata(container).apply(object));
       blob.setPayload(object.payload());
+      blob.setAllHeaders(object.headers());
       return blob;
    }
 

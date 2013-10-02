@@ -52,6 +52,7 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
             .etag(from.getFirstHeaderOrNull(ETAG)) //
             .payload(from.getPayload()) //
             .lastModified(dates.rfc822DateParse(from.getFirstHeaderOrNull(LAST_MODIFIED))) //
+            .headers(from.getHeaders())
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
    }
 
