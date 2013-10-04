@@ -77,7 +77,7 @@ public class GetTokenFromApi implements Function<Credentials, String> {
 
       HttpResponse response = http.invoke(HttpRequest.builder() //
             .method("GET") //
-            .endpoint(URI.create(provider.getEndpoint())) //
+            .endpoint(URI.create(provider.getEndpoint() + "/login")) //
             .addHeader(AUTHORIZATION, basic(input.identity, input.credential)) //
             .build());
 
