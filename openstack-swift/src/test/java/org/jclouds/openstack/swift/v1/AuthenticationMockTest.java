@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 import java.util.Properties;
 
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
-import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -37,7 +37,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
  * @author Adrian Cole
  */
 @Test
-public class AuthenticationMockTest extends BaseSwiftMockTest {
+public class AuthenticationMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    @DataProvider(name = "jclouds.keystone.credential-type")
    Object[][] credentialTypeToPostBody() {
@@ -59,7 +59,7 @@ public class AuthenticationMockTest extends BaseSwiftMockTest {
          Properties overrides = new Properties();
          overrides.setProperty("jclouds.keystone.credential-type", credentialType);
 
-         SwiftApi api = swiftApi(server.getUrl("/").toString(), overrides);
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
 
          api.accountApiInRegion("DFW").get();
 

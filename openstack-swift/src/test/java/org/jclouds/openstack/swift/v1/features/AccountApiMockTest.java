@@ -22,9 +22,9 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Account;
-import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,7 +36,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
  * @author Jeremy Daggett
  */
 @Test
-public class AccountApiMockTest extends BaseSwiftMockTest {
+public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    /** upper-cases first char, and lower-cases rest!! **/
    public void getKnowingServerMessesWithMetadataKeyCaseFormat() throws Exception {
@@ -48,7 +48,7 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
             .addHeader("X-Account-Meta-Apiversion", "v1.1"));
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          Account account = api.accountApiInRegion("DFW").get();
          assertEquals(account.containerCount(), 3l);
          assertEquals(account.objectCount(), 42l);
@@ -74,7 +74,7 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
             .addHeader("X-Account-Meta-ApiVersion", "v1.1"));
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertTrue(api.accountApiInRegion("DFW").updateMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);
@@ -96,7 +96,7 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
       server.enqueue(accountResponse());
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertTrue(api.accountApiInRegion("DFW").updateTemporaryUrlKey("foobar"));
 
          assertEquals(server.getRequestCount(), 2);
@@ -116,7 +116,7 @@ public class AccountApiMockTest extends BaseSwiftMockTest {
       server.enqueue(accountResponse());
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertTrue(api.accountApiInRegion("DFW").deleteMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);

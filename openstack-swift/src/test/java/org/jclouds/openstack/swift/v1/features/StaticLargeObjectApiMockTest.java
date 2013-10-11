@@ -20,7 +20,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Segment;
-import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -31,7 +31,7 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 @Test
-public class StaticLargeObjectApiMockTest extends BaseSwiftMockTest {
+public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void replaceManifest() throws Exception {
       MockWebServer server = mockSwiftServer();
@@ -39,7 +39,7 @@ public class StaticLargeObjectApiMockTest extends BaseSwiftMockTest {
       server.enqueue(new MockResponse().addHeader(HttpHeaders.ETAG, "\"abcd\""));
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertEquals(
                api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").replaceManifest(
                      "myObject",
@@ -75,7 +75,7 @@ public class StaticLargeObjectApiMockTest extends BaseSwiftMockTest {
       server.enqueue(new MockResponse().setResponseCode(204));
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
@@ -94,7 +94,7 @@ public class StaticLargeObjectApiMockTest extends BaseSwiftMockTest {
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);

@@ -24,9 +24,9 @@ import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.exporter.TarGzExporter;
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.ExtractArchiveResponse;
-import org.jclouds.openstack.swift.v1.internal.BaseSwiftMockTest;
 import org.testng.annotations.Test;
 
 import com.google.common.io.ByteStreams;
@@ -36,7 +36,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 // TODO: cannot yet test bulk delete offline
 @Test
-public class BulkApiMockTest extends BaseSwiftMockTest {
+public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void extractArchive() throws Exception {
       GenericArchive files = ShrinkWrap.create(GenericArchive.class, "files.tar.gz");
@@ -51,7 +51,7 @@ public class BulkApiMockTest extends BaseSwiftMockTest {
       server.enqueue(new MockResponse().setResponseCode(201).setBody("{\"Number Files Created\": 10, \"Errors\": []}"));
 
       try {
-         SwiftApi api = swiftApi(server.getUrl("/").toString());
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          ExtractArchiveResponse response = api.bulkApiInRegion("DFW").extractArchive("myContainer",
                newByteArrayPayload(tarGz), "tar.gz");
          assertEquals(response.created(), 10);
