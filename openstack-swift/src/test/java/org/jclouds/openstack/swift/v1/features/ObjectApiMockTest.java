@@ -82,8 +82,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void list() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(containerResponse() //
             .addHeader("X-Container-Read", ".r:*,.rlistings") //
             .setBody(objectList));
@@ -105,8 +105,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void listOptions() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(containerResponse().setBody(objectList));
 
       try {
@@ -124,8 +124,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void replace() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse() //
             .setResponseCode(201) //
             .addHeader("ETag", "d9f5eb4bba4e2f2f046e54611bc8196b"));
@@ -152,8 +152,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    /** upper-cases first char, and lower-cases rest!! **/
    public void headKnowingServerMessesWithMetadataKeyCaseFormat() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(objectResponse() //
             // note silly casing
             .addHeader("X-Object-Meta-Apiname", "swift") //
@@ -182,8 +182,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void get() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(objectResponse() //
             // note silly casing
             .addHeader("X-Object-Meta-Apiname", "swift") //
@@ -215,8 +215,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void updateMetadata() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(objectResponse() //
             .addHeader("X-Object-Meta-ApiName", "swift") //
             .addHeader("X-Object-Meta-ApiVersion", "v1.1"));
@@ -239,8 +239,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void deleteMetadata() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(objectResponse());
 
       try {
@@ -261,8 +261,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void delete() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(204));
 
       try {
@@ -280,8 +280,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void alreadyDeleted() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {

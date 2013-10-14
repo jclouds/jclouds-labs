@@ -40,8 +40,8 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    /** upper-cases first char, and lower-cases rest!! **/
    public void getKnowingServerMessesWithMetadataKeyCaseFormat() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(accountResponse() //
             // note silly casing
             .addHeader("X-Account-Meta-Apiname", "swift") //
@@ -67,8 +67,8 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void updateMetadata() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(accountResponse() //
             .addHeader("X-Account-Meta-ApiName", "swift") //
             .addHeader("X-Account-Meta-ApiVersion", "v1.1"));
@@ -91,8 +91,8 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void updateTemporaryUrlKey() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(accountResponse());
 
       try {
@@ -111,8 +111,8 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void deleteMetadata() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(accountResponse());
 
       try {

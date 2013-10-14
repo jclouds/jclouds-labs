@@ -51,8 +51,8 @@ public class AuthenticationMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    @Test(dataProvider = "jclouds.keystone.credential-type")
    public void authenticateCredentialType(String credentialType, String expectedPost) throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(accountResponse());
 
       try {

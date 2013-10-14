@@ -46,8 +46,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          + "]";
 
    public void listFirstPage() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setBody(containerList));
 
       try {
@@ -73,8 +73,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void listAt() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setBody(containerList));
 
       try {
@@ -100,8 +100,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void createIfAbsent() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(201));
 
       try {
@@ -119,8 +119,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void createWithOptions() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(201));
 
       try {
@@ -142,8 +142,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void alreadyCreated() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(202));
 
       try {
@@ -162,8 +162,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    /** upper-cases first char, and lower-cases rest!! **/
    public void getKnowingServerMessesWithMetadataKeyCaseFormat() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(containerResponse() //
             // note silly casing
             .addHeader("X-Container-Meta-Apiname", "swift") //
@@ -189,8 +189,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void updateMetadata() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(containerResponse() //
             .addHeader("X-Container-Meta-ApiName", "swift") //
             .addHeader("X-Container-Meta-ApiVersion", "v1.1"));
@@ -213,8 +213,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void deleteMetadata() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(containerResponse());
 
       try {
@@ -235,8 +235,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void deleteIfEmpty() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(204));
 
       try {
@@ -254,8 +254,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    public void alreadyDeleted() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
@@ -274,8 +274,8 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    @Test(expectedExceptions = IllegalStateException.class)
    public void deleteWhenNotEmpty() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(409));
 
       try {

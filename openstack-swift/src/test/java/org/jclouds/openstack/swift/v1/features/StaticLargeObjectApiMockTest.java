@@ -34,8 +34,8 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void replaceManifest() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().addHeader(HttpHeaders.ETAG, "\"abcd\""));
 
       try {
@@ -70,8 +70,8 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
    }
 
    public void delete() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(204));
 
       try {
@@ -89,8 +89,8 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
    }
 
    public void alreadyDeleted() throws Exception {
-      MockWebServer server = mockSwiftServer();
-      server.enqueue(new MockResponse().setBody(access));
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
