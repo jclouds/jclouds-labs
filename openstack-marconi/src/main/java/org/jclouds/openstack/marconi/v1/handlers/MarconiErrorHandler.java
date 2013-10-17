@@ -29,11 +29,14 @@ public class MarconiErrorHandler implements HttpErrorHandler {
    public void handleError(HttpCommand command, HttpResponse response) {
       // it is important to always read fully and close streams
       byte[] data = closeClientButKeepContentStream(response);
-      String message = (data != null) ? new String(data) : null;
+      Exception exception;
 
-      Exception exception = (message != null) ?
-            new HttpResponseException(command, response, message) :
-            new HttpResponseException(command, response);
+      if (data == null) {
+         exception = new HttpResponseException(command, response);
+      }
+      else {
+         exception = new HttpResponseException(command, response, new String(data));
+      }
 
       switch (response.getStatusCode()) {
          case 401:
@@ -43,6 +46,7 @@ public class MarconiErrorHandler implements HttpErrorHandler {
             exception = new IllegalStateException(exception.getMessage(), exception);
             break;
       }
+
       command.setException(exception);
    }
 }

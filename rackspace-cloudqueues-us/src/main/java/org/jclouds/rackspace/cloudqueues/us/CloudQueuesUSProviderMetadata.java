@@ -84,7 +84,7 @@ public class CloudQueuesUSProviderMetadata extends BaseProviderMetadata {
                   .identityName("${userName}")
                   .credentialName("${apiKey}")
                   .defaultEndpoint("https://identity.api.rackspacecloud.com/v2.0/")
-                  .endpointName("identity service url ending in /v2.0/")
+                  .endpointName("Rackspace Cloud Identity service URL ending in /v2.0/")
                   .documentation(URI.create("http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html"))
                   .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                                               .add(CloudIdentityAuthenticationApiModule.class)
