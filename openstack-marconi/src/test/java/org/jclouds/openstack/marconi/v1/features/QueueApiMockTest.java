@@ -25,6 +25,7 @@ import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
 
+import java.util.Date;
 import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
@@ -182,6 +183,38 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          assertEquals(stats.getMessagesStats().getTotal(), 0);
          assertFalse(stats.getMessagesStats().getOldest().isPresent());
          assertFalse(stats.getMessagesStats().getNewest().isPresent());
+
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues/jclouds-test/stats HTTP/1.1");
+      }
+      finally {
+         server.shutdown();
+      }
+   }
+
+   public void getQueueStatsWithTotal() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
+      server.enqueue(new MockResponse().setResponseCode(200)
+            .setBody("{\"messages\": {\"claimed\": 0, \"oldest\": {\"age\": 0, \"href\": \"/v1/queues/jclouds-test/messages/526558b3f4919b655feba3a7\", \"created\": \"2013-10-21T16:39:15Z\"}, \"total\": 4, \"newest\": {\"age\": 0, \"href\": \"/v1/queues/jclouds-test/messages/526558b33ac24e663fc545e7\", \"created\": \"2013-10-21T16:39:15Z\"}, \"free\": 4}}"));
+
+      try {
+         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
+         QueueApi queueApi = api.getQueueApiForZone("DFW");
+         QueueStats stats = queueApi.getStats("jclouds-test");
+
+         assertEquals(stats.getMessagesStats().getClaimed(), 0);
+         assertEquals(stats.getMessagesStats().getFree(), 4);
+         assertEquals(stats.getMessagesStats().getTotal(), 4);
+         assertTrue(stats.getMessagesStats().getOldest().isPresent());
+         assertTrue(stats.getMessagesStats().getOldest().get().getCreated().before(new Date()));
+         assertEquals(stats.getMessagesStats().getOldest().get().getAge(), 0);
+         assertEquals(stats.getMessagesStats().getOldest().get().getId(), "526558b3f4919b655feba3a7");
+         assertTrue(stats.getMessagesStats().getNewest().isPresent());
+         assertTrue(stats.getMessagesStats().getNewest().get().getCreated().before(new Date()));
+         assertEquals(stats.getMessagesStats().getNewest().get().getAge(), 0);
+         assertEquals(stats.getMessagesStats().getNewest().get().getId(), "526558b33ac24e663fc545e7");
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

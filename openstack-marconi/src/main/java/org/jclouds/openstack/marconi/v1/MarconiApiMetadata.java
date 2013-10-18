@@ -57,6 +57,7 @@ public class MarconiApiMetadata extends BaseHttpApiMetadata<MarconiApi> {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(SERVICE_TYPE, ServiceType.QUEUES);
       properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
+
       return properties;
    }
 

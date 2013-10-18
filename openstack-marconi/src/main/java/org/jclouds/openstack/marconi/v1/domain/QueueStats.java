@@ -20,7 +20,7 @@ package org.jclouds.openstack.marconi.v1.domain;
 
 import com.google.common.base.Objects;
 
-import java.beans.ConstructorProperties;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Queue statistics, including how many messages are in the queue.
@@ -29,10 +29,10 @@ import java.beans.ConstructorProperties;
  */
 public class QueueStats {
 
-   private MessagesStats messages;
+   private final MessagesStats messages;
 
-   protected QueueStats(MessagesStats messages) {
-      this.messages = messages;
+   protected QueueStats(MessagesStats messageStats) {
+      this.messages = checkNotNull(messageStats);
    }
 
    /**
@@ -63,5 +63,42 @@ public class QueueStats {
    @Override
    public String toString() {
       return string().toString();
+   }
+
+   public static Builder builder() {
+      return new ConcreteBuilder();
+   }
+
+   public Builder toBuilder() {
+      return new ConcreteBuilder().fromQueueStats(this);
+   }
+
+   public static abstract class Builder {
+      protected abstract Builder self();
+
+      protected MessagesStats messagesStats;
+
+      /**
+       * @see QueueStats#getMessagesStats()
+       */
+      public Builder messageStats(MessagesStats messagesStats) {
+         this.messagesStats = messagesStats;
+         return self();
+      }
+
+      public QueueStats build() {
+         return new QueueStats(messagesStats);
+      }
+
+      public Builder fromQueueStats(QueueStats in) {
+         return this.messageStats(in.getMessagesStats());
+      }
+   }
+
+   private static class ConcreteBuilder extends Builder {
+      @Override
+      protected ConcreteBuilder self() {
+         return this;
+      }
    }
 }

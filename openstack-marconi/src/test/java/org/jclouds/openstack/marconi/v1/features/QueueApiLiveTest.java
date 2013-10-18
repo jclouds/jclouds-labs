@@ -16,15 +16,20 @@
  */
 package org.jclouds.openstack.marconi.v1.features;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.jclouds.openstack.marconi.v1.domain.CreateMessage;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 import org.jclouds.openstack.marconi.v1.internal.BaseMarconiApiLiveTest;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "QueueApiLiveTest", singleThreaded = true)
@@ -85,6 +90,31 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
    }
 
    @Test(dependsOnMethods = { "getStatsWithoutTotal" })
+   public void getStatsWithTotal() throws Exception {
+      for (String zoneId : api.getConfiguredZones()) {
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
+
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         String json1 = "{\"event\":{\"type\":\"hockey\",\"players\":[\"bob\",\"jim\",\"sally\"]}}";
+         CreateMessage message1 = CreateMessage.builder().ttl(120).body(json1).build();
+         List<CreateMessage> message = ImmutableList.of(message1);
+
+         messageApi.create(clientId, message);
+
+         QueueApi queueApi = api.getQueueApiForZone(zoneId);
+         QueueStats stats = queueApi.getStats("jclouds-test");
+
+         assertEquals(stats.getMessagesStats().getClaimed(), 0);
+         assertEquals(stats.getMessagesStats().getFree(), 1);
+         assertEquals(stats.getMessagesStats().getTotal(), 1);
+         assertTrue(stats.getMessagesStats().getOldest().isPresent());
+         assertNotNull(stats.getMessagesStats().getOldest().get().getId());
+         assertTrue(stats.getMessagesStats().getNewest().isPresent());
+         assertNotNull(stats.getMessagesStats().getNewest().get().getId());
+      }
+   }
+
+   @Test(dependsOnMethods = { "getStatsWithTotal" })
    public void delete() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);

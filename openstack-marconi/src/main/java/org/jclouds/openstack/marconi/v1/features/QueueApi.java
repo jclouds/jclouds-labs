@@ -19,9 +19,11 @@ package org.jclouds.openstack.marconi.v1.features;
 import org.jclouds.Fallbacks;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
+import org.jclouds.openstack.marconi.v1.functions.ParseQueueStats;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SkipEncoding;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
@@ -44,6 +46,8 @@ import java.util.Map;
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)
 public interface QueueApi {
+   // TODO: Move name parameter into MarconiApi.getQueueApiForZone(String name, String zone)
+
    /**
     * Create a queue.
     *
@@ -79,6 +83,8 @@ public interface QueueApi {
    @Path("queues/{name}")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    boolean exists(@PathParam("name") String name);
+
+   // TODO stream method!
 
    /**
     * Sets metadata for the specified queue.
@@ -124,6 +130,7 @@ public interface QueueApi {
    @GET
    @Path("queues/{name}/stats")
    @Consumes(MediaType.APPLICATION_JSON)
+   @ResponseParser(ParseQueueStats.class)
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    QueueStats getStats(@PathParam("name") String name);
 }

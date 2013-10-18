@@ -31,11 +31,11 @@ import java.beans.ConstructorProperties;
  */
 public class MessagesStats {
 
-   private int claimed;
-   private int free;
-   private int total;
-   private Aged oldest;
-   private Aged newest;
+   private final int claimed;
+   private final int free;
+   private final int total;
+   private final Aged oldest;
+   private final Aged newest;
 
    @ConstructorProperties({
          "claimed", "free", "total", "oldest", "newest"
@@ -128,7 +128,7 @@ public class MessagesStats {
       protected Aged newest;
 
       /**
-       * @see MessagesStats#claimed
+       * @see MessagesStats#getClaimed()
        */
       public Builder claimed(int claimed) {
          this.claimed = claimed;
@@ -136,7 +136,7 @@ public class MessagesStats {
       }
 
       /**
-       * @see MessagesStats#free
+       * @see MessagesStats#getFree()
        */
       public Builder free(int free) {
          this.free = free;
@@ -144,7 +144,7 @@ public class MessagesStats {
       }
 
       /**
-       * @see MessagesStats#total
+       * @see MessagesStats#getTotal()
        */
       public Builder total(int total) {
          this.total = total;
@@ -152,7 +152,7 @@ public class MessagesStats {
       }
 
       /**
-       * @see MessagesStats#oldest
+       * @see MessagesStats#getOldest()
        */
       public Builder oldest(Aged oldest) {
          this.oldest = oldest;
@@ -160,7 +160,7 @@ public class MessagesStats {
       }
 
       /**
-       * @see MessagesStats#newest
+       * @see MessagesStats#getNewest()
        */
       public Builder newest(Aged newest) {
          this.newest = newest;
@@ -183,5 +183,4 @@ public class MessagesStats {
          return this;
       }
    }
-
 }

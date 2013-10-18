@@ -18,13 +18,15 @@ package org.jclouds.openstack.marconi.v1;
 
 import com.google.inject.Provides;
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.location.Region;
 import org.jclouds.location.Zone;
 import org.jclouds.location.functions.ZoneToEndpoint;
+import org.jclouds.openstack.marconi.v1.features.MessageApi;
 import org.jclouds.openstack.marconi.v1.features.QueueApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import java.io.Closeable;
 import java.util.Set;
 
@@ -43,8 +45,21 @@ public interface MarconiApi extends Closeable {
 
    /**
     * Provides access to Queue features.
+    *
+    * @param zone The zone where this queue will live.
     */
    @Delegate
    QueueApi getQueueApiForZone(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+
+   /**
+    * Provides access to Message features.
+    *
+    * @param zone The zone where this queue will live.
+    * @param name Name of the queue.
+    */
+   @Delegate
+   @Path("/queues/{name}")
+   MessageApi getMessageApiForZoneAndQueue(
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone, @PathParam("name") String name);
 }

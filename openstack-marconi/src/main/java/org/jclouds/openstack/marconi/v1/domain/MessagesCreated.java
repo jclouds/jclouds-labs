@@ -22,69 +22,49 @@ import com.google.common.base.Objects;
 
 import javax.inject.Named;
 import java.beans.ConstructorProperties;
-import java.util.Date;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The age of messages in a queue.
+ * The response to creating messages on a queue.
  *
  * @author Everett Toews
  */
-public class Aged {
+public class MessagesCreated {
 
-   private final int age;
-   private final Date created;
-   @Named("href")
-   private final String id;
+   @Named("resources")
+   private final List<String> messageIds;
 
    @ConstructorProperties({
-         "age", "created", "href"
+         "resources"
    })
-   protected Aged(int age, Date created, String id) {
-      this.age = age;
-      this.created = checkNotNull(created, "created required");
-      this.id = checkNotNull(id, "id required");
+   protected MessagesCreated(List<String> messageIds) {
+      this.messageIds = checkNotNull(messageIds, "messageIds required");
    }
 
    /**
-    * @return Age of the oldest/newest message in seconds.
+    * @return A list of message ids that correspond to each message submitted in the request, in order.
     */
-   public int getAge() {
-      return age;
-   }
-
-   /**
-    * @return Date/Time of the oldest/newest message.
-    */
-   public Date getCreated() {
-      return created;
-   }
-
-   /**
-    * @return Id of the oldest/newest message.
-    */
-   public String getId() {
-      return id;
+   public List<String> getMessageIds() {
+      return messageIds;
    }
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(age, created, id);
+      return Objects.hashCode(messageIds);
    }
 
    @Override
    public boolean equals(Object obj) {
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
-      Aged that = Aged.class.cast(obj);
-      return Objects.equal(this.age, that.age) && Objects.equal(this.created, that.created)
-            && Objects.equal(this.id, that.id);
+      MessagesCreated that = MessagesCreated.class.cast(obj);
+      return Objects.equal(this.messageIds, that.messageIds);
    }
 
    protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper(this)
-         .add("age", age).add("created", created).add("id", id);
+      return Objects.toStringHelper(this).add("messageIds", messageIds);
    }
 
    @Override
@@ -97,46 +77,28 @@ public class Aged {
    }
 
    public Builder toBuilder() {
-      return new ConcreteBuilder().fromAged(this);
+      return new ConcreteBuilder().fromMessageCreated(this);
    }
 
    public static abstract class Builder {
       protected abstract Builder self();
 
-      protected int age;
-      protected Date created;
-      protected String id;
+      protected List<String> messageIds;
 
       /**
-       * @see Aged#getAge()
+       * @see MessagesCreated#getMessageIds()
        */
-      public Builder age(int age) {
-         this.age = age;
+      public Builder messageIds(List<String> messageIds) {
+         this.messageIds = messageIds;
          return self();
       }
 
-      /**
-       * @see Aged#getCreated()
-       */
-      public Builder created(Date created) {
-         this.created = created;
-         return self();
+      public MessagesCreated build() {
+         return new MessagesCreated(messageIds);
       }
 
-      /**
-       * @see Aged#getId()
-       */
-      public Builder id(String id) {
-         this.id = id;
-         return self();
-      }
-
-      public Aged build() {
-         return new Aged(age, created, id);
-      }
-
-      public Builder fromAged(Aged in) {
-         return this.age(in.getAge()).created(in.getCreated()).id(in.getId());
+      public Builder fromMessageCreated(MessagesCreated in) {
+         return this.messageIds(in.getMessageIds());
       }
    }
 
@@ -146,4 +108,5 @@ public class Aged {
          return this;
       }
    }
+
 }
