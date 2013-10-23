@@ -802,7 +802,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
          return Enterprise.builder(in.context).name(in.getName())
                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-               .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+               .hdLimitsInMb(in.getHdSoftLimitInBytes(), in.getHdHardLimitInBytes())
                .storageLimits(in.getStorageSoft(), in.getStorageHard())
                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())

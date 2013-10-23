@@ -43,11 +43,15 @@ public abstract class DomainWithLimitsWrapper<T extends SingleResourceWithLimits
       return target.getCpuCountSoftLimit();
    }
 
-   public long getHdHardLimitInMb() {
+   public long getHdHardLimitInBytes() {
+      // Due to a bug in Abiquo, the hard drive limits are interpreted as bytes,
+      // though the name of the method makes reference to Mb      
       return target.getHdHardLimitInMb();
    }
 
-   public long getHdSoftLimitInMb() {
+   public long getHdSoftLimitInBytes() {
+      // Due to a bug in Abiquo, the hard drive limits are interpreted as bytes,
+      // though the name of the method makes reference to Mb
       return target.getHdSoftLimitInMb();
    }
 
@@ -95,16 +99,22 @@ public abstract class DomainWithLimitsWrapper<T extends SingleResourceWithLimits
       target.setCpuCountSoftLimit(cpuCountSoftLimit);
    }
 
-   public void setHdHardLimitInMb(final long hdHardLimitInMb) {
-      target.setHdHardLimitInMb(hdHardLimitInMb);
+   public void setHdHardLimitInBytes(final long hdHardLimit) {
+      // Due to a bug in Abiquo, the hard drive limits are interpreted as bytes,
+      // though the name of the method makes reference to Mb      
+      target.setHdHardLimitInMb(hdHardLimit);
    }
 
-   public void setHdLimitsInMb(final long softLimit, final long hardLimit) {
+   public void setHdLimitsInBytes(final long softLimit, final long hardLimit) {
+      // Due to a bug in Abiquo, the hard drive limits are interpreted as bytes,
+      // though the name of the method makes reference to Mb      
       target.setHdLimitsInMb(softLimit, hardLimit);
    }
 
-   public void setHdSoftLimitInMb(final long hdSoftLimitInMb) {
-      target.setHdSoftLimitInMb(hdSoftLimitInMb);
+   public void setHdSoftLimitInBytes(final long hdSoftLimit) {
+      // Due to a bug in Abiquo, the hard drive limits are interpreted as bytes,
+      // though the name of the method makes reference to Mb
+      target.setHdSoftLimitInMb(hdSoftLimit);
    }
 
    public void setPublicIPLimits(final long softLimit, final long hardLimit) {

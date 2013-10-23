@@ -112,7 +112,7 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto> {
          return Limits.builder(in.context, in.getDatacenter())
                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-               .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+               .hdLimitsInMb(in.getHdSoftLimitInBytes(), in.getHdHardLimitInBytes())
                .storageLimits(in.getStorageSoft(), in.getStorageHard())
                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
@@ -158,7 +158,7 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto> {
    public String toString() {
       return "Limits [id=" + getId() + ", repositoryHard=" + getRepositoryHard() + ", repositorySoft="
             + getRepositorySoft() + ", cpuCountHard=" + getCpuCountHardLimit() + ", cpuCountSoft="
-            + getCpuCountSoftLimit() + ", hdHardInMB=" + getHdHardLimitInMb() + ", hdSoftInMB=" + getHdSoftLimitInMb()
+            + getCpuCountSoftLimit() + ", hdHardInBytes=" + getHdHardLimitInBytes() + ", hdSoftInBytes=" + getHdSoftLimitInBytes()
             + ", publicIPsHard=" + getPublicIpsHard() + ", publicIpsSoft=" + getPublicIpsSoft() + ", ramHardInMB="
             + getRamHardLimitInMb() + ", ramSoftInMB=" + getRamSoftLimitInMb() + ", storageHard=" + getStorageHard()
             + ", storageSoft=" + getStorageSoft() + ", vlansHard=" + getVlansHard() + ", vlansSoft=" + getVlansSoft()

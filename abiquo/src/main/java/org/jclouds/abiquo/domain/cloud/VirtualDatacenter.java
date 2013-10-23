@@ -587,7 +587,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
          return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(in.getName())
                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-               .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+               .hdLimitsInMb(in.getHdSoftLimitInBytes(), in.getHdHardLimitInBytes())
                .storageLimits(in.getStorageSoft(), in.getStorageHard())
                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).hypervisorType(in.getHypervisorType());
