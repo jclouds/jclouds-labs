@@ -16,23 +16,29 @@
  */
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.abiquo.model.enumerator.VolumeState.ATTACHED;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
-
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.ApiContext;
 
 import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link VolumeManagementDto}.
@@ -88,6 +94,24 @@ public class Volume extends DomainWrapper<VolumeManagementDto> {
       VirtualDatacenterDto dto = context.getApi().getCloudApi().getVirtualDatacenter(virtualDatacenterId);
       virtualDatacenter = wrap(context, VirtualDatacenter.class, dto);
       return virtualDatacenter;
+   }
+
+   /**
+    * Retrieve the virtual machine this volume is attached to.
+    * 
+    * @return The virtual machine this volume is attached to, or null if it is
+    * not attached.
+    */
+   public VirtualMachine getVirtualMachine() {
+      checkState(ATTACHED == VolumeState.valueOf(target.getState()), "Volume is not attached to a VM");
+      RESTLink vmLink = checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_MACHINE),
+            ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_MACHINE);
+      vmLink.setType(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE);
+      HttpResponse response = context.getApi().get(vmLink);
+
+      ParseXMLWithJAXB<VirtualMachineWithNodeExtendedDto> parser = context.utils().injector()
+            .getInstance(Key.get(new TypeLiteral<ParseXMLWithJAXB<VirtualMachineWithNodeExtendedDto>>(){}));
+      return wrap(context, VirtualMachine.class, parser.apply(response));
    }
 
    public Tier getTier() {

@@ -59,4 +59,6 @@ public class ParentLinkName {
    public static final String NETWORK_GATEWAY = "network_configuration";
 
    public final static String TASK_RESULT = "result";
+   
+   public final static String VIRTUAL_MACHINE = "virtualmachine";
 }
