@@ -72,20 +72,20 @@
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.jclouds.api</groupId>
-      <artifactId>openstack-keystone</artifactId>
+      <groupId>org.apache.jclouds</groupId>
+      <artifactId>jclouds-core</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jclouds</groupId>
+      <artifactId>jclouds-core</artifactId>
       <version>${project.parent.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.jclouds</groupId>
-      <artifactId>jclouds-core</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.jclouds</groupId>
-      <artifactId>jclouds-core</artifactId>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>openstack-keystone</artifactId>
       <version>${project.parent.version}</version>
       <type>test-jar</type>
       <scope>test</scope>

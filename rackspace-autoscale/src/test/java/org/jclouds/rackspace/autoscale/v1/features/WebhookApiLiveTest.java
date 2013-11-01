@@ -17,9 +17,14 @@
 package org.jclouds.rackspace.autoscale.v1.features;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +40,10 @@ import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
+import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
+import org.jclouds.rackspace.autoscale.v1.domain.WebhookResponse;
 import org.jclouds.rackspace.autoscale.v1.internal.BaseAutoscaleApiLiveTest;
+import org.jclouds.rackspace.autoscale.v1.utils.AutoscaleUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -48,12 +56,12 @@ import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.Uninterruptibles;
 
 /**
- * Scaling Policy live test
+ * Webhook live test
  * 
  * @author Zack Shoylev
  */
-@Test(groups = "live", testName = "ScalingPolicyApiLiveTest", singleThreaded = true)
-public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
+@Test(groups = "live", testName = "WebhookApiLiveTest", singleThreaded = true)
+public class WebhookApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    private static Map<String, List<Group>> created = Maps.newHashMap();
 
@@ -84,7 +92,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                      .networks(
                            ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                            .personalities(
-                                 ImmutableList.of(Personality.builder().path("testfile")
+                                 ImmutableList.of(Personality.builder().path("/root/.csivh")
                                        .contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                                        .type(LaunchConfigurationType.LAUNCH_SERVER).build();
 
@@ -96,6 +104,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          Group g = groupApi.create(groupConfiguration, launchConfiguration, scalingPolicies);
          createdGroupList.add(g);
+
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         assertFalse( webhookApi.create("test_webhook", ImmutableMap.<String, Object>of()).isEmpty() );
 
          assertNotNull(g);
          assertNotNull(g.getId());
@@ -124,7 +135,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertEquals(g.getLaunchConfiguration().getServerFlavorRef(), "2");
          assertEquals(g.getLaunchConfiguration().getServerDiskConfig(), "AUTO");
          assertEquals(g.getLaunchConfiguration().getPersonalities().size(), 1);
-         assertEquals(g.getLaunchConfiguration().getPersonalities().get(0).getPath(), "testfile");
+         assertEquals(g.getLaunchConfiguration().getPersonalities().get(0).getPath(), "/root/.csivh");
          assertEquals(g.getLaunchConfiguration().getPersonalities().get(0).getContents(),
                "VGhpcyBpcyBhIHRlc3QgZmlsZS4=");
          assertEquals(g.getLaunchConfiguration().getNetworks().size(), 2);
@@ -146,154 +157,108 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    }
 
    @Test
-   public void testCreatePolicy() {
+   public void testCreateWebhook() {
       for (String zone : api.getConfiguredZones()) {
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         WebhookResponse webhook = webhookApi.create("test1", ImmutableMap.<String, Object>of("notes", "test metadata")).first().get();
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
-
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
-
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
-               .cooldown(3)
-               .type(ScalingPolicyType.WEBHOOK)
-               .name("scale up by one server")
-               .targetType(ScalingPolicyTargetType.INCREMENTAL)
-               .target("1")
-               .build();
-         scalingPolicies.add(scalingPolicy);
-
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
-         assertNotNull(scalingPolicyResponse.iterator().next().getId());
-         assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
-         assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
+         assertEquals(webhook.getName(), "test1");
+         assertEquals(webhook.getMetadata().get("notes"), "test metadata");
       }
    }
 
    @Test
-   public void testListPolicy() {
+   public void testCreateWebhooks() {
       for (String zone : api.getConfiguredZones()) {
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         FluentIterable<WebhookResponse> webhookList = webhookApi.create(
+               ImmutableList.of(
+                     Webhook.builder().name("test5").metadata(null).build(),
+                     Webhook.builder().name("test6").metadata(ImmutableMap.<String, Object>of("notes2", "different test")).build()
+                     ));
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
-
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.list();
-         assertNotNull(scalingPolicyResponse.iterator().next().getId());
+         assertEquals(webhookList.get(0).getName(), "test5");
+         assertNull(webhookList.get(0).getMetadata().get("notes"));
+         assertEquals(webhookList.get(1).getName(), "test6");
+         assertEquals(webhookList.get(1).getMetadata().get("notes2"), "different test");
       }
    }
 
    @Test
-   public void testGetPolicy() {
+   public void testUpdateWebhook() {
       for (String zone : api.getConfiguredZones()) {
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         String webhookId = webhookApi.list().first().get().getId();
+         assertTrue( webhookApi.update(webhookId, "updated_name", ImmutableMap.<String, Object>of()) );
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
-
-         assertNotNull(policyApi);
-         ScalingPolicyResponse listResponse = policyApi.list().iterator().next();
-         ScalingPolicyResponse getResponse = policyApi.get(listResponse.getId());
-         assertEquals(listResponse.getId(), getResponse.getId());
-         assertEquals(listResponse.getName(), getResponse.getName());
-         assertEquals(listResponse.getCooldown(), getResponse.getCooldown());
-         assertEquals(listResponse.getLinks(), getResponse.getLinks());
-         assertEquals(listResponse.getTarget(), getResponse.getTarget());
-         assertEquals(listResponse.getTargetType(), getResponse.getTargetType());
-         assertEquals(listResponse.getType(), getResponse.getType());
+         WebhookResponse webhook= webhookApi.get(webhookId);
+         assertEquals(webhook.getName(), "updated_name");
+         assertTrue( webhook.getMetadata().isEmpty() );
       }
    }
 
    @Test
-   public void testUpdatePolicy() {
+   public void testGetWebhook() {
       for (String zone : api.getConfiguredZones()) {
-
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
-
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
-
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
-               .cooldown(3)
-               .type(ScalingPolicyType.WEBHOOK)
-               .name("scale up by one server")
-               .targetType(ScalingPolicyTargetType.INCREMENTAL)
-               .target("1")
-               .build();
-         scalingPolicies.add(scalingPolicy);
-
-         ScalingPolicy updated = ScalingPolicy.builder()
-               .cooldown(3)
-               .type(ScalingPolicyType.WEBHOOK)
-               .name("scale up by 2 PERCENT server")
-               .targetType(ScalingPolicyTargetType.PERCENT_CHANGE)
-               .target("2")
-               .build();
-
-
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
-         String policyId = scalingPolicyResponse.iterator().next().getId();
-         assertNotNull(policyId);
-
-         boolean result = policyApi.update(policyId, updated);
-         assertTrue(result);
-
-         ScalingPolicyResponse updatedResponse = policyApi.get(policyId);
-
-         assertNotNull(updatedResponse.getId());
-         assertEquals(updatedResponse.getCooldown(), 3);
-         assertEquals(updatedResponse.getTarget(), "2");
-         assertEquals(updatedResponse.getTargetType(), ScalingPolicyTargetType.PERCENT_CHANGE);
-         assertEquals(updatedResponse.getType(), ScalingPolicyType.WEBHOOK);
-         assertEquals(updatedResponse.getName(), "scale up by 2 PERCENT server");
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         WebhookResponse webhookList = webhookApi.list().first().get();
+         WebhookResponse webhookGet = webhookApi.get(webhookList.getId());
+         assertNotNull(webhookList);
+         assertNotNull(webhookGet);
+         assertEquals(webhookList, webhookGet);
       }
    }
 
    @Test
-   public void testDeletePolicy() {
+   public void testListWebhook() {
       for (String zone : api.getConfiguredZones()) {
-
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
-
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
-
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
-               .cooldown(3)
-               .type(ScalingPolicyType.WEBHOOK)
-               .name("scale up by one server")
-               .targetType(ScalingPolicyTargetType.INCREMENTAL)
-               .target("1")
-               .build();
-         scalingPolicies.add(scalingPolicy);         
-
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
-         String policyId = scalingPolicyResponse.iterator().next().getId();
-         assertNotNull(policyId);
-
-         boolean result = policyApi.delete(policyId);
-         assertTrue(result);
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         assertFalse( webhookApi.list().isEmpty() );
       }
    }
 
    @Test
-   public void testExecutePolicy() {
+   public void testDeleteWebhook() {
       for (String zone : api.getConfiguredZones()) {
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         WebhookResponse webhook = webhookApi.create("test1", ImmutableMap.<String, Object>of("notes", "test metadata")).first().get();
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
-
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
-
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
-               .cooldown(3)
-               .type(ScalingPolicyType.WEBHOOK)
-               .name("scale up by 0 server")
-               .targetType(ScalingPolicyTargetType.INCREMENTAL)
-               .target("1")
-               .build();
-         scalingPolicies.add(scalingPolicy);         
-
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
-         String policyId = scalingPolicyResponse.iterator().next().getId();
-         assertNotNull(policyId);
-
-         boolean result = policyApi.execute(policyId);
-         assertTrue(result);
+         assertEquals(webhook.getName(), "test1");
+         assertEquals(webhook.getMetadata().get("notes"), "test metadata");
+         
+         assertTrue( webhookApi.delete(webhook.getId()) );
+         assertNull( webhookApi.get(webhook.getId()) );
       }
-   }   
+   }
+
+   @Test
+   public void testExecuteWebhook() throws IOException {
+      for (String zone : api.getConfiguredZones()) {
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         WebhookResponse webhook = webhookApi.create("test_execute", ImmutableMap.<String, Object>of("notes", "test metadata")).first().get();
+         
+         assertTrue( AutoscaleUtils.execute(webhook.getAnonymousExecutionURI().get()) , " for " + webhook + " in " + zone);
+      }
+   }
+
+   @Test
+   public void testExecuteWebhookFail() throws IOException, URISyntaxException {
+      for (String zone : api.getConfiguredZones()) {
+         Group g = created.get(zone).get(0);
+         WebhookApi webhookApi = api.getWebhookApiForGroupAndPolicyInZone(g.getId(), g.getScalingPolicies().iterator().next().getId(), zone);
+         WebhookResponse webhook = webhookApi.create("test_execute_fail", ImmutableMap.<String, Object>of("notes", "test metadata")).first().get();
+         
+         URI uri = new URI(webhook.getAnonymousExecutionURI().toString() + "123");
+         assertFalse( AutoscaleUtils.execute(uri) );
+      }
+   }
 
    @Override
    @AfterClass(groups = { "integration", "live" })
@@ -312,7 +277,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
             List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
             ScalingPolicy scalingPolicy = ScalingPolicy.builder()
-                  .cooldown(3)
+                  .cooldown(2)
                   .type(ScalingPolicyType.WEBHOOK)
                   .name("0 machines")
                   .targetType(ScalingPolicyTargetType.DESIRED_CAPACITY)
@@ -321,13 +286,14 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
             scalingPolicies.add(scalingPolicy);
 
             FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
-            String policyId = scalingPolicyResponse.first().get().getId();
+            String policyId = scalingPolicyResponse.iterator().next().getId();
 
             Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);
 
             policyApi.execute(policyId);
 
             Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);
+            policyApi.delete(policyId);
 
             if (!groupApi.delete(group.getId()))
                System.out.println("Could not delete an autoscale group after tests!");

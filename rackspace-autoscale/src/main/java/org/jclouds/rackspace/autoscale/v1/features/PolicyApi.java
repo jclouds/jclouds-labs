@@ -17,6 +17,7 @@
 package org.jclouds.rackspace.autoscale.v1.features;
 
 
+import java.io.Closeable;
 import java.util.List;
 
 import javax.inject.Named;
@@ -53,7 +54,8 @@ import com.google.common.collect.FluentIterable;
  * @author Zack Shoylev
  */
 @RequestFilters(AuthenticateRequest.class)
-public interface PolicyApi {
+@Consumes(MediaType.APPLICATION_JSON)
+public interface PolicyApi extends Closeable {
    /**
     * Create a scaling policy.
     * @param scalingPolicies The list of scaling policies.
@@ -64,7 +66,6 @@ public interface PolicyApi {
    @Named("Policy:create")
    @POST
    @Path("/policies")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @MapBinder(BindScalingPoliciesToJson.class)
    @ResponseParser(ParseScalingPoliciesResponse.class)
@@ -79,7 +80,6 @@ public interface PolicyApi {
    @GET
    @Path("/policies")
    @ResponseParser(ParseScalingPoliciesResponse.class)
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    FluentIterable<ScalingPolicyResponse> list();
 
@@ -92,7 +92,6 @@ public interface PolicyApi {
    @GET
    @Path("/policies/{scalingPolicyId}")
    @ResponseParser(ParseScalingPolicyResponse.class)
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
    ScalingPolicyResponse get(@PathParam("scalingPolicyId") String scalingPolicyId);
 
@@ -104,7 +103,6 @@ public interface PolicyApi {
    @Named("Policy:update")
    @PUT
    @Path("/policies/{scalingPolicyId}")
-   @Consumes(MediaType.APPLICATION_JSON)
    @MapBinder(BindScalingPolicyToJson.class)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean update(@PathParam("scalingPolicyId") String scalingPolicyId, @PayloadParam("scalingPolicy") ScalingPolicy scalingPolicy);
@@ -117,7 +115,6 @@ public interface PolicyApi {
    @Named("Policy:delete")
    @DELETE
    @Path("/policies/{scalingPolicyId}")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("scalingPolicyId") String scalingPolicyId);
 
@@ -129,7 +126,6 @@ public interface PolicyApi {
    @Named("Policy:execute")
    @POST
    @Path("/policies/{scalingPolicyId}/execute")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean execute(@PathParam("scalingPolicyId") String scalingPolicyId);
 }

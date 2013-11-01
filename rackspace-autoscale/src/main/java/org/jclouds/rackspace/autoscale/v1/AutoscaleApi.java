@@ -28,6 +28,7 @@ import org.jclouds.location.functions.ZoneToEndpoint;
 import org.jclouds.openstack.keystone.v2_0.domain.Tenant;
 import org.jclouds.rackspace.autoscale.v1.features.GroupApi;
 import org.jclouds.rackspace.autoscale.v1.features.PolicyApi;
+import org.jclouds.rackspace.autoscale.v1.features.WebhookApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
@@ -63,6 +64,15 @@ public interface AutoscaleApi extends Closeable{
    @Delegate
    @Path("/groups/{groupId}")
    PolicyApi getPolicyApiForGroupInZone(@PathParam("groupId") String groupId, 
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);   
+
+   /**
+    * Provides access to webhook management features.
+    */
+   @Delegate
+   @Path("/groups/{groupId}/policies/{policyId}")
+   WebhookApi getWebhookApiForGroupAndPolicyInZone(@PathParam("groupId") String groupId, 
+         @PathParam("policyId") String policyId, 
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
 
    /**

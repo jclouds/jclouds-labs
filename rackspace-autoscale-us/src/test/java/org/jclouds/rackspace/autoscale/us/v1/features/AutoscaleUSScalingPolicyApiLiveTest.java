@@ -20,11 +20,11 @@ import org.jclouds.rackspace.autoscale.v1.features.ScalingPolicyApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
- * Tests GroupApi Guice wiring and parsing
+ * Tests Scaling Policy Api - live
  *
  * @author Zack Shoylev
  */
-@Test(groups = "unit", testName = "AutoscaleUSGroupApiLiveTest", singleThreaded = true)
+@Test(groups = "live", testName = "AutoscaleUSScalingPolicyApiLiveTest", singleThreaded = true)
 public class AutoscaleUSScalingPolicyApiLiveTest extends ScalingPolicyApiLiveTest {
    public AutoscaleUSScalingPolicyApiLiveTest() {
       provider = "rackspace-autoscale-us";

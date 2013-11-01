@@ -16,6 +16,7 @@
  */
 package org.jclouds.rackspace.autoscale.v1.features;
 
+import java.io.Closeable;
 import java.util.List;
 
 import javax.inject.Named;
@@ -56,7 +57,8 @@ import com.google.common.collect.FluentIterable;
  * @author Zack Shoylev
  */
 @RequestFilters(AuthenticateRequest.class)
-public interface GroupApi {
+@Consumes(MediaType.APPLICATION_JSON)
+public interface GroupApi extends Closeable {
 
    /**
     * Create a scaling group.
@@ -72,7 +74,6 @@ public interface GroupApi {
    @Named("Group:create")
    @POST
    @Path("/groups")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
    @MapBinder(BindCreateGroupToJson.class)
    @ResponseParser(ParseGroupResponse.class)
@@ -90,7 +91,6 @@ public interface GroupApi {
    @Named("Groups:pause/{groupId}")
    @POST
    @Path("/groups/{groupId}/pause")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean pause(@PathParam("groupId") String groupId);
 
@@ -104,7 +104,6 @@ public interface GroupApi {
    @Named("Groups:resume/{groupId}")
    @POST
    @Path("/groups/{groupId}/resume")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean resume(@PathParam("groupId") String groupId);
 
@@ -117,7 +116,6 @@ public interface GroupApi {
    @Named("Groups:delete/{id}")
    @DELETE
    @Path("/groups/{id}")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("id") String groupId);
 
@@ -129,7 +127,6 @@ public interface GroupApi {
    @Named("Group:get/{id}")
    @GET
    @Path("/groups/{id}")
-   @Consumes(MediaType.APPLICATION_JSON)
    @ResponseParser(ParseGroupResponse.class)
    @Fallback(NullOnNotFoundOr404.class)
    Group get(@PathParam("id") String id);
@@ -144,7 +141,6 @@ public interface GroupApi {
    @GET
    @Path("/groups/{id}/state")
    @SelectJson("group")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
    GroupState getState(@PathParam("id") String id);
 
@@ -157,7 +153,6 @@ public interface GroupApi {
    @GET
    @Path("/groups")
    @SelectJson("groups")
-   @Consumes(MediaType.APPLICATION_JSON)
    FluentIterable<GroupState> listGroupStates();
    
    /**
@@ -169,7 +164,6 @@ public interface GroupApi {
    @GET
    @Path("/groups/{groupId}/config")
    @SelectJson("groupConfiguration")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
    GroupConfiguration getGroupConfiguration(@PathParam("groupId") String id);
    
@@ -181,7 +175,6 @@ public interface GroupApi {
    @Named("Group:updateConfiguration")
    @PUT
    @Path("/groups/{groupId}/config")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    @MapBinder(BindToGroupConfigurationRequestPayload.class)
    boolean updateGroupConfiguration(@PathParam("groupId") String id,
@@ -195,7 +188,6 @@ public interface GroupApi {
    @Named("Group:launchConfiguration")
    @GET
    @Path("/groups/{groupId}/launch")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(NullOnNotFoundOr404.class)
    @ResponseParser(ParseGroupLaunchConfigurationResponse.class)
    LaunchConfiguration getLaunchConfiguration(@PathParam("groupId") String id);
@@ -208,7 +200,6 @@ public interface GroupApi {
    @Named("Group:updateLaunchConfiguration")
    @PUT
    @Path("/groups/{groupId}/launch")
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    @MapBinder(BindLaunchConfigurationToJson.class)
    boolean updateLaunchConfiguration(@PathParam("groupId") String id, 

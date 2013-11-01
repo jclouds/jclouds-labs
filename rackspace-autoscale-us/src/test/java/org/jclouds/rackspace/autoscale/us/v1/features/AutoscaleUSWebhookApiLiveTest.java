@@ -16,17 +16,17 @@
  */
 package org.jclouds.rackspace.autoscale.us.v1.features;
 
-import org.jclouds.rackspace.autoscale.v1.features.GroupApiLiveTest;
+import org.jclouds.rackspace.autoscale.v1.features.WebhookApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
- * Tests GroupApi - live
+ * Tests WebhookApi - live
  *
  * @author Zack Shoylev
  */
-@Test(groups = "live", testName = "AutoscaleUSGroupApiLiveTest", singleThreaded = true)
-public class AutoscaleUSGroupApiLiveTest extends GroupApiLiveTest {
-   public AutoscaleUSGroupApiLiveTest() {
+@Test(groups = "live", testName = "AutoscaleUSWebhookApiLiveTest", singleThreaded = true)
+public class AutoscaleUSWebhookApiLiveTest extends WebhookApiLiveTest {
+   public AutoscaleUSWebhookApiLiveTest() {
       provider = "rackspace-autoscale-us";
    }
 }

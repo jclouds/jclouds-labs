@@ -52,7 +52,7 @@ import com.google.common.collect.Maps;
  * 
  * @author Zack Shoylev
  */
-@Test(groups = "unit", testName = "GroupApiLiveTest", singleThreaded = true)
+@Test(groups = "live", testName = "GroupApiLiveTest", singleThreaded = true)
 public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    private static Map<String, List<Group>> created = Maps.newHashMap();
@@ -76,7 +76,6 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
                .serverName("autoscale_server")
                .serverImageRef("57b8a366-ab2c-454b-939f-215303a4431f")
-               //.serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
                .serverMetadata(
@@ -85,13 +84,13 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                      .networks(
                            ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                            .personalities(
-                                 ImmutableList.of(Personality.builder().path("/root/.csivh")
+                                 ImmutableList.of(Personality.builder().path("testfile")
                                        .contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                                        .type(LaunchConfigurationType.LAUNCH_SERVER).build();
 
          List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder().cooldown(0).type(ScalingPolicyType.WEBHOOK)
+         ScalingPolicy scalingPolicy = ScalingPolicy.builder().cooldown(1).type(ScalingPolicyType.WEBHOOK)
                .name("scale up by 1").targetType(ScalingPolicyTargetType.INCREMENTAL).target("1").build();
          scalingPolicies.add(scalingPolicy);
 
@@ -111,7 +110,7 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                g.getScalingPolicies().get(0).getLinks().get(0).getHref().toString(),
                "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() +"/");
          assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getRelation(), Link.Relation.SELF);
-         assertEquals(g.getScalingPolicies().get(0).getCooldown(), 0);
+         assertEquals(g.getScalingPolicies().get(0).getCooldown(), 1);
          assertEquals(g.getScalingPolicies().get(0).getTarget(), "1");
          assertEquals(g.getScalingPolicies().get(0).getTargetType(), ScalingPolicyTargetType.INCREMENTAL);
          assertEquals(g.getScalingPolicies().get(0).getType(), ScalingPolicyType.WEBHOOK);
@@ -125,7 +124,7 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertEquals(g.getLaunchConfiguration().getServerFlavorRef(), "2");
          assertEquals(g.getLaunchConfiguration().getServerDiskConfig(), "AUTO");
          assertEquals(g.getLaunchConfiguration().getPersonalities().size(), 1);
-         assertEquals(g.getLaunchConfiguration().getPersonalities().get(0).getPath(), "/root/.csivh");
+         assertEquals(g.getLaunchConfiguration().getPersonalities().get(0).getPath(), "testfile");
          assertEquals(g.getLaunchConfiguration().getPersonalities().get(0).getContents(),
                "VGhpcyBpcyBhIHRlc3QgZmlsZS4=");
          assertEquals(g.getLaunchConfiguration().getNetworks().size(), 2);
@@ -247,7 +246,7 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                      .networks(
                            ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                            .personalities(
-                                 ImmutableList.of(Personality.builder().path("/root/.csivh")
+                                 ImmutableList.of(Personality.builder().path("testfile2")
                                        .contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                                        .type(LaunchConfigurationType.LAUNCH_SERVER).build();
 

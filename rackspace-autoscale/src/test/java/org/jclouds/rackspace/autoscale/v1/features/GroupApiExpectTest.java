@@ -381,7 +381,7 @@ public class GroupApiExpectTest extends BaseAutoscaleApiExpectTest {
             .getGroupApiForZone("DFW");
 
       GroupConfiguration gc = api.getGroupConfiguration("1234567890");
-      assertEquals(gc, null);
+      assertNull(gc);
    }
 
    public void testGetLaunchConfiguration() {
@@ -410,7 +410,7 @@ public class GroupApiExpectTest extends BaseAutoscaleApiExpectTest {
             .getGroupApiForZone("DFW");
 
       LaunchConfiguration lc = api.getLaunchConfiguration("1234567890");
-      assertEquals(lc, null);
+      assertNull(lc);
    }
 
    public void testUpdateGroupConfiguration() {
