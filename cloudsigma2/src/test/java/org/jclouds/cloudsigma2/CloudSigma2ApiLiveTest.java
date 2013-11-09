@@ -19,6 +19,7 @@ package org.jclouds.cloudsigma2;
 import com.google.common.collect.ImmutableList;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
+import org.jclouds.cloudsigma2.domain.Discount;
 import org.jclouds.cloudsigma2.domain.Drive;
 import org.jclouds.cloudsigma2.domain.DriveInfo;
 import org.jclouds.cloudsigma2.domain.FirewallAction;
@@ -38,6 +39,7 @@ import org.jclouds.cloudsigma2.domain.ServerInfo;
 import org.jclouds.cloudsigma2.domain.Subscription;
 import org.jclouds.cloudsigma2.domain.Tag;
 import org.jclouds.cloudsigma2.domain.TagResource;
+import org.jclouds.cloudsigma2.domain.Transaction;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -77,7 +79,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testGetDriveInfo() throws Exception {
-        for(Drive driveInfo : api.listDrives()){
+        for(Drive driveInfo : api.listDrives().concat()){
             Assert.assertNotNull(api.getDriveInfo(driveInfo.getUuid()));
         }
     }
@@ -146,7 +148,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testGetLibraryDrive() throws Exception {
-        for(LibraryDrive libraryDrive : api.listLibraryDrives()){
+        for(LibraryDrive libraryDrive : api.listLibraryDrives().concat()){
             Assert.assertNotNull(libraryDrive.getUuid());
         }
     }
@@ -168,7 +170,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                 .memory(new BigInteger("5368709120"))
                 .cpu(3000)
                 .vncPassword("new_password")
-                .drives(ImmutableList.of(api.listDrives().get(0).toServerDrive(1, "0:1", DeviceEmulationType.IDE)))
+                .drives(ImmutableList.of(api.listDrives().concat().get(0).toServerDrive(1, "0:1", DeviceEmulationType.IDE)))
                 .build();
 
         createdServer = api.createServer(serverInfo);
@@ -213,7 +215,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testGetServerInfo() throws Exception {
-        for(Server server : api.listServers()){
+        for(Server server : api.listServers().concat()){
             Assert.assertNotNull(server.getUuid());
         }
     }
@@ -389,7 +391,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testGetVLANInfo() throws Exception {
-        for(VLANInfo vlanInfo : api.listVLANs()){
+        for(VLANInfo vlanInfo : api.listVLANs().concat()){
             Assert.assertNotNull(vlanInfo.getUuid());
         }
     }
@@ -404,7 +406,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                                         .build();
 
         if(api.listVLANs().size() > 0){
-            checkVlAN(vlanInfo, api.editVLAN(api.listVLANs().get(0).getUuid(), vlanInfo));
+            checkVlAN(vlanInfo, api.editVLAN(api.listVLANs().concat().get(0).getUuid(), vlanInfo));
         }
     }
 
@@ -420,7 +422,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testGetIPInfo() throws Exception {
-        for(IP ip : api.listIPs()){
+        for(IP ip : api.listIPs().concat()){
             Assert.assertNotNull(api.getIPInfo(ip.getUuid()));
         }
     }
@@ -435,7 +437,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                 .build();
 
         if(api.listIPs().size() > 0){
-            checkIP(ip, api.editIP(api.listIPs().get(0).getUuid(), ip));
+            checkIP(ip, api.editIP(api.listIPs().concat().get(0).getUuid(), ip));
         }
     }
 
@@ -451,7 +453,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testGetTagInfo() throws Exception {
-        for(Tag tag : api.listTags()){
+        for(Tag tag : api.listTags().concat()){
             Assert.assertNotNull(api.getTagInfo(tag.getUuid()));
         }
     }
@@ -564,19 +566,23 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testListSubscriptions() throws Exception {
-        Assert.assertNotNull(api.listSubscriptions());
+        for(Subscription subscription : api.listSubscriptions().concat()){
+            Assert.assertNotNull(subscription);
+        }
     }
 
     @Test
     public void testGetSubscription() throws Exception {
-        for(Subscription subscription : api.listSubscriptions()){
+        for(Subscription subscription : api.listSubscriptions().concat()){
             Assert.assertNotNull(api.getSubscription(subscription.getId()));
         }
     }
 
     @Test
     public void testListSubscriptionsCalculator() throws Exception {
-        Assert.assertNotNull(api.listSubscriptionsCalculator());
+        for(Subscription subscription : api.listSubscriptionsCalculator().concat()){
+            Assert.assertNotNull(subscription);
+        }
     }
 
     @Test
@@ -586,18 +592,23 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
     @Test
     public void testListDiscounts() throws Exception {
-        Assert.assertNotNull(api.listDiscounts());
+        for(Discount discount : api.listDiscounts().concat()){
+            Assert.assertNotNull(discount);
+        }
     }
 
     @Test
     public void testListTransactions() throws Exception {
-        Assert.assertNotNull(api.listTransactions());
+        for(Transaction transaction : api.listTransactions().concat()){
+            Assert.assertNotNull(transaction);
+        }
     }
 
     @Test
     public void testListLicenses() throws Exception {
-        List<License> licenses = api.listLicenses();
-        Assert.assertNotNull(licenses);
+        for(License license : api.listLicenses().concat()){
+            Assert.assertNotNull(license);
+        }
     }
 
     private void checkDrive(DriveInfo newDrive, DriveInfo createdDrive){

@@ -1,0 +1,32 @@
+{
+    "meta" : {
+        "limit": 1,
+        "offset": 0,
+        "total_count": 2
+    },
+    "objects": [
+        {
+            "meta": {},
+            "name": "New policy",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/fwpolicies/b68dd907-69fc-4b3c-b954-c39d0046525b/",
+            "rules": [
+                {
+                    "action": "accept",
+                    "comment": "Test comment",
+                    "direction": "in",
+                    "dst_ip": "192.168.1.132/32",
+                    "dst_port": "1233",
+                    "ip_proto": "tcp",
+                    "src_ip": "255.255.255.12/32",
+                    "src_port": "321"
+                }
+            ],
+            "servers": [],
+            "uuid": "b68dd907-69fc-4b3c-b954-c39d0046525b"
+        }
+    ]
+}

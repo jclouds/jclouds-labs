@@ -1,0 +1,28 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 2,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "amount": "17179869184",
+            "auto_renew": true,
+            "descendants": [],
+            "discount_amount": null,
+            "discount_percent": null,
+            "end_time": "2014-02-20T14:04:14+00:00",
+            "id": "3985",
+            "last_notification": null,
+            "period": "365 days, 0:00:00",
+            "price": "0E-20",
+            "remaining": "17179869184",
+            "resource": "mem",
+            "resource_uri": "/api/2.0/subscriptions/3985/",
+            "start_time": "2013-02-20T14:04:14+00:00",
+            "status": "active",
+            "subscribed_object": null,
+            "uuid": "9bb117d3-4bc5-4e2d-a907-b20abd48eaf9"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 2,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "burstable": false,
+            "long_name": "SQL Server Standard 2008",
+            "name": "msft_tfa_00009",
+            "resource_uri": "/api/2.0/licenses/11/",
+            "type": "instance",
+            "user_metric": ""
+        }
+    ]
+}

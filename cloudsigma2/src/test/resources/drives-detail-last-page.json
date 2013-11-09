@@ -1,0 +1,31 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 2,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "affinities": [],
+            "allow_multimount": false,
+            "jobs": [],
+            "licenses": [],
+            "media": "disk",
+            "meta": {
+                "description": "",
+                "install_notes": ""
+            },
+            "mounted_on": [],
+            "name": "otom",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/drives/7bc04bc5-bd09-4269-b45d-16b58d6f71b4/",
+            "size": 11811160064,
+            "status": "unmounted",
+            "tags": [],
+            "uuid": "7bc04bc5-bd09-4269-b45d-16b58d6f71b4"
+        }
+    ]
+}

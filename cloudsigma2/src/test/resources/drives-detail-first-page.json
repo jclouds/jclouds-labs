@@ -1,0 +1,88 @@
+{
+    "meta": {
+        "limit": 2,
+        "offset": 0,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "affinities": [
+                "ssd",
+                "sample"
+            ],
+            "allow_multimount": true,
+            "jobs": [],
+            "licenses": [
+                {
+                    "amount" : 1,
+                    "license" : {
+                        "burstable" : true,
+                        "long_name" : "sample_longname",
+                        "name" : "sample_name",
+                        "resource_uri" : "/api/2.0/samples/",
+                        "type" : "sample_type",
+                        "user_metric" : sample
+                    },
+                    "user" : {
+                        "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                        "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+                    }
+                }
+            ],
+            "media": "disk",
+            "meta": {
+                "description": "",
+                "install_notes": ""
+            },
+            "mounted_on": [
+                {
+                    "uuid" : "81f911f9-5152-4328-8671-02543bafbd0e",
+                    "resource_uri" : "/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"
+                },
+                {
+                    "uuid" : "19163e1a-a6d6-4e73-8087-157dd302c373",
+                    "resource_uri" : "/api/2.0/servers/19163e1a-a6d6-4e73-8087-157dd302c373/"
+                }
+            ],
+            "name": "atom-sol3",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/drives/92ca1450-417e-4cc1-983b-1015777e2591/",
+            "size": 12348030976,
+            "status": "unmounted",
+            "tags": [
+                "tag_uuid_1",
+                "tag_uuid_2"
+            ],
+            "uuid": "92ca1450-417e-4cc1-983b-1015777e2591"
+        },
+        {
+            "affinities": [
+                "ssd"
+            ],
+            "allow_multimount": false,
+            "jobs": [],
+            "licenses": [],
+            "media": "disk",
+            "meta": {},
+            "mounted_on": [
+                {
+                "uuid" : "81f911f9-5152-4328-8671-02543bafbd0e",
+                "resource_uri" : "/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"
+                }
+            ],
+            "name": "test_drive_3",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/drives/414ad24b-ba41-47c0-9751-ef5060b6c391/",
+            "size": 1024000000,
+            "status": "unmounted",
+            "tags": [],
+            "uuid": "414ad24b-ba41-47c0-9751-ef5060b6c391"
+        }
+    ]
+}

@@ -46,6 +46,7 @@ import org.jclouds.cloudsigma2.domain.IP;
 import org.jclouds.cloudsigma2.domain.IPInfo;
 import org.jclouds.cloudsigma2.domain.LibraryDrive;
 import org.jclouds.cloudsigma2.domain.License;
+import org.jclouds.cloudsigma2.domain.PaginatedCollection;
 import org.jclouds.cloudsigma2.domain.Pricing;
 import org.jclouds.cloudsigma2.domain.ProfileInfo;
 import org.jclouds.cloudsigma2.domain.Server;
@@ -55,14 +56,32 @@ import org.jclouds.cloudsigma2.domain.Subscription;
 import org.jclouds.cloudsigma2.domain.Tag;
 import org.jclouds.cloudsigma2.domain.Transaction;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
+import org.jclouds.cloudsigma2.functions.internal.ParseDiscounts;
+import org.jclouds.cloudsigma2.functions.internal.ParseDriveInfos;
+import org.jclouds.cloudsigma2.functions.internal.ParseDrives;
+import org.jclouds.cloudsigma2.functions.internal.ParseFirewallPolicies;
+import org.jclouds.cloudsigma2.functions.internal.ParseIPInfos;
+import org.jclouds.cloudsigma2.functions.internal.ParseIPs;
+import org.jclouds.cloudsigma2.functions.internal.ParseLibraryDrives;
+import org.jclouds.cloudsigma2.functions.internal.ParseLicenses;
+import org.jclouds.cloudsigma2.functions.internal.ParseServerInfos;
+import org.jclouds.cloudsigma2.functions.internal.ParseServers;
+import org.jclouds.cloudsigma2.functions.internal.ParseSubscriptions;
+import org.jclouds.cloudsigma2.functions.internal.ParseTags;
+import org.jclouds.cloudsigma2.functions.internal.ParseTransactions;
+import org.jclouds.cloudsigma2.functions.internal.ParseVLANs;
+import org.jclouds.cloudsigma2.options.PaginationOptions;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.OnlyElement;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.rest.annotations.SkipEncoding;
+import org.jclouds.rest.annotations.Transform;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -94,9 +113,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("drive:listDrives")
     @GET
-    @Path("/drives/?limit=0")
-    @SelectJson("objects")
-    List<Drive> listDrives();
+    @Path("/drives/")
+    @ResponseParser(ParseDrives.class)
+    @Transform(ParseDrives.ToPagedIterable.class)
+    PagedIterable<Drive> listDrives();
+
+    /**
+     * Gets the list of drives to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of drives
+     */
+    @Named("drive:listDrives")
+    @GET
+    @Path("/drives/")
+    @ResponseParser(ParseDrives.class)
+    PaginatedCollection<Drive> listDrives(PaginationOptions options);
 
     /**
      * Gets the list of drives to which the authenticated user has access.
@@ -107,7 +138,7 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("drive:listDrives")
     @GET
-    @Path("/drives/?limit=0")
+    @Path("/drives/")
     @SelectJson("objects")
     List<DriveInfo> listDrives(@QueryParam("fields") DrivesListRequestFieldsGroup fields
             , @DefaultValue("0") @QueryParam("limit") int limit);
@@ -119,9 +150,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("drive:listDrivesInfo")
     @GET
-    @Path("/drives/detail/?limit=0")
-    @SelectJson("objects")
-    List<DriveInfo> listDrivesInfo();
+    @Path("/drives/detail/")
+    @ResponseParser(ParseDriveInfos.class)
+    @Transform(ParseDriveInfos.ToPagedIterable.class)
+    PagedIterable<DriveInfo> listDrivesInfo();
+
+    /**
+     * Gets the detailed list of drives with additional information to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of drives
+     */
+    @Named("drive:listDrivesInfo")
+    @GET
+    @Path("/drives/detail/")
+    @ResponseParser(ParseDriveInfos.class)
+    PaginatedCollection<DriveInfo> listDrivesInfo(PaginationOptions options);
 
     /**
      * Gets detailed information for drive identified by drive uuid
@@ -220,9 +263,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("libdrive:listLibraryDrives")
     @GET
-    @Path("/libdrives/?limit=0")
-    @SelectJson("objects")
-    List<LibraryDrive> listLibraryDrives();
+    @Path("/libdrives/")
+    @ResponseParser(ParseLibraryDrives.class)
+    @Transform(ParseLibraryDrives.ToPagedIterable.class)
+    PagedIterable<LibraryDrive> listLibraryDrives();
+
+    /**
+     * Gets the list of library drives to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of library drives
+     */
+    @Named("libdrive:listLibraryDrives")
+    @GET
+    @Path("/libdrives/")
+    @ResponseParser(ParseLibraryDrives.class)
+    PaginatedCollection<LibraryDrive> listLibraryDrives(PaginationOptions options);
 
     /**
      * Gets detailed information for library drive identified by uuid.
@@ -257,9 +312,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("server:listServers")
     @GET
-    @Path("/servers/?limit=0")
-    @SelectJson("objects")
-    List<Server> listServers();
+    @Path("/servers/")
+    @ResponseParser(ParseServers.class)
+    @Transform(ParseServers.ToPagedIterable.class)
+    PagedIterable<Server> listServers();
+
+    /**
+     * Gets the list of servers to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of servers
+     */
+    @Named("server:listServers")
+    @GET
+    @Path("/servers/")
+    @ResponseParser(ParseServers.class)
+    PaginatedCollection<Server> listServers(PaginationOptions options);
 
     /**
      * Gets the detailed list of servers to which the authenticated user has access.
@@ -268,9 +335,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("server:listServersInfo")
     @GET
-    @Path("/servers/detail/?limit=0")
-    @SelectJson("objects")
-    List<ServerInfo> listServersInfo();
+    @Path("/servers/detail/")
+    @ResponseParser(ParseServerInfos.class)
+    @Transform(ParseServerInfos.ToPagedIterable.class)
+    PagedIterable<ServerInfo> listServersInfo();
+
+    /**
+     * Gets the detailed list of servers to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of servers
+     */
+    @Named("server:listServersInfo")
+    @GET
+    @Path("/servers/detail/")
+    @ResponseParser(ParseServerInfos.class)
+    PaginatedCollection<ServerInfo> listServersInfo(PaginationOptions options);
 
     /**
      * Creates a new virtual server or multiple servers.
@@ -433,7 +512,7 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("server:listServerAvailabilityGroup")
     @GET
-    @Path("/servers/availability_groups/?limit=0")
+    @Path("/servers/availability_groups/")
     List<List<String>> listServerAvailabilityGroup();
 
     /**
@@ -456,9 +535,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("fwpolicy:listFirewallPolicies")
     @GET
-    @Path("/fwpolicies/?limit=0")
-    @SelectJson("objects")
-    List<FirewallPolicy> listFirewallPolicies();
+    @Path("/fwpolicies/")
+    @ResponseParser(ParseFirewallPolicies.class)
+    @Transform(ParseFirewallPolicies.ToPagedIterable.class)
+    PagedIterable<FirewallPolicy> listFirewallPolicies();
+
+    /**
+     * Gets the list of firewall policies to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of firewall policies
+     */
+    @Named("fwpolicy:listFirewallPolicies")
+    @GET
+    @Path("/fwpolicies/")
+    @ResponseParser(ParseFirewallPolicies.class)
+    PaginatedCollection<FirewallPolicy> listFirewallPolicies(PaginationOptions options);
 
     /**
      * Gets a detailed list of firewall policies to which the authenticated user has access.
@@ -467,9 +558,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("fwpolicy:listFirewallPoliciesInfo")
     @GET
-    @Path("/fwpolicies/detail/?limit=0")
-    @SelectJson("objects")
-    List<FirewallPolicy> listFirewallPoliciesInfo();
+    @Path("/fwpolicies/detail/")
+    @ResponseParser(ParseFirewallPolicies.class)
+    @Transform(ParseFirewallPolicies.ToPagedIterableInfo.class)
+    PagedIterable<FirewallPolicy> listFirewallPoliciesInfo();
+
+    /**
+     * Gets a detailed list of firewall policies to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of firewall policies
+     */
+    @Named("fwpolicy:listFirewallPoliciesInfo")
+    @GET
+    @Path("/fwpolicies/detail/")
+    @ResponseParser(ParseFirewallPolicies.class)
+    PaginatedCollection<FirewallPolicy> listFirewallPoliciesInfo(PaginationOptions options);
 
     /**
      * Creates firewall policies.
@@ -482,7 +585,7 @@ public interface CloudSigma2Api extends Closeable {
     @Path("/fwpolicies/")
     @SelectJson("objects")
     List<FirewallPolicy> createFirewallPolicies(
-            @BinderParam(BindFirewallPoliciesListToJsonRequest.class) List<FirewallPolicy> firewallPolicies);
+            @BinderParam(BindFirewallPoliciesListToJsonRequest.class) List< FirewallPolicy > firewallPolicies);
 
     /**
      * Creates a firewall policy.
@@ -530,9 +633,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("vlan:listVLANs")
     @GET
-    @Path("/vlans/?limit=0")
-    @SelectJson("objects")
-    List<VLANInfo> listVLANs();
+    @Path("/vlans/")
+    @ResponseParser(ParseVLANs.class)
+    @Transform(ParseVLANs.ToPagedIterable.class)
+    PagedIterable<VLANInfo> listVLANs();
+
+    /**
+     * Gets the list of VLANs to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of VLANs
+     */
+    @Named("vlan:listVLANs")
+    @GET
+    @Path("/vlans/")
+    @ResponseParser(ParseVLANs.class)
+    PaginatedCollection<VLANInfo> listVLANs(PaginationOptions options);
 
     /**
      * Gets the list of VLANs to which the authenticated user has access.
@@ -541,9 +656,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("vlan:listVLANInfo")
     @GET
-    @Path("/vlans/detail/?limit=0")
-    @SelectJson("objects")
-    List<VLANInfo> listVLANInfo();
+    @Path("/vlans/detail/")
+    @ResponseParser(ParseVLANs.class)
+    @Transform(ParseVLANs.ToPagedIterableInfo.class)
+    PagedIterable<VLANInfo> listVLANInfo();
+
+    /**
+     * Gets the list of VLANs to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of VLANs
+     */
+    @Named("vlan:listVLANInfo")
+    @GET
+    @Path("/vlans/detail/")
+    @ResponseParser(ParseVLANs.class)
+    PaginatedCollection<VLANInfo> listVLANInfo(PaginationOptions options);
 
     /**
      * Currently only VLAN meta field can be edited.
@@ -566,9 +693,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("ip:listIPs")
     @GET
-    @Path("/ips/?limit=0")
-    @SelectJson("objects")
-    List<IP> listIPs();
+    @Path("/ips/")
+    @ResponseParser(ParseIPs.class)
+    @Transform(ParseIPs.ToPagedIterable.class)
+    PagedIterable<IP> listIPs();
+
+    /**
+     * Gets the list of IPs to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of IPs
+     */
+    @Named("ip:listIPs")
+    @GET
+    @Path("/ips/")
+    @ResponseParser(ParseIPs.class)
+    PaginatedCollection<IP> listIPs(PaginationOptions options);
 
     /**
      * Gets the detailed list of IPs with additional information to which the authenticated user has access.
@@ -577,9 +716,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("ip:listIPInfo")
     @GET
-    @Path("/ips/detail/?limit=0")
-    @SelectJson("objects")
-    List<IPInfo> listIPInfo();
+    @Path("/ips/detail/")
+    @ResponseParser(ParseIPInfos.class)
+    @Transform(ParseIPInfos.ToPagedIterable.class)
+    PagedIterable<IPInfo> listIPInfo();
+
+    /**
+     * Gets the detailed list of IPs with additional information to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of IPs
+     */
+    @Named("ip:listIPInfo")
+    @GET
+    @Path("/ips/detail/")
+    @ResponseParser(ParseIPInfos.class)
+    PaginatedCollection<IPInfo> listIPInfo(PaginationOptions options);
 
     /**
      * Gets detailed information for IP identified by IP uuid.
@@ -614,9 +765,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("tag:listTags")
     @GET
-    @Path("/tags/?limit=0")
-    @SelectJson("objects")
-    List<Tag> listTags();
+    @Path("/tags/")
+    @ResponseParser(ParseTags.class)
+    @Transform(ParseTags.ToPagedIterable.class)
+    PagedIterable<Tag> listTags();
+
+    /**
+     * Gets the list of tags to which the authenticated user has access.
+     *
+     * @return PaginatedCollection of tags to which the authenticated user has access
+     */
+    @Named("tag:listTags")
+    @GET
+    @Path("/tags/")
+    @ResponseParser(ParseTags.class)
+    PaginatedCollection<Tag> listTags(PaginationOptions options);
 
     /**
      * Gets the detailed list of tags with additional information to which the authenticated user has access,
@@ -626,9 +789,22 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("tag:listTagsInfo")
     @GET
-    @Path("/tags/detail/?limit=0")
-    @SelectJson("objects")
-    List<Tag> listTagsInfo();
+    @Path("/tags/detail/")
+    @ResponseParser(ParseTags.class)
+    @Transform(ParseTags.ToPagedIterableInfo.class)
+    PagedIterable<Tag> listTagsInfo();
+
+    /**
+     * Gets the detailed list of tags with additional information to which the authenticated user has access,
+     * like the tagged resource
+     *
+     * @return PaginatedCollection of detailed tags
+     */
+    @Named("tag:listTagsInfo")
+    @GET
+    @Path("/tags/detail/")
+    @ResponseParser(ParseTags.class)
+    PaginatedCollection<Tag> listTagsInfo(PaginationOptions options);
 
     /**
      * Gets detailed information for tag identified by tag uuid.
@@ -740,9 +916,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("subscription:listSubscriptions")
     @GET
-    @Path("/subscriptions/?limit=0")
-    @SelectJson("objects")
-    List<Subscription> listSubscriptions();
+    @Path("/subscriptions/")
+    @ResponseParser(ParseSubscriptions.class)
+    @Transform(ParseSubscriptions.ToPagedIterable.class)
+    PagedIterable<Subscription> listSubscriptions();
+
+    /**
+     * Gets the list of subscriptions of the user.
+     *
+     * @return PaginatedCollection of subscriptions of the user.
+     */
+    @Named("subscription:listSubscriptions")
+    @GET
+    @Path("/subscriptions/")
+    @ResponseParser(ParseSubscriptions.class)
+    PaginatedCollection<Subscription> listSubscriptions(PaginationOptions options);
 
     /**
      * Returns requested subscription
@@ -762,9 +950,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("subscription:listSubscriptionsCalculator")
     @GET
-    @Path("/subscriptioncalculator/?limit=0")
-    @SelectJson("objects")
-    List<Subscription> listSubscriptionsCalculator();
+    @Path("/subscriptioncalculator/")
+    @ResponseParser(ParseSubscriptions.class)
+    @Transform(ParseSubscriptions.ToPagedIterableCalculator.class)
+    PagedIterable<Subscription> listSubscriptionsCalculator();
+
+    /**
+     * This is identical to the listSubscriptions(), except that subscriptions are not actually bought.
+     *
+     * @return PaginatedCollection of subscriptions that are not actually bought.
+     */
+    @Named("subscription:listSubscriptionsCalculator")
+    @GET
+    @Path("/subscriptioncalculator/")
+    @ResponseParser(ParseSubscriptions.class)
+    PaginatedCollection<Subscription> listSubscriptionsCalculator(PaginationOptions options);
 
     /**
      * Creates a new subscription.
@@ -849,9 +1049,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("discount:listDiscounts")
     @GET
-    @Path("/discount/?limit=0")
-    @SelectJson("objects")
-    List<Discount> listDiscounts();
+    @Path("/discount/")
+    @ResponseParser(ParseDiscounts.class)
+    @Transform(ParseDiscounts.ToPagedIterable.class)
+    PagedIterable<Discount> listDiscounts();
+
+    /**
+     * Get discount information.
+     *
+     * @return PaginatedCollection of discount information.
+     */
+    @Named("discount:listDiscounts")
+    @GET
+    @Path("/discount/")
+    @ResponseParser(ParseDiscounts.class)
+    PaginatedCollection<Discount> listDiscounts(PaginationOptions options);
 
     /**
      * Get the transactions for the account.
@@ -860,9 +1072,21 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("ledger:listTransactions")
     @GET
-    @Path("/ledger/?limit=0")
-    @SelectJson("objects")
-    List<Transaction> listTransactions();
+    @Path("/ledger/")
+    @ResponseParser(ParseTransactions.class)
+    @Transform(ParseTransactions.ToPagedIterable.class)
+    PagedIterable<Transaction> listTransactions();
+
+    /**
+     * Get the transactions for the account.
+     *
+     * @return PaginatedCollection of account's transactions.
+     */
+    @Named("ledger:listTransactions")
+    @GET
+    @Path("/ledger/")
+    @ResponseParser(ParseTransactions.class)
+    PaginatedCollection<Transaction> listTransactions(PaginationOptions options);
 
     /**
      * Get the licenses available on the cloud. The type of the license can be one of:
@@ -877,7 +1101,25 @@ public interface CloudSigma2Api extends Closeable {
      */
     @Named("license:listLicenses")
     @GET
-    @Path("/licenses/?limit=0")
-    @SelectJson("objects")
-    List<License> listLicenses();
+    @Path("/licenses/")
+    @ResponseParser(ParseLicenses.class)
+    @Transform(ParseLicenses.ToPagedIterable.class)
+    PagedIterable<License> listLicenses();
+
+    /**
+     * Get the licenses available on the cloud. The type of the license can be one of:
+     *      install - These licenses are billed per installation, regardless of whether it is attached to a running guests or not.
+     *      instance - These licenses are billed per running instance of a guest. A license attached to a guest that’s stopped is not billed.
+     *      stub - These licenses are billed per a metric specified by the customer (i.e. per number of users license)
+     *
+     * The user metric field specifies what attribute on the instance of the guest is used for determining the number of licenses.
+     * For example, “smp” will count one license for each CPU/core in the virtual machine.
+     *
+     * @return PaginatedCollection of licenses available on the cloud
+     */
+    @Named("license:listLicenses")
+    @GET
+    @Path("/licenses/")
+    @ResponseParser(ParseLicenses.class)
+    PaginatedCollection<License> listLicenses(PaginationOptions options);
 }

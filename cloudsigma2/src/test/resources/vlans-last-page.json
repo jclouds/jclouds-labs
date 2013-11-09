@@ -1,0 +1,21 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 1,
+        "total_count": 2
+    },
+    "objects": [
+        {
+            "meta": {},
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/vlans/00b445a9-3936-47e5-ba8a-38adcf43db20/",
+            "servers": [],
+            "subscription": null,
+            "tags": [],
+            "uuid": "00b445a9-3936-47e5-ba8a-38adcf43db20"
+        }
+    ]
+}

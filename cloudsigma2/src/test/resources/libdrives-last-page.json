@@ -1,0 +1,36 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 2,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "affinities": [],
+            "allow_multimount": false,
+            "arch": "64",
+            "category": [
+                "general"
+            ],
+            "description": "",
+            "favourite": true,
+            "image_type": "install",
+            "install_notes": "",
+            "jobs": [],
+            "licenses": [],
+            "media": "cdrom",
+            "meta": {},
+            "mounted_on": [],
+            "name": "Windows_Server_2003_r2_standard_x64_with_sp2_cd1.iso pub",
+            "os": "windows",
+            "owner": null,
+            "paid": false,
+            "resource_uri": "/api/2.0/libdrives/dd9da460-b1ab-419a-9fa1-804540eee4c3/",
+            "size": 1000000000,
+            "status": "unmounted",
+            "tags": [],
+            "url": "test_url",
+            "uuid": "dd9da460-b1ab-419a-9fa1-804540eee4c3"
+        }
+    ]
+}

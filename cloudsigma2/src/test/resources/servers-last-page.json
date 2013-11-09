@@ -1,0 +1,20 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 2,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "name": "test_server_2",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/servers/05c16b9a-f2f5-4da6-a1cb-b90722c32212/",
+            "runtime": null,
+            "status": "stopped",
+            "uuid": "05c16b9a-f2f5-4da6-a1cb-b90722c32212"
+        }
+    ]
+}

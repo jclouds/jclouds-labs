@@ -42,10 +42,12 @@ import org.jclouds.cloudsigma2.domain.Tag;
 import org.jclouds.cloudsigma2.domain.TagResource;
 import org.jclouds.cloudsigma2.domain.Transaction;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
+import org.jclouds.cloudsigma2.options.PaginationOptions;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -105,30 +107,84 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListDrives() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "drives/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/drives.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "drives/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/drives-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Drive> drives = api.listDrives().concat().toList();
+
+        Assert.assertEquals(drives.size(), 3);
+        Assert.assertEquals(drives.get(0).getUuid(), "92ca1450-417e-4cc1-983b-1015777e2591");
+        Assert.assertEquals(drives.get(1).getUuid(), "414ad24b-ba41-47c0-9751-ef5060b6c391");
+        Assert.assertEquals(drives.get(2).getUuid(), "7bc04bc5-bd09-4269-b45d-16b58d6f71b4");
+    }
+
+    @Test
+    public void testListDrivesPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "drives/?limit=0")
+                        .endpoint(endpoint + "drives/?limit=3&offset=3")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/drives.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Drive> result = api.listDrives();
-        assertNotNull(result);
+        for(Drive drive : api.listDrives(new PaginationOptions.Builder().limit(3).offset(3).build())){
+            assertNotNull(drive);
+        }
     }
 
     @Test
     public void testListDrivesInfo() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "drives/detail/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/drives-detail-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "drives/detail/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/drives-detail-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<DriveInfo> drives = api.listDrivesInfo().concat().toList();
+
+        Assert.assertEquals(drives.size(), 3);
+        Assert.assertEquals(drives.get(0).getUuid(), "92ca1450-417e-4cc1-983b-1015777e2591");
+        Assert.assertEquals(drives.get(1).getUuid(), "414ad24b-ba41-47c0-9751-ef5060b6c391");
+        Assert.assertEquals(drives.get(2).getUuid(), "7bc04bc5-bd09-4269-b45d-16b58d6f71b4");
+    }
+
+    @Test
+    public void testListDrivesInfoPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "drives/detail/?limit=0")
+                        .endpoint(endpoint + "drives/detail/?limit=3&offset=3")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/drives-detail.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<DriveInfo> result = api.listDrivesInfo();
-        assertNotNull(result);
+        for(DriveInfo driveInfo : api.listDrivesInfo(new PaginationOptions.Builder().limit(3).offset(3).build())){
+            assertNotNull(driveInfo);
+        }
     }
 
     @Test
@@ -275,16 +331,46 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListLibraryDrives() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "libdrives/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/libdrives.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "libdrives/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/libdrives-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<LibraryDrive> drives = api.listLibraryDrives().concat().toList();
+
+        Assert.assertEquals(drives.size(), 3);
+        Assert.assertEquals(drives.get(0).getUuid(), "8c45d8d9-4efd-44ec-9833-8d52004b4298");
+        Assert.assertEquals(drives.get(1).getUuid(), "d1ec9f26-ba44-4002-bbdf-82a31a84b611");
+        Assert.assertEquals(drives.get(2).getUuid(), "dd9da460-b1ab-419a-9fa1-804540eee4c3");
+    }
+
+    @Test
+    public void testListLibraryDrivesPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "libdrives/?limit=0")
+                        .endpoint(endpoint + "libdrives/?limit=3&offset=3")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/libdrives.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<LibraryDrive> result = api.listLibraryDrives();
-        assertNotNull(result);
+        for (LibraryDrive libraryDrive : api.listLibraryDrives(new PaginationOptions.Builder()
+                .limit(3)
+                .offset(3)
+                .build())) {
+            assertNotNull(libraryDrive);
+        }
     }
 
     @Test
@@ -325,30 +411,84 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListServers() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "servers/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/servers.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "servers/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/servers-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Server> servers = api.listServers().concat().toList();
+
+        Assert.assertEquals(servers.size(), 3);
+        Assert.assertEquals(servers.get(0).getUuid(), "61d61337-884b-4c87-b4de-f7f48f9cfc84");
+        Assert.assertEquals(servers.get(1).getUuid(), "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154");
+        Assert.assertEquals(servers.get(2).getUuid(), "05c16b9a-f2f5-4da6-a1cb-b90722c32212");
+    }
+
+    @Test
+    public void testListServersPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "servers/?limit=0")
+                        .endpoint(endpoint + "servers/?limit=3&offset=3")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/servers.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Server> result = api.listServers();
-        assertNotNull(result);
+        for (Server sever : api.listServers(new PaginationOptions.Builder().limit(3).offset(3).build())) {
+            assertNotNull(sever);
+        }
     }
 
     @Test
     public void testListServersInfo() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "servers/detail/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/server-detail-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "servers/detail/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/server-detail-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<ServerInfo> serverInfos = api.listServersInfo().concat().toList();
+
+        Assert.assertEquals(serverInfos.size(), 3);
+        Assert.assertEquals(serverInfos.get(0).getUuid(), "a19a425f-9e92-42f6-89fb-6361203071bb");
+        Assert.assertEquals(serverInfos.get(1).getUuid(), "61d61337-884b-4c87-b4de-f7f48f9cfc84");
+        Assert.assertEquals(serverInfos.get(2).getUuid(), "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154");
+    }
+
+    @Test
+    public void testListServersInfoPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "servers/detail/?limit=0")
+                        .endpoint(endpoint + "servers/detail/?limit=3&offset=3")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/server-detail.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<ServerInfo> result = api.listServersInfo();
-        assertNotNull(result);
+        for(ServerInfo serverInfo : api.listServersInfo(new PaginationOptions.Builder().limit(3).offset(3).build())){
+            assertNotNull(serverInfo);
+        }
     }
 
     @Test
@@ -547,56 +687,95 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
     public void testListServerAvailabilityGroup() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "servers/availability_groups/?limit=0")
+                        .endpoint(endpoint + "servers/availability_groups/")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/servers-availability-groups.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<List<String>> result = api.listServerAvailabilityGroup();
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testGetServerAvailabilityGroup() throws Exception {
-        CloudSigma2Api api = requestSendsResponse(
-                getBuilder()
-                        .endpoint(endpoint + "fwpolicies/?limit=0")
-                        .build()
-                , responseBuilder()
-                .payload(payloadFromResourceWithContentType("/fwpolicies-detail.json", MediaType.APPLICATION_JSON))
-                .build());
-
-        List<FirewallPolicy> result = api.listFirewallPolicies();
-        assertNotNull(result);
+        for(List<String> availabilityGroup : api.listServerAvailabilityGroup()){
+            assertNotNull(availabilityGroup);
+        }
     }
 
     @Test
     public void testListFirewallPolicies() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "fwpolicies/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/fwpolicies-detail-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "fwpolicies/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/fwpolicies-detail-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<FirewallPolicy> firewallPolicies = api.listFirewallPolicies().concat().toList();
+
+        Assert.assertEquals(firewallPolicies.size(), 2);
+        Assert.assertEquals(firewallPolicies.get(0).getUuid(), "b68dd907-69fc-4b3c-b954-c39d0046525b");
+        Assert.assertEquals(firewallPolicies.get(1).getUuid(), "cf8479b4-c98b-46c8-ab9c-108bb00c8218");
+    }
+
+    @Test
+    public void testListFirewallPoliciesPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "fwpolicies/?limit=0")
+                        .endpoint(endpoint + "fwpolicies/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/fwpolicies-detail.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<FirewallPolicy> result = api.listFirewallPolicies();
-        assertNotNull(result);
+        for(FirewallPolicy firewallPolicy : api.listFirewallPolicies(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(firewallPolicy);
+        }
     }
 
     @Test
     public void testListFirewallPoliciesInfo() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "fwpolicies/detail/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/fwpolicies-detail-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "fwpolicies/detail/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/fwpolicies-detail-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<FirewallPolicy> firewallPolicies = api.listFirewallPoliciesInfo().concat().toList();
+
+        Assert.assertEquals(firewallPolicies.size(), 2);
+        Assert.assertEquals(firewallPolicies.get(0).getUuid(), "b68dd907-69fc-4b3c-b954-c39d0046525b");
+        Assert.assertEquals(firewallPolicies.get(1).getUuid(), "cf8479b4-c98b-46c8-ab9c-108bb00c8218");
+    }
+
+    @Test
+    public void testListFirewallPoliciesInfoPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "fwpolicies/detail/?limit=0")
+                        .endpoint(endpoint + "fwpolicies/detail/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/fwpolicies-detail.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<FirewallPolicy> result = api.listFirewallPoliciesInfo();
-        assertNotNull(result);
+        for(FirewallPolicy firewallPolicy : api.listFirewallPoliciesInfo(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(firewallPolicy);
+        }
     }
 
     @Test
@@ -793,30 +972,82 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListVLANs() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "vlans/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/vlans.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "vlans/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/vlans-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<VLANInfo> vlans = api.listVLANs().concat().toList();
+
+        Assert.assertEquals(vlans.size(), 2);
+        Assert.assertEquals(vlans.get(0).getUuid(), "96537817-f4b6-496b-a861-e74192d3ccb0");
+        Assert.assertEquals(vlans.get(1).getUuid(), "00b445a9-3936-47e5-ba8a-38adcf43db20");
+    }
+
+    @Test
+    public void testListVLANsPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "vlans/?limit=0")
+                        .endpoint(endpoint + "vlans/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/vlans.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<VLANInfo> result = api.listVLANs();
-        assertNotNull(result);
+        for(VLANInfo vlanInfo : api.listVLANs(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(vlanInfo);
+        }
     }
 
     @Test
     public void testListVLANInfo() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "vlans/detail/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/vlans.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "vlans/detail/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/vlans-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<VLANInfo> vlanInfos = api.listVLANInfo().concat().toList();
+
+        Assert.assertEquals(vlanInfos.size(), 2);
+        Assert.assertEquals(vlanInfos.get(0).getUuid(), "96537817-f4b6-496b-a861-e74192d3ccb0");
+        Assert.assertEquals(vlanInfos.get(1).getUuid(), "00b445a9-3936-47e5-ba8a-38adcf43db20");
+    }
+
+    @Test
+    public void testListVLANInfoPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "vlans/detail/?limit=0")
+                        .endpoint(endpoint + "vlans/detail/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/vlans.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<VLANInfo> result = api.listVLANInfo();
-        assertNotNull(result);
+        for(VLANInfo vlanInfo : api.listVLANInfo(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(vlanInfo);
+        }
     }
 
     @Test
@@ -845,30 +1076,82 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListIPs() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "ips/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/ips.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "ips/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/ips-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<IP> ips = api.listIPs().concat().toList();
+
+        Assert.assertEquals(ips.size(), 2);
+        Assert.assertEquals(ips.get(0).getUuid(), "185.12.6.183");
+        Assert.assertEquals(ips.get(1).getUuid(), "185.12.5.233");
+    }
+
+    @Test
+    public void testListIPsPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "ips/?limit=0")
+                        .endpoint(endpoint + "ips/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/ips.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<IP> result = api.listIPs();
-        assertNotNull(result);
+        for(IP ip : api.listIPs(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(ip);
+        }
     }
 
     @Test
     public void testListIPInfo() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "ips/detail/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/ips.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "ips/detail/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/ips-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<IPInfo> ipInfos = api.listIPInfo().concat().toList();
+
+        Assert.assertEquals(ipInfos.size(), 2);
+        Assert.assertEquals(ipInfos.get(0).getUuid(), "185.12.6.183");
+        Assert.assertEquals(ipInfos.get(1).getUuid(), "185.12.5.233");
+    }
+
+    @Test
+    public void testListIPInfoPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "ips/detail/?limit=0")
+                        .endpoint(endpoint + "ips/detail/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/ips.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<IPInfo> result = api.listIPInfo();
-        assertNotNull(result);
+        for(IPInfo ipInfo : api.listIPInfo(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(ipInfo);
+        }
     }
 
     @Test
@@ -912,30 +1195,83 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListTags() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "tags/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/tags-detail-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "tags/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/tags-detail-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Tag> tags = api.listTags().concat().toList();
+
+        Assert.assertEquals(tags.size(), 2);
+        Assert.assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
+        Assert.assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
+    }
+
+    @Test
+    public void testListTagsPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "tags/?limit=0")
+                        .endpoint(endpoint + "tags/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/tags-detail.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Tag> result = api.listTags();
-        assertNotNull(result);
+        for(Tag tag : api.listTags(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(tag);
+        }
     }
 
     @Test
     public void testListTagsInfo() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "tags/detail/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/tags-detail-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "tags/detail/")
+                .addQueryParam("limit", "1")
+                .addQueryParam("offset", "1")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/tags-detail-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Tag> tags = api.listTagsInfo().concat().toList();
+
+        Assert.assertEquals(tags.size(), 2);
+        Assert.assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
+        Assert.assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
+    }
+
+
+    @Test
+    public void testListTagsInfoPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "tags/detail/?limit=0")
+                        .endpoint(endpoint + "tags/detail/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/tags-detail.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Tag> result = api.listTagsInfo();
-        assertNotNull(result);
+        for(Tag tag : api.listTagsInfo(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(tag);
+        }
     }
 
     @Test
@@ -1140,30 +1476,84 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListSubscriptions() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "subscriptions/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/subscriptions-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "subscriptions/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/subscriptions-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Subscription> subscriptions = api.listSubscriptions().concat().toList();
+
+        Assert.assertEquals(subscriptions.size(), 3);
+        Assert.assertEquals(subscriptions.get(0).getUuid(), "509f8e27-1e64-49bb-aa5a-baec074b0210");
+        Assert.assertEquals(subscriptions.get(1).getUuid(), "c2423c1a-8768-462c-bdc3-4ca09c1e650b");
+        Assert.assertEquals(subscriptions.get(2).getUuid(), "9bb117d3-4bc5-4e2d-a907-b20abd48eaf9");
+    }
+
+    @Test
+    public void testListSubscriptionsPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "subscriptions/?limit=0")
+                        .endpoint(endpoint + "subscriptions/?limit=3&offset=3")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/subscriptions.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Subscription> result = api.listSubscriptions();
-        assertNotNull(result);
+        for(Subscription subscription : api.listSubscriptions(new PaginationOptions.Builder().limit(3).offset(3).build())){
+            assertNotNull(subscription);
+        }
     }
 
     @Test
     public void testListSubscriptionsCalculator() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "subscriptioncalculator/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/subscriptions-first-page.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "subscriptioncalculator/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/subscriptions-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Subscription> subscriptions = api.listSubscriptionsCalculator().concat().toList();
+
+        Assert.assertEquals(subscriptions.size(), 3);
+        Assert.assertEquals(subscriptions.get(0).getUuid(), "509f8e27-1e64-49bb-aa5a-baec074b0210");
+        Assert.assertEquals(subscriptions.get(1).getUuid(), "c2423c1a-8768-462c-bdc3-4ca09c1e650b");
+        Assert.assertEquals(subscriptions.get(2).getUuid(), "9bb117d3-4bc5-4e2d-a907-b20abd48eaf9");
+    }
+
+    @Test
+    public void testListSubscriptionsCalculatorPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "subscriptioncalculator/?limit=0")
+                        .endpoint(endpoint + "subscriptioncalculator/?limit=2&offset=2")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/subscriptions.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Subscription> result = api.listSubscriptionsCalculator();
-        assertNotNull(result);
+        for(Subscription subscription : api.listSubscriptionsCalculator(new PaginationOptions.Builder().limit(2).offset(2).build())){
+            assertNotNull(subscription);
+        }
     }
 
     @Test
@@ -1273,43 +1663,127 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
     @Test
     public void testListDiscounts() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "discount/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/discount.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "discount/")
+                .addQueryParam("limit", "3")
+                .addQueryParam("offset", "3")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/discount-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Discount> discounts = api.listDiscounts().concat().toList();
+
+        Assert.assertEquals(discounts.size(), 5);
+        Assert.assertEquals(discounts.get(0).getValue(), 0.03);
+        Assert.assertEquals(discounts.get(1).getValue(), 0.1);
+        Assert.assertEquals(discounts.get(2).getValue(), 0.25);
+        Assert.assertEquals(discounts.get(3).getValue(), 0.35);
+        Assert.assertEquals(discounts.get(4).getValue(), 0.45);
+    }
+
+    @Test
+    public void testListDiscountsPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "discount/?limit=0")
+                        .endpoint(endpoint + "discount/?limit=5&offset=5")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/discount.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Discount> result = api.listDiscounts();
-        assertNotNull(result);
+        for(Discount discount : api.listDiscounts(new PaginationOptions.Builder().limit(5).offset(5).build())){
+            assertNotNull(discount);
+        }
     }
 
     @Test
     public void testListTransactions() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "ledger/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/ledger.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "ledger/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/ledger-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<Transaction> transactions = api.listTransactions().concat().toList();
+
+        Assert.assertEquals(transactions.size(), 4);
+        Assert.assertEquals(transactions.get(0).getId(), "11042920");
+        Assert.assertEquals(transactions.get(1).getId(), "11042919");
+        Assert.assertEquals(transactions.get(2).getId(), "11042661");
+        Assert.assertEquals(transactions.get(3).getId(), "11042660");
+    }
+
+    @Test
+    public void testListTransactionsPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                        .endpoint(endpoint + "ledger/?limit=0")
+                        .endpoint(endpoint + "ledger/?limit=4&offset=4")
                         .build()
                 , responseBuilder()
                 .payload(payloadFromResourceWithContentType("/ledger.json", MediaType.APPLICATION_JSON))
                 .build());
 
-        List<Transaction> result = api.listTransactions();
-        assertNotNull(result);
+        for(Transaction transaction : api.listTransactions(new PaginationOptions.Builder().limit(4).offset(4).build())){
+            assertNotNull(transaction);
+        }
     }
 
     @Test
     public void testListLicenses() throws Exception {
+        CloudSigma2Api api = requestsSendResponses(
+                getBuilder()
+                        .endpoint(endpoint + "licenses/")
+                        .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/licences.json", MediaType.APPLICATION_JSON))
+                .build()
+                , getBuilder()
+                .endpoint(endpoint + "licenses/")
+                .addQueryParam("limit", "2")
+                .addQueryParam("offset", "2")
+                .build()
+                , responseBuilder()
+                .payload(payloadFromResourceWithContentType("/licences-last-page.json", MediaType.APPLICATION_JSON))
+                .build());
+
+        List<License> licenses = api.listLicenses().concat().toList();
+
+        Assert.assertEquals(licenses.size(), 3);
+        Assert.assertEquals(licenses.get(0).getName(), "msft_lwa_00135");
+        Assert.assertEquals(licenses.get(1).getName(), "msft_p73_04837");
+        Assert.assertEquals(licenses.get(2).getName(), "msft_tfa_00009");
+    }
+
+    @Test
+    public void testListLicensesPaginatedCollection() throws Exception {
         CloudSigma2Api api = requestSendsResponse(
                 getBuilder()
-                    .endpoint(endpoint + "licenses/?limit=0")
+                    .endpoint(endpoint + "licenses/?limit=3&offset=3")
                     .build()
                 , responseBuilder()
                     .payload(payloadFromResourceWithContentType("/licences.json", MediaType.APPLICATION_JSON))
                     .build());
 
-        List<License> result = api.listLicenses();
-        assertNotNull(result);
+        for(License license : api.listLicenses(new PaginationOptions.Builder().limit(3).offset(3).build())){
+            assertNotNull(license);
+        }
     }
 }

@@ -1,0 +1,34 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 2,
+        "total_count": 3
+    },
+    "objects": [
+        {
+            "cpu": 1000,
+            "cpus_instead_of_cores": false,
+            "drives": [],
+            "enable_numa": false,
+            "hv_relaxed": false,
+            "hv_tsc": false,
+            "mem": 536870912,
+            "meta": {},
+            "name": "test_server_1",
+            "nics": [],
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "requirements": [],
+            "resource_uri": "/api/2.0/servers/33e71c37-0d0a-4a3a-a1ea-dc7265c9a154/",
+            "runtime": null,
+            "smp": 1,
+            "status": "stopped",
+            "tags": [],
+            "uuid": "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154",
+            "vnc_password": "testserver"
+        }
+    ]
+}
+

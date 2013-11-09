@@ -1,0 +1,20 @@
+{
+    "meta": {
+        "limit": 1,
+        "offset": 0,
+        "total_count": 2
+    },
+    "objects": [
+        {
+            "meta": {},
+            "name": "new tag",
+            "owner": {
+                "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
+                "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
+            },
+            "resource_uri": "/api/2.0/tags/956e2ca0-dee3-4b3f-a1be-a6e86f90946f/",
+            "resources": [],
+            "uuid": "956e2ca0-dee3-4b3f-a1be-a6e86f90946f"
+        },
+    ]
+}

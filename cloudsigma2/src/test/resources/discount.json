@@ -1,6 +1,6 @@
 {
     "meta": {
-        "limit": 0,
+        "limit": 3,
         "offset": 0,
         "total_count": 5
     },
@@ -16,14 +16,6 @@
         {
             "period": "1 year",
             "value": "0.2500000000"
-        },
-        {
-            "period": "2 years",
-            "value": "0.3500000000"
-        },
-        {
-            "period": "3 years",
-            "value": "0.4500000000"
         }
     ]
 }

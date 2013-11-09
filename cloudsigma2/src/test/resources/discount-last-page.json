@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "limit": 2,
+        "offset": 3,
+        "total_count": 5
+    },
+    "objects": [
+        {
+            "period": "2 years",
+            "value": "0.3500000000"
+        },
+        {
+            "period": "3 years",
+            "value": "0.4500000000"
+        }
+    ]
+}
