@@ -40,46 +40,47 @@ import java.util.Map;
 @Test(groups = "unit")
 public class VLANInfoToJsonTest {
 
-    private static final VLANInfoToJson VLAN_INFO_TO_JSON = Guice.createInjector().getInstance(VLANInfoToJson.class);
+   private static final VLANInfoToJson VLAN_INFO_TO_JSON = Guice.createInjector().getInstance(VLANInfoToJson.class);
 
-    private VLANInfo input;
-    private JsonObject expected;
-    {
-        Map<String, String> meta = new HashMap<String, String>();
-        meta.put("description", "test vlan");
-        meta.put("test_key_1", "test_value_1");
-        meta.put("test_key_2", "test_value_2");
+   private VLANInfo input;
+   private JsonObject expected;
 
-        try {
-            input = new VLANInfo.Builder()
-                    .meta(meta)
-                    .resourceUri(new URI("/api/2.0/vlans/96537817-f4b6-496b-a861-e74192d3ccb0/"))
-                    .servers(ImmutableList.of(
-                            new Server.Builder()
-                                    .uuid("81f911f9-5152-4328-8671-02543bafbd0e")
-                                    .resourceUri(new URI("/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"))
-                                    .build()
-                            , new Server.Builder()
-                            .uuid("19163e1a-a6d6-4e73-8087-157dd302c373")
-                            .resourceUri(new URI("/api/2.0/servers/19163e1a-a6d6-4e73-8087-157dd302c373/"))
-                            .build()
-                    ))
-                    .subscription(new Subscription.Builder()
-                            .id("7272")
-                            .resourceUri(new URI("/api/2.0/subscriptions/7272/"))
-                            .build())
-                    .tags(new ArrayList<Tag>())
-                    .uuid("96537817-f4b6-496b-a861-e74192d3ccb0")
-                    .build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+   {
+      Map<String, String> meta = new HashMap<String, String>();
+      meta.put("description", "test vlan");
+      meta.put("test_key_1", "test_value_1");
+      meta.put("test_key_2", "test_value_2");
 
-        expected = new JsonObject();
-        expected.add("meta", new JsonParser().parse(new Gson().toJson(meta)));
-    }
+      try {
+         input = new VLANInfo.Builder()
+               .meta(meta)
+               .resourceUri(new URI("/api/2.0/vlans/96537817-f4b6-496b-a861-e74192d3ccb0/"))
+               .servers(ImmutableList.of(
+                     new Server.Builder()
+                           .uuid("81f911f9-5152-4328-8671-02543bafbd0e")
+                           .resourceUri(new URI("/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"))
+                           .build()
+                     , new Server.Builder()
+                     .uuid("19163e1a-a6d6-4e73-8087-157dd302c373")
+                     .resourceUri(new URI("/api/2.0/servers/19163e1a-a6d6-4e73-8087-157dd302c373/"))
+                     .build()
+               ))
+               .subscription(new Subscription.Builder()
+                     .id("7272")
+                     .resourceUri(new URI("/api/2.0/subscriptions/7272/"))
+                     .build())
+               .tags(new ArrayList<Tag>())
+               .uuid("96537817-f4b6-496b-a861-e74192d3ccb0")
+               .build();
+      } catch (URISyntaxException e) {
+         e.printStackTrace();
+      }
 
-    public void test(){
-        Assert.assertEquals(VLAN_INFO_TO_JSON.apply(input), expected);
-    }
+      expected = new JsonObject();
+      expected.add("meta", new JsonParser().parse(new Gson().toJson(meta)));
+   }
+
+   public void test() {
+      Assert.assertEquals(VLAN_INFO_TO_JSON.apply(input), expected);
+   }
 }

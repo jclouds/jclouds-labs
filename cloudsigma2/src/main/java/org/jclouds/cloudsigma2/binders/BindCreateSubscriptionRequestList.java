@@ -36,33 +36,34 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Singleton
 public class BindCreateSubscriptionRequestList implements Binder {
 
-    private final CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction;
+   private final CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction;
 
-    @Inject
-    public BindCreateSubscriptionRequestList(CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction) {
-        this.subscriptionRequestJsonObjectFunction = subscriptionRequestJsonObjectFunction;
-    }
+   @Inject
+   public BindCreateSubscriptionRequestList(CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction) {
+      this.subscriptionRequestJsonObjectFunction = subscriptionRequestJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof List, "this binder is only valid for List<CreateSubscriptionRequest>!");
-        List list = List.class.cast(input);
-        for(Object o : list){
-            checkArgument(o instanceof CreateSubscriptionRequest, "this binder is only valid for List<CreateSubscriptionRequest>!");
-        }
-        List<CreateSubscriptionRequest> createSubscriptionRequests = (List<CreateSubscriptionRequest>) input;
-        JsonArray subscriptionsJsonArray = new JsonArray();
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof List, "this binder is only valid for List<CreateSubscriptionRequest>!");
+      List list = List.class.cast(input);
+      for (Object o : list) {
+         checkArgument(o instanceof CreateSubscriptionRequest
+               , "this binder is only valid for List<CreateSubscriptionRequest>!");
+      }
+      List<CreateSubscriptionRequest> createSubscriptionRequests = (List<CreateSubscriptionRequest>) input;
+      JsonArray subscriptionsJsonArray = new JsonArray();
 
-        for(CreateSubscriptionRequest createSubscriptionRequest : createSubscriptionRequests){
-            JsonObject sunbscriptionRequestObject = subscriptionRequestJsonObjectFunction.apply(createSubscriptionRequest);
-            subscriptionsJsonArray.add(sunbscriptionRequestObject);
-        }
+      for (CreateSubscriptionRequest createSubscriptionRequest : createSubscriptionRequests) {
+         JsonObject sunbscriptionRequestObject = subscriptionRequestJsonObjectFunction.apply(createSubscriptionRequest);
+         subscriptionsJsonArray.add(sunbscriptionRequestObject);
+      }
 
-        JsonObject json = new JsonObject();
-        json.add("objects", subscriptionsJsonArray);
+      JsonObject json = new JsonObject();
+      json.add("objects", subscriptionsJsonArray);
 
-        request.setPayload(json.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(json.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

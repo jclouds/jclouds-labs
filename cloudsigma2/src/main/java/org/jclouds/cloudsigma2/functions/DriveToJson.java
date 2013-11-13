@@ -29,35 +29,35 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class DriveToJson implements Function<DriveInfo, JsonObject> {
-    @Override
-    public JsonObject apply(DriveInfo input) {
-        JsonObject driveObject = new JsonObject();
+   @Override
+   public JsonObject apply(DriveInfo input) {
+      JsonObject driveObject = new JsonObject();
 
-        if(input.getName() != null){
-            driveObject.addProperty("name", input.getName());
-        }
+      if (input.getName() != null) {
+         driveObject.addProperty("name", input.getName());
+      }
 
-        if(input.getSize() != null){
-            driveObject.addProperty("size", "" + input.getSize().toString());
-        }
+      if (input.getSize() != null) {
+         driveObject.addProperty("size", "" + input.getSize().toString());
+      }
 
-        if(input.getMedia() != null){
-            driveObject.addProperty("media", input.getMedia().toString());
-        }
+      if (input.getMedia() != null) {
+         driveObject.addProperty("media", input.getMedia().toString());
+      }
 
-        if(input.getAffinities() != null){
-            driveObject.add("affinities", new JsonParser().parse(new Gson().toJson(input.getAffinities())));
-        }
+      if (input.getAffinities() != null) {
+         driveObject.add("affinities", new JsonParser().parse(new Gson().toJson(input.getAffinities())));
+      }
 
-        if(input.getMeta() != null){
-            driveObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         driveObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        if(input.getTags() != null){
-            driveObject.add("tags", new JsonParser().parse(new Gson().toJson(input.getTags())));
-        }
+      if (input.getTags() != null) {
+         driveObject.add("tags", new JsonParser().parse(new Gson().toJson(input.getTags())));
+      }
 
-        driveObject.addProperty("allow_multimount", input.isAllowMultimount());
-        return driveObject;
-    }
+      driveObject.addProperty("allow_multimount", input.isAllowMultimount());
+      return driveObject;
+   }
 }

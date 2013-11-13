@@ -25,133 +25,129 @@ import java.net.URI;
  */
 public class TagResource {
 
-    public static class Builder{
-        private Owner owner;
-        private URI resourceUri;
-        private String uuid;
-        private TagResourceType resourceType;
+   public static class Builder {
+      private Owner owner;
+      private URI resourceUri;
+      private String uuid;
+      private TagResourceType resourceType;
 
-        public Builder uuid(String uuid) {
-            this.uuid = uuid;
-            return this;
-        }
+      public Builder uuid(String uuid) {
+         this.uuid = uuid;
+         return this;
+      }
 
-        public Builder resourceUri(URI resourceUri) {
-            this.resourceUri = resourceUri;
-            return this;
-        }
+      public Builder resourceUri(URI resourceUri) {
+         this.resourceUri = resourceUri;
+         return this;
+      }
 
-        public Builder owner(Owner owner) {
-            this.owner = owner;
-            return this;
-        }
+      public Builder owner(Owner owner) {
+         this.owner = owner;
+         return this;
+      }
 
-        public Builder resourceType(TagResourceType resourceType) {
-            this.resourceType = resourceType;
-            return this;
-        }
+      public Builder resourceType(TagResourceType resourceType) {
+         this.resourceType = resourceType;
+         return this;
+      }
 
-        public TagResource build() {
-            return new TagResource(uuid, resourceType, owner, resourceUri);
-        }
-    }
+      public TagResource build() {
+         return new TagResource(uuid, resourceType, owner, resourceUri);
+      }
+   }
 
-    private final Owner owner;
-    @Named("resource_uri")
-    private final URI resourceUri;
-    private final String uuid;
-    @Named("resource_type")
-    private final TagResourceType resourceType;
+   private final Owner owner;
+   @Named("resource_uri")
+   private final URI resourceUri;
+   private final String uuid;
+   @Named("resource_type")
+   private final TagResourceType resourceType;
 
-    @ConstructorProperties({
-            "uuid", "resource_type", "owner", "resource_uri"
-    })
-    public TagResource(String uuid, TagResourceType resourceType, Owner owner, URI resourceUri) {
-        this.owner = owner;
-        this.resourceUri = resourceUri;
-        this.uuid = uuid;
-        this.resourceType = resourceType;
-    }
+   @ConstructorProperties({
+         "uuid", "resource_type", "owner", "resource_uri"
+   })
+   public TagResource(String uuid, TagResourceType resourceType, Owner owner, URI resourceUri) {
+      this.owner = owner;
+      this.resourceUri = resourceUri;
+      this.uuid = uuid;
+      this.resourceType = resourceType;
+   }
 
-    /**
-     *
-     * @return resource owner
-     */
-    public Owner getOwner() {
-        return owner;
-    }
+   /**
+    * @return resource owner
+    */
+   public Owner getOwner() {
+      return owner;
+   }
 
-    /**
-     *
-     * @return resource type
-     */
-    public TagResourceType getResourceType() {
-        return resourceType;
-    }
+   /**
+    * @return resource type
+    */
+   public TagResourceType getResourceType() {
+      return resourceType;
+   }
 
-    /**
-     *
-     * @return resource uri
-     */
-    public URI getResourceUri() {
-        return resourceUri;
-    }
+   /**
+    * @return resource uri
+    */
+   public URI getResourceUri() {
+      return resourceUri;
+   }
 
-    /**
-     *
-     * @return resource uuid
-     */
-    public String getUuid() {
-        return uuid;
-    }
+   /**
+    * @return resource uuid
+    */
+   public String getUuid() {
+      return uuid;
+   }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      TagResource other = (TagResource) obj;
+      if (owner == null) {
+         if (other.owner != null)
             return false;
-        if (getClass() != obj.getClass())
+      } else if (!owner.equals(other.owner))
+         return false;
+      if (uuid == null) {
+         if (other.uuid != null)
             return false;
-        TagResource other = (TagResource) obj;
-        if (owner == null) {
-            if (other.owner != null)
-                return false;
-        } else if (!owner.equals(other.owner))
+      } else if (!uuid.equals(other.uuid))
+         return false;
+      if (resourceUri == null) {
+         if (other.resourceUri != null)
             return false;
-        if (uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!uuid.equals(other.uuid))
+      } else if (!resourceUri.equals(other.resourceUri))
+         return false;
+      if (resourceType == null) {
+         if (other.resourceType != null)
             return false;
-        if (resourceUri == null) {
-            if (other.resourceUri != null)
-                return false;
-        } else if (!resourceUri.equals(other.resourceUri))
-            return false;
-        if (resourceType == null) {
-            if (other.resourceType != null)
-                return false;
-        } else if (!resourceType.equals(other.resourceType))
-            return false;
+      } else if (!resourceType.equals(other.resourceType))
+         return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-        result = prime * result + ((owner == null) ? 0 : owner.hashCode());
-        result = prime * result + ((resourceUri == null) ? 0 : resourceUri.hashCode());
-        result = prime * result + ((resourceType == null) ? 0 : resourceType.hashCode());
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+      result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+      result = prime * result + ((resourceUri == null) ? 0 : resourceUri.hashCode());
+      result = prime * result + ((resourceType == null) ? 0 : resourceType.hashCode());
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[uuid=" + uuid + ", owner=" + owner
-                + ", resourceUri=" + resourceUri + ", resourceType=" + resourceType + "]";
-    }
+   @Override
+   public String toString() {
+      return "[uuid=" + uuid + ", owner=" + owner
+            + ", resourceUri=" + resourceUri + ", resourceType=" + resourceType + "]";
+   }
 }

@@ -36,38 +36,38 @@ import java.util.List;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class ParseDiscounts extends ParseJson<ParseDiscounts.Discounts>{
-    static class Discounts extends PaginatedCollection<Discount> {
+public class ParseDiscounts extends ParseJson<ParseDiscounts.Discounts> {
+   static class Discounts extends PaginatedCollection<Discount> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public Discounts(Iterable<Discount> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public Discounts(Iterable<Discount> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseDiscounts(Json json) {
-        super(json, TypeLiteral.get(Discounts.class));
-    }
+   @Inject
+   public ParseDiscounts(Json json) {
+      super(json, TypeLiteral.get(Discounts.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<Discount, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<Discount, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Discount>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Discount>>() {
-                @Override
-                public IterableWithMarker<Discount> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listDiscounts(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Discount>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Discount>>() {
+            @Override
+            public IterableWithMarker<Discount> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listDiscounts(paginationOptions);
+            }
+         };
+      }
+   }
 }

@@ -33,22 +33,22 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Singleton
 public class BindTagToJsonRequest implements Binder {
-    private final TagToJson createTagRequestToJson;
+   private final TagToJson createTagRequestToJson;
 
-    @Inject
-    public BindTagToJsonRequest(TagToJson createTagRequestToJson) {
-        this.createTagRequestToJson = createTagRequestToJson;
-    }
+   @Inject
+   public BindTagToJsonRequest(TagToJson createTagRequestToJson) {
+      this.createTagRequestToJson = createTagRequestToJson;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof Tag, "this binder is only valid for Tag!");
-        Tag create = Tag.class.cast(input);
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof Tag, "this binder is only valid for Tag!");
+      Tag create = Tag.class.cast(input);
 
-        JsonObject serverInfoJson = createTagRequestToJson.apply(create);
-        request.setPayload(serverInfoJson.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      JsonObject serverInfoJson = createTagRequestToJson.apply(create);
+      request.setPayload(serverInfoJson.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }
 

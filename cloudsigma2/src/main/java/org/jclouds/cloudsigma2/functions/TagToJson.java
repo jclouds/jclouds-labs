@@ -33,28 +33,28 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TagToJson implements Function<Tag, JsonObject> {
-    @Override
-    public JsonObject apply(@Nullable Tag input) {
-        JsonObject jsonTag = new JsonObject();
+   @Override
+   public JsonObject apply(@Nullable Tag input) {
+      JsonObject jsonTag = new JsonObject();
 
-        if(input.getName() != null){
-            jsonTag.addProperty("name", input.getName());
-        }
+      if (input.getName() != null) {
+         jsonTag.addProperty("name", input.getName());
+      }
 
-        if(input.getMeta() != null){
-            jsonTag.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         jsonTag.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        if(input.getResources() != null && input.getResources().size() != 0){
-            JsonArray uuidsArray = new JsonArray();
+      if (input.getResources() != null && input.getResources().size() != 0) {
+         JsonArray uuidsArray = new JsonArray();
 
-            for(TagResource tagResource : input.getResources()){
-                uuidsArray.add(new JsonPrimitive(tagResource.getUuid()));
-            }
+         for (TagResource tagResource : input.getResources()) {
+            uuidsArray.add(new JsonPrimitive(tagResource.getUuid()));
+         }
 
-            jsonTag.add("resources", uuidsArray);
-        }
+         jsonTag.add("resources", uuidsArray);
+      }
 
-        return jsonTag;
-    }
+      return jsonTag;
+   }
 }

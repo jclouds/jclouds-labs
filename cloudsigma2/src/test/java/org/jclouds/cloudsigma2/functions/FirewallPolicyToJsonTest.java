@@ -35,116 +35,116 @@ import java.util.Map;
 @Test(groups = "unit")
 public class FirewallPolicyToJsonTest {
 
-    private final static FirewallPolicyToJson FIREWALL_POLICY_TO_JSON = Guice
-                                                                        .createInjector()
-                                                                        .getInstance(FirewallPolicyToJson.class);
+   private final static FirewallPolicyToJson FIREWALL_POLICY_TO_JSON = Guice
+         .createInjector()
+         .getInstance(FirewallPolicyToJson.class);
 
-    private FirewallPolicy input;
-    private JsonObject expected;
+   private FirewallPolicy input;
+   private JsonObject expected;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        Map <String, String> meta = new HashMap<String, String>();
-        meta.put("description", "test firewall policy");
-        meta.put("test_key_1", "test_value_1");
-        meta.put("test_key_2", "test_value_2");
+   @BeforeMethod
+   public void setUp() throws Exception {
+      Map<String, String> meta = new HashMap<String, String>();
+      meta.put("description", "test firewall policy");
+      meta.put("test_key_1", "test_value_1");
+      meta.put("test_key_2", "test_value_2");
 
-        input = new FirewallPolicy.Builder()
-                .meta(meta)
-                .name("My awesome policy")
-                .resourceUri(new URI("/api/2.0/fwpolicies/cf8479b4-c98b-46c8-ab9c-108bb00c8218/"))
-                .rules(ImmutableList.of(
-                        new FirewallRule.Builder()
-                                .action(FirewallAction.DROP)
-                                .comment("Drop traffic from the VM to IP address 23.0.0.0/32")
-                                .direction(FirewallDirection.OUT)
-                                .destinationIp("23.0.0.0/32")
-                                .build()
-                        , new FirewallRule.Builder()
-                                .action(FirewallAction.ACCEPT)
-                                .comment("Allow SSH traffic to the VM from our office in Dubai")
-                                .direction(FirewallDirection.IN)
-                                .destinationPort("22")
-                                .ipProtocol(FirewallIpProtocol.TCP)
-                                .sourceIp("172.66.32.0/24")
-                                .build()
-                        , new FirewallRule.Builder()
-                                .action(FirewallAction.DROP)
-                                .comment("Drop all other SSH traffic to the VM")
-                                .direction(FirewallDirection.IN)
-                                .destinationPort("22")
-                                .ipProtocol(FirewallIpProtocol.TCP)
-                                .build()
-                        , new FirewallRule.Builder()
-                                .action(FirewallAction.DROP)
-                                .comment("Drop all UDP traffic to the VM, not originating from 172.66.32.55")
-                                .direction(FirewallDirection.IN)
-                                .ipProtocol(FirewallIpProtocol.UDP)
-                                .sourceIp("!172.66.32.55/32")
-                                .build()
-                        , new FirewallRule.Builder()
-                                .action(FirewallAction.DROP)
-                                .comment("Drop any traffic, to the VM with destination port not between 1-1024")
-                                .direction(FirewallDirection.IN)
-                                .destinationPort("!1:1024")
-                                .ipProtocol(FirewallIpProtocol.TCP)
-                                .build()
-                ))
-                .build();
+      input = new FirewallPolicy.Builder()
+            .meta(meta)
+            .name("My awesome policy")
+            .resourceUri(new URI("/api/2.0/fwpolicies/cf8479b4-c98b-46c8-ab9c-108bb00c8218/"))
+            .rules(ImmutableList.of(
+                  new FirewallRule.Builder()
+                        .action(FirewallAction.DROP)
+                        .comment("Drop traffic from the VM to IP address 23.0.0.0/32")
+                        .direction(FirewallDirection.OUT)
+                        .destinationIp("23.0.0.0/32")
+                        .build()
+                  , new FirewallRule.Builder()
+                  .action(FirewallAction.ACCEPT)
+                  .comment("Allow SSH traffic to the VM from our office in Dubai")
+                  .direction(FirewallDirection.IN)
+                  .destinationPort("22")
+                  .ipProtocol(FirewallIpProtocol.TCP)
+                  .sourceIp("172.66.32.0/24")
+                  .build()
+                  , new FirewallRule.Builder()
+                  .action(FirewallAction.DROP)
+                  .comment("Drop all other SSH traffic to the VM")
+                  .direction(FirewallDirection.IN)
+                  .destinationPort("22")
+                  .ipProtocol(FirewallIpProtocol.TCP)
+                  .build()
+                  , new FirewallRule.Builder()
+                  .action(FirewallAction.DROP)
+                  .comment("Drop all UDP traffic to the VM, not originating from 172.66.32.55")
+                  .direction(FirewallDirection.IN)
+                  .ipProtocol(FirewallIpProtocol.UDP)
+                  .sourceIp("!172.66.32.55/32")
+                  .build()
+                  , new FirewallRule.Builder()
+                  .action(FirewallAction.DROP)
+                  .comment("Drop any traffic, to the VM with destination port not between 1-1024")
+                  .direction(FirewallDirection.IN)
+                  .destinationPort("!1:1024")
+                  .ipProtocol(FirewallIpProtocol.TCP)
+                  .build()
+            ))
+            .build();
 
-        expected = new JsonObject();
+      expected = new JsonObject();
 
-        expected.addProperty("name", "My awesome policy");
+      expected.addProperty("name", "My awesome policy");
 
-        JsonObject metaObject = new JsonObject();
-        metaObject.addProperty("description", "test firewall policy");
-        metaObject.addProperty("test_key_1", "test_value_1");
-        metaObject.addProperty("test_key_2", "test_value_2");
+      JsonObject metaObject = new JsonObject();
+      metaObject.addProperty("description", "test firewall policy");
+      metaObject.addProperty("test_key_1", "test_value_1");
+      metaObject.addProperty("test_key_2", "test_value_2");
 
-        expected.add("meta", metaObject);
+      expected.add("meta", metaObject);
 
-        JsonObject rule1Object = new JsonObject();
-        rule1Object.addProperty("action", "drop");
-        rule1Object.addProperty("comment", "Drop traffic from the VM to IP address 23.0.0.0/32");
-        rule1Object.addProperty("direction", "out");
-        rule1Object.addProperty("dst_ip", "23.0.0.0/32");
-        JsonObject rule2Object = new JsonObject();
-        rule2Object.addProperty("action", "accept");
-        rule2Object.addProperty("comment", "Allow SSH traffic to the VM from our office in Dubai");
-        rule2Object.addProperty("direction", "in");
-        rule2Object.addProperty("dst_port", "22");
-        rule2Object.addProperty("ip_proto", "tcp");
-        rule2Object.addProperty("src_ip", "172.66.32.0/24");
-        JsonObject rule3Object = new JsonObject();
-        rule3Object.addProperty("action", "drop");
-        rule3Object.addProperty("comment", "Drop all other SSH traffic to the VM");
-        rule3Object.addProperty("direction", "in");
-        rule3Object.addProperty("dst_port", "22");
-        rule3Object.addProperty("ip_proto", "tcp");
-        JsonObject rule4Object = new JsonObject();
-        rule4Object.addProperty("action", "drop");
-        rule4Object.addProperty("comment", "Drop all UDP traffic to the VM, not originating from 172.66.32.55");
-        rule4Object.addProperty("direction", "in");
-        rule4Object.addProperty("ip_proto", "udp");
-        rule4Object.addProperty("src_ip", "!172.66.32.55/32");
-        JsonObject rule5Object = new JsonObject();
-        rule5Object.addProperty("action", "drop");
-        rule5Object.addProperty("comment", "Drop any traffic, to the VM with destination port not between 1-1024");
-        rule5Object.addProperty("direction", "in");
-        rule5Object.addProperty("dst_port", "!1:1024");
-        rule5Object.addProperty("ip_proto", "tcp");
+      JsonObject rule1Object = new JsonObject();
+      rule1Object.addProperty("action", "drop");
+      rule1Object.addProperty("comment", "Drop traffic from the VM to IP address 23.0.0.0/32");
+      rule1Object.addProperty("direction", "out");
+      rule1Object.addProperty("dst_ip", "23.0.0.0/32");
+      JsonObject rule2Object = new JsonObject();
+      rule2Object.addProperty("action", "accept");
+      rule2Object.addProperty("comment", "Allow SSH traffic to the VM from our office in Dubai");
+      rule2Object.addProperty("direction", "in");
+      rule2Object.addProperty("dst_port", "22");
+      rule2Object.addProperty("ip_proto", "tcp");
+      rule2Object.addProperty("src_ip", "172.66.32.0/24");
+      JsonObject rule3Object = new JsonObject();
+      rule3Object.addProperty("action", "drop");
+      rule3Object.addProperty("comment", "Drop all other SSH traffic to the VM");
+      rule3Object.addProperty("direction", "in");
+      rule3Object.addProperty("dst_port", "22");
+      rule3Object.addProperty("ip_proto", "tcp");
+      JsonObject rule4Object = new JsonObject();
+      rule4Object.addProperty("action", "drop");
+      rule4Object.addProperty("comment", "Drop all UDP traffic to the VM, not originating from 172.66.32.55");
+      rule4Object.addProperty("direction", "in");
+      rule4Object.addProperty("ip_proto", "udp");
+      rule4Object.addProperty("src_ip", "!172.66.32.55/32");
+      JsonObject rule5Object = new JsonObject();
+      rule5Object.addProperty("action", "drop");
+      rule5Object.addProperty("comment", "Drop any traffic, to the VM with destination port not between 1-1024");
+      rule5Object.addProperty("direction", "in");
+      rule5Object.addProperty("dst_port", "!1:1024");
+      rule5Object.addProperty("ip_proto", "tcp");
 
-        JsonArray rulesArray = new JsonArray();
-        rulesArray.add(rule1Object);
-        rulesArray.add(rule2Object);
-        rulesArray.add(rule3Object);
-        rulesArray.add(rule4Object);
-        rulesArray.add(rule5Object);
+      JsonArray rulesArray = new JsonArray();
+      rulesArray.add(rule1Object);
+      rulesArray.add(rule2Object);
+      rulesArray.add(rule3Object);
+      rulesArray.add(rule4Object);
+      rulesArray.add(rule5Object);
 
-        expected.add("rules", rulesArray);
-    }
+      expected.add("rules", rulesArray);
+   }
 
-    public void test(){
-        Assert.assertEquals(FIREWALL_POLICY_TO_JSON.apply(input), expected);
-    }
+   public void test() {
+      Assert.assertEquals(FIREWALL_POLICY_TO_JSON.apply(input), expected);
+   }
 }

@@ -22,21 +22,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Vladimir Shevchenko
  */
 public enum SubscriptionResource {
-    DSSD, CPU, MEM, TX, IP, VLAN;
-    public String value() {
-        return name().toLowerCase();
-    }
+   DSSD, CPU, MEM, TX, IP, VLAN;
 
-    @Override
-    public String toString() {
-        return value();
-    }
+   public String value() {
+      return name().toLowerCase();
+   }
 
-    public static SubscriptionResource fromValue(String status) {
-        try {
-            return valueOf(checkNotNull(status, "status").toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
+   @Override
+   public String toString() {
+      return value();
+   }
+
+   public static SubscriptionResource fromValue(String status) {
+      try {
+         return valueOf(checkNotNull(status, "status").toUpperCase());
+      } catch (IllegalArgumentException e) {
+         return null;
+      }
+   }
 }

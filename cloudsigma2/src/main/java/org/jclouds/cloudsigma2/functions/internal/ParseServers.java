@@ -38,37 +38,37 @@ import java.util.List;
 @Singleton
 public class ParseServers extends ParseJson<ParseServers.Servers> {
 
-    static class Servers extends PaginatedCollection<Server>{
+   static class Servers extends PaginatedCollection<Server> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public Servers(Iterable<Server> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public Servers(Iterable<Server> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseServers(Json json) {
-        super(json, TypeLiteral.get(Servers.class));
-    }
+   @Inject
+   public ParseServers(Json json) {
+      super(json, TypeLiteral.get(Servers.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<Server, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<Server, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Server>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Server>>() {
-                @Override
-                public IterableWithMarker<Server> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listServers(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Server>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Server>>() {
+            @Override
+            public IterableWithMarker<Server> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listServers(paginationOptions);
+            }
+         };
+      }
+   }
 }

@@ -34,33 +34,33 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public class BindFirewallPoliciesListToJsonRequest implements Binder {
 
-    private final FirewallPolicyToJson policyJsonObjectFunction;
+   private final FirewallPolicyToJson policyJsonObjectFunction;
 
-    @Inject
-    public BindFirewallPoliciesListToJsonRequest(FirewallPolicyToJson policyJsonObjectFunction) {
-        this.policyJsonObjectFunction = policyJsonObjectFunction;
-    }
+   @Inject
+   public BindFirewallPoliciesListToJsonRequest(FirewallPolicyToJson policyJsonObjectFunction) {
+      this.policyJsonObjectFunction = policyJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof List, "this binder is only valid for List<FirewallPolicy>!");
-        List list = List.class.cast(input);
-        for(Object o : list){
-            checkArgument(o instanceof FirewallPolicy, "this binder is only valid for List<FirewallPolicy>!");
-        }
-        List<FirewallPolicy> firewallPolicies = (List<FirewallPolicy>) input;
-        JsonArray firewalsJsonArray = new JsonArray();
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof List, "this binder is only valid for List<FirewallPolicy>!");
+      List list = List.class.cast(input);
+      for (Object o : list) {
+         checkArgument(o instanceof FirewallPolicy, "this binder is only valid for List<FirewallPolicy>!");
+      }
+      List<FirewallPolicy> firewallPolicies = (List<FirewallPolicy>) input;
+      JsonArray firewalsJsonArray = new JsonArray();
 
-        for(FirewallPolicy firewallPolicy : firewallPolicies){
-            JsonObject firewallObject = policyJsonObjectFunction.apply(firewallPolicy);
-            firewalsJsonArray.add(firewallObject);
-        }
+      for (FirewallPolicy firewallPolicy : firewallPolicies) {
+         JsonObject firewallObject = policyJsonObjectFunction.apply(firewallPolicy);
+         firewalsJsonArray.add(firewallObject);
+      }
 
-        JsonObject json = new JsonObject();
-        json.add("objects", firewalsJsonArray);
+      JsonObject json = new JsonObject();
+      json.add("objects", firewalsJsonArray);
 
-        request.setPayload(json.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(json.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

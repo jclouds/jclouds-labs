@@ -38,37 +38,37 @@ import java.util.List;
 @Singleton
 public class ParseDriveInfos extends ParseJson<ParseDriveInfos.DriveInfos> {
 
-    static class DriveInfos extends PaginatedCollection<DriveInfo>{
+   static class DriveInfos extends PaginatedCollection<DriveInfo> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public DriveInfos(Iterable<DriveInfo> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public DriveInfos(Iterable<DriveInfo> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseDriveInfos(Json json) {
-        super(json, TypeLiteral.get(DriveInfos.class));
-    }
+   @Inject
+   public ParseDriveInfos(Json json) {
+      super(json, TypeLiteral.get(DriveInfos.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<DriveInfo, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<DriveInfo, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<DriveInfo>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<DriveInfo>>() {
-                @Override
-                public IterableWithMarker<DriveInfo> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listDrivesInfo(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<DriveInfo>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<DriveInfo>>() {
+            @Override
+            public IterableWithMarker<DriveInfo> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listDrivesInfo(paginationOptions);
+            }
+         };
+      }
+   }
 }

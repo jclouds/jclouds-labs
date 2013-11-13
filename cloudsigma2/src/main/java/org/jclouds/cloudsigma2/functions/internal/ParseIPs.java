@@ -37,37 +37,37 @@ import java.util.List;
  */
 @Singleton
 public class ParseIPs extends ParseJson<ParseIPs.IPs> {
-    static class IPs extends PaginatedCollection<IP> {
+   static class IPs extends PaginatedCollection<IP> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public IPs(Iterable<IP> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public IPs(Iterable<IP> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseIPs(Json json) {
-        super(json, TypeLiteral.get(IPs.class));
-    }
+   @Inject
+   public ParseIPs(Json json) {
+      super(json, TypeLiteral.get(IPs.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<IP, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<IP, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<IP>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<IP>>() {
-                @Override
-                public IterableWithMarker<IP> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listIPs(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<IP>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<IP>>() {
+            @Override
+            public IterableWithMarker<IP> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listIPs(paginationOptions);
+            }
+         };
+      }
+   }
 }

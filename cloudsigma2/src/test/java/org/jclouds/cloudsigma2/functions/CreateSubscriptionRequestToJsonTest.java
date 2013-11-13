@@ -30,28 +30,28 @@ import org.testng.annotations.Test;
 @Test(groups = "unit")
 public class CreateSubscriptionRequestToJsonTest {
 
-    private static final CreateSubscriptionRequestToJson CREATE_SUBSCRIPTION_REQUEST_TO_JSON = Guice
-                                                        .createInjector()
-                                                        .getInstance(CreateSubscriptionRequestToJson.class);
+   private static final CreateSubscriptionRequestToJson CREATE_SUBSCRIPTION_REQUEST_TO_JSON = Guice
+         .createInjector()
+         .getInstance(CreateSubscriptionRequestToJson.class);
 
-    private CreateSubscriptionRequest input;
-    private JsonObject expected;
+   private CreateSubscriptionRequest input;
+   private JsonObject expected;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        input = new  CreateSubscriptionRequest.Builder()
-                .amount("30000")
-                .period("1 month")
-                .resource(SubscriptionResource.DSSD)
-                .build();
+   @BeforeMethod
+   public void setUp() throws Exception {
+      input = new CreateSubscriptionRequest.Builder()
+            .amount("30000")
+            .period("1 month")
+            .resource(SubscriptionResource.DSSD)
+            .build();
 
-        expected = new JsonObject();
-        expected.addProperty("amount", "30000");
-        expected.addProperty("period", "1 month");
-        expected.addProperty("resource", "dssd");
-    }
+      expected = new JsonObject();
+      expected.addProperty("amount", "30000");
+      expected.addProperty("period", "1 month");
+      expected.addProperty("resource", "dssd");
+   }
 
-    public void test(){
-        Assert.assertEquals(CREATE_SUBSCRIPTION_REQUEST_TO_JSON.apply(input), expected);
-    }
+   public void test() {
+      Assert.assertEquals(CREATE_SUBSCRIPTION_REQUEST_TO_JSON.apply(input), expected);
+   }
 }

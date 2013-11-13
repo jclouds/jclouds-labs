@@ -36,52 +36,53 @@ import java.util.HashMap;
 @Test(groups = "unit")
 public class LibraryDriveToJsonTest {
 
-    private static final DriveToJson DRIVE_TO_JSON = Guice.createInjector().getInstance(DriveToJson.class);
-    private static final LibraryDriveToJson LIBRARY_DRIVE_TO_JSON = new LibraryDriveToJson(DRIVE_TO_JSON);
+   private static final DriveToJson DRIVE_TO_JSON = Guice.createInjector().getInstance(DriveToJson.class);
+   private static final LibraryDriveToJson LIBRARY_DRIVE_TO_JSON = new LibraryDriveToJson(DRIVE_TO_JSON);
 
-    private JsonObject expected = new JsonObject();
-    private LibraryDrive input;
-    {
-        expected.addProperty("name", "Vyatta-6.5-32bit-Virtualization-ISO");
-        expected.addProperty("size", "1000000000");
-        expected.addProperty("media", "cdrom");
-        expected.add("meta", new JsonObject());
-        expected.add("tags", new JsonArray());
-        expected.addProperty("allow_multimount", false);
-        expected.addProperty("favourite", true);
-        expected.addProperty("description", "test_description");
+   private JsonObject expected = new JsonObject();
+   private LibraryDrive input;
 
-        try {
-            input = new LibraryDrive.Builder()
-                    .allowMultimount(false)
-                    .arch("32")
-                    .category(ImmutableList.of("general"))
-                    .description("test_description")
-                    .isFavorite(true)
-                    .imageType("install")
-                    .installNotes("test_install_notes")
-                    .jobs(new ArrayList<String>())
-                    .licenses(new ArrayList<DriveLicense>())
-                    .media(MediaType.CDROM)
-                    .meta(new HashMap<String, String>())
-                    .mountedOn(new ArrayList<Server>())
-                    .name("Vyatta-6.5-32bit-Virtualization-ISO")
-                    .os("linux")
-                    .owner(null)
-                    .isPaid(false)
-                    .resourceUri(new URI("/api/2.0/libdrives/6d53b92c-42dc-472b-a7b6-7021f45f377a/"))
-                    .size(new BigInteger("1000000000"))
-                    .status(DriveStatus.MOUNTED)
-                    .tags(new ArrayList<String>())
-                    .url("http://www.vyatta.org/")
-                    .uuid("6d53b92c-42dc-472b-a7b6-7021f45f377a")
-                    .build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
+   {
+      expected.addProperty("name", "Vyatta-6.5-32bit-Virtualization-ISO");
+      expected.addProperty("size", "1000000000");
+      expected.addProperty("media", "cdrom");
+      expected.add("meta", new JsonObject());
+      expected.add("tags", new JsonArray());
+      expected.addProperty("allow_multimount", false);
+      expected.addProperty("favourite", true);
+      expected.addProperty("description", "test_description");
 
-    public void test(){
-        Assert.assertEquals(LIBRARY_DRIVE_TO_JSON.apply(input), expected);
-    }
+      try {
+         input = new LibraryDrive.Builder()
+               .allowMultimount(false)
+               .arch("32")
+               .category(ImmutableList.of("general"))
+               .description("test_description")
+               .isFavorite(true)
+               .imageType("install")
+               .installNotes("test_install_notes")
+               .jobs(new ArrayList<String>())
+               .licenses(new ArrayList<DriveLicense>())
+               .media(MediaType.CDROM)
+               .meta(new HashMap<String, String>())
+               .mountedOn(new ArrayList<Server>())
+               .name("Vyatta-6.5-32bit-Virtualization-ISO")
+               .os("linux")
+               .owner(null)
+               .isPaid(false)
+               .resourceUri(new URI("/api/2.0/libdrives/6d53b92c-42dc-472b-a7b6-7021f45f377a/"))
+               .size(new BigInteger("1000000000"))
+               .status(DriveStatus.MOUNTED)
+               .tags(new ArrayList<String>())
+               .url("http://www.vyatta.org/")
+               .uuid("6d53b92c-42dc-472b-a7b6-7021f45f377a")
+               .build();
+      } catch (URISyntaxException e) {
+         e.printStackTrace();
+      }
+   }
+
+   public void test() {
+      Assert.assertEquals(LIBRARY_DRIVE_TO_JSON.apply(input), expected);
+   }
 }

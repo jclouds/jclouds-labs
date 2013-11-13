@@ -33,10 +33,10 @@ import org.jclouds.rest.config.HttpApiModule;
 @ConfiguresHttpApi
 public class CloudSigma2HttpApiModule extends HttpApiModule<CloudSigma2Api> {
 
-    @Override
-    protected void bindErrorHandlers() {
-        bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(CloudSigmaErrorHandler.class);
-        bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(CloudSigmaErrorHandler.class);
-        bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(CloudSigmaErrorHandler.class);
-    }
+   @Override
+   protected void bindErrorHandlers() {
+      bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(CloudSigmaErrorHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(CloudSigmaErrorHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(CloudSigmaErrorHandler.class);
+   }
 }

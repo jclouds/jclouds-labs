@@ -23,56 +23,56 @@ import java.beans.ConstructorProperties;
  */
 public class Discount {
 
-    private final String period;
-    private final Double value;
+   private final String period;
+   private final Double value;
 
-    @ConstructorProperties({
-            "period", "value"
-    })
-    public Discount(String period, Double value) {
-        this.period = period;
-        this.value = value;
-    }
+   @ConstructorProperties({
+         "period", "value"
+   })
+   public Discount(String period, Double value) {
+      this.period = period;
+      this.value = value;
+   }
 
-    /**
-     * @return The minimum period for this discount
-     */
-    public String getPeriod() {
-        return period;
-    }
+   /**
+    * @return The minimum period for this discount
+    */
+   public String getPeriod() {
+      return period;
+   }
 
-    /**
-     * @return The value of the discount
-     */
-    public Double getValue() {
-        return value;
-    }
+   /**
+    * @return The value of the discount
+    */
+   public Double getValue() {
+      return value;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Discount)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Discount)) return false;
 
-        Discount discount = (Discount) o;
+      Discount discount = (Discount) o;
 
-        if (period != null ? !period.equals(discount.period) : discount.period != null) return false;
-        if (value != null ? !value.equals(discount.value) : discount.value != null) return false;
+      if (period != null ? !period.equals(discount.period) : discount.period != null) return false;
+      if (value != null ? !value.equals(discount.value) : discount.value != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        int result = period != null ? period.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result = period != null ? period.hashCode() : 0;
+      result = 31 * result + (value != null ? value.hashCode() : 0);
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[" +
-                "period='" + period + '\'' +
-                ", value=" + value +
-                "]";
-    }
+   @Override
+   public String toString() {
+      return "[" +
+            "period='" + period + '\'' +
+            ", value=" + value +
+            "]";
+   }
 }

@@ -17,101 +17,107 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.jclouds.labs</groupId>
+        <artifactId>jclouds-labs</artifactId>
+        <version>1.7.0-SNAPSHOT</version>
+    </parent>
+
+    <!-- TODO: when out of labs, switch to org.jclouds.provider -->
     <groupId>org.apache.jclouds.labs</groupId>
-    <artifactId>jclouds-labs</artifactId>
+    <artifactId>cloudsigma2</artifactId>
     <version>1.7.0-SNAPSHOT</version>
-  </parent>
+    <name>jclouds CloudSigma v2 API</name>
+    <description>ComputeService binding to the CloudSigma v2 API</description>
+    <packaging>bundle</packaging>
 
-  <!-- TODO: when out of labs, switch to org.jclouds.provider -->
-  <groupId>org.apache.jclouds.labs</groupId>
-  <artifactId>cloudsigma2</artifactId>
-  <version>1.7.0-SNAPSHOT</version>
-  <name>jclouds CloudSigma v2 API</name>
-  <description>ComputeService binding to the CloudSigma v2 API</description>
-  <packaging>bundle</packaging>
-  
-  <properties>
-    <test.cloudsigma2.endpoint>https://zrh.cloudsigma.com/api/2.0/</test.cloudsigma2.endpoint>
-    <test.cloudsigma2.api-version>2.0</test.cloudsigma2.api-version>
-    <test.cloudsigma2.identity>FIXME</test.cloudsigma2.identity>
-    <test.cloudsigma2.credential>FIXME</test.cloudsigma2.credential>
-    <test.cloudsigma2.template>imageId=f3c7c665-cd54-4a78-8fd2-7ec2f028cf29</test.cloudsigma2.template>
-    <jclouds.osgi.export>org.jclouds.cloudsigma2*;version="${project.version}"</jclouds.osgi.export>
-    <jclouds.osgi.import>
-      org.jclouds.compute.internal;version="${project.version}",
-      org.jclouds.rest.internal;version="${project.version}",
-      org.jclouds*;version="${project.version}",
-      *
-    </jclouds.osgi.import>
-  </properties>
+    <properties>
+        <test.cloudsigma2.endpoint>https://zrh.cloudsigma.com/api/2.0/</test.cloudsigma2.endpoint>
+        <test.cloudsigma2.api-version>2.0</test.cloudsigma2.api-version>
+        <test.cloudsigma2.identity>FIXME</test.cloudsigma2.identity>
+        <test.cloudsigma2.credential>FIXME</test.cloudsigma2.credential>
+        <test.cloudsigma2.template>imageId=f3c7c665-cd54-4a78-8fd2-7ec2f028cf29</test.cloudsigma2.template>
+        <jclouds.osgi.export>org.jclouds.cloudsigma2*;version="${project.version}"</jclouds.osgi.export>
+        <jclouds.osgi.import>
+            org.jclouds.compute.internal;version="${project.version}",
+            org.jclouds.rest.internal;version="${project.version}",
+            org.jclouds*;version="${project.version}",
+            *
+        </jclouds.osgi.import>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.jclouds</groupId>
-      <artifactId>jclouds-compute</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.jclouds.driver</groupId>
-      <artifactId>jclouds-sshj</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.jclouds</groupId>
-      <artifactId>jclouds-core</artifactId>
-      <version>${project.parent.version}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.jclouds</groupId>
-      <artifactId>jclouds-compute</artifactId>
-      <version>${project.parent.version}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.jclouds.driver</groupId>
-      <artifactId>jclouds-log4j</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jclouds.driver</groupId>
+            <artifactId>jclouds-sshj</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jclouds</groupId>
+            <artifactId>jclouds-core</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jclouds.driver</groupId>
+            <artifactId>jclouds-log4j</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <profiles>
-    <profile>
-      <id>live</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>integration</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <systemPropertyVariables>
-                    <test.cloudsigma2.endpoint>${test.cloudsigma2.endpoint}</test.cloudsigma2.endpoint>
-                    <test.cloudsigma2.api-version>${test.cloudsigma2.api-version}</test.cloudsigma2.api-version>
-                    <test.cloudsigma2.build-version>${test.cloudsigma2.build-version}</test.cloudsigma2.build-version>
-                    <test.cloudsigma2.credential>${test.cloudsigma2.credential}</test.cloudsigma2.credential>
-                    <test.cloudsigma2.template>${test.cloudsigma2.template}</test.cloudsigma2.template>
-                  </systemPropertyVariables>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+    <profiles>
+        <profile>
+            <id>live</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>integration</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <test.cloudsigma2.endpoint>${test.cloudsigma2.endpoint}
+                                        </test.cloudsigma2.endpoint>
+                                        <test.cloudsigma2.api-version>${test.cloudsigma2.api-version}
+                                        </test.cloudsigma2.api-version>
+                                        <test.cloudsigma2.build-version>${test.cloudsigma2.build-version}
+                                        </test.cloudsigma2.build-version>
+                                        <test.cloudsigma2.credential>${test.cloudsigma2.credential}
+                                        </test.cloudsigma2.credential>
+                                        <test.cloudsigma2.template>${test.cloudsigma2.template}
+                                        </test.cloudsigma2.template>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

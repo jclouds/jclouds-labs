@@ -24,84 +24,84 @@ import java.math.BigInteger;
  */
 public class Usage {
 
-    public static class Builder{
-        private BigInteger burst;
-        private BigInteger subscribed;
-        private BigInteger using;
+   public static class Builder {
+      private BigInteger burst;
+      private BigInteger subscribed;
+      private BigInteger using;
 
-        public Builder subscribed(BigInteger subscribed) {
-            this.subscribed = subscribed;
-            return this;
-        }
+      public Builder subscribed(BigInteger subscribed) {
+         this.subscribed = subscribed;
+         return this;
+      }
 
-        public Builder burst(BigInteger burst) {
-            this.burst = burst;
-            return this;
-        }
+      public Builder burst(BigInteger burst) {
+         this.burst = burst;
+         return this;
+      }
 
-        public Builder using(BigInteger using) {
-            this.using = using;
-            return this;
-        }
+      public Builder using(BigInteger using) {
+         this.using = using;
+         return this;
+      }
 
-        public Usage build(){
-            return new Usage(burst, subscribed, using);
-        }
-    }
+      public Usage build() {
+         return new Usage(burst, subscribed, using);
+      }
+   }
 
-    private final BigInteger burst;
-    private final BigInteger subscribed;
-    private final BigInteger using;
+   private final BigInteger burst;
+   private final BigInteger subscribed;
+   private final BigInteger using;
 
-    @ConstructorProperties({
-            "burst", "subscribed", "using"
-    })
-    public Usage(BigInteger burst, BigInteger subscribed, BigInteger using) {
-        this.burst = burst;
-        this.subscribed = subscribed;
-        this.using = using;
-    }
+   @ConstructorProperties({
+         "burst", "subscribed", "using"
+   })
+   public Usage(BigInteger burst, BigInteger subscribed, BigInteger using) {
+      this.burst = burst;
+      this.subscribed = subscribed;
+      this.using = using;
+   }
 
-    public BigInteger getUsing() {
-        return using;
-    }
+   public BigInteger getUsing() {
+      return using;
+   }
 
-    public BigInteger getBurst() {
-        return burst;
-    }
+   public BigInteger getBurst() {
+      return burst;
+   }
 
-    public BigInteger getSubscribed() {
-        return subscribed;
-    }
+   public BigInteger getSubscribed() {
+      return subscribed;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Usage)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Usage)) return false;
 
-        Usage usage = (Usage) o;
+      Usage usage = (Usage) o;
 
-        if (burst != null ? !burst.equals(usage.burst) : usage.burst != null) return false;
-        if (subscribed != null ? !subscribed.equals(usage.subscribed) : usage.subscribed != null) return false;
-        if (using != null ? !using.equals(usage.using) : usage.using != null) return false;
+      if (burst != null ? !burst.equals(usage.burst) : usage.burst != null) return false;
+      if (subscribed != null ? !subscribed.equals(usage.subscribed) : usage.subscribed != null) return false;
+      if (using != null ? !using.equals(usage.using) : usage.using != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        int result = burst != null ? burst.hashCode() : 0;
-        result = 31 * result + (subscribed != null ? subscribed.hashCode() : 0);
-        result = 31 * result + (using != null ? using.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result = burst != null ? burst.hashCode() : 0;
+      result = 31 * result + (subscribed != null ? subscribed.hashCode() : 0);
+      result = 31 * result + (using != null ? using.hashCode() : 0);
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[" +
-                "burst=" + burst +
-                ", subscribed=" + subscribed +
-                ", using=" + using +
-                "]";
-    }
+   @Override
+   public String toString() {
+      return "[" +
+            "burst=" + burst +
+            ", subscribed=" + subscribed +
+            ", using=" + using +
+            "]";
+   }
 }

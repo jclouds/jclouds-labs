@@ -24,47 +24,47 @@ import java.util.List;
  */
 public class ServerAvailabilityGroup {
 
-    private final List<String> uuids;
+   private final List<String> uuids;
 
-    public ServerAvailabilityGroup(List<String> uuids) {
-        this.uuids = uuids;
-    }
+   public ServerAvailabilityGroup(List<String> uuids) {
+      this.uuids = uuids;
+   }
 
-    public List<String> getUuids() {
-        return uuids;
-    }
+   public List<String> getUuids() {
+      return uuids;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ServerAvailabilityGroup)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof ServerAvailabilityGroup)) return false;
 
-        ServerAvailabilityGroup that = (ServerAvailabilityGroup) o;
+      ServerAvailabilityGroup that = (ServerAvailabilityGroup) o;
 
-        if (uuids != null ? !uuids.equals(that.uuids) : that.uuids != null) return false;
+      if (uuids != null ? !uuids.equals(that.uuids) : that.uuids != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        return uuids != null ? uuids.hashCode() : 0;
-    }
+   @Override
+   public int hashCode() {
+      return uuids != null ? uuids.hashCode() : 0;
+   }
 
-    @Override
-    public String toString() {
-        String returnString = "";
+   @Override
+   public String toString() {
+      String returnString = "";
 
-        Iterator iterator = uuids.iterator();
+      Iterator iterator = uuids.iterator();
 
-        while (iterator.hasNext()){
-            returnString += iterator.next();
+      while (iterator.hasNext()) {
+         returnString += iterator.next();
 
-            if(iterator.hasNext()){
-                returnString += ",";
-            }
-        }
+         if (iterator.hasNext()) {
+            returnString += ",";
+         }
+      }
 
-        return returnString;
-    }
+      return returnString;
+   }
 }

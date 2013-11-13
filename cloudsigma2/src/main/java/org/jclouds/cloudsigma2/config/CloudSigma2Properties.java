@@ -17,14 +17,13 @@
 package org.jclouds.cloudsigma2.config;
 
 /**
- *
  * @author Vladimir Shevchenko
  */
 public class CloudSigma2Properties {
 
-    /**
-     * default VNC password used on new machines
-     */
-    public static final String PROPERTY_VNC_PASSWORD = "jclouds.cloudsigma.vnc-password";
-    
+   /**
+    * default VNC password used on new machines
+    */
+   public static final String PROPERTY_VNC_PASSWORD = "jclouds.cloudsigma.vnc-password";
+
 }

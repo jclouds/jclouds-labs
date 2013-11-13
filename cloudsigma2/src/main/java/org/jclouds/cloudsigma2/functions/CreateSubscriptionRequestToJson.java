@@ -28,26 +28,26 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class CreateSubscriptionRequestToJson implements Function<CreateSubscriptionRequest, JsonObject> {
-    @Override
-    public JsonObject apply(@Nullable CreateSubscriptionRequest input) {
-        if(input == null){
-            return null;
-        }
+   @Override
+   public JsonObject apply(@Nullable CreateSubscriptionRequest input) {
+      if (input == null) {
+         return null;
+      }
 
-        JsonObject createSubscriptionObject = new JsonObject();
+      JsonObject createSubscriptionObject = new JsonObject();
 
-        if(input.getAmount() != null){
-            createSubscriptionObject.addProperty("amount", input.getAmount());
-        }
+      if (input.getAmount() != null) {
+         createSubscriptionObject.addProperty("amount", input.getAmount());
+      }
 
-        if(input.getPeriod() != null){
-            createSubscriptionObject.addProperty("period", input.getPeriod());
-        }
+      if (input.getPeriod() != null) {
+         createSubscriptionObject.addProperty("period", input.getPeriod());
+      }
 
-        if(input.getResource() != null){
-            createSubscriptionObject.addProperty("resource", input.getResource().value());
-        }
+      if (input.getResource() != null) {
+         createSubscriptionObject.addProperty("resource", input.getResource().value());
+      }
 
-        return createSubscriptionObject;
-    }
+      return createSubscriptionObject;
+   }
 }

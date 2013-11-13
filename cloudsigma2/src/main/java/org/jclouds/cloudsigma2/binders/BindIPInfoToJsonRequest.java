@@ -34,21 +34,21 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Singleton
 public class BindIPInfoToJsonRequest implements Binder {
 
-    private final IPInfoToJson ipInfoJsonObjectFunction;
+   private final IPInfoToJson ipInfoJsonObjectFunction;
 
-    @Inject
-    public BindIPInfoToJsonRequest(IPInfoToJson ipInfoJsonObjectFunction) {
-        this.ipInfoJsonObjectFunction = ipInfoJsonObjectFunction;
-    }
+   @Inject
+   public BindIPInfoToJsonRequest(IPInfoToJson ipInfoJsonObjectFunction) {
+      this.ipInfoJsonObjectFunction = ipInfoJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof IPInfo, "this binder is only valid for IPInfo!");
-        IPInfo create = IPInfo.class.cast(input);
-        JsonObject ipJsonObject = ipInfoJsonObjectFunction.apply(create);
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof IPInfo, "this binder is only valid for IPInfo!");
+      IPInfo create = IPInfo.class.cast(input);
+      JsonObject ipJsonObject = ipInfoJsonObjectFunction.apply(create);
 
-        request.setPayload(ipJsonObject.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(ipJsonObject.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

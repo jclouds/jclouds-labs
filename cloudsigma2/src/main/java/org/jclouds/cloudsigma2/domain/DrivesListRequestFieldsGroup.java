@@ -22,30 +22,30 @@ import java.util.Iterator;
  * @author Vladimir Shevchenko
  */
 public class DrivesListRequestFieldsGroup {
-    private final Iterable<String> fields;
+   private final Iterable<String> fields;
 
-    public DrivesListRequestFieldsGroup(Iterable<String> fields) {
-        this.fields = fields;
-    }
+   public DrivesListRequestFieldsGroup(Iterable<String> fields) {
+      this.fields = fields;
+   }
 
-    public Iterable<String> getFields() {
-        return fields;
-    }
+   public Iterable<String> getFields() {
+      return fields;
+   }
 
-    @Override
-    public String toString() {
-        String returnString = "";
+   @Override
+   public String toString() {
+      String returnString = "";
 
-        Iterator iterator = fields.iterator();
+      Iterator iterator = fields.iterator();
 
-        while (iterator.hasNext()){
-            returnString += iterator.next();
+      while (iterator.hasNext()) {
+         returnString += iterator.next();
 
-            if(iterator.hasNext()){
-                returnString += ",";
-            }
-        }
+         if (iterator.hasNext()) {
+            returnString += ",";
+         }
+      }
 
-        return returnString;
-    }
+      return returnString;
+   }
 }

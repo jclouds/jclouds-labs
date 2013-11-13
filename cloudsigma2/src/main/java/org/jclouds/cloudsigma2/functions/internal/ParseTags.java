@@ -37,58 +37,58 @@ import java.util.List;
  */
 @Singleton
 public class ParseTags extends ParseJson<ParseTags.Tags> {
-    static class Tags extends PaginatedCollection<Tag> {
+   static class Tags extends PaginatedCollection<Tag> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public Tags(Iterable<Tag> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public Tags(Iterable<Tag> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseTags(Json json) {
-        super(json, TypeLiteral.get(Tags.class));
-    }
+   @Inject
+   public ParseTags(Json json) {
+      super(json, TypeLiteral.get(Tags.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<Tag, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<Tag, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Tag>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Tag>>() {
-                @Override
-                public IterableWithMarker<Tag> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listTags(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Tag>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Tag>>() {
+            @Override
+            public IterableWithMarker<Tag> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listTags(paginationOptions);
+            }
+         };
+      }
+   }
 
-    public static class ToPagedIterableInfo extends ArgsToPagedIterable<Tag, ToPagedIterable> {
+   public static class ToPagedIterableInfo extends ArgsToPagedIterable<Tag, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterableInfo(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterableInfo(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Tag>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Tag>>() {
-                @Override
-                public IterableWithMarker<Tag> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listTagsInfo(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Tag>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Tag>>() {
+            @Override
+            public IterableWithMarker<Tag> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listTagsInfo(paginationOptions);
+            }
+         };
+      }
+   }
 }

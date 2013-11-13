@@ -34,20 +34,20 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Singleton
 public class BindProfileInfoToJsonRequest implements Binder {
 
-    private final ProfileInfoToJson createProfileRequestToJson;
+   private final ProfileInfoToJson createProfileRequestToJson;
 
-    @Inject
-    public BindProfileInfoToJsonRequest(ProfileInfoToJson createProfileRequestToJson) {
-        this.createProfileRequestToJson = createProfileRequestToJson;
-    }
+   @Inject
+   public BindProfileInfoToJsonRequest(ProfileInfoToJson createProfileRequestToJson) {
+      this.createProfileRequestToJson = createProfileRequestToJson;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof ProfileInfo, "this binder is only valid for ProfileInfo!");
-        ProfileInfo create = ProfileInfo.class.cast(input);
-        JsonObject profileInfoJsonObject = createProfileRequestToJson.apply(create);
-        request.setPayload(profileInfoJsonObject.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof ProfileInfo, "this binder is only valid for ProfileInfo!");
+      ProfileInfo create = ProfileInfo.class.cast(input);
+      JsonObject profileInfoJsonObject = createProfileRequestToJson.apply(create);
+      request.setPayload(profileInfoJsonObject.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

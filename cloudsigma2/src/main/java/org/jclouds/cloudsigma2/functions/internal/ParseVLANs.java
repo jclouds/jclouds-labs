@@ -37,58 +37,58 @@ import java.util.List;
  */
 @Singleton
 public class ParseVLANs extends ParseJson<ParseVLANs.VLANs> {
-    static class VLANs extends PaginatedCollection<VLANInfo> {
+   static class VLANs extends PaginatedCollection<VLANInfo> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public VLANs(Iterable<VLANInfo> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public VLANs(Iterable<VLANInfo> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseVLANs(Json json) {
-        super(json, TypeLiteral.get(VLANs.class));
-    }
+   @Inject
+   public ParseVLANs(Json json) {
+      super(json, TypeLiteral.get(VLANs.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<VLANInfo, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<VLANInfo, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<VLANInfo>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<VLANInfo>>() {
-                @Override
-                public IterableWithMarker<VLANInfo> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listVLANs(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<VLANInfo>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<VLANInfo>>() {
+            @Override
+            public IterableWithMarker<VLANInfo> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listVLANs(paginationOptions);
+            }
+         };
+      }
+   }
 
-    public static class ToPagedIterableInfo extends ArgsToPagedIterable<VLANInfo, ToPagedIterable> {
+   public static class ToPagedIterableInfo extends ArgsToPagedIterable<VLANInfo, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterableInfo(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterableInfo(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<VLANInfo>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<VLANInfo>>() {
-                @Override
-                public IterableWithMarker<VLANInfo> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listVLANInfo(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<VLANInfo>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<VLANInfo>>() {
+            @Override
+            public IterableWithMarker<VLANInfo> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listVLANInfo(paginationOptions);
+            }
+         };
+      }
+   }
 }

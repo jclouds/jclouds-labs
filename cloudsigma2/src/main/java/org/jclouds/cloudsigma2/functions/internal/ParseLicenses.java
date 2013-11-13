@@ -37,37 +37,37 @@ import java.util.List;
  */
 @Singleton
 public class ParseLicenses extends ParseJson<ParseLicenses.Licenses> {
-    static class Licenses extends PaginatedCollection<License> {
+   static class Licenses extends PaginatedCollection<License> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public Licenses(Iterable<License> objects, PaginationOptions meta) {
-            super(objects, meta);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public Licenses(Iterable<License> objects, PaginationOptions meta) {
+         super(objects, meta);
+      }
+   }
 
-    @Inject
-    public ParseLicenses(Json json) {
-        super(json, TypeLiteral.get(Licenses.class));
-    }
+   @Inject
+   public ParseLicenses(Json json) {
+      super(json, TypeLiteral.get(Licenses.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<License, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<License, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<License>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<License>>() {
-                @Override
-                public IterableWithMarker<License> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listLicenses(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<License>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<License>>() {
+            @Override
+            public IterableWithMarker<License> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listLicenses(paginationOptions);
+            }
+         };
+      }
+   }
 }

@@ -37,37 +37,37 @@ import java.util.List;
  */
 @Singleton
 public class ParseLibraryDrives extends ParseJson<ParseLibraryDrives.LibraryDrives> {
-    static class LibraryDrives extends PaginatedCollection<LibraryDrive>{
+   static class LibraryDrives extends PaginatedCollection<LibraryDrive> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public LibraryDrives(Iterable<LibraryDrive> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public LibraryDrives(Iterable<LibraryDrive> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseLibraryDrives(Json json) {
-        super(json, TypeLiteral.get(LibraryDrives.class));
-    }
+   @Inject
+   public ParseLibraryDrives(Json json) {
+      super(json, TypeLiteral.get(LibraryDrives.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<LibraryDrive, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<LibraryDrive, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<LibraryDrive>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<LibraryDrive>>() {
-                @Override
-                public IterableWithMarker<LibraryDrive> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listLibraryDrives(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<LibraryDrive>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<LibraryDrive>>() {
+            @Override
+            public IterableWithMarker<LibraryDrive> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listLibraryDrives(paginationOptions);
+            }
+         };
+      }
+   }
 }

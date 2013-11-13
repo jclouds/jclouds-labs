@@ -38,53 +38,53 @@ import java.util.Map;
 @Test(groups = "unit")
 public class IPInfoToJsonTest {
 
-    private final static IPInfoToJson IP_INFO_TO_JSON = Guice.createInjector().getInstance(IPInfoToJson.class);
+   private final static IPInfoToJson IP_INFO_TO_JSON = Guice.createInjector().getInstance(IPInfoToJson.class);
 
-    private IPInfo input;
-    private JsonObject expected;
+   private IPInfo input;
+   private JsonObject expected;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        Owner owner = new Owner.Builder()
-                .resourceUri(new URI("/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/"))
-                .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
-                .build();
+   @BeforeMethod
+   public void setUp() throws Exception {
+      Owner owner = new Owner.Builder()
+            .resourceUri(new URI("/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/"))
+            .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
+            .build();
 
-        Map<String, String> meta = new HashMap<String, String>();
-        meta.put("description", "test ip");
-        meta.put("test_key_1", "test_value_1");
-        meta.put("test_key_2", "test_value_2");
+      Map<String, String> meta = new HashMap<String, String>();
+      meta.put("description", "test ip");
+      meta.put("test_key_1", "test_value_1");
+      meta.put("test_key_2", "test_value_2");
 
-        input = new IPInfo.Builder()
-                .gateway("185.12.6.1")
-                .meta(meta)
-                .nameservers(ImmutableList.of(
-                        "69.194.139.62",
-                        "178.22.66.167",
-                        "178.22.71.56"))
-                .netmask(24)
-                .owner(owner)
-                .resourceUri(new URI("/api/2.0/ips/185.12.6.183/"))
-                .server(null)
-                .subscription(new Subscription.Builder()
-                        .id("7273")
-                        .resourceUri(new URI("/api/2.0/subscriptions/7273/"))
-                        .build())
-                .tags(new ArrayList<Tag>())
-                .uuid("185.12.6.183")
-                .build();
+      input = new IPInfo.Builder()
+            .gateway("185.12.6.1")
+            .meta(meta)
+            .nameservers(ImmutableList.of(
+                  "69.194.139.62",
+                  "178.22.66.167",
+                  "178.22.71.56"))
+            .netmask(24)
+            .owner(owner)
+            .resourceUri(new URI("/api/2.0/ips/185.12.6.183/"))
+            .server(null)
+            .subscription(new Subscription.Builder()
+                  .id("7273")
+                  .resourceUri(new URI("/api/2.0/subscriptions/7273/"))
+                  .build())
+            .tags(new ArrayList<Tag>())
+            .uuid("185.12.6.183")
+            .build();
 
-        expected = new JsonObject();
+      expected = new JsonObject();
 
-        JsonObject metaObject = new JsonObject();
-        metaObject.addProperty("description", "test ip");
-        metaObject.addProperty("test_key_1", "test_value_1");
-        metaObject.addProperty("test_key_2", "test_value_2");
+      JsonObject metaObject = new JsonObject();
+      metaObject.addProperty("description", "test ip");
+      metaObject.addProperty("test_key_1", "test_value_1");
+      metaObject.addProperty("test_key_2", "test_value_2");
 
-        expected.add("meta", metaObject);
-    }
+      expected.add("meta", metaObject);
+   }
 
-    public void test(){
-        Assert.assertEquals(IP_INFO_TO_JSON.apply(input), expected);
-    }
+   public void test() {
+      Assert.assertEquals(IP_INFO_TO_JSON.apply(input), expected);
+   }
 }

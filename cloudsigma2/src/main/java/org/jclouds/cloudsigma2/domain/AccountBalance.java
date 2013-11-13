@@ -23,59 +23,59 @@ import java.beans.ConstructorProperties;
  */
 public class AccountBalance {
 
-    private final double balance;
-    private final String currency;
+   private final double balance;
+   private final String currency;
 
-    @ConstructorProperties({
-            "balance", "currency"
-    })
-    public AccountBalance(double balance, String currency) {
-        this.balance = balance;
-        this.currency = currency;
-    }
+   @ConstructorProperties({
+         "balance", "currency"
+   })
+   public AccountBalance(double balance, String currency) {
+      this.balance = balance;
+      this.currency = currency;
+   }
 
-    /**
-     * @return Amount of money in account
-     */
-    public double getBalance() {
-        return balance;
-    }
+   /**
+    * @return Amount of money in account
+    */
+   public double getBalance() {
+      return balance;
+   }
 
-    /**
-     * @return Currency of the account
-     */
-    public String getCurrency() {
-        return currency;
-    }
+   /**
+    * @return Currency of the account
+    */
+   public String getCurrency() {
+      return currency;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AccountBalance)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof AccountBalance)) return false;
 
-        AccountBalance that = (AccountBalance) o;
+      AccountBalance that = (AccountBalance) o;
 
-        if (Double.compare(that.balance, balance) != 0) return false;
-        if (currency != null ? !currency.equals(that.currency) : that.currency != null) return false;
+      if (Double.compare(that.balance, balance) != 0) return false;
+      if (currency != null ? !currency.equals(that.currency) : that.currency != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(balance);
-        result = (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (currency != null ? currency.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result;
+      long temp;
+      temp = Double.doubleToLongBits(balance);
+      result = (int) (temp ^ (temp >>> 32));
+      result = 31 * result + (currency != null ? currency.hashCode() : 0);
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[" +
-                "balance=" + balance +
-                ", currency='" + currency + '\'' +
-                "]";
-    }
+   @Override
+   public String toString() {
+      return "[" +
+            "balance=" + balance +
+            ", currency='" + currency + '\'' +
+            "]";
+   }
 }

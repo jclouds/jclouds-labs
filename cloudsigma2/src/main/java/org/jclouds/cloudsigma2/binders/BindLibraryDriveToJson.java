@@ -34,20 +34,20 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Singleton
 public class BindLibraryDriveToJson implements Binder {
 
-    private final LibraryDriveToJson createDriveJsonObjectFunction;
+   private final LibraryDriveToJson createDriveJsonObjectFunction;
 
-    @Inject
-    public BindLibraryDriveToJson(LibraryDriveToJson createDriveJsonObjectFunction) {
-        this.createDriveJsonObjectFunction = createDriveJsonObjectFunction;
-    }
+   @Inject
+   public BindLibraryDriveToJson(LibraryDriveToJson createDriveJsonObjectFunction) {
+      this.createDriveJsonObjectFunction = createDriveJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof LibraryDrive, "this binder is only valid for LibraryDrive!");
-        LibraryDrive create = LibraryDrive.class.cast(input);
-        JsonObject profileInfoJsonObject = createDriveJsonObjectFunction.apply(create);
-        request.setPayload(profileInfoJsonObject.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof LibraryDrive, "this binder is only valid for LibraryDrive!");
+      LibraryDrive create = LibraryDrive.class.cast(input);
+      JsonObject profileInfoJsonObject = createDriveJsonObjectFunction.apply(create);
+      request.setPayload(profileInfoJsonObject.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

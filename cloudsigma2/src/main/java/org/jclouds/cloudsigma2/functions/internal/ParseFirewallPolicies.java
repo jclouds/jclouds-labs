@@ -36,59 +36,59 @@ import java.util.List;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class ParseFirewallPolicies extends ParseJson<ParseFirewallPolicies.FirewallPolicies>{
-    static class FirewallPolicies extends PaginatedCollection<FirewallPolicy>{
+public class ParseFirewallPolicies extends ParseJson<ParseFirewallPolicies.FirewallPolicies> {
+   static class FirewallPolicies extends PaginatedCollection<FirewallPolicy> {
 
-        @ConstructorProperties({"objects", "meta"})
-        FirewallPolicies(Iterable<FirewallPolicy> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      FirewallPolicies(Iterable<FirewallPolicy> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseFirewallPolicies(Json json) {
-        super(json, TypeLiteral.get(FirewallPolicies.class));
-    }
+   @Inject
+   public ParseFirewallPolicies(Json json) {
+      super(json, TypeLiteral.get(FirewallPolicies.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<FirewallPolicy, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<FirewallPolicy, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<FirewallPolicy>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<FirewallPolicy>>() {
-                @Override
-                public IterableWithMarker<FirewallPolicy> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listFirewallPolicies(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<FirewallPolicy>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<FirewallPolicy>>() {
+            @Override
+            public IterableWithMarker<FirewallPolicy> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listFirewallPolicies(paginationOptions);
+            }
+         };
+      }
+   }
 
-    public static class ToPagedIterableInfo extends ArgsToPagedIterable<FirewallPolicy, ToPagedIterable> {
+   public static class ToPagedIterableInfo extends ArgsToPagedIterable<FirewallPolicy, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterableInfo(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterableInfo(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<FirewallPolicy>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<FirewallPolicy>>() {
-                @Override
-                public IterableWithMarker<FirewallPolicy> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listFirewallPoliciesInfo(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<FirewallPolicy>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<FirewallPolicy>>() {
+            @Override
+            public IterableWithMarker<FirewallPolicy> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listFirewallPoliciesInfo(paginationOptions);
+            }
+         };
+      }
+   }
 }

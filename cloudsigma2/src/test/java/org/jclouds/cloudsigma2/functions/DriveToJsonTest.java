@@ -39,61 +39,61 @@ import java.util.Map;
 @Test(groups = "unit")
 public class DriveToJsonTest {
 
-    private final static DriveToJson DRIVE_TO_JSON = Guice.createInjector().getInstance(DriveToJson.class);
+   private final static DriveToJson DRIVE_TO_JSON = Guice.createInjector().getInstance(DriveToJson.class);
 
-    private final static JsonObject result = new JsonObject();
-    private DriveInfo input;
+   private final static JsonObject result = new JsonObject();
+   private DriveInfo input;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        List<String> affinities = ImmutableList.of("ssd", "sample");
-        List<String> tags =ImmutableList.of("tag_uuid_1", "tag_uuid_2");
+   @BeforeMethod
+   public void setUp() throws Exception {
+      List<String> affinities = ImmutableList.of("ssd", "sample");
+      List<String> tags = ImmutableList.of("tag_uuid_1", "tag_uuid_2");
 
-        Map<String, String> metaMap = new HashMap<String, String>();
-        metaMap.put("description", "test_description");
-        metaMap.put("install_notes", "test_install_notes");
+      Map<String, String> metaMap = new HashMap<String, String>();
+      metaMap.put("description", "test_description");
+      metaMap.put("install_notes", "test_install_notes");
 
-        result.addProperty("name", "test");
-        result.addProperty("size", "1024000000");
-        result.addProperty("media", "disk");
-        result.add("affinities", new JsonParser().parse(new Gson().toJson(affinities)));
-        result.add("meta", new JsonParser().parse(new Gson().toJson(metaMap)));
-        result.add("tags", new JsonParser().parse(new Gson().toJson(tags)));
-        result.addProperty("allow_multimount", false);
+      result.addProperty("name", "test");
+      result.addProperty("size", "1024000000");
+      result.addProperty("media", "disk");
+      result.add("affinities", new JsonParser().parse(new Gson().toJson(affinities)));
+      result.add("meta", new JsonParser().parse(new Gson().toJson(metaMap)));
+      result.add("tags", new JsonParser().parse(new Gson().toJson(tags)));
+      result.addProperty("allow_multimount", false);
 
-        input = new DriveInfo.Builder()
-                .affinities(ImmutableList.of("ssd", "sample"))
-                .allowMultimount(false)
-                .jobs(new ArrayList<String>())
-                .licenses(ImmutableList.of(new DriveLicense.Builder()
-                        .amount(1)
-                        .license(new License.Builder()
-                                .isBurstable(true)
-                                .longName("sample_longname")
-                                .name("sample_name")
-                                .resourceUri(new URI("/api/2.0/samples/"))
-                                .type("sample_type")
-                                .userMetric("sample")
-                                .build())
+      input = new DriveInfo.Builder()
+            .affinities(ImmutableList.of("ssd", "sample"))
+            .allowMultimount(false)
+            .jobs(new ArrayList<String>())
+            .licenses(ImmutableList.of(new DriveLicense.Builder()
+                  .amount(1)
+                  .license(new License.Builder()
+                        .isBurstable(true)
+                        .longName("sample_longname")
+                        .name("sample_name")
+                        .resourceUri(new URI("/api/2.0/samples/"))
+                        .type("sample_type")
+                        .userMetric("sample")
+                        .build())
+                  .build()))
+            .media(MediaType.DISK)
+            .meta(metaMap)
+            .mountedOn(ImmutableList.of(new Server.Builder()
+                  .uuid("81f911f9-5152-4328-8671-02543bafbd0e")
+                  .build(),
+                  new Server.Builder()
+                        .uuid("19163e1a-a6d6-4e73-8087-157dd302c373")
                         .build()))
-                .media(MediaType.DISK)
-                .meta(metaMap)
-                .mountedOn(ImmutableList.of(new Server.Builder()
-                        .uuid("81f911f9-5152-4328-8671-02543bafbd0e")
-                        .build(),
-                        new Server.Builder()
-                                .uuid("19163e1a-a6d6-4e73-8087-157dd302c373")
-                                .build()))
-                .name("test")
-                .size(new BigInteger("1024000000"))
-                .status(DriveStatus.UNMOUNTED)
-                .tags(ImmutableList.of("tag_uuid_1", "tag_uuid_2"))
-                .uuid("e96f3c63-6f50-47eb-9401-a56c5ccf6b32")
-                .build();
-    }
+            .name("test")
+            .size(new BigInteger("1024000000"))
+            .status(DriveStatus.UNMOUNTED)
+            .tags(ImmutableList.of("tag_uuid_1", "tag_uuid_2"))
+            .uuid("e96f3c63-6f50-47eb-9401-a56c5ccf6b32")
+            .build();
+   }
 
-    public void test(){
-        Assert.assertEquals(DRIVE_TO_JSON.apply(input), result);
-    }
+   public void test() {
+      Assert.assertEquals(DRIVE_TO_JSON.apply(input), result);
+   }
 }
 

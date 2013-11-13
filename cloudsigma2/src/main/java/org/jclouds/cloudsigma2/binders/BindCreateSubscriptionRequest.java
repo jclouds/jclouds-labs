@@ -34,21 +34,22 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Singleton
 public class BindCreateSubscriptionRequest implements Binder {
 
-    private final CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction;
+   private final CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction;
 
-    @Inject
-    public BindCreateSubscriptionRequest(CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction) {
-        this.subscriptionRequestJsonObjectFunction = subscriptionRequestJsonObjectFunction;
-    }
+   @Inject
+   public BindCreateSubscriptionRequest(CreateSubscriptionRequestToJson subscriptionRequestJsonObjectFunction) {
+      this.subscriptionRequestJsonObjectFunction = subscriptionRequestJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof CreateSubscriptionRequest, "this binder is only valid for CreateSubscriptionRequest!");
-        CreateSubscriptionRequest create = CreateSubscriptionRequest.class.cast(input);
-        JsonObject subscriptionObject = subscriptionRequestJsonObjectFunction.apply(create);
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof CreateSubscriptionRequest
+            , "this binder is only valid for CreateSubscriptionRequest!");
+      CreateSubscriptionRequest create = CreateSubscriptionRequest.class.cast(input);
+      JsonObject subscriptionObject = subscriptionRequestJsonObjectFunction.apply(create);
 
-        request.setPayload(subscriptionObject.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(subscriptionObject.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

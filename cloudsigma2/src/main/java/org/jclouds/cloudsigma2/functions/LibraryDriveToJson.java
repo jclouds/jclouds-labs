@@ -30,26 +30,26 @@ import javax.inject.Singleton;
 @Singleton
 public class LibraryDriveToJson implements Function<LibraryDrive, JsonObject> {
 
-    private final DriveToJson infoJsonObjectFunction;
+   private final DriveToJson infoJsonObjectFunction;
 
-    @Inject
-    public LibraryDriveToJson(DriveToJson infoJsonObjectFunction) {
-        this.infoJsonObjectFunction = infoJsonObjectFunction;
-    }
+   @Inject
+   public LibraryDriveToJson(DriveToJson infoJsonObjectFunction) {
+      this.infoJsonObjectFunction = infoJsonObjectFunction;
+   }
 
-    @Override
-    public JsonObject apply(@Nullable LibraryDrive input) {
-        JsonObject libraryDriveObject = infoJsonObjectFunction.apply(input);
+   @Override
+   public JsonObject apply(@Nullable LibraryDrive input) {
+      JsonObject libraryDriveObject = infoJsonObjectFunction.apply(input);
 
-        if(libraryDriveObject == null){
-            libraryDriveObject = new JsonObject();
-        }
+      if (libraryDriveObject == null) {
+         libraryDriveObject = new JsonObject();
+      }
 
-        libraryDriveObject.addProperty("favourite", input.isFavorite());
+      libraryDriveObject.addProperty("favourite", input.isFavorite());
 
-        if(input.getDescription() != null){
-            libraryDriveObject.addProperty("description", input.getDescription());
-        }
-        return libraryDriveObject;
-    }
+      if (input.getDescription() != null) {
+         libraryDriveObject.addProperty("description", input.getDescription());
+      }
+      return libraryDriveObject;
+   }
 }

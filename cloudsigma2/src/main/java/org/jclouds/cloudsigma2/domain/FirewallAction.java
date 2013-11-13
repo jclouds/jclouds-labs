@@ -22,22 +22,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Vladimir Shevchenko
  */
 public enum FirewallAction {
-    DROP, ACCEPT;
+   DROP, ACCEPT;
 
-    public String value() {
-        return name().toLowerCase();
-    }
+   public String value() {
+      return name().toLowerCase();
+   }
 
-    @Override
-    public String toString() {
-        return value();
-    }
+   @Override
+   public String toString() {
+      return value();
+   }
 
-    public static FirewallAction fromValue(String type) {
-        try {
-            return valueOf(checkNotNull(type, "type").toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
+   public static FirewallAction fromValue(String type) {
+      try {
+         return valueOf(checkNotNull(type, "type").toUpperCase());
+      } catch (IllegalArgumentException e) {
+         return null;
+      }
+   }
 }

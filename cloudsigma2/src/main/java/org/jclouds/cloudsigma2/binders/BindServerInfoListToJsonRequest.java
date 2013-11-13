@@ -35,32 +35,33 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Singleton
 public class BindServerInfoListToJsonRequest implements Binder {
-    private final ServerInfoToJson createServerInfoRequestToJson;
+   private final ServerInfoToJson createServerInfoRequestToJson;
 
-    @Inject
-    public BindServerInfoListToJsonRequest(ServerInfoToJson createServerInfoRequestToJson) {
-        this.createServerInfoRequestToJson = createServerInfoRequestToJson;
-    }
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
-        checkArgument(payload instanceof List, "this binder is only valid for List<ServerInfo>!");
-        List list = List.class.cast(payload);
-        for(Object o : list){
-            checkArgument(o instanceof ServerInfo, "this binder is only valid for List<ServerInfo>!");
-        }
-        Iterable<ServerInfo> serverInfoList = (Iterable<ServerInfo>) payload;
-        JsonArray serversJsonArray = new JsonArray();
+   @Inject
+   public BindServerInfoListToJsonRequest(ServerInfoToJson createServerInfoRequestToJson) {
+      this.createServerInfoRequestToJson = createServerInfoRequestToJson;
+   }
 
-        for(ServerInfo serverInfo : serverInfoList){
-            JsonObject driveObject = createServerInfoRequestToJson.apply(serverInfo);
-            serversJsonArray.add(driveObject);
-        }
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
+      checkArgument(payload instanceof List, "this binder is only valid for List<ServerInfo>!");
+      List list = List.class.cast(payload);
+      for (Object o : list) {
+         checkArgument(o instanceof ServerInfo, "this binder is only valid for List<ServerInfo>!");
+      }
+      Iterable<ServerInfo> serverInfoList = (Iterable<ServerInfo>) payload;
+      JsonArray serversJsonArray = new JsonArray();
 
-        JsonObject json = new JsonObject();
-        json.add("objects", serversJsonArray);
+      for (ServerInfo serverInfo : serverInfoList) {
+         JsonObject driveObject = createServerInfoRequestToJson.apply(serverInfo);
+         serversJsonArray.add(driveObject);
+      }
 
-        request.setPayload(json.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      JsonObject json = new JsonObject();
+      json.add("objects", serversJsonArray);
+
+      request.setPayload(json.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

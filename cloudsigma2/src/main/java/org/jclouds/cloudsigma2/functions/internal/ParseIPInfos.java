@@ -36,38 +36,38 @@ import java.util.List;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class ParseIPInfos extends ParseJson<ParseIPInfos.IPInfos>{
-    static class IPInfos extends PaginatedCollection<IPInfo> {
+public class ParseIPInfos extends ParseJson<ParseIPInfos.IPInfos> {
+   static class IPInfos extends PaginatedCollection<IPInfo> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public IPInfos(Iterable<IPInfo> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public IPInfos(Iterable<IPInfo> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseIPInfos(Json json) {
-        super(json, TypeLiteral.get(IPInfos.class));
-    }
+   @Inject
+   public ParseIPInfos(Json json) {
+      super(json, TypeLiteral.get(IPInfos.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<IPInfo, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<IPInfo, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<IPInfo>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<IPInfo>>() {
-                @Override
-                public IterableWithMarker<IPInfo> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listIPInfo(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<IPInfo>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<IPInfo>>() {
+            @Override
+            public IterableWithMarker<IPInfo> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listIPInfo(paginationOptions);
+            }
+         };
+      }
+   }
 }

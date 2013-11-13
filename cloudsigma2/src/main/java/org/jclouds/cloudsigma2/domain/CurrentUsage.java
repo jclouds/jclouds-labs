@@ -23,69 +23,69 @@ import java.beans.ConstructorProperties;
  */
 public class CurrentUsage {
 
-    public static class Builder{
-        private AccountBalance balance;
-        private AccountUsage usage;
+   public static class Builder {
+      private AccountBalance balance;
+      private AccountUsage usage;
 
-        public Builder balance(AccountBalance balance) {
-            this.balance = balance;
-            return this;
-        }
+      public Builder balance(AccountBalance balance) {
+         this.balance = balance;
+         return this;
+      }
 
-        public Builder usage(AccountUsage usage) {
-            this.usage = usage;
-            return this;
-        }
+      public Builder usage(AccountUsage usage) {
+         this.usage = usage;
+         return this;
+      }
 
-        public CurrentUsage build(){
-            return new CurrentUsage(balance, usage);
-        }
-    }
+      public CurrentUsage build() {
+         return new CurrentUsage(balance, usage);
+      }
+   }
 
-    private final AccountBalance balance;
-    private final AccountUsage usage;
+   private final AccountBalance balance;
+   private final AccountUsage usage;
 
-    @ConstructorProperties({
-            "balance", "usage"
-    })
-    public CurrentUsage(AccountBalance balance, AccountUsage usage) {
-        this.balance = balance;
-        this.usage = usage;
-    }
+   @ConstructorProperties({
+         "balance", "usage"
+   })
+   public CurrentUsage(AccountBalance balance, AccountUsage usage) {
+      this.balance = balance;
+      this.usage = usage;
+   }
 
-    public AccountBalance getBalance() {
-        return balance;
-    }
+   public AccountBalance getBalance() {
+      return balance;
+   }
 
-    public AccountUsage getUsage() {
-        return usage;
-    }
+   public AccountUsage getUsage() {
+      return usage;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CurrentUsage)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof CurrentUsage)) return false;
 
-        CurrentUsage that = (CurrentUsage) o;
+      CurrentUsage that = (CurrentUsage) o;
 
-        if (balance != null ? !balance.equals(that.balance) : that.balance != null) return false;
-        if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
+      if (balance != null ? !balance.equals(that.balance) : that.balance != null) return false;
+      if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        int result = balance != null ? balance.hashCode() : 0;
-        result = 31 * result + (usage != null ? usage.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result = balance != null ? balance.hashCode() : 0;
+      result = 31 * result + (usage != null ? usage.hashCode() : 0);
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[" +
-                "balance=" + balance +
-                ", usage=" + usage +
-                "]";
-    }
+   @Override
+   public String toString() {
+      return "[" +
+            "balance=" + balance +
+            ", usage=" + usage +
+            "]";
+   }
 }

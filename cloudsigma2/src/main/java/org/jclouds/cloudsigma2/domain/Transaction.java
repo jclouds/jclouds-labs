@@ -25,169 +25,172 @@ import java.util.Date;
  */
 public class Transaction {
 
-    public static class Builder{
-        private double amount;
-        private long billingCycle;
-        private double end;
-        private String id;
-        private double initial;
-        private String reason;
-        private Date time;
+   public static class Builder {
+      private double amount;
+      private long billingCycle;
+      private double end;
+      private String id;
+      private double initial;
+      private String reason;
+      private Date time;
 
-        public Builder amount(double amount){
-            this.amount = amount;
-            return this;
-        }
+      public Builder amount(double amount) {
+         this.amount = amount;
+         return this;
+      }
 
-        public Builder billingCycle(long billingCycle){
-            this.billingCycle = billingCycle;
-            return this;
-        }
+      public Builder billingCycle(long billingCycle) {
+         this.billingCycle = billingCycle;
+         return this;
+      }
 
-        public Builder end(double end){
-            this.end = end;
-            return this;
-        }
-        public Builder id(String id){
-            this.id = id;
-            return this;
-        }
-        public Builder initial(double initial){
-            this.initial = initial;
-            return this;
-        }
+      public Builder end(double end) {
+         this.end = end;
+         return this;
+      }
 
-        public Builder reason(String reason){
-            this.reason = reason;
-            return this;
-        }
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
 
-        public Builder time(Date time){
-            this.time = time;
-            return this;
-        }
+      public Builder initial(double initial) {
+         this.initial = initial;
+         return this;
+      }
 
-        public Transaction build(){
-            return new Transaction(amount, billingCycle, end, id, initial, reason, time);
-        }
-    }
+      public Builder reason(String reason) {
+         this.reason = reason;
+         return this;
+      }
 
-    private final double amount;
-    @Named("billing_cycle")
-    private final long billingCycle;
-    private final double end;
-    private final String id;
-    private final double initial;
-    private final String reason;
-    private final Date time;
+      public Builder time(Date time) {
+         this.time = time;
+         return this;
+      }
 
-    @ConstructorProperties({
-            "amount", "billing_cycle", "end", "id", "initial", "reason", "time"
-    })
-    public Transaction(double amount, long billingCycle, double end, String id, double initial, String reason, Date time) {
-        this.amount = amount;
-        this.billingCycle = billingCycle;
-        this.end = end;
-        this.id = id;
-        this.initial = initial;
-        this.reason = reason;
-        this.time = time;
-    }
+      public Transaction build() {
+         return new Transaction(amount, billingCycle, end, id, initial, reason, time);
+      }
+   }
 
-    /**
-     * @return Amount of the operation, positive for debits, negative for credits
-     */
-    public double getAmount() {
-        return amount;
-    }
+   private final double amount;
+   @Named("billing_cycle")
+   private final long billingCycle;
+   private final double end;
+   private final String id;
+   private final double initial;
+   private final String reason;
+   private final Date time;
 
-    /**
-     * @return Billing cycle that generated this charge
-     */
-    public long getBillingCycle() {
-        return billingCycle;
-    }
+   @ConstructorProperties({
+         "amount", "billing_cycle", "end", "id", "initial", "reason", "time"
+   })
+   public Transaction(double amount, long billingCycle, double end, String id, double initial, String reason
+         , Date time) {
+      this.amount = amount;
+      this.billingCycle = billingCycle;
+      this.end = end;
+      this.id = id;
+      this.initial = initial;
+      this.reason = reason;
+      this.time = time;
+   }
 
-    /**
-     * @return Amount of money after the operation
-     */
-    public double getEnd() {
-        return end;
-    }
+   /**
+    * @return Amount of the operation, positive for debits, negative for credits
+    */
+   public double getAmount() {
+      return amount;
+   }
 
-    /**
-     * @return Unique id
-     */
-    public String getId() {
-        return id;
-    }
+   /**
+    * @return Billing cycle that generated this charge
+    */
+   public long getBillingCycle() {
+      return billingCycle;
+   }
 
-    /**
-     * @return Amount of money before the operation
-     */
-    public double getInitial() {
-        return initial;
-    }
+   /**
+    * @return Amount of money after the operation
+    */
+   public double getEnd() {
+      return end;
+   }
 
-    /**
-     * @return Description of the operation
-     */
-    public String getReason() {
-        return reason;
-    }
+   /**
+    * @return Unique id
+    */
+   public String getId() {
+      return id;
+   }
 
-    /**
-     * @return date & time
-     */
-    public Date getTime() {
-        return time;
-    }
+   /**
+    * @return Amount of money before the operation
+    */
+   public double getInitial() {
+      return initial;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Transaction)) return false;
+   /**
+    * @return Description of the operation
+    */
+   public String getReason() {
+      return reason;
+   }
 
-        Transaction that = (Transaction) o;
+   /**
+    * @return date & time
+    */
+   public Date getTime() {
+      return time;
+   }
 
-        if (Double.compare(that.amount, amount) != 0) return false;
-        if (billingCycle != that.billingCycle) return false;
-        if (Double.compare(that.end, end) != 0) return false;
-        if (Double.compare(that.initial, initial) != 0) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (reason != null ? !reason.equals(that.reason) : that.reason != null) return false;
-        if (time != null ? !time.equals(that.time) : that.time != null) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Transaction)) return false;
 
-        return true;
-    }
+      Transaction that = (Transaction) o;
 
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(amount);
-        result = (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) (billingCycle ^ (billingCycle >>> 32));
-        temp = Double.doubleToLongBits(end);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        temp = Double.doubleToLongBits(initial);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (reason != null ? reason.hashCode() : 0);
-        result = 31 * result + (time != null ? time.hashCode() : 0);
-        return result;
-    }
+      if (Double.compare(that.amount, amount) != 0) return false;
+      if (billingCycle != that.billingCycle) return false;
+      if (Double.compare(that.end, end) != 0) return false;
+      if (Double.compare(that.initial, initial) != 0) return false;
+      if (id != null ? !id.equals(that.id) : that.id != null) return false;
+      if (reason != null ? !reason.equals(that.reason) : that.reason != null) return false;
+      if (time != null ? !time.equals(that.time) : that.time != null) return false;
 
-    @Override
-    public String toString() {
-        return "[" +
-                "amount=" + amount +
-                ", billingCycle=" + billingCycle +
-                ", end=" + end +
-                ", id='" + id + '\'' +
-                ", initial=" + initial +
-                ", reason='" + reason + '\'' +
-                ", time=" + time +
-                "]";
-    }
+      return true;
+   }
+
+   @Override
+   public int hashCode() {
+      int result;
+      long temp;
+      temp = Double.doubleToLongBits(amount);
+      result = (int) (temp ^ (temp >>> 32));
+      result = 31 * result + (int) (billingCycle ^ (billingCycle >>> 32));
+      temp = Double.doubleToLongBits(end);
+      result = 31 * result + (int) (temp ^ (temp >>> 32));
+      result = 31 * result + (id != null ? id.hashCode() : 0);
+      temp = Double.doubleToLongBits(initial);
+      result = 31 * result + (int) (temp ^ (temp >>> 32));
+      result = 31 * result + (reason != null ? reason.hashCode() : 0);
+      result = 31 * result + (time != null ? time.hashCode() : 0);
+      return result;
+   }
+
+   @Override
+   public String toString() {
+      return "[" +
+            "amount=" + amount +
+            ", billingCycle=" + billingCycle +
+            ", end=" + end +
+            ", id='" + id + '\'' +
+            ", initial=" + initial +
+            ", reason='" + reason + '\'' +
+            ", time=" + time +
+            "]";
+   }
 }

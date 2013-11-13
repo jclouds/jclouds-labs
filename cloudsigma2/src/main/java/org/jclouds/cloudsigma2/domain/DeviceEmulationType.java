@@ -22,22 +22,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Vladimir Shevchenko
  */
 public enum DeviceEmulationType {
-    IDE, VIRTIO, UNRECOGNIZED;
+   IDE, VIRTIO, UNRECOGNIZED;
 
-    public String value() {
-        return name().toLowerCase();
-    }
+   public String value() {
+      return name().toLowerCase();
+   }
 
-    @Override
-    public String toString() {
-        return value();
-    }
+   @Override
+   public String toString() {
+      return value();
+   }
 
-    public static DeviceEmulationType fromValue(String type) {
-        try {
-            return valueOf(checkNotNull(type, "type").toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return UNRECOGNIZED;
-        }
-    }
+   public static DeviceEmulationType fromValue(String type) {
+      try {
+         return valueOf(checkNotNull(type, "type").toUpperCase());
+      } catch (IllegalArgumentException e) {
+         return UNRECOGNIZED;
+      }
+   }
 }

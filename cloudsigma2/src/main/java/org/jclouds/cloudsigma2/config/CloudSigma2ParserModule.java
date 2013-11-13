@@ -22,9 +22,9 @@ import org.jclouds.json.config.GsonModule;
 /**
  * @author Vladimir Shevchenko
  */
-public class CloudSigma2ParserModule extends AbstractModule{
-    @Override
-    protected void configure() {
-        bind(GsonModule.DateAdapter.class).to(GsonModule.Iso8601DateAdapter.class);
-    }
+public class CloudSigma2ParserModule extends AbstractModule {
+   @Override
+   protected void configure() {
+      bind(GsonModule.DateAdapter.class).to(GsonModule.Iso8601DateAdapter.class);
+   }
 }

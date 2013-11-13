@@ -29,71 +29,71 @@ import javax.inject.Singleton;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class ProfileInfoToJson implements Function<ProfileInfo, JsonObject>{
-    @Override
-    public JsonObject apply(@Nullable ProfileInfo input) {
-        if(input == null){
-            return null;
-        }
+public class ProfileInfoToJson implements Function<ProfileInfo, JsonObject> {
+   @Override
+   public JsonObject apply(@Nullable ProfileInfo input) {
+      if (input == null) {
+         return null;
+      }
 
-        JsonObject profileJson = new JsonObject();
+      JsonObject profileJson = new JsonObject();
 
-        if(input.getAddress() != null){
-            profileJson.addProperty("address", input.getAddress());
-        }
+      if (input.getAddress() != null) {
+         profileJson.addProperty("address", input.getAddress());
+      }
 
-        if(input.getBankReference() != null){
-            profileJson.addProperty("bank_reference", input.getBankReference());
-        }
+      if (input.getBankReference() != null) {
+         profileJson.addProperty("bank_reference", input.getBankReference());
+      }
 
-        if(input.getCompany() != null){
-            profileJson.addProperty("company", input.getCompany());
-        }
+      if (input.getCompany() != null) {
+         profileJson.addProperty("company", input.getCompany());
+      }
 
-        if(input.getCountry() != null){
-            profileJson.addProperty("country", input.getCountry());
-        }
+      if (input.getCountry() != null) {
+         profileJson.addProperty("country", input.getCountry());
+      }
 
-        if(input.getEmail() != null){
-            profileJson.addProperty("email", input.getEmail());
-        }
+      if (input.getEmail() != null) {
+         profileJson.addProperty("email", input.getEmail());
+      }
 
-        if(input.getFirstName() != null){
-            profileJson.addProperty("first_name", input.getFirstName());
-        }
+      if (input.getFirstName() != null) {
+         profileJson.addProperty("first_name", input.getFirstName());
+      }
 
-        if(input.getLastName() != null){
-            profileJson.addProperty("last_name", input.getLastName());
-        }
+      if (input.getLastName() != null) {
+         profileJson.addProperty("last_name", input.getLastName());
+      }
 
-        if(input.getMeta() != null){
-            profileJson.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         profileJson.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        if(input.getMyNotes() != null){
-            profileJson.addProperty("my_notes", input.getMyNotes());
-        }
+      if (input.getMyNotes() != null) {
+         profileJson.addProperty("my_notes", input.getMyNotes());
+      }
 
-        if(input.getNickname() != null){
-            profileJson.addProperty("nickname", input.getNickname());
-        }
+      if (input.getNickname() != null) {
+         profileJson.addProperty("nickname", input.getNickname());
+      }
 
-        if(input.getPhone() != null){
-            profileJson.addProperty("phone", input.getPhone());
-        }
+      if (input.getPhone() != null) {
+         profileJson.addProperty("phone", input.getPhone());
+      }
 
-        if(input.getPostcode() != null){
-            profileJson.addProperty("postcode", input.getPostcode());
-        }
+      if (input.getPostcode() != null) {
+         profileJson.addProperty("postcode", input.getPostcode());
+      }
 
-        if(input.getTitle() != null){
-            profileJson.addProperty("title", input.getTitle());
-        }
+      if (input.getTitle() != null) {
+         profileJson.addProperty("title", input.getTitle());
+      }
 
-        if(input.getTown() != null){
-            profileJson.addProperty("town", input.getTown());
-        }
+      if (input.getTown() != null) {
+         profileJson.addProperty("town", input.getTown());
+      }
 
-        return profileJson;
-    }
+      return profileJson;
+   }
 }

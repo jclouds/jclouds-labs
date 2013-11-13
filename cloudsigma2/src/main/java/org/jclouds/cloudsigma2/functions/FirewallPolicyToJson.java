@@ -32,61 +32,61 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class FirewallPolicyToJson implements Function<FirewallPolicy, JsonObject> {
-    @Override
-    public JsonObject apply(@Nullable FirewallPolicy input) {
-        JsonObject firewallObject = new JsonObject();
+   @Override
+   public JsonObject apply(@Nullable FirewallPolicy input) {
+      JsonObject firewallObject = new JsonObject();
 
-        if(input.getName() != null){
-            firewallObject.addProperty("name", input.getName());
-        }
+      if (input.getName() != null) {
+         firewallObject.addProperty("name", input.getName());
+      }
 
-        if(input.getMeta() != null){
-            firewallObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         firewallObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        if(input.getRules() != null){
-            JsonArray rulesArray = new JsonArray();
+      if (input.getRules() != null) {
+         JsonArray rulesArray = new JsonArray();
 
-            for(FirewallRule rule : input.getRules()){
-                JsonObject ruleObject = new JsonObject();
+         for (FirewallRule rule : input.getRules()) {
+            JsonObject ruleObject = new JsonObject();
 
-                if(rule.getAction() != null){
-                    ruleObject.addProperty("action", rule.getAction().value());
-                }
-
-                if(rule.getComment() != null){
-                    ruleObject.addProperty("comment", rule.getComment());
-                }
-
-                if(rule.getDirection() != null){
-                    ruleObject.addProperty("direction", rule.getDirection().value());
-                }
-
-                if(rule.getDestinationIp() != null){
-                    ruleObject.addProperty("dst_ip", rule.getDestinationIp());
-                }
-
-                if(rule.getDestinationPort() != null){
-                    ruleObject.addProperty("dst_port", rule.getDestinationPort());
-                }
-
-                if(rule.getIpProtocol() != null){
-                    ruleObject.addProperty("ip_proto", rule.getIpProtocol().toString());
-                }
-
-                if(rule.getSourceIp() != null){
-                    ruleObject.addProperty("src_ip", rule.getSourceIp());
-                }
-
-                if(rule.getSourcePort() != null){
-                    ruleObject.addProperty("src_port", rule.getSourcePort());
-                }
-
-                rulesArray.add(ruleObject);
+            if (rule.getAction() != null) {
+               ruleObject.addProperty("action", rule.getAction().value());
             }
 
-            firewallObject.add("rules", rulesArray);
-        }
-        return firewallObject;
-    }
+            if (rule.getComment() != null) {
+               ruleObject.addProperty("comment", rule.getComment());
+            }
+
+            if (rule.getDirection() != null) {
+               ruleObject.addProperty("direction", rule.getDirection().value());
+            }
+
+            if (rule.getDestinationIp() != null) {
+               ruleObject.addProperty("dst_ip", rule.getDestinationIp());
+            }
+
+            if (rule.getDestinationPort() != null) {
+               ruleObject.addProperty("dst_port", rule.getDestinationPort());
+            }
+
+            if (rule.getIpProtocol() != null) {
+               ruleObject.addProperty("ip_proto", rule.getIpProtocol().toString());
+            }
+
+            if (rule.getSourceIp() != null) {
+               ruleObject.addProperty("src_ip", rule.getSourceIp());
+            }
+
+            if (rule.getSourcePort() != null) {
+               ruleObject.addProperty("src_port", rule.getSourcePort());
+            }
+
+            rulesArray.add(ruleObject);
+         }
+
+         firewallObject.add("rules", rulesArray);
+      }
+      return firewallObject;
+   }
 }

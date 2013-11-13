@@ -34,21 +34,21 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Singleton
 public class BindFirewallPolicyToJsonRequest implements Binder {
 
-    private final FirewallPolicyToJson policyJsonObjectFunction;
+   private final FirewallPolicyToJson policyJsonObjectFunction;
 
-    @Inject
-    public BindFirewallPolicyToJsonRequest(FirewallPolicyToJson policyJsonObjectFunction) {
-        this.policyJsonObjectFunction = policyJsonObjectFunction;
-    }
+   @Inject
+   public BindFirewallPolicyToJsonRequest(FirewallPolicyToJson policyJsonObjectFunction) {
+      this.policyJsonObjectFunction = policyJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof FirewallPolicy, "this binder is only valid for FirewallPolicy!");
-        FirewallPolicy create = FirewallPolicy.class.cast(input);
-        JsonObject firewallJsonObject = policyJsonObjectFunction.apply(create);
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof FirewallPolicy, "this binder is only valid for FirewallPolicy!");
+      FirewallPolicy create = FirewallPolicy.class.cast(input);
+      JsonObject firewallJsonObject = policyJsonObjectFunction.apply(create);
 
-        request.setPayload(firewallJsonObject.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(firewallJsonObject.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

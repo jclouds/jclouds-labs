@@ -33,21 +33,21 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Singleton
 public class BindServerInfoToJsonRequest implements Binder {
-    private final ServerInfoToJson createServerInfoRequestToJson;
+   private final ServerInfoToJson createServerInfoRequestToJson;
 
-    @Inject
-    public BindServerInfoToJsonRequest(ServerInfoToJson createServerInfoRequestToJson) {
-        this.createServerInfoRequestToJson = createServerInfoRequestToJson;
-    }
+   @Inject
+   public BindServerInfoToJsonRequest(ServerInfoToJson createServerInfoRequestToJson) {
+      this.createServerInfoRequestToJson = createServerInfoRequestToJson;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof ServerInfo, "this binder is only valid for ServerInfo!");
-        ServerInfo create = ServerInfo.class.cast(input);
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof ServerInfo, "this binder is only valid for ServerInfo!");
+      ServerInfo create = ServerInfo.class.cast(input);
 
-        JsonObject serverInfoJson = createServerInfoRequestToJson.apply(create);
-        request.setPayload(serverInfoJson.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      JsonObject serverInfoJson = createServerInfoRequestToJson.apply(create);
+      request.setPayload(serverInfoJson.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

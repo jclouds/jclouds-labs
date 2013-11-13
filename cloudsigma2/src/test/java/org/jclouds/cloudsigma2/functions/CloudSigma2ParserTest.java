@@ -27,16 +27,16 @@ import java.io.InputStreamReader;
  */
 public class CloudSigma2ParserTest {
 
-    public String EMPTY_OBJECTS_ARRAY = "{\"objects\" : []}";
+   public String EMPTY_OBJECTS_ARRAY = "{\"objects\" : []}";
 
-    public String getJsonResource(String path){
-        InputStream inputStream = this.getClass().getResourceAsStream(path);
+   public String getJsonResource(String path) {
+      InputStream inputStream = this.getClass().getResourceAsStream(path);
 
-        try {
-            return CharStreams.toString(new InputStreamReader(inputStream));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+      try {
+         return CharStreams.toString(new InputStreamReader(inputStream));
+      } catch (IOException e) {
+         e.printStackTrace();
+         return null;
+      }
+   }
 }

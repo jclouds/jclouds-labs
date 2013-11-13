@@ -30,18 +30,18 @@ import org.jclouds.javax.annotation.Nullable;
 @Singleton
 public class VLANInfoToJson implements Function<VLANInfo, JsonObject> {
 
-    @Override
-    public JsonObject apply(@Nullable VLANInfo input) {
-        if(input == null){
-            return null;
-        }
+   @Override
+   public JsonObject apply(@Nullable VLANInfo input) {
+      if (input == null) {
+         return null;
+      }
 
-        JsonObject vlanObject = new JsonObject();
+      JsonObject vlanObject = new JsonObject();
 
-        if(input.getMeta() != null){
-            vlanObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         vlanObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        return vlanObject;
-    }
+      return vlanObject;
+   }
 }

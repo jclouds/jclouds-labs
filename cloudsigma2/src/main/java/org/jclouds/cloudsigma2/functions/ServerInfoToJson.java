@@ -33,113 +33,113 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class ServerInfoToJson implements Function<ServerInfo, JsonObject> {
-    @Override
-    public JsonObject apply(ServerInfo input) {
-        JsonObject serverObject = new JsonObject();
+   @Override
+   public JsonObject apply(ServerInfo input) {
+      JsonObject serverObject = new JsonObject();
 
-        if(input.getName() != null){
-            serverObject.addProperty("name", input.getName());
-        }
+      if (input.getName() != null) {
+         serverObject.addProperty("name", input.getName());
+      }
 
-        if(input.getCpu() > 0){
-            serverObject.addProperty("cpu", input.getCpu());
-        }
+      if (input.getCpu() > 0) {
+         serverObject.addProperty("cpu", input.getCpu());
+      }
 
-        if(input.getMemory() != null){
-            serverObject.addProperty("mem", input.getMemory().toString());
-        }
+      if (input.getMemory() != null) {
+         serverObject.addProperty("mem", input.getMemory().toString());
+      }
 
-        if(input.getMeta() != null){
-            serverObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         serverObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        if(input.getRequirements() != null){
-            serverObject.add("requirements", new JsonParser().parse(new Gson().toJson(input.getRequirements())));
-        }
+      if (input.getRequirements() != null) {
+         serverObject.add("requirements", new JsonParser().parse(new Gson().toJson(input.getRequirements())));
+      }
 
-        if(input.getTags() != null){
-            serverObject.add("tags", new JsonParser().parse(new Gson().toJson(input.getTags())));
-        }
+      if (input.getTags() != null) {
+         serverObject.add("tags", new JsonParser().parse(new Gson().toJson(input.getTags())));
+      }
 
-        if(input.getVncPassword() != null){
-            serverObject.addProperty("vnc_password", input.getVncPassword());
-        }
+      if (input.getVncPassword() != null) {
+         serverObject.addProperty("vnc_password", input.getVncPassword());
+      }
 
-        if(input.getNics() != null){
-            JsonArray nics = new JsonArray();
+      if (input.getNics() != null) {
+         JsonArray nics = new JsonArray();
 
-            for(NIC nic : input.getNics()){
-                JsonObject nicObject = new JsonObject();
+         for (NIC nic : input.getNics()) {
+            JsonObject nicObject = new JsonObject();
 
-                if(nic.getFirewallPolicy() != null){
-                    nicObject.addProperty("firewall_policy", nic.getFirewallPolicy().getUuid());
-                }
-
-                if(nic.getVlan() != null){
-                    nicObject.addProperty("vlan", nic.getVlan().getUuid());
-                } else if(nic.getIpV4Configuration() != null){
-                    nicObject.add("ip_v4_conf", ipConfigurationToJsonObject(nic.getIpV4Configuration()));
-
-                    if(nic.getModel() != null){
-                        nicObject.addProperty("model", nic.getModel().value());
-                    }
-                    if(nic.getMac() != null){
-                        nicObject.addProperty("mac", nic.getMac());
-                    }
-                } else if(nic.getIpV6Configuration() != null){
-                    nicObject.add("ip_v6_conf", ipConfigurationToJsonObject(nic.getIpV6Configuration()));
-
-                    if(nic.getModel() != null){
-                        nicObject.addProperty("model", nic.getModel().value());
-                    }
-                    if(nic.getMac() != null){
-                        nicObject.addProperty("mac", nic.getMac());
-                    }
-                }
-
-                nics.add(nicObject);
+            if (nic.getFirewallPolicy() != null) {
+               nicObject.addProperty("firewall_policy", nic.getFirewallPolicy().getUuid());
             }
 
-            serverObject.add("nics", nics);
-        }
+            if (nic.getVlan() != null) {
+               nicObject.addProperty("vlan", nic.getVlan().getUuid());
+            } else if (nic.getIpV4Configuration() != null) {
+               nicObject.add("ip_v4_conf", ipConfigurationToJsonObject(nic.getIpV4Configuration()));
 
-        if(input.getDrives() != null){
-            JsonArray serverDrives = new JsonArray();
+               if (nic.getModel() != null) {
+                  nicObject.addProperty("model", nic.getModel().value());
+               }
+               if (nic.getMac() != null) {
+                  nicObject.addProperty("mac", nic.getMac());
+               }
+            } else if (nic.getIpV6Configuration() != null) {
+               nicObject.add("ip_v6_conf", ipConfigurationToJsonObject(nic.getIpV6Configuration()));
 
-            for(ServerDrive serverDrive : input.getDrives()){
-                JsonObject driveObject = new JsonObject();
-                driveObject.addProperty("boot_order", serverDrive.getBootOrder());
-
-                if(serverDrive.getDeviceChannel() != null){
-                    driveObject.addProperty("dev_channel", serverDrive.getDeviceChannel());
-                }
-
-                if(serverDrive.getDeviceEmulationType() != null){
-                    driveObject.addProperty("device", serverDrive.getDeviceEmulationType().value());
-                }
-
-                if(serverDrive.getDriveUuid() != null){
-                    driveObject.addProperty("drive", serverDrive.getDriveUuid());
-                } else if(serverDrive.getDrive() != null){
-                    driveObject.addProperty("drive", serverDrive.getDrive().getUuid());
-                }
-
-                serverDrives.add(driveObject);
+               if (nic.getModel() != null) {
+                  nicObject.addProperty("model", nic.getModel().value());
+               }
+               if (nic.getMac() != null) {
+                  nicObject.addProperty("mac", nic.getMac());
+               }
             }
-            serverObject.add("drives", serverDrives);
-        }
 
-        return serverObject;
-    }
+            nics.add(nicObject);
+         }
 
-    private JsonObject ipConfigurationToJsonObject(IPConfiguration ipConfiguration){
-        JsonObject ipConfObject = new JsonObject();
-        if(ipConfiguration.getConfigurationType() != null){
-            ipConfObject.addProperty("conf", ipConfiguration.getConfigurationType().value());
-        }
-        if(ipConfiguration.getIp() != null){
-            ipConfObject.addProperty("ip", ipConfiguration.getIp().getUuid());
-        }
-        return ipConfObject;
-    }
+         serverObject.add("nics", nics);
+      }
+
+      if (input.getDrives() != null) {
+         JsonArray serverDrives = new JsonArray();
+
+         for (ServerDrive serverDrive : input.getDrives()) {
+            JsonObject driveObject = new JsonObject();
+            driveObject.addProperty("boot_order", serverDrive.getBootOrder());
+
+            if (serverDrive.getDeviceChannel() != null) {
+               driveObject.addProperty("dev_channel", serverDrive.getDeviceChannel());
+            }
+
+            if (serverDrive.getDeviceEmulationType() != null) {
+               driveObject.addProperty("device", serverDrive.getDeviceEmulationType().value());
+            }
+
+            if (serverDrive.getDriveUuid() != null) {
+               driveObject.addProperty("drive", serverDrive.getDriveUuid());
+            } else if (serverDrive.getDrive() != null) {
+               driveObject.addProperty("drive", serverDrive.getDrive().getUuid());
+            }
+
+            serverDrives.add(driveObject);
+         }
+         serverObject.add("drives", serverDrives);
+      }
+
+      return serverObject;
+   }
+
+   private JsonObject ipConfigurationToJsonObject(IPConfiguration ipConfiguration) {
+      JsonObject ipConfObject = new JsonObject();
+      if (ipConfiguration.getConfigurationType() != null) {
+         ipConfObject.addProperty("conf", ipConfiguration.getConfigurationType().value());
+      }
+      if (ipConfiguration.getIp() != null) {
+         ipConfObject.addProperty("ip", ipConfiguration.getIp().getUuid());
+      }
+      return ipConfObject;
+   }
 }

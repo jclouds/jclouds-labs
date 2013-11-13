@@ -33,13 +33,12 @@ import java.io.IOException;
 
 /**
  * This will parse and set an appropriate exception on the command object.
- * 
+ * <p/>
  * <p/>
  * Errors are returned with an appropriate HTTP status code, an X-Elastic- Error header specifying
  * the error type, and a text description in the HTTP body.
- * 
+ *
  * @author Vladimir Shevchenko
- * 
  */
 @Singleton
 public class CloudSigmaErrorHandler implements HttpErrorHandler {
@@ -55,32 +54,32 @@ public class CloudSigmaErrorHandler implements HttpErrorHandler {
          message = message != null ? message : String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
                response.getStatusLine());
          switch (response.getStatusCode()) {
-         case 400:
-            if ((command.getCurrentRequest().getEndpoint().getPath().endsWith("/info"))
-                  || (message != null && message.indexOf("could not be found") != -1))
-               exception = new ResourceNotFoundException(message, exception);
-            else if (message != null && message.indexOf("currently in use") != -1)
+            case 400:
+               if ((command.getCurrentRequest().getEndpoint().getPath().endsWith("/info"))
+                     || (message != null && message.indexOf("could not be found") != -1))
+                  exception = new ResourceNotFoundException(message, exception);
+               else if (message != null && message.indexOf("currently in use") != -1)
+                  exception = new IllegalStateException(message, exception);
+               else
+                  exception = new IllegalArgumentException(message, exception);
+               break;
+            case 401:
+               exception = new AuthorizationException(message, exception);
+               break;
+            case 402:
                exception = new IllegalStateException(message, exception);
-            else
+               break;
+            case 404:
+               if (!command.getCurrentRequest().getMethod().equals("DELETE")) {
+                  exception = new ResourceNotFoundException(message, exception);
+               }
+               break;
+            case 405:
                exception = new IllegalArgumentException(message, exception);
-            break;
-         case 401:
-            exception = new AuthorizationException(message, exception);
-            break;
-         case 402:
-             exception = new IllegalStateException(message, exception);
-             break;
-         case 404:
-            if (!command.getCurrentRequest().getMethod().equals("DELETE")) {
-               exception = new ResourceNotFoundException(message, exception);
-            }
-            break;
-         case 405:
-            exception = new IllegalArgumentException(message, exception);
-            break;
-         case 409:
-            exception = new IllegalStateException(message, exception);
-            break;
+               break;
+            case 409:
+               exception = new IllegalStateException(message, exception);
+               break;
          }
       } finally {
          Closeables.closeQuietly(response.getPayload());

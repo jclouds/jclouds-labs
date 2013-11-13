@@ -32,23 +32,23 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class BindVLANToJsonRequest implements Binder{
+public class BindVLANToJsonRequest implements Binder {
 
-    private final VLANInfoToJson vlanInfoJsonObjectFunction;
+   private final VLANInfoToJson vlanInfoJsonObjectFunction;
 
-    @Inject
-    public BindVLANToJsonRequest(VLANInfoToJson vlanInfoJsonObjectFunction) {
-        this.vlanInfoJsonObjectFunction = vlanInfoJsonObjectFunction;
-    }
+   @Inject
+   public BindVLANToJsonRequest(VLANInfoToJson vlanInfoJsonObjectFunction) {
+      this.vlanInfoJsonObjectFunction = vlanInfoJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-        checkArgument(input instanceof VLANInfo, "this binder is only valid for VLANInfo!");
-        VLANInfo create = VLANInfo.class.cast(input);
-        JsonObject vlanJsonObject = vlanInfoJsonObjectFunction.apply(create);
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      checkArgument(input instanceof VLANInfo, "this binder is only valid for VLANInfo!");
+      VLANInfo create = VLANInfo.class.cast(input);
+      JsonObject vlanJsonObject = vlanInfoJsonObjectFunction.apply(create);
 
-        request.setPayload(vlanJsonObject.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(vlanJsonObject.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

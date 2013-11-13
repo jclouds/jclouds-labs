@@ -27,32 +27,32 @@ import java.util.Iterator;
  */
 public class PaginatedCollection<T> extends IterableWithMarker<T> {
 
-    private Iterable<T> objects;
-    private PaginationOptions paginationOptions;
+   private Iterable<T> objects;
+   private PaginationOptions paginationOptions;
 
-    public PaginatedCollection(Iterable<T> objects, PaginationOptions paginationOptions) {
-        this.objects = objects;
-        this.paginationOptions = paginationOptions;
-    }
+   public PaginatedCollection(Iterable<T> objects, PaginationOptions paginationOptions) {
+      this.objects = objects;
+      this.paginationOptions = paginationOptions;
+   }
 
-    @Override
-    public Optional<Object> nextMarker() {
-        if(paginationOptions.getLimit() == 0){
-            return Optional.absent();
-        }
+   @Override
+   public Optional<Object> nextMarker() {
+      if (paginationOptions.getLimit() == 0) {
+         return Optional.absent();
+      }
 
-        if(paginationOptions.getTotalCount() - paginationOptions.getOffset() > paginationOptions.getLimit()){
-            return Optional.of((Object) new PaginationOptions.Builder()
-                    .limit(paginationOptions.getLimit())
-                    .offset(paginationOptions.getOffset() + paginationOptions.getLimit())
-                    .build());
-        }
+      if (paginationOptions.getTotalCount() - paginationOptions.getOffset() > paginationOptions.getLimit()) {
+         return Optional.of((Object) new PaginationOptions.Builder()
+               .limit(paginationOptions.getLimit())
+               .offset(paginationOptions.getOffset() + paginationOptions.getLimit())
+               .build());
+      }
 
-        return Optional.absent();
-    }
+      return Optional.absent();
+   }
 
-    @Override
-    public Iterator<T> iterator() {
-        return objects.iterator();
-    }
+   @Override
+   public Iterator<T> iterator() {
+      return objects.iterator();
+   }
 }

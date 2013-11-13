@@ -35,33 +35,33 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Singleton
 public class BindTagListToJsonRequest implements Binder {
-    private final TagToJson tagJsonObjectFunction;
+   private final TagToJson tagJsonObjectFunction;
 
-    @Inject
-    public BindTagListToJsonRequest(TagToJson tagJsonObjectFunction) {
-        this.tagJsonObjectFunction = tagJsonObjectFunction;
-    }
+   @Inject
+   public BindTagListToJsonRequest(TagToJson tagJsonObjectFunction) {
+      this.tagJsonObjectFunction = tagJsonObjectFunction;
+   }
 
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
-        checkArgument(payload instanceof List, "this binder is only valid for List<Tag>!");
-        List list = List.class.cast(payload);
-        for(Object o : list){
-            checkArgument(o instanceof Tag, "this binder is only valid for List<Tag>!");
-        }
-        Iterable<Tag> tags = (Iterable<Tag>) payload;
-        JsonArray tagJsonArray = new JsonArray();
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
+      checkArgument(payload instanceof List, "this binder is only valid for List<Tag>!");
+      List list = List.class.cast(payload);
+      for (Object o : list) {
+         checkArgument(o instanceof Tag, "this binder is only valid for List<Tag>!");
+      }
+      Iterable<Tag> tags = (Iterable<Tag>) payload;
+      JsonArray tagJsonArray = new JsonArray();
 
-        for(Tag tag : tags){
-            JsonObject driveObject = tagJsonObjectFunction.apply(tag);
-            tagJsonArray.add(driveObject);
-        }
+      for (Tag tag : tags) {
+         JsonObject driveObject = tagJsonObjectFunction.apply(tag);
+         tagJsonArray.add(driveObject);
+      }
 
-        JsonObject json = new JsonObject();
-        json.add("objects", tagJsonArray);
+      JsonObject json = new JsonObject();
+      json.add("objects", tagJsonArray);
 
-        request.setPayload(json.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      request.setPayload(json.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

@@ -33,7 +33,7 @@ import static org.jclouds.reflect.Reflection2.typeToken;
 
 /**
  * Implementation of {@link BaseHttpApiMetadata} for the Cloud Sigma API
- * 
+ *
  * @author Vladimir Shevchenko
  */
 public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> {
@@ -67,19 +67,19 @@ public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> 
       protected Builder() {
          super(CloudSigma2Api.class);
          id("cloudsigma2")
-         .name("CloudSigma API")
-         .defaultIdentity("email")
-         .identityName("Email")
-         .defaultCredential("Password")
-         .credentialName("Password")
-         .documentation(URI.create("http://cloudsigma.com/en/platform-details/the-api"))
-         .version("2.0")
-         .defaultEndpoint("https://zrh.cloudsigma.com/api/2.0")
-         .defaultProperties(CloudSigma2ApiMetadata.defaultProperties())
-         .view(typeToken(ComputeServiceContext.class))
-         .defaultModules(ImmutableSet.<Class<? extends Module>>of(
-                CloudSigma2HttpApiModule.class,
-                CloudSigma2ParserModule.class));
+               .name("CloudSigma API")
+               .defaultIdentity("email")
+               .identityName("Email")
+               .defaultCredential("Password")
+               .credentialName("Password")
+               .documentation(URI.create("http://cloudsigma.com/en/platform-details/the-api"))
+               .version("2.0")
+               .defaultEndpoint("https://zrh.cloudsigma.com/api/2.0")
+               .defaultProperties(CloudSigma2ApiMetadata.defaultProperties())
+               .view(typeToken(ComputeServiceContext.class))
+               .defaultModules(ImmutableSet.<Class<? extends Module>>of(
+                     CloudSigma2HttpApiModule.class,
+                     CloudSigma2ParserModule.class));
       }
 
       @Override
@@ -94,7 +94,7 @@ public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> 
 
       @Override
       public Builder fromApiMetadata(ApiMetadata in) {
-          return this;
+         return this;
       }
    }
 }

@@ -24,79 +24,77 @@ import java.beans.ConstructorProperties;
  */
 public class IPConfiguration {
 
-    public static class Builder{
-        private IPConfigurationType configurationType;
-        private IP ip;
+   public static class Builder {
+      private IPConfigurationType configurationType;
+      private IP ip;
 
-        public Builder configurationType(IPConfigurationType configurationType) {
-            this.configurationType = configurationType;
-            return this;
-        }
+      public Builder configurationType(IPConfigurationType configurationType) {
+         this.configurationType = configurationType;
+         return this;
+      }
 
-        public Builder ip(IP ip) {
-            this.ip = ip;
-            return this;
-        }
+      public Builder ip(IP ip) {
+         this.ip = ip;
+         return this;
+      }
 
-        public IPConfiguration build(){
-            return new IPConfiguration(configurationType, ip);
-        }
-    }
+      public IPConfiguration build() {
+         return new IPConfiguration(configurationType, ip);
+      }
+   }
 
-    @Named("conf")
-    private final IPConfigurationType configurationType;
-    @Named("ip")
-    private final IP ip;
+   @Named("conf")
+   private final IPConfigurationType configurationType;
+   @Named("ip")
+   private final IP ip;
 
-    @ConstructorProperties({
-            "conf", "ip"
-    })
-    public IPConfiguration(IPConfigurationType configurationType, IP ip) {
-        this.configurationType = configurationType;
-        this.ip = ip;
-    }
+   @ConstructorProperties({
+         "conf", "ip"
+   })
+   public IPConfiguration(IPConfigurationType configurationType, IP ip) {
+      this.configurationType = configurationType;
+      this.ip = ip;
+   }
 
-    /**
-     *
-     * @return configuration type
-     */
-    public IPConfigurationType getConfigurationType() {
-        return configurationType;
-    }
+   /**
+    * @return configuration type
+    */
+   public IPConfigurationType getConfigurationType() {
+      return configurationType;
+   }
 
-    /**
-     *
-     * @return An IP address reference. Only used in ’static’ IP configuration.
-     */
-    public IP getIp() {
-        return ip;
-    }
+   /**
+    * @return An IP address reference. Only used in ’static’ IP configuration.
+    */
+   public IP getIp() {
+      return ip;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof IPConfiguration)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof IPConfiguration)) return false;
 
-        IPConfiguration that = (IPConfiguration) o;
+      IPConfiguration that = (IPConfiguration) o;
 
-        if (configurationType != that.configurationType) return false;
-        if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
+      if (configurationType != that.configurationType) return false;
+      if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        int result = configurationType != null ? configurationType.hashCode() : 0;
-        result = 31 * result + (ip != null ? ip.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result = configurationType != null ? configurationType.hashCode() : 0;
+      result = 31 * result + (ip != null ? ip.hashCode() : 0);
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[" +
-                "configurationType=" + configurationType +
-                ", ip=" + ip +
-                "]";
-    }
+   @Override
+   public String toString() {
+      return "[" +
+            "configurationType=" + configurationType +
+            ", ip=" + ip +
+            "]";
+   }
 }

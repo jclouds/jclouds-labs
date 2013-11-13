@@ -29,19 +29,19 @@ import javax.inject.Singleton;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class IPInfoToJson implements Function<IPInfo, JsonObject>{
-    @Override
-    public JsonObject apply(@Nullable IPInfo input) {
-        if(input == null){
-            return null;
-        }
+public class IPInfoToJson implements Function<IPInfo, JsonObject> {
+   @Override
+   public JsonObject apply(@Nullable IPInfo input) {
+      if (input == null) {
+         return null;
+      }
 
-        JsonObject ipObject = new JsonObject();
+      JsonObject ipObject = new JsonObject();
 
-        if(input.getMeta() != null){
-            ipObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
-        }
+      if (input.getMeta() != null) {
+         ipObject.add("meta", new JsonParser().parse(new Gson().toJson(input.getMeta())));
+      }
 
-        return ipObject;
-    }
+      return ipObject;
+   }
 }

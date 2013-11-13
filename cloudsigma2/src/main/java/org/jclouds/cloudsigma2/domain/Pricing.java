@@ -26,84 +26,84 @@ import java.util.List;
  */
 public class Pricing {
 
-    public static class Builder{
-        private BurstLevel current;
-        private BurstLevel next;
-        private List<Price> priceList;
+   public static class Builder {
+      private BurstLevel current;
+      private BurstLevel next;
+      private List<Price> priceList;
 
-        public Builder current(BurstLevel current) {
-            this.current = current;
-            return this;
-        }
+      public Builder current(BurstLevel current) {
+         this.current = current;
+         return this;
+      }
 
-        public Builder next(BurstLevel next) {
-            this.next = next;
-            return this;
-        }
+      public Builder next(BurstLevel next) {
+         this.next = next;
+         return this;
+      }
 
-        public Builder priceList(List<Price> priceList) {
-            this.priceList = ImmutableList.copyOf(priceList);
-            return this;
-        }
+      public Builder priceList(List<Price> priceList) {
+         this.priceList = ImmutableList.copyOf(priceList);
+         return this;
+      }
 
-        public Pricing build(){
-            return new Pricing(current, next, priceList);
-        }
-    }
+      public Pricing build() {
+         return new Pricing(current, next, priceList);
+      }
+   }
 
-    private final BurstLevel current;
-    private final BurstLevel next;
-    private final List<Price> priceList;
+   private final BurstLevel current;
+   private final BurstLevel next;
+   private final List<Price> priceList;
 
-    @ConstructorProperties({
-            "current", "next", "objects"
-    })
-    public Pricing(BurstLevel current, BurstLevel next, List<Price> priceList) {
-        this.current = current;
-        this.next = next;
-        this.priceList = priceList;
-    }
+   @ConstructorProperties({
+         "current", "next", "objects"
+   })
+   public Pricing(BurstLevel current, BurstLevel next, List<Price> priceList) {
+      this.current = current;
+      this.next = next;
+      this.priceList = priceList;
+   }
 
-    public BurstLevel getCurrent() {
-        return current;
-    }
+   public BurstLevel getCurrent() {
+      return current;
+   }
 
-    public BurstLevel getNext() {
-        return next;
-    }
+   public BurstLevel getNext() {
+      return next;
+   }
 
-    public List<Price> getPriceList() {
-        return priceList;
-    }
+   public List<Price> getPriceList() {
+      return priceList;
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Pricing)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Pricing)) return false;
 
-        Pricing pricing = (Pricing) o;
+      Pricing pricing = (Pricing) o;
 
-        if (current != null ? !current.equals(pricing.current) : pricing.current != null) return false;
-        if (next != null ? !next.equals(pricing.next) : pricing.next != null) return false;
-        if (priceList != null ? !priceList.equals(pricing.priceList) : pricing.priceList != null) return false;
+      if (current != null ? !current.equals(pricing.current) : pricing.current != null) return false;
+      if (next != null ? !next.equals(pricing.next) : pricing.next != null) return false;
+      if (priceList != null ? !priceList.equals(pricing.priceList) : pricing.priceList != null) return false;
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public int hashCode() {
-        int result = current != null ? current.hashCode() : 0;
-        result = 31 * result + (next != null ? next.hashCode() : 0);
-        result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result = current != null ? current.hashCode() : 0;
+      result = 31 * result + (next != null ? next.hashCode() : 0);
+      result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
+      return result;
+   }
 
-    @Override
-    public String toString() {
-        return "[" +
-                "current=" + current +
-                ", next=" + next +
-                ", priceList=" + priceList +
-                "]";
-    }
+   @Override
+   public String toString() {
+      return "[" +
+            "current=" + current +
+            ", next=" + next +
+            ", priceList=" + priceList +
+            "]";
+   }
 }

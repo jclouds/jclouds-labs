@@ -39,61 +39,61 @@ import java.util.Map;
 @Test(groups = "unit")
 public class TagToJsonTest {
 
-    private static final TagToJson TAG_TO_JSON = Guice.createInjector().getInstance(TagToJson.class);
+   private static final TagToJson TAG_TO_JSON = Guice.createInjector().getInstance(TagToJson.class);
 
-    private Tag input;
-    private JsonObject expected;
+   private Tag input;
+   private JsonObject expected;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        Owner owner = new Owner.Builder()
-                .resourceUri(new URI("/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/"))
-                .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
-                .build();
+   @BeforeMethod
+   public void setUp() throws Exception {
+      Owner owner = new Owner.Builder()
+            .resourceUri(new URI("/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/"))
+            .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
+            .build();
 
-        Map<String, String> meta = new HashMap<String, String>();
-        meta.put("description", "test tag");
+      Map<String, String> meta = new HashMap<String, String>();
+      meta.put("description", "test tag");
 
-        input = new Tag.Builder()
-                .meta(meta)
-                .name("TagCreatedWithResource")
-                .resources(ImmutableList.of(
-                        new TagResource.Builder()
-                                .uuid("96537817-f4b6-496b-a861-e74192d3ccb0")
-                                .build()
-                        , new TagResource.Builder()
-                                .uuid("61bcc398-c034-42f1-81c9-f6d7f62c4ea0")
-                                .build()
-                        , new TagResource.Builder()
-                                .uuid("3610d935-514a-4552-acf3-a40dd0a5f961")
-                                .build()
-                        , new TagResource.Builder()
-                                .resourceType(TagResourceType.IPS)
-                                .resourceUri(new URI("/api/2.0/ips/185.12.6.183/"))
-                                .uuid("185.12.6.183")
-                                .owner(owner)
-                                .build()
-                ))
-                .build();
+      input = new Tag.Builder()
+            .meta(meta)
+            .name("TagCreatedWithResource")
+            .resources(ImmutableList.of(
+                  new TagResource.Builder()
+                        .uuid("96537817-f4b6-496b-a861-e74192d3ccb0")
+                        .build()
+                  , new TagResource.Builder()
+                  .uuid("61bcc398-c034-42f1-81c9-f6d7f62c4ea0")
+                  .build()
+                  , new TagResource.Builder()
+                  .uuid("3610d935-514a-4552-acf3-a40dd0a5f961")
+                  .build()
+                  , new TagResource.Builder()
+                  .resourceType(TagResourceType.IPS)
+                  .resourceUri(new URI("/api/2.0/ips/185.12.6.183/"))
+                  .uuid("185.12.6.183")
+                  .owner(owner)
+                  .build()
+            ))
+            .build();
 
-        expected = new JsonObject();
+      expected = new JsonObject();
 
-        JsonObject metaObject = new JsonObject();
-        metaObject.addProperty("description", "test tag");
+      JsonObject metaObject = new JsonObject();
+      metaObject.addProperty("description", "test tag");
 
-        expected.add("meta", metaObject);
-        expected.addProperty("name", "TagCreatedWithResource");
+      expected.add("meta", metaObject);
+      expected.addProperty("name", "TagCreatedWithResource");
 
-        JsonArray resourcesArray = new JsonArray();
-        resourcesArray.add(new JsonPrimitive("96537817-f4b6-496b-a861-e74192d3ccb0"));
-        resourcesArray.add(new JsonPrimitive("61bcc398-c034-42f1-81c9-f6d7f62c4ea0"));
-        resourcesArray.add(new JsonPrimitive("3610d935-514a-4552-acf3-a40dd0a5f961"));
-        resourcesArray.add(new JsonPrimitive("185.12.6.183"));
+      JsonArray resourcesArray = new JsonArray();
+      resourcesArray.add(new JsonPrimitive("96537817-f4b6-496b-a861-e74192d3ccb0"));
+      resourcesArray.add(new JsonPrimitive("61bcc398-c034-42f1-81c9-f6d7f62c4ea0"));
+      resourcesArray.add(new JsonPrimitive("3610d935-514a-4552-acf3-a40dd0a5f961"));
+      resourcesArray.add(new JsonPrimitive("185.12.6.183"));
 
-        expected.add("resources", resourcesArray);
-    }
+      expected.add("resources", resourcesArray);
+   }
 
-    public void test(){
-        Assert.assertEquals(TAG_TO_JSON.apply(input), expected);
-    }
+   public void test() {
+      Assert.assertEquals(TAG_TO_JSON.apply(input), expected);
+   }
 }

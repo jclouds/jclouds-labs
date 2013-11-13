@@ -35,32 +35,33 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @Singleton
 public class BindDrivesToJson implements Binder {
-    private final DriveToJson createDriveRequestJson;
+   private final DriveToJson createDriveRequestJson;
 
-    @Inject
-    public BindDrivesToJson(DriveToJson  createDriveRequestToMap) {
-        this.createDriveRequestJson = createDriveRequestToMap;
-    }
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
-        checkArgument(payload instanceof List, "this binder is only valid for List<DriveInfo>!");
-        List list = List.class.cast(payload);
-        for(Object o : list){
-            checkArgument(o instanceof DriveInfo, "this binder is only valid for List<DriveInfo>!");
-        }
-        List<DriveInfo> drivesList = (List<DriveInfo>) payload;
-        JsonArray drivesJsonArray = new JsonArray();
+   @Inject
+   public BindDrivesToJson(DriveToJson createDriveRequestToMap) {
+      this.createDriveRequestJson = createDriveRequestToMap;
+   }
 
-        for(DriveInfo drive : drivesList){
-            JsonObject driveObject = createDriveRequestJson.apply(drive);
-            drivesJsonArray.add(driveObject);
-        }
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
+      checkArgument(payload instanceof List, "this binder is only valid for List<DriveInfo>!");
+      List list = List.class.cast(payload);
+      for (Object o : list) {
+         checkArgument(o instanceof DriveInfo, "this binder is only valid for List<DriveInfo>!");
+      }
+      List<DriveInfo> drivesList = (List<DriveInfo>) payload;
+      JsonArray drivesJsonArray = new JsonArray();
 
-        JsonObject json = new JsonObject();
-        json.add("objects", drivesJsonArray);
+      for (DriveInfo drive : drivesList) {
+         JsonObject driveObject = createDriveRequestJson.apply(drive);
+         drivesJsonArray.add(driveObject);
+      }
 
-        request.setPayload(json.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+      JsonObject json = new JsonObject();
+      json.add("objects", drivesJsonArray);
+
+      request.setPayload(json.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }

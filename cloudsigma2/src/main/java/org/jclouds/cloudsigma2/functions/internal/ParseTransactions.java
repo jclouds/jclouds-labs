@@ -37,37 +37,37 @@ import java.util.List;
  */
 @Singleton
 public class ParseTransactions extends ParseJson<ParseTransactions.Transactions> {
-    static class Transactions extends PaginatedCollection<Transaction> {
+   static class Transactions extends PaginatedCollection<Transaction> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public Transactions(Iterable<Transaction> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public Transactions(Iterable<Transaction> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseTransactions(Json json) {
-        super(json, TypeLiteral.get(Transactions.class));
-    }
+   @Inject
+   public ParseTransactions(Json json) {
+      super(json, TypeLiteral.get(Transactions.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<Transaction, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<Transaction, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Transaction>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Transaction>>() {
-                @Override
-                public IterableWithMarker<Transaction> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listTransactions(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Transaction>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Transaction>>() {
+            @Override
+            public IterableWithMarker<Transaction> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listTransactions(paginationOptions);
+            }
+         };
+      }
+   }
 }

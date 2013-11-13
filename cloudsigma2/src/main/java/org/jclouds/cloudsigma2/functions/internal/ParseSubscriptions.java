@@ -37,59 +37,59 @@ import java.util.List;
  * @author Vladimir Shevchenko
  */
 @Singleton
-public class ParseSubscriptions extends ParseJson<ParseSubscriptions.Subscriptions>{
-    static class Subscriptions extends PaginatedCollection<Subscription> {
+public class ParseSubscriptions extends ParseJson<ParseSubscriptions.Subscriptions> {
+   static class Subscriptions extends PaginatedCollection<Subscription> {
 
-        @ConstructorProperties({"objects", "meta"})
-        public Subscriptions(Iterable<Subscription> objects, PaginationOptions paginationOptions) {
-            super(objects, paginationOptions);
-        }
-    }
+      @ConstructorProperties({"objects", "meta"})
+      public Subscriptions(Iterable<Subscription> objects, PaginationOptions paginationOptions) {
+         super(objects, paginationOptions);
+      }
+   }
 
-    @Inject
-    public ParseSubscriptions(Json json) {
-        super(json, TypeLiteral.get(Subscriptions.class));
-    }
+   @Inject
+   public ParseSubscriptions(Json json) {
+      super(json, TypeLiteral.get(Subscriptions.class));
+   }
 
-    public static class ToPagedIterable extends ArgsToPagedIterable<Subscription, ToPagedIterable> {
+   public static class ToPagedIterable extends ArgsToPagedIterable<Subscription, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterable(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterable(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Subscription>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Subscription>>() {
-                @Override
-                public IterableWithMarker<Subscription> apply(Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listSubscriptions(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Subscription>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Subscription>>() {
+            @Override
+            public IterableWithMarker<Subscription> apply(Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listSubscriptions(paginationOptions);
+            }
+         };
+      }
+   }
 
-    public static class ToPagedIterableCalculator extends ArgsToPagedIterable<Subscription, ToPagedIterable> {
+   public static class ToPagedIterableCalculator extends ArgsToPagedIterable<Subscription, ToPagedIterable> {
 
-        private CloudSigma2Api api;
+      private CloudSigma2Api api;
 
-        @Inject
-        public ToPagedIterableCalculator(CloudSigma2Api api) {
-            this.api = api;
-        }
+      @Inject
+      public ToPagedIterableCalculator(CloudSigma2Api api) {
+         this.api = api;
+      }
 
-        @Override
-        protected Function<Object, IterableWithMarker<Subscription>> markerToNextForArgs(List<Object> args) {
-            return new Function<Object, IterableWithMarker<Subscription>>() {
-                @Override
-                public IterableWithMarker<Subscription> apply(@Nullable Object input) {
-                    PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                    return api.listSubscriptionsCalculator(paginationOptions);
-                }
-            };
-        }
-    }
+      @Override
+      protected Function<Object, IterableWithMarker<Subscription>> markerToNextForArgs(List<Object> args) {
+         return new Function<Object, IterableWithMarker<Subscription>>() {
+            @Override
+            public IterableWithMarker<Subscription> apply(@Nullable Object input) {
+               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
+               return api.listSubscriptionsCalculator(paginationOptions);
+            }
+         };
+      }
+   }
 }

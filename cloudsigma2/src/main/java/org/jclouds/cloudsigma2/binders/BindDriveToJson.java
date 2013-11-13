@@ -29,26 +29,26 @@ import javax.ws.rs.core.MediaType;
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
- *
  * @author Vladimir Shevchenko
  */
 
 @Singleton
 public class BindDriveToJson implements Binder {
-    private final DriveToJson createDriveRequestToJson;
+   private final DriveToJson createDriveRequestToJson;
 
-    @Inject
-    public BindDriveToJson(DriveToJson createDriveRequestToJson) {
-        this.createDriveRequestToJson = createDriveRequestToJson;
-    }
-    @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
-        checkArgument(payload instanceof DriveInfo, "this binder is only valid for DriveInfo!");
-        DriveInfo create = DriveInfo.class.cast(payload);
-        JsonObject driveJson = createDriveRequestToJson.apply(create);
+   @Inject
+   public BindDriveToJson(DriveToJson createDriveRequestToJson) {
+      this.createDriveRequestToJson = createDriveRequestToJson;
+   }
 
-        request.setPayload(driveJson.toString());
-        request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
-        return request;
-    }
+   @Override
+   public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
+      checkArgument(payload instanceof DriveInfo, "this binder is only valid for DriveInfo!");
+      DriveInfo create = DriveInfo.class.cast(payload);
+      JsonObject driveJson = createDriveRequestToJson.apply(create);
+
+      request.setPayload(driveJson.toString());
+      request.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_JSON);
+      return request;
+   }
 }
