@@ -32,7 +32,7 @@ public class QueueStats {
    private final MessagesStats messages;
 
    protected QueueStats(MessagesStats messageStats) {
-      this.messages = checkNotNull(messageStats);
+      this.messages = checkNotNull(messageStats, "messageStats required");
    }
 
    /**

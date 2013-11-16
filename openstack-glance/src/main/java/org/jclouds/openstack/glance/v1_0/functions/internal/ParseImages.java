@@ -17,6 +17,7 @@
 package org.jclouds.openstack.glance.v1_0.functions.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.getOnlyElement;
 import static org.jclouds.openstack.glance.v1_0.options.ListImageOptions.Builder.marker;
 
 import java.beans.ConstructorProperties;
@@ -25,7 +26,6 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.google.common.collect.Iterables;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.IterableWithMarkers;
 import org.jclouds.collect.internal.Arg0ToPagedIterable;
@@ -88,7 +88,7 @@ public class ParseImages extends ParseJson<Images> {
                Collection<String> markers = paginationOptions.buildQueryParameters().get("marker");
 
                if (!markers.isEmpty()) {
-                  return IterableWithMarker.class.cast(imageApi.listInDetail(marker(Iterables.get(markers, 0))));
+                  return IterableWithMarker.class.cast(imageApi.listInDetail(marker(getOnlyElement(markers))));
                }
                else {
                   return IterableWithMarkers.EMPTY;
