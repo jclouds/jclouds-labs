@@ -38,8 +38,8 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    public void createQueues() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
-         QueueApi queueApi = api.getQueueApiForZoneAndQueue(zoneId, "jclouds-test");
-         boolean success = queueApi.create();
+         QueueApi queueApi = api.getQueueApiForZone(zoneId);
+         boolean success = queueApi.create("jclouds-test");
 
          assertTrue(success);
       }
@@ -138,8 +138,8 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "streamManyPagesOfMessages" })
    public void delete() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
-         QueueApi queueApi = api.getQueueApiForZoneAndQueue(zoneId, "jclouds-test");
-         boolean success = queueApi.delete();
+         QueueApi queueApi = api.getQueueApiForZone(zoneId);
+         boolean success = queueApi.delete("jclouds-test");
 
          assertTrue(success);
       }
