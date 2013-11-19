@@ -46,43 +46,29 @@ import java.util.Map;
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)
 public interface QueueApi {
-   // TODO: Move name parameter into MarconiApi.getQueueApiForZone(String name, String zone)
-
    /**
     * Create a queue.
-    *
-    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
-    *             letters, digits, underscores, and hyphens.
     */
    @Named("queue:create")
    @PUT
-   @Path("queues/{name}")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-   boolean create(@PathParam("name") String name);
+   boolean create();
 
    /**
     * Delete a queue.
-    *
-    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
-    *             letters, digits, underscores, and hyphens.
     */
    @Named("queue:delete")
    @DELETE
-   @Path("queues/{name}")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-   boolean delete(@PathParam("name") String name);
+   boolean delete();
 
    /**
     * Check for a queue's existence.
-    *
-    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
-    *             letters, digits, underscores, and hyphens.
     */
    @Named("queue:get")
    @GET
-   @Path("queues/{name}")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-   boolean exists(@PathParam("name") String name);
+   boolean exists();
 
    // TODO stream method!
 
@@ -94,43 +80,34 @@ public interface QueueApi {
     * This operation replaces any existing metadata document in its entirety. Ensure that you do not accidentally
     * overwrite existing metadata that you want to retain.
     *
-    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
-    *             letters, digits, underscores, and hyphens.
     * @param metadata Metadata in key/value pairs.
     */
    @Named("queue:setMetadata")
    @PUT
-   @Path("queues/{name}/metadata")
+   @Path("/metadata")
    @Produces(MediaType.APPLICATION_JSON)
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-   boolean setMetadata(@PathParam("name") String name,
-                       @BinderParam(BindToJsonPayload.class) Map<String, String> metadata);
+   boolean setMetadata(@BinderParam(BindToJsonPayload.class) Map<String, String> metadata);
 
    /**
     * Gets metadata for the specified queue.
-    *
-    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
-    *             letters, digits, underscores, and hyphens.
     */
    @Named("queue:getMetadata")
    @GET
-   @Path("queues/{name}/metadata")
+   @Path("/metadata")
    @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-   Map<String, String> getMetadata(@PathParam("name") String name);
+   Map<String, String> getMetadata();
 
 
    /**
     * Gets stats for the specified queue.
-    *
-    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
-    *             letters, digits, underscores, and hyphens.
     */
    @Named("queue:getStats")
    @GET
-   @Path("queues/{name}/stats")
+   @Path("/stats")
    @Consumes(MediaType.APPLICATION_JSON)
    @ResponseParser(ParseQueueStats.class)
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-   QueueStats getStats(@PathParam("name") String name);
+   QueueStats getStats();
 }

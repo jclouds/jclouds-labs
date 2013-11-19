@@ -45,8 +45,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         boolean success = queueApi.create("jclouds-test");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
+         boolean success = queueApi.create();
 
          assertTrue(success);
 
@@ -66,8 +66,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         boolean success = queueApi.delete("jclouds-test");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
+         boolean success = queueApi.delete();
 
          assertTrue(success);
 
@@ -87,8 +87,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         boolean success = queueApi.exists("jclouds-test");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
+         boolean success = queueApi.exists();
 
          assertTrue(success);
 
@@ -108,8 +108,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         boolean success = queueApi.exists("jclouds-blerg");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-blerg");
+         boolean success = queueApi.exists();
 
          assertFalse(success);
 
@@ -129,9 +129,9 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
          Map<String, String> metadata = ImmutableMap.of("key1", "value1");
-         boolean success = queueApi.setMetadata("jclouds-test", metadata);
+         boolean success = queueApi.setMetadata(metadata);
 
          assertTrue(success);
 
@@ -153,8 +153,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         Map<String, String> metadata = queueApi.getMetadata("jclouds-test");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
+         Map<String, String> metadata = queueApi.getMetadata();
 
          assertEquals(metadata.get("key1"), "value1");
 
@@ -175,8 +175,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         QueueStats stats = queueApi.getStats("jclouds-test");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
+         QueueStats stats = queueApi.getStats();
 
          assertEquals(stats.getMessagesStats().getClaimed(), 0);
          assertEquals(stats.getMessagesStats().getFree(), 0);
@@ -201,8 +201,8 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApiForZone("DFW");
-         QueueStats stats = queueApi.getStats("jclouds-test");
+         QueueApi queueApi = api.getQueueApiForZoneAndQueue("DFW", "jclouds-test");
+         QueueStats stats = queueApi.getStats();
 
          assertEquals(stats.getMessagesStats().getClaimed(), 0);
          assertEquals(stats.getMessagesStats().getFree(), 4);

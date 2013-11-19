@@ -47,10 +47,13 @@ public interface MarconiApi extends Closeable {
     * Provides access to Queue features.
     *
     * @param zone The zone where this queue will live.
+    * @param name Name of the queue. The name must not exceed 64 bytes in length, and it is limited to US-ASCII
+    *             letters, digits, underscores, and hyphens.
     */
    @Delegate
-   QueueApi getQueueApiForZone(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   @Path("/queues/{name}")
+   QueueApi getQueueApiForZoneAndQueue(
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone, @PathParam("name") String name);
 
    /**
     * Provides access to Message features.
