@@ -80,9 +80,9 @@
             <keyword>Licensed</keyword>
           </keywords>
           <mapping>
-                <xml>XML_STYLE</xml>
-                <java>SLASHSTAR_STYLE</java>
-                <clj>SEMICOLON_STYLE</clj>
+            <xml>XML_STYLE</xml>
+            <java>SLASHSTAR_STYLE</java>
+            <clj>SEMICOLON_STYLE</clj>
           </mapping>
           <excludes>
             <!-- expectation files for unit tests -->
