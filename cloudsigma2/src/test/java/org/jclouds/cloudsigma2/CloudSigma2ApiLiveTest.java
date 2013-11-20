@@ -15,8 +15,19 @@
  * limitations under the License.
  */
 package org.jclouds.cloudsigma2;
+import static com.google.common.base.Predicates.in;
+import static com.google.common.collect.Iterables.any;
+import static com.google.common.collect.Iterables.transform;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
-import com.google.common.collect.ImmutableList;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
 import org.jclouds.cloudsigma2.domain.Discount;
@@ -29,6 +40,7 @@ import org.jclouds.cloudsigma2.domain.FirewallPolicy;
 import org.jclouds.cloudsigma2.domain.FirewallRule;
 import org.jclouds.cloudsigma2.domain.IP;
 import org.jclouds.cloudsigma2.domain.IPInfo;
+import org.jclouds.cloudsigma2.domain.Item;
 import org.jclouds.cloudsigma2.domain.LibraryDrive;
 import org.jclouds.cloudsigma2.domain.License;
 import org.jclouds.cloudsigma2.domain.MediaType;
@@ -41,13 +53,11 @@ import org.jclouds.cloudsigma2.domain.Tag;
 import org.jclouds.cloudsigma2.domain.TagResource;
 import org.jclouds.cloudsigma2.domain.Transaction;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author Vladimir Shevchenko
@@ -69,18 +79,18 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testListDrives() throws Exception {
-      Assert.assertNotNull(api.listDrives());
+      assertNotNull(api.listDrives());
    }
 
    @Test
    public void testListDrivesInfo() throws Exception {
-      Assert.assertNotNull(api.listDrivesInfo());
+      assertNotNull(api.listDrivesInfo());
    }
 
    @Test
    public void testGetDriveInfo() throws Exception {
       for (Drive driveInfo : api.listDrives().concat()) {
-         Assert.assertNotNull(api.getDriveInfo(driveInfo.getUuid()));
+         assertNotNull(api.getDriveInfo(driveInfo.getUuid()));
       }
    }
 
@@ -109,7 +119,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .build());
 
       createdDrives = api.createDrives(newDrives);
-      Assert.assertEquals(newDrives.size(), createdDrives.size());
+      assertEquals(newDrives.size(), createdDrives.size());
 
       for (int i = 0; i < newDrives.size(); i++) {
          checkDrive(newDrives.get(i), createdDrives.get(i));
@@ -129,7 +139,9 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test(dependsOnMethods = {"testEditDrive"})
    public void testDeleteDrive() throws Exception {
-      api.deleteDrive(createdDrive.getUuid());
+      String uuid = createdDrive.getUuid();
+      api.deleteDrive(uuid);
+      assertNull(api.getDriveInfo(uuid));
    }
 
    @Test(dependsOnMethods = {"testCreateDrives"})
@@ -138,29 +150,34 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       for (DriveInfo driveInfo : createdDrives) {
          stringListBuilder.add(driveInfo.getUuid());
       }
-      api.deleteDrives(stringListBuilder.build());
+      ImmutableList<String> uuids = stringListBuilder.build();
+      api.deleteDrives(uuids);
+      
+      // Verify all deleted drives no longer exist
+      FluentIterable<Drive> drives = api.listDrives().concat();
+      assertFalse(any(transform(drives, extractUuid()), in(uuids)));
    }
 
    @Test
    public void testListLibraryDrives() throws Exception {
-      Assert.assertNotNull(api.listLibraryDrives());
+      assertNotNull(api.listLibraryDrives());
    }
 
    @Test
    public void testGetLibraryDrive() throws Exception {
       for (LibraryDrive libraryDrive : api.listLibraryDrives().concat()) {
-         Assert.assertNotNull(libraryDrive.getUuid());
+         assertNotNull(libraryDrive.getUuid());
       }
    }
 
    @Test
    public void testListServers() throws Exception {
-      Assert.assertNotNull(api.listServers());
+      assertNotNull(api.listServers());
    }
 
    @Test
    public void testListServersInfo() throws Exception {
-      Assert.assertNotNull(api.listServersInfo());
+      assertNotNull(api.listServersInfo());
    }
 
    @Test
@@ -194,7 +211,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .build());
 
       createdServers = api.createServers(newServerList);
-      Assert.assertEquals(newServerList.size(), createdServers.size());
+      assertEquals(newServerList.size(), createdServers.size());
 
       for (int i = 0; i < newServerList.size(); i++) {
          checkServer(newServerList.get(i), createdServers.get(i));
@@ -216,13 +233,15 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    @Test
    public void testGetServerInfo() throws Exception {
       for (Server server : api.listServers().concat()) {
-         Assert.assertNotNull(server.getUuid());
+         assertNotNull(server.getUuid());
       }
    }
 
    @Test(dependsOnMethods = {"testEditServer"})
    public void testDeleteServer() throws Exception {
-      api.deleteServer(createdServer.getUuid());
+      String uuid = createdServer.getUuid();
+      api.deleteServer(uuid);
+      assertNull(api.getServerInfo(uuid));
    }
 
    @Test(dependsOnMethods = {"testCreateServers"})
@@ -231,17 +250,22 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       for (ServerInfo serverInfo : createdServers) {
          stringListBuilder.add(serverInfo.getUuid());
       }
-      api.deleteServers(stringListBuilder.build());
+      ImmutableList<String> uuids = stringListBuilder.build();
+      api.deleteServers(uuids);
+      
+      // Verify all deleted servers no longer exist
+      FluentIterable<Server> servers = api.listServers().concat();
+      assertFalse(any(transform(servers, extractUuid()), in(uuids)));
    }
 
    @Test
    public void testListFirewallPolicies() throws Exception {
-      Assert.assertNotNull(api.listFirewallPolicies());
+      assertNotNull(api.listFirewallPolicies());
    }
 
    @Test
    public void testListFirewallPoliciesInfo() throws Exception {
-      Assert.assertNotNull(api.listFirewallPoliciesInfo());
+      assertNotNull(api.listFirewallPoliciesInfo());
    }
 
    @Test
@@ -304,7 +328,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .build());
 
       List<FirewallPolicy> createdFirewallPolicies = api.createFirewallPolicies(newFirewallPolicies);
-      Assert.assertEquals(newFirewallPolicies.size(), createdFirewallPolicies.size());
+      assertEquals(newFirewallPolicies.size(), createdFirewallPolicies.size());
 
       for (int i = 0; i < newFirewallPolicies.size(); i++) {
          checkFirewallPolicy(newFirewallPolicies.get(i), createdFirewallPolicies.get(i));
@@ -381,18 +405,18 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testListVLANs() throws Exception {
-      Assert.assertNotNull(api.listVLANs());
+      assertNotNull(api.listVLANs());
    }
 
    @Test
    public void testListVLANInfo() throws Exception {
-      Assert.assertNotNull(api.listVLANInfo());
+      assertNotNull(api.listVLANInfo());
    }
 
    @Test
    public void testGetVLANInfo() throws Exception {
       for (VLANInfo vlanInfo : api.listVLANs().concat()) {
-         Assert.assertNotNull(vlanInfo.getUuid());
+         assertNotNull(vlanInfo.getUuid());
       }
    }
 
@@ -412,18 +436,18 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testListIPs() throws Exception {
-      Assert.assertNotNull(api.listIPs());
+      assertNotNull(api.listIPs());
    }
 
    @Test
    public void testListIPInfo() throws Exception {
-      Assert.assertNotNull(api.listIPInfo());
+      assertNotNull(api.listIPInfo());
    }
 
    @Test
    public void testGetIPInfo() throws Exception {
       for (IP ip : api.listIPs().concat()) {
-         Assert.assertNotNull(api.getIPInfo(ip.getUuid()));
+         assertNotNull(api.getIPInfo(ip.getUuid()));
       }
    }
 
@@ -443,99 +467,83 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testListTags() throws Exception {
-      Assert.assertNotNull(api.listTags());
+      assertNotNull(api.listTags());
    }
 
    @Test
    public void testListTagsInfo() throws Exception {
-      Assert.assertNotNull(api.listTagsInfo());
+      assertNotNull(api.listTagsInfo());
    }
 
    @Test
    public void testGetTagInfo() throws Exception {
       for (Tag tag : api.listTags().concat()) {
-         Assert.assertNotNull(api.getTagInfo(tag.getUuid()));
+         assertNotNull(api.getTagInfo(tag.getUuid()));
       }
    }
 
-// Following test cases are disabled due to constant failing because of internal, server-side bug.
-   // @Test(dependsOnMethods = {"testEditDrive"})
-   // public void testCreateTag() throws Exception {
-   //     Map<String, String> meta = new HashMap<String, String>();
-   //     meta.put("description", "Test tag");
+   @Test(dependsOnMethods = { "testEditDrive" })
+   public void testCreateTag() throws Exception {
+      Map<String, String> meta = new HashMap<String, String>();
+      meta.put("description", "Test tag");
 
-   //     Tag newTag = new Tag.Builder()
-   //             .meta(meta)
-   //             .name("Cloudsigma2 Test tag")
-   //             .meta(new HashMap<String, String>())
-   //             .resources(ImmutableList.of(
-   //                     new TagResource.Builder()
-   //                             .uuid(createdDrive.getUuid())
-   //                             .build()
-   //             ))
-   //             .build();
-   //     createdTag = api.createTag(newTag);
-   //     checkTag(newTag, createdTag);
-   // }
+      Tag newTag = new Tag.Builder().meta(meta).name("Cloudsigma2 Test tag").meta(new HashMap<String, String>())
+            .resources(ImmutableList.of(new TagResource.Builder().uuid(createdDrive.getUuid()).build())).build();
+      createdTag = api.createTag(newTag);
+      checkTag(newTag, createdTag);
+   }
 
-   // @Test(dependsOnMethods = {"testEditDrive"})
-   // public void testCreateTags() throws Exception {
-   //     List<Tag> newTagsList = ImmutableList.of(
-   //             new Tag.Builder()
-   //                     .name("Cloudsigma2 New tag")
-   //                     .meta(new HashMap<String, String>())
-   //                     .build()
-   //             , new Tag.Builder()
-   //                 .name("Cloudsigma2 tag with resource")
-   //                 .meta(new HashMap<String, String>())
-   //                 .resources(ImmutableList.of(
-   //                         new TagResource.Builder()
-   //                                 .uuid(createdDrive.getUuid())
-   //                                 .build()
-   //             ))
-   //             .build());
+   @Test(dependsOnMethods = { "testEditDrive" })
+   public void testCreateTags() throws Exception {
+      List<Tag> newTagsList = ImmutableList.of(
+            new Tag.Builder().name("Cloudsigma2 New tag " + System.currentTimeMillis())
+                  .meta(new HashMap<String, String>()).build(),
+            new Tag.Builder().name("Cloudsigma2 tag with resource " + System.currentTimeMillis())
+                  .meta(new HashMap<String, String>())
+                  .resources(ImmutableList.of(new TagResource.Builder().uuid(createdDrive.getUuid()).build())).build());
 
-   //     createdTags = api.createTags(newTagsList);
-   //     Assert.assertEquals(newTagsList.size(), createdTags.size());
+      createdTags = api.createTags(newTagsList);
+      assertEquals(createdTags.size(), newTagsList.size());
 
-   //     for(int i = 0; i < newTagsList.size(); i++){
-   //         checkTag(newTagsList.get(i), createdTags.get(i));
-   //     }
-   // }
+      for (int i = 0; i < newTagsList.size(); i++) {
+         checkTag(newTagsList.get(i), createdTags.get(i));
+      }
+   }
 
-   // @Test(dependsOnMethods = {"testCreateTag"})
-   // public void testEditTag() throws Exception {
-   //     Map<String, String> meta = new HashMap<String, String>();
-   //     meta.put("description", "test tag");
+   @Test(dependsOnMethods = { "testCreateTag" })
+   public void testEditTag() throws Exception {
+      Map<String, String> meta = new HashMap<String, String>();
+      meta.put("description", "test tag");
 
-   //     Tag editedTag = new Tag.Builder()
-   //             .meta(meta)
-   //             .name("Edited Tag")
-   //             .resources(ImmutableList.of(
-   //                     new TagResource.Builder()
-   //                             .uuid(createdDrive.getUuid())
-   //                             .build()
-   //             ))
-   //             .build();
+      Tag editedTag = new Tag.Builder().meta(meta).name("Edited tag")
+            .resources(ImmutableList.of(new TagResource.Builder().uuid(createdDrive.getUuid()).build())).build();
 
-   //     checkTag(editedTag, api.editTag(createdTag.getUuid(), editedTag));
-   // }
+      checkTag(editedTag, api.editTag(createdTag.getUuid(), editedTag));
+   }
 
-   // @Test(dependsOnMethods = {"testEditTag"})
-   // public void testDeleteTag() throws Exception{
-   //     api.deleteTag(createdTag.getUuid());
-   // }
+   @Test(dependsOnMethods = { "testEditTag" })
+   public void testDeleteTag() throws Exception {
+      String uuid = createdTag.getUuid();
+      api.deleteTag(uuid);
+      assertNull(api.getTagInfo(uuid));
+   }
 
-   // @Test(dependsOnMethods = {"testCreateTags"})
-   // public void testDeleteTags() throws Exception{
-   //     for(Tag tag : createdTags){
-   //         api.deleteTag(tag.getUuid());
-   //     }
-   // }
+   @Test(dependsOnMethods = { "testCreateTags" })
+   public void testDeleteTags() throws Exception {
+      ImmutableList.Builder<String> uuids = ImmutableList.builder();
+      for (Tag tag : createdTags) {
+         uuids.add(tag.getUuid());
+         api.deleteTag(tag.getUuid());
+      }
+
+      // Verify all tags no longer exist
+      FluentIterable<Tag> tags = api.listTags().concat();
+      assertFalse(any(transform(tags, extractUuid()), in(uuids.build())));
+   }
 
    @Test
    public void testGetProfileInfo() throws Exception {
-      Assert.assertNotNull(api.getProfileInfo());
+      assertNotNull(api.getProfileInfo());
    }
 
    @Test
@@ -544,7 +552,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .address("edited address")
             .bankReference("sigma111")
             .company("Awesome company")
-            .country("USA")
+            .country("ES")
             .email("user@example.com")
             .firstName("Tim")
             .lastName("Testersson")
@@ -556,73 +564,73 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testGetAccountBalance() throws Exception {
-      Assert.assertNotNull(api.getAccountBalance());
+      assertNotNull(api.getAccountBalance());
    }
 
    @Test
    public void testGetCurrentUsage() throws Exception {
-      Assert.assertNotNull(api.getCurrentUsage());
+      assertNotNull(api.getCurrentUsage());
    }
 
    @Test
    public void testListSubscriptions() throws Exception {
       for (Subscription subscription : api.listSubscriptions().concat()) {
-         Assert.assertNotNull(subscription);
+         assertNotNull(subscription);
       }
    }
 
    @Test
    public void testGetSubscription() throws Exception {
       for (Subscription subscription : api.listSubscriptions().concat()) {
-         Assert.assertNotNull(api.getSubscription(subscription.getId()));
+         assertNotNull(api.getSubscription(subscription.getId()));
       }
    }
 
    @Test
    public void testListSubscriptionsCalculator() throws Exception {
       for (Subscription subscription : api.listSubscriptionsCalculator().concat()) {
-         Assert.assertNotNull(subscription);
+         assertNotNull(subscription);
       }
    }
 
    @Test
    public void testGetPricing() throws Exception {
-      Assert.assertNotNull(api.getPricing());
+      assertNotNull(api.getPricing());
    }
 
    @Test
    public void testListDiscounts() throws Exception {
       for (Discount discount : api.listDiscounts().concat()) {
-         Assert.assertNotNull(discount);
+         assertNotNull(discount);
       }
    }
 
    @Test
    public void testListTransactions() throws Exception {
       for (Transaction transaction : api.listTransactions().concat()) {
-         Assert.assertNotNull(transaction);
+         assertNotNull(transaction);
       }
    }
 
    @Test
    public void testListLicenses() throws Exception {
       for (License license : api.listLicenses().concat()) {
-         Assert.assertNotNull(license);
+         assertNotNull(license);
       }
    }
 
    private void checkDrive(DriveInfo newDrive, DriveInfo createdDrive) {
-      Assert.assertEquals(newDrive.getName(), createdDrive.getName());
-      Assert.assertEquals(newDrive.getMedia(), createdDrive.getMedia());
+      assertEquals(newDrive.getName(), createdDrive.getName());
+      assertEquals(newDrive.getMedia(), createdDrive.getMedia());
    }
 
    private void checkServer(ServerInfo newServer, ServerInfo createdServer) {
-      Assert.assertEquals(newServer.getName(), createdServer.getName());
-      Assert.assertEquals(newServer.getMemory(), createdServer.getMemory());
-      Assert.assertEquals(newServer.getVncPassword(), createdServer.getVncPassword());
-      Assert.assertEquals(newServer.getCpu(), createdServer.getCpu());
+      assertEquals(newServer.getName(), createdServer.getName());
+      assertEquals(newServer.getMemory(), createdServer.getMemory());
+      assertEquals(newServer.getVncPassword(), createdServer.getVncPassword());
+      assertEquals(newServer.getCpu(), createdServer.getCpu());
 
-      Assert.assertEquals(newServer.getDrives().size(), createdServer.getDrives().size());
+      assertEquals(newServer.getDrives().size(), createdServer.getDrives().size());
 
       for (int i = 0; i < newServer.getDrives().size(); i++) {
          checkServerDrive(newServer.getDrives().get(i), createdServer.getDrives().get(i));
@@ -630,29 +638,29 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    }
 
    private void checkServerDrive(ServerDrive newServerDrive, ServerDrive createdServerDrive) {
-      Assert.assertEquals(newServerDrive.getBootOrder(), createdServerDrive.getBootOrder());
-      Assert.assertEquals(newServerDrive.getDeviceChannel(), createdServerDrive.getDeviceChannel());
-      Assert.assertEquals(newServerDrive.getDeviceEmulationType(), createdServerDrive.getDeviceEmulationType());
+      assertEquals(newServerDrive.getBootOrder(), createdServerDrive.getBootOrder());
+      assertEquals(newServerDrive.getDeviceChannel(), createdServerDrive.getDeviceChannel());
+      assertEquals(newServerDrive.getDeviceEmulationType(), createdServerDrive.getDeviceEmulationType());
    }
 
    private void checkFirewallPolicy(FirewallPolicy newFirewallPolicy, FirewallPolicy createdFirewallPolicy) {
-      Assert.assertEquals(newFirewallPolicy.getName(), createdFirewallPolicy.getName());
-      Assert.assertEquals(newFirewallPolicy.getRules(), createdFirewallPolicy.getRules());
+      assertEquals(newFirewallPolicy.getName(), createdFirewallPolicy.getName());
+      assertEquals(newFirewallPolicy.getRules(), createdFirewallPolicy.getRules());
    }
 
    private void checkVlAN(VLANInfo newVLAN, VLANInfo createdVLAN) {
-      Assert.assertEquals(newVLAN.getMeta(), createdVLAN.getMeta());
+      assertEquals(newVLAN.getMeta(), createdVLAN.getMeta());
    }
 
    private void checkIP(IPInfo newIP, IPInfo createdIP) {
-      Assert.assertEquals(newIP.getMeta(), createdIP.getMeta());
+      assertEquals(newIP.getMeta(), createdIP.getMeta());
    }
 
    private void checkTag(Tag newTag, Tag createdTag) {
-      Assert.assertEquals(newTag.getName(), createdTag.getName());
-      Assert.assertEquals(newTag.getMeta(), createdTag.getMeta());
+      assertEquals(newTag.getName(), createdTag.getName());
+      assertEquals(newTag.getMeta(), createdTag.getMeta());
 
-      Assert.assertEquals(newTag.getResources().size(), createdTag.getResources().size());
+      assertEquals(newTag.getResources().size(), createdTag.getResources().size());
 
       for (int i = 0; i < newTag.getResources().size(); i++) {
          checkTagRes(newTag.getResources().get(i), createdTag.getResources().get(i));
@@ -660,15 +668,24 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    }
 
    private void checkTagRes(TagResource newTagResource, TagResource createdTagResource) {
-      Assert.assertEquals(newTagResource.getUuid(), createdTagResource.getUuid());
+      assertEquals(newTagResource.getUuid(), createdTagResource.getUuid());
    }
 
    private void checkProfileInfo(ProfileInfo newProfileInfo, ProfileInfo createdProfileInfo) {
-      Assert.assertEquals(newProfileInfo.getAddress(), createdProfileInfo.getAddress());
-      Assert.assertEquals(newProfileInfo.getCompany(), createdProfileInfo.getCompany());
-      Assert.assertEquals(newProfileInfo.getCountry(), createdProfileInfo.getCountry());
-      Assert.assertEquals(newProfileInfo.getFirstName(), createdProfileInfo.getFirstName());
-      Assert.assertEquals(newProfileInfo.getLastName(), createdProfileInfo.getLastName());
-      Assert.assertEquals(newProfileInfo.getTown(), createdProfileInfo.getTown());
+      assertEquals(newProfileInfo.getAddress(), createdProfileInfo.getAddress());
+      assertEquals(newProfileInfo.getCompany(), createdProfileInfo.getCompany());
+      assertEquals(newProfileInfo.getCountry(), createdProfileInfo.getCountry());
+      assertEquals(newProfileInfo.getFirstName(), createdProfileInfo.getFirstName());
+      assertEquals(newProfileInfo.getLastName(), createdProfileInfo.getLastName());
+      assertEquals(newProfileInfo.getTown(), createdProfileInfo.getTown());
+   }
+   
+   private static Function<Item, String> extractUuid() {
+      return new Function<Item, String>() {
+         @Override
+         public String apply(Item input) {
+            return input.getUuid();
+         }
+      };
    }
 }

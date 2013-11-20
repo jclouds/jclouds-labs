@@ -974,7 +974,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param subscriptionRequest subscription request object
     * @return created subscription
     */
-   @Named("subscription:listSubscriptionsCalculator")
+   @Named("subscription:createSubscription")
    @POST
    @Path("/subscriptions/")
    @SelectJson("objects")

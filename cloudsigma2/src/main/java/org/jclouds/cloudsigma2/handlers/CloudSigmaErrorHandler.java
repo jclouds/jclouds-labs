@@ -82,7 +82,12 @@ public class CloudSigmaErrorHandler implements HttpErrorHandler {
                break;
          }
       } finally {
-         Closeables.closeQuietly(response.getPayload());
+         try {
+            Closeables.close(response.getPayload(), true);
+          } catch (IOException e) {
+             // This code will never be reached
+             throw Throwables.propagate(e);
+          }
          command.setException(exception);
       }
    }

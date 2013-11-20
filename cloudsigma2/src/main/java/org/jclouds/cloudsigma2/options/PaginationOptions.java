@@ -49,10 +49,7 @@ public class PaginationOptions extends BaseHttpRequestOptions {
             offset = 0;
          }
 
-         PaginationOptions paginationOptions = new PaginationOptions(limit, offset, 0);
-         paginationOptions.queryParameters.put("limit", String.valueOf(limit));
-         paginationOptions.queryParameters.put("offset", String.valueOf(offset));
-         return paginationOptions;
+         return new PaginationOptions(limit, offset, 0);
       }
    }
 
@@ -68,6 +65,8 @@ public class PaginationOptions extends BaseHttpRequestOptions {
       this.limit = limit;
       this.offset = offset;
       this.totalCount = totalCount;
+      queryParameters.put("limit", String.valueOf(limit));
+      queryParameters.put("offset", String.valueOf(offset));
    }
 
    public int getTotalCount() {

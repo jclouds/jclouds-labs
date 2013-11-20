@@ -16,20 +16,19 @@
  */
 package org.jclouds.cloudsigma2;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
-import org.jclouds.apis.ApiMetadata;
-import org.jclouds.cloudsigma2.config.CloudSigma2HttpApiModule;
-import org.jclouds.cloudsigma2.config.CloudSigma2ParserModule;
-import org.jclouds.cloudsigma2.config.CloudSigma2Properties;
-import org.jclouds.compute.ComputeServiceContext;
-import org.jclouds.rest.internal.BaseHttpApiMetadata;
+import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
 
 import java.net.URI;
 import java.util.Properties;
 
-import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
-import static org.jclouds.reflect.Reflection2.typeToken;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.cloudsigma2.config.CloudSigma2HttpApiModule;
+import org.jclouds.cloudsigma2.config.CloudSigma2ParserModule;
+import org.jclouds.cloudsigma2.config.CloudSigma2Properties;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 /**
  * Implementation of {@link BaseHttpApiMetadata} for the Cloud Sigma API
@@ -76,7 +75,8 @@ public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> 
                .version("2.0")
                .defaultEndpoint("https://zrh.cloudsigma.com/api/2.0")
                .defaultProperties(CloudSigma2ApiMetadata.defaultProperties())
-               .view(typeToken(ComputeServiceContext.class))
+               // Uncomment once the ComputeService is implemented 
+               //.view(typeToken(ComputeServiceContext.class))
                .defaultModules(ImmutableSet.<Class<? extends Module>>of(
                      CloudSigma2HttpApiModule.class,
                      CloudSigma2ParserModule.class));
