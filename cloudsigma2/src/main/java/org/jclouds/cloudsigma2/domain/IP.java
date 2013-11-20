@@ -16,6 +16,7 @@
  */
 package org.jclouds.cloudsigma2.domain;
 
+import com.google.inject.name.Named;
 import org.jclouds.javax.annotation.Nullable;
 
 import java.beans.ConstructorProperties;
@@ -101,6 +102,7 @@ public class IP {
    protected final Owner owner;
    protected final String uuid;
    protected final Server server;
+   @Named("resource_uri")
    protected final URI resourceUri;
 
    @ConstructorProperties({

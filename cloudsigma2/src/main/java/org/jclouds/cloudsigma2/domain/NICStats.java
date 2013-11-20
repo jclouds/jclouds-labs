@@ -29,15 +29,15 @@ public class NICStats {
    @Named("io")
    private final IOStats ioStats;
    @Named("ip_v4")
-   private final String ipV4;
+   private final IP ipV4;
    @Named("ip_v6")
-   private final String ipV6;
+   private final IP ipV6;
    private final String mac;
 
    @ConstructorProperties({
          "interface_type", "io", "ip_v4", "ip_v6", "mac"
    })
-   public NICStats(InterfaceType interfaceType, IOStats ioStats, String ipV4, String ipV6, String mac) {
+   public NICStats(InterfaceType interfaceType, IOStats ioStats, IP ipV4, IP ipV6, String mac) {
       this.interfaceType = interfaceType;
       this.ioStats = ioStats;
       this.ipV4 = ipV4;
@@ -62,14 +62,14 @@ public class NICStats {
    /**
     * @return Public IPv4 configuration
     */
-   public String getIpV4() {
+   public IP getIpV4() {
       return ipV4;
    }
 
    /**
     * @return Public IPv6 configuration
     */
-   public String getIpV6() {
+   public IP getIpV6() {
       return ipV6;
    }
 

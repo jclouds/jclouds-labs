@@ -15,14 +15,66 @@
             "mem": 536870912,
             "meta": {},
             "name": "test_server_1",
-            "nics": [],
+            "nics": [
+                {
+                    "boot_order": null,
+                    "firewall_policy": {
+                        "resource_uri": "/api/2.0/fwpolicies/8f822be5-f44b-40bf-bff8-83caa9af253d/",
+                        "uuid": "8f822be5-f44b-40bf-bff8-83caa9af253d"
+                    },
+                    "ip_v4_conf": {
+                        "conf": "static",
+                        "ip": {
+                            "resource_uri": "/api/2.0/ips/185.12.5.11/",
+                            "uuid": "185.12.5.11"
+                        }
+                    },
+                    "ip_v6_conf": null,
+                    "mac": "22:18:a8:6d:88:b0",
+                    "model": "virtio",
+                    "runtime": {
+                        "interface_type": "public",
+                        "io": {
+                            "bytes_recv": "1277397",
+                            "bytes_sent": "2645643754",
+                            "packets_recv": "10875",
+                            "packets_sent": "36574091"
+                        },
+                        "ip_v4": {
+                            "resource_uri": "/api/2.0/ips/185.12.5.11/",
+                            "uuid": "185.12.5.11"
+                        },
+                        "ip_v6": null
+                    },
+                    "vlan": null
+                }
+            ],
             "owner": {
                 "resource_uri": "/api/2.0/user/5b4a69a3-8e78-4c45-a8ba-8b13f0895e23/",
                 "uuid": "5b4a69a3-8e78-4c45-a8ba-8b13f0895e23"
             },
             "requirements": [],
             "resource_uri": "/api/2.0/servers/33e71c37-0d0a-4a3a-a1ea-dc7265c9a154/",
-            "runtime": null,
+            "runtime": {
+                "active_since": "2013-11-15T10:14:27+00:00",
+                "nics": [
+                    {
+                       "interface_type": "public",
+                       "io": {
+                           "bytes_recv": "1277397",
+                           "bytes_sent": "2645643754",
+                           "packets_recv": "10875",
+                           "packets_sent": "36574091"
+                       },
+                       "ip_v4": {
+                           "resource_uri": "/api/2.0/ips/185.12.5.11/",
+                           "uuid": "185.12.5.11"
+                       },
+                       "ip_v6": null,
+                       "mac": "22:18:a8:6d:88:b0"
+                    }
+                ]
+            },
             "smp": 1,
             "status": "stopped",
             "tags": [],
