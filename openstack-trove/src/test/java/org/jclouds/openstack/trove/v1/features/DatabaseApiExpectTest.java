@@ -48,7 +48,7 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/database_create_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("testingdb");
       assertTrue(result);
@@ -64,7 +64,7 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/database_create_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("testingdb");
       assertFalse(result);
@@ -80,7 +80,7 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/database_create_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("testingdb", "utf8", "utf8_general_ci");
       assertTrue(result);
@@ -96,7 +96,7 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/database_create_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("testingdb", "utf8", "utf8_general_ci");
       assertFalse(result);
@@ -111,8 +111,8 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             .method("DELETE")
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
-      
+            ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
+
       boolean result = api.delete("db1");
       assertTrue(result);
    }
@@ -126,8 +126,8 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             .method("DELETE")
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
-      
+            ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
+
       boolean result = api.delete("db1");
       assertFalse(result);
    }
@@ -139,7 +139,7 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/database_list.json")).build()
-      ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       List<String> databases = api.list().toList();
       assertEquals(databases.size(), 5);
@@ -153,7 +153,7 @@ public class DatabaseApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/database_list.json")).build()
-      ).getDatabaseApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getDatabaseApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases = api.list().toSet();
       assertTrue(databases.isEmpty());

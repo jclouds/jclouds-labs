@@ -3,7 +3,7 @@
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
+ * (the "License");you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
@@ -53,7 +53,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_policy_create_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_policy_create_response.json")).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -84,7 +84,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_policy_create_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_policy_create_response.json")).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -109,7 +109,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("GET").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_policy_list_response.json")).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.list();
 
@@ -129,7 +129,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("GET").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_policy_list_response.json")).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.list();
 
@@ -143,7 +143,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("GET").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_policy_get_response.json")).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       ScalingPolicyResponse scalingPolicyResponse = api.get("policyId");
 
@@ -162,7 +162,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("GET").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_policy_get_response.json")).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       ScalingPolicyResponse scalingPolicyResponse = api.get("policyId");
 
@@ -176,7 +176,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("PUT").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_policy_update_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(201).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       ScalingPolicy scalingPolicy = ScalingPolicy.builder()
             .cooldown(6)
@@ -197,7 +197,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("PUT").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_policy_update_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(404).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       ScalingPolicy scalingPolicy = ScalingPolicy.builder()
             .cooldown(6)
@@ -218,7 +218,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("DELETE").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(201).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       boolean result = api.delete("policyId");
       assertTrue(result);
@@ -231,7 +231,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("DELETE").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       boolean result = api.delete("policyId");
       assertFalse(result);
@@ -244,7 +244,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(201).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       boolean result = api.execute("policyId");
       assertTrue(result);
@@ -257,7 +257,7 @@ public class ScalingPolicyApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).build()
-            ).getPolicyApiForGroupInZone("groupId1", "DFW");      
+            ).getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
       boolean result = api.execute("policyId");
       assertFalse(result);

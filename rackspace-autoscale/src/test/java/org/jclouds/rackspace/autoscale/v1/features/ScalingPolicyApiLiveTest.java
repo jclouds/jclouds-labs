@@ -149,7 +149,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testCreatePolicy() {
       for (String zone : api.getConfiguredZones()) {
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -173,7 +173,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testListPolicy() {
       for (String zone : api.getConfiguredZones()) {
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.list();
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
@@ -184,7 +184,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testGetPolicy() {
       for (String zone : api.getConfiguredZones()) {
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          assertNotNull(policyApi);
          ScalingPolicyResponse listResponse = policyApi.list().iterator().next();
@@ -203,7 +203,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testUpdatePolicy() {
       for (String zone : api.getConfiguredZones()) {
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -247,7 +247,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testDeletePolicy() {
       for (String zone : api.getConfiguredZones()) {
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -273,7 +273,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testExecutePolicy() {
       for (String zone : api.getConfiguredZones()) {
 
-         PolicyApi policyApi = api.getPolicyApiForGroupInZone(created.get(zone).get(0).getId(), zone);
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -301,7 +301,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          GroupApi groupApi = api.getGroupApiForZone(zone);
          for (Group group : created.get(zone)) {
-            PolicyApi policyApi = api.getPolicyApiForGroupInZone(group.getId(), zone);
+            PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, group.getId());
             if(policyApi == null)continue;
             for(ScalingPolicyResponse sgr : policyApi.list()) {
                if(!policyApi.delete(sgr.getId())) {

@@ -50,7 +50,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_webhook_create_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_webhook_create_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       FluentIterable<WebhookResponse> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
       assertEquals(webhooks.first().get().getName(), "PagerDuty");
@@ -64,7 +64,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_webhook_create_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_webhook_create_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       FluentIterable<WebhookResponse> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
       assertTrue(webhooks.isEmpty());
@@ -77,7 +77,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_webhooks_create_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_webhooks_create_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       FluentIterable<WebhookResponse> webhooks = api.create(ImmutableList.of(
                Webhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
@@ -95,7 +95,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("POST").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_webhooks_create_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_webhooks_create_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       FluentIterable<WebhookResponse> webhooks = api.create(ImmutableList.of(
                Webhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
@@ -111,7 +111,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("GET").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_webhook_list_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       FluentIterable<WebhookResponse> webhooks = api.list();
       assertEquals(webhooks.size(), 2);
@@ -126,7 +126,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("GET").endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_webhook_list_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       FluentIterable<WebhookResponse> webhooks = api.list();
       assertEquals(webhooks.size(), 0);
@@ -139,7 +139,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("PUT").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_webhook_update_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(201).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       boolean success = api.update("5555", "alice", ImmutableMap.<String, Object>of("notes", "this is for Alice"));
       assertTrue(success);
@@ -152,7 +152,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().method("PUT").endpoint(endpoint).payload(payloadFromResourceWithContentType("/autoscale_webhook_update_request.json", MediaType.APPLICATION_JSON)).build(),
             HttpResponse.builder().statusCode(404).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       boolean success = api.update("5555", "alice", ImmutableMap.<String, Object>of("notes", "this is for Alice"));
       assertFalse(success);
@@ -165,7 +165,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(201).payload(payloadFromResource("/autoscale_webhook_get_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       WebhookResponse webhook = api.get("5555");
       assertEquals(webhook.getName(), "alice");
@@ -179,7 +179,7 @@ public class WebhookApiExpectTest extends BaseAutoscaleApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/autoscale_webhook_get_response.json")).build()
-            ).getWebhookApiForGroupAndPolicyInZone("1234567890", "321456", "DFW");
+            ).getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");
 
       WebhookResponse webhook = api.get("5555");
       assertNull(webhook);

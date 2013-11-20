@@ -48,37 +48,37 @@ public interface TroveApi extends Closeable{
    @Provides
    @Zone
    Set<String> getConfiguredZones();
-   
+
    /**
     * Provides access to Flavor features.
     */
    @Delegate
    FlavorApi getFlavorApiForZone(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
-   
+
    /**
     * Provides access to Instance features.
     */
    @Delegate
    InstanceApi getInstanceApiForZone(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
-   
+
    /**
     * Provides access to User features.
     */
    @Delegate
    @Path("/instances/{instanceId}")
-   UserApi getUserApiForInstanceInZone(@PathParam("instanceId") String instanceId, 
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
-   
+   UserApi getUserApiForZoneAndInstance(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @PathParam("instanceId") String instanceId);
+
    /**
     * Provides access to Database features.
     */
    @Delegate
    @Path("/instances/{instanceId}")
-   DatabaseApi getDatabaseApiForInstanceInZone(@PathParam("instanceId") String instanceId, 
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
-   
+   DatabaseApi getDatabaseApiForZoneAndInstance(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @PathParam("instanceId") String instanceId);
+
    /**
     * Provides the Tenant.
     */

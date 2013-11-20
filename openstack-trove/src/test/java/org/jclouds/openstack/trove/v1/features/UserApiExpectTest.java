@@ -55,7 +55,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_create_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("dbuser1", "password", "databaseA");
       assertTrue(result);
@@ -71,7 +71,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_create_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("dbuser1", "password", "databaseA");
       assertFalse(result);
@@ -87,7 +87,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_create_with_host_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("dbuser1", "password", "192.168.64.64", "databaseA");
       assertTrue(result);
@@ -103,7 +103,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_create_with_host_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.create("dbuser1", "password", "192.168.64.64", "databaseA");
       assertFalse(result);
@@ -119,7 +119,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_create_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases1 = Sets.newHashSet();
       databases1.add( "databaseA" );      
@@ -151,7 +151,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_create_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases1 = Sets.newHashSet();
       databases1.add( "databaseA" );
@@ -183,7 +183,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_grant_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.grant("dbuser1", "databaseZ");
       assertTrue(result);
@@ -199,7 +199,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_grant_simple_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       boolean result = api.grant("dbuser1", "databaseZ");
       assertFalse(result);
@@ -215,7 +215,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_grant_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       List<String> databases = Lists.newArrayList();
       databases.add( "databaseC" );
@@ -235,7 +235,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .payload(payloadFromResourceWithContentType("/user_grant_request.json", MediaType.APPLICATION_JSON))
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       List<String> databases = Lists.newArrayList();
       databases.add( "databaseC" );
@@ -254,7 +254,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .method("DELETE")
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases = Sets.newHashSet();
       databases.add( "database" );
@@ -272,7 +272,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .method("DELETE")
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases = Sets.newHashSet();
       databases.add( "database" );
@@ -290,7 +290,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .method("DELETE")
             .build(),
             HttpResponse.builder().statusCode(202).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases = Sets.newHashSet();
       databases.add( "database" );
@@ -308,7 +308,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             .method("DELETE")
             .build(),
             HttpResponse.builder().statusCode(404).build() // response
-            ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+            ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases = Sets.newHashSet();
       databases.add( "database" );
@@ -324,7 +324,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/trove_user_list.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<User> users = api.list().toSet();
       assertEquals(users.size(), 4);
@@ -339,7 +339,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/trove_user_list.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<User> users = api.list().toSet();
       assertTrue(users.isEmpty());
@@ -352,7 +352,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/user_list_access.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       List<String> databases = api.getDatabaseList("dbuser1").toList();
       assertEquals(databases.size(), 2);
@@ -366,7 +366,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/user_list_access.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       Set<String> databases = api.getDatabaseList("dbuser1").toSet();
       assertTrue(databases.isEmpty());
@@ -379,7 +379,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/user_get.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       User user = api.get("exampleuser");
       assertEquals(user.getName(), "exampleuser");
@@ -395,7 +395,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/user_get.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       User user = api.get("exampleuser");
       assertNull(user);
@@ -408,7 +408,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(200).payload(payloadFromResource("/user_get_withhost.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       User user = api.get("example.user", "192.168.64.64");
       assertEquals(user.getName(), "example.user");
@@ -425,7 +425,7 @@ public class UserApiExpectTest extends BaseTroveApiExpectTest {
             responseWithKeystoneAccess,
             authenticatedGET().endpoint(endpoint).build(),
             HttpResponse.builder().statusCode(404).payload(payloadFromResource("/user_get_withhost.json")).build()
-      ).getUserApiForInstanceInZone("instanceId-1234-5678","RegionOne");
+      ).getUserApiForZoneAndInstance("RegionOne", "instanceId-1234-5678");
 
       User user = api.get("example.user", "192.168.64.64");
       assertNull(user);

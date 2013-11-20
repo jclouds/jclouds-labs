@@ -63,17 +63,17 @@ public interface AutoscaleApi extends Closeable{
     */
    @Delegate
    @Path("/groups/{groupId}")
-   PolicyApi getPolicyApiForGroupInZone(@PathParam("groupId") String groupId, 
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);   
+   PolicyApi getPolicyApiForZoneAndGroup(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @PathParam("groupId") String groupId);
 
    /**
     * Provides access to webhook management features.
     */
    @Delegate
    @Path("/groups/{groupId}/policies/{policyId}")
-   WebhookApi getWebhookApiForGroupAndPolicyInZone(@PathParam("groupId") String groupId, 
-         @PathParam("policyId") String policyId, 
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   WebhookApi getWebhookApiForZoneAndGroupAndPolicy(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @PathParam("groupId") String groupId,
+         @PathParam("policyId") String policyId);
 
    /**
     * Provides the Tenant.

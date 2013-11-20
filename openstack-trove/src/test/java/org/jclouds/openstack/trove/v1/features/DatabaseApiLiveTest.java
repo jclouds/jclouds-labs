@@ -55,9 +55,9 @@ public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
          instanceList.add(first);
          instanceList.add(second);
          instancesToDelete.put(zone, instanceList);
-         
-         DatabaseApi databaseApiFirst = api.getDatabaseApiForInstanceInZone(first.getId(), zone);
-         DatabaseApi databaseApiSecond = api.getDatabaseApiForInstanceInZone(second.getId(), zone);         
+
+         DatabaseApi databaseApiFirst = api.getDatabaseApiForZoneAndInstance(zone, first.getId());
+         DatabaseApi databaseApiSecond = api.getDatabaseApiForZoneAndInstance(zone, second.getId());
          databaseApiFirst.create("livetest_db1");
          databaseApiFirst.create("livetest_db2");
          databaseApiSecond.create("livetest_db3");
@@ -83,7 +83,7 @@ public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
          for(Instance instance : instancesToDelete.get(zone)) {
-            DatabaseApi databaseApi = api.getDatabaseApiForInstanceInZone(instance.getId(), zone);
+            DatabaseApi databaseApi = api.getDatabaseApiForZoneAndInstance(zone, instance.getId());
             if(!instance.getName().contains("database_testing"))continue;
             assertTrue(databaseApi.list().size() >=1);
             for(String database : databaseApi.list()){
@@ -92,14 +92,14 @@ public class DatabaseApiLiveTest extends BaseTroveApiLiveTest {
          }  
       }   
    }
-   
+
    @Test
    public void testDeleteDatabases() {
       for (String zone : api.getConfiguredZones()) {
          InstanceApi instanceApi = api.getInstanceApiForZone(zone);
          assertTrue(instanceApi.list().size() >= 2);
          for(Instance instance : instancesToDelete.get(zone)) {
-            DatabaseApi databaseApi = api.getDatabaseApiForInstanceInZone(instance.getId(), zone);
+            DatabaseApi databaseApi = api.getDatabaseApiForZoneAndInstance(zone, instance.getId());
             if(!instance.getName().contains("database_testing"))continue;
             assertTrue(databaseApi.list().size() >=1);
             for(String database : databaseApi.list()){
