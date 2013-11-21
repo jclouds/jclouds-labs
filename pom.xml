@@ -31,9 +31,9 @@
   <name>Apache jclouds labs</name>
 
   <scm>
-    <connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-jclouds-labs.git</connection>
-    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-jclouds-labs.git</developerConnection>
-    <url>https://git-wip-us.apache.org/repos/asf?p=incubator-jclouds-labs.git</url>
+    <connection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs.git</connection>
+    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs.git</developerConnection>
+    <url>https://git-wip-us.apache.org/repos/asf?p=jclouds-labs.git</url>
     <tag>HEAD</tag>
   </scm>
 
