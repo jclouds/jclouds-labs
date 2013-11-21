@@ -33,9 +33,9 @@
   <packaging>pom</packaging>
 
   <scm>
-    <connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-jclouds-labs-openstack.git</connection>
-    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-jclouds-labs-openstack.git</developerConnection>
-    <url>https://git-wip-us.apache.org/repos/asf?p=incubator-jclouds-labs-openstack.git</url>
+    <connection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs-openstack.git</connection>
+    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs-openstack.git</developerConnection>
+    <url>https://git-wip-us.apache.org/repos/asf?p=jclouds-labs-openstack.git</url>
     <tag>HEAD</tag>
   </scm>
 
