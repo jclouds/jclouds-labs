@@ -32,6 +32,7 @@ import org.jclouds.compute.config.CustomizationResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.functions.GroupNamingConvention;
+import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.compute.strategy.CreateNodeWithGroupEncodedIntoName;
 import org.jclouds.compute.strategy.CustomizeNodeAndAddToGoodMapOrPutExceptionIntoBadMap;
 import org.jclouds.compute.strategy.ListNodesStrategy;
@@ -80,6 +81,8 @@ public class ApplyJoyentCloudTemplateOptionsCreateNodesWithGroupEncodedIntoNameT
       JoyentCloudTemplateOptions templateOptions = JoyentCloudTemplateOptions.class.cast(mutableTemplate.getOptions());
 
       assert template.getOptions().equals(templateOptions) : "options didn't clone properly";
+
+      templateOptions.userMetadata(ComputeServiceConstants.NODE_GROUP_KEY, group);
 
       String datacenter = mutableTemplate.getLocation().getId();
       

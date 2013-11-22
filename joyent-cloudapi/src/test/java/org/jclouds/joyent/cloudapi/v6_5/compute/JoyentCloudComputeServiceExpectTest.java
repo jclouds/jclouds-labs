@@ -89,7 +89,7 @@ public class JoyentCloudComputeServiceExpectTest extends BaseJoyentCloudComputeS
       requestResponseMap.put(machines.list, machines.listResponse);
 
       HttpRequest createMachine = HttpRequest.builder().method("POST")
-               .endpoint("https://us-sw-1.api.joyentcloud.com/my/machines?dataset=sdc%3Asdc%3Aubuntu-10.04%3A1.0.1&name=test-1&package=Small%201GB")
+               .endpoint("https://us-sw-1.api.joyentcloud.com/my/machines?dataset=sdc%3Asdc%3Aubuntu-10.04%3A1.0.1&name=test-1&package=Small%201GB&metadata.jclouds-group=test")
                .addHeader("X-Api-Version", "~6.5")
                .addHeader("Accept", "application/json")
                .addHeader("Authorization", "Basic aWRlbnRpdHk6Y3JlZGVudGlhbA==").build();

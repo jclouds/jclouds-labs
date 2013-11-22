@@ -23,6 +23,7 @@ import static com.google.common.collect.Iterables.tryFind;
 import static com.google.common.collect.Maps.filterKeys;
 import static org.jclouds.compute.util.ComputeServiceUtils.addMetadataAndParseTagsFromCommaDelimitedValue;
 import static org.jclouds.compute.util.ComputeServiceUtils.getSpace;
+import static org.jclouds.compute.util.ComputeServiceUtils.groupFromMapOrName;
 
 import java.util.Map;
 import java.util.Set;
@@ -94,7 +95,7 @@ public class MachineInDatacenterToNodeMetadata implements Function<MachineInData
       builder.name(from.getName());
       builder.hostname(from.getId());
       builder.location(zone);
-      addMetadataAndParseTagsFromCommaDelimitedValue(builder, filterKeys(from.getMetadata(), new Predicate<String>() {
+      Map<String, String> metadataMap = filterKeys(from.getMetadata(), new Predicate<String>() {
 
          @Override
          public boolean apply(String input) {
@@ -105,8 +106,11 @@ public class MachineInDatacenterToNodeMetadata implements Function<MachineInData
             return true;
          }
 
-      }));
-      builder.group(nodeNamingConvention.groupInUniqueNameOrNull(from.getName()));
+      });
+      addMetadataAndParseTagsFromCommaDelimitedValue(builder, metadataMap);
+
+      builder.group(groupFromMapOrName(metadataMap, from.getName(), nodeNamingConvention));
+
       builder.imageId(DatacenterAndName.fromDatacenterAndName(machineInDatacenter.getDatacenter(), from.getDatasetURN())
             .slashEncode());
       builder.operatingSystem(findOperatingSystemForMachineOrNull(machineInDatacenter));
