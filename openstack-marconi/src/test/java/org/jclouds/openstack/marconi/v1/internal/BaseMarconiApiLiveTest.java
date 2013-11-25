@@ -16,16 +16,35 @@
  */
 package org.jclouds.openstack.marconi.v1.internal;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.marconi.v1.MarconiApi;
+import org.testng.annotations.BeforeClass;
 
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 public class BaseMarconiApiLiveTest extends BaseApiLiveTest<MarconiApi> {
 
+   protected Set<String> zones = Sets.newHashSet();
+
    public BaseMarconiApiLiveTest() {
       provider = "openstack-marconi";
+   }
+
+   @BeforeClass
+   public void setupZones() {
+      String key = "test." + provider + ".zone";
+
+      if (System.getProperties().containsKey(key)) {
+         zones.add(System.getProperty(key));
+      }
+      else {
+         zones = api.getConfiguredZones();
+      }
    }
 
    @Override

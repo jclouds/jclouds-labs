@@ -94,7 +94,7 @@ public interface QueueApi {
    boolean exists(@PathParam("name") String name);
 
    /**
-    * List the queues.
+    * Lists the queues.
     *
     * @param detailed Determines whether queue metadata is included in the list.
     */

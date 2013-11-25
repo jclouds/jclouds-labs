@@ -39,7 +39,7 @@ import static org.testng.Assert.assertTrue;
 public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    public void listZeroPagesOfQueues() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          List<Queue> queues = queueApi.list(false).concat().toList();
 
@@ -49,7 +49,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listZeroPagesOfQueues" })
    public void create() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
 
          for (int i=0; i < 6; i++) {
@@ -62,7 +62,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "create" })
    public void listOnePageOfQueues() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          List<Queue> queues = queueApi.list(false).concat().toList();
 
@@ -77,7 +77,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listOnePageOfQueues" })
    public void createMore() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
 
          for (int i=6; i < 12; i++) {
@@ -90,7 +90,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createMore" })
    public void listManyPagesOfQueues() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          List<Queue> queues = queueApi.list(false).concat().toList();
 
@@ -105,7 +105,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listManyPagesOfQueues" })
    public void listManyPagesOfQueuesManually() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
 
          Queues queues = queueApi.list(limit(6));
@@ -125,7 +125,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listManyPagesOfQueuesManually" })
    public void exists() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          boolean success = queueApi.exists("jclouds-test-1");
 
@@ -135,7 +135,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "exists" })
    public void setMetadata() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          Map<String, String> metadata = ImmutableMap.of("key1", "value1");
          boolean success = queueApi.setMetadata("jclouds-test-1", metadata);
@@ -146,7 +146,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "setMetadata" })
    public void listManyPagesOfQueuesWithDetails() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          List<Queue> queues = queueApi.list(true).concat().toList();
 
@@ -168,7 +168,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listManyPagesOfQueuesWithDetails" })
    public void getMetadata() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          Map<String, String> metadata = queueApi.getMetadata("jclouds-test-1");
 
@@ -178,7 +178,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getMetadata" })
    public void getStatsWithoutTotal() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          QueueStats stats = queueApi.getStats("jclouds-test-1");
 
@@ -192,7 +192,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getStatsWithoutTotal" })
    public void getStatsWithTotal() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test-1");
 
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
@@ -217,7 +217,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getStatsWithTotal" })
    public void delete() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
 
          for (int i=0; i < 12; i++) {
@@ -230,7 +230,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "delete" })
    public void doesNotExist() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          boolean success = queueApi.exists("jclouds-test-1");
 

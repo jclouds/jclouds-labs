@@ -36,7 +36,7 @@ public class BindIdsToQueryParam implements Binder {
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       checkArgument(input instanceof Iterable<?>, "This binder is only valid for Iterable");
-      Iterable<String> ids = (Iterable<String>) checkNotNull(input, "Iterable of Strings");
+      Iterable<String> ids = (Iterable<String>) input;
       checkArgument(Iterables.size(ids) > 0, "You must specify at least one id");
 
       return (R) request.toBuilder().replaceQueryParam("ids", Joiner.on(',').join(ids)).build();

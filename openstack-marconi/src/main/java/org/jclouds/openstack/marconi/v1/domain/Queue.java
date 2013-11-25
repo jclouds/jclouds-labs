@@ -37,7 +37,7 @@ public class Queue {
    private final Map<String, String> metadata;
 
    protected Queue(String name, @Nullable Map<String, String> metadata) {
-      this.name = checkNotNull(name, "id required");
+      this.name = checkNotNull(name, "name required");
       this.metadata = metadata;
    }
 

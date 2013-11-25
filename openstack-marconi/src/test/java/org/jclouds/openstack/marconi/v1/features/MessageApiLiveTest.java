@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.google.common.collect.Iterables.getLast;
 import static org.jclouds.openstack.marconi.v1.options.StreamMessagesOptions.Builder.echo;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -43,7 +44,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    private final Map<String, List<String>> messageIds = Maps.newHashMap();
 
    public void createQueues() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          boolean success = queueApi.create("jclouds-test");
 
@@ -53,7 +54,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createQueues" })
    public void streamZeroPagesOfMessages() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
@@ -66,7 +67,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "streamZeroPagesOfMessages" })
    public void createMessage() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
 
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
@@ -83,7 +84,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createMessage" })
    public void streamOnePageOfMessages() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
@@ -101,7 +102,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "streamOnePageOfMessages" })
    public void createMessages() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
 
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
@@ -122,7 +123,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createMessages" })
    public void streamManyPagesOfMessages() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
          messageIds.put(zoneId, new ArrayList<String>());
@@ -145,7 +146,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "streamManyPagesOfMessages" })
    public void listMessagesByIds() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
@@ -161,8 +162,33 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    }
 
    @Test(dependsOnMethods = { "listMessagesByIds" })
+   public void getMessage() throws Exception {
+      for (String zoneId : zones) {
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+
+         Message message = messageApi.get(clientId, getLast(messageIds.get(zoneId)));
+
+         assertNotNull(message.getId());
+         assertNotNull(message.getBody());
+      }
+   }
+
+   @Test(dependsOnMethods = { "getMessage" })
+   public void deleteMessages() throws Exception {
+      for (String zoneId : zones) {
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+
+         boolean success = messageApi.delete(clientId, messageIds.get(zoneId));
+
+         assertTrue(success);
+      }
+   }
+
+   @Test(dependsOnMethods = { "deleteMessages" })
    public void delete() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
+      for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);
          boolean success = queueApi.delete("jclouds-test");
 
