@@ -110,7 +110,7 @@ public interface QueueApi {
    /**
     * Use this method to manually page through the list of queues.
     */
-   @Named("record:list")
+   @Named("queue:list")
    @GET
    @ResponseParser(ParseQueues.class)
    @Consumes(MediaType.APPLICATION_JSON)

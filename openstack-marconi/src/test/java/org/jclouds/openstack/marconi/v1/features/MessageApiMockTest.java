@@ -22,6 +22,7 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import org.jclouds.openstack.marconi.v1.MarconiApi;
 import org.jclouds.openstack.marconi.v1.domain.CreateMessage;
+import org.jclouds.openstack.marconi.v1.domain.Message;
 import org.jclouds.openstack.marconi.v1.domain.MessageStream;
 import org.jclouds.openstack.marconi.v1.domain.MessagesCreated;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
@@ -30,7 +31,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 
-import static org.jclouds.openstack.marconi.v1.options.StreamOptions.Builder.limit;
+import static org.jclouds.openstack.marconi.v1.options.StreamMessagesOptions.Builder.limit;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -190,6 +191,37 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues/jclouds-test/messages?marker=4508&limit=2 HTTP/1.1");
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues/jclouds-test/messages?marker=4510&limit=2 HTTP/1.1");
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues/jclouds-test/messages?marker=4512&limit=2 HTTP/1.1");
+      }
+      finally {
+         server.shutdown();
+      }
+   }
+
+   public void listMessagesByIds() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
+      server.enqueue(new MockResponse().setResponseCode(200).setBody("[{\"body\": \"{\\\"event\\\":{\\\"name\\\":\\\"SF Java User Group\\\",\\\"attendees\\\":[\\\"bob\\\",\\\"jim\\\",\\\"sally\\\"]}}\", \"age\": 1596, \"href\": \"/v1/queues/jclouds-test/messages/messages/52928896b04a584f24883227\", \"ttl\": 86400}, {\"body\": \"{\\\"event\\\":{\\\"name\\\":\\\"Austin Java User Group\\\",\\\"attendees\\\":[\\\"bob\\\",\\\"jim\\\",\\\"sally\\\"]}}\", \"age\": 1596, \"href\": \"/v1/queues/jclouds-test/messages/messages/52928896b04a584f24883228\", \"ttl\": 86400}, {\"body\": \"{\\\"event\\\":{\\\"name\\\":\\\"HK Java User Group\\\",\\\"attendees\\\":[\\\"bob\\\",\\\"jim\\\",\\\"sally\\\"]}}\", \"age\": 1596, \"href\": \"/v1/queues/jclouds-test/messages/messages/52928896b04a584f24883229\", \"ttl\": 86400}]"));
+
+      try {
+         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         List<String> ids = ImmutableList.of("52928896b04a584f24883227", "52928896b04a584f24883228", "52928896b04a584f24883229");
+
+         List<Message> messages = messageApi.list(clientId, ids);
+
+         assertEquals(messages.size(), 3);
+
+         for (Message message: messages) {
+            assertNotNull(message.getId());
+            assertNotNull(message.getBody());
+            assertEquals(message.getAge(), 1596);
+            assertEquals(message.getTTL(), 86400);
+         }
+
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues/jclouds-test/messages?ids=52928896b04a584f24883227,52928896b04a584f24883228,52928896b04a584f24883229 HTTP/1.1");
       }
       finally {
          server.shutdown();

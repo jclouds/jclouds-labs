@@ -17,14 +17,16 @@
 package org.jclouds.openstack.marconi.v1.features;
 
 import org.jclouds.Fallbacks;
-import org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.openstack.marconi.v1.binders.BindIdsToQueryParam;
 import org.jclouds.openstack.marconi.v1.domain.CreateMessage;
-import org.jclouds.openstack.marconi.v1.domain.MessagesCreated;
+import org.jclouds.openstack.marconi.v1.domain.Message;
 import org.jclouds.openstack.marconi.v1.domain.MessageStream;
-import org.jclouds.openstack.marconi.v1.functions.ParseMessages;
+import org.jclouds.openstack.marconi.v1.domain.MessagesCreated;
+import org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream;
 import org.jclouds.openstack.marconi.v1.functions.ParseMessagesCreated;
-import org.jclouds.openstack.marconi.v1.options.StreamOptions;
+import org.jclouds.openstack.marconi.v1.functions.ParseMessagesToList;
+import org.jclouds.openstack.marconi.v1.options.StreamMessagesOptions;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
@@ -38,9 +40,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
+
+import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import static org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
 
 /**
  * Provides access to Messages via their REST API.
@@ -69,12 +75,36 @@ public interface MessageApi {
    MessagesCreated create(@HeaderParam("Client-ID") UUID clientId,
                           @BinderParam(BindToJsonPayload.class) List<CreateMessage> messages);
 
+   /**
+    * Streams the messages off of a queue. In a very active queue it's possible that you could continuously stream
+    * messages indefinitely.
+    *
+    * @param clientId A UUID for each client instance.
+    * @param options Options for streaming messages to your client.
+    */
    @Named("message:stream")
    @GET
-   @ResponseParser(ParseMessages.class)
+   @ResponseParser(ParseMessagesToStream.class)
    @Consumes(MediaType.APPLICATION_JSON)
-   @Fallback(KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404.class)
+   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
    @Path("/messages")
    MessageStream stream(@HeaderParam("Client-ID") UUID clientId,
-                        StreamOptions... options);
+                        StreamMessagesOptions... options);
+
+   /**
+    * List specific messages. Unlike the stream method, a client's own messages are always returned in this operation.
+    *
+    * @param clientId A UUID for each client instance.
+    * @param ids Specifies the IDs of the messages to get.
+    */
+   @Named("message:list")
+   @GET
+   @ResponseParser(ParseMessagesToList.class)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Path("/messages")
+   @Fallback(EmptyListOnNotFoundOr404.class)
+   List<Message> list(@HeaderParam("Client-ID") UUID clientId,
+                      @BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
+
+   // TODO: list by claim id when claim API done
 }

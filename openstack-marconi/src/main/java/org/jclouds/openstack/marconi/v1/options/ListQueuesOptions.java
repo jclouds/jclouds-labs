@@ -67,7 +67,7 @@ public class ListQueuesOptions extends PaginationOptions {
    }
 
    /**
-    * @return The String representation of the marker for these StreamOptions.
+    * @return The String representation of the marker for these StreamMessagesOptions.
     */
    public String getMarker() {
       return Iterables.getOnlyElement(queryParameters.get("marker"));

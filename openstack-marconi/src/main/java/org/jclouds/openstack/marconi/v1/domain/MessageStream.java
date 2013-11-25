@@ -21,7 +21,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
-import org.jclouds.openstack.marconi.v1.options.StreamOptions;
+import org.jclouds.openstack.marconi.v1.options.StreamMessagesOptions;
 import org.jclouds.openstack.v2_0.domain.Link;
 import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 
@@ -37,8 +37,8 @@ public class MessageStream extends PaginatedCollection<Message> {
     *
     * @return The options necessary to get the next page of messages.
     */
-   public StreamOptions nextStreamOptions() {
-      return StreamOptions.class.cast(nextMarker().get());
+   public StreamMessagesOptions nextStreamOptions() {
+      return StreamMessagesOptions.class.cast(nextMarker().get());
    }
 
    @Override
@@ -58,7 +58,7 @@ public class MessageStream extends PaginatedCollection<Message> {
       @Override
       public Object apply(Link link) {
          Multimap<String, String> queryParams = queryParser().apply(link.getHref().getRawQuery());
-         StreamOptions paginationOptions = StreamOptions.Builder.queryParameters(queryParams);
+         StreamMessagesOptions paginationOptions = StreamMessagesOptions.Builder.queryParameters(queryParams);
 
          return paginationOptions;
       }

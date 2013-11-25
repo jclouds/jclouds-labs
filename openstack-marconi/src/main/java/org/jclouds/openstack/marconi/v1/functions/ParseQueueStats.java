@@ -25,7 +25,7 @@ import org.jclouds.openstack.marconi.v1.domain.MessagesStats;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.openstack.marconi.v1.functions.ParseMessages.TO_MESSAGE_ID;
+import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE_ID;
 
 /**
  * This parses the stats of a queue.

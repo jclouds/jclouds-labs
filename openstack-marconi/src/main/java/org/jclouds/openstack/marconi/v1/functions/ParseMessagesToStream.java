@@ -19,7 +19,6 @@ package org.jclouds.openstack.marconi.v1.functions;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Message;
@@ -29,19 +28,18 @@ import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 
 import javax.inject.Inject;
 import java.beans.ConstructorProperties;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Everett Toews
  */
-public class ParseMessages implements Function<HttpResponse, MessageStream> {
+public class ParseMessagesToStream implements Function<HttpResponse, MessageStream> {
 
    private final ParseJson<MessagesWithHref> json;
 
    @Inject
-   ParseMessages(ParseJson<MessagesWithHref> json) {
+   ParseMessagesToStream(ParseJson<MessagesWithHref> json) {
       this.json = checkNotNull(json, "json");
    }
 
@@ -93,7 +91,7 @@ public class ParseMessages implements Function<HttpResponse, MessageStream> {
       }
    }
 
-   private static class MessageWithHref extends Message {
+   protected static class MessageWithHref extends Message {
 
       @ConstructorProperties({ "href", "ttl", "body", "age" })
       protected MessageWithHref(String href, int ttl, String body, int age) {

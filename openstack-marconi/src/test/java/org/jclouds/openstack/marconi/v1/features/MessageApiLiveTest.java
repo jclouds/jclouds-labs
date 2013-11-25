@@ -18,16 +18,20 @@ package org.jclouds.openstack.marconi.v1.features;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import org.jclouds.openstack.marconi.v1.domain.CreateMessage;
+import org.jclouds.openstack.marconi.v1.domain.Message;
 import org.jclouds.openstack.marconi.v1.domain.MessageStream;
 import org.jclouds.openstack.marconi.v1.domain.MessagesCreated;
 import org.jclouds.openstack.marconi.v1.internal.BaseMarconiApiLiveTest;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import static org.jclouds.openstack.marconi.v1.options.StreamOptions.Builder.echo;
+import static org.jclouds.openstack.marconi.v1.options.StreamMessagesOptions.Builder.echo;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -35,6 +39,8 @@ import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "MessageApiLiveTest", singleThreaded = true)
 public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
+
+   private final Map<String, List<String>> messageIds = Maps.newHashMap();
 
    public void createQueues() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
@@ -49,7 +55,6 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    public void streamZeroPagesOfMessages() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
-
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
          MessageStream messageStream = messageApi.stream(clientId, echo(true));
@@ -80,7 +85,6 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    public void streamOnePageOfMessages() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
-
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
          MessageStream messageStream = messageApi.stream(clientId, echo(true));
@@ -120,13 +124,17 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    public void streamManyPagesOfMessages() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
-
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         messageIds.put(zoneId, new ArrayList<String>());
 
          MessageStream messageStream = messageApi.stream(clientId, echo(true).limit(2));
 
          while(messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 2);
+
+            for (Message message: messageStream) {
+               messageIds.get(zoneId).add(message.getId());
+            }
 
             messageStream = messageApi.stream(clientId, messageStream.nextStreamOptions());
          }
@@ -136,6 +144,23 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    }
 
    @Test(dependsOnMethods = { "streamManyPagesOfMessages" })
+   public void listMessagesByIds() throws Exception {
+      for (String zoneId : api.getConfiguredZones()) {
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+
+         List<Message> messages = messageApi.list(clientId, messageIds.get(zoneId));
+
+         assertEquals(messages.size(), 4);
+
+         for (Message message: messages) {
+            assertNotNull(message.getId());
+            assertNotNull(message.getBody());
+         }
+      }
+   }
+
+   @Test(dependsOnMethods = { "listMessagesByIds" })
    public void delete() throws Exception {
       for (String zoneId : api.getConfiguredZones()) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId);

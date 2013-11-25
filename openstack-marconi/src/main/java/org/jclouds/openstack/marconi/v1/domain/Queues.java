@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import org.jclouds.openstack.marconi.v1.options.ListQueuesOptions;
-import org.jclouds.openstack.marconi.v1.options.StreamOptions;
 import org.jclouds.openstack.v2_0.domain.Link;
 import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 

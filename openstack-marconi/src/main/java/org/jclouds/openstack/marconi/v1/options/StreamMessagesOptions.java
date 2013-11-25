@@ -25,15 +25,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Options used to control the messages returned in the response.
  */
-public class StreamOptions extends PaginationOptions {
+public class StreamMessagesOptions extends PaginationOptions {
 
-   public static final StreamOptions NONE = new StreamOptions();
+   public static final StreamMessagesOptions NONE = new StreamMessagesOptions();
 
    /**
     * {@inheritDoc}
     */
    @Override
-   public StreamOptions queryParameters(Multimap<String, String> queryParams) {
+   public StreamMessagesOptions queryParameters(Multimap<String, String> queryParams) {
       checkNotNull(queryParams, "queryParams");
       queryParameters.putAll(queryParams);
       return this;
@@ -43,7 +43,7 @@ public class StreamOptions extends PaginationOptions {
     * @see Builder#marker(String)
     */
    @Override
-   public StreamOptions marker(String marker) {
+   public StreamMessagesOptions marker(String marker) {
       super.marker(marker);
       return this;
    }
@@ -52,7 +52,7 @@ public class StreamOptions extends PaginationOptions {
     * @see Builder#limit(int)
     */
    @Override
-   public StreamOptions limit(int limit) {
+   public StreamMessagesOptions limit(int limit) {
       super.limit(limit);
       return this;
 
@@ -61,13 +61,13 @@ public class StreamOptions extends PaginationOptions {
    /**
     * @see Builder#echo(boolean)
     */
-   public StreamOptions echo(boolean echo) {
+   public StreamMessagesOptions echo(boolean echo) {
       queryParameters.put("echo", Boolean.toString(echo));
       return this;
    }
 
    /**
-    * @return The String representation of the marker for these StreamOptions.
+    * @return The String representation of the marker for these StreamMessagesOptions.
     */
    public String getMarker() {
       return Iterables.getOnlyElement(queryParameters.get("marker"));
@@ -77,8 +77,8 @@ public class StreamOptions extends PaginationOptions {
       /**
        * @see PaginationOptions#queryParameters(Multimap)
        */
-      public static StreamOptions queryParameters(Multimap<String, String> queryParams) {
-         StreamOptions options = new StreamOptions();
+      public static StreamMessagesOptions queryParameters(Multimap<String, String> queryParams) {
+         StreamMessagesOptions options = new StreamMessagesOptions();
          return options.queryParameters(queryParams);
       }
 
@@ -90,8 +90,8 @@ public class StreamOptions extends PaginationOptions {
        * Clients should make no assumptions about the format or length of the marker. Furthermore, clients should assume
        * that there is no relationship between markers and message IDs.
        */
-      public static StreamOptions marker(String marker) {
-         StreamOptions options = new StreamOptions();
+      public static StreamMessagesOptions marker(String marker) {
+         StreamMessagesOptions options = new StreamMessagesOptions();
          return options.marker(marker);
       }
 
@@ -101,8 +101,8 @@ public class StreamOptions extends PaginationOptions {
        * MessageStream#nextStreamOptions()}. Specifies up to 10 messages (the default value) to return. If you do not
        * specify a value for the limit parameter, the default value of 10 is used.
        */
-      public static StreamOptions limit(int limit) {
-         StreamOptions options = new StreamOptions();
+      public static StreamMessagesOptions limit(int limit) {
+         StreamMessagesOptions options = new StreamMessagesOptions();
          return options.limit(limit);
       }
 
@@ -111,8 +111,8 @@ public class StreamOptions extends PaginationOptions {
        * (UUID) portion of the client. If you do not specify a value, echo uses the default value of false. If you are
        * experimenting with the API, you might want to set echo=true in order to see the messages that you posted.
        */
-      public static StreamOptions echo(boolean echo) {
-         StreamOptions options = new StreamOptions();
+      public static StreamMessagesOptions echo(boolean echo) {
+         StreamMessagesOptions options = new StreamMessagesOptions();
          return options.echo(echo);
       }
    }
