@@ -110,8 +110,8 @@ public class Server extends Item {
    @ConstructorProperties({
          "uuid", "name", "resource_uri", "owner", "status", "runtime"
    })
-   public Server(@Nullable String uuid, String name, URI resourceUri, Owner owner, ServerStatus status
-         , ServerRuntime runtime) {
+   public Server(@Nullable String uuid, String name, URI resourceUri, Owner owner, ServerStatus status,
+                 ServerRuntime runtime) {
       super(uuid, name, resourceUri);
       this.owner = owner;
       this.status = status;

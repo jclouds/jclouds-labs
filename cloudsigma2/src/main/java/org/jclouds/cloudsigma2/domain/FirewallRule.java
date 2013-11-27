@@ -107,8 +107,8 @@ public class FirewallRule {
       }
 
       public FirewallRule build() {
-         return new FirewallRule(action, comment, direction, destinationIp, destinationPort, ipProtocol, sourceIp
-               , sourcePort);
+         return new FirewallRule(action, comment, direction, destinationIp, destinationPort, ipProtocol, sourceIp,
+               sourcePort);
       }
    }
 
@@ -130,8 +130,8 @@ public class FirewallRule {
          "action", "comment", "direction", "dst_ip",
          "dst_port", "ip_proto", "src_ip", "src_port"
    })
-   public FirewallRule(FirewallAction action, String comment, FirewallDirection direction, String destinationIp
-         , String destinationPort, FirewallIpProtocol ipProtocol, String sourceIp, String sourcePort) {
+   public FirewallRule(FirewallAction action, String comment, FirewallDirection direction, String destinationIp,
+                       String destinationPort, FirewallIpProtocol ipProtocol, String sourceIp, String sourcePort) {
       this.action = action;
       this.comment = comment;
       this.direction = direction;

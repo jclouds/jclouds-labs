@@ -85,8 +85,8 @@ public class Tag extends Item {
    @ConstructorProperties({
          "uuid", "name", "resource_uri", "meta", "owner", "resources"
    })
-   public Tag(String uuid, String name, URI resourceUri, Map<String, String> meta, Owner owner
-         , List<TagResource> resources) {
+   public Tag(String uuid, String name, URI resourceUri, Map<String, String> meta, Owner owner,
+              List<TagResource> resources) {
       super(uuid, name, resourceUri);
       this.meta = meta;
       this.owner = owner;

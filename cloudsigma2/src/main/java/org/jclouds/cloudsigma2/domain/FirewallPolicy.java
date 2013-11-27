@@ -114,8 +114,8 @@ public class FirewallPolicy extends Item {
    @ConstructorProperties({
          "meta", "name", "owner", "resource_uri", "rules", "servers", "uuid"
    })
-   public FirewallPolicy(Map<String, String> meta, String name, Owner owner, URI resourceUri, List<FirewallRule> rules
-         , List<Server> servers, String uuid) {
+   public FirewallPolicy(Map<String, String> meta, String name, Owner owner, URI resourceUri, List<FirewallRule> rules,
+                         List<Server> servers, String uuid) {
       super(uuid, name, resourceUri);
       this.meta = meta;
       this.owner = owner;

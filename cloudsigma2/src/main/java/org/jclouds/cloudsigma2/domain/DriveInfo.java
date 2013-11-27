@@ -197,8 +197,8 @@ public class DriveInfo extends Drive {
        */
       @Override
       public DriveInfo build() {
-         return new DriveInfo(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs, licenses
-               , media, meta, mountedOn, tags);
+         return new DriveInfo(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs, licenses,
+               media, meta, mountedOn, tags);
       }
 
    }

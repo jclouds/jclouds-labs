@@ -153,8 +153,8 @@ public class IPInfo extends IP {
          "uuid", "owner", "server", "resource_uri", "meta", "subscription",
          "tags", "nameservers", "netmask", "gateway"
    })
-   public IPInfo(String uuid, Owner owner, Server server, URI resourceUri, Map<String, String> meta
-         , Subscription subscription, List<Tag> tags, List<String> nameservers, int netmask, String gateway) {
+   public IPInfo(String uuid, Owner owner, Server server, URI resourceUri, Map<String, String> meta,
+                 Subscription subscription, List<Tag> tags, List<String> nameservers, int netmask, String gateway) {
       super(uuid, owner, server, resourceUri);
       this.meta = meta;
       this.subscription = subscription;

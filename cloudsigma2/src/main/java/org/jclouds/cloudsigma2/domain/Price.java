@@ -112,8 +112,8 @@ public class Price {
    @ConstructorProperties({
          "currency", "id", "level", "multiplier", "price", "resource", "unit"
    })
-   public Price(String currency, String id, Integer level, BigInteger multiplier, double price
-         , SubscriptionResource resource, String unit) {
+   public Price(String currency, String id, Integer level, BigInteger multiplier, double price,
+                SubscriptionResource resource, String unit) {
       this.currency = currency;
       this.id = id;
       this.level = level;

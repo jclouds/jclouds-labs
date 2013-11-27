@@ -226,9 +226,9 @@ public class LibraryDrive extends DriveInfo {
       }
 
       public LibraryDrive build() {
-         return new LibraryDrive(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs
-               , licenses, media, meta, mountedOn, tags, arch, category, description, isFavorite, imageType
-               , installNotes, os, isPaid, url);
+         return new LibraryDrive(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs,
+               licenses, media, meta, mountedOn, tags, arch, category, description, isFavorite, imageType, installNotes,
+               os, isPaid, url);
       }
    }
 
@@ -252,11 +252,13 @@ public class LibraryDrive extends DriveInfo {
          "media", "meta", "mounted_on", "tags", "arch", "category",
          "description", "favourite", "image_type", "install_notes", "os", "paid", "url"
    })
-   public LibraryDrive(String uuid, String name, URI resourceUri, BigInteger size, Owner owner, DriveStatus status
-         , boolean allowMultimount, List<String> affinities, List<String> jobs, List<DriveLicense> licenses
-         , MediaType media, Map<String, String> meta, List<Server> mountedOn, List<String> tags, String arch, List<String> category
-         , String description, boolean favorite, String imageType, String installNotes, String os, boolean paid, String url) {
-      super(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs, licenses, media, meta, mountedOn, tags);
+   public LibraryDrive(String uuid, String name, URI resourceUri, BigInteger size, Owner owner, DriveStatus status,
+                       boolean allowMultimount, List<String> affinities, List<String> jobs, List<DriveLicense> licenses,
+                       MediaType media, Map<String, String> meta, List<Server> mountedOn, List<String> tags,
+                       String arch, List<String> category, String description, boolean favorite, String imageType,
+                       String installNotes, String os, boolean paid, String url) {
+      super(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs, licenses, media, meta,
+            mountedOn, tags);
       this.arch = arch;
       this.category = category;
       this.description = description;

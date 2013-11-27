@@ -1,0 +1,35 @@
+{
+   "objects": [
+      {
+         "amount": "1",
+         "discount_amount": "0",
+         "discount_percent": "0",
+         "end_time": "2013-12-27T12:00:00+00:00",
+         "period": "30 days, 1:43:58.559688",
+         "price": "5.50000000000000000000",
+         "resource": "ip",
+         "start_time": "2013-11-27T10:16:01.440312+00:00"
+      },
+      {
+         "amount": "1",
+         "discount_amount": "0",
+         "discount_percent": "0",
+         "end_time": "2013-12-27T12:00:00+00:00",
+         "period": "30 days, 1:43:58.528053",
+         "price": "11.00000000000000000000",
+         "resource": "vlan",
+         "start_time": "2013-11-27T10:16:01.440312+00:00"
+      },
+      {
+         "amount": "250",
+         "discount_amount": "0",
+         "discount_percent": "0",
+         "end_time": "2013-12-27T12:00:00+00:00",
+         "period": "30 days, 1:43:58.510201",
+         "price": "3.36600000000000000000",
+         "resource": "cpu",
+         "start_time": "2013-11-27T10:16:01.440312+00:00"
+      }
+   ],
+   "price": "19.86600000000000000000"
+}

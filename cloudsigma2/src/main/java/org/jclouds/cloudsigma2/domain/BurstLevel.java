@@ -94,7 +94,8 @@ public class BurstLevel {
       }
 
       public BurstLevel build() {
-         return new BurstLevel(cpu, dssd, ip, mem, windowsWebServer2008, windowsServer2008Standard, sqlServerStandard2008, sms, ssd, tx, vlan);
+         return new BurstLevel(cpu, dssd, ip, mem, windowsWebServer2008, windowsServer2008Standard,
+               sqlServerStandard2008, sms, ssd, tx, vlan);
       }
    }
 
@@ -116,8 +117,8 @@ public class BurstLevel {
    @ConstructorProperties({
          "cpu", "dssd", "ip", "mem", "msft_lwa_00135", "msft_p37_04837", "msft_tfa_00009", "sms", "ssd", "tx", "vlan"
    })
-   public BurstLevel(int cpu, int dssd, int ip, int mem, int windowsWebServer2008
-         , int windowsServer2008Standard, int sqlServerStandard2008, int sms, int ssd, int tx, int vlan) {
+   public BurstLevel(int cpu, int dssd, int ip, int mem, int windowsWebServer2008, int windowsServer2008Standard,
+                     int sqlServerStandard2008, int sms, int ssd, int tx, int vlan) {
       this.cpu = cpu;
       this.dssd = dssd;
       this.ip = ip;

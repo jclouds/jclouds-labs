@@ -113,8 +113,8 @@ public class Drive extends Item {
    @ConstructorProperties({
          "uuid", "name", "resource_uri", "owner", "status"
    })
-   public Drive(@Nullable String uuid, String name, @Nullable URI resourceUri, @Nullable Owner owner
-         , DriveStatus status) {
+   public Drive(@Nullable String uuid, String name, @Nullable URI resourceUri, @Nullable Owner owner,
+                DriveStatus status) {
       super(uuid, name, resourceUri);
 
       this.owner = owner;

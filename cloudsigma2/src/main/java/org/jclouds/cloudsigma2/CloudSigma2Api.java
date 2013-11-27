@@ -35,6 +35,7 @@ import org.jclouds.cloudsigma2.binders.BindTagToJsonRequest;
 import org.jclouds.cloudsigma2.binders.BindUuidStringsToJsonArray;
 import org.jclouds.cloudsigma2.binders.BindVLANToJsonRequest;
 import org.jclouds.cloudsigma2.domain.AccountBalance;
+import org.jclouds.cloudsigma2.domain.CalcSubscription;
 import org.jclouds.cloudsigma2.domain.CreateSubscriptionRequest;
 import org.jclouds.cloudsigma2.domain.CurrentUsage;
 import org.jclouds.cloudsigma2.domain.Discount;
@@ -53,6 +54,7 @@ import org.jclouds.cloudsigma2.domain.Server;
 import org.jclouds.cloudsigma2.domain.ServerAvailabilityGroup;
 import org.jclouds.cloudsigma2.domain.ServerInfo;
 import org.jclouds.cloudsigma2.domain.Subscription;
+import org.jclouds.cloudsigma2.domain.SubscriptionCalculator;
 import org.jclouds.cloudsigma2.domain.Tag;
 import org.jclouds.cloudsigma2.domain.Transaction;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
@@ -82,6 +84,7 @@ import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.rest.annotations.SkipEncoding;
 import org.jclouds.rest.annotations.Transform;
+import org.jclouds.rest.binders.BindToJsonPayload;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -140,8 +143,8 @@ public interface CloudSigma2Api extends Closeable {
    @GET
    @Path("/drives/")
    @SelectJson("objects")
-   List<DriveInfo> listDrives(@QueryParam("fields") DrivesListRequestFieldsGroup fields
-         , @DefaultValue("0") @QueryParam("limit") int limit);
+   List<DriveInfo> listDrives(@QueryParam("fields") DrivesListRequestFieldsGroup fields,
+                              @DefaultValue("0") @QueryParam("limit") int limit);
 
    /**
     * Gets the detailed list of drives with additional information to which the authenticated user has access.
@@ -238,8 +241,7 @@ public interface CloudSigma2Api extends Closeable {
    @PUT
    @Path("/drives/{uuid}/")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   DriveInfo editDrive(@PathParam("uuid") String sourceUuid
-         , @BinderParam(BindDriveToJson.class) DriveInfo driveInfo);
+   DriveInfo editDrive(@PathParam("uuid") String sourceUuid, @BinderParam(BindDriveToJson.class) DriveInfo driveInfo);
 
 
    /**
@@ -253,8 +255,8 @@ public interface CloudSigma2Api extends Closeable {
    @POST
    @Path("/drives/{uuid}/action/?do=clone")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   DriveInfo cloneDrive(@PathParam("uuid") String sourceUuid
-         , @Nullable @BinderParam(BindDriveToJson.class) DriveInfo driveInfo);
+   DriveInfo cloneDrive(@PathParam("uuid") String sourceUuid,
+                        @Nullable @BinderParam(BindDriveToJson.class) DriveInfo driveInfo);
 
    /**
     * Gets the list of library drives to which the authenticated user has access.
@@ -481,8 +483,8 @@ public interface CloudSigma2Api extends Closeable {
    @POST
    @Path("/servers/{uuid}/action/?do=start")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-   void startServerInSeparateAvailabilityGroup(@PathParam("uuid") String uuid
-         , @QueryParam("avoid") List<String> uuidGroup);
+   void startServerInSeparateAvailabilityGroup(@PathParam("uuid") String uuid,
+                                               @QueryParam("avoid") List<String> uuidGroup);
 
    /**
     * Opens a VNC tunnel to a server with specific UUID.
@@ -753,8 +755,8 @@ public interface CloudSigma2Api extends Closeable {
    @PUT
    @Path("/ips/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-   IPInfo editIP(@PathParam("uuid") String uuid
-         , @BinderParam(BindIPInfoToJsonRequest.class) IPInfo ipInfo);
+   IPInfo editIP(@PathParam("uuid") String uuid,
+                 @BinderParam(BindIPInfoToJsonRequest.class) IPInfo ipInfo);
 
    /**
     * Gets the list of tags to which the authenticated user has access.
@@ -944,25 +946,13 @@ public interface CloudSigma2Api extends Closeable {
    /**
     * This is identical to the listSubscriptions(), except that subscriptions are not actually bought.
     *
-    * @return list of subscriptions that are not actually bought.
+    * @return SubscriptionCalculator with subscriptions that are not actually bought.
     */
-   @Named("subscription:listSubscriptionsCalculator")
-   @GET
+   @Named("subscription:calculateSubscriptions")
+   @POST
    @Path("/subscriptioncalculator/")
-   @ResponseParser(ParseSubscriptions.class)
-   @Transform(ParseSubscriptions.ToPagedIterableCalculator.class)
-   PagedIterable<Subscription> listSubscriptionsCalculator();
-
-   /**
-    * This is identical to the listSubscriptions(), except that subscriptions are not actually bought.
-    *
-    * @return PaginatedCollection of subscriptions that are not actually bought.
-    */
-   @Named("subscription:listSubscriptionsCalculator")
-   @GET
-   @Path("/subscriptioncalculator/")
-   @ResponseParser(ParseSubscriptions.class)
-   PaginatedCollection<Subscription> listSubscriptionsCalculator(PaginationOptions options);
+   SubscriptionCalculator calculateSubscriptions(@BinderParam(BindToJsonPayload.class)
+                                                 Iterable<CalcSubscription> subscriptions);
 
    /**
     * Creates a new subscription.

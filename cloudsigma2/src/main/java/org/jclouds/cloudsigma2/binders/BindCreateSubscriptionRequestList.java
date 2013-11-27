@@ -48,8 +48,8 @@ public class BindCreateSubscriptionRequestList implements Binder {
       checkArgument(input instanceof List, "this binder is only valid for List<CreateSubscriptionRequest>!");
       List list = List.class.cast(input);
       for (Object o : list) {
-         checkArgument(o instanceof CreateSubscriptionRequest
-               , "this binder is only valid for List<CreateSubscriptionRequest>!");
+         checkArgument(o instanceof CreateSubscriptionRequest,
+               "this binder is only valid for List<CreateSubscriptionRequest>!");
       }
       List<CreateSubscriptionRequest> createSubscriptionRequests = (List<CreateSubscriptionRequest>) input;
       JsonArray subscriptionsJsonArray = new JsonArray();

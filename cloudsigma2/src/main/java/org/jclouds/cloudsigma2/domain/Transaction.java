@@ -86,8 +86,8 @@ public class Transaction {
    @ConstructorProperties({
          "amount", "billing_cycle", "end", "id", "initial", "reason", "time"
    })
-   public Transaction(double amount, long billingCycle, double end, String id, double initial, String reason
-         , Date time) {
+   public Transaction(double amount, long billingCycle, double end, String id, double initial, String reason,
+                      Date time) {
       this.amount = amount;
       this.billingCycle = billingCycle;
       this.end = end;

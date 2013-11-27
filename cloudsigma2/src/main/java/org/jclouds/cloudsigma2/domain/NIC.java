@@ -107,8 +107,8 @@ public class NIC {
          "boot_order", "firewall_policy", "ip_v4_conf", "ip_v6_conf",
          "mac", "model", "runtime", "vlan"
    })
-   public NIC(int bootOrder, FirewallPolicy firewallPolicy, IPConfiguration ipV4Configuration
-         , IPConfiguration ipV6Configuration, String mac, Model model, NICStats runtime, VLANInfo vlan) {
+   public NIC(int bootOrder, FirewallPolicy firewallPolicy, IPConfiguration ipV4Configuration,
+              IPConfiguration ipV6Configuration, String mac, Model model, NICStats runtime, VLANInfo vlan) {
       this.bootOrder = bootOrder;
       this.firewallPolicy = firewallPolicy;
       this.ipV4Configuration = ipV4Configuration;

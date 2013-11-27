@@ -261,8 +261,8 @@ public class ServerInfo extends Server {
        * @return server with details
        */
       public ServerInfo build() {
-         return new ServerInfo(uuid, name, resourceUri, owner, status, runtime, cpu, cpusInsteadOfCores, drives
-               , enableNuma, hvRelaxed, hvTsc, memory, meta, nics, requirements, tags, vncPassword, smp);
+         return new ServerInfo(uuid, name, resourceUri, owner, status, runtime, cpu, cpusInsteadOfCores, drives,
+               enableNuma, hvRelaxed, hvTsc, memory, meta, nics, requirements, tags, vncPassword, smp);
       }
    }
 
@@ -292,10 +292,10 @@ public class ServerInfo extends Server {
          "hv_relaxed", "hv_tsc", "mem", "meta", "nics",
          "requirements", "tags", "vnc_password", "smp"
    })
-   public ServerInfo(String uuid, String name, URI resourceUri, Owner owner, ServerStatus status, ServerRuntime runtime
-         , int cpu, boolean cpusInsteadOfCores, List<ServerDrive> drives, boolean enableNuma
-         , boolean hvRelaxed, boolean hvTsc, BigInteger memory, Map<String, String> meta, List<NIC> nics
-         , List<String> requirements, List<String> tags, String vncPassword, int smp) {
+   public ServerInfo(String uuid, String name, URI resourceUri, Owner owner, ServerStatus status, ServerRuntime runtime,
+                     int cpu, boolean cpusInsteadOfCores, List<ServerDrive> drives, boolean enableNuma,
+                     boolean hvRelaxed, boolean hvTsc, BigInteger memory, Map<String, String> meta, List<NIC> nics,
+                     List<String> requirements, List<String> tags, String vncPassword, int smp) {
       super(uuid, name, resourceUri, owner, status, runtime);
       this.cpu = cpu;
       this.cpusInsteadOfCores = cpusInsteadOfCores;

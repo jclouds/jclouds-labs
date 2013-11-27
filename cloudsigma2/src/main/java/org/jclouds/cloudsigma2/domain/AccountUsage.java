@@ -94,8 +94,8 @@ public class AccountUsage {
       }
 
       public AccountUsage build() {
-         return new AccountUsage(cpu, dssd, ip, mem, windowsWebServer2008, windowsServer2008Standard
-               , sqlServerStandard2008, sms, ssd, tx, vlan);
+         return new AccountUsage(cpu, dssd, ip, mem, windowsWebServer2008, windowsServer2008Standard,
+               sqlServerStandard2008, sms, ssd, tx, vlan);
       }
    }
 
@@ -117,8 +117,9 @@ public class AccountUsage {
    @ConstructorProperties({
          "cpu", "dssd", "ip", "mem", "msft_lwa_00135", "msft_p37_04837", "msft_tfa_00009", "sms", "ssd", "tx", "vlan"
    })
-   public AccountUsage(Usage cpu, Usage dssd, Usage ip, Usage mem, Usage windowsWebServer2008
-         , Usage windowsServer2008Standard, Usage sqlServerStandard2008, Usage sms, Usage ssd, Usage tx, Usage vlan) {
+   public AccountUsage(Usage cpu, Usage dssd, Usage ip, Usage mem, Usage windowsWebServer2008,
+                       Usage windowsServer2008Standard, Usage sqlServerStandard2008, Usage sms, Usage ssd, Usage tx,
+                       Usage vlan) {
       this.cpu = cpu;
       this.dssd = dssd;
       this.ip = ip;

@@ -118,8 +118,8 @@ public class VLANInfo {
    @ConstructorProperties({
          "meta", "uuid", "owner", "resource_uri", "servers", "subscription", "tags"
    })
-   public VLANInfo(Map<String, String> meta, String uuid, Owner owner, URI resourceUri, List<Server> servers
-         , Subscription subscription, List<Tag> tags) {
+   public VLANInfo(Map<String, String> meta, String uuid, Owner owner, URI resourceUri, List<Server> servers,
+                   Subscription subscription, List<Tag> tags) {
       this.meta = meta;
       this.uuid = uuid;
       this.owner = owner;

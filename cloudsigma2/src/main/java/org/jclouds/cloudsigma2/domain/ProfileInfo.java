@@ -209,10 +209,10 @@ public class ProfileInfo {
       }
 
       public ProfileInfo build() {
-         return new ProfileInfo(address, isApiHttpsOnly, autotopupAmount, autotopupThreshold, bankReference, company
-               , country, currency, email, firstName, hasAutotopup, invoicing, isKeyAuth, language, lastName
-               , isMailingListEnabled, meta, myNotes, nickname, phone, postcode, reseller, signupTime, state
-               , taxName, taxRate, title, town, uuid, vat);
+         return new ProfileInfo(address, isApiHttpsOnly, autotopupAmount, autotopupThreshold, bankReference, company,
+               country, currency, email, firstName, hasAutotopup, invoicing, isKeyAuth, language, lastName,
+               isMailingListEnabled, meta, myNotes, nickname, phone, postcode, reseller, signupTime, state,
+               taxName, taxRate, title, town, uuid, vat);
       }
 
    }
@@ -262,19 +262,17 @@ public class ProfileInfo {
    private final String vat;
 
    @ConstructorProperties({
-         "address", "api_https_only", "autopopup_amount", "autopopup_threshold"
-         , "bank_reference", "company", "country", "currency", "email", "first_name"
-         , "has_autotopup", "invoicing", "key_auth", "language", "last_name"
-         , "mailing_list", "meta", "my_notes", "nickname", "phone"
-         , "postcode", "reseller", "signup_time", "state", "tax_name", "tax_rate"
-         , "title", "town", "uuid", "vat"
+         "address", "api_https_only", "autopopup_amount", "autopopup_threshold", "bank_reference", "company", "country",
+         "currency", "email", "first_name", "has_autotopup", "invoicing", "key_auth", "language", "last_name",
+         "mailing_list", "meta", "my_notes", "nickname", "phone", "postcode", "reseller", "signup_time", "state",
+         "tax_name", "tax_rate", "title", "town", "uuid", "vat"
    })
-   public ProfileInfo(String address, boolean apiHttpsOnly, String autotopupAmount, String autotopupThreshold
-         , String bankReference, String company, String country, String currency, String email, String firstName
-         , boolean hasAutotopup, boolean invoicing, boolean keyAuth, String language, String lastName
-         , boolean mailingListEnabled, Map<String, String> meta, String myNotes, String nickname, String phone
-         , String postcode, String reseller, Date signupTime, String state, String taxName, double taxRate
-         , String title, String town, String uuid, String vat) {
+   public ProfileInfo(String address, boolean apiHttpsOnly, String autotopupAmount, String autotopupThreshold,
+                      String bankReference, String company, String country, String currency, String email,
+                      String firstName, boolean hasAutotopup, boolean invoicing, boolean keyAuth, String language,
+                      String lastName, boolean mailingListEnabled, Map<String, String> meta, String myNotes,
+                      String nickname, String phone, String postcode, String reseller, Date signupTime, String state,
+                      String taxName, double taxRate, String title, String town, String uuid, String vat) {
       this.address = address;
       isApiHttpsOnly = apiHttpsOnly;
       this.autotopupAmount = autotopupAmount;

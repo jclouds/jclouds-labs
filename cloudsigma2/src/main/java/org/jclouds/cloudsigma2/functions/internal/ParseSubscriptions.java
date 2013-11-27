@@ -26,7 +26,6 @@ import org.jclouds.cloudsigma2.options.PaginationOptions;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.internal.ArgsToPagedIterable;
 import org.jclouds.http.functions.ParseJson;
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.Json;
 
 import javax.inject.Singleton;
@@ -67,27 +66,6 @@ public class ParseSubscriptions extends ParseJson<ParseSubscriptions.Subscriptio
             public IterableWithMarker<Subscription> apply(Object input) {
                PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
                return api.listSubscriptions(paginationOptions);
-            }
-         };
-      }
-   }
-
-   public static class ToPagedIterableCalculator extends ArgsToPagedIterable<Subscription, ToPagedIterable> {
-
-      private CloudSigma2Api api;
-
-      @Inject
-      public ToPagedIterableCalculator(CloudSigma2Api api) {
-         this.api = api;
-      }
-
-      @Override
-      protected Function<Object, IterableWithMarker<Subscription>> markerToNextForArgs(List<Object> args) {
-         return new Function<Object, IterableWithMarker<Subscription>>() {
-            @Override
-            public IterableWithMarker<Subscription> apply(@Nullable Object input) {
-               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-               return api.listSubscriptionsCalculator(paginationOptions);
             }
          };
       }

@@ -15,20 +15,12 @@
  * limitations under the License.
  */
 package org.jclouds.cloudsigma2;
-import static com.google.common.base.Predicates.in;
-import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Iterables.transform;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.cloudsigma2.domain.CalcSubscription;
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
 import org.jclouds.cloudsigma2.domain.Discount;
 import org.jclouds.cloudsigma2.domain.Drive;
@@ -49,15 +41,28 @@ import org.jclouds.cloudsigma2.domain.Server;
 import org.jclouds.cloudsigma2.domain.ServerDrive;
 import org.jclouds.cloudsigma2.domain.ServerInfo;
 import org.jclouds.cloudsigma2.domain.Subscription;
+import org.jclouds.cloudsigma2.domain.SubscriptionCalculator;
+import org.jclouds.cloudsigma2.domain.SubscriptionResource;
 import org.jclouds.cloudsigma2.domain.Tag;
 import org.jclouds.cloudsigma2.domain.TagResource;
 import org.jclouds.cloudsigma2.domain.Transaction;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
+import org.jclouds.cloudsigma2.options.PaginationOptions;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Predicates.in;
+import static com.google.common.collect.Iterables.any;
+import static com.google.common.collect.Iterables.transform;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 /**
  * @author Vladimir Shevchenko
@@ -107,16 +112,17 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testCreateDrives() throws Exception {
-      List<DriveInfo> newDrives = ImmutableList.of(new DriveInfo.Builder()
-            .name("New Drive")
-            .size(new BigInteger("2073741824"))
-            .media(MediaType.DISK)
-            .build()
-            , new DriveInfo.Builder()
-            .name("Test Drive")
-            .size(new BigInteger("6073741824"))
-            .media(MediaType.DISK)
-            .build());
+      List<DriveInfo> newDrives = ImmutableList.of(
+            new DriveInfo.Builder()
+                  .name("New Drive")
+                  .size(new BigInteger("2073741824"))
+                  .media(MediaType.DISK)
+                  .build(),
+            new DriveInfo.Builder()
+                  .name("Test Drive")
+                  .size(new BigInteger("6073741824"))
+                  .media(MediaType.DISK)
+                  .build());
 
       createdDrives = api.createDrives(newDrives);
       assertEquals(newDrives.size(), createdDrives.size());
@@ -202,13 +208,13 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                   .memory(new BigInteger("5368709120"))
                   .cpu(3000)
                   .vncPassword("new_password")
-                  .build()
-            , new ServerInfo.Builder()
-            .name("Test Server")
-            .memory(new BigInteger("5368709120"))
-            .cpu(3000)
-            .vncPassword("test_password")
-            .build());
+                  .build(),
+            new ServerInfo.Builder()
+                  .name("Test Server")
+                  .memory(new BigInteger("5368709120"))
+                  .cpu(3000)
+                  .vncPassword("test_password")
+                  .build());
 
       createdServers = api.createServers(newServerList);
       assertEquals(newServerList.size(), createdServers.size());
@@ -279,42 +285,40 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                               .comment("Drop traffic from the VM to IP address 23.0.0.0/32")
                               .direction(FirewallDirection.OUT)
                               .destinationIp("23.0.0.0/32")
-                              .build()
-                        , new FirewallRule.Builder()
-                        .action(FirewallAction.ACCEPT)
-                        .comment("Allow SSH traffic to the VM from our office in Dubai")
-                        .direction(FirewallDirection.IN)
-                        .destinationPort("22")
-                        .ipProtocol(FirewallIpProtocol.TCP)
-                        .sourceIp("172.66.32.0/24")
-                        .build()
-                        , new FirewallRule.Builder()
-                        .action(FirewallAction.DROP)
-                        .comment("Drop all other SSH traffic to the VM")
-                        .direction(FirewallDirection.IN)
-                        .destinationPort("22")
-                        .ipProtocol(FirewallIpProtocol.TCP)
-                        .build()
-                        , new FirewallRule.Builder()
-                        .action(FirewallAction.DROP)
-                        .comment("Drop all UDP traffic to the VM, not originating from 172.66.32.55")
-                        .direction(FirewallDirection.IN)
-                        .ipProtocol(FirewallIpProtocol.UDP)
-                        .sourceIp("!172.66.32.55/32")
-                        .build()
-                        , new FirewallRule.Builder()
-                        .action(FirewallAction.DROP)
-                        .comment("Drop any traffic, to the VM with destination port not between 1-1024")
-                        .direction(FirewallDirection.IN)
-                        .destinationPort("!1:1024")
-                        .ipProtocol(FirewallIpProtocol.TCP)
-                        .build()
-                  ))
-                  .build()
-            , new FirewallPolicy.Builder()
-            .name("New policy")
-            .rules(ImmutableList.of(
-                  new FirewallRule.Builder()
+                              .build(),
+                        new FirewallRule.Builder()
+                              .action(FirewallAction.ACCEPT)
+                              .comment("Allow SSH traffic to the VM from our office in Dubai")
+                              .direction(FirewallDirection.IN)
+                              .destinationPort("22")
+                              .ipProtocol(FirewallIpProtocol.TCP)
+                              .sourceIp("172.66.32.0/24")
+                              .build(),
+                        new FirewallRule.Builder()
+                              .action(FirewallAction.DROP)
+                              .comment("Drop all other SSH traffic to the VM")
+                              .direction(FirewallDirection.IN)
+                              .destinationPort("22")
+                              .ipProtocol(FirewallIpProtocol.TCP)
+                              .build(),
+                        new FirewallRule.Builder()
+                              .action(FirewallAction.DROP)
+                              .comment("Drop all UDP traffic to the VM, not originating from 172.66.32.55")
+                              .direction(FirewallDirection.IN)
+                              .ipProtocol(FirewallIpProtocol.UDP)
+                              .sourceIp("!172.66.32.55/32")
+                              .build(),
+                        new FirewallRule.Builder()
+                              .action(FirewallAction.DROP)
+                              .comment("Drop any traffic, to the VM with destination port not between 1-1024")
+                              .direction(FirewallDirection.IN)
+                              .destinationPort("!1:1024")
+                              .ipProtocol(FirewallIpProtocol.TCP)
+                              .build()))
+                  .build(),
+            new FirewallPolicy.Builder()
+                  .name("New policy")
+                  .rules(ImmutableList.of(new FirewallRule.Builder()
                         .action(FirewallAction.ACCEPT)
                         .comment("Test comment")
                         .direction(FirewallDirection.IN)
@@ -323,9 +327,8 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                         .ipProtocol(FirewallIpProtocol.TCP)
                         .sourceIp("255.255.255.12/32")
                         .sourcePort("321")
-                        .build()
-            ))
-            .build());
+                        .build()))
+                  .build());
 
       List<FirewallPolicy> createdFirewallPolicies = api.createFirewallPolicies(newFirewallPolicies);
       assertEquals(newFirewallPolicies.size(), createdFirewallPolicies.size());
@@ -345,37 +348,36 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                         .comment("Drop traffic from the VM to IP address 23.0.0.0/32")
                         .direction(FirewallDirection.OUT)
                         .destinationIp("23.0.0.0/32")
-                        .build()
-                  , new FirewallRule.Builder()
-                  .action(FirewallAction.ACCEPT)
-                  .comment("Allow SSH traffic to the VM from our office in Dubai")
-                  .direction(FirewallDirection.IN)
-                  .destinationPort("22")
-                  .ipProtocol(FirewallIpProtocol.TCP)
-                  .sourceIp("172.66.32.0/24")
-                  .build()
-                  , new FirewallRule.Builder()
-                  .action(FirewallAction.DROP)
-                  .comment("Drop all other SSH traffic to the VM")
-                  .direction(FirewallDirection.IN)
-                  .destinationPort("22")
-                  .ipProtocol(FirewallIpProtocol.TCP)
-                  .build()
-                  , new FirewallRule.Builder()
-                  .action(FirewallAction.DROP)
-                  .comment("Drop all UDP traffic to the VM, not originating from 172.66.32.55")
-                  .direction(FirewallDirection.IN)
-                  .ipProtocol(FirewallIpProtocol.UDP)
-                  .sourceIp("!172.66.32.55/32")
-                  .build()
-                  , new FirewallRule.Builder()
-                  .action(FirewallAction.DROP)
-                  .comment("Drop any traffic, to the VM with destination port not between 1-1024")
-                  .direction(FirewallDirection.IN)
-                  .destinationPort("!1:1024")
-                  .ipProtocol(FirewallIpProtocol.TCP)
-                  .build()
-            ))
+                        .build(),
+                  new FirewallRule.Builder()
+                        .action(FirewallAction.ACCEPT)
+                        .comment("Allow SSH traffic to the VM from our office in Dubai")
+                        .direction(FirewallDirection.IN)
+                        .destinationPort("22")
+                        .ipProtocol(FirewallIpProtocol.TCP)
+                        .sourceIp("172.66.32.0/24")
+                        .build(),
+                  new FirewallRule.Builder()
+                        .action(FirewallAction.DROP)
+                        .comment("Drop all other SSH traffic to the VM")
+                        .direction(FirewallDirection.IN)
+                        .destinationPort("22")
+                        .ipProtocol(FirewallIpProtocol.TCP)
+                        .build(),
+                  new FirewallRule.Builder()
+                        .action(FirewallAction.DROP)
+                        .comment("Drop all UDP traffic to the VM, not originating from 172.66.32.55")
+                        .direction(FirewallDirection.IN)
+                        .ipProtocol(FirewallIpProtocol.UDP)
+                        .sourceIp("!172.66.32.55/32")
+                        .build(),
+                  new FirewallRule.Builder()
+                        .action(FirewallAction.DROP)
+                        .comment("Drop any traffic, to the VM with destination port not between 1-1024")
+                        .direction(FirewallDirection.IN)
+                        .destinationPort("!1:1024")
+                        .ipProtocol(FirewallIpProtocol.TCP)
+                        .build()))
             .build();
 
       createdFirewallPolicy = api.createFirewallPolicy(newFirewallPolicy);
@@ -396,8 +398,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                         .ipProtocol(FirewallIpProtocol.TCP)
                         .sourceIp("255.255.255.12/32")
                         .sourcePort("321")
-                        .build()
-            ))
+                        .build()))
             .build();
 
       checkFirewallPolicy(editedPolicy, api.editFirewallPolicy(createdFirewallPolicy.getUuid(), editedPolicy));
@@ -487,8 +488,16 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       Map<String, String> meta = new HashMap<String, String>();
       meta.put("description", "Test tag");
 
-      Tag newTag = new Tag.Builder().meta(meta).name("Cloudsigma2 Test tag").meta(new HashMap<String, String>())
-            .resources(ImmutableList.of(new TagResource.Builder().uuid(createdDrive.getUuid()).build())).build();
+      Tag newTag = new Tag.Builder()
+            .meta(meta)
+            .name("Cloudsigma2 Test tag")
+            .meta(new HashMap<String, String>())
+            .resources(ImmutableList.of(
+                  new TagResource.Builder()
+                        .uuid(createdDrive.getUuid())
+                        .build()))
+            .build();
+
       createdTag = api.createTag(newTag);
       checkTag(newTag, createdTag);
    }
@@ -587,9 +596,29 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    }
 
    @Test
-   public void testListSubscriptionsCalculator() throws Exception {
-      for (Subscription subscription : api.listSubscriptionsCalculator().concat()) {
-         assertNotNull(subscription);
+   public void testCalculateSubscriptions() throws Exception {
+      long monthInMilliseconds = (long) 30 * 24 * 3600 * 1000;
+      Date startTime = new Date();
+      Date endTime = new Date(startTime.getTime() + monthInMilliseconds);
+
+      List<CalcSubscription> subscriptionsToCalculate = ImmutableList.of(
+            new CalcSubscription.Builder()
+                  .startTime(startTime)
+                  .resource(SubscriptionResource.IP)
+                  .endTime(endTime)
+                  .build(),
+            new CalcSubscription.Builder()
+                  .startTime(startTime)
+                  .endTime(endTime)
+                  .resource(SubscriptionResource.VLAN)
+                  .discountAmount(10.5d)
+                  .build()
+      );
+      SubscriptionCalculator subscriptionCalculator = api.calculateSubscriptions(subscriptionsToCalculate);
+      List<CalcSubscription> calculatedSubscriptions = subscriptionCalculator.getSubscriptions();
+      assertEquals(calculatedSubscriptions.size(), subscriptionsToCalculate.size());
+      for (int i = 0; i < calculatedSubscriptions.size(); i++) {
+         assertEquals(calculatedSubscriptions.get(i).getResource(), subscriptionsToCalculate.get(i).getResource());
       }
    }
 
@@ -607,7 +636,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testListTransactions() throws Exception {
-      for (Transaction transaction : api.listTransactions().concat()) {
+      for (Transaction transaction : api.listTransactions(new PaginationOptions.Builder().build())) {
          assertNotNull(transaction);
       }
    }

@@ -43,8 +43,8 @@ public class BindCreateSubscriptionRequest implements Binder {
 
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-      checkArgument(input instanceof CreateSubscriptionRequest
-            , "this binder is only valid for CreateSubscriptionRequest!");
+      checkArgument(input instanceof CreateSubscriptionRequest,
+            "this binder is only valid for CreateSubscriptionRequest!");
       CreateSubscriptionRequest create = CreateSubscriptionRequest.class.cast(input);
       JsonObject subscriptionObject = subscriptionRequestJsonObjectFunction.apply(create);
 

@@ -1,0 +1,1 @@
+[{"amount":1.0,"price":5.5,"resource":"ip","start_time":"2013-11-27T10:16:01.440Z","end_time":"2013-12-27T12:00:00.000Z"},{"amount":1.0,"price":11.0,"resource":"vlan","start_time":"2013-11-27T10:16:01.440Z","end_time":"2013-12-27T12:00:00.000Z"},{"amount":250.0,"price":3.366,"resource":"cpu","start_time":"2013-11-27T10:16:01.440Z","end_time":"2013-12-27T12:00:00.000Z"}]

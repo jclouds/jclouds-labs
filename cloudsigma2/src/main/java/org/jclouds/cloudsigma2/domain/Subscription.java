@@ -50,7 +50,7 @@ public class Subscription {
 
       /**
        * @param amount
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder amount(String amount) {
          this.amount = amount;
@@ -59,7 +59,7 @@ public class Subscription {
 
       /**
        * @param isAutoRenewEnabled States if the subscription will auto renew on expire
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder isAutoRenewEnabled(boolean isAutoRenewEnabled) {
          this.isAutoRenewEnabled = isAutoRenewEnabled;
@@ -68,7 +68,7 @@ public class Subscription {
 
       /**
        * @param descendants Subscriptions that have been extended from the current one
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder descendants(List<URI> descendants) {
          this.descendants = ImmutableList.copyOf(descendants);
@@ -77,7 +77,7 @@ public class Subscription {
 
       /**
        * @param discountAmount Amount of discount
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder discountAmount(double discountAmount) {
          this.discountAmount = discountAmount;
@@ -86,7 +86,7 @@ public class Subscription {
 
       /**
        * @param discountPercent Percent of discount
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder discountPercent(double discountPercent) {
          this.discountPercent = discountPercent;
@@ -95,7 +95,7 @@ public class Subscription {
 
       /**
        * @param endTime End time of subscription
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder endTime(Date endTime) {
          this.endTime = endTime;
@@ -104,7 +104,7 @@ public class Subscription {
 
       /**
        * @param id unique id
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder id(String id) {
          this.id = id;
@@ -113,7 +113,7 @@ public class Subscription {
 
       /**
        * @param lastNotification A date & time of last notification
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder lastNotification(Date lastNotification) {
          this.lastNotification = lastNotification;
@@ -122,7 +122,7 @@ public class Subscription {
 
       /**
        * @param period Duration of the subscription
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder period(String period) {
          this.period = period;
@@ -131,7 +131,7 @@ public class Subscription {
 
       /**
        * @param price Subscription price
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder price(double price) {
          this.price = price;
@@ -140,7 +140,7 @@ public class Subscription {
 
       /**
        * @param remaining Amount remaining
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder remaining(String remaining) {
          this.remaining = remaining;
@@ -149,7 +149,7 @@ public class Subscription {
 
       /**
        * @param resource Name of resource associated with the subscription
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder resource(SubscriptionResource resource) {
          this.resource = resource;
@@ -158,7 +158,7 @@ public class Subscription {
 
       /**
        * @param resourceUri Resource URI
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder resourceUri(URI resourceUri) {
          this.resourceUri = resourceUri;
@@ -167,7 +167,7 @@ public class Subscription {
 
       /**
        * @param startTime Start time of subscription
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder startTime(Date startTime) {
          this.startTime = startTime;
@@ -176,7 +176,7 @@ public class Subscription {
 
       /**
        * @param status Status of the subscription
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder status(String status) {
          this.status = status;
@@ -185,7 +185,7 @@ public class Subscription {
 
       /**
        * @param subscribedObject Subscribed object - the target of this subscription, if applicable
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder subscribedObject(String subscribedObject) {
          this.subscribedObject = subscribedObject;
@@ -194,7 +194,7 @@ public class Subscription {
 
       /**
        * @param uuid Subscription uuid
-       * @return Subscription Binder
+       * @return Subscription Builder
        */
       public Builder uuid(String uuid) {
          this.uuid = uuid;
@@ -202,9 +202,9 @@ public class Subscription {
       }
 
       public Subscription build() {
-         return new Subscription(amount, isAutoRenewEnabled, descendants, discountAmount, discountPercent, endTime
-               , id, lastNotification, period, price, remaining, resource, resourceUri, startTime, status
-               , subscribedObject, uuid);
+         return new Subscription(amount, isAutoRenewEnabled, descendants, discountAmount, discountPercent, endTime, id,
+               lastNotification, period, price, remaining, resource, resourceUri, startTime, status, subscribedObject,
+               uuid);
       }
    }
 
@@ -235,15 +235,14 @@ public class Subscription {
    private final String uuid;
 
    @ConstructorProperties({
-         "amount", "auto_renew", "descendants", "discount_amount"
-         , "discount_percent", "end_time", "id", "last_notification", "period", "price"
-         , "remaining", "resource", "resource_uri", "start_time", "status"
-         , "subscribed_object", "uuid"
+         "amount", "auto_renew", "descendants", "discount_amount", "discount_percent", "end_time", "id",
+         "last_notification", "period", "price", "remaining", "resource", "resource_uri", "start_time", "status",
+         "subscribed_object", "uuid"
    })
-   public Subscription(String amount, boolean autoRenewEnabled, List<URI> descendants, double discountAmount
-         , double discountPercent, Date endTime, String id, Date lastNotification, String period, double price
-         , String remaining, SubscriptionResource resource, URI resourceUri, Date startTime, String status
-         , String subscribedObject, String uuid) {
+   public Subscription(String amount, boolean autoRenewEnabled, List<URI> descendants, double discountAmount,
+                       double discountPercent, Date endTime, String id, Date lastNotification, String period,
+                       double price, String remaining, SubscriptionResource resource, URI resourceUri, Date startTime,
+                       String status, String subscribedObject, String uuid) {
       this.amount = amount;
       isAutoRenewEnabled = autoRenewEnabled;
       this.descendants = descendants;
