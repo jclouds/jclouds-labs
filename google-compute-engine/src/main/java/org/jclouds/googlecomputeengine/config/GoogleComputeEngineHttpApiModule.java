@@ -16,7 +16,6 @@
  */
 package org.jclouds.googlecomputeengine.config;
 
-import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Suppliers.compose;
 import static com.google.inject.name.Names.named;
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
@@ -98,9 +97,20 @@ public class GoogleComputeEngineHttpApiModule extends HttpApiModule<GoogleComput
       return MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier.create(authException,
               compose(new Function<Credentials, String>() {
                  public String apply(Credentials in) {
-                    checkState(in.identity.indexOf("@") != 1,
-                            "identity should be in project_id@developer.gserviceaccount.com format");
-                    Project project = api.getProjectApi().get(Iterables.get(Splitter.on("@").split(in.identity), 0));
+                    // ID should be of the form project_id@developer.gserviceaccount.com
+                    // OR (increasingly often) project_id-extended_uid@developer.gserviceaccount.com
+                    // where project_id is the NUMBER;
+                    // HERE we also accept simply "project" as the identity, if no "@" is present;
+                    // this is used in tests, but not sure if it is valid in the wild.
+                    String projectName = in.identity;
+                    if (projectName.indexOf("@") != -1) {
+                       projectName = Iterables.get(Splitter.on("@").split(projectName), 0);
+                       if (projectName.indexOf("-") != -1) {
+                          // if ID is of the form project_id-extended_uid@developer.gserviceaccount.com
+                          projectName = Iterables.get(Splitter.on("-").split(projectName), 0);
+                       }
+                    }
+                    Project project = api.getProjectApi().get(projectName);
                     return project.getName();
                  }
               }, creds), seconds, TimeUnit.SECONDS);
