@@ -578,7 +578,7 @@ public class DataApiLiveTest extends BaseCDMIApiLiveTest {
          System.out.println(dataObject.getValueAsString());
          assertEquals(dataObject.getMimetype(), "text/plain");
          // value is SGVsbA==. This needs investigating to determine if this
-         // is problem with CDMI server or the jcloud client or must understanding of spec
+         // is problem with CDMI server or the jclouds client or must understanding of spec
 
          dataApi.delete(dataObjectNameIn);
          assertEquals(containerApi.get(containerName).getChildren().contains(dataObjectNameIn), false);
