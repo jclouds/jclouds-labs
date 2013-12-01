@@ -28,7 +28,7 @@
   <!-- TODO: when out of labs, switch to org.jclouds.api? -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>nodepool</artifactId>
-  <name>jcloud nodepool api</name>
+  <name>jclouds nodepool api</name>
   <packaging>bundle</packaging>
 
   <properties>

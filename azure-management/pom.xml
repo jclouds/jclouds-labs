@@ -28,7 +28,7 @@
   <!-- TODO: when out of labs, switch to org.jclouds.provider -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>azure-management</artifactId>
-  <name>jcloud azure-management api</name>
+  <name>jclouds azure-management api</name>
   <description>jclouds components to access an implementation of Azure Management</description>
   <packaging>bundle</packaging>
 

@@ -28,7 +28,7 @@
   <!-- TODO: when out of labs, switch to org.jclouds.provider -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>opsource-servers</artifactId>
-  <name>jcloud opsource-servers provider</name>
+  <name>jclouds opsource-servers provider</name>
   <description>jclouds components to access an implementation of OpSource Cloud Servers</description>
   <packaging>bundle</packaging>
 

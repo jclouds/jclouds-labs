@@ -28,7 +28,7 @@
   <!-- TODO: when out of labs, switch to org.jclouds.api -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>virtualbox</artifactId>
-  <name>jcloud virtualbox api</name>
+  <name>jclouds virtualbox api</name>
   <description>jclouds components to access an implementation of virtualbox</description>
   <packaging>bundle</packaging>
 

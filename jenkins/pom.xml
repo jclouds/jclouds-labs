@@ -28,7 +28,7 @@
   <!-- TODO: when out of labs, switch to org.jclouds.api -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>jenkins</artifactId>
-  <name>jcloud jenkins api</name>
+  <name>jclouds jenkins api</name>
   <description>jclouds components to access an implementation of Jenkins</description>
   <packaging>bundle</packaging>
 

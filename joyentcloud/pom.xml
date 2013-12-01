@@ -28,7 +28,7 @@
   <!-- TODO: when out of labs, switch to org.jclouds.provider -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>joyentcloud</artifactId>
-  <name>jcloud joyentcloud provider</name>
+  <name>jclouds joyentcloud provider</name>
   <description>jclouds components to access the Joyent Cloud</description>
   <packaging>bundle</packaging>
 
