@@ -86,7 +86,7 @@ public class Queue {
       return new ConcreteBuilder().fromMessage(this);
    }
 
-   public static abstract class Builder {
+   public abstract static class Builder {
       protected abstract Builder self();
 
       protected String name;

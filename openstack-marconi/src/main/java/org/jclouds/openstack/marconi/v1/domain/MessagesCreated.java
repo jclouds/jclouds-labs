@@ -80,7 +80,7 @@ public class MessagesCreated {
       return new ConcreteBuilder().fromMessageCreated(this);
    }
 
-   public static abstract class Builder {
+   public abstract static class Builder {
       protected abstract Builder self();
 
       protected List<String> messageIds;

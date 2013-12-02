@@ -94,7 +94,7 @@ public class BindMetadataToHeaders implements Binder {
     * @see <a
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-account-metadata.html">documentation</a>
     */
-   public static abstract class ForRemoval extends BindMetadataToHeaders {
+   public abstract static class ForRemoval extends BindMetadataToHeaders {
       ForRemoval(String metadataPrefix) {
          super(metadataPrefix);
       }

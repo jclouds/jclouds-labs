@@ -37,7 +37,7 @@ public class SwiftBlobStoreContextModule extends AbstractModule {
       install(new FactoryModuleBuilder().build(Factory.class));
    }
 
-   static interface Factory {
+   interface Factory {
       RegionScopedSwiftBlobStore create(String in);
    }
 

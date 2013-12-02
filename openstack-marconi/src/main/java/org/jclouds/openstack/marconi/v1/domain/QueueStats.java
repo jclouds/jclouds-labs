@@ -73,7 +73,7 @@ public class QueueStats {
       return new ConcreteBuilder().fromQueueStats(this);
    }
 
-   public static abstract class Builder {
+   public abstract static class Builder {
       protected abstract Builder self();
 
       protected MessagesStats messagesStats;

@@ -100,7 +100,7 @@ public class Aged {
       return new ConcreteBuilder().fromAged(this);
    }
 
-   public static abstract class Builder {
+   public abstract static class Builder {
       protected abstract Builder self();
 
       protected int age;

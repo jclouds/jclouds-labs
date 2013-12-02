@@ -118,7 +118,7 @@ public class MessagesStats {
       return new ConcreteBuilder().fromMessagesStats(this);
    }
 
-   public static abstract class Builder {
+   public abstract static class Builder {
       protected abstract Builder self();
 
       protected int claimed;

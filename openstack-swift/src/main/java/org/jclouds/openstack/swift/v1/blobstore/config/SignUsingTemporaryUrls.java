@@ -35,7 +35,7 @@ public class SignUsingTemporaryUrls extends AbstractModule {
       install(new FactoryModuleBuilder().build(Factory.class));
    }
 
-   static interface Factory {
+   interface Factory {
       RegionScopedTemporaryUrlBlobSigner create(String in);
    }
 
