@@ -51,7 +51,7 @@ public interface BlobStore {
     * @param directory the directory to list
     * @return a list that may be incomplete, depending on whether PageSet#getNextMarker is set
     */
-   public Set<StorageMetadata> list(String container, String directory);
+   Set<StorageMetadata> list(String container, String directory);
 
    /**
     * Retrieves the metadata of a {@code Blob} at location {@code container/name}

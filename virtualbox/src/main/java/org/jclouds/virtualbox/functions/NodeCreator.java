@@ -16,7 +16,11 @@
  */
 package org.jclouds.virtualbox.functions;
 
- import com.google.common.base.*;
+ import com.google.common.base.Charsets;
+ import com.google.common.base.Function;
+ import com.google.common.base.Optional;
+ import com.google.common.base.Predicate;
+ import com.google.common.base.Supplier;
  import com.google.common.collect.ImmutableSet;
  import com.google.common.collect.Iterables;
  import com.google.common.io.Files;
@@ -29,13 +33,24 @@ package org.jclouds.virtualbox.functions;
  import org.jclouds.logging.Logger;
  import org.jclouds.util.Strings2;
  import org.jclouds.virtualbox.config.VirtualBoxComputeServiceContextModule;
- import org.jclouds.virtualbox.domain.*;
+ import org.jclouds.virtualbox.domain.CloneSpec;
+ import org.jclouds.virtualbox.domain.Master;
+ import org.jclouds.virtualbox.domain.NetworkInterfaceCard;
+ import org.jclouds.virtualbox.domain.NetworkSpec;
+ import org.jclouds.virtualbox.domain.NodeSpec;
+ import org.jclouds.virtualbox.domain.VmSpec;
  import org.jclouds.virtualbox.statements.DeleteGShadowLock;
  import org.jclouds.virtualbox.statements.PasswordlessSudo;
  import org.jclouds.virtualbox.util.MachineController;
  import org.jclouds.virtualbox.util.MachineUtils;
  import org.jclouds.virtualbox.util.NetworkUtils;
- import org.virtualbox_4_2.*;
+ import org.virtualbox_4_2.CleanupMode;
+ import org.virtualbox_4_2.IMachine;
+ import org.virtualbox_4_2.IProgress;
+ import org.virtualbox_4_2.ISession;
+ import org.virtualbox_4_2.LockType;
+ import org.virtualbox_4_2.NetworkAttachmentType;
+ import org.virtualbox_4_2.VirtualBoxManager;
  import com.google.common.collect.ImmutableList;
 
  import javax.annotation.Resource;
@@ -48,7 +63,13 @@ package org.jclouds.virtualbox.functions;
 
  import static com.google.common.base.Preconditions.checkNotNull;
  import static com.google.common.base.Preconditions.checkState;
- import static org.jclouds.virtualbox.config.VirtualBoxConstants.*;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.GUEST_OS_PASSWORD;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.GUEST_OS_USER;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_GUEST_MEMORY;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_IMAGE_PREFIX;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_NODE_NAME_SEPARATOR;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_NODE_PREFIX;
+ import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_WORKINGDIR;
 
 /**
  * Creates nodes, by cloning a master vm and based on the provided {@link NodeSpec}. Must be

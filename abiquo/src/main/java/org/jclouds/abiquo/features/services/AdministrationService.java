@@ -56,7 +56,7 @@ public interface AdministrationService {
    /**
     * Get the list of all machines in the infrastructure.
     */
-   public Iterable<Machine> listMachines();
+   Iterable<Machine> listMachines();
 
    /*********************** Enterprise ***********************/
 

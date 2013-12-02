@@ -46,7 +46,7 @@ public interface ConversionMonitor extends MonitoringService {
     * @param conversions
     *           The {@link Conversion}s to monitor.
     */
-   public void monitor(final Conversion... conversions);
+   void monitor(final Conversion... conversions);
 
    /**
     * Monitor the given {@link Conversion}s and block until they finish.
@@ -71,5 +71,5 @@ public interface ConversionMonitor extends MonitoringService {
     * @param conversions
     *           The {@link Conversion}s to monitor.
     */
-   public void monitor(final Long maxWait, final TimeUnit timeUnit, final Conversion... conversions);
+   void monitor(final Long maxWait, final TimeUnit timeUnit, final Conversion... conversions);
 }

@@ -80,8 +80,8 @@ public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {
    private final HttpUtils utils;
    private final String apiVersion;
 
-   final static String SIGNATURE_VERSION = "1.0";
-   final static String SIGNATURE_METHOD = "SHA1withRSA";
+   static final String SIGNATURE_VERSION = "1.0";
+   static final String SIGNATURE_METHOD = "SHA1withRSA";
 
    @Inject
    public RequestAuthenticator(Supplier<FGCPCredentials> creds,

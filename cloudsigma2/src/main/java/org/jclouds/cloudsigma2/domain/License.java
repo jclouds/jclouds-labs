@@ -151,7 +151,7 @@ public class License {
 
    @Override
    public int hashCode() {
-      int result = (burstable ? 1 : 0);
+      int result = burstable ? 1 : 0;
       result = 31 * result + (longName != null ? longName.hashCode() : 0);
       result = 31 * result + (name != null ? name.hashCode() : 0);
       result = 31 * result + (resourceUri != null ? resourceUri.hashCode() : 0);

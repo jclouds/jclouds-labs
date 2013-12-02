@@ -51,7 +51,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterables.transform;
 import static org.jclouds.scriptbuilder.domain.Statements.call;
-import static org.jclouds.virtualbox.config.VirtualBoxConstants.*;
+import static org.jclouds.virtualbox.config.VirtualBoxConstants.GUEST_OS_PASSWORD;
+import static org.jclouds.virtualbox.config.VirtualBoxConstants.GUEST_OS_USER;
+import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_PRECONFIGURATION_URL;
 
 @Singleton
 public class CreateAndInstallVm implements Function<MasterSpec, IMachine> {

@@ -47,7 +47,7 @@ public interface AsyncTaskMonitor extends MonitoringService {
     * @param tasks
     *           The {@link AsyncTask}s to monitor.
     */
-   public void monitor(final AsyncTask<?, ?>... tasks);
+   void monitor(final AsyncTask<?, ?>... tasks);
 
    /**
     * Monitor the given {@link AsyncTask}s and block until they finish.
@@ -72,5 +72,5 @@ public interface AsyncTaskMonitor extends MonitoringService {
     * @param tasks
     *           The {@link AsyncTask}s to monitor.
     */
-   public void monitor(final Long maxWait, final TimeUnit timeUnit, final AsyncTask<?, ?>... tasks);
+   void monitor(final Long maxWait, final TimeUnit timeUnit, final AsyncTask<?, ?>... tasks);
 }

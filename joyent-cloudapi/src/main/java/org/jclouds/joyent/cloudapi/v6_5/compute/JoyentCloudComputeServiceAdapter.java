@@ -54,6 +54,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
+import com.google.common.util.concurrent.Atomics;
 
 /**
  * The adapter used by the JoyentCloudComputeServiceContextModule to interface the
@@ -187,7 +188,7 @@ public class JoyentCloudComputeServiceAdapter implements
 
    @Override
    public void destroyNode(String id) {
-      final AtomicReference<MachineInDatacenter> machine = new AtomicReference<MachineInDatacenter>(getNode(id));
+      final AtomicReference<MachineInDatacenter> machine = Atomics.newReference(getNode(id));
       if (machine.get() == null)
          return;
       if (machine.get().get().getState() == State.RUNNING) {

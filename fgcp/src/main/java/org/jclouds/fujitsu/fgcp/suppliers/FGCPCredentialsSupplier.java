@@ -114,7 +114,7 @@ public class FGCPCredentialsSupplier implements Supplier<FGCPCredentials> {
          // in : pem with Bagattributes metadata and pk
          // out: pem with only certs
          LineProcessor<String> callback = new LineProcessor<String>() {
-            final static String CERTIFICATE_X509_END_MARKER = "-----END CERTIFICATE-----";
+            static final String CERTIFICATE_X509_END_MARKER = "-----END CERTIFICATE-----";
             StringBuilder result = new StringBuilder();
             boolean insideCert = false;
 

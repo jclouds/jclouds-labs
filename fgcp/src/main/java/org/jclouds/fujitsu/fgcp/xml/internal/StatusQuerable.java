@@ -22,9 +22,9 @@ package org.jclouds.fujitsu.fgcp.xml.internal;
  * @author Dies Koper
  */
 public interface StatusQuerable {
-   public String getResponseMessage();
+   String getResponseMessage();
 
-   public String getResponseStatus();
+   String getResponseStatus();
 
-   public boolean isError();
+   boolean isError();
 }
