@@ -17,11 +17,21 @@
 package org.jclouds.cloudsigma2.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.inject.Guice;
-import org.jclouds.cloudsigma2.domain.*;
+import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
+import org.jclouds.cloudsigma2.domain.Drive;
+import org.jclouds.cloudsigma2.domain.IPConfiguration;
+import org.jclouds.cloudsigma2.domain.IPConfigurationType;
+import org.jclouds.cloudsigma2.domain.Model;
+import org.jclouds.cloudsigma2.domain.NIC;
+import org.jclouds.cloudsigma2.domain.Owner;
+import org.jclouds.cloudsigma2.domain.ServerDrive;
+import org.jclouds.cloudsigma2.domain.ServerInfo;
+import org.jclouds.cloudsigma2.domain.ServerStatus;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,7 +39,6 @@ import org.testng.annotations.Test;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +47,7 @@ import java.util.Map;
 @Test(groups = "unit")
 public class ServerInfoToJsonTest {
 
-   private final static ServerInfoToJson SERVER_INFO_TO_JSON = Guice.createInjector().getInstance(ServerInfoToJson.class);
+   private static final ServerInfoToJson SERVER_INFO_TO_JSON = Guice.createInjector().getInstance(ServerInfoToJson.class);
 
    private ServerInfo input;
    private JsonObject expected = new JsonObject();
@@ -50,7 +59,7 @@ public class ServerInfoToJsonTest {
             .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
             .build();
 
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "A full server with description");
 
       input = new ServerInfo.Builder()

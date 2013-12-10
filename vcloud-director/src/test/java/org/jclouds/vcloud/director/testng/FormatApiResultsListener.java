@@ -47,7 +47,7 @@ public class FormatApiResultsListener extends TestListenerAdapter {
    private static final Set<String> apis = ImmutableSet.of("admin", "user");
 
    @Override
-   synchronized public void onTestSuccess(ITestResult res) {
+   public synchronized void onTestSuccess(ITestResult res) {
       if (methodInApiGroup(res)) {
          String statusLine = resultForState(res, "succeeded");
          logger.info(statusLine);
@@ -55,7 +55,7 @@ public class FormatApiResultsListener extends TestListenerAdapter {
    }
 
    @Override
-   synchronized public void onTestFailure(ITestResult res) {
+   public synchronized void onTestFailure(ITestResult res) {
       if (methodInApiGroup(res)) {
          String statusLine = resultForState(res, "failed");
          logger.info(statusLine);
@@ -63,7 +63,7 @@ public class FormatApiResultsListener extends TestListenerAdapter {
    }
 
    @Override
-   synchronized public void onTestSkipped(ITestResult res) {
+   public synchronized void onTestSkipped(ITestResult res) {
       if (methodInApiGroup(res)) {
          String statusLine = resultForState(res, "skipped");
          logger.info(statusLine);

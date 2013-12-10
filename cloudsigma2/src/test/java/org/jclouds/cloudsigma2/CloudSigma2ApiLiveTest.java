@@ -19,6 +19,7 @@ package org.jclouds.cloudsigma2;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.cloudsigma2.domain.CalcSubscription;
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
@@ -423,7 +424,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testEditVLAN() throws Exception {
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("test", "test data");
 
       VLANInfo vlanInfo = new VLANInfo.Builder()
@@ -454,7 +455,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test
    public void testEditIP() throws Exception {
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("test", "test data");
 
       IPInfo ip = new IPInfo.Builder()
@@ -485,13 +486,13 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test(dependsOnMethods = { "testEditDrive" })
    public void testCreateTag() throws Exception {
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "Test tag");
 
       Tag newTag = new Tag.Builder()
             .meta(meta)
             .name("Cloudsigma2 Test tag")
-            .meta(new HashMap<String, String>())
+            .meta(Maps.<String, String>newHashMap())
             .resources(ImmutableList.of(
                   new TagResource.Builder()
                         .uuid(createdDrive.getUuid())
@@ -506,9 +507,9 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    public void testCreateTags() throws Exception {
       List<Tag> newTagsList = ImmutableList.of(
             new Tag.Builder().name("Cloudsigma2 New tag " + System.currentTimeMillis())
-                  .meta(new HashMap<String, String>()).build(),
+                  .meta(Maps.<String, String>newHashMap()).build(),
             new Tag.Builder().name("Cloudsigma2 tag with resource " + System.currentTimeMillis())
-                  .meta(new HashMap<String, String>())
+                  .meta(Maps.<String, String>newHashMap())
                   .resources(ImmutableList.of(new TagResource.Builder().uuid(createdDrive.getUuid()).build())).build());
 
       createdTags = api.createTags(newTagsList);
@@ -521,7 +522,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    @Test(dependsOnMethods = { "testCreateTag" })
    public void testEditTag() throws Exception {
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test tag");
 
       Tag editedTag = new Tag.Builder().meta(meta).name("Edited tag")

@@ -17,6 +17,7 @@
 package org.jclouds.cloudsigma2.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -30,7 +31,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,7 +51,7 @@ public class TagToJsonTest {
             .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
             .build();
 
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test tag");
 
       input = new Tag.Builder()

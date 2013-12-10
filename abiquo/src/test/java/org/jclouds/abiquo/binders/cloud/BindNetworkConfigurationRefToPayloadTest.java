@@ -120,7 +120,7 @@ public class BindNetworkConfigurationRefToPayloadTest {
             + "\" rel=\"network_configuration\"/></links>"), LinksDto.class);
    }
 
-   static interface TestNetworkConfig {
+   interface TestNetworkConfig {
       @GET
       void withoutVirtualMachine(VLANNetworkDto network);
 

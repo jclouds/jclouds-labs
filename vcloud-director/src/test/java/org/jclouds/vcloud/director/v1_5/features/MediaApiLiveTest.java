@@ -87,7 +87,8 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    /*
     * Shared state between dependent tests.
     */
-   private Media media, oldMedia;
+   private Media media;
+   private Media oldMedia;
    private Owner owner;
    private Metadata metadata;
    private String metadataValue;

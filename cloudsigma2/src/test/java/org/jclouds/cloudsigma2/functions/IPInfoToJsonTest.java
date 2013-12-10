@@ -17,6 +17,7 @@
 package org.jclouds.cloudsigma2.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 import org.jclouds.cloudsigma2.domain.IPInfo;
@@ -29,7 +30,6 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +38,7 @@ import java.util.Map;
 @Test(groups = "unit")
 public class IPInfoToJsonTest {
 
-   private final static IPInfoToJson IP_INFO_TO_JSON = Guice.createInjector().getInstance(IPInfoToJson.class);
+   private static final IPInfoToJson IP_INFO_TO_JSON = Guice.createInjector().getInstance(IPInfoToJson.class);
 
    private IPInfo input;
    private JsonObject expected;
@@ -50,7 +50,7 @@ public class IPInfoToJsonTest {
             .uuid("5b4a69a3-8e78-4c45-a8ba-8b13f0895e23")
             .build();
 
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test ip");
       meta.put("test_key_1", "test_value_1");
       meta.put("test_key_2", "test_value_2");

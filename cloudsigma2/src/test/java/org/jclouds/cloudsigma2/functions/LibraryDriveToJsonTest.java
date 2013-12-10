@@ -17,18 +17,22 @@
 package org.jclouds.cloudsigma2.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
-import org.jclouds.cloudsigma2.domain.*;
+import org.jclouds.cloudsigma2.domain.DriveLicense;
+import org.jclouds.cloudsigma2.domain.DriveStatus;
+import org.jclouds.cloudsigma2.domain.MediaType;
+import org.jclouds.cloudsigma2.domain.LibraryDrive;
+import org.jclouds.cloudsigma2.domain.Server;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @author Vladimir Shevchenko
@@ -61,11 +65,11 @@ public class LibraryDriveToJsonTest {
                .isFavorite(true)
                .imageType("install")
                .installNotes("test_install_notes")
-               .jobs(new ArrayList<String>())
-               .licenses(new ArrayList<DriveLicense>())
+               .jobs(Lists.<String>newArrayList())
+               .licenses(Lists.<DriveLicense>newArrayList())
                .media(MediaType.CDROM)
-               .meta(new HashMap<String, String>())
-               .mountedOn(new ArrayList<Server>())
+               .meta(Maps.<String, String>newHashMap())
+               .mountedOn(Lists.<Server>newArrayList())
                .name("Vyatta-6.5-32bit-Virtualization-ISO")
                .os("linux")
                .owner(null)
@@ -73,7 +77,7 @@ public class LibraryDriveToJsonTest {
                .resourceUri(new URI("/api/2.0/libdrives/6d53b92c-42dc-472b-a7b6-7021f45f377a/"))
                .size(new BigInteger("1000000000"))
                .status(DriveStatus.MOUNTED)
-               .tags(new ArrayList<String>())
+               .tags(Lists.<String>newArrayList())
                .url("http://www.vyatta.org/")
                .uuid("6d53b92c-42dc-472b-a7b6-7021f45f377a")
                .build();

@@ -17,6 +17,7 @@
 package org.jclouds.cloudsigma2.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -31,7 +32,6 @@ import org.testng.annotations.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,7 +46,7 @@ public class VLANInfoToJsonTest {
    private JsonObject expected;
 
    {
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test vlan");
       meta.put("test_key_1", "test_value_1");
       meta.put("test_key_2", "test_value_2");

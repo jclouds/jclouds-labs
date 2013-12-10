@@ -126,7 +126,7 @@ public class BindToPathTest {
       assertEquals(newRequest.getRequestLine(), "GET http://linkuri?param=value HTTP/1.1");
    }
 
-   static interface TestEndpointLink {
+   interface TestEndpointLink {
       @GET
       void withEndpointLink(@EndpointLink("edit") TestDto dto);
 

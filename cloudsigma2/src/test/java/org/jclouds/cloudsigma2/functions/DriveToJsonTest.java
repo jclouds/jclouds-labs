@@ -17,11 +17,17 @@
 package org.jclouds.cloudsigma2.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.inject.Guice;
-import org.jclouds.cloudsigma2.domain.*;
+import org.jclouds.cloudsigma2.domain.DriveInfo;
+import org.jclouds.cloudsigma2.domain.DriveLicense;
+import org.jclouds.cloudsigma2.domain.DriveStatus;
+import org.jclouds.cloudsigma2.domain.License;
+import org.jclouds.cloudsigma2.domain.MediaType;
+import org.jclouds.cloudsigma2.domain.Server;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,7 +35,6 @@ import org.testng.annotations.Test;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +44,9 @@ import java.util.Map;
 @Test(groups = "unit")
 public class DriveToJsonTest {
 
-   private final static DriveToJson DRIVE_TO_JSON = Guice.createInjector().getInstance(DriveToJson.class);
+   private static final DriveToJson DRIVE_TO_JSON = Guice.createInjector().getInstance(DriveToJson.class);
 
-   private final static JsonObject result = new JsonObject();
+   private static final JsonObject result = new JsonObject();
    private DriveInfo input;
 
    @BeforeMethod
@@ -49,7 +54,7 @@ public class DriveToJsonTest {
       List<String> affinities = ImmutableList.of("ssd", "sample");
       List<String> tags = ImmutableList.of("tag_uuid_1", "tag_uuid_2");
 
-      Map<String, String> metaMap = new HashMap<String, String>();
+      Map<String, String> metaMap = Maps.newHashMap();
       metaMap.put("description", "test_description");
       metaMap.put("install_notes", "test_install_notes");
 

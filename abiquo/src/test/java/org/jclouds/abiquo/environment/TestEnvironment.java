@@ -28,10 +28,10 @@ public interface TestEnvironment {
    /**
     * Builds the test environment.
     */
-   public void setup() throws Exception;
+   void setup() throws Exception;
 
    /**
     * Cleans the test environment.
     */
-   public void tearDown() throws Exception;
+   void tearDown() throws Exception;
 }

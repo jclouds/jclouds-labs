@@ -27,7 +27,7 @@ import org.virtualbox_4_2.StorageBus;
 
 public class InstallGuestAdditionsTest {
    
-   private final static String VBOX_VERISION = "4.2.0";
+   private static final String VBOX_VERISION = "4.2.0";
 
    @Test
    public void testInstallGAWhenIsoIsPresent() {

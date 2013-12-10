@@ -49,7 +49,8 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
     * Shared state between dependant tests.
     */
    private Group group;
-   private OrgLdapSettings oldLdapSettings, newLdapSettings;
+   private OrgLdapSettings oldLdapSettings;
+   private OrgLdapSettings newLdapSettings;
    
    @Override
    @BeforeClass(alwaysRun = true)

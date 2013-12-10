@@ -16,6 +16,7 @@
  */
 package org.jclouds.cloudsigma2.functions;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 import org.jclouds.cloudsigma2.domain.ProfileInfo;
@@ -24,7 +25,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,7 +40,7 @@ public class ProfileInfoToJsonTest {
 
    @BeforeMethod
    public void setUp() throws Exception {
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "profile info");
 
       input = new ProfileInfo.Builder()

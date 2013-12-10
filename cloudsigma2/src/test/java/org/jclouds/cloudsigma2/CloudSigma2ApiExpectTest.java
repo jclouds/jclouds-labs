@@ -17,6 +17,7 @@
 package org.jclouds.cloudsigma2;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import org.jclouds.cloudsigma2.domain.AccountBalance;
 import org.jclouds.cloudsigma2.domain.CalcSubscription;
 import org.jclouds.cloudsigma2.domain.CreateSubscriptionRequest;
@@ -55,7 +56,6 @@ import org.testng.annotations.Test;
 import javax.ws.rs.core.MediaType;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -1093,7 +1093,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
    @Test
    public void testEditVLAN() throws Exception {
       String uuid = "96537817-f4b6-496b-a861-e74192d3ccb0";
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test vlan");
       meta.put("test_key_1", "test_value_1");
       meta.put("test_key_2", "test_value_2");
@@ -1209,7 +1209,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
    @Test
    public void testEditIP() throws Exception {
       String uuid = "96537817-f4b6-496b-a861-e74192d3ccb0";
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test vlan");
       meta.put("test_key_1", "test_value_1");
       meta.put("test_key_2", "test_value_2");
@@ -1447,7 +1447,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
                   .payload(payloadFromResourceWithContentType("/profile.json", MediaType.APPLICATION_JSON))
                   .build());
 
-      Map<String, String> meta = new HashMap<String, String>();
+      Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "profile info");
 
       ProfileInfo result = api.editProfileInfo(new ProfileInfo.Builder()
