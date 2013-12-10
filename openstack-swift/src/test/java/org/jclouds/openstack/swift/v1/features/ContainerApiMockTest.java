@@ -292,7 +292,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   private final static Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
+   private static final Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
 
    public static MockResponse containerResponse() {
       return new MockResponse() //

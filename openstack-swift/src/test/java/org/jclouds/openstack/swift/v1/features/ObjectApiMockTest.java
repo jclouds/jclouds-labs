@@ -23,7 +23,7 @@ import static org.jclouds.io.Payloads.newStringPayload;
 import static org.jclouds.openstack.swift.v1.options.ListContainerOptions.Builder.marker;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.*;
+import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.containerResponse;
 
 import java.net.URI;
 import java.util.Map;
@@ -298,7 +298,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   private final static Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
+   private static final Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
 
    public static MockResponse objectResponse() {
       return new MockResponse() //

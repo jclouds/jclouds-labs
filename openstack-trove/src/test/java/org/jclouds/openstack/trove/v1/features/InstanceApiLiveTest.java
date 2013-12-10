@@ -123,11 +123,12 @@ public class InstanceApiLiveTest extends BaseTroveApiLiveTest {
         for (String zone : api.getConfiguredZones()) {
             InstanceApi instanceApi = api.getInstanceApiForZone(zone);
             Iterator<Instance> iterator = instanceApi.list().iterator();
-            Instance first, second;
-            do{
+            Instance first;
+            Instance second;
+            do {
                first = iterator.next(); 
             } while(!first.getName().contains("instance_testing"));
-            do{
+            do {
                second = iterator.next(); 
             } while(!second.getName().contains("instance_testing"));
             assertTrue(instanceApi.isRooted(first.getId()) || instanceApi.isRooted(second.getId()));
