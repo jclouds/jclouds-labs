@@ -16,10 +16,19 @@
  */
 package org.jclouds.cloudsigma2;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
+import static com.google.common.base.Predicates.in;
+import static com.google.common.collect.Iterables.any;
+import static com.google.common.collect.Iterables.transform;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.cloudsigma2.domain.CalcSubscription;
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
@@ -51,19 +60,10 @@ import org.jclouds.cloudsigma2.domain.VLANInfo;
 import org.jclouds.cloudsigma2.options.PaginationOptions;
 import org.testng.annotations.Test;
 
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.base.Predicates.in;
-import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Iterables.transform;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 /**
  * @author Vladimir Shevchenko
@@ -83,17 +83,17 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       provider = "cloudsigma2";
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateDrives"})
    public void testListDrives() throws Exception {
       assertNotNull(api.listDrives());
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateDrives"})
    public void testListDrivesInfo() throws Exception {
       assertNotNull(api.listDrivesInfo());
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateDrives"})
    public void testGetDriveInfo() throws Exception {
       for (Drive driveInfo : api.listDrives().concat()) {
          assertNotNull(api.getDriveInfo(driveInfo.getUuid()));
@@ -144,7 +144,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkDrive(editedDrive, api.editDrive(createdDrive.getUuid(), editedDrive));
    }
 
-   @Test(dependsOnMethods = {"testEditDrive"})
+   @Test(dependsOnMethods = {"testEditDrive", "testCreateTag", "testEditTag"})
    public void testDeleteDrive() throws Exception {
       String uuid = createdDrive.getUuid();
       api.deleteDrive(uuid);
@@ -177,12 +177,12 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       }
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateServers"})
    public void testListServers() throws Exception {
       assertNotNull(api.listServers());
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateServers"})
    public void testListServersInfo() throws Exception {
       assertNotNull(api.listServersInfo());
    }
@@ -237,7 +237,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkServer(serverInfo, api.editServer(createdServer.getUuid(), serverInfo));
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateServers"})
    public void testGetServerInfo() throws Exception {
       for (Server server : api.listServers().concat()) {
          assertNotNull(server.getUuid());
@@ -265,12 +265,12 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       assertFalse(any(transform(servers, extractUuid()), in(uuids)));
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateFirewallPolicies"})
    public void testListFirewallPolicies() throws Exception {
       assertNotNull(api.listFirewallPolicies());
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateFirewallPolicies"})
    public void testListFirewallPoliciesInfo() throws Exception {
       assertNotNull(api.listFirewallPoliciesInfo());
    }
@@ -385,7 +385,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkFirewallPolicy(newFirewallPolicy, createdFirewallPolicy);
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateFirewallPolicy"})
    public void testEditFirewallPolicy() throws Exception {
       FirewallPolicy editedPolicy = new FirewallPolicy.Builder()
             .name("Edited policy")
@@ -467,24 +467,24 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       }
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateTags"})
    public void testListTags() throws Exception {
       assertNotNull(api.listTags());
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateTags"})
    public void testListTagsInfo() throws Exception {
       assertNotNull(api.listTagsInfo());
    }
 
-   @Test
+   @Test(dependsOnMethods = {"testCreateTags"})
    public void testGetTagInfo() throws Exception {
       for (Tag tag : api.listTags().concat()) {
          assertNotNull(api.getTagInfo(tag.getUuid()));
       }
    }
 
-   @Test(dependsOnMethods = { "testEditDrive" })
+   @Test(dependsOnMethods = {"testCreateDrive"})
    public void testCreateTag() throws Exception {
       Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "Test tag");
@@ -503,7 +503,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkTag(newTag, createdTag);
    }
 
-   @Test(dependsOnMethods = { "testEditDrive" })
+   @Test(dependsOnMethods = {"testCreateDrive"})
    public void testCreateTags() throws Exception {
       List<Tag> newTagsList = ImmutableList.of(
             new Tag.Builder().name("Cloudsigma2 New tag " + System.currentTimeMillis())
@@ -520,7 +520,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       }
    }
 
-   @Test(dependsOnMethods = { "testCreateTag" })
+   @Test(dependsOnMethods = {"testCreateTag"})
    public void testEditTag() throws Exception {
       Map<String, String> meta = Maps.newHashMap();
       meta.put("description", "test tag");
@@ -531,14 +531,14 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkTag(editedTag, api.editTag(createdTag.getUuid(), editedTag));
    }
 
-   @Test(dependsOnMethods = { "testEditTag" })
+   @Test(dependsOnMethods = {"testEditTag"})
    public void testDeleteTag() throws Exception {
       String uuid = createdTag.getUuid();
       api.deleteTag(uuid);
       assertNull(api.getTagInfo(uuid));
    }
 
-   @Test(dependsOnMethods = { "testCreateTags" })
+   @Test(dependsOnMethods = {"testCreateTags"})
    public void testDeleteTags() throws Exception {
       ImmutableList.Builder<String> uuids = ImmutableList.builder();
       for (Tag tag : createdTags) {
