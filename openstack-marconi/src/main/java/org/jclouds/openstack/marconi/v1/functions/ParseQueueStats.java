@@ -25,7 +25,7 @@ import org.jclouds.openstack.marconi.v1.domain.MessagesStats;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE_ID;
+import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_ID_FROM_HREF;
 
 /**
  * This parses the stats of a queue.
@@ -51,11 +51,11 @@ public class ParseQueueStats implements Function<HttpResponse, QueueStats> {
          // change the hrefs to ids
          Aged oldestWithHref = rawQueueStats.getMessagesStats().getOldest().get();
          Aged oldestWithId = oldestWithHref.toBuilder()
-               .id(TO_MESSAGE_ID.apply(oldestWithHref.getId()))
+               .id(TO_ID_FROM_HREF.apply(oldestWithHref.getId()))
                .build();
          Aged newestWithHref = rawQueueStats.getMessagesStats().getNewest().get();
          Aged newestWithId = newestWithHref.toBuilder()
-               .id(TO_MESSAGE_ID.apply(newestWithHref.getId()))
+               .id(TO_ID_FROM_HREF.apply(newestWithHref.getId()))
                .build();
 
          MessagesStats messagesStatsWithIds = rawQueueStats.getMessagesStats().toBuilder()

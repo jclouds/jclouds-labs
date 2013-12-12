@@ -20,15 +20,18 @@ import com.google.inject.Provides;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Zone;
 import org.jclouds.location.functions.ZoneToEndpoint;
+import org.jclouds.openstack.marconi.v1.features.ClaimApi;
 import org.jclouds.openstack.marconi.v1.features.MessageApi;
 import org.jclouds.openstack.marconi.v1.features.QueueApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.io.Closeable;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Marconi is a robust, web-scale message queuing service to support the distributed nature of large web applications.
@@ -55,11 +58,29 @@ public interface MarconiApi extends Closeable {
    /**
     * Provides access to Message features.
     *
-    * @param zone The zone where this queue will live.
+    * @param zone The zone where this queue lives.
     * @param name Name of the queue.
     */
    @Delegate
    @Path("/queues/{name}")
    MessageApi getMessageApiForZoneAndQueue(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone, @PathParam("name") String name);
+
+   /**
+    * Provides access to Claim features.
+    *
+    * @param zone The zone where this queue lives.
+    * @param clientId A UUID for each client instance. The UUID must be submitted in its canonical form (for example,
+    *                 3381af92-2b9e-11e3-b191-71861300734c). The client generates the Client-ID once. Client-ID
+    *                 persists between restarts of the client so the client should reuse that same Client-ID. All
+    *                 message-related operations require the use of Client-ID in the headers to ensure that messages
+    *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
+    * @param name Name of the queue.
+    */
+   @Delegate
+   @Path("/queues/{name}")
+   ClaimApi getClaimApiForZoneAndClientAndQueue(
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @HeaderParam("Client-ID") UUID clientId,
+         @PathParam("name") String name);
 }

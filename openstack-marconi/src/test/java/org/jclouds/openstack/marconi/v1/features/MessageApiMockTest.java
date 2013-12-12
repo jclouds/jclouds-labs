@@ -277,4 +277,27 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          server.shutdown();
       }
    }
+
+   public void deleteMessageByClaimId() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
+      server.enqueue(new MockResponse().setResponseCode(204));
+
+      try {
+         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+
+         boolean success = messageApi.deleteByClaim(clientId, "52936b8a3ac24e6ef4c067dd", "5292b30cef913e6d026f4dec");
+
+         assertTrue(success);
+
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         assertEquals(server.takeRequest().getRequestLine(), "DELETE /v1/123123/queues/jclouds-test/messages/52936b8a3ac24e6ef4c067dd?claim_id=5292b30cef913e6d026f4dec HTTP/1.1");
+      }
+      finally {
+         server.shutdown();
+      }
+   }
 }

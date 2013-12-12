@@ -67,6 +67,14 @@ public class StreamMessagesOptions extends PaginationOptions {
    }
 
    /**
+    * @see Builder#includeClaimed(boolean)
+    */
+   public StreamMessagesOptions includeClaimed(boolean includeClaimed) {
+      queryParameters.put("include_claimed", Boolean.toString(includeClaimed));
+      return this;
+   }
+
+   /**
     * @return The String representation of the marker for these StreamMessagesOptions.
     */
    public String getMarker() {
@@ -114,6 +122,14 @@ public class StreamMessagesOptions extends PaginationOptions {
       public static StreamMessagesOptions echo(boolean echo) {
          StreamMessagesOptions options = new StreamMessagesOptions();
          return options.echo(echo);
+      }
+
+      /**
+       * The includeClaimed parameter determines whether the API returns claimed messages.
+       */
+      public static StreamMessagesOptions includeClaimed(boolean includeClaimed) {
+         StreamMessagesOptions options = new StreamMessagesOptions();
+         return options.echo(includeClaimed);
       }
    }
 }

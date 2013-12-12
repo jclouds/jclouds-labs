@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.google.common.collect.Iterables.getLast;
+import static com.google.common.collect.Iterables.getOnlyElement;
 import static org.jclouds.openstack.marconi.v1.options.StreamMessagesOptions.Builder.echo;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -175,6 +176,20 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    }
 
    @Test(dependsOnMethods = { "getMessage" })
+   public void deleteMessagesByClaimId() throws Exception {
+      for (String zoneId : zones) {
+         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
+         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, clientId, "jclouds-test");
+         Message message = getOnlyElement(claimApi.claim(300, 100, 1));
+
+         boolean success = messageApi.deleteByClaim(clientId, message.getId(), message.getClaimId().get());
+
+         assertTrue(success);
+      }
+   }
+
+   @Test(dependsOnMethods = { "deleteMessagesByClaimId" })
    public void deleteMessages() throws Exception {
       for (String zoneId : zones) {
          MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");

@@ -42,6 +42,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
@@ -83,7 +84,7 @@ public interface MessageApi {
     * messages indefinitely.
     *
     * @param clientId A UUID for each client instance.
-    * @param options Options for streaming messages to your client.
+    * @param options  Options for streaming messages to your client.
     */
    @Named("message:stream")
    @GET
@@ -98,7 +99,7 @@ public interface MessageApi {
     * Lists specific messages. Unlike the stream method, a client's own messages are always returned in this operation.
     *
     * @param clientId A UUID for each client instance.
-    * @param ids Specifies the IDs of the messages to get.
+    * @param ids      Specifies the IDs of the messages to list.
     */
    @Named("message:list")
    @GET
@@ -109,13 +110,11 @@ public interface MessageApi {
    List<Message> list(@HeaderParam("Client-ID") UUID clientId,
                       @BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
 
-   // TODO: list by claim id when claim API done
-
    /**
     * Gets a specific message. Unlike the stream method, a client's own messages are always returned in this operation.
     *
     * @param clientId A UUID for each client instance.
-    * @param id Specific ID of the message to get.
+    * @param id       Specific ID of the message to get.
     */
    @Named("message:get")
    @GET
@@ -131,7 +130,7 @@ public interface MessageApi {
     * remaining valid messages IDs are deleted.
     *
     * @param clientId A UUID for each client instance.
-    * @param ids Specifies the IDs of the messages to delete.
+    * @param ids      Specifies the IDs of the messages to delete.
     */
    @Named("message:delete")
    @DELETE
@@ -141,5 +140,22 @@ public interface MessageApi {
    boolean delete(@HeaderParam("Client-ID") UUID clientId,
                   @BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
 
-   // TODO: delete by claim id when claim API done
+   /**
+    * The claimId parameter specifies that the message is deleted only if it has the specified claim ID and that claim
+    * has not expired. This specification is useful for ensuring only one worker processes any given message. When a
+    * worker's claim expires before it can delete a message that it has processed, the worker must roll back any
+    * actions it took based on that message because another worker can now claim and process the same message.
+    *
+    * @param clientId A UUID for each client instance.
+    * @param id       Specific ID of the message to delete.
+    * @param claimId  Specific claim ID of the message to delete.
+    */
+   @Named("message:delete")
+   @DELETE
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Path("/messages/{message_id}")
+   @Fallback(FalseOnNotFoundOr404.class)
+   boolean deleteByClaim(@HeaderParam("Client-ID") UUID clientId,
+                         @PathParam("message_id") String id,
+                         @QueryParam("claim_id") String claimId);
 }

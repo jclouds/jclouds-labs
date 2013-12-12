@@ -19,30 +19,31 @@
 package org.jclouds.openstack.marconi.v1.domain;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import org.jclouds.javax.annotation.Nullable;
 
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A message to be sent to a queue.
+ * A claim for messages in a queue.
  *
  * @author Everett Toews
  */
-public class Message {
+public class Claim {
 
    private final String id;
    private final int ttl;
-   private final String body;
    private final int age;
-   private final String claimId;
+   private final List<Message> messages;
 
-   protected Message(String id, int ttl, String body, int age, @Nullable String claimId) {
+   protected Claim(String id, int ttl, int age, @Nullable List<Message> messages) {
       this.id = checkNotNull(id, "id required");
       this.ttl = ttl;
-      this.body = checkNotNull(body, "body required");
       this.age = age;
-      this.claimId = claimId;
+      this.messages = messages == null ? ImmutableList.<Message>of() : messages;
    }
 
    /**
@@ -60,13 +61,6 @@ public class Message {
    }
 
    /**
-    * @see CreateMessage.Builder#body(String)
-    */
-   public String getBody() {
-      return body;
-   }
-
-   /**
     * @return Age of this message in seconds.
     */
    public int getAge() {
@@ -74,10 +68,10 @@ public class Message {
    }
 
    /**
-    * @return The claim id of this message.
+    * @return The messages that are associated with this claim.
     */
-   public Optional<String> getClaimId() {
-      return Optional.fromNullable(claimId);
+   public List<Message> getMessages() {
+      return messages;
    }
 
    @Override
@@ -89,13 +83,13 @@ public class Message {
    public boolean equals(Object obj) {
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
-      Message that = Message.class.cast(obj);
+      Claim that = Claim.class.cast(obj);
       return Objects.equal(this.id, that.id);
    }
 
    protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper(this).omitNullValues()
-         .add("id", id).add("ttl", ttl).add("body", body).add("age", age).add("claimId", claimId);
+      return Objects.toStringHelper(this)
+         .add("id", id).add("ttl", ttl).add("age", age).add("messages", messages);
    }
 
    @Override
@@ -111,17 +105,16 @@ public class Message {
       return new ConcreteBuilder().fromMessage(this);
    }
 
-   public abstract static class Builder {
+   public static abstract class Builder {
       protected abstract Builder self();
 
       protected String id;
       protected int ttl;
-      protected String body;
       protected int age;
-      protected String claimId;
+      protected List<Message> messages;
 
       /**
-       * @see Message#getId()
+       * @see Claim#getId()
        */
       public Builder id(String id) {
          this.id = id;
@@ -137,15 +130,7 @@ public class Message {
       }
 
       /**
-       * @see CreateMessage.Builder#body(String)
-       */
-      public Builder body(String json) {
-         this.body = json;
-         return self();
-      }
-
-      /**
-       * @see Message#getAge()
+       * @see Claim#getAge()
        */
       public Builder age(int age) {
          this.age = age;
@@ -153,20 +138,19 @@ public class Message {
       }
 
       /**
-       * @see Message#getClaimId()
+       * @see Claim#getMessages()
        */
-      public Builder claimId(String claimId) {
-         this.claimId = claimId;
+      public Builder messages(List<Message> messages) {
+         this.messages = messages;
          return self();
       }
 
-      public Message build() {
-         return new Message(id, ttl, body, age, claimId);
+      public Claim build() {
+         return new Claim(id, ttl, age, messages);
       }
 
-      public Builder fromMessage(Message in) {
-         return this.id(in.getId()).ttl(in.getTTL()).body(in.getBody()).age(in.getAge())
-               .claimId(in.getClaimId().orNull());
+      public Builder fromMessage(Claim in) {
+         return this.id(in.getId()).ttl(in.getTTL()).age(in.getAge()).messages(in.getMessages());
       }
    }
 

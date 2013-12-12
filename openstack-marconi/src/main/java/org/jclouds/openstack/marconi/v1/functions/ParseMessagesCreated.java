@@ -26,7 +26,7 @@ import org.jclouds.openstack.marconi.v1.domain.MessagesCreated;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE_ID;
+import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_ID_FROM_HREF;
 
 /**
  * This parses the messages created on a queue.
@@ -44,7 +44,7 @@ public class ParseMessagesCreated implements Function<HttpResponse, MessagesCrea
 
    public MessagesCreated apply(HttpResponse from) {
       MessagesCreated rawMessagesCreated = json.apply(from);
-      List<String> messageIds = Lists.transform(rawMessagesCreated.getMessageIds(), TO_MESSAGE_ID);
+      List<String> messageIds = Lists.transform(rawMessagesCreated.getMessageIds(), TO_ID_FROM_HREF);
 
       MessagesCreated messagesCreated = MessagesCreated.builder()
             .messageIds(messageIds)

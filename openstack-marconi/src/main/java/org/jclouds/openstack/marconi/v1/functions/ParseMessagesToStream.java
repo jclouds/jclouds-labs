@@ -18,7 +18,7 @@ package org.jclouds.openstack.marconi.v1.functions;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Multimap;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Message;
@@ -30,6 +30,9 @@ import javax.inject.Inject;
 import java.beans.ConstructorProperties;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.getOnlyElement;
+import static com.google.common.collect.Iterables.transform;
+import static org.jclouds.http.utils.Queries.queryParser;
 
 /**
  * @author Everett Toews
@@ -51,27 +54,53 @@ public class ParseMessagesToStream implements Function<HttpResponse, MessageStre
       }
 
       MessagesWithHref messagesWithHref = json.apply(response);
-      Iterable<Message> messages = Iterables.transform(messagesWithHref, TO_MESSAGE);
+      Iterable<Message> messages = transform(messagesWithHref, TO_MESSAGE);
 
       return new Messages(messages, messagesWithHref.getLinks());
    }
 
-   private static String getMessageId(String rawMessageHref) {
-      // strip off everything but the message id
-      return rawMessageHref.substring(rawMessageHref.lastIndexOf('/')+1);
+   /**
+    * Strip off everything but the message id.
+    */
+   private static String getIdFromHref(String rawMessageHref) {
+      int indexOfQuestionMark = rawMessageHref.indexOf('?');
+      int lastIndexOfSlash = rawMessageHref.lastIndexOf('/') + 1;
+
+      if (indexOfQuestionMark > 0) {
+         return rawMessageHref.substring(lastIndexOfSlash, indexOfQuestionMark);
+      }
+      else {
+         return rawMessageHref.substring(lastIndexOfSlash);
+      }
+   }
+
+   private static String getClaimIdFromHref(String rawMessageHref) {
+      int indexOfQuestionMark = rawMessageHref.indexOf('?') + 1;
+
+      if (indexOfQuestionMark > 0) {
+         Multimap<String, String> queryParams = queryParser().apply(rawMessageHref.substring(indexOfQuestionMark));
+
+         return getOnlyElement(queryParams.get("claim_id"), null);
+      }
+      else {
+         return null;
+      }
    }
 
    protected static final Function<MessageWithHref, Message> TO_MESSAGE = new Function<MessageWithHref, Message>() {
       @Override
       public Message apply(MessageWithHref messageWithHref) {
-         return messageWithHref.toBuilder().id(getMessageId(messageWithHref.getId())).build();
+         return messageWithHref.toBuilder()
+               .id(getIdFromHref(messageWithHref.getId()))
+               .claimId(getClaimIdFromHref(messageWithHref.getId()))
+               .build();
       }
    };
 
-   protected static final Function<String, String> TO_MESSAGE_ID = new Function<String, String>() {
+   protected static final Function<String, String> TO_ID_FROM_HREF = new Function<String, String>() {
       @Override
       public String apply(String messageIdWithHref) {
-         return getMessageId(messageIdWithHref);
+         return getIdFromHref(messageIdWithHref);
       }
    };
 
@@ -95,7 +124,7 @@ public class ParseMessagesToStream implements Function<HttpResponse, MessageStre
 
       @ConstructorProperties({ "href", "ttl", "body", "age" })
       protected MessageWithHref(String href, int ttl, String body, int age) {
-         super(href, ttl, body, age);
+         super(href, ttl, body, age, null);
       }
    }
 }
