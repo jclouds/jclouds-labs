@@ -13,11 +13,8 @@ Although this is a "labs" repository, some of the providers and APIs here are pr
 | openstack-marconi | API | No |
 | openstack-neutron | API | Yes |
 | openstack-swift | API | No |
-| openstack-trove | API | Yes |
 | rackspace-autoscale | API | No |
 | rackspace-autoscale-us | Provider | No |
-| rackspace-clouddatabases-uk | Provider | Yes |
-| rackspace-clouddatabases-us | Provider | Yes |
 | rackspace-cloudqueues-us | Provider | No |
 
 License

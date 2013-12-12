@@ -55,11 +55,8 @@
   <modules>
     <module>openstack-glance</module>
     <module>openstack-neutron</module>
-    <module>openstack-trove</module>
     <module>openstack-swift</module>
     <module>openstack-marconi</module>
-    <module>rackspace-clouddatabases-us</module>
-    <module>rackspace-clouddatabases-uk</module>
     <module>rackspace-autoscale</module>
     <module>rackspace-autoscale-us</module>
     <module>rackspace-cloudqueues-us</module>
