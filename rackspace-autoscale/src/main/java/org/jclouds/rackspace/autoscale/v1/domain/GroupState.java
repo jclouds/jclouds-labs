@@ -20,7 +20,6 @@ import java.beans.ConstructorProperties;
 import java.util.List;
 
 import org.jclouds.openstack.v2_0.domain.Link;
-import org.jclouds.rackspace.autoscale.v1.features.GroupApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;

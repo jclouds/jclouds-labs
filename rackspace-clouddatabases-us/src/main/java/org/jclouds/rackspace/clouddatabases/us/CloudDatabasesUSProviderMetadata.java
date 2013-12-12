@@ -28,7 +28,6 @@ import java.util.Properties;
 import org.jclouds.openstack.trove.v1.TroveApiMetadata;
 import org.jclouds.openstack.trove.v1.config.TroveParserModule;
 import org.jclouds.openstack.trove.v1.config.TroveHttpApiModule;
-import org.jclouds.openstack.v2_0.ServiceType;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;

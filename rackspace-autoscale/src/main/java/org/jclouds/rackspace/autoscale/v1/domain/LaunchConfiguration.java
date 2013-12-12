@@ -21,7 +21,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
-import org.jclouds.rackspace.autoscale.v1.features.GroupApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;

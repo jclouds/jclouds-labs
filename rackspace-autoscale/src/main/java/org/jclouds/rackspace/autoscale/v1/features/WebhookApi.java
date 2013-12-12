@@ -37,8 +37,6 @@ import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.autoscale.v1.binders.BindWebhookToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindWebhookUpdateToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindWebhooksToJson;
-import org.jclouds.rackspace.autoscale.v1.domain.Group;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
 import org.jclouds.rackspace.autoscale.v1.domain.WebhookResponse;
 import org.jclouds.rest.annotations.Fallback;

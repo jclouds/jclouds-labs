@@ -17,16 +17,13 @@
 package org.jclouds.openstack.marconi.v1.functions;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Queue;
 import org.jclouds.openstack.marconi.v1.domain.Queues;
-import org.jclouds.openstack.v2_0.domain.Link;
 import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 
 import javax.inject.Inject;
-import java.beans.ConstructorProperties;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

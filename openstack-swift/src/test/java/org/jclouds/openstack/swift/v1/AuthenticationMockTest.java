@@ -22,7 +22,6 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

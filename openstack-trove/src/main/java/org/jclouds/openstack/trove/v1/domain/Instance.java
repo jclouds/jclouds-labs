@@ -21,7 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-import org.jclouds.openstack.trove.v1.features.InstanceApi;
 import org.jclouds.openstack.trove.v1.internal.Volume;
 import org.jclouds.openstack.v2_0.domain.Link;
 import com.google.common.base.Objects;

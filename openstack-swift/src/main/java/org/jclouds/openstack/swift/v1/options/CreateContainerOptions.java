@@ -20,8 +20,6 @@ import java.util.Map;
 
 import org.jclouds.http.options.BaseHttpRequestOptions;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders;
-import org.jclouds.openstack.swift.v1.domain.Container;
-import org.jclouds.openstack.swift.v1.features.ContainerApi;
 
 /**
  * Options available to <a href=

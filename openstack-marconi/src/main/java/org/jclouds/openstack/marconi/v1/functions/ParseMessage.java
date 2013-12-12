@@ -17,16 +17,13 @@
 package org.jclouds.openstack.marconi.v1.functions;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Message;
 
 import javax.inject.Inject;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.transform;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
 
