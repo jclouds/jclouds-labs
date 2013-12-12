@@ -19,7 +19,6 @@ package org.jclouds.snia.cdmi.v1;
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.apis.ApiMetadata;
 import org.jclouds.rest.RestContext;
 import org.jclouds.rest.internal.BaseRestApiMetadata;
 import org.jclouds.snia.cdmi.v1.config.CDMIRestClientModule;

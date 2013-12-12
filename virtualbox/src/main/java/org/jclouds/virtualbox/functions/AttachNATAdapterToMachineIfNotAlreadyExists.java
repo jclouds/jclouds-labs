@@ -22,7 +22,6 @@ import org.jclouds.virtualbox.domain.NetworkInterfaceCard;
 import org.jclouds.virtualbox.domain.RedirectRule;
 import org.virtualbox_4_2.IMachine;
 import org.virtualbox_4_2.INetworkAdapter;
-import org.virtualbox_4_2.NetworkAdapterType;
 import org.virtualbox_4_2.VBoxException;
 
 import com.google.common.base.Function;

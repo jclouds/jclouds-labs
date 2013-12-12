@@ -22,7 +22,6 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.apis.Compute;
 import org.jclouds.management.ComputeManagement;
 import org.jclouds.management.ManagementContext;
-import org.jclouds.management.internal.BaseManagementContext;
 import org.jclouds.providers.JcloudsTestComputeProviderMetadata;
 import org.testng.annotations.Test;
 

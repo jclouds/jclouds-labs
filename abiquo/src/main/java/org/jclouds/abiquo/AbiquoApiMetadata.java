@@ -26,7 +26,6 @@ import java.util.Properties;
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
 import org.jclouds.abiquo.config.AbiquoAuthenticationModule;
 import org.jclouds.abiquo.config.AbiquoHttpApiModule;
-import org.jclouds.apis.ApiMetadata;
 import org.jclouds.concurrent.config.ScheduledExecutorServiceModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 

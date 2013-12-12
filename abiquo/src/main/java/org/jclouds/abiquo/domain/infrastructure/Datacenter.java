@@ -29,7 +29,6 @@ import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.NetworkServiceType;
-import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.predicates.NetworkServiceTypePredicates;
 import org.jclouds.collect.PagedIterable;

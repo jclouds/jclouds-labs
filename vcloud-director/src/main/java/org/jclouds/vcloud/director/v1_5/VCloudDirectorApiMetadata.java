@@ -26,7 +26,6 @@ import static org.jclouds.vcloud.director.v1_5.VCloudDirectorConstants.PROPERTY_
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.apis.ApiMetadata;
 import org.jclouds.rest.internal.BaseRestApiMetadata;
 import org.jclouds.vcloud.director.v1_5.config.VCloudDirectorRestClientModule;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;

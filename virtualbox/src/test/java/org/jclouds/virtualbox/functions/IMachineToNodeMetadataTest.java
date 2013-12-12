@@ -36,7 +36,6 @@ import org.jclouds.json.config.GsonModule;
 import org.jclouds.virtualbox.config.VirtualBoxComputeServiceContextModule;
 import org.jclouds.virtualbox.util.NetworkUtils;
 import org.testng.annotations.Test;
-import org.virtualbox_4_2.IGuest;
 import org.virtualbox_4_2.IGuestOSType;
 import org.virtualbox_4_2.IMachine;
 import org.virtualbox_4_2.INATEngine;

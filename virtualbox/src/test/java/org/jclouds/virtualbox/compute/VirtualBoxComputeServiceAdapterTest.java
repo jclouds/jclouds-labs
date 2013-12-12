@@ -21,7 +21,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_IMAGE_PREFIX;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

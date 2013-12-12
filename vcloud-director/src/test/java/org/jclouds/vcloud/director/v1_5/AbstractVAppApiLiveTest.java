@@ -28,7 +28,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 

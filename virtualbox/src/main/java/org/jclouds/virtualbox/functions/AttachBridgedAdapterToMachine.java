@@ -16,7 +16,6 @@
  */
 package org.jclouds.virtualbox.functions;
 
-import static org.virtualbox_4_2.NetworkAdapterType.Am79C973;
 import static org.virtualbox_4_2.NetworkAttachmentType.Bridged;
 
 import org.jclouds.virtualbox.domain.NetworkInterfaceCard;

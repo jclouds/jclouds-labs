@@ -20,12 +20,8 @@ import java.util.Properties;
 
 import org.jclouds.Constants;
 import org.jclouds.apis.BaseApiLiveTest;
-import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.fujitsu.fgcp.FGCPApi;
-import org.jclouds.sshj.config.SshjSshClientModule;
-import org.testng.annotations.BeforeGroups;
 
-import com.google.inject.Module;
 
 /**
  * @author Dies Koper

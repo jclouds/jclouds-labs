@@ -18,7 +18,6 @@ package org.jclouds.abiquo.domain.config;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveApiTest;
 import org.testng.annotations.Test;
 

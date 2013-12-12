@@ -17,17 +17,13 @@
 package org.jclouds.virtualbox.functions;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import com.google.common.collect.ImmutableMap;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.virtualbox_4_2.DeviceType;
 import org.virtualbox_4_2.IMachine;
-import org.virtualbox_4_2.VBoxException;
 
 import java.util.Map;
 

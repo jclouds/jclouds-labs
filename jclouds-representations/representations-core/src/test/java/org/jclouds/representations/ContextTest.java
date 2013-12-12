@@ -16,7 +16,6 @@
  */
 package org.jclouds.representations;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
@@ -25,7 +24,6 @@ import com.google.gson.JsonElement;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static com.google.common.io.Resources.getResource;
 import static org.testng.Assert.assertEquals;

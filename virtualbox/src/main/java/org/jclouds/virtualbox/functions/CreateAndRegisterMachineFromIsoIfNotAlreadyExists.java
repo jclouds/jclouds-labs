@@ -20,11 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.virtualbox.util.MachineUtils.machineNotFoundException;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -32,7 +30,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.logging.Logger;
 import org.jclouds.virtualbox.config.VirtualBoxConstants;
@@ -56,7 +53,6 @@ import org.virtualbox_4_2.VirtualBoxManager;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.Uninterruptibles;
 
 /**
  * @author Mattias Holmqvist

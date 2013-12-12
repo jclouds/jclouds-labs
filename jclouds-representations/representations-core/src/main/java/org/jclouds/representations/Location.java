@@ -17,11 +17,9 @@
 package org.jclouds.representations;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 
 public class Location implements Serializable {

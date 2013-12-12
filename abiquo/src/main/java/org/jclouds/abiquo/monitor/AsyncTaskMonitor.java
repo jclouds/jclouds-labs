@@ -18,7 +18,6 @@ package org.jclouds.abiquo.monitor;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.internal.BaseAsyncTaskMonitor;

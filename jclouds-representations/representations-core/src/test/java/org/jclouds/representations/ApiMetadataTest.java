@@ -30,7 +30,6 @@ import java.util.Map;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static com.google.common.io.Resources.getResource;
-import static org.testng.Assert.assertTrue;
 
 
 @Test

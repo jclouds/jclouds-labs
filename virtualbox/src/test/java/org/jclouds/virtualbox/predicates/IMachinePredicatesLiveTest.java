@@ -20,7 +20,6 @@ import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_IMAGE
 import static org.jclouds.virtualbox.predicates.IMachinePredicates.isLinkedClone;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.config.ValueOfConfigurationKeyOrNull;
 import org.jclouds.virtualbox.BaseVirtualBoxClientLiveTest;
 import org.jclouds.virtualbox.domain.CloneSpec;
 import org.jclouds.virtualbox.domain.HardDisk;
@@ -42,7 +41,6 @@ import org.virtualbox_4_2.NetworkAttachmentType;
 import org.virtualbox_4_2.StorageBus;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 
