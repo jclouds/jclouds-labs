@@ -42,7 +42,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    public void createQueues() throws Exception {
       for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZone(zoneId);
+         QueueApi queueApi = api.getQueueApiForZone(zoneId, CLIENT_ID);
          boolean success = queueApi.create("jclouds-test");
 
          assertTrue(success);
@@ -52,9 +52,8 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "createQueues" })
    public void createMessages() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
          String json1 = "{\"event\":{\"name\":\"Austin Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage message1 = CreateMessage.builder().ttl(86400).body(json1).build();
          String json2 = "{\"event\":{\"name\":\"SF Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
@@ -63,7 +62,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
          CreateMessage message3 = CreateMessage.builder().ttl(86400).body(json3).build();
          List<CreateMessage> messages = ImmutableList.of(message1, message2, message3);
 
-         MessagesCreated messagesCreated = messageApi.create(clientId, messages);
+         MessagesCreated messagesCreated = messageApi.create(messages);
 
          assertNotNull(messagesCreated);
          assertEquals(messagesCreated.getMessageIds().size(), 3);
@@ -123,7 +122,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "getClaim" })
    public void delete() throws Exception {
       for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZone(zoneId);
+         QueueApi queueApi = api.getQueueApiForZone(zoneId, CLIENT_ID);
          boolean success = queueApi.delete("jclouds-test");
 
          assertTrue(success);

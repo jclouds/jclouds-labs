@@ -49,25 +49,20 @@ public interface MarconiApi extends Closeable {
    /**
     * Provides access to Queue features.
     *
-    * @param zone The zone where this queue will live.
+    * @param zone     The zone where this queue will live.
+    * @param clientId A UUID for each client instance. The UUID must be submitted in its canonical form (for example,
+    *                 3381af92-2b9e-11e3-b191-71861300734c). The client generates the Client-ID once. Client-ID
+    *                 persists between restarts of the client so the client should reuse that same Client-ID. All
+    *                 message-related operations require the use of Client-ID in the headers to ensure that messages
+    *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     */
    @Delegate
    QueueApi getQueueApiForZone(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @HeaderParam("Client-ID") UUID clientId);
 
    /**
     * Provides access to Message features.
-    *
-    * @param zone The zone where this queue lives.
-    * @param name Name of the queue.
-    */
-   @Delegate
-   @Path("/queues/{name}")
-   MessageApi getMessageApiForZoneAndQueue(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone, @PathParam("name") String name);
-
-   /**
-    * Provides access to Claim features.
     *
     * @param zone The zone where this queue lives.
     * @param clientId A UUID for each client instance. The UUID must be submitted in its canonical form (for example,
@@ -76,6 +71,24 @@ public interface MarconiApi extends Closeable {
     *                 message-related operations require the use of Client-ID in the headers to ensure that messages
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     * @param name Name of the queue.
+    */
+   @Delegate
+   @Path("/queues/{name}")
+   MessageApi getMessageApiForZoneAndQueue(
+         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+         @HeaderParam("Client-ID") UUID clientId,
+         @PathParam("name") String name);
+
+   /**
+    * Provides access to Claim features.
+    *
+    * @param zone     The zone where this queue lives.
+    * @param clientId A UUID for each client instance. The UUID must be submitted in its canonical form (for example,
+    *                 3381af92-2b9e-11e3-b191-71861300734c). The client generates the Client-ID once. Client-ID
+    *                 persists between restarts of the client so the client should reuse that same Client-ID. All
+    *                 message-related operations require the use of Client-ID in the headers to ensure that messages
+    *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
+    * @param name     Name of the queue.
     */
    @Delegate
    @Path("/queues/{name}")

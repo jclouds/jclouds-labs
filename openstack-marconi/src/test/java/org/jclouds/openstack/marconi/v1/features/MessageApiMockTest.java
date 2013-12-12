@@ -42,6 +42,7 @@ import static org.testng.Assert.assertTrue;
  */
 @Test
 public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
+   private static final UUID CLIENT_ID = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
    public void createMessage() throws Exception {
       MockWebServer server = mockOpenStackServer();
@@ -50,14 +51,13 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
          String json1 = "{\"event\":{\"name\":\"Edmonton Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage createMessage1 = CreateMessage.builder().ttl(120).body(json1).build();
          List<CreateMessage> createMessages = ImmutableList.of(createMessage1);
 
-         MessagesCreated messagesCreated = messageApi.create(clientId, createMessages);
+         MessagesCreated messagesCreated = messageApi.create(createMessages);
 
          assertNotNull(messagesCreated);
          assertEquals(messagesCreated.getMessageIds().size(), 1);
@@ -79,9 +79,8 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
          String json1 = "{\"event\":{\"name\":\"Austin Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage createMessage1 = CreateMessage.builder().ttl(120).body(json1).build();
          String json2 = "{\"event\":{\"name\":\"SF Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
@@ -90,7 +89,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          CreateMessage createMessage3 = CreateMessage.builder().ttl(120).body(json3).build();
          List<CreateMessage> createMessages = ImmutableList.of(createMessage1, createMessage2, createMessage3);
 
-         MessagesCreated messagesCreated = messageApi.create(clientId, createMessages);
+         MessagesCreated messagesCreated = messageApi.create(createMessages);
 
          assertNotNull(messagesCreated);
          assertEquals(messagesCreated.getMessageIds().size(), 3);
@@ -114,10 +113,9 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         MessageStream messageStream = messageApi.stream(clientId);
+         MessageStream messageStream = messageApi.stream();
 
          assertTrue(Iterables.isEmpty(messageStream));
          assertFalse(messageStream.nextMarker().isPresent());
@@ -139,15 +137,14 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         MessageStream messageStream = messageApi.stream(clientId);
+         MessageStream messageStream = messageApi.stream();
 
          while(messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 6);
 
-            messageStream = messageApi.stream(clientId, messageStream.nextStreamOptions());
+            messageStream = messageApi.stream(messageStream.nextStreamOptions());
          }
 
          assertFalse(messageStream.nextMarker().isPresent());
@@ -172,15 +169,14 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         MessageStream messageStream = messageApi.stream(clientId, limit(2));
+         MessageStream messageStream = messageApi.stream(limit(2));
 
          while(messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 2);
 
-            messageStream = messageApi.stream(clientId, messageStream.nextStreamOptions());
+            messageStream = messageApi.stream(messageStream.nextStreamOptions());
          }
 
          assertFalse(messageStream.nextMarker().isPresent());
@@ -204,11 +200,10 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
          List<String> ids = ImmutableList.of("52928896b04a584f24883227", "52928896b04a584f24883228", "52928896b04a584f24883229");
 
-         List<Message> messages = messageApi.list(clientId, ids);
+         List<Message> messages = messageApi.list(ids);
 
          assertEquals(messages.size(), 3);
 
@@ -235,10 +230,9 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         Message message = messageApi.get(clientId, "5292b30cef913e6d026f4dec");
+         Message message = messageApi.get("5292b30cef913e6d026f4dec");
 
          assertEquals(message.getId(), "5292b30cef913e6d026f4dec");
          assertEquals(message.getBody(), "{\"event\":{\"name\":\"Edmonton Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}");
@@ -261,11 +255,10 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
          List<String> ids = ImmutableList.of("52936b8a3ac24e6ef4c067dd", "5292b30cef913e6d026f4dec");
 
-         boolean success = messageApi.delete(clientId, ids);
+         boolean success = messageApi.delete(ids);
 
          assertTrue(success);
 
@@ -285,10 +278,9 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", "jclouds-test");
-         UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
+         MessageApi messageApi = api.getMessageApiForZoneAndQueue("DFW", CLIENT_ID, "jclouds-test");
 
-         boolean success = messageApi.deleteByClaim(clientId, "52936b8a3ac24e6ef4c067dd", "5292b30cef913e6d026f4dec");
+         boolean success = messageApi.deleteByClaim("52936b8a3ac24e6ef4c067dd", "5292b30cef913e6d026f4dec");
 
          assertTrue(success);
 

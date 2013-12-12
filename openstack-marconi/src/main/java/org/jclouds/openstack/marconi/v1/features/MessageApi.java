@@ -38,14 +38,12 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.UUID;
 
 import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import static org.jclouds.Fallbacks.FalseOnNotFoundOr404;
@@ -63,11 +61,6 @@ public interface MessageApi {
    /**
     * Create message(s) on a queue.
     *
-    * @param clientId A UUID for each client instance. The UUID must be submitted in its canonical form (for example,
-    *                 3381af92-2b9e-11e3-b191-71861300734c). The client generates the Client-ID once. Client-ID
-    *                 persists between restarts of the client so the client should reuse that same Client-ID. All
-    *                 message-related operations require the use of Client-ID in the headers to ensure that messages
-    *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     * @param messages The messages created on the queue. The number of messages allowed in one request are configurable
     *                 by your cloud provider. Consult your cloud provider documentation to learn the maximum.
     */
@@ -76,14 +69,12 @@ public interface MessageApi {
    @Path("/messages")
    @ResponseParser(ParseMessagesCreated.class)
    @Fallback(NullOnNotFoundOr404.class)
-   MessagesCreated create(@HeaderParam("Client-ID") UUID clientId,
-                          @BinderParam(BindToJsonPayload.class) List<CreateMessage> messages);
+   MessagesCreated create(@BinderParam(BindToJsonPayload.class) List<CreateMessage> messages);
 
    /**
     * Streams the messages off of a queue. In a very active queue it's possible that you could continuously stream
     * messages indefinitely.
     *
-    * @param clientId A UUID for each client instance.
     * @param options  Options for streaming messages to your client.
     */
    @Named("message:stream")
@@ -92,13 +83,11 @@ public interface MessageApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
    @Path("/messages")
-   MessageStream stream(@HeaderParam("Client-ID") UUID clientId,
-                        StreamMessagesOptions... options);
+   MessageStream stream(StreamMessagesOptions... options);
 
    /**
     * Lists specific messages. Unlike the stream method, a client's own messages are always returned in this operation.
     *
-    * @param clientId A UUID for each client instance.
     * @param ids      Specifies the IDs of the messages to list.
     */
    @Named("message:list")
@@ -107,13 +96,11 @@ public interface MessageApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Path("/messages")
    @Fallback(EmptyListOnNotFoundOr404.class)
-   List<Message> list(@HeaderParam("Client-ID") UUID clientId,
-                      @BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
+   List<Message> list(@BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
 
    /**
     * Gets a specific message. Unlike the stream method, a client's own messages are always returned in this operation.
     *
-    * @param clientId A UUID for each client instance.
     * @param id       Specific ID of the message to get.
     */
    @Named("message:get")
@@ -122,14 +109,12 @@ public interface MessageApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Path("/messages/{message_id}")
    @Fallback(NullOnNotFoundOr404.class)
-   Message get(@HeaderParam("Client-ID") UUID clientId,
-               @PathParam("message_id") String id);
+   Message get(@PathParam("message_id") String id);
 
    /**
     * Deletes specific messages. If any of the message IDs are malformed or non-existent, they are ignored. The
     * remaining valid messages IDs are deleted.
     *
-    * @param clientId A UUID for each client instance.
     * @param ids      Specifies the IDs of the messages to delete.
     */
    @Named("message:delete")
@@ -137,8 +122,7 @@ public interface MessageApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Path("/messages")
    @Fallback(FalseOnNotFoundOr404.class)
-   boolean delete(@HeaderParam("Client-ID") UUID clientId,
-                  @BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
+   boolean delete(@BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
 
    /**
     * The claimId parameter specifies that the message is deleted only if it has the specified claim ID and that claim
@@ -146,7 +130,6 @@ public interface MessageApi {
     * worker's claim expires before it can delete a message that it has processed, the worker must roll back any
     * actions it took based on that message because another worker can now claim and process the same message.
     *
-    * @param clientId A UUID for each client instance.
     * @param id       Specific ID of the message to delete.
     * @param claimId  Specific claim ID of the message to delete.
     */
@@ -155,7 +138,6 @@ public interface MessageApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Path("/messages/{message_id}")
    @Fallback(FalseOnNotFoundOr404.class)
-   boolean deleteByClaim(@HeaderParam("Client-ID") UUID clientId,
-                         @PathParam("message_id") String id,
+   boolean deleteByClaim(@PathParam("message_id") String id,
                          @QueryParam("claim_id") String claimId);
 }

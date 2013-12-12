@@ -18,9 +18,8 @@ package org.jclouds.openstack.marconi.v1.functions;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.jclouds.collect.IterableWithMarker;
-import org.jclouds.collect.internal.Arg0ToPagedIterable;
+import org.jclouds.collect.internal.ArgsToPagedIterable;
 import org.jclouds.openstack.marconi.v1.MarconiApi;
 import org.jclouds.openstack.marconi.v1.domain.Queue;
 import org.jclouds.openstack.marconi.v1.features.QueueApi;
@@ -29,6 +28,8 @@ import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 import org.jclouds.openstack.v2_0.options.PaginationOptions;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.openstack.marconi.v1.options.ListQueuesOptions.Builder.queryParameters;
@@ -37,7 +38,7 @@ import static org.jclouds.openstack.marconi.v1.options.ListQueuesOptions.Builder
  * @author Everett Toews
  */
 @Beta
-public class QueuesToPagedIterable extends Arg0ToPagedIterable.FromCaller<Queue, QueuesToPagedIterable> {
+public class QueuesToPagedIterable extends ArgsToPagedIterable.FromCaller<Queue, QueuesToPagedIterable> {
 
    private final MarconiApi api;
 
@@ -47,10 +48,11 @@ public class QueuesToPagedIterable extends Arg0ToPagedIterable.FromCaller<Queue,
    }
 
    @Override
-   protected Function<Object, IterableWithMarker<Queue>> markerToNextForArg0(Optional<Object> arg0) {
-      String zone = String.class.cast(arg0.get());
+   protected Function<Object, IterableWithMarker<Queue>> markerToNextForArgs(List<Object> args) {
+      String zone = String.class.cast(args.get(0));
+      UUID clientId = UUID.class.cast(args.get(1));
 
-      return new ListQueuesAtMarker(api.getQueueApiForZone(zone));
+      return new ListQueuesAtMarker(api.getQueueApiForZone(zone, clientId));
    }
 
    private static class ListQueuesAtMarker implements Function<Object, IterableWithMarker<Queue>> {
