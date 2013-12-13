@@ -24,7 +24,6 @@ import org.jclouds.javax.annotation.Nullable;
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -105,7 +104,7 @@ public class Claim {
       return new ConcreteBuilder().fromMessage(this);
    }
 
-   public static abstract class Builder {
+   public abstract static class Builder {
       protected abstract Builder self();
 
       protected String id;

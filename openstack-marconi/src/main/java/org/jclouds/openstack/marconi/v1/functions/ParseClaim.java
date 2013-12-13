@@ -17,7 +17,6 @@
 package org.jclouds.openstack.marconi.v1.functions;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Claim;
