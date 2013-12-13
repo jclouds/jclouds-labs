@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
-import org.jclouds.joyent.cloudapi.v6_5.compute.functions.DatasetToOperatingSystem;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Dataset;
 import org.jclouds.joyent.cloudapi.v6_5.parse.ParseDatasetTest;
 import org.testng.annotations.Test;

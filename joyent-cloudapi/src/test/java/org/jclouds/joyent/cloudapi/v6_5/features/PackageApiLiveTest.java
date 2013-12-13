@@ -21,7 +21,6 @@ import static org.testng.Assert.assertEquals;
 import java.util.Set;
 
 import org.jclouds.joyent.cloudapi.v6_5.domain.Package;
-import org.jclouds.joyent.cloudapi.v6_5.features.PackageApi;
 import org.jclouds.joyent.cloudapi.v6_5.internal.BaseJoyentCloudApiLiveTest;
 import org.testng.annotations.Test;
 

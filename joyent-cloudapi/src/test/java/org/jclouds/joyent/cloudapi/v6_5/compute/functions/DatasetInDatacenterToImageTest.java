@@ -25,7 +25,6 @@ import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
-import org.jclouds.joyent.cloudapi.v6_5.compute.functions.DatasetInDatacenterToImage;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Dataset;
 import org.jclouds.joyent.cloudapi.v6_5.domain.datacenterscoped.DatasetInDatacenter;
 import org.jclouds.joyent.cloudapi.v6_5.parse.ParseDatasetTest;

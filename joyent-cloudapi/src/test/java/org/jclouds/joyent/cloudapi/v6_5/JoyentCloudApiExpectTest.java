@@ -18,7 +18,6 @@ package org.jclouds.joyent.cloudapi.v6_5;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudApi;
 import org.jclouds.joyent.cloudapi.v6_5.internal.BaseJoyentCloudApiExpectTest;
 import org.testng.annotations.Test;
 

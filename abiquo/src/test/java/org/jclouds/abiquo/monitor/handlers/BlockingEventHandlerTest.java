@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.monitor.events.MonitorEvent;
 import org.jclouds.abiquo.monitor.events.MonitorEvent.Type;
-import org.jclouds.abiquo.monitor.handlers.BlockingEventHandler;
 import org.testng.annotations.Test;
 
 /**

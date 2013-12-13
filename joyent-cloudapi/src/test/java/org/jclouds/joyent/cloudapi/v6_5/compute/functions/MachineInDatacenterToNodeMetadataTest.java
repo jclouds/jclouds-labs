@@ -35,7 +35,6 @@ import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
 import org.jclouds.joyent.cloudapi.v6_5.compute.config.JoyentCloudComputeServiceContextModule;
-import org.jclouds.joyent.cloudapi.v6_5.compute.functions.MachineInDatacenterToNodeMetadata;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Machine;
 import org.jclouds.joyent.cloudapi.v6_5.domain.datacenterscoped.MachineInDatacenter;
 import org.jclouds.joyent.cloudapi.v6_5.parse.ParseCreatedMachineTest;

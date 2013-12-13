@@ -26,7 +26,6 @@ import org.jclouds.compute.domain.Hardware;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
-import org.jclouds.joyent.cloudapi.v6_5.compute.functions.PackageInDatacenterToHardware;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Package;
 import org.jclouds.joyent.cloudapi.v6_5.domain.datacenterscoped.PackageInDatacenter;
 import org.testng.annotations.Test;

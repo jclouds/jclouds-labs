@@ -16,7 +16,6 @@
  */
 package org.jclouds.fujitsu.fgcp.compute;
 
-import org.jclouds.fujitsu.fgcp.compute.FGCPBaseComputeServiceLiveTest;
 import org.testng.annotations.Test;
 
 /**
