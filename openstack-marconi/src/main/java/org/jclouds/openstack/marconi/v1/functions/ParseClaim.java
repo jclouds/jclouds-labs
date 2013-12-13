@@ -17,6 +17,7 @@
 package org.jclouds.openstack.marconi.v1.functions;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Claim;
@@ -28,7 +29,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_ID_FROM_HREF;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
@@ -41,7 +41,7 @@ public class ParseClaim implements Function<HttpResponse, Claim> {
    protected static final Function<ClaimWithHref, Claim> TO_CLAIM = new Function<ClaimWithHref, Claim>() {
       @Override
       public Claim apply(ClaimWithHref claimWithHref) {
-         List<Message> messages = newArrayList(transform(claimWithHref.messagesWithHref, TO_MESSAGE));
+         List<Message> messages = ImmutableList.copyOf(transform(claimWithHref.messagesWithHref, TO_MESSAGE));
          String claimId = TO_ID_FROM_HREF.apply(claimWithHref.getId());
 
          return claimWithHref.toBuilder()

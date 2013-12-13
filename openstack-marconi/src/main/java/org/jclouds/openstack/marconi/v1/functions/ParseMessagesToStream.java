@@ -28,6 +28,8 @@ import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 
 import javax.inject.Inject;
 import java.beans.ConstructorProperties;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -66,7 +68,7 @@ public class ParseMessagesToStream implements Function<HttpResponse, MessageStre
       int indexOfQuestionMark = rawMessageHref.indexOf('?');
       int lastIndexOfSlash = rawMessageHref.lastIndexOf('/') + 1;
 
-      if (indexOfQuestionMark > 0) {
+      if (indexOfQuestionMark > lastIndexOfSlash) {
          return rawMessageHref.substring(lastIndexOfSlash, indexOfQuestionMark);
       }
       else {
@@ -75,14 +77,18 @@ public class ParseMessagesToStream implements Function<HttpResponse, MessageStre
    }
 
    private static String getClaimIdFromHref(String rawMessageHref) {
-      int indexOfQuestionMark = rawMessageHref.indexOf('?') + 1;
+      try {
+         String query = new URI(rawMessageHref).getQuery();
 
-      if (indexOfQuestionMark > 0) {
-         Multimap<String, String> queryParams = queryParser().apply(rawMessageHref.substring(indexOfQuestionMark));
-
-         return getOnlyElement(queryParams.get("claim_id"), null);
+         if (query != null) {
+            Multimap<String, String> queryParams = queryParser().apply(query);
+            return getOnlyElement(queryParams.get("claim_id"), null);
+         }
+         else {
+            return null;
+         }
       }
-      else {
+      catch (URISyntaxException e) {
          return null;
       }
    }

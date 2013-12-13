@@ -75,11 +75,11 @@ public interface ClaimApi {
     * claim itself, plus the specified grace period. If a claimed message would normally live longer than the grace
     * period, its expiration is not adjusted.
     *
-    * @param ttl   The ttl attribute specifies how long the server waits before releasing the claim. The ttl value
+    * @param ttl   The TTL attribute specifies how long the server waits before releasing the claim. The ttl value
     *              must be between 60 and 43200 seconds (12 hours). You must include a value for this attribute in
     *              your request.
-    * @param grace The grace attribute specifies the message grace period in seconds. The value of grace value must
-    *              be between 60 and 43200 seconds (12 hours). You must include a value for thia attribute in your
+    * @param grace The grace value specifies the message grace period in seconds. The value of grace value must
+    *              be between 60 and 43200 seconds (12 hours). You must include a value for this attribute in your
     *              request.
     * @param limit Specifies the number of messages to return, up to 20 messages.
     */
@@ -127,7 +127,7 @@ public interface ClaimApi {
    //                  @PayloadParam("ttl") int ttl);
 
    /**
-    * This operation immediately releases a claim, making any remaining, undeleted) messages that are associated with
+    * This operation immediately releases a claim, making any remaining, undeleted messages that are associated with
     * the claim available to other workers. This operation is useful when a worker is performing a graceful shutdown,
     * fails to process one or more messages, or is taking longer than expected to process messages, and wants to make
     * the remainder of the messages available to other workers.
