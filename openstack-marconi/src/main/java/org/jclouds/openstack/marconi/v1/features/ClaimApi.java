@@ -22,6 +22,7 @@ import org.jclouds.openstack.marconi.v1.domain.Message;
 import org.jclouds.openstack.marconi.v1.functions.ParseClaim;
 import org.jclouds.openstack.marconi.v1.functions.ParseMessagesToList;
 import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.PATCH;
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.RequestFilters;
@@ -35,6 +36,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -116,15 +118,14 @@ public interface ClaimApi {
     *                must be between 60 and 43200 seconds (12 hours). You must include a value for this attribute in
     *                your request.
     */
-   // TODO: revisit this when we figure out what's wrong with PATCH
-   //   @Named("claim:update")
-   //   @PATCH
-   //   @Path("/claims/{claim_id}")
-   //   @Fallback(FalseOnNotFoundOr404.class)
-   //   @Payload("%7B\"ttl\":{ttl}%7D")
-   //   @Produces(MediaType.APPLICATION_JSON)
-   //   boolean update(@PathParam("claim_id") String claimId,
-   //                  @PayloadParam("ttl") int ttl);
+   @Named("claim:update")
+   @PATCH
+   @Path("/claims/{claim_id}")
+   @Fallback(FalseOnNotFoundOr404.class)
+   @Payload("%7B\"ttl\":{ttl}%7D")
+   @Produces(MediaType.APPLICATION_JSON)
+   boolean update(@PathParam("claim_id") String claimId,
+                  @PayloadParam("ttl") int ttl);
 
    /**
     * This operation immediately releases a claim, making any remaining, undeleted messages that are associated with

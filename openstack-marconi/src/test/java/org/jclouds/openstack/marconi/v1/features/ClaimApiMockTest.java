@@ -100,6 +100,34 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
       }
    }
 
+   /**
+    * Disabled due to PATCH with an output (body content) is not supported over HTTP.
+    *
+    * See https://issues.apache.org/jira/browse/JCLOUDS-405
+    */
+   @Test(enabled = false)
+   public void updateClaim() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
+      server.enqueue(new MockResponse().setResponseCode(204));
+
+      try {
+         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
+         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+
+         boolean success = claimApi.update("52a8d23eb04a584f1bbd4f47", 400);
+
+         assertTrue(success);
+
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         assertEquals(server.takeRequest().getRequestLine(), "PATCH /v1/123123/queues/jclouds-test/claims/52a8d23eb04a584f1bbd4f47 HTTP/1.1");
+      }
+      finally {
+         server.shutdown();
+      }
+   }
+
    public void releaseClaim() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(new MockResponse().setBody(accessRackspace));

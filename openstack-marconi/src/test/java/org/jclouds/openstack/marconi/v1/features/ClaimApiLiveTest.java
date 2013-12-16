@@ -109,6 +109,17 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
    }
 
    @Test(dependsOnMethods = { "getClaim" })
+   public void updateClaim() throws Exception {
+      for (String zoneId : zones) {
+         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+
+         boolean success = claimApi.update(claimIds.get(zoneId).get(0), 400);
+
+         assertTrue(success);
+      }
+   }
+
+   @Test(dependsOnMethods = { "updateClaim" })
    public void releaseClaim() throws Exception {
       for (String zoneId : zones) {
          ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
@@ -119,7 +130,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
       }
    }
 
-   @Test(dependsOnMethods = { "getClaim" })
+   @Test(dependsOnMethods = { "releaseClaim" })
    public void delete() throws Exception {
       for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZone(zoneId, CLIENT_ID);
