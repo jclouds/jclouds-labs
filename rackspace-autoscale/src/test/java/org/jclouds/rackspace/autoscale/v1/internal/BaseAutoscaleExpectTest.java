@@ -54,7 +54,7 @@ public class BaseAutoscaleExpectTest<T> extends BaseRestApiExpectTest<T> {
       authToken = "bb03a23aa8271291a7aaa9aaa2aaaaaa";
       responseWithKeystoneAccess = HttpResponse.builder()
             .statusCode(200)
-            .payload(payloadFromResourceWithContentType("/access_rax.json", "application/json"))
+            .payload(payloadFromResourceWithContentType("/access.json", "application/json"))
             .build();
       // now, createContext arg will need tenant prefix
       identityWithTenantId = KeystoneFixture.INSTANCE.getTenantId() + ":" + identity;
