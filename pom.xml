@@ -60,6 +60,7 @@
     <module>rackspace-autoscale</module>
     <module>rackspace-autoscale-us</module>
     <module>rackspace-cloudqueues-us</module>
+    <module>rackspace-cloudqueues-uk</module>
   </modules>
 
   <build>
