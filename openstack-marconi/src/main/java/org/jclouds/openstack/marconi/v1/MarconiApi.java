@@ -57,24 +57,24 @@ public interface MarconiApi extends Closeable {
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     */
    @Delegate
-   QueueApi getQueueApiForZone(
+   QueueApi getQueueApiForZoneAndClient(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
          @HeaderParam("Client-ID") UUID clientId);
 
    /**
     * Provides access to Message features.
     *
-    * @param zone The zone where this queue lives.
+    * @param zone     The zone where this queue lives.
     * @param clientId A UUID for each client instance. The UUID must be submitted in its canonical form (for example,
     *                 3381af92-2b9e-11e3-b191-71861300734c). The client generates the Client-ID once. Client-ID
     *                 persists between restarts of the client so the client should reuse that same Client-ID. All
     *                 message-related operations require the use of Client-ID in the headers to ensure that messages
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
-    * @param name Name of the queue.
+    * @param name     Name of the queue.
     */
    @Delegate
    @Path("/queues/{name}")
-   MessageApi getMessageApiForZoneAndQueue(
+   MessageApi getMessageApiForZoneAndClientAndQueue(
          @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
          @HeaderParam("Client-ID") UUID clientId,
          @PathParam("name") String name);

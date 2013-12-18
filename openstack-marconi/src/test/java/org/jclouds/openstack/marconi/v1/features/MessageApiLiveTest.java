@@ -47,7 +47,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
    public void createQueues() throws Exception {
       for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZone(zoneId, CLIENT_ID);
+         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
          boolean success = queueApi.create("jclouds-test");
 
          assertTrue(success);
@@ -57,7 +57,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "createQueues" })
    public void streamZeroPagesOfMessages() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          MessageStream messageStream = messageApi.stream(echo(true));
 
@@ -69,7 +69,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "streamZeroPagesOfMessages" })
    public void createMessage() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          String json1 = "{\"event\":{\"name\":\"Edmonton Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage message1 = CreateMessage.builder().ttl(120).body(json1).build();
@@ -85,7 +85,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "createMessage" })
    public void streamOnePageOfMessages() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          MessageStream messageStream = messageApi.stream(echo(true));
 
@@ -102,7 +102,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "streamOnePageOfMessages" })
    public void createMessages() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          String json1 = "{\"event\":{\"name\":\"Austin Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage message1 = CreateMessage.builder().ttl(120).body(json1).build();
@@ -122,7 +122,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "createMessages" })
    public void streamManyPagesOfMessages() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
          messageIds.put(zoneId, new ArrayList<String>());
 
          MessageStream messageStream = messageApi.stream(echo(true).limit(2));
@@ -144,7 +144,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "streamManyPagesOfMessages" })
    public void listMessagesByIds() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          List<Message> messages = messageApi.list(messageIds.get(zoneId));
 
@@ -160,7 +160,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "listMessagesByIds" })
    public void getMessage() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          Message message = messageApi.get(getLast(messageIds.get(zoneId)));
 
@@ -173,7 +173,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    public void deleteMessagesByClaimId() throws Exception {
       for (String zoneId : zones) {
          UUID clientId = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
          ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, clientId, "jclouds-test");
          Message message = getOnlyElement(claimApi.claim(300, 100, 1));
 
@@ -186,7 +186,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "deleteMessagesByClaimId" })
    public void deleteMessages() throws Exception {
       for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
 
          boolean success = messageApi.delete(messageIds.get(zoneId));
 
@@ -197,7 +197,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    @Test(dependsOnMethods = { "deleteMessages" })
    public void delete() throws Exception {
       for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZone(zoneId, CLIENT_ID);
+         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
          boolean success = queueApi.delete("jclouds-test");
 
          assertTrue(success);

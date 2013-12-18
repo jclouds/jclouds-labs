@@ -52,7 +52,7 @@ public class QueuesToPagedIterable extends ArgsToPagedIterable.FromCaller<Queue,
       String zone = String.class.cast(args.get(0));
       UUID clientId = UUID.class.cast(args.get(1));
 
-      return new ListQueuesAtMarker(api.getQueueApiForZone(zone, clientId));
+      return new ListQueuesAtMarker(api.getQueueApiForZoneAndClient(zone, clientId));
    }
 
    private static class ListQueuesAtMarker implements Function<Object, IterableWithMarker<Queue>> {
