@@ -18,7 +18,7 @@ package org.jclouds.virtualbox.functions.admin;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.io.ByteStreams.copy;
-import static com.google.common.io.Closeables.closeQuietly;
+import static org.jclouds.util.Closeables2.closeQuietly;
 import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_WORKINGDIR;
 
 import java.io.File;

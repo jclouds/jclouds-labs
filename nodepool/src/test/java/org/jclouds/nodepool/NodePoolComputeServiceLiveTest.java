@@ -38,12 +38,12 @@ import org.jclouds.logging.config.LoggingModule;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.sshj.config.SshjSshClientModule;
+import org.jclouds.utils.Closeables2;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.google.common.io.Closeables;
 import com.google.inject.Module;
 
 public class NodePoolComputeServiceLiveTest extends BaseComputeServiceLiveTest {
@@ -72,7 +72,7 @@ public class NodePoolComputeServiceLiveTest extends BaseComputeServiceLiveTest {
    @AfterClass(groups = { "integration", "live" })
    @Override
    protected void tearDownContext() {
-      Closeables.closeQuietly(context);
+      Closeables2.closeQuietly(context);
    }
 
    @Override

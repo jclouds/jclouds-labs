@@ -28,10 +28,10 @@ import org.jclouds.http.HttpResponseException;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
+import com.jclouds.util.Closeables2;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
-import com.google.common.io.Closeables;
 
 /**
  * 
@@ -72,7 +72,7 @@ public class VPDCErrorHandler implements HttpErrorHandler {
                break;
          }
       } finally {
-         Closeables.closeQuietly(response.getPayload());
+         Closeables2.closeQuietly(response.getPayload());
          command.setException(exception);
       }
    }
