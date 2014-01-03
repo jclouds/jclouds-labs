@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyScheduleType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
@@ -121,6 +122,100 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
           * Check response
           */
          assertTrue(scalingPolicyResponse.isEmpty(), "Expected no policy response, but was: " + scalingPolicyResponse);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testCreateCronScheduleScalingPolicy() throws IOException, InterruptedException {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201).setBody(stringFromResource("/autoscale_policy_schedule_cron_create_response.json"))));
+
+      try {
+         AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
+         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+
+         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+
+         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+               .cooldown(2)
+               .type(ScalingPolicyType.SCHEDULE)
+               .name("scale down by 5.5 percent at 11pm")
+               .targetType(ScalingPolicyTargetType.PERCENT_CHANGE)
+               .target("-5.5")
+               .cronSchedule("23 * * * *")
+               .build();
+         scalingPolicies.add(scalingPolicy);
+
+         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.create(scalingPolicies);
+
+         /*
+          * Check request
+          */
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "POST", "/v1.0/888888/groups/groupId1/policies", "/autoscale_policy_schedule_cron_create_request.json");
+
+         /*
+          * Check response
+          */
+         assertNotNull(scalingPolicyResponse);
+         assertEquals(scalingPolicyResponse.size(), 1);
+         assertEquals(scalingPolicyResponse.get(0).getCooldown(), 2);
+         assertEquals(scalingPolicyResponse.get(0).getId(), "30707675-8e7c-4ea5-9358-c21648afcf29");
+         assertEquals(scalingPolicyResponse.get(0).getName(), "scale down by 5.5 percent at 11pm");
+         assertEquals(scalingPolicyResponse.get(0).getTarget(), "-5.5");
+         assertEquals(scalingPolicyResponse.get(0).getType(), ScalingPolicyType.SCHEDULE);
+         assertEquals(scalingPolicyResponse.get(0).getSchedulingType(), ScalingPolicyScheduleType.CRON);
+         assertEquals(scalingPolicyResponse.get(0).getSchedulingString(), "23 * * * *");
+         assertEquals(scalingPolicyResponse.get(0).getLinks().size(), 1);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testCreateAtScheduleScalingPolicy() throws IOException, InterruptedException {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201).setBody(stringFromResource("/autoscale_policy_schedule_at_create_response.json"))));
+
+      try {
+         AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
+         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+
+         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+
+         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+               .cooldown(2)
+               .type(ScalingPolicyType.SCHEDULE)
+               .name("scale down by 5.5 percent on the 5th")
+               .targetType(ScalingPolicyTargetType.PERCENT_CHANGE)
+               .target("-5.5")
+               .atSchedule("2013-06-05T03:12Z")
+               .build();
+         scalingPolicies.add(scalingPolicy);
+
+         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.create(scalingPolicies);
+
+         /*
+          * Check request
+          */
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "POST", "/v1.0/888888/groups/groupId1/policies", "/autoscale_policy_schedule_at_create_request.json");
+
+         /*
+          * Check response
+          */
+         assertNotNull(scalingPolicyResponse);
+         assertEquals(scalingPolicyResponse.size(), 1);
+         assertEquals(scalingPolicyResponse.get(0).getCooldown(), 2);
+         assertEquals(scalingPolicyResponse.get(0).getId(), "9f7c5801-6b25-4f5a-af07-4bb752e23d53");
+         assertEquals(scalingPolicyResponse.get(0).getName(), "scale down by 5.5 percent on the 5th");
+         assertEquals(scalingPolicyResponse.get(0).getTarget(), "-5.5");
+         assertEquals(scalingPolicyResponse.get(0).getType(), ScalingPolicyType.SCHEDULE);
+         assertEquals(scalingPolicyResponse.get(0).getSchedulingType(), ScalingPolicyScheduleType.AT);
+         assertEquals(scalingPolicyResponse.get(0).getSchedulingString(), "2013-06-05T03:12Z");
+         assertEquals(scalingPolicyResponse.get(0).getLinks().size(), 1);
       } finally {
          server.shutdown();
       }

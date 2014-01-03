@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
 import java.util.List;
+import java.util.Map;
 
 import org.jclouds.openstack.v2_0.domain.Link;
 
@@ -38,10 +39,10 @@ public class ScalingPolicyResponse extends ScalingPolicy{
    private final String id;
 
    @ConstructorProperties({
-      "name", "type", "cooldown", "target", "targetType", "links", "id"
+      "name", "type", "cooldown", "target", "targetType", "args", "links", "id"
    })
-   public ScalingPolicyResponse(String name, ScalingPolicyType type, int cooldown, String target, ScalingPolicyTargetType targetType, List<Link> links, String id) {
-      super(name, type, cooldown, target, targetType);
+   public ScalingPolicyResponse(String name, ScalingPolicyType type, int cooldown, String target, ScalingPolicyTargetType targetType, Map<String, String> args, List<Link> links, String id) {
+      super(name, type, cooldown, target, targetType, args);
       this.id = checkNotNull(id, "id required");
       this.links = ImmutableList.copyOf(checkNotNull(links, "links required"));
    }

@@ -1,0 +1,20 @@
+{
+    "policies":[
+        {
+            "args":{
+                "cron":"23 * * * *"
+            },
+            "changePercent":-5.5,
+            "cooldown":2,
+            "id":"30707675-8e7c-4ea5-9358-c21648afcf29",
+            "links":[
+                {
+                    "href":"https://dfw.autoscale.api.rackspacecloud.com/v1.0/676873/groups/605e13f6-1452-4588-b5da-ac6bb468c5bf/policies/30707675-8e7c-4ea5-9358-c21648afcf29/",
+                    "rel":"self"
+                }
+            ],
+            "name":"scale down by 5.5 percent at 11pm",
+            "type":"schedule"
+        }
+    ]
+}

@@ -173,16 +173,16 @@ public class WebhookApiLiveTest extends BaseAutoscaleApiLiveTest {
       for (String zone : api.getConfiguredZones()) {
          Group g = created.get(zone).get(0);
          WebhookApi webhookApi = api.getWebhookApiForZoneAndGroupAndPolicy(zone, g.getId(), g.getScalingPolicies().iterator().next().getId());
-         FluentIterable<WebhookResponse> webhookList = webhookApi.create(
+         FluentIterable<WebhookResponse> webhookResponse = webhookApi.create(
                ImmutableList.of(
                      Webhook.builder().name("test5").metadata(null).build(),
                      Webhook.builder().name("test6").metadata(ImmutableMap.<String, Object>of("notes2", "different test")).build()
                      ));
 
-         assertEquals(webhookList.get(0).getName(), "test5");
-         assertNull(webhookList.get(0).getMetadata().get("notes"));
-         assertEquals(webhookList.get(1).getName(), "test6");
-         assertEquals(webhookList.get(1).getMetadata().get("notes2"), "different test");
+         assertEquals(webhookResponse.get(0).getName(), "test5");
+         assertNull(webhookResponse.get(0).getMetadata().get("notes"));
+         assertEquals(webhookResponse.get(1).getName(), "test6");
+         assertEquals(webhookResponse.get(1).getMetadata().get("notes2"), "different test");
       }
    }
 
@@ -204,12 +204,18 @@ public class WebhookApiLiveTest extends BaseAutoscaleApiLiveTest {
    public void testGetWebhook() {
       for (String zone : api.getConfiguredZones()) {
          Group g = created.get(zone).get(0);
-         WebhookApi webhookApi = api.getWebhookApiForZoneAndGroupAndPolicy(zone, g.getId(), g.getScalingPolicies().iterator().next().getId());
-         WebhookResponse webhookList = webhookApi.list().first().get();
-         WebhookResponse webhookGet = webhookApi.get(webhookList.getId());
-         assertNotNull(webhookList);
-         assertNotNull(webhookGet);
-         assertEquals(webhookList, webhookGet);
+         WebhookApi webhookApi;
+         boolean foundWebhook = false;
+         for (ScalingPolicyResponse sp :  g.getScalingPolicies()) {
+            webhookApi = api.getWebhookApiForZoneAndGroupAndPolicy(zone, g.getId(), sp.getId());
+            WebhookResponse webhookResponse = webhookApi.list().first().get();
+            if (webhookResponse != null) {
+               WebhookResponse webhookGet = webhookApi.get(webhookResponse.getId());
+               assertEquals(webhookResponse, webhookGet);
+               foundWebhook = true;
+            }
+         }
+         assertTrue(foundWebhook, "No webhooks were found, and some were expected");
       }
    }
 
@@ -255,7 +261,7 @@ public class WebhookApiLiveTest extends BaseAutoscaleApiLiveTest {
          WebhookApi webhookApi = api.getWebhookApiForZoneAndGroupAndPolicy(zone, g.getId(), g.getScalingPolicies().iterator().next().getId());
          WebhookResponse webhook = webhookApi.create("test_execute_fail", ImmutableMap.<String, Object>of("notes", "test metadata")).first().get();
          
-         URI uri = new URI(webhook.getAnonymousExecutionURI().toString() + "123");
+         URI uri = new URI(webhook.getAnonymousExecutionURI().get().toString() + "123");
          assertFalse( AutoscaleUtils.execute(uri) );
       }
    }

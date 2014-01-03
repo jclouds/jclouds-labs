@@ -32,6 +32,7 @@ import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration.LaunchConfi
 import org.jclouds.rackspace.autoscale.v1.domain.LoadBalancer;
 import org.jclouds.rackspace.autoscale.v1.domain.Personality;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyScheduleType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
@@ -166,6 +167,60 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
          assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
          assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
+      }
+   }
+
+   @Test
+   public void testCreateScheduleCronPolicy() {
+      for (String zone : api.getConfiguredZones()) {
+
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+
+         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+
+         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+               .cooldown(3)
+               .type(ScalingPolicyType.SCHEDULE)
+               .name("scale up by one server")
+               .targetType(ScalingPolicyTargetType.INCREMENTAL)
+               .target("1")
+               .cronSchedule("23 * * * *")
+               .build();
+         scalingPolicies.add(scalingPolicy);
+
+         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         assertNotNull(scalingPolicyResponse.iterator().next().getId());
+         assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
+         assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
+         assertEquals(scalingPolicyResponse.iterator().next().getSchedulingType(), ScalingPolicyScheduleType.CRON);
+         assertEquals(scalingPolicyResponse.iterator().next().getSchedulingString(), "23 * * * *");
+      }
+   }
+
+   @Test
+   public void testCreateScheduleAtPolicy() {
+      for (String zone : api.getConfiguredZones()) {
+
+         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+
+         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+
+         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+               .cooldown(3)
+               .type(ScalingPolicyType.SCHEDULE)
+               .name("scale up by one server")
+               .targetType(ScalingPolicyTargetType.INCREMENTAL)
+               .target("1")
+               .atSchedule("2020-12-05T03:12:00Z")
+               .build();
+         scalingPolicies.add(scalingPolicy);
+
+         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         assertNotNull(scalingPolicyResponse.iterator().next().getId());
+         assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
+         assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
+         assertEquals(scalingPolicyResponse.iterator().next().getSchedulingType(), ScalingPolicyScheduleType.AT);
+         assertEquals(scalingPolicyResponse.iterator().next().getSchedulingString(), "2020-12-05T03:12:00Z");
       }
    }
 

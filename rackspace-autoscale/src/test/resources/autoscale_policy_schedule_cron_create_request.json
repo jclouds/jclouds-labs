@@ -1,0 +1,11 @@
+[
+    {
+        "args":{
+            "cron":"23 * * * *"
+        },
+        "changePercent":-5.5,
+        "cooldown":2,
+        "name":"scale down by 5.5 percent at 11pm",
+        "type":"schedule"
+    }
+]

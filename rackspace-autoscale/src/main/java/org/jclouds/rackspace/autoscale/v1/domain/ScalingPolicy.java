@@ -21,14 +21,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
 import java.util.EnumSet;
+import java.util.Map;
 
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 /**
- * Autoscale ScalingPolicy. This class is used for requests.
+ * Auto Scale ScalingPolicy. This class is used for requests.
  * 
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, java.util.List)
  * @see Group#getScalingPolicies()
@@ -41,18 +44,19 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
    private final int cooldown;
    private final String target;
    private final ScalingPolicyTargetType targetType;
+   private final Map<String, String> args;
 
    @ConstructorProperties({
-      "name", "type", "cooldown", "target", "targetType"
+      "name", "type", "cooldown", "target", "targetType", "args"
    })
-   protected ScalingPolicy(String name, ScalingPolicyType type, int cooldown, String target, ScalingPolicyTargetType targetType) {
-
+   protected ScalingPolicy(String name, ScalingPolicyType type, int cooldown, String target, ScalingPolicyTargetType targetType, Map<String, String> args) {
       this.name = checkNotNull(name, "name required");
       this.type = type;
       checkArgument(cooldown >= 0, "cooldown should be non-negative");
       this.cooldown = cooldown;
       this.target = target;
       this.targetType = targetType;
+      this.args = args;
    }
 
    /**
@@ -98,9 +102,46 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
       return this.targetType;
    }
 
+   /**
+    * @return The scheduling string, if any.
+    * @see ScalingPolicy.Builder#atSchedule(String)
+    * @see ScalingPolicy.Builder#cronSchedule(String)
+    */
+   protected Map<String, String> getSchedulingArgs() {
+      return this.args;
+   }
+
+   /**
+    * @return The scheduling string, if any.
+    * @see ScalingPolicy.Builder#atSchedule(String)
+    * @see ScalingPolicy.Builder#cronSchedule(String)
+    */
+   public String getSchedulingString() {
+      if (this.args != null) {
+         for (Map.Entry<String, String> entry : this.args.entrySet()) {
+            return entry.getValue();
+         }
+      }
+      return null;
+   }
+
+   /**
+    * @return The type of the schedule this policy uses.
+    */
+   public ScalingPolicyScheduleType getSchedulingType() {
+      if(this.args != null) {
+         for (ScalingPolicyScheduleType type : ScalingPolicyScheduleType.values()) {
+            if (this.args.get(type.toString()) != null) {
+               return type;
+            }
+         }
+      }
+      return null;
+   }
+
    @Override
    public int hashCode() {
-      return Objects.hashCode(name, type, cooldown, target, targetType);
+      return Objects.hashCode(name, type, cooldown, target, targetType, args);
    }
 
    @Override
@@ -112,7 +153,8 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
             Objects.equal(this.type, that.type) &&
             Objects.equal(this.cooldown, that.cooldown) &&
             Objects.equal(this.target, that.target) &&
-            Objects.equal(this.targetType, that.targetType);
+            Objects.equal(this.targetType, that.targetType) &&
+            Objects.equal(this.args, that.args);
    }
 
    protected ToStringHelper string() {
@@ -121,7 +163,8 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
             .add("type", type)
             .add("cooldown", cooldown)
             .add("target", target)
-            .add("targetType", "targetType");
+            .add("targetType", targetType)
+            .add("args", args);
    }
 
    @Override
@@ -143,6 +186,7 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
       protected int cooldown;
       protected String target;
       protected ScalingPolicyTargetType targetType;
+      protected Map<String, String> args;
 
       /** 
        * @param name The name of this ScalingPolicy.
@@ -155,7 +199,7 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
       }
 
       /** 
-       * @param name The type for this ScalingPolicy.
+       * @param type The type for this ScalingPolicy.
        * @return The builder object.
        * @see ScalingPolicyType
        * @see ScalingPolicy#getType()
@@ -186,7 +230,7 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
       }
 
       /** 
-       * @param target type The target type of this ScalingPolicy.
+       * @param targetType The target type of this ScalingPolicy.
        * @return The builder object.
        * @see ScalingPolicyTargetType
        * @see ScalingPolicy#getTargetType()
@@ -196,20 +240,62 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
          return this;
       }
 
+      /** 
+       * @param cron This parameter specifies the recurring time when the policy will be executed as a cron entry. 
+       * For example, if this is parameter is set to "1 0 * * *",
+       * the policy will be executed at one minute past midnight (00:01)
+       * every day of the month, and every day of the week.
+       * You can either provide "cron" or "at" for a given policy, but not both.
+       * @return The builder object.
+       * @see ScalingPolicyTargetType
+       * @see ScalingPolicy#getTargetType()
+       * @see <a href="http://en.wikipedia.org/wiki/Cron">Cron</a>
+       */
+      public Builder cronSchedule(String cron) {
+         this.type = ScalingPolicyType.SCHEDULE;
+         this.args = ImmutableMap.of("cron", cron);
+         return this;
+      }
+
+      /** 
+       * @param at This parameter specifies the time at which this policy will be executed.
+       * This property is mutually exclusive with the "cron" parameter.
+       * You can either provide "cron" or "at" for a given policy, but not both.
+       * Example date string: "2013-12-05T03:12:00Z"
+       * @return The builder object.
+       * @see ScalingPolicyTargetType
+       * @see ScalingPolicy#getTargetType()
+       */
+      public Builder atSchedule(String at) {
+         this.type = ScalingPolicyType.SCHEDULE;
+         this.args = ImmutableMap.of("at", at);
+         return this;
+      }
+
+      private Builder scheduleArgs(Map<String, String> args) {
+         this.args = args;
+         return this;
+      }
+
       /**
        * @return A new ScalingPolicy object.
        */
       public ScalingPolicy build() {
-         return new ScalingPolicy(name, type, cooldown, target, targetType);
+         return new ScalingPolicy(name, type, cooldown, target, targetType, args);
       }
 
+      /**
+       * @param in The target scaling policy
+       * @return The scaling policy builder
+       */
       public Builder fromScalingPolicy(ScalingPolicy in) {
          return this
                .name(in.getName())
                .type(in.getType())
                .cooldown(in.getCooldown())
                .target(in.getTarget())
-               .targetType(in.getTargetType());
+               .targetType(in.getTargetType())
+               .scheduleArgs(in.getSchedulingArgs());
       }        
    }
 
@@ -222,7 +308,8 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
     * Enumerates different types of scaling policies
     */
    public static enum ScalingPolicyType {
-      WEBHOOK("webhook");
+      WEBHOOK("webhook"),
+      SCHEDULE("schedule");
 
       private final String name;
 
@@ -255,6 +342,41 @@ public class ScalingPolicy implements Comparable<ScalingPolicy>{
       private final String name;
 
       private ScalingPolicyTargetType(String name) {
+         this.name = name;
+      }
+
+      public String toString() {
+         return name;
+      }
+
+      public static Optional<ScalingPolicyTargetType> getByValue(String value){
+         for (final ScalingPolicyTargetType element : EnumSet.allOf(ScalingPolicyTargetType.class)) {
+            if (element.toString().equals(value)) {
+               return Optional.of(element);
+            }
+         }
+         return Optional.absent();
+      }
+   }
+
+   /**
+    * Enumerates different types of targets a policy might have
+    */
+   public static enum ScalingPolicyScheduleType {
+      /**
+       * Example: "1 0 * * *"
+       * @see ScalingPolicy.Builder#cronSchedule(String)
+       */
+      AT("at"),
+      /**
+       * Example date string: "2013-12-05T03:12:00Z"
+       * @see ScalingPolicy.Builder#atSchedule(String)
+       */
+      CRON("cron");
+
+      private final String name;
+
+      private ScalingPolicyScheduleType(String name) {
          this.name = name;
       }
 

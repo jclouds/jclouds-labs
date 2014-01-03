@@ -28,6 +28,8 @@ import com.google.common.collect.Maps;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
+import static org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
+
 /**
  * @author Zack Shoylev
  * 
@@ -75,7 +77,7 @@ public class ParseHelper {
       }
       return scalingPoliciesListBuilder.build();
    }
-   
+
    public static ImmutableMap<String, Object> buildScalingPolicyMap(ScalingPolicy scalingPolicy) {
       ImmutableMap.Builder<String, Object> scalingPolicyMapBuilder = ImmutableMap.builder();
       scalingPolicyMapBuilder.put("cooldown", scalingPolicy.getCooldown());
@@ -95,6 +97,12 @@ public class ParseHelper {
          scalingPolicyMapBuilder.put(scalingPolicy.getTargetType().toString(), targetFloat);
       } else {
          scalingPolicyMapBuilder.put(scalingPolicy.getTargetType().toString(), targetString);
+      }
+
+      if (scalingPolicy.getSchedulingType() != null
+            && scalingPolicy.getType().equals(ScalingPolicyType.SCHEDULE)) {
+         // Have to use getters to rebuild map
+         scalingPolicyMapBuilder.put("args", ImmutableMap.of(scalingPolicy.getSchedulingType().toString(),scalingPolicy.getSchedulingString()));
       }
 
       return scalingPolicyMapBuilder.build();

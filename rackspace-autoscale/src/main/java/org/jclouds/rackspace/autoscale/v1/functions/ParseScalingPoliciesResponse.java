@@ -84,6 +84,7 @@ public class ParseScalingPoliciesResponse implements Function<HttpResponse, Flue
                      ((Double)scalingPolicyMap.get("cooldown")).intValue(),
                      DoubleMath.isMathematicalInteger(d) ? Integer.toString(d.intValue()) : Double.toString(d),
                            targetType,
+                           (Map<String, String>) scalingPolicyMap.get("args"),
                            ImmutableList.copyOf(links.build()),
                            (String) scalingPolicyMap.get("id")
                      );

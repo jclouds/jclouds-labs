@@ -1,0 +1,20 @@
+{
+    "policies":[
+        {
+            "args":{
+                "at":"2013-06-05T03:12Z"
+            },
+            "changePercent":-5.5,
+            "cooldown":2,
+            "id":"9f7c5801-6b25-4f5a-af07-4bb752e23d53",
+            "links":[
+                {
+                    "href":"https://dfw.autoscale.api.rackspacecloud.com/v1.0/676873/groups/605e13f6-1452-4588-b5da-ac6bb468c5bf/policies/9f7c5801-6b25-4f5a-af07-4bb752e23d53/",
+                    "rel":"self"
+                }
+            ],
+            "name":"scale down by 5.5 percent on the 5th",
+            "type":"schedule"
+        }
+    ]
+}
