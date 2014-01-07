@@ -27,6 +27,8 @@ import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.openstack.swift.v1.CopyObjectException;
+import org.jclouds.openstack.swift.v1.reference.SwiftHeaders;
 import org.jclouds.rest.AuthorizationException;
 
 // TODO: is there error spec someplace? let's type errors, etc.
@@ -49,10 +51,21 @@ public class SwiftErrorHandler implements HttpErrorHandler {
             exception = new AuthorizationException(exception.getMessage(), exception);
             break;
          case 404:
-            if (!command.getCurrentRequest().getMethod().equals("DELETE")) {
+            Exception oldException = exception;         
+            String sourcePath = command.getCurrentRequest().getFirstHeaderOrNull(SwiftHeaders.OBJECT_COPY_FROM);
+            if (sourcePath != null) {
+               // the path returned here is in the form "/v1/tenant-id/destContainer/destObject"
+               String path = command.getCurrentRequest().getEndpoint().getPath();
+               int startOfDestinationPath = path.lastIndexOf("/", path.lastIndexOf("/") - 1);
+               // get the "/destContainer/destObject" portion of the path
+               String destinationPath = path.substring(startOfDestinationPath);
+               
+               exception = new CopyObjectException(sourcePath, destinationPath, message);
+               exception.initCause(oldException);
+            } else if (!command.getCurrentRequest().getMethod().equals("DELETE")) {
                String path = command.getCurrentRequest().getEndpoint().getPath();
                Matcher matcher = CONTAINER_PATH.matcher(path);
-               Exception oldException = exception;
+               
                if (matcher.find()) {
                   exception = new ContainerNotFoundException(matcher.group(1), message);
                   exception.initCause(oldException);

@@ -35,8 +35,8 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
    public void replaceManifest() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().addHeader(HttpHeaders.ETAG, "\"abcd\""));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().addHeader(HttpHeaders.ETAG, "\"abcd\"")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -71,8 +71,8 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
    public void delete() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(204));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(204)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -90,8 +90,8 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
    public void alreadyDeleted() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(404));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");

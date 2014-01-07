@@ -20,28 +20,47 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.location.reference.LocationConstants;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.BulkDeleteResponse;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
+import org.testng.annotations.BeforeClass;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
 public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
 
+   protected Set<String> regions;
+   
    public BaseSwiftApiLiveTest() {
       provider = "openstack-swift";
    }
-
+   
+   @Override
+   @BeforeClass(groups = "live")
+   public void setup() {
+      super.setup();
+      String providedRegion = System.getProperty("test." + LocationConstants.PROPERTY_REGION);
+      if (providedRegion != null) {
+        regions = ImmutableSet.of(providedRegion);
+      } else {
+        regions = api.configuredRegions();
+      }
+   }
+   
    @Override
    protected Properties setupProperties() {
       Properties props = super.setupProperties();
       setIfTestSystemPropertyPresent(props, KeystoneProperties.CREDENTIAL_TYPE);
+      setIfTestSystemPropertyPresent(props, LocationConstants.PROPERTY_REGION);
       return props;
    }
 

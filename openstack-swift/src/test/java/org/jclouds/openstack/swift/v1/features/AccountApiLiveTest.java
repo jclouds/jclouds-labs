@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
 
    public void get() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
          Account account = accountApi.get();
 
@@ -46,7 +46,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
    }
 
    public void updateMetadata() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
@@ -58,7 +58,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
    }
 
    public void deleteMetadata() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");

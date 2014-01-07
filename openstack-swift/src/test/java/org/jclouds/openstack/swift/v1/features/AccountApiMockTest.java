@@ -22,9 +22,9 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Account;
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -41,11 +41,11 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    /** upper-cases first char, and lower-cases rest!! **/
    public void getKnowingServerMessesWithMetadataKeyCaseFormat() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(accountResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(accountResponse() //
             // note silly casing
             .addHeader("X-Account-Meta-Apiname", "swift") //
-            .addHeader("X-Account-Meta-Apiversion", "v1.1"));
+            .addHeader("X-Account-Meta-Apiversion", "v1.1")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -68,10 +68,10 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void updateMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(accountResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(accountResponse() //
             .addHeader("X-Account-Meta-ApiName", "swift") //
-            .addHeader("X-Account-Meta-ApiVersion", "v1.1"));
+            .addHeader("X-Account-Meta-ApiVersion", "v1.1")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -92,8 +92,8 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void updateTemporaryUrlKey() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(accountResponse());
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(accountResponse()));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -112,8 +112,8 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void deleteMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(accountResponse());
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(accountResponse()));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");

@@ -44,7 +44,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
 
    @Test
    public void list() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          ContainerApi containerApi = api.containerApiInRegion(regionId);
          FluentIterable<Container> response = containerApi.listFirstPage();
          assertNotNull(response);
@@ -57,7 +57,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
    }
 
    public void get() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          Container container = api.containerApiInRegion(regionId).get(name);
          assertEquals(container.name(), name);
          assertTrue(container.objectCount() == 0);
@@ -67,7 +67,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
 
    public void listAt() throws Exception {
       String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          Container container = api.containerApiInRegion(regionId).listAt(lexicographicallyBeforeName).get(0);
          assertEquals(container.name(), name);
          assertTrue(container.objectCount() == 0);
@@ -76,7 +76,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
    }
 
    public void updateMetadata() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          ContainerApi containerApi = api.containerApiInRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
@@ -88,7 +88,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
    }
 
    public void deleteMetadata() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          ContainerApi containerApi = api.containerApiInRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
@@ -118,15 +118,15 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest {
    @BeforeClass(groups = "live")
    public void setup() {
       super.setup();
-      for (String regionId : api.configuredRegions()) {
-         api.containerApiInRegion(regionId).createIfAbsent(name, new CreateContainerOptions());
+      for (String regionId : regions) {
+         api.containerApiInRegion(regionId).createIfAbsent(name, CreateContainerOptions.NONE);
       }
    }
 
    @Override
    @AfterClass(groups = "live")
    public void tearDown() {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          api.containerApiInRegion(regionId).deleteIfEmpty(name);
       }
       super.tearDown();

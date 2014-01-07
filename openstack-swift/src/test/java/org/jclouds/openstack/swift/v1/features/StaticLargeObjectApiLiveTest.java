@@ -45,13 +45,13 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
    private byte[] megOf2s;
 
    public void notPresentWhenDeleting() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          api.staticLargeObjectApiInRegionForContainer(regionId, containerName).delete(UUID.randomUUID().toString());
       }
    }
 
    public void replaceManifest() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
          String etag1s = objectApi.replace(name + "/1", newPayload(megOf1s), ImmutableMap.<String, String> of());
          assertMegabyteAndETagMatches(regionId, name + "/1", etag1s);
@@ -85,7 +85,7 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
 
    @Test(dependsOnMethods = "replaceManifest")
    public void delete() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          api.staticLargeObjectApiInRegionForContainer(regionId, containerName).delete(name);
          assertEquals(api.containerApiInRegion(regionId).get(containerName).objectCount(), 0);
       }
@@ -95,9 +95,9 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
    @BeforeClass(groups = "live")
    public void setup() {
       super.setup();
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          boolean created = api.containerApiInRegion(regionId).createIfAbsent(containerName,
-               new CreateContainerOptions());
+               CreateContainerOptions.NONE);
          if (!created) {
             deleteAllObjectsInContainer(regionId, containerName);
          }
@@ -113,7 +113,7 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
    @Override
    @AfterClass(groups = "live")
    public void tearDown() {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          deleteAllObjectsInContainer(regionId, containerName);
          api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
       }

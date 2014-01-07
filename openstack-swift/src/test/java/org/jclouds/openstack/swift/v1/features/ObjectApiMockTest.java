@@ -20,23 +20,35 @@ import static com.google.common.base.Charsets.US_ASCII;
 import static com.google.common.net.HttpHeaders.RANGE;
 import static org.jclouds.http.options.GetOptions.Builder.tail;
 import static org.jclouds.io.Payloads.newStringPayload;
+import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.containerResponse;
 import static org.jclouds.openstack.swift.v1.options.ListContainerOptions.Builder.marker;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_COPY_FROM;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.containerResponse;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.inject.Named;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+import org.jclouds.blobstore.BlobStoreFallbacks.FalseOnContainerNotFound;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
-import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
+import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
+import org.jclouds.openstack.swift.v1.reference.SwiftHeaders;
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
 import org.jclouds.util.Strings2;
 import org.testng.annotations.Test;
 
@@ -83,10 +95,10 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void list() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(containerResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(containerResponse() //
             .addHeader("X-Container-Read", ".r:*,.rlistings") //
-            .setBody(objectList));
+            .setBody(objectList)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -106,8 +118,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void listOptions() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(containerResponse().setBody(objectList));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(containerResponse().setBody(objectList)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -125,10 +137,10 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void replace() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse() //
             .setResponseCode(201) //
-            .addHeader("ETag", "d9f5eb4bba4e2f2f046e54611bc8196b"));
+            .addHeader("ETag", "d9f5eb4bba4e2f2f046e54611bc8196b")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -153,11 +165,11 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    /** upper-cases first char, and lower-cases rest!! **/
    public void headKnowingServerMessesWithMetadataKeyCaseFormat() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(objectResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(objectResponse() //
             // note silly casing
             .addHeader("X-Object-Meta-Apiname", "swift") //
-            .addHeader("X-Object-Meta-Apiversion", "v1.1"));
+            .addHeader("X-Object-Meta-Apiversion", "v1.1")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -183,11 +195,11 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void get() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(objectResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(objectResponse() //
             // note silly casing
             .addHeader("X-Object-Meta-Apiname", "swift") //
-            .addHeader("X-Object-Meta-Apiversion", "v1.1"));
+            .addHeader("X-Object-Meta-Apiversion", "v1.1")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -216,10 +228,10 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void updateMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(objectResponse() //
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(objectResponse() //
             .addHeader("X-Object-Meta-ApiName", "swift") //
-            .addHeader("X-Object-Meta-ApiVersion", "v1.1"));
+            .addHeader("X-Object-Meta-ApiVersion", "v1.1")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -240,8 +252,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void deleteMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(objectResponse());
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(objectResponse()));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -262,8 +274,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void delete() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(204));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(204)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -281,8 +293,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    public void alreadyDeleted() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(404));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -297,7 +309,44 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          server.shutdown();
       }
    }
-
+   
+   public void copyObject() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201)
+            .addHeader(SwiftHeaders.OBJECT_COPY_FROM, "/bar/foo.txt")));
+      try {
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
+         assertTrue(api.objectApiInRegionForContainer("DFW", "foo")
+            .copy("bar.txt", "bar", "foo.txt"));
+              
+         assertEquals(server.getRequestCount(), 2);
+         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         
+         RecordedRequest copyRequest = server.takeRequest();
+         assertEquals(copyRequest.getRequestLine(),
+               "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/foo/bar.txt HTTP/1.1");
+      } finally {
+         server.shutdown();
+      }
+   }
+   
+   @Test(expectedExceptions = CopyObjectException.class)
+   public void copyObjectFail() throws InterruptedException, IOException {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)
+            .addHeader(SwiftHeaders.OBJECT_COPY_FROM, "/bogus/foo.txt")));
+      
+      try {
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
+         // the following line will throw the CopyObjectException
+         api.objectApiInRegionForContainer("DFW", "foo").copy("bar.txt", "bogus", "foo.txt"); 
+      } finally {
+         server.shutdown();
+      }  
+   }
+   
    private static final Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
 
    public static MockResponse objectResponse() {

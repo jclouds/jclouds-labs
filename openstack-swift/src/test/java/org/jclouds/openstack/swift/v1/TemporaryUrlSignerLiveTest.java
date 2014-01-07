@@ -73,7 +73,7 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest {
       String key = UUID.randomUUID().toString();
       for (String regionId : api.configuredRegions()) {
          api.accountApiInRegion(regionId).updateTemporaryUrlKey(key);
-         api.containerApiInRegion(regionId).createIfAbsent(containerName, new CreateContainerOptions());
+         api.containerApiInRegion(regionId).createIfAbsent(containerName, CreateContainerOptions.NONE);
          api.objectApiInRegionForContainer(regionId, containerName) //
                .replace(name, newStringPayload("swifty"), ImmutableMap.<String, String> of());
       }

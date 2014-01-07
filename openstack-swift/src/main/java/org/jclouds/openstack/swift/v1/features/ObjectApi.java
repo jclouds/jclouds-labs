@@ -17,6 +17,7 @@
 package org.jclouds.openstack.swift.v1.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_COPY_FROM;
 
 import java.util.Map;
 
@@ -33,10 +34,12 @@ import javax.ws.rs.PathParam;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+import org.jclouds.blobstore.BlobStoreFallbacks.FalseOnContainerNotFound;
 import org.jclouds.http.options.GetOptions;
 import org.jclouds.io.Payload;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindObjectMetadataToHeaders;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindRemoveObjectMetadataToHeaders;
 import org.jclouds.openstack.swift.v1.binders.SetPayload;
@@ -48,6 +51,7 @@ import org.jclouds.openstack.swift.v1.functions.ParseObjectListFromResponse;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
@@ -64,7 +68,10 @@ public interface ObjectApi {
    /**
     * Lists up to 10,000 objects.
     * 
-    * @return a list of existing storage objects ordered by name or null.
+    * @param options
+    *          options to control the output list.
+    *          
+    * @return an {@link ObjectList} of {@link SwiftObject} ordered by name or null.
     */
    @Named("ListObjects")
    @GET
@@ -103,7 +110,7 @@ public interface ObjectApi {
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#name()}.
-    * @return the Object or null, if not found.
+    * @return the {@link SwiftObject} or null, if not found.
     * 
     * @see <a
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">
@@ -140,18 +147,18 @@ public interface ObjectApi {
    SwiftObject get(@PathParam("objectName") String objectName, GetOptions options);
 
    /**
-    * Creates or updates the Object metadata.
+    * Creates or updates the metadata for a {@link SwiftObject}.
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#name()}.
     * @param metadata
-    *           the Object metadata to create or update.
+    *           the metadata to create or update.
     * 
     * @see <a
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Update_Container_Metadata-d1e1900.html">
     *      Create or Update Object Metadata API</a>
     * 
-    * @return <code>true</code> if the Object Metadata was successfully created
+    * @return {@code true} if the metadata was successfully created
     *         or updated, false if not.
     */
    @Named("UpdateObjectMetadata")
@@ -162,15 +169,14 @@ public interface ObjectApi {
          @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
-    * Deletes Object metadata.
+    * Deletes the metadata from a {@link SwiftObject}.
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#name()}.
     * @param metadata
-    *           the Object metadata to delete.
+    *           corresponds to {@link SwiftObject#metadata()}.
     * 
-    * @return <code>true</code> if the Object Metadata was successfully deleted,
-    *         false if not.
+    * @return {@code true} if the metadata was successfully deleted, false if not.
     * 
     * @see <a
     *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object-metadata.html">
@@ -184,7 +190,7 @@ public interface ObjectApi {
          @BinderParam(BindRemoveObjectMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
-    * Deletes a object, if present.
+    * Deletes an object, if present.
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#name()}.
@@ -197,4 +203,32 @@ public interface ObjectApi {
    @Fallback(VoidOnNotFoundOr404.class)
    @Path("/{objectName}")
    void delete(@PathParam("objectName") String objectName);
+
+   /**
+    * Copies an object from one container to another. Please note that this 
+    * is a server side copy.
+    * 
+    * @param destinationObject
+    *           the destination object name.
+    * @param sourceContainer
+    *           the source container name.
+    * @param sourceObject
+    *           the source object name.
+    * @return {@code true} if the object was successfully copied, false if not.
+    * 
+    * @throws CopyObjectException if the source or destination container do not exist
+    * 
+    * @see <a
+    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">
+    *      Copy Object API</a>
+    */
+   @Named("CopyObject")
+   @PUT
+   @Path("/{destinationObject}")
+   @Headers(keys = OBJECT_COPY_FROM, values = "/{sourceContainer}/{sourceObject}")
+   @Fallback(FalseOnContainerNotFound.class)
+   boolean copy(@PathParam("destinationObject") String destinationObject,
+                @PathParam("sourceContainer") String sourceContainer,
+                @PathParam("sourceObject") String sourceObject);
+
 }

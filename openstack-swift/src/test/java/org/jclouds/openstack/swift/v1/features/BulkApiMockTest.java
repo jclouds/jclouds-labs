@@ -47,8 +47,8 @@ public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       byte[] tarGz = ByteStreams.toByteArray(files.as(TarGzExporter.class).exportAsInputStream());
 
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(201).setBody("{\"Number Files Created\": 10, \"Errors\": []}"));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201).setBody("{\"Number Files Created\": 10, \"Errors\": []}")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");

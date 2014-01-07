@@ -35,8 +35,8 @@ public class TemporaryUrlSignerMockTest extends BaseOpenStackMockTest<SwiftApi> 
 
    public void whenAccountApiHasKey() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(accountResponse().addHeader("X-Account-Meta-Temp-URL-Key", "mykey"));
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(accountResponse().addHeader("X-Account-Meta-Temp-URL-Key", "mykey")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -57,8 +57,8 @@ public class TemporaryUrlSignerMockTest extends BaseOpenStackMockTest<SwiftApi> 
    @Test(expectedExceptions = IllegalStateException.class, expectedExceptionsMessageRegExp = ".*returned a null temporaryUrlKey!")
    public void whenAccountApiDoesntHaveKey() throws Exception {
       MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(accountResponse());
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(accountResponse()));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");

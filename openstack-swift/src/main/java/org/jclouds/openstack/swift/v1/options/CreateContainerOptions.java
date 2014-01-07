@@ -29,6 +29,7 @@ import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders;
  * @see ContainerApi#createIfAbsent
  */
 public class CreateContainerOptions extends BaseHttpRequestOptions {
+   public static final CreateContainerOptions NONE = new CreateContainerOptions();
 
    /** corresponds to {@link Container#metadata()} */
    public CreateContainerOptions metadata(Map<String, String> metadata) {

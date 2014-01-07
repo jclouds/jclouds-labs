@@ -49,7 +49,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
    private String containerName = getClass().getSimpleName();
 
    public void notPresentWhenDeleting() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          BulkDeleteResponse deleteResponse = api.bulkApiInRegion(regionId).bulkDelete(
                ImmutableList.of(UUID.randomUUID().toString()));
          assertEquals(deleteResponse.deleted(), 0);
@@ -59,7 +59,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
    }
 
    public void extractArchive() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          ExtractArchiveResponse extractResponse = api.bulkApiInRegion(regionId).extractArchive(containerName,
                Payloads.newPayload(tarGz), "tar.gz");
          assertEquals(extractResponse.created(), OBJECT_COUNT);
@@ -76,7 +76,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
 
    @Test(dependsOnMethods = "extractArchive")
    public void bulkDelete() throws Exception {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          BulkDeleteResponse deleteResponse = api.bulkApiInRegion(regionId).bulkDelete(paths);
          assertEquals(deleteResponse.deleted(), OBJECT_COUNT);
          assertEquals(deleteResponse.notFound(), 0);
@@ -92,9 +92,9 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
    @BeforeClass(groups = "live")
    public void setup() {
       super.setup();
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          boolean created = api.containerApiInRegion(regionId).createIfAbsent(containerName,
-               new CreateContainerOptions());
+               CreateContainerOptions.NONE);
          if (!created) {
             deleteAllObjectsInContainer(regionId, containerName);
          }
@@ -115,7 +115,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest {
    @Override
    @AfterClass(groups = "live")
    public void tearDown() {
-      for (String regionId : api.configuredRegions()) {
+      for (String regionId : regions) {
          deleteAllObjectsInContainer(regionId, containerName);
          api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
       }
