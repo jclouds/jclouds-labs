@@ -32,9 +32,9 @@ import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration.LaunchConfigurationType;
 import org.jclouds.rackspace.autoscale.v1.domain.LoadBalancer;
 import org.jclouds.rackspace.autoscale.v1.domain.Personality;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -67,7 +67,7 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
       Map<String, Object> group = (Map<String, Object>) result.get("group");
       Map<String, Object> groupConfigurationMap = (Map<String, Object>) group.get("groupConfiguration");
       Map<String, Object> launchConfigurationMap = (Map<String, Object>) group.get("launchConfiguration");
-      ImmutableList.Builder<ScalingPolicyResponse> scalingPoliciesList = ImmutableList.builder();
+      ImmutableList.Builder<ScalingPolicy> scalingPoliciesList = ImmutableList.builder();
       Map<String, Object> args = (Map<String, Object>) launchConfigurationMap.get("args");
       Map<String, Object> server = (Map<String, Object>) args.get("server");      
 
@@ -125,8 +125,8 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
 
          Double d = (Double)scalingPolicyMap.get(targetType.toString()); // GSON only knows double now
 
-         ScalingPolicyResponse scalingPolicyResponse = 
-               new ScalingPolicyResponse(
+         ScalingPolicy scalingPolicyResponse = 
+               new ScalingPolicy(
                      (String)scalingPolicyMap.get("name"),
                      ScalingPolicyType.getByValue((String)scalingPolicyMap.get("type")).get(),
                      ((Double)scalingPolicyMap.get("cooldown")).intValue(),

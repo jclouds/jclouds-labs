@@ -26,9 +26,9 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.v2_0.domain.Link;
 import org.jclouds.openstack.v2_0.domain.Link.Relation;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
@@ -40,7 +40,7 @@ import com.google.inject.Inject;
  * This parses the scaling policy response and decouples domain objects from the json object returned by the service.
  * @author Zack Shoylev
  */
-public class ParseScalingPoliciesResponse implements Function<HttpResponse, FluentIterable<ScalingPolicyResponse>> {
+public class ParseScalingPoliciesResponse implements Function<HttpResponse, FluentIterable<ScalingPolicy>> {
 
    private final ParseJson<Map<String, List<Map<String, Object>>>> json;
 
@@ -53,13 +53,13 @@ public class ParseScalingPoliciesResponse implements Function<HttpResponse, Flue
     * Parse a list of scaling policy responses
     */
    @SuppressWarnings("unchecked")
-   public FluentIterable<ScalingPolicyResponse> apply(HttpResponse from) {
+   public FluentIterable<ScalingPolicy> apply(HttpResponse from) {
       // This needs to be refactored when the service is in a more final state and changing less often
       // A lot of the complexity is expected to go away
 
       Map<String, List<Map<String, Object>>> singleMap = (Map<String, List<Map<String, Object>>>) json.apply(from);
       List<Map<String, Object>> result = singleMap.get("policies");
-      ImmutableList.Builder<ScalingPolicyResponse> scalingPoliciesList = ImmutableList.builder();
+      ImmutableList.Builder<ScalingPolicy> scalingPoliciesList = ImmutableList.builder();
 
       for(Map<String, Object> scalingPolicyMap : result) {
          ScalingPolicyTargetType targetType = null;
@@ -77,8 +77,8 @@ public class ParseScalingPoliciesResponse implements Function<HttpResponse, Flue
          }
 
          Double d = (Double)scalingPolicyMap.get(targetType.toString()); // GSON only knows double now
-         ScalingPolicyResponse scalingPolicyResponse = 
-               new ScalingPolicyResponse(
+         ScalingPolicy scalingPolicyResponse = 
+               new ScalingPolicy(
                      (String)scalingPolicyMap.get("name"),
                      ScalingPolicyType.getByValue((String)scalingPolicyMap.get("type")).get(),
                      ((Double)scalingPolicyMap.get("cooldown")).intValue(),

@@ -21,7 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 
-import org.jclouds.rackspace.autoscale.v1.domain.WebhookResponse;
+import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
 
 /**
  * @author Zack Shoylev
@@ -46,7 +46,7 @@ public class AutoscaleUtils {
       return code == 202;
    }
    
-   public static boolean execute(WebhookResponse webhook) throws IOException {
+   public static boolean execute(Webhook webhook) throws IOException {
       return execute(webhook.getAnonymousExecutionURI().get());
    }
 }

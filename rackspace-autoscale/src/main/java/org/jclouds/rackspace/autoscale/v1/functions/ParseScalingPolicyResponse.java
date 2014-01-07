@@ -26,9 +26,9 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.v2_0.domain.Link;
 import org.jclouds.openstack.v2_0.domain.Link.Relation;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
+import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -39,7 +39,7 @@ import com.google.inject.Inject;
  * This parses the scaling policy response and decouples domain objects from the json object returned by the service.
  * @author Zack Shoylev
  */
-public class ParseScalingPolicyResponse implements Function<HttpResponse, ScalingPolicyResponse> {
+public class ParseScalingPolicyResponse implements Function<HttpResponse, ScalingPolicy> {
 
    private final ParseJson<Map<String, Object>> json;
 
@@ -52,7 +52,7 @@ public class ParseScalingPolicyResponse implements Function<HttpResponse, Scalin
     * Parse a single scaling policy response
     */
    @SuppressWarnings("unchecked")
-   public ScalingPolicyResponse apply(HttpResponse from) {
+   public ScalingPolicy apply(HttpResponse from) {
       // This needs to be refactored when the service is in a more final state and changing less often
       // A lot of the complexity is expected to go away
 
@@ -74,8 +74,8 @@ public class ParseScalingPolicyResponse implements Function<HttpResponse, Scalin
       }
 
       Double d = (Double)scalingPolicyMap.get(targetType.toString()); // GSON only knows double now
-      ScalingPolicyResponse scalingPolicyResponse =
-            new ScalingPolicyResponse(
+      ScalingPolicy scalingPolicyResponse =
+            new ScalingPolicy(
                   (String)scalingPolicyMap.get("name"),
                   ScalingPolicyType.getByValue((String)scalingPolicyMap.get("type")).get(),
                   ((Double)scalingPolicyMap.get("cooldown")).intValue(),

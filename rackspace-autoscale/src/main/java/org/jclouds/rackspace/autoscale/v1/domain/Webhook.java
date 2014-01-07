@@ -19,116 +19,88 @@ package org.jclouds.rackspace.autoscale.v1.domain;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
+import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.v2_0.domain.Link;
+import org.jclouds.openstack.v2_0.domain.Link.Relation;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 /**
- * An Autoscale Webhook for a specific group and policy.
+ * Autoscale WebhookResponse. Extends Webhook with id and links.
  * 
- * @see Group
- * @see ScalingPolicy
+ * @see CreateWebhook#getWebhooks()
  * @author Zack Shoylev
  */
-public class Webhook {
-   private final String name;
-   private final ImmutableMap<String, Object> metadata;
+public class Webhook extends CreateWebhook {
+   private final ImmutableList<Link> links;
+   private final String id;
 
-   @ConstructorProperties({ "name", "metadata" })
-   protected Webhook(String name, @Nullable Map<String, Object> metadata) {
-      this.name = checkNotNull(name, "name should not be null");
-      if (metadata == null) {
-         this.metadata = ImmutableMap.of();
-      } else {
-         this.metadata = ImmutableMap.copyOf(metadata);
+   @ConstructorProperties({
+      "name", "metadata", "links", "id"
+   })
+   public Webhook(String name, @Nullable Map<String, Object> metadata, List<Link> links, String id) {
+      super(name, metadata);
+      this.id = checkNotNull(id, "id required");
+      this.links = ImmutableList.copyOf(checkNotNull(links, "links required"));
+   }
+
+   /**
+    * @return the unique id of this ScalingPolicy.
+    * @see ScalingPolicyResponse.Builder#id(String)
+    */
+   public String getId() {
+      return this.id;
+   }   
+
+   /**
+    * The capability Link for the webhook can be called with a POST request to execute the webhook anonymously.
+    * @return the links to this ScalingPolicy.
+    * @see ScalingPolicyResponse.Builder#links(String)
+    */
+   public ImmutableList<Link> getLinks() {
+      return this.links;
+   }
+   
+   public Optional<URI> getAnonymousExecutionURI() {
+      // TODO: Add Relation.CAPABILITY to openstack Link
+      for (Link l : this.links) {
+         if (l.getRelation() == Relation.UNRECOGNIZED) {
+            return Optional.of(l.getHref());
+         }
       }
-   }
-
-   /**
-    * @return the name of this Webhook.
-    * @see Webhook.Builder#name(String)
-    */
-   public String getName() {
-      return this.name;
-   }
-
-   /**
-    * @return the metadata for this Webhook.
-    * @see Webhook.Builder#metadata(Map)
-    */
-   public ImmutableMap<String, Object> getMetadata() {
-      return this.metadata;
+      return Optional.absent();
    }
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name, metadata);
+      return Objects.hashCode(super.hashCode(), links, id);
    }
 
    @Override
    public boolean equals(Object obj) {
-      if (this == obj)
-         return true;
-      if (obj == null || getClass() != obj.getClass())
-         return false;
+      if (this == obj) return true;
+      if (obj == null || getClass() != obj.getClass()) return false;
       Webhook that = Webhook.class.cast(obj);
-      return Objects.equal(this.name, that.name) && Objects.equal(this.metadata, that.metadata);
+      return Objects.equal(this.id, that.id) && 
+            Objects.equal(this.links, that.links) &&
+            super.equals(obj);
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this).add("name", name).add("metadata", metadata);
+      return super.string()
+            .add("links", links)
+            .add("id", id);
    }
 
    @Override
    public String toString() {
       return string().toString();
-   }
-
-   public static Builder builder() {
-      return new Builder();
-   }
-
-   public Builder toBuilder() {
-      return new Builder().fromWebhook(this);
-   }
-
-   public static class Builder {
-      protected String name;
-      protected Map<String, Object> metadata;
-
-      /**
-       * @param name The name of this Webhook.
-       * @return The builder object.
-       * @see Webhook#getName()
-       */
-      public Builder name(String name) {
-         this.name = name;
-         return this;
-      }
-
-      /**
-       * @param metadata The metadata of this Webhook.
-       * @return The builder object.
-       * @see Webhook#getMetadata()
-       */
-      public Builder metadata(Map<String, Object> metadata) {
-         this.metadata = metadata;
-         return this;
-      }
-
-      /**
-       * @return A new Webhook object.
-       */
-      public Webhook build() {
-         return new Webhook(name, metadata);
-      }
-
-      public Builder fromWebhook(Webhook in) {
-         return this.name(in.getName()).metadata(in.getMetadata());
-      }
-   }
+   }   
 }

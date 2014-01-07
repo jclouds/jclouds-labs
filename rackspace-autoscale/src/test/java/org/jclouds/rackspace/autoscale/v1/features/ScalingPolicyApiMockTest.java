@@ -26,11 +26,11 @@ import java.io.IOException;
 import java.util.List;
 
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyScheduleType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyScheduleType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
 import org.jclouds.rackspace.autoscale.v1.internal.BaseAutoscaleApiMockTest;
 import org.testng.annotations.Test;
 
@@ -56,9 +56,9 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(1800)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by one server")
@@ -67,7 +67,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = api.create(scalingPolicies);
 
          /*
           * Check request
@@ -99,9 +99,9 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(1800)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by one server")
@@ -110,7 +110,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = api.create(scalingPolicies);
 
          /*
           * Check request
@@ -136,9 +136,9 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(2)
                .type(ScalingPolicyType.SCHEDULE)
                .name("scale down by 5.5 percent at 11pm")
@@ -148,7 +148,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = api.create(scalingPolicies);
 
          /*
           * Check request
@@ -183,9 +183,9 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(2)
                .type(ScalingPolicyType.SCHEDULE)
                .name("scale down by 5.5 percent on the 5th")
@@ -195,7 +195,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = api.create(scalingPolicies);
 
          /*
           * Check request
@@ -230,7 +230,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.list();
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = api.list();
 
          /*
           * Check request
@@ -262,7 +262,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = api.list();
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = api.list();
 
          /*
           * Check request
@@ -288,7 +288,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         ScalingPolicyResponse scalingPolicyResponse = api.get("policyId");
+         ScalingPolicy scalingPolicyResponse = api.get("policyId");
 
          /*
           * Check request
@@ -319,7 +319,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
 
-         ScalingPolicyResponse scalingPolicyResponse = api.get("policyId");
+         ScalingPolicy scalingPolicyResponse = api.get("policyId");
 
          /*
           * Check request
@@ -345,7 +345,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(6)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale down by 5 percent")
@@ -379,7 +379,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(6)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale down by 5 percent")

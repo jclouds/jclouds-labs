@@ -31,11 +31,11 @@ import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration.LaunchConfigurationType;
 import org.jclouds.rackspace.autoscale.v1.domain.LoadBalancer;
 import org.jclouds.rackspace.autoscale.v1.domain.Personality;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyScheduleType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyScheduleType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicyResponse;
 import org.jclouds.rackspace.autoscale.v1.internal.BaseAutoscaleApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -89,9 +89,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                                        .contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                                        .type(LaunchConfigurationType.LAUNCH_SERVER).build();
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder().cooldown(3).type(ScalingPolicyType.WEBHOOK)
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder().cooldown(3).type(ScalingPolicyType.WEBHOOK)
                .name("scale up by 1").targetType(ScalingPolicyTargetType.INCREMENTAL).target("1").build();
          scalingPolicies.add(scalingPolicy);
 
@@ -152,9 +152,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by one server")
@@ -163,7 +163,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
          assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
          assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
@@ -176,9 +176,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.SCHEDULE)
                .name("scale up by one server")
@@ -188,7 +188,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
          assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
          assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
@@ -203,9 +203,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.SCHEDULE)
                .name("scale up by one server")
@@ -215,7 +215,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
          assertEquals(scalingPolicyResponse.iterator().next().getCooldown(), 3);
          assertEquals(scalingPolicyResponse.iterator().next().getTarget(), "1");
@@ -230,7 +230,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.list();
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.list();
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
       }
    }
@@ -242,8 +242,8 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
          assertNotNull(policyApi);
-         ScalingPolicyResponse listResponse = policyApi.list().iterator().next();
-         ScalingPolicyResponse getResponse = policyApi.get(listResponse.getId());
+         ScalingPolicy listResponse = policyApi.list().iterator().next();
+         ScalingPolicy getResponse = policyApi.get(listResponse.getId());
          assertEquals(listResponse.getId(), getResponse.getId());
          assertEquals(listResponse.getName(), getResponse.getName());
          assertEquals(listResponse.getCooldown(), getResponse.getCooldown());
@@ -260,9 +260,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by one server")
@@ -271,7 +271,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
          scalingPolicies.add(scalingPolicy);
 
-         ScalingPolicy updated = ScalingPolicy.builder()
+         CreateScalingPolicy updated = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by 2 PERCENT server")
@@ -280,14 +280,14 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
 
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          String policyId = scalingPolicyResponse.iterator().next().getId();
          assertNotNull(policyId);
 
          boolean result = policyApi.update(policyId, updated);
          assertTrue(result);
 
-         ScalingPolicyResponse updatedResponse = policyApi.get(policyId);
+         ScalingPolicy updatedResponse = policyApi.get(policyId);
 
          assertNotNull(updatedResponse.getId());
          assertEquals(updatedResponse.getCooldown(), 3);
@@ -304,9 +304,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by one server")
@@ -315,7 +315,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
          scalingPolicies.add(scalingPolicy);         
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          String policyId = scalingPolicyResponse.iterator().next().getId();
          assertNotNull(policyId);
 
@@ -330,9 +330,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
          PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(3)
                .type(ScalingPolicyType.WEBHOOK)
                .name("scale up by 0 server")
@@ -341,7 +341,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .build();
          scalingPolicies.add(scalingPolicy);         
 
-         FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+         FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          String policyId = scalingPolicyResponse.iterator().next().getId();
          assertNotNull(policyId);
 
@@ -358,15 +358,15 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          for (Group group : created.get(zone)) {
             PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, group.getId());
             if(policyApi == null)continue;
-            for(ScalingPolicyResponse sgr : policyApi.list()) {
+            for(ScalingPolicy sgr : policyApi.list()) {
                if(!policyApi.delete(sgr.getId())) {
                   System.out.println("Could not delete an autoscale policy after tests!");
                }
             }
 
-            List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+            List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-            ScalingPolicy scalingPolicy = ScalingPolicy.builder()
+            CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                   .cooldown(3)
                   .type(ScalingPolicyType.WEBHOOK)
                   .name("0 machines")
@@ -375,7 +375,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                   .build();
             scalingPolicies.add(scalingPolicy);
 
-            FluentIterable<ScalingPolicyResponse> scalingPolicyResponse = policyApi.create(scalingPolicies);
+            FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
             String policyId = scalingPolicyResponse.first().get().getId();
 
             Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);

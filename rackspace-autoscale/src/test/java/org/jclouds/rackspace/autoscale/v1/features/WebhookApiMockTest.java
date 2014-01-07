@@ -24,8 +24,8 @@ import static org.testng.Assert.assertTrue;
 import java.io.IOException;
 
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateWebhook;
 import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
-import org.jclouds.rackspace.autoscale.v1.domain.WebhookResponse;
 import org.jclouds.rackspace.autoscale.v1.internal.BaseAutoscaleApiMockTest;
 import org.testng.annotations.Test;
 
@@ -52,7 +52,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         FluentIterable<WebhookResponse> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
+         FluentIterable<Webhook> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
 
          /*
           * Check request
@@ -79,7 +79,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         FluentIterable<WebhookResponse> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
+         FluentIterable<Webhook> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
 
          /*
           * Check request
@@ -105,9 +105,9 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         FluentIterable<WebhookResponse> webhooks = api.create(ImmutableList.of(
-               Webhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
-               Webhook.builder().name("Nagios").metadata(ImmutableMap.<String, Object>of()).build()
+         FluentIterable<Webhook> webhooks = api.create(ImmutableList.of(
+               CreateWebhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
+               CreateWebhook.builder().name("Nagios").metadata(ImmutableMap.<String, Object>of()).build()
                ));
 
          /*
@@ -136,9 +136,9 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         FluentIterable<WebhookResponse> webhooks = api.create(ImmutableList.of(
-               Webhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
-               Webhook.builder().name("Nagios").metadata(ImmutableMap.<String, Object>of()).build()
+         FluentIterable<Webhook> webhooks = api.create(ImmutableList.of(
+               CreateWebhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
+               CreateWebhook.builder().name("Nagios").metadata(ImmutableMap.<String, Object>of()).build()
                ));
 
          /*
@@ -165,7 +165,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         FluentIterable<WebhookResponse> webhooks = api.list();
+         FluentIterable<Webhook> webhooks = api.list();
 
          /*
           * Check request
@@ -193,7 +193,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         FluentIterable<WebhookResponse> webhooks = api.list();
+         FluentIterable<Webhook> webhooks = api.list();
 
          /*
           * Check request
@@ -271,7 +271,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         WebhookResponse webhook = api.get("5555");
+         Webhook webhook = api.get("5555");
 
          /*
           * Check request
@@ -298,7 +298,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
          WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
 
-         WebhookResponse webhook = api.get("5555");
+         Webhook webhook = api.get("5555");
 
          /*
           * Check request

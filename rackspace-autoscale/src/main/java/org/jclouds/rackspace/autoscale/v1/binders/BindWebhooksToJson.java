@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateWebhook;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
@@ -47,7 +47,7 @@ public class BindWebhooksToJson implements MapBinder {
    // Refactoring will depend on whether this call will change any further.
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
       ImmutableList.Builder<Map<String, Object>> webhookListBuilder = ImmutableList.builder();
-      for(Webhook webhook : (List<Webhook>)postParams.get("webhooks") ) {
+      for(CreateWebhook webhook : (List<CreateWebhook>)postParams.get("webhooks") ) {
          ImmutableMap.Builder<String, Object> webhookMap = ImmutableMap.builder();
          webhookMap.put("name", webhook.getName());
          if(!webhook.getMetadata().isEmpty()) {

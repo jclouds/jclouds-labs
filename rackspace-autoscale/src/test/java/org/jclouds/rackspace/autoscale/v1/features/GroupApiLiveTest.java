@@ -33,9 +33,9 @@ import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration.LaunchConfigurationType;
 import org.jclouds.rackspace.autoscale.v1.domain.LoadBalancer;
 import org.jclouds.rackspace.autoscale.v1.domain.Personality;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.internal.BaseAutoscaleApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -88,9 +88,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                                        .contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                                        .type(LaunchConfigurationType.LAUNCH_SERVER).build();
 
-         List<ScalingPolicy> scalingPolicies = Lists.newArrayList();
+         List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
-         ScalingPolicy scalingPolicy = ScalingPolicy.builder().cooldown(1).type(ScalingPolicyType.WEBHOOK)
+         CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder().cooldown(1).type(ScalingPolicyType.WEBHOOK)
                .name("scale up by 1").targetType(ScalingPolicyTargetType.INCREMENTAL).target("1").build();
          scalingPolicies.add(scalingPolicy);
 

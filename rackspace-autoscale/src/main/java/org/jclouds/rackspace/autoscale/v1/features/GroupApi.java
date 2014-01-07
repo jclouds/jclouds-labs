@@ -39,7 +39,7 @@ import org.jclouds.rackspace.autoscale.v1.domain.Group;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupState;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.functions.ParseGroupLaunchConfigurationResponse;
 import org.jclouds.rackspace.autoscale.v1.functions.ParseGroupResponse;
 import org.jclouds.rest.annotations.Fallback;
@@ -68,7 +68,7 @@ public interface GroupApi extends Closeable {
     * @return Group The group created by this call.
     * @see GroupConfiguration
     * @see LaunchConfiguration
-    * @see ScalingPolicy
+    * @see CreateScalingPolicy
     * @see Group
     */
    @Named("Group:create")
@@ -79,7 +79,7 @@ public interface GroupApi extends Closeable {
    @ResponseParser(ParseGroupResponse.class)
    Group create(@PayloadParam("groupConfiguration") GroupConfiguration groupConfiguration, 
          @PayloadParam("launchConfiguration") LaunchConfiguration launchConfiguration,
-         @PayloadParam("scalingPolicies") List<ScalingPolicy> scalingPolicies);
+         @PayloadParam("scalingPolicies") List<CreateScalingPolicy> scalingPolicies);
 
    /**
     * This operation pauses the specified Autoscaling Group

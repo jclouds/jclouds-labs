@@ -19,7 +19,7 @@ package org.jclouds.rackspace.autoscale.v1.binders;
 import java.util.Map;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.internal.ParseHelper;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
@@ -41,7 +41,7 @@ public class BindScalingPolicyToJson implements MapBinder {
 
    @Override    
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
-      ScalingPolicy scalingPolicy = (ScalingPolicy) postParams.get("scalingPolicy");
+      CreateScalingPolicy scalingPolicy = (CreateScalingPolicy) postParams.get("scalingPolicy");
       return jsonBinder.bindToRequest(request, ParseHelper.buildScalingPolicyMap(scalingPolicy));
    }
 

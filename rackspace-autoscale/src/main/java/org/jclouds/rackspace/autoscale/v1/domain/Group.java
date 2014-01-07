@@ -34,11 +34,11 @@ import com.google.common.collect.ImmutableList;
 public class Group {
    private final String id;
    private final ImmutableList<Link> links;
-   private final ImmutableList<ScalingPolicyResponse> scalingPolicy;
+   private final ImmutableList<ScalingPolicy> scalingPolicy;
    private final GroupConfiguration groupConfiguration;
    private final LaunchConfiguration launchConfiguration;
 
-   protected Group(String id, ImmutableList<Link> links, ImmutableList<ScalingPolicyResponse> scalingPolicy, GroupConfiguration groupConfiguration, LaunchConfiguration launchConfiguration) {
+   protected Group(String id, ImmutableList<Link> links, ImmutableList<ScalingPolicy> scalingPolicy, GroupConfiguration groupConfiguration, LaunchConfiguration launchConfiguration) {
       this.id = id;
       this.links = links;
       this.scalingPolicy = scalingPolicy;
@@ -66,10 +66,10 @@ public class Group {
 
    /**
     * @return A list of scaling policies for this Group.
-    * @see ScalingPolicy
+    * @see CreateScalingPolicy
     * @see Group.Builder#scalingPolicy(List)
     */
-   public ImmutableList<ScalingPolicyResponse> getScalingPolicies() {
+   public ImmutableList<ScalingPolicy> getScalingPolicies() {
       return this.scalingPolicy;
    }
 
@@ -133,7 +133,7 @@ public class Group {
    public static class Builder {
       protected String id;
       protected ImmutableList<Link> links;
-      protected ImmutableList<ScalingPolicyResponse> scalingPolicy;
+      protected ImmutableList<ScalingPolicy> scalingPolicy;
       protected GroupConfiguration groupConfiguration;
       protected LaunchConfiguration launchConfiguration;
 
@@ -162,7 +162,7 @@ public class Group {
        * @return The builder object.
        * @see Group#getScalingPolicy()
        */
-      public Builder scalingPolicy(List<ScalingPolicyResponse> scalingPolicy) {
+      public Builder scalingPolicy(List<ScalingPolicy> scalingPolicy) {
          this.scalingPolicy = ImmutableList.copyOf(scalingPolicy);
          return this;
       }

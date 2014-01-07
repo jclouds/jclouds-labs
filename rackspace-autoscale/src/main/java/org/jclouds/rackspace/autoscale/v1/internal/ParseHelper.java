@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
-import org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
-import static org.jclouds.rackspace.autoscale.v1.domain.ScalingPolicy.ScalingPolicyType;
+import static org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 
 /**
  * @author Zack Shoylev
@@ -69,16 +69,16 @@ public class ParseHelper {
 
    @SuppressWarnings("unchecked")
    public static ImmutableList<Map<String, Object>> buildScalingPoliciesRequestList(Map<String, Object> postParams) {
-      List<ScalingPolicy> scalingPoliciesRequest = (List<ScalingPolicy>) postParams.get("scalingPolicies");
+      List<CreateScalingPolicy> scalingPoliciesRequest = (List<CreateScalingPolicy>) postParams.get("scalingPolicies");
       ImmutableList.Builder<Map<String, Object>> scalingPoliciesListBuilder = ImmutableList.builder();
 
-      for (ScalingPolicy scalingPolicy : scalingPoliciesRequest) {
+      for (CreateScalingPolicy scalingPolicy : scalingPoliciesRequest) {
          scalingPoliciesListBuilder.add(buildScalingPolicyMap(scalingPolicy));
       }
       return scalingPoliciesListBuilder.build();
    }
 
-   public static ImmutableMap<String, Object> buildScalingPolicyMap(ScalingPolicy scalingPolicy) {
+   public static ImmutableMap<String, Object> buildScalingPolicyMap(CreateScalingPolicy scalingPolicy) {
       ImmutableMap.Builder<String, Object> scalingPolicyMapBuilder = ImmutableMap.builder();
       scalingPolicyMapBuilder.put("cooldown", scalingPolicy.getCooldown());
       scalingPolicyMapBuilder.put("type", scalingPolicy.getType().toString());
