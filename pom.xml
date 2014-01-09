@@ -71,6 +71,7 @@
     <module>cdmi</module>
     <module>cloudsigma2</module>
     <module>cloudsigma2-lvs</module>
+    <module>cloudsigma2-wdc</module>
     <module>cloudsigma2-zrh</module>
     <module>joyent-cloudapi</module>
     <module>joyentcloud</module>
