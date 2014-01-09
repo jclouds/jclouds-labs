@@ -22,6 +22,8 @@ import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.isEmpty;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Iterables.tryFind;
 
@@ -40,7 +42,9 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplateInVirtualDatacenter;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
@@ -48,10 +52,12 @@ import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.abiquo.predicates.IpPredicates;
 import org.jclouds.collect.Memoized;
+import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Template;
+import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
 import org.jclouds.logging.Logger;
@@ -62,7 +68,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.Ints;
 import com.google.inject.Inject;
 
 /**
@@ -141,19 +148,7 @@ public class AbiquoComputeServiceAdapter
 
       vm.save();
 
-      // Once the virtual machine is created, override the default network
-      // settings if needed.
-      // If no public ip is available in the virtual datacenter, the virtual
-      // machine will be assigned by default an ip address in the default
-      // private VLAN for the virtual datacenter.
-      Optional<PublicIp> publicIp = tryFind(template.getVirtualDatacenter().listPurchasedPublicIps(),
-            IpPredicates.<PublicIp> notUsed());
-      if (publicIp.isPresent()) {
-         logger.debug(">> Found available public ip %s", publicIp.get().getIp());
-         vm.setNics(Lists.<Ip<?, ?>> newArrayList(publicIp.get()));
-      } else {
-         logger.debug(">> No available public ip found. Using a private ip");
-      }
+      configureNetworking(vm, template, datacenter, options);
 
       // This is an async operation, but jclouds already waits until the node is
       // RUNNING, so there is no need to block here
@@ -258,6 +253,68 @@ public class AbiquoComputeServiceAdapter
             return contains(ids, Integer.toString(machine.getId()));
          }
       });
+   }
+
+   /**
+    * Configures the networking for the created virtual machine.
+    * <ul>
+    * <li>If the template options have been configured with a set of network
+    * identifiers, jclouds will assign the virtual machine one IP address of
+    * each network.</li>
+    * <li>If no network ids have been defined, jclouds will try to assign a
+    * public IP address.</li>
+    * <li>If no public IP addresses are available in the user account, then an
+    * IP address in the virtual datacenter's default network will be assigned.</li>
+    * </ul>
+    */
+   private void configureNetworking(VirtualMachine vm, VirtualApplianceCachingTemplate template, Datacenter datacenter,
+         TemplateOptions options) {
+
+      if (!options.getNetworks().isEmpty()) {
+         ImmutableList.Builder<Ip<?, ?>> ips = ImmutableList.<Ip<?, ?>> builder();
+
+         Enterprise enterprise = adminService.getCurrentEnterprise();
+         Iterable<ExternalNetwork> externalNetworks = enterprise.listExternalNetworks(datacenter);
+
+         for (String networkId : options.getNetworks()) {
+            Network<? extends Ip<?, ?>> network = template.getVirtualDatacenter().getPrivateNetwork(
+                  Ints.tryParse(networkId));
+
+            if (network == null) {
+               // If the given network is not a private network, it should be an
+               // external one
+               final Integer id = Ints.tryParse(networkId);
+               network = find(externalNetworks, new Predicate<Network<?>>() {
+                  @Override
+                  public boolean apply(final Network<?> input) {
+                     return Integer.valueOf(id).equals(input.getId());
+                  }
+               }, null);
+            }
+
+            checkArgument(network != null, "No network was found with id: %s", networkId);
+
+            Iterable<? extends Ip<?, ?>> unusedIps = network.listUnusedIps();
+            checkArgument(!isEmpty(unusedIps), "There are no available ips in network: %s", networkId);
+
+            // Get the first available ip
+            Ip<?, ?> availableIp = get(unusedIps, 0);
+            logger.debug(">> Found available ip: %s", availableIp);
+            ips.add(availableIp);
+         }
+
+         // Assign all ips to the virtual machine
+         vm.setNics(ips.build());
+      } else {
+         Optional<PublicIp> publicIp = tryFind(template.getVirtualDatacenter().listPurchasedPublicIps(),
+               IpPredicates.<PublicIp> notUsed());
+         if (publicIp.isPresent()) {
+            logger.debug(">> Found available public ip %s", publicIp.get().getIp());
+            vm.setNics(ImmutableList.<Ip<?, ?>> of(publicIp.get()));
+         } else {
+            logger.debug(">> No available public ip found. Using a private ip");
+         }
+      }
    }
 
    private static Predicate<VirtualMachine> vmId(final String id) {
