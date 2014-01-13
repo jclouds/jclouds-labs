@@ -1,0 +1,10 @@
+{
+  "status": "OK",
+  "image": {
+    "id" : 3,
+    "name" : "Dokku on Ubuntu 13.04 0.2.0rc3",
+    "distribution" : "Ubuntu",
+    "public" : true,
+    "slug" : null
+  }
+}

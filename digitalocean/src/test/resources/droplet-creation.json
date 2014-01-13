@@ -1,0 +1,10 @@
+{
+  "status": "OK",
+  "droplet": {
+      "id": 100824,
+      "name": "test",
+      "image_id": 419,
+      "size_id": 32,
+      "event_id": 7499
+  }
+}
