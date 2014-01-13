@@ -1,0 +1,26 @@
+{
+   "status":"OK",
+   "images":[
+      {
+         "id":1601,
+         "name":"CentOS 5.8 x64",
+         "slug":null,
+         "distribution":"CentOS",
+         "public":true
+      },
+      {
+         "id":1602,
+         "name":"CentOS 5.8 x32",
+         "slug":null,
+         "distribution":"CentOS",
+         "public":true
+      },
+      {
+         "id":12573,
+         "name":"Debian 6.0 x64",
+         "slug":null,
+         "distribution":"Debian",
+         "public":true
+      }
+   ]
+}

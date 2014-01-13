@@ -1,0 +1,10 @@
+{
+  "status": "OK",
+  "image": {
+    "id" : 1,
+    "name" : "Arch Linux 2013.05 x32",
+    "distribution" : "Arch Linux",
+    "public" : true,
+    "slug" : null
+  }
+}

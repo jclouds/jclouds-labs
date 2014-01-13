@@ -1,0 +1,10 @@
+{
+  "status": "OK",
+  "image": {
+    "id" : 2,
+    "name" : "Fedora 17 x64 Desktop",
+    "distribution" : "Fedora",
+    "public" : true,
+    "slug" : null
+  }
+}

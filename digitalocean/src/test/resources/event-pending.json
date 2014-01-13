@@ -1,0 +1,10 @@
+{
+  "status": "OK",
+  "event": {
+    "id": 7499,
+    "action_status": null,
+    "droplet_id": 100824,
+    "event_type_id": 1,
+    "percentage": "50"
+  }
+}

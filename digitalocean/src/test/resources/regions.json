@@ -1,0 +1,25 @@
+{
+   "status":"OK",
+   "regions":[
+      {
+         "id":1,
+         "name":"New York 1",
+         "slug":"nyc1"
+      },
+      {
+         "id":3,
+         "name":"San Francisco 1",
+         "slug":"sfo1"
+      },
+      {
+         "id":4,
+         "name":"New York 2",
+         "slug":"nyc2"
+      },
+      {
+         "id":5,
+         "name":"Amsterdam 2",
+         "slug":"ams2"
+      }
+   ]
+}
