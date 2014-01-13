@@ -105,7 +105,7 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
     *
     * See https://issues.apache.org/jira/browse/JCLOUDS-405
     */
-   @Test(enabled = false)
+   @Test
    public void updateClaim() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(new MockResponse().setBody(accessRackspace));

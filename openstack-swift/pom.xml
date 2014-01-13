@@ -110,11 +110,9 @@
       <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- TODO: change jclouds parent base pom to okhttp MWS, as google one is dead -->
     <dependency>
       <groupId>com.squareup.okhttp</groupId>
       <artifactId>mockwebserver</artifactId>
-      <version>1.2.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

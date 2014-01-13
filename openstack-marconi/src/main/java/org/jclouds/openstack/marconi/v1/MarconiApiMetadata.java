@@ -18,6 +18,8 @@ package org.jclouds.openstack.marconi.v1;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
+
+import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
 import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
@@ -76,6 +78,7 @@ public class MarconiApiMetadata extends BaseHttpApiMetadata<MarconiApi> {
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                                      .add(AuthenticationApiModule.class)
                                      .add(KeystoneAuthenticationModule.class)
+                                     .add(OkHttpCommandExecutorServiceModule.class)
                                      .add(ZoneModule.class)
                                      .add(MarconiTypeAdapters.class)
                                      .add(MarconiHttpApiModule.class).build());
