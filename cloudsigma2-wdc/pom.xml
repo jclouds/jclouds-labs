@@ -25,7 +25,7 @@
     <version>1.8.0-SNAPSHOT</version>
   </parent>
 
-  <!-- TODO: when out of labs, switch to org.jclouds.provider -->
+  <!-- TODO: when out of labs, switch to org.apache.jclouds.provider -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>cloudsigma2-wdc</artifactId>
   <version>1.8.0-SNAPSHOT</version>

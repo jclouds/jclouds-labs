@@ -51,9 +51,7 @@ public class CloudSigma2WashingtonProviderMetadata extends BaseProviderMetadata 
       return properties;
    }
 
-   public static class Builder
-         extends
-         BaseProviderMetadata.Builder {
+   public static class Builder extends BaseProviderMetadata.Builder {
 
       protected Builder() {
          id("cloudsigma2-wdc")
@@ -72,8 +70,7 @@ public class CloudSigma2WashingtonProviderMetadata extends BaseProviderMetadata 
       }
 
       @Override
-      public Builder fromProviderMetadata(
-            ProviderMetadata in) {
+      public Builder fromProviderMetadata(ProviderMetadata in) {
          super.fromProviderMetadata(in);
          return this;
       }
