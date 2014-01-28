@@ -1,0 +1,8 @@
+{"cluster":
+  { "name": "slice",
+    "clusterType": "HADOOP_HDP1_1",
+    "flavorId": "4fba3bca-7c76-11e2-b737-beeffa00040e",
+    "nodeCount": 5,
+    "postInitScript" :  "http://example.com/configure_cluster.sh"
+  }
+}

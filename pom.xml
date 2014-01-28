@@ -61,6 +61,8 @@
     <module>rackspace-autoscale-us</module>
     <module>rackspace-cloudqueues-us</module>
     <module>rackspace-cloudqueues-uk</module>
+    <module>rackspace-cloudbigdata</module>
+    <module>rackspace-cloudbigdata-us</module>
   </modules>
 
   <build>

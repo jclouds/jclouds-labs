@@ -1,0 +1,28 @@
+{"node":
+  { "id": "000",
+    "created": "2012-12-27T10:10:10Z", 
+    "role": "NAMENODE",
+    "name": "NAMENODE-1", 
+    "postInitScriptStatus": null,
+    "status": "ACTIVE",
+    "addresses": {
+      "public": [{ "addr": "168.x.x.3", "version": 4 }],
+      "private": [{ "addr": "10.x.x.3", "version": 4}]
+    },
+    "services": [
+      { "name": "datanode" },
+      { "name": "tasktracker" },
+      { "name": "ssh",
+        "uri": "ssh://user@168.x.x.3"
+      }
+    ],
+    "links": [
+      { "rel": "self",
+        "href": "https://dfw.bigdata.api.rackspacecloud.com/v1.0/1234/clusters/db478fc1-2d86-4597-8010-cbe787bbbc41/nodes/000"
+      },
+      { "rel": "bookmark",
+        "href": "https://dfw.bigdata.api.rackspacecloud.com/1234/clusters/db478fc1-2d86-4597-8010-cbe787bbbc41/nodes/000"
+      }
+    ],
+  } 
+}

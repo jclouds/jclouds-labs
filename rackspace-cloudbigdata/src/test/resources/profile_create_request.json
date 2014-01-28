@@ -1,0 +1,19 @@
+{ "profile": {
+    "username": "john.doe",
+    "password": "j0Hnd03",
+    "sshkeys": [
+      { "name": "t@test",
+        "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtUFnkFrqDDCgEqW1akQkpMOX
+Owwvg73PLn5Z5QgvxjvJhRCg9ZTR/OWXpWcYqFVNagH4Zs8NOb9921TyQ+ydMnatOM
+haxMh1ZwTgaUcvndOF8fY+kcERiw1l0iT95w42F8IdUH42Z+8KihZM8gVsbMS6qYTi
+OM29WHX7y37wuJIzqf3N2TiVXrqfjwugvY/bZ+47EUn78uk6aPZYJGXdDgaFqnIXUV
+N+hRFYXgKnU0Ui0aQkuYwnAW8KmanLoNU2xodrb6/XqWnSAAmwl7aoGKFunQsT6xDW
+yQk+ncUHUcdofDUqgd3lXmHGrTmQW97vqexDEnhsJ+AwbLGD5dukr t@test"
+      }
+    ],
+    "cloudCredentials": {
+      "username": "jdoe",
+      "apikey": "df23gkh34h52gkdgfakgf"
+    }
+}
+}

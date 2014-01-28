@@ -1,0 +1,21 @@
+{"cluster":
+  { "id": "db478fc1-2d86-4597-8010-cbe787bbbc41",
+    "created": "2012-12-27T10:10:10Z",
+    "updated": "2013-12-27T10:10:10Z",
+    "name": "slice",
+    "clusterType": "HADOOP_HDP1_1",
+    "flavorId": "4fba3bca-7c76-11e2-b737-beeffa00040e",
+    "nodeCount": 5,
+    "postInitScriptStatus": "PENDING",
+    "progress": 1.0,
+    "status": "ACTIVE",
+    "links": [
+      { "rel": "self",
+        "href": "https://dfw.bigdata.api.rackspacecloud.com/v1.0/1234/clusters/db478fc1-2d86-4597-8010-cbe787bbbc41"
+      },
+      { "rel": "bookmark",
+        "href": "https://dfw.bigdata.api.rackspacecloud.com/1234/clusters/db478fc1-2d86-4597-8010-cbe787bbbc41"
+      }
+    ]
+  }
+}

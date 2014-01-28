@@ -1,0 +1,30 @@
+{ "limits":
+  { "absolute":
+    {
+      "disk": {
+        "limit": 5120,
+        "remaining": 5120
+      },
+      "nodeCount": {
+        "limit": 5,
+        "remaining": 5
+      },
+      "ram": {
+        "limit": 40960,
+        "remaining": 40960
+      },
+      "vcpus": {
+        "limit": 10,
+        "remaining": 10
+      }
+    },
+    "links": [
+      { "href": "http://dfw.bigdata.api.rackspacecloud.com/v1.0/1234/limits",
+        "rel": "self"
+      },
+      { "href": "http://dfw.bigdata.api.rackspacecloud.com/1234/limits",
+        "rel": "bookmark"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{ "flavor":
+  {
+    "disk": 256,
+    "id": "4fba3bca-7c76-11e2-b737-beeffa00040e",
+    "links": [
+      { "href": "http://dfw.bigdata.api.rackspacecloud.com/v1.0/1234/flavors/4fba3bca-7c76-11e2-b737-beeffa00040e", 
+        "rel": "self"
+      },
+      { "href": "http://dfw.bigdata.api.rackspacecloud.com/1234/flavors/4fba3bca-7c76-11e2-b737-beeffa00040e", 
+        "rel": "bookmark"
+      }
+    ],
+    "name": "Tiny Hadoop Instance",
+    "ram": 5120,
+    "vcpus": 1
+  }
+}

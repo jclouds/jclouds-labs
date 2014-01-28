@@ -1,0 +1,15 @@
+{ "type":
+  {
+    "id": "HADOOP_HDP1_1",
+    "links": [
+      { "href": "http://dfw.bigdata.api.rackspacecloud.com/v1.0/1234/types/HADOOP_HDP1_1",
+        "rel": "self"
+      },
+      { "href": "http://dfw.bigdata.api.rackspacecloud.com/1234/types/HADOOP_HDP1_1",
+        "rel": "bookmark"
+      }
+    ],
+    "name": "Hadoop (HDP 1.1)",
+    "services": []
+  }
+}
