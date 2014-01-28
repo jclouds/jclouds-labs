@@ -657,7 +657,7 @@ public interface CloudApi extends Closeable {
     * @return A <code>String</code> representation of the price of the virtual
     *         appliance.
     */
-   @Named("vapp:gerprice")
+   @Named("vapp:getprice")
    @GET
    @Consumes(MediaType.TEXT_PLAIN)
    @ResponseParser(ReturnStringIf2xx.class)
