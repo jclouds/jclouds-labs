@@ -46,15 +46,8 @@ import com.google.common.base.Joiner;
 /**
  * Provides access to the Swift Bulk API.
  * 
- * <h3>Note</h3>
- * 
- * As of the Grizzly release, these operations occur <a
- * href="https://blueprints.launchpad.net/swift/+spec/concurrent-bulk">serially
- * on the backend</a>.
- * 
- * @see <a
- *      href="http://docs.openstack.org/developer/swift/misc.html#module-swift.common.middleware.bulk">
- *      Swift Bulk Middleware</a>
+ * @author Adrian Cole
+ * @author Jeremy Daggett
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
@@ -64,15 +57,15 @@ public interface BulkApi {
     * Extracts a tar archive at the path specified as {@code path}.
     * 
     * @param path
-    *           path to extract under, if not empty string.
+    *           the path to extract under.
     * @param tar
-    *           valid tar archive
+    *           a valid tar archive.
     * @param format
     *           one of {@code tar}, {@code tar.gz}, or {@code tar.bz2}
     * 
-    * @return {@link BulkDeleteResponse#errors()} are empty on success.
+    * @return {@link BulkDeleteResponse#getErrors()} are empty on success.
     */
-   @Named("ExtractArchive")
+   @Named("bulk:extractArchive")
    @PUT
    @Path("/{path}")
    ExtractArchiveResponse extractArchive(@PathParam("path") String path,
@@ -85,9 +78,9 @@ public interface BulkApi {
     *           format of {@code container}, for an empty container, or
     *           {@code container/object} for an object.
     * 
-    * @return {@link BulkDeleteResponse#errors()} are empty on success.
+    * @return {@link BulkDeleteResponse#getErrors()} are empty on success.
     */
-   @Named("BulkDelete")
+   @Named("bulk:delete")
    @DELETE
    @Path("/")
    @QueryParams(keys = "bulk-delete")

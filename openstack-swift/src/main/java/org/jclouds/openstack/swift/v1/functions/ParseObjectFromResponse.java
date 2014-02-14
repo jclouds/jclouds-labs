@@ -46,12 +46,12 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
 
    @Override
    public SwiftObject apply(HttpResponse from) {
-      return SwiftObject.builder() //
-            .uri(URI.create(uri)) //
-            .name(name) //
-            .etag(from.getFirstHeaderOrNull(ETAG)) //
-            .payload(from.getPayload()) //
-            .lastModified(dates.rfc822DateParse(from.getFirstHeaderOrNull(LAST_MODIFIED))) //
+      return SwiftObject.builder()
+            .uri(URI.create(uri))
+            .name(name)
+            .etag(from.getFirstHeaderOrNull(ETAG))
+            .payload(from.getPayload())
+            .lastModified(dates.rfc822DateParse(from.getFirstHeaderOrNull(LAST_MODIFIED)))
             .headers(from.getHeaders())
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
    }

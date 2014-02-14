@@ -20,14 +20,17 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.jclouds.openstack.swift.v1.features.StaticLargeObjectApi;
+
 import com.google.common.base.Objects;
 
 /**
- * One piece of a multi-part upload.
+ * Represents a single segment of a multi-part upload.
  * 
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-large-objects.html">api
- *      doc</a>
+ * @author Adrian Cole
+ * @author Jeremy Daggett
+ * 
+ * @see StaticLargeObjectApi
  */
 public class Segment {
 
@@ -42,22 +45,23 @@ public class Segment {
    }
 
    /**
-    * {@code /container/objectName} which corresponds to the path of
-    * {@link SwiftObject#uri()}.
+    * @return The container and object name in the format: {@code <container-name>/<object-name>}
     */
-   public String path() {
+   public String getPath() {
       return path;
    }
 
    /**
-    * Corresponds to the {@code ETag} header of the response, and is usually the
-    * MD5 checksum of the object
+    * @return The ETag of the content of the segment object.
     */
-   public String etag() {
+   public String getEtag() {
       return etag;
    }
 
-   public long sizeBytes() {
+   /**
+    * @return The size of the segment object.
+    */
+   public long getSizeBytes() {
       return size_bytes;
    }
 
@@ -68,9 +72,9 @@ public class Segment {
       }
       if (object instanceof Segment) {
          Segment that = Segment.class.cast(object);
-         return equal(path(), that.path()) //
-               && equal(etag(), that.etag()) //
-               && equal(sizeBytes(), that.sizeBytes());
+         return equal(getPath(), that.getPath())
+               && equal(getEtag(), that.getEtag())
+               && equal(getSizeBytes(), that.getSizeBytes());
       } else {
          return false;
       }
@@ -78,15 +82,15 @@ public class Segment {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(path(), etag(), sizeBytes());
+      return Objects.hashCode(getPath(), getEtag(), getSizeBytes());
    }
 
    @Override
    public String toString() {
-      return toStringHelper("") //
-            .add("path", path()) //
-            .add("etag", etag()) //
-            .add("sizeBytes", sizeBytes()).toString();
+      return toStringHelper("")
+            .add("path", getPath())
+            .add("etag", getEtag())
+            .add("sizeBytes", getSizeBytes()).toString();
    }
 
    public static Builder builder() {
@@ -99,7 +103,7 @@ public class Segment {
       protected long sizeBytes;
 
       /**
-       * @see Segment#path()
+       * @see Segment#getPath()
        */
       public Builder path(String path) {
          this.path = path;
@@ -107,7 +111,7 @@ public class Segment {
       }
 
       /**
-       * @see Segment#etag()
+       * @see Segment#getEtag()
        */
       public Builder etag(String etag) {
          this.etag = etag;
@@ -115,7 +119,7 @@ public class Segment {
       }
 
       /**
-       * @see Segment#sizeBytes()
+       * @see Segment#getSizeBytes()
        */
       public Builder sizeBytes(long sizeBytes) {
          this.sizeBytes = sizeBytes;

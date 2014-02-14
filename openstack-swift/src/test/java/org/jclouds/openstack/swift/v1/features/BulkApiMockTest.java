@@ -34,11 +34,10 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
-// TODO: cannot yet test bulk delete offline
-@Test
+@Test(groups = "unit", testName = "BulkApiMockTest")
 public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
-   public void extractArchive() throws Exception {
+   public void testExtractArchive() throws Exception {
       GenericArchive files = ShrinkWrap.create(GenericArchive.class, "files.tar.gz");
       StringAsset content = new StringAsset("foo");
       for (int i = 0; i < 10; i++) {
@@ -54,14 +53,13 @@ public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          ExtractArchiveResponse response = api.bulkApiInRegion("DFW").extractArchive("myContainer",
                newByteArrayPayload(tarGz), "tar.gz");
-         assertEquals(response.created(), 10);
-         assertTrue(response.errors().isEmpty());
+         assertEquals(response.getCreated(), 10);
+         assertTrue(response.getErrors().isEmpty());
 
          assertEquals(server.getRequestCount(), 2);
-         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         assertAuthentication(server);
          RecordedRequest extractRequest = server.takeRequest();
-         assertEquals(extractRequest.getRequestLine(),
-               "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer?extract-archive=tar.gz HTTP/1.1");
+         assertRequest(extractRequest, "PUT", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer?extract-archive=tar.gz");
          assertEquals(extractRequest.getBody(), tarGz);
       } finally {
          server.shutdown();

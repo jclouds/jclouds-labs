@@ -16,6 +16,11 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_ACL_ANYBODY_READ;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_BYTES_USED;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_OBJECT_COUNT;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_READ;
+
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.swift.v1.domain.Container;
@@ -31,12 +36,14 @@ public class ParseContainerFromHeaders implements Function<HttpResponse, Contain
 
    @Override
    public Container apply(HttpResponse from) {
-      return Container.builder() //
-            .name(name) //
-            .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull("X-Container-Bytes-Used"))) //
-            .objectCount(Long.parseLong(from.getFirstHeaderOrNull("X-Container-Object-Count"))) //
-            .anybodyRead(".r:*,.rlistings".equals(from.getFirstHeaderOrNull("X-Container-Read"))) //
+      Container c = 
+      Container.builder()
+            .name(name)
+            .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull(CONTAINER_BYTES_USED)))
+            .objectCount(Long.parseLong(from.getFirstHeaderOrNull(CONTAINER_OBJECT_COUNT)))
+            .anybodyRead(CONTAINER_ACL_ANYBODY_READ.equals(from.getFirstHeaderOrNull(CONTAINER_READ)))
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
+      return c;
    }
 
    @Override

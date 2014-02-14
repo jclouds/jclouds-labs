@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
 
-@Test
+@Test(groups = "unit", testName = "UrlEncodeAndJoinOnNewlineTest")
 public class UrlEncodeAndJoinOnNewlineTest {
    UrlEncodeAndJoinOnNewline binder = new UrlEncodeAndJoinOnNewline();
 
@@ -38,8 +38,7 @@ public class UrlEncodeAndJoinOnNewlineTest {
             .add("/v1/12345678912345/mycontainer/home/xx<yy")
             .add("/v1/12345678912345/mycontainer/../image.gif").build());
 
-      assertEquals(request.getPayload().getRawContent(), "" //
-            + "/v1/12345678912345/mycontainer/home/xx%3Cyy\n" //
+      assertEquals(request.getPayload().getRawContent(), "/v1/12345678912345/mycontainer/home/xx%3Cyy\n"
             + "/v1/12345678912345/mycontainer/../image.gif");
    }
 }

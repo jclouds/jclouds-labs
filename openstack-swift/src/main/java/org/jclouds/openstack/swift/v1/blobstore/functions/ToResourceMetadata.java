@@ -35,10 +35,10 @@ public class ToResourceMetadata implements Function<Container, StorageMetadata> 
    @Override
    public StorageMetadata apply(Container from) {
       MutableStorageMetadata to = new MutableStorageMetadataImpl();
-      to.setName(from.name());
+      to.setName(from.getName());
       to.setLocation(region);
       to.setType(StorageType.CONTAINER);
-      to.setUserMetadata(from.metadata());
+      to.setUserMetadata(from.getMetadata());
       return to;
    }
 }

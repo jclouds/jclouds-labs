@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 
 @Test(groups = "live", testName = "TemporaryUrlSignerLiveTest")
-public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest {
+public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    private String name = getClass().getSimpleName();
    private String containerName = getClass().getSimpleName() + "Container";
@@ -48,10 +48,10 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).head(name);
 
          long expires = System.currentTimeMillis() / 1000 + 5;
-         String signature = TemporaryUrlSigner.checkApiEvery(api.accountApiInRegion(regionId), 5) //
-               .sign("GET", object.uri().getPath(), expires);
+         String signature = TemporaryUrlSigner.checkApiEvery(api.accountApiInRegion(regionId), 5)
+               .sign("GET", object.getUri().getPath(), expires);
 
-         URI signed = URI.create(format("%s?temp_url_sig=%s&temp_url_expires=%s", object.uri(), signature, expires));
+         URI signed = URI.create(format("%s?temp_url_sig=%s&temp_url_expires=%s", object.getUri(), signature, expires));
 
          InputStream publicStream = signed.toURL().openStream();
          assertEquals(Strings2.toStringAndClose(publicStream), "swifty");
@@ -74,7 +74,7 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest {
       for (String regionId : api.configuredRegions()) {
          api.accountApiInRegion(regionId).updateTemporaryUrlKey(key);
          api.containerApiInRegion(regionId).createIfAbsent(containerName, CreateContainerOptions.NONE);
-         api.objectApiInRegionForContainer(regionId, containerName) //
+         api.objectApiInRegionForContainer(regionId, containerName)
                .replace(name, newStringPayload("swifty"), ImmutableMap.<String, String> of());
       }
    }

@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.v1;
 
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.ACCOUNT_TEMPORARY_URL_KEY;
 import static org.jclouds.openstack.swift.v1.features.AccountApiMockTest.accountResponse;
 import static org.testng.Assert.assertEquals;
 
@@ -25,7 +26,7 @@ import org.testng.annotations.Test;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
-@Test
+@Test(groups = "unit", testName = "TemporaryUrlSignerMockTest")
 public class TemporaryUrlSignerMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    @Test(expectedExceptions = NullPointerException.class, expectedExceptionsMessageRegExp = "accountApi")
@@ -36,7 +37,7 @@ public class TemporaryUrlSignerMockTest extends BaseOpenStackMockTest<SwiftApi> 
    public void whenAccountApiHasKey() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(accountResponse().addHeader("X-Account-Meta-Temp-URL-Key", "mykey")));
+      server.enqueue(addCommonHeaders(accountResponse().addHeader(ACCOUNT_TEMPORARY_URL_KEY, "mykey")));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");

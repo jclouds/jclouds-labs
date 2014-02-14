@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_METADATA_PREFIX;
 import static org.testng.Assert.assertEquals;
 
 import org.jclouds.openstack.swift.v1.SwiftApi;
@@ -30,10 +31,10 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
-@Test
+@Test(groups = "unit", testName = "StaticLargeObjectApiMockTest")
 public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
-   public void replaceManifest() throws Exception {
+   public void testReplaceManifest() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().addHeader(HttpHeaders.ETAG, "\"abcd\"")));
@@ -54,11 +55,11 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
                      ImmutableMap.of("MyFoo", "Bar")), "abcd");
 
          assertEquals(server.getRequestCount(), 2);
-         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
+         assertAuthentication(server);
+
          RecordedRequest replaceRequest = server.takeRequest();
-         assertEquals(replaceRequest.getRequestLine(),
-               "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=put HTTP/1.1");
-         assertEquals(replaceRequest.getHeader("x-object-meta-myfoo"), "Bar");
+         assertRequest(replaceRequest, "PUT", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=put");
+         assertEquals(replaceRequest.getHeader(OBJECT_METADATA_PREFIX + "myfoo"), "Bar");
          assertEquals(
                new String(replaceRequest.getBody()),
          "[{\"path\":\"/mycontainer/objseg1\",\"etag\":\"0228c7926b8b642dfb29554cd1f00963\",\"size_bytes\":1468006}," +
@@ -69,7 +70,7 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
       }
    }
 
-   public void delete() throws Exception {
+   public void testDelete() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(204)));
@@ -79,16 +80,15 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
          api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
-         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         RecordedRequest deleteRequest = server.takeRequest();
-         assertEquals(deleteRequest.getRequestLine(),
-               "DELETE /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=delete HTTP/1.1");
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=delete");
+      
       } finally {
          server.shutdown();
       }
    }
 
-   public void alreadyDeleted() throws Exception {
+   public void testAlreadyDeleted() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
@@ -98,10 +98,8 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
          api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
-         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         RecordedRequest deleteRequest = server.takeRequest();
-         assertEquals(deleteRequest.getRequestLine(),
-               "DELETE /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=delete HTTP/1.1");
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=delete");
       } finally {
          server.shutdown();
       }

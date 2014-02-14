@@ -16,6 +16,10 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.ACCOUNT_BYTES_USED;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.ACCOUNT_CONTAINER_COUNT;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.ACCOUNT_OBJECT_COUNT;
+
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.swift.v1.domain.Account;
 
@@ -25,10 +29,10 @@ public class ParseAccountFromHeaders implements Function<HttpResponse, Account> 
 
    @Override
    public Account apply(HttpResponse from) {
-      return Account.builder() //
-            .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Bytes-Used"))) //
-            .containerCount(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Container-Count"))) //
-            .objectCount(Long.parseLong(from.getFirstHeaderOrNull("X-Account-Object-Count"))) //
+      return Account.builder()
+            .bytesUsed(Long.parseLong(from.getFirstHeaderOrNull(ACCOUNT_BYTES_USED)))
+            .containerCount(Long.parseLong(from.getFirstHeaderOrNull(ACCOUNT_CONTAINER_COUNT)))
+            .objectCount(Long.parseLong(from.getFirstHeaderOrNull(ACCOUNT_OBJECT_COUNT)))
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();
    }
 }

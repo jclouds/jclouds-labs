@@ -32,6 +32,7 @@ import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindObjectMetadataToHeaders;
 import org.jclouds.openstack.swift.v1.domain.Segment;
+import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.functions.ETagHeader;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
@@ -41,9 +42,10 @@ import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
 /**
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-large-objects.html">
- *      Static Large Objects API</a>
+ * Provides access to the Swift Static Large Object API features.
+ * 
+ * @author Adrian Cole
+ * @author Jeremy Daggett
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
@@ -53,16 +55,16 @@ public interface StaticLargeObjectApi {
     * Creates or updates a static large object's manifest.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
+    *           corresponds to {@link SwiftObject#getName()}.
     * @param segments
     *           ordered parts which will be concatenated upon download.
     * @param metadata
-    *           corresponds to {@link SwiftObject#metadata()}.
+    *           corresponds to {@link SwiftObject#getMetadata()}.
     * 
-    * @return {@link SwiftObject#etag()} of the object, which is the MD5
+    * @return {@link SwiftObject#getEtag()} of the object, which is the MD5
     *         checksum of the concatenated ETag values of the {@code segments}.
     */
-   @Named("CreateOrUpdateStaticLargeObjectManifest")
+   @Named("staticLargeObject:replaceManifest")
    @PUT
    @ResponseParser(ETagHeader.class)
    @Path("/{objectName}")
@@ -75,9 +77,9 @@ public interface StaticLargeObjectApi {
     * Deletes a static large object, if present, including all of its segments.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
+    *           corresponds to {@link SwiftObject#getName()}.
     */
-   @Named("DeleteStaticLargeObject")
+   @Named("staticLargeObject:delete")
    @DELETE
    @Fallback(VoidOnNotFoundOr404.class)
    @Path("/{objectName}")

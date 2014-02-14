@@ -23,6 +23,7 @@ import static org.jclouds.reflect.Reflection2.typeToken;
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
@@ -33,16 +34,18 @@ import org.jclouds.openstack.swift.v1.blobstore.config.SwiftBlobStoreContextModu
 import org.jclouds.openstack.swift.v1.config.SwiftHttpApiModule;
 import org.jclouds.openstack.swift.v1.config.SwiftTypeAdapters;
 import org.jclouds.openstack.v2_0.ServiceType;
+import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Implementation of {@link ApiMetadata} for Swift 1.0 API
+ * Implementation of {@link ApiMetadata} for the Swift API.
  * 
  * @author Adrian Cole
  * @author Zack Shoylev
+ * @author Jeremy Daggett
  */
 public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
    
@@ -74,8 +77,8 @@ public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
          .credentialName("${password}")
          .documentation(URI.create("http://docs.openstack.org/api/openstack-object-storage/1.0/content/ch_object-storage-dev-overview.html"))
-         .version("1.0")
-         .endpointName("KeyStone base url ending in /v2.0/")
+         .version("1")
+         .endpointName("Keystone base url ending in /v2.0/")
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(SwiftApiMetadata.defaultProperties())
          .view(typeToken(RegionScopedBlobStoreContext.class))

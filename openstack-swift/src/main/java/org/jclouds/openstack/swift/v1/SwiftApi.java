@@ -36,10 +36,13 @@ import org.jclouds.rest.annotations.EndpointParam;
 import com.google.inject.Provides;
 
 /**
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content">api
- *      doc</a>
+ * Provides access to the OpenStack Object Storage (Swift) API.
+ * <p/>
+ * OpenStack Object Storage is an object-based storage system that stores content and metadata
+ * as objects. You create, modify, and get objects and metadata using this API.
+ * 
  * @author Adrian Cole
+ * @author Jeremy Daggett
  * @author Zack Shoylev
  */
 public interface SwiftApi extends Closeable {

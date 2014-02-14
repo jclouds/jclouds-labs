@@ -30,32 +30,32 @@ import com.google.gson.GsonBuilder;
 
 @Test
 public class SwiftTypeAdaptersTest {
-   Gson gson = new GsonBuilder() //
-         .registerTypeAdapter(ExtractArchiveResponse.class, new ExtractArchiveResponseAdapter()) //
-         .registerTypeAdapter(BulkDeleteResponse.class, new BulkDeleteResponseAdapter()) //
+   Gson gson = new GsonBuilder()
+         .registerTypeAdapter(ExtractArchiveResponse.class, new ExtractArchiveResponseAdapter())
+         .registerTypeAdapter(BulkDeleteResponse.class, new BulkDeleteResponseAdapter())
          .create();
 
    public void extractArchiveWithoutErrors() {
-      assertEquals(gson.fromJson("" //
-            + "{\n" //
-            + "  \"Response Status\": \"201 Created\",\n" //
-            + "  \"Response Body\": \"\",\n" //
-            + "  \"Errors\": [],\n" //
-            + "  \"Number Files Created\": 10\n" //
+      assertEquals(gson.fromJson(""
+            + "{\n"
+            + "  \"Response Status\": \"201 Created\",\n"
+            + "  \"Response Body\": \"\",\n"
+            + "  \"Errors\": [],\n"
+            + "  \"Number Files Created\": 10\n"
             + "}", ExtractArchiveResponse.class), ExtractArchiveResponse.create(10, ImmutableMap.<String, String> of()));
    }
 
    public void extractArchiveWithErrorsAndDecodesPaths() {
       assertEquals(
-            gson.fromJson("" //
-                  + "{\n" //
-                  + "  \"Response Status\": \"201 Created\",\n" //
-                  + "  \"Response Body\": \"\",\n" //
-                  + "  \"Errors\": [\n" //
-                  + "    [\"/v1/12345678912345/mycontainer/home/xx%3Cyy\", \"400 Bad Request\"],\n" //
-                  + "    [\"/v1/12345678912345/mycontainer/../image.gif\", \"400 Bad Request\"]\n" //
-                  + "  ],\n" //
-                  + "  \"Number Files Created\": 8\n" //
+            gson.fromJson(""
+                  + "{\n"
+                  + "  \"Response Status\": \"201 Created\",\n"
+                  + "  \"Response Body\": \"\",\n"
+                  + "  \"Errors\": [\n"
+                  + "    [\"/v1/12345678912345/mycontainer/home/xx%3Cyy\", \"400 Bad Request\"],\n"
+                  + "    [\"/v1/12345678912345/mycontainer/../image.gif\", \"400 Bad Request\"]\n"
+                  + "  ],\n"
+                  + "  \"Number Files Created\": 8\n"
                   + "}", ExtractArchiveResponse.class),
             ExtractArchiveResponse.create(
                   8,
@@ -65,25 +65,25 @@ public class SwiftTypeAdaptersTest {
    }
 
    public void bulkDeleteWithoutErrors() {
-      assertEquals(gson.fromJson("" //
-            + "{\n" //
-            + "  \"Response Status\": \"200 OK\",\n" //
-            + "  \"Response Body\": \"\",\n" //
-            + "  \"Errors\": [],\n" //
-            + "  \"Number Not Found\": 1,\n" //
-            + "  \"Number Deleted\": 9\n" //
+      assertEquals(gson.fromJson(""
+            + "{\n"
+            + "  \"Response Status\": \"200 OK\",\n"
+            + "  \"Response Body\": \"\",\n"
+            + "  \"Errors\": [],\n"
+            + "  \"Number Not Found\": 1,\n"
+            + "  \"Number Deleted\": 9\n"
             + "}", BulkDeleteResponse.class), BulkDeleteResponse.create(9, 1, ImmutableMap.<String, String> of()));
    }
 
    public void bulkDeleteWithErrorsAndDecodesPaths() {
-      assertEquals(gson.fromJson("" //
-            + "{\n" //
-            + "  \"Response Status\": \"400 Bad Request\",\n" //
-            + "  \"Response Body\": \"\",\n" //
-            + "  \"Errors\": [\n" //
-            + "    [\"/v1/12345678912345/Not%20Empty\", \"409 Conflict\"]" //
-            + "  ],\n" //
-            + "  \"Number Deleted\": 0\n" //
+      assertEquals(gson.fromJson(""
+            + "{\n"
+            + "  \"Response Status\": \"400 Bad Request\",\n"
+            + "  \"Response Body\": \"\",\n"
+            + "  \"Errors\": [\n"
+            + "    [\"/v1/12345678912345/Not%20Empty\", \"409 Conflict\"]"
+            + "  ],\n"
+            + "  \"Number Deleted\": 0\n"
             + "}", BulkDeleteResponse.class),
             BulkDeleteResponse.create(0, 0, ImmutableMap.of("/v1/12345678912345/Not Empty", "409 Conflict")));
    }

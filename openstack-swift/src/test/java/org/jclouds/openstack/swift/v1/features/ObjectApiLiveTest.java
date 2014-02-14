@@ -35,6 +35,7 @@ import org.jclouds.http.options.GetOptions;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.CopyObjectException;
+import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
@@ -48,18 +49,22 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 
 /**
+ * Provides live tests for the {@link ObjectApi}.
+ * 
  * @author Adrian Cole
+ * @author Jeremy Daggett
  */
-@Test(groups = "live", testName = "ObjectApiLiveTest")
-public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
+@Test(groups = "live", testName = "ObjectApiLiveTest", singleThreaded = true)
+public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
+   
    private String name = getClass().getSimpleName();
    private String containerName = getClass().getSimpleName() + "Container";
    
-   public void copyObject() throws Exception {
-      for (String regionId : regions) {               
+   public void testCopyObject() throws Exception {
+      for (String regionId : regions) {
          // source
          String sourceContainer = "src" + containerName;
-         String sourceObject = "original.txt";
+         String sourceObjectName = "original.txt";
          String badSource = "badSource";
          
          // destination
@@ -81,29 +86,29 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
          ObjectApi destApi = api.objectApiInRegionForContainer(regionId, destinationContainer);
          
          // Create source object 
-         assertNotNull(srcApi.replace(sourceObject, data, ImmutableMap.<String, String> of()));
-         SwiftObject object = srcApi.get(sourceObject, GetOptions.NONE);
-         checkObject(object);
+         assertNotNull(srcApi.replace(sourceObjectName, data, ImmutableMap.<String, String> of()));
+         SwiftObject sourceObject = srcApi.get(sourceObjectName, GetOptions.NONE);
+         checkObject(sourceObject);
 
          // Create the destination object
          assertNotNull(destApi.replace(destinationObject, data, ImmutableMap.<String, String> of()));
-         object = destApi.get(destinationObject, GetOptions.NONE);
-         checkObject(destApi.get(destinationObject, GetOptions.NONE));
+         SwiftObject object = destApi.get(destinationObject, GetOptions.NONE);
+         checkObject(object);
 
          // check the copy operation 
-         assertTrue(destApi.copy(destinationObject, sourceContainer, sourceObject));
+         assertTrue(destApi.copy(destinationObject, sourceContainer, sourceObjectName));
          assertNotNull(destApi.head(destinationObject));
          
          // now get a real SwiftObject
          SwiftObject destSwiftObject = destApi.get(destinationObject, GetOptions.NONE);
-         assertEquals(Strings2.toString(destSwiftObject.payload()), stringPayload);
+         assertEquals(Strings2.toString(destSwiftObject.getPayload()), stringPayload);
          
          // test exception thrown on bad source name
          try {
-            destApi.copy(destinationObject, badSource, sourceObject);
+            destApi.copy(destinationObject, badSource, sourceObjectName);
             fail("Expected CopyObjectException");
-         } catch (CopyObjectException e) {             
-            assertEquals(e.getSourcePath(), "/" + badSource + "/" + sourceObject);
+         } catch (CopyObjectException e) {
+            assertEquals(e.getSourcePath(), "/" + badSource + "/" + sourceObjectName);
             assertEquals(e.getDestinationPath(), destinationPath);
          }
 
@@ -115,11 +120,11 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
       }
    }
 
-   public void list() throws Exception {
+   public void testList() throws Exception {
       for (String regionId : regions) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-         ObjectList response = objectApi.list(new ListContainerOptions());
-         assertEquals(response.container(), api.containerApiInRegion(regionId).get(containerName));
+         ObjectList response = objectApi.list(ListContainerOptions.NONE);
+         assertEquals(response.getContainer(), api.containerApiInRegion(regionId).get(containerName));
          assertNotNull(response);
          for (SwiftObject object : response) {
             checkObject(object);
@@ -127,97 +132,81 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
       }
    }
 
-   static void checkObject(SwiftObject object) {
-      assertNotNull(object.name());
-      assertNotNull(object.uri());
-      assertNotNull(object.etag());
-      assertTrue(object.lastModified().getTime() <= System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5));
-      assertNotNull(object.payload().getContentMetadata().getContentLength());
-      assertNotNull(object.payload().getContentMetadata().getContentType());
-   }
-
-   public void metadata() throws Exception {
+   public void testMetadata() throws Exception {
       for (String regionId : regions) {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).head(name);
-         assertEquals(object.name(), name);
+         assertEquals(object.getName(), name);
          checkObject(object);
-         assertEquals(toStringAndClose(object.payload().getInput()), "");
+         assertEquals(toStringAndClose(object.getPayload().getInput()), "");
       }
    }
 
-   public void get() throws Exception {
+   public void testUpdateMetadata() throws Exception {
+      for (String regionId : regions) {
+         ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
+         
+         Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
+         assertTrue(objectApi.updateMetadata(name, meta));
+         
+         SwiftObject object = objectApi.head(name);
+         for (Entry<String, String> entry : meta.entrySet()) {
+            // note keys are returned in lower-case!
+            assertEquals(object.getMetadata().get(entry.getKey().toLowerCase()), entry.getValue(),
+                  object + " didn't have metadata: " + entry);
+         }
+      }
+   }
+
+   public void testGet() throws Exception {
       for (String regionId : regions) {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).get(name, GetOptions.NONE);
-         assertEquals(object.name(), name);
+         assertEquals(object.getName(), name);
          checkObject(object);
-         assertEquals(toStringAndClose(object.payload().getInput()), "swifty");
+         assertEquals(toStringAndClose(object.getPayload().getInput()), "swifty");
       }
    }
 
-   public void privateByDefault() throws Exception {
+   public void testPrivateByDefault() throws Exception {
       for (String regionId : regions) {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).head(name);
          try {
-            object.uri().toURL().openStream();
+            object.getUri().toURL().openStream();
             fail("shouldn't be able to access " + object);
          } catch (IOException expected) {
          }
       }
    }
 
-   public void getOptions() throws Exception {
+   public void testGetOptions() throws Exception {
       for (String regionId : regions) {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).get(name, tail(1));
-         assertEquals(object.name(), name);
+         assertEquals(object.getName(), name);
          checkObject(object);
-         assertEquals(toStringAndClose(object.payload().getInput()), "y");
+         assertEquals(toStringAndClose(object.getPayload().getInput()), "y");
       }
    }
 
-   public void listOptions() throws Exception {
+   public void testListOptions() throws Exception {
       String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
       for (String regionId : regions) {
          SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName)
                .list(marker(lexicographicallyBeforeName)).get(0);
-         assertEquals(object.name(), name);
+         assertEquals(object.getName(), name);
          checkObject(object);
       }
    }
 
-   public void updateMetadata() throws Exception {
-      for (String regionId : regions) {
-         ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
-
-         Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
-         assertTrue(objectApi.updateMetadata(name, meta));
-         containerHasMetadata(objectApi, name, meta);
-      }
-   }
-
-   public void deleteMetadata() throws Exception {
+   public void testDeleteMetadata() throws Exception {
       for (String regionId : regions) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
-
+          
          assertTrue(objectApi.updateMetadata(name, meta));
-         containerHasMetadata(objectApi, name, meta);
-
+         assertFalse(objectApi.head(name).getMetadata().isEmpty());
+         
          assertTrue(objectApi.deleteMetadata(name, meta));
-         SwiftObject object = objectApi.head(name);
-         for (Entry<String, String> entry : meta.entrySet()) {
-            // note keys are returned in lower-case!
-            assertFalse(object.metadata().containsKey(entry.getKey().toLowerCase()));
-         }
-      }
-   }
-
-   static void containerHasMetadata(ObjectApi objectApi, String name, Map<String, String> meta) {
-      SwiftObject object = objectApi.head(name);
-      for (Entry<String, String> entry : meta.entrySet()) {
-         // note keys are returned in lower-case!
-         assertEquals(object.metadata().get(entry.getKey().toLowerCase()), entry.getValue(), //
-               object + " didn't have metadata: " + entry);
+         assertTrue(objectApi.head(name).getMetadata().isEmpty());
       }
    }
 
@@ -240,6 +229,16 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest {
          api.objectApiInRegionForContainer(regionId, containerName).delete(name);
          api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
       }
+      
       super.tearDown();
+   }
+   
+   static void checkObject(SwiftObject object) {
+      assertNotNull(object.getName());
+      assertNotNull(object.getUri());
+      assertNotNull(object.getEtag());
+      assertTrue(object.getLastModified().getTime() <= System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5));
+      assertNotNull(object.getPayload().getContentMetadata().getContentLength());
+      assertNotNull(object.getPayload().getContentMetadata().getContentType());
    }
 }

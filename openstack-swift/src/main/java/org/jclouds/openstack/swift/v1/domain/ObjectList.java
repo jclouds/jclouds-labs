@@ -20,8 +20,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import org.jclouds.openstack.swift.v1.features.ObjectApi;
+
 import com.google.common.collect.ForwardingList;
 
+/**
+ * Represents a list of objects in a container.
+ * 
+ * @author Jeremy Daggett
+ * 
+ * @see Container 
+ * @see SwiftObject
+ * @see ObjectApi#list()
+ */
 public class ObjectList extends ForwardingList<SwiftObject> {
 
    public static ObjectList create(List<SwiftObject> objects, Container container) {
@@ -36,7 +47,10 @@ public class ObjectList extends ForwardingList<SwiftObject> {
       this.container = checkNotNull(container, "container");
    }
 
-   public Container container() {
+   /**
+    * @return the parent {@link Container} the objects reside in.
+    */
+   public Container getContainer() {
       return container;
    }
 

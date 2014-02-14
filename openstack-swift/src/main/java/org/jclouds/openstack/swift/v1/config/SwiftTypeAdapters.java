@@ -43,8 +43,8 @@ public class SwiftTypeAdapters extends AbstractModule {
 
    @Provides
    public Map<Type, Object> provideCustomAdapterBindings() {
-      return ImmutableMap.<Type, Object> builder() //
-            .put(ExtractArchiveResponse.class, new ExtractArchiveResponseAdapter()) //
+      return ImmutableMap.<Type, Object> builder()
+            .put(ExtractArchiveResponse.class, new ExtractArchiveResponseAdapter())
             .put(BulkDeleteResponse.class, new BulkDeleteResponseAdapter()).build();
    }
 

@@ -29,9 +29,7 @@ import com.google.common.collect.Multimap;
  * @param from
  *           a {@link Multimap} containing the prefixed headers.
  * 
- * @return the extracted {@code Metadata} without the prefixed keys.
- * 
- * @see {@link SwiftResource#metadata()}
+ * @return the extracted metadata without the prefixed keys. 
  */
 enum EntriesWithoutMetaPrefix implements Function<Multimap<String, String>, Map<String, String>> {
    INSTANCE;

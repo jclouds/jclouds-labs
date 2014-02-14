@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jclouds.io.Payload;
+import org.jclouds.openstack.swift.v1.features.ObjectApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
@@ -34,9 +35,12 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
 /**
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">api
- *      doc</a>
+ * Represents an object in OpenStack Object Storage.
+ * 
+ * @author Adrian Cole
+ * @author Jeremy Daggett
+ * 
+ * @see ObjectApi
  */
 public class SwiftObject implements Comparable<SwiftObject> {
 
@@ -59,52 +63,62 @@ public class SwiftObject implements Comparable<SwiftObject> {
       this.payload = checkNotNull(payload, "payload of %s", name);
    }
 
-   public String name() {
+   /**
+    * @return The name of this object.
+    */
+   public String getName() {
       return name;
    }
 
    /**
-    * http location of the object, accessible if its container is
-    * {@link CreateContainerOptions#publicRead}.
+    * @return The {@link URI} for this object.
     */
-   public URI uri() {
+   public URI getUri() {
       return uri;
    }
 
    /**
-    * Corresponds to the {@code ETag} header of the response, and is usually the
-    * MD5 checksum of the object
+    * @return The ETag of the content of this object.
     */
-   public String etag() {
+   public String getEtag() {
       return etag;
    }
 
-   public Date lastModified() {
+   /**
+    * @return The {@link Date} that this object was last modified.
+    */
+   public Date getLastModified() {
       return lastModified;
    }
 
-   public Multimap<String, String> headers() {
+   /**
+    * @return The HTTP headers for this object.
+    */
+   public Multimap<String, String> getHeaders() {
       return headers;
    }
 
    /**
-    * Empty except in {@link ObjectApi#head(String) GetObjectMetadata} or
-    * {@link ObjectApi#get(String) GetObject} commands.
-    * 
-    * <h3>Note</h3>
-    * 
+    * <h3>NOTE</h3>
     * In current swift implementations, headers keys are lower-cased. This means
     * characters such as turkish will probably not work out well.
+    * 
+    * @return a {@code Map<String, String>} containing this object's metadata. The map is empty
+    *         except in {@link ObjectApi#head(String) GetObjectMetadata} or
+    *         {@link ObjectApi#get(String) GetObject} commands.
     */
-   public Map<String, String> metadata() {
+   public Map<String, String> getMetadata() {
       return metadata;
    }
 
    /**
-    * Only has a {@link Payload#getInput()} when retrieved via the
+    * <h3>NOTE</h3>
+    * The object will only have a {@link Payload#getInput()} when retrieved via the
     * {@link ObjectApi#get(String) GetObject} command.
+    * 
+    * @return The {@link Payload} for this object.
     */
-   public Payload payload() {
+   public Payload getPayload() {
       return payload;
    }
 
@@ -115,9 +129,9 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
       if (object instanceof SwiftObject) {
          final SwiftObject that = SwiftObject.class.cast(object);
-         return equal(name(), that.name()) //
-               && equal(uri(), that.uri()) //
-               && equal(etag(), that.etag());
+         return equal(getName(), that.getName())
+               && equal(getUri(), that.getUri())
+               && equal(getEtag(), that.getEtag());
       } else {
          return false;
       }
@@ -125,7 +139,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name(), uri(), etag());
+      return Objects.hashCode(getName(), getUri(), getEtag());
    }
 
    @Override
@@ -134,12 +148,12 @@ public class SwiftObject implements Comparable<SwiftObject> {
    }
 
    protected ToStringHelper string() {
-      return toStringHelper("") //
-            .add("name", name()) //
-            .add("uri", uri()) //
-            .add("etag", etag()) //
-            .add("lastModified", lastModified()) //
-            .add("metadata", metadata());
+      return toStringHelper("")
+            .add("name", getName())
+            .add("uri", getUri())
+            .add("etag", getEtag())
+            .add("lastModified", getLastModified())
+            .add("metadata", getMetadata());
    }
 
    @Override
@@ -148,7 +162,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
          return 1;
       if (this == that)
          return 0;
-      return this.name().compareTo(that.name());
+      return this.getName().compareTo(that.getName());
    }
 
    public static Builder builder() {
@@ -169,7 +183,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       protected Map<String, String> metadata = ImmutableMap.of();
 
       /**
-       * @see SwiftObject#name()
+       * @see SwiftObject#getName()
        */
       public Builder name(String name) {
          this.name = checkNotNull(name, "name");
@@ -177,7 +191,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       /**
-       * @see SwiftObject#uri()
+       * @see SwiftObject#getUri()
        */
       public Builder uri(URI uri) {
          this.uri = checkNotNull(uri, "uri");
@@ -185,7 +199,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       /**
-       * @see SwiftObject#etag()
+       * @see SwiftObject#getEtag()
        */
       public Builder etag(String etag) {
          this.etag = etag;
@@ -193,7 +207,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       /**
-       * @see SwiftObject#lastModified()
+       * @see SwiftObject#getLastModified()
        */
       public Builder lastModified(Date lastModified) {
          this.lastModified = lastModified;
@@ -201,13 +215,16 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       /**
-       * @see SwiftObject#payload()
+       * @see SwiftObject#getPayload()
        */
       public Builder payload(Payload payload) {
          this.payload = payload;
          return this;
       }
 
+      /**
+       * @see SwiftObject#getHeaders()
+       */
       public Builder headers(Multimap<String, String> headers) {
          this.headers = headers;
          return this;
@@ -217,7 +234,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
        * Will lower-case all metadata keys due to a swift implementation
        * decision.
        * 
-       * @see SwiftObject#metadata()
+       * @see SwiftObject#getMetadata()
        */
       public Builder metadata(Map<String, String> metadata) {
          ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String> builder();
@@ -233,13 +250,13 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       public Builder fromObject(SwiftObject from) {
-         return name(from.name()) //
-               .uri(from.uri()) //
-               .etag(from.etag()) //
-               .lastModified(from.lastModified()) //
-               .headers(from.headers()) //
-               .metadata(from.metadata()) //
-               .payload(from.payload());
+         return name(from.getName())
+               .uri(from.getUri())
+               .etag(from.getEtag())
+               .lastModified(from.getLastModified())
+               .headers(from.getHeaders())
+               .metadata(from.getMetadata())
+               .payload(from.getPayload());
       }
    }
 }

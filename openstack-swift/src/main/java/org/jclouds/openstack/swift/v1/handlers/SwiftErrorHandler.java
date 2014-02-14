@@ -30,6 +30,7 @@ import org.jclouds.http.HttpResponseException;
 import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.reference.SwiftHeaders;
 import org.jclouds.rest.AuthorizationException;
+import org.jclouds.rest.InsufficientResourcesException;
 
 // TODO: is there error spec someplace? let's type errors, etc.
 public class SwiftErrorHandler implements HttpErrorHandler {
@@ -80,6 +81,9 @@ public class SwiftErrorHandler implements HttpErrorHandler {
             break;
          case 409:
             exception = new IllegalStateException(exception.getMessage(), exception);
+            break;
+         case 413:
+            exception = new InsufficientResourcesException(exception.getMessage(), exception);
             break;
       }
       command.setException(exception);

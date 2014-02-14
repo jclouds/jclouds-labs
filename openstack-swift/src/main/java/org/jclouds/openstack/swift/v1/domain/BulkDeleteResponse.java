@@ -22,12 +22,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
 
+import org.jclouds.openstack.swift.v1.features.BulkApi;
+
 import com.google.common.base.Objects;
 
 /**
- * @see <a
- *      href="http://docs.openstack.org/developer/swift/misc.html#module-swift.common.middleware.bulk">
- *      Swift Bulk Middleware</a>
+ * Represents a response from a Bulk Delete request.
+ * 
+ * @author Jeremy Daggett
+ * 
+ * @see BulkApi
  */
 public class BulkDeleteResponse {
    public static BulkDeleteResponse create(int deleted, int notFound, Map<String, String> errors) {
@@ -44,18 +48,25 @@ public class BulkDeleteResponse {
       this.errors = checkNotNull(errors, "errors");
    }
 
-   /** number of files deleted. */
-   public int deleted() {
+   /** 
+    * @return The number of files deleted.
+    * */
+   public int getDeleted() {
       return deleted;
    }
 
-   /** number of files not found. */
-   public int notFound() {
+   /** 
+    * @return The number of files not found.
+    */
+   public int getNotFound() {
       return notFound;
    }
 
-   /** For each path that failed to delete, a corresponding error response. */
-   public Map<String, String> errors() {
+   /** 
+    * @return a {@code Map<String, String>} containing each path that failed 
+    *         to be deleted and its corresponding error response.
+    */
+   public Map<String, String> getErrors() {
       return errors;
    }
 
@@ -66,9 +77,9 @@ public class BulkDeleteResponse {
       }
       if (object instanceof BulkDeleteResponse) {
          BulkDeleteResponse that = BulkDeleteResponse.class.cast(object);
-         return equal(deleted(), that.deleted()) //
-               && equal(notFound(), that.notFound()) //
-               && equal(errors(), that.errors());
+         return equal(getDeleted(), that.getDeleted())
+               && equal(getNotFound(), that.getNotFound())
+               && equal(getErrors(), that.getErrors());
       } else {
          return false;
       }
@@ -76,14 +87,14 @@ public class BulkDeleteResponse {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(deleted(), notFound(), errors());
+      return Objects.hashCode(getDeleted(), getNotFound(), getErrors());
    }
 
    @Override
    public String toString() {
-      return toStringHelper("") //
-            .add("deleted", deleted()) //
-            .add("notFound", notFound()) //
-            .add("errors", errors()).toString();
+      return toStringHelper("")
+            .add("deleted", getDeleted())
+            .add("notFound", getNotFound())
+            .add("errors", getErrors()).toString();
    }
 }

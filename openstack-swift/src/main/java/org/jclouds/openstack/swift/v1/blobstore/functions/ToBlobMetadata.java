@@ -43,17 +43,17 @@ public class ToBlobMetadata implements Function<SwiftObject, MutableBlobMetadata
       if (from == null)
          return null;
       MutableBlobMetadata to = new MutableBlobMetadataImpl();
-      to.setContainer(container.name());
-      if (container.anybodyRead().isPresent()) {
-         to.setPublicUri(from.uri());
+      to.setContainer(container.getName());
+      if (container.getAnybodyRead().isPresent()) {
+         to.setPublicUri(from.getUri());
       }
-      to.setUri(from.uri());
-      to.setETag(from.etag());
-      to.setName(from.name());
-      to.setLastModified(from.lastModified());
-      to.setContentMetadata(from.payload().getContentMetadata());
-      to.getContentMetadata().setContentMD5(base16().lowerCase().decode(from.etag()));
-      to.setUserMetadata(from.metadata());
+      to.setUri(from.getUri());
+      to.setETag(from.getEtag());
+      to.setName(from.getName());
+      to.setLastModified(from.getLastModified());
+      to.setContentMetadata(from.getPayload().getContentMetadata());
+      to.getContentMetadata().setContentMD5(base16().lowerCase().decode(from.getEtag()));
+      to.setUserMetadata(from.getMetadata());
       String directoryName = ifDirectoryReturnName.execute(to);
       if (directoryName != null) {
          to.setName(directoryName);

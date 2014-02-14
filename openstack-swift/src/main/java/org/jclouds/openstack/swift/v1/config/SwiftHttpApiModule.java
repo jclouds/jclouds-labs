@@ -15,25 +15,18 @@
  * limitations under the License.
  */
 package org.jclouds.openstack.swift.v1.config;
-import org.jclouds.http.HttpErrorHandler;
-import org.jclouds.http.annotation.ClientError;
-import org.jclouds.http.annotation.Redirection;
-import org.jclouds.http.annotation.ServerError;
 import org.jclouds.openstack.swift.v1.SwiftApi;
-import org.jclouds.openstack.swift.v1.handlers.SwiftErrorHandler;
 import org.jclouds.rest.ConfiguresHttpApi;
-import org.jclouds.rest.config.HttpApiModule;
 
 @ConfiguresHttpApi
-public class SwiftHttpApiModule extends HttpApiModule<SwiftApi> {
-  
+public class SwiftHttpApiModule extends BaseSwiftHttpApiModule<SwiftApi> {
+
    public SwiftHttpApiModule() {
-   }   
+      super(SwiftApi.class);
+   }
 
    @Override
-   protected void bindErrorHandlers() {
-      bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(SwiftErrorHandler.class);
-      bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(SwiftErrorHandler.class);
-      bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(SwiftErrorHandler.class);
+   protected void configure() {
+      super.configure();
    }
 }

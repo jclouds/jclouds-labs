@@ -24,8 +24,9 @@ import java.util.Properties;
 import org.jclouds.blobstore.integration.internal.BaseContainerIntegrationTest;
 import org.testng.annotations.Test;
 
-@Test(groups = "live")
+@Test(groups = "live", testName = "SwiftContainerIntegrationLiveTest")
 public class SwiftContainerIntegrationLiveTest extends BaseContainerIntegrationTest {
+
    public SwiftContainerIntegrationLiveTest() {
       provider = "openstack-swift";
    }

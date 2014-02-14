@@ -26,8 +26,9 @@ import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Test(groups = "live")
+@Test(groups = "live", testName = "SwiftBlobIntegrationLiveTest")
 public class SwiftBlobIntegrationLiveTest extends BaseBlobIntegrationTest {
+   
    public SwiftBlobIntegrationLiveTest() {
       provider = "openstack-swift";
    }

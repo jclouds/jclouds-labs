@@ -57,9 +57,10 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 /**
- * @see <a href=
- *      "http://docs.openstack.org/api/openstack-object-storage/1.0/content/storage-object-services.html"
- *      >api doc</a>
+ * Provides access to the Swift Object API features.
+ * 
+ * @author Adrian Cole
+ * @author Jeremy Daggett
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
@@ -68,12 +69,12 @@ public interface ObjectApi {
    /**
     * Lists up to 10,000 objects.
     * 
-    * @param options
-    *          options to control the output list.
-    *          
-    * @return an {@link ObjectList} of {@link SwiftObject} ordered by name or null.
+    * @param options  
+    *           the {@link ListContainerOptions} for controlling the returned list.
+    * 
+    * @return an {@link ObjectList} of {@link SwiftObject} ordered by name or {@code null}.
     */
-   @Named("ListObjects")
+   @Named("object:list")
    @GET
    @QueryParams(keys = "format", values = "json")
    @ResponseParser(ParseObjectListFromResponse.class)
@@ -83,21 +84,18 @@ public interface ObjectApi {
    ObjectList list(ListContainerOptions options);
 
    /**
-    * Creates or updates an object.
+    * Creates or updates a {@link SwiftObject}.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
+    *           corresponds to {@link SwiftObject#getName()}.
     * @param payload
-    *           corresponds to {@link SwiftObject#payload()}.
+    *           corresponds to {@link SwiftObject#getPayload()}.
     * @param metadata
-    *           corresponds to {@link SwiftObject#metadata()}.
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">
-    *      Create or Update Object API</a>
+    *           corresponds to {@link SwiftObject#getMetadata()}.
     * 
-    * @return {@link SwiftObject#etag()} of the object.
+    * @return {@link SwiftObject#getEtag()} of the object.
     */
-   @Named("CreateOrUpdateObject")
+   @Named("object:replace")
    @PUT
    @ResponseParser(ETagHeader.class)
    @Path("/{objectName}")
@@ -105,18 +103,14 @@ public interface ObjectApi {
          @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
-    * Gets the {@link SwiftObject} metadata without its
-    * {@link Payload#getInput() body}.
+    * Gets the {@link SwiftObject} metadata without its {@link Payload#getInput() body}.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
-    * @return the {@link SwiftObject} or null, if not found.
+    *           corresponds to {@link SwiftObject#getName()}.
     * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">
-    *      Get Object Metadata API</a>
+    * @return the {@link SwiftObject} or {@code null}, if not found.
     */
-   @Named("GetObjectMetadata")
+   @Named("object:head")
    @HEAD
    @ResponseParser(ParseObjectFromResponse.class)
    @Fallback(NullOnNotFoundOr404.class)
@@ -128,17 +122,13 @@ public interface ObjectApi {
     * Gets the {@link SwiftObject} including its {@link Payload#getInput() body}.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
+    *           corresponds to {@link SwiftObject#getName()}.
     * @param options
     *           options to control the download.
     * 
-    * @return the Object or null, if not found.
-    * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">
-    *      Get Object API</a>
+    * @return the {@link SwiftObject} or {@code null}, if not found.
     */
-   @Named("GetObject")
+   @Named("object:get")
    @GET
    @ResponseParser(ParseObjectFromResponse.class)
    @Fallback(NullOnNotFoundOr404.class)
@@ -150,18 +140,14 @@ public interface ObjectApi {
     * Creates or updates the metadata for a {@link SwiftObject}.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
+    *           corresponds to {@link SwiftObject#getName()}.
     * @param metadata
     *           the metadata to create or update.
     * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Update_Container_Metadata-d1e1900.html">
-    *      Create or Update Object Metadata API</a>
-    * 
-    * @return {@code true} if the metadata was successfully created
-    *         or updated, false if not.
+    * @return {@code true} if the metadata was successfully created or updated, 
+    *         {@code false} if not.
     */
-   @Named("UpdateObjectMetadata")
+   @Named("object:updateMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{objectName}")
@@ -172,17 +158,14 @@ public interface ObjectApi {
     * Deletes the metadata from a {@link SwiftObject}.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
+    *           corresponds to {@link SwiftObject#getName()}.
     * @param metadata
-    *           corresponds to {@link SwiftObject#metadata()}.
+    *           corresponds to {@link SwiftObject#getMetadata()}.
     * 
-    * @return {@code true} if the metadata was successfully deleted, false if not.
-    * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object-metadata.html">
-    *      Delete Object Metadata API</a>
+    * @return {@code true} if the metadata was successfully deleted, 
+    *         {@code false} if not.
     */
-   @Named("DeleteObjectMetadata")
+   @Named("object:deleteMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{objectName}")
@@ -193,20 +176,19 @@ public interface ObjectApi {
     * Deletes an object, if present.
     * 
     * @param objectName
-    *           corresponds to {@link SwiftObject#name()}.
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object.html">
-    *      Delete Object API</a>
+    *           corresponds to {@link SwiftObject#getName()}.
     */
-   @Named("DeleteObject")
+   @Named("object:delete")
    @DELETE
    @Fallback(VoidOnNotFoundOr404.class)
    @Path("/{objectName}")
    void delete(@PathParam("objectName") String objectName);
 
    /**
-    * Copies an object from one container to another. Please note that this 
-    * is a server side copy.
+    * Copies an object from one container to another. 
+    * 
+    * <h3>NOTE</h3>
+    * This is a server side copy.
     * 
     * @param destinationObject
     *           the destination object name.
@@ -214,15 +196,12 @@ public interface ObjectApi {
     *           the source container name.
     * @param sourceObject
     *           the source object name.
-    * @return {@code true} if the object was successfully copied, false if not.
     * 
-    * @throws CopyObjectException if the source or destination container do not exist
+    * @return {@code true} if the object was successfully copied, {@code false} if not.
     * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">
-    *      Copy Object API</a>
+    * @throws CopyObjectException if the source or destination container do not exist.
     */
-   @Named("CopyObject")
+   @Named("object:copy")
    @PUT
    @Path("/{destinationObject}")
    @Headers(keys = OBJECT_COPY_FROM, values = "/{sourceContainer}/{sourceObject}")
@@ -230,5 +209,4 @@ public interface ObjectApi {
    boolean copy(@PathParam("destinationObject") String destinationObject,
                 @PathParam("sourceContainer") String sourceContainer,
                 @PathParam("sourceObject") String sourceObject);
-
 }

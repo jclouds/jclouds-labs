@@ -19,19 +19,20 @@ package org.jclouds.openstack.swift.v1.features;
 import static org.jclouds.openstack.swift.v1.options.CreateContainerOptions.Builder.anybodyRead;
 import static org.testng.Assert.assertTrue;
 
+import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "CreatePublicContainerLiveTest")
-public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest {
+public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    private String name = getClass().getSimpleName();
 
-   public void anybodyReadUpdatesMetadata() throws Exception {
+   public void testAnybodyReadUpdatesMetadata() throws Exception {
       for (String regionId : api.configuredRegions()) {
          api.containerApiInRegion(regionId).createIfAbsent(name, anybodyRead());
-         assertTrue(api.containerApiInRegion(regionId).get(name).anybodyRead().get());
+         assertTrue(api.containerApiInRegion(regionId).get(name).getAnybodyRead().get());
       }
    }
 

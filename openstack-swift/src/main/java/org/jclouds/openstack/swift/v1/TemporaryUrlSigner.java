@@ -35,10 +35,6 @@ import com.google.common.base.Supplier;
 
 /**
  * Use this utility to create temporary urls.
- * 
- * @see <a
- *      href="http://docs.openstack.org/trunk/config-reference/content/object-storage-tempurl.html">Temporary
- *      URL Documentation</a>
  */
 public class TemporaryUrlSigner {
 
@@ -82,12 +78,12 @@ public class TemporaryUrlSigner {
 
       @Override
       public String get() {
-         return api.get().temporaryUrlKey().orNull();
+         return api.get().getTemporaryUrlKey().orNull();
       }
 
       @Override
       public String toString() {
-         return format("get().temporaryUrlKey() using %s", api);
+         return format("get().getTemporaryUrlKey() using %s", api);
       }
    }
 }

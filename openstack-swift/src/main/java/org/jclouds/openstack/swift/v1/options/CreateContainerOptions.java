@@ -16,22 +16,29 @@
  */
 package org.jclouds.openstack.swift.v1.options;
 
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_ACL_ANYBODY_READ;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_METADATA_PREFIX;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_READ;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_VERSIONS_LOCATION;
+
 import java.util.Map;
 
 import org.jclouds.http.options.BaseHttpRequestOptions;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders;
+import org.jclouds.openstack.swift.v1.domain.Container;
+import org.jclouds.openstack.swift.v1.features.ContainerApi;
 
 /**
- * Options available to <a href=
- * "http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html"
- * >create a container</a>.
+ * Options for creating a {@link Container}. 
  * 
- * @see ContainerApi#createIfAbsent
+ * @see ContainerApi#createIfAbsent(String, CreateContainerOptions)
  */
 public class CreateContainerOptions extends BaseHttpRequestOptions {
    public static final CreateContainerOptions NONE = new CreateContainerOptions();
 
-   /** corresponds to {@link Container#metadata()} */
+   /** 
+    * Sets the metadata on a container at creation. 
+    */
    public CreateContainerOptions metadata(Map<String, String> metadata) {
       if (!metadata.isEmpty()) {
          this.headers.putAll(bindMetadataToHeaders.toHeaders(metadata));
@@ -39,26 +46,48 @@ public class CreateContainerOptions extends BaseHttpRequestOptions {
       return this;
    }
 
-   /** Sets the ACL the container so that anybody can read it. */
+   /** 
+    * Sets the public ACL on the container so that anybody can read it. 
+    */
    public CreateContainerOptions anybodyRead() {
-      this.headers.put("x-container-read", ".r:*,.rlistings");
+      this.headers.put(CONTAINER_READ, CONTAINER_ACL_ANYBODY_READ);
+      return this;
+   }
+
+   /** 
+    * Sets the container that will contain object versions.
+    */
+   public CreateContainerOptions versionsLocation(String containerName) {
+      this.headers.put(CONTAINER_VERSIONS_LOCATION, containerName);
       return this;
    }
 
    public static class Builder {
 
-      /** @see CreateContainerOptions#anybodyRead */
+      /** 
+       * @see CreateContainerOptions#anybodyRead 
+       */
       public static CreateContainerOptions anybodyRead() {
          CreateContainerOptions options = new CreateContainerOptions();
          return options.anybodyRead();
       }
 
-      /** @see CreateContainerOptions#metadata */
+      /** 
+       * @see CreateContainerOptions#metadata 
+       */
       public static CreateContainerOptions metadata(Map<String, String> metadata) {
          CreateContainerOptions options = new CreateContainerOptions();
          return options.metadata(metadata);
       }
+
+      /** 
+       * @see CreateContainerOptions#versionsLocation 
+       */
+      public static CreateContainerOptions versionsLocation(String containerName) {
+         CreateContainerOptions options = new CreateContainerOptions();
+         return options.versionsLocation(containerName);
+      }
    }
 
-   private static final BindMetadataToHeaders bindMetadataToHeaders = new BindMetadataToHeaders("x-container-meta-");
+   private static final BindMetadataToHeaders bindMetadataToHeaders = new BindMetadataToHeaders(CONTAINER_METADATA_PREFIX);
 }

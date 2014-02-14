@@ -110,7 +110,7 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
    @Override
    public PageSet<? extends StorageMetadata> list() {
       // TODO: there may eventually be >10k containers..
-      FluentIterable<StorageMetadata> containers = api.containerApiInRegion(region.getId()).listFirstPage()
+      FluentIterable<StorageMetadata> containers = api.containerApiInRegion(region.getId()).list()
             .transform(toResourceMetadata);
       return new PageSetImpl<StorageMetadata>(containers, null);
    }
@@ -153,7 +153,7 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
          containerCache.put(container, Optional.<Container> absent());
          return new PageSetImpl<StorageMetadata>(ImmutableList.<StorageMetadata> of(), null);
       } else {
-         containerCache.put(container, Optional.of(objects.container()));
+         containerCache.put(container, Optional.of(objects.getContainer()));
          List<? extends StorageMetadata> list = transform(objects, toBlobMetadata(container));
          int limit = Optional.fromNullable(options.getMaxResults()).or(10000);
          String marker = list.size() == limit ? list.get(limit - 1).getName() : null;
@@ -214,8 +214,8 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
          return null;
       }
       Blob blob = new BlobImpl(toBlobMetadata(container).apply(object));
-      blob.setPayload(object.payload());
-      blob.setAllHeaders(object.headers());
+      blob.setPayload(object.getPayload());
+      blob.setAllHeaders(object.getHeaders());
       return blob;
    }
 
@@ -236,13 +236,13 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
 
    @Override
    public boolean directoryExists(String containerName, String directory) {
-      return api.objectApiInRegionForContainer(region.getId(), containerName) //
+      return api.objectApiInRegionForContainer(region.getId(), containerName)
             .head(directory) != null;
    }
 
    @Override
    public void createDirectory(String containerName, String directory) {
-      api.objectApiInRegionForContainer(region.getId(), containerName) //
+      api.objectApiInRegionForContainer(region.getId(), containerName)
             .replace(directory, directoryPayload, ImmutableMap.<String, String> of());
    }
 
@@ -261,7 +261,7 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
    public long countBlobs(String containerName) {
       Container container = api.containerApiInRegion(region.getId()).get(containerName);
       // undefined if container doesn't exist, so default to zero
-      return container != null ? container.objectCount() : 0;
+      return container != null ? container.getObjectCount() : 0;
    }
 
    @Override

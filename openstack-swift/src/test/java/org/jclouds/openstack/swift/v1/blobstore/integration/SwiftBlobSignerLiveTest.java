@@ -23,8 +23,9 @@ import java.util.Properties;
 import org.jclouds.blobstore.integration.internal.BaseBlobSignerLiveTest;
 import org.testng.annotations.Test;
 
-@Test(groups = "live")
+@Test(groups = "live", testName = "SwiftBlobSignerLiveTest")
 public class SwiftBlobSignerLiveTest extends BaseBlobSignerLiveTest {
+
    public SwiftBlobSignerLiveTest() {
       provider = "openstack-swift";
    }

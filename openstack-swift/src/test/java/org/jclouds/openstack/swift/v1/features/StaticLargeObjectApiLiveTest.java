@@ -19,12 +19,12 @@ package org.jclouds.openstack.swift.v1.features;
 import static java.lang.String.format;
 import static org.jclouds.io.Payloads.newPayload;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 import java.util.UUID;
 
+import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Segment;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
@@ -37,20 +37,20 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 @Test(groups = "live", testName = "StaticLargeObjectApiLiveTest")
-public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
+public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    private String name = getClass().getSimpleName();
    private String containerName = getClass().getSimpleName() + "Container";
    private byte[] megOf1s;
    private byte[] megOf2s;
 
-   public void notPresentWhenDeleting() throws Exception {
+   public void testNotPresentWhenDeleting() throws Exception {
       for (String regionId : regions) {
          api.staticLargeObjectApiInRegionForContainer(regionId, containerName).delete(UUID.randomUUID().toString());
       }
    }
 
-   public void replaceManifest() throws Exception {
+   public void testReplaceManifest() throws Exception {
       for (String regionId : regions) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
          String etag1s = objectApi.replace(name + "/1", newPayload(megOf1s), ImmutableMap.<String, String> of());
@@ -74,21 +74,27 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
          assertNotNull(etagOfEtags);
 
          SwiftObject bigObject = api.objectApiInRegionForContainer(regionId, containerName).head(name);
-         assertNotEquals(bigObject.etag(), etagOfEtags);
-         assertEquals(bigObject.payload().getContentMetadata().getContentLength(), new Long(2 * 1024 * 1024));
-         assertEquals(bigObject.metadata(), ImmutableMap.of("myfoo", "Bar"));
+         assertEquals(bigObject.getEtag(), etagOfEtags);
+         assertEquals(bigObject.getPayload().getContentMetadata().getContentLength(), new Long(2 * 1024 * 1024));
+         assertEquals(bigObject.getMetadata(), ImmutableMap.of("myfoo", "Bar"));
 
          // segments are visible
-         assertEquals(api.containerApiInRegion(regionId).get(containerName).objectCount(), 3);
+         assertEquals(api.containerApiInRegion(regionId).get(containerName).getObjectCount(), 3);
       }
    }
 
-   @Test(dependsOnMethods = "replaceManifest")
-   public void delete() throws Exception {
+   @Test(dependsOnMethods = "testReplaceManifest")
+   public void testDelete() throws Exception {
       for (String regionId : regions) {
          api.staticLargeObjectApiInRegionForContainer(regionId, containerName).delete(name);
-         assertEquals(api.containerApiInRegion(regionId).get(containerName).objectCount(), 0);
+         assertEquals(api.containerApiInRegion(regionId).get(containerName).getObjectCount(), 0);
       }
+   }
+
+   protected void assertMegabyteAndETagMatches(String regionId, String name, String etag1s) {
+      SwiftObject object1s = api.objectApiInRegionForContainer(regionId, containerName).head(name);
+      assertEquals(object1s.getEtag(), etag1s);
+      assertEquals(object1s.getPayload().getContentMetadata().getContentLength(), new Long(1024 * 1024));
    }
 
    @Override
@@ -118,11 +124,5 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest {
          api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
       }
       super.tearDown();
-   }
-
-   protected void assertMegabyteAndETagMatches(String regionId, String name, String etag1s) {
-      SwiftObject object1s = api.objectApiInRegionForContainer(regionId, containerName).head(name);
-      assertEquals(object1s.etag(), etag1s);
-      assertEquals(object1s.payload().getContentMetadata().getContentLength(), new Long(1024 * 1024));
    }
 }

@@ -24,6 +24,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Account;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.testng.annotations.Test;
@@ -31,21 +32,21 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 
 @Test(groups = "live", testName = "AccountApiLiveTest")
-public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
+public class AccountApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
-   public void get() throws Exception {
+   public void testGet() throws Exception {
       for (String regionId : regions) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
          Account account = accountApi.get();
 
          assertNotNull(account);
-         assertTrue(account.containerCount() >= 0);
-         assertTrue(account.objectCount() >= 0);
-         assertTrue(account.bytesUsed() >= 0);
+         assertTrue(account.getContainerCount() >= 0);
+         assertTrue(account.getObjectCount() >= 0);
+         assertTrue(account.getBytesUsed() >= 0);
       }
    }
 
-   public void updateMetadata() throws Exception {
+   public void testUpdateMetadata() throws Exception {
       for (String regionId : regions) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
 
@@ -57,7 +58,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
       }
    }
 
-   public void deleteMetadata() throws Exception {
+   public void testDeleteMetadata() throws Exception {
       for (String regionId : regions) {
          AccountApi accountApi = api.accountApiInRegion(regionId);
 
@@ -70,7 +71,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
          Account account = accountApi.get();
          for (Entry<String, String> entry : meta.entrySet()) {
             // note keys are returned in lower-case!
-            assertFalse(account.metadata().containsKey(entry.getKey().toLowerCase()));
+            assertFalse(account.getMetadata().containsKey(entry.getKey().toLowerCase()));
          }
       }
    }
@@ -79,7 +80,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest {
       Account account = accountApi.get();
       for (Entry<String, String> entry : meta.entrySet()) {
          // note keys are returned in lower-case!
-         assertEquals(account.metadata().get(entry.getKey().toLowerCase()), entry.getValue(), //
+         assertEquals(account.getMetadata().get(entry.getKey().toLowerCase()), entry.getValue(),
                account + " didn't have metadata: " + entry);
       }
    }

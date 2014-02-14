@@ -24,6 +24,8 @@ import java.beans.ConstructorProperties;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.openstack.swift.v1.features.ContainerApi;
+import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
@@ -31,9 +33,12 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/s_listcontainers.html">api
- *      doc</a>
+ * Represents a Container in OpenStack Object Storage.
+ * 
+ * @author Adrian Cole
+ * @author Jeremy Daggett
+ * 
+ * @see ContainerApi
  */
 public class Container implements Comparable<Container> {
 
@@ -53,38 +58,46 @@ public class Container implements Comparable<Container> {
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
    }
 
-   public String name() {
+   /**
+    * @return The name of this container.
+    */
+   public String getName() {
       return name;
    }
 
-   public long objectCount() {
+   /**
+    * @return The count of objects for this container.
+    */
+   public long getObjectCount() {
       return objectCount;
    }
 
-   public long bytesUsed() {
+   /**
+    * @return The number of bytes used by this container.
+    */
+   public long getBytesUsed() {
       return bytesUsed;
    }
 
    /**
-    * Absent except in {@link ContainerApi#get(String) GetContainer} commands.
+    * Absent except in {@link ContainerApi#get(String) Get Container} commands.
     * 
-    * When present, designates that the container is publicly readable.
+    * @return true  if this container is publicly readable, false otherwise.
     * 
     * @see CreateContainerOptions#anybodyRead()
     */
-   public Optional<Boolean> anybodyRead() {
+   public Optional<Boolean> getAnybodyRead() {
       return anybodyRead;
    }
 
    /**
-    * Empty except in {@link ContainerApi#get(String) GetContainer} commands.
-    * 
-    * <h3>Note</h3>
-    * 
+    * <h3>NOTE</h3>
     * In current swift implementations, headers keys are lower-cased. This means
     * characters such as turkish will probably not work out well.
+    * 
+    * @return a {@code Map<String, String>} containing this container's metadata.
     */
-   public Map<String, String> metadata() {
+   public Map<String, String> getMetadata() {
       return metadata;
    }
 
@@ -95,10 +108,10 @@ public class Container implements Comparable<Container> {
       }
       if (object instanceof Container) {
          final Container that = Container.class.cast(object);
-         return equal(name(), that.name()) //
-               && equal(objectCount(), that.objectCount()) //
-               && equal(bytesUsed(), that.bytesUsed()) //
-               && equal(metadata(), that.metadata());
+         return equal(getName(), that.getName())
+               && equal(getObjectCount(), that.getObjectCount())
+               && equal(getBytesUsed(), that.getBytesUsed())
+               && equal(getMetadata(), that.getMetadata());
       } else {
          return false;
       }
@@ -106,7 +119,7 @@ public class Container implements Comparable<Container> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name(), objectCount(), bytesUsed(), anybodyRead(), metadata());
+      return Objects.hashCode(getName(), getObjectCount(), getBytesUsed(), getAnybodyRead(), getMetadata());
    }
 
    @Override
@@ -115,12 +128,12 @@ public class Container implements Comparable<Container> {
    }
 
    protected ToStringHelper string() {
-      return toStringHelper("").omitNullValues() //
-            .add("name", name()) //
-            .add("objectCount", objectCount()) //
-            .add("bytesUsed", bytesUsed()) //
-            .add("anybodyRead", anybodyRead().orNull()) //
-            .add("metadata", metadata());
+      return toStringHelper("").omitNullValues()
+            .add("name", getName())
+            .add("objectCount", getObjectCount())
+            .add("bytesUsed", getBytesUsed())
+            .add("anybodyRead", getAnybodyRead().orNull())
+            .add("metadata", getMetadata());
    }
 
    @Override
@@ -129,7 +142,7 @@ public class Container implements Comparable<Container> {
          return 1;
       if (this == that)
          return 0;
-      return this.name().compareTo(that.name());
+      return this.getName().compareTo(that.getName());
    }
 
    public static Builder builder() {
@@ -148,7 +161,7 @@ public class Container implements Comparable<Container> {
       protected Map<String, String> metadata = ImmutableMap.of();
 
       /**
-       * @see Container#name()
+       * @see Container#getName()
        */
       public Builder name(String name) {
          this.name = checkNotNull(name, "name");
@@ -156,7 +169,7 @@ public class Container implements Comparable<Container> {
       }
 
       /**
-       * @see Container#objectCount()
+       * @see Container#getObjectCount()
        */
       public Builder objectCount(long objectCount) {
          this.objectCount = objectCount;
@@ -164,7 +177,7 @@ public class Container implements Comparable<Container> {
       }
 
       /**
-       * @see Container#bytesUsed()
+       * @see Container#getBytesUsed()
        */
       public Builder bytesUsed(long bytesUsed) {
          this.bytesUsed = bytesUsed;
@@ -172,7 +185,7 @@ public class Container implements Comparable<Container> {
       }
 
       /**
-       * @see Container#anybodyRead()
+       * @see Container#getAnybodyRead()
        */
       public Builder anybodyRead(Boolean anybodyRead) {
          this.anybodyRead = Optional.fromNullable(anybodyRead);
@@ -180,10 +193,10 @@ public class Container implements Comparable<Container> {
       }
 
       /**
-       * Will lower-case all metadata keys due to a swift implementation
-       * decision.
+       * <h3>NOTE</h3>
+       * This method will lower-case all metadata keys.
        * 
-       * @see Container#metadata()
+       * @see Container#getMetadata()
        */
       public Builder metadata(Map<String, String> metadata) {
          ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String> builder();
@@ -199,11 +212,11 @@ public class Container implements Comparable<Container> {
       }
 
       public Builder fromContainer(Container from) {
-         return name(from.name()) //
-               .objectCount(from.objectCount()) //
-               .bytesUsed(from.bytesUsed()) //
-               .anybodyRead(from.anybodyRead().orNull()) //
-               .metadata(from.metadata());
+         return name(from.getName())
+               .objectCount(from.getObjectCount())
+               .bytesUsed(from.getBytesUsed())
+               .anybodyRead(from.getAnybodyRead().orNull())
+               .metadata(from.getMetadata());
       }
    }
 }

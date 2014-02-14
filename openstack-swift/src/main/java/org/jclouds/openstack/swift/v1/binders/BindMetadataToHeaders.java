@@ -16,6 +16,10 @@
  */
 package org.jclouds.openstack.swift.v1.binders;
 
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.ACCOUNT_METADATA_PREFIX;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_METADATA_PREFIX;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_METADATA_PREFIX;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -48,45 +52,42 @@ import com.google.common.collect.ImmutableMultimap.Builder;
  * HTTP response headers keys are known to be case-insensitive, but this
  * practice of mixing up case will prevent metadata keys such as those in
  * Turkish from working.
- * 
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">documentation</a>
  */
 public class BindMetadataToHeaders implements Binder {
 
    public static class BindAccountMetadataToHeaders extends BindMetadataToHeaders {
       BindAccountMetadataToHeaders() {
-         super("x-account-meta-");
+         super(ACCOUNT_METADATA_PREFIX);
       }
    }
 
    public static class BindRemoveAccountMetadataToHeaders extends BindMetadataToHeaders.ForRemoval {
       BindRemoveAccountMetadataToHeaders() {
-         super("x-account-meta-");
+         super(ACCOUNT_METADATA_PREFIX);
       }
    }
 
    public static class BindContainerMetadataToHeaders extends BindMetadataToHeaders {
       BindContainerMetadataToHeaders() {
-         super("x-container-meta-");
+         super(CONTAINER_METADATA_PREFIX);
       }
    }
 
    public static class BindRemoveContainerMetadataToHeaders extends BindMetadataToHeaders.ForRemoval {
       BindRemoveContainerMetadataToHeaders() {
-         super("x-container-meta-");
+         super(CONTAINER_METADATA_PREFIX);
       }
    }
 
    public static class BindObjectMetadataToHeaders extends BindMetadataToHeaders {
       BindObjectMetadataToHeaders() {
-         super("x-object-meta-");
+         super(OBJECT_METADATA_PREFIX);
       }
    }
 
    public static class BindRemoveObjectMetadataToHeaders extends BindMetadataToHeaders.ForRemoval {
       BindRemoveObjectMetadataToHeaders() {
-         super("x-object-meta-");
+         super(OBJECT_METADATA_PREFIX);
       }
    }
 

@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.location.reference.LocationConstants;
@@ -31,19 +32,22 @@ import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Uninterruptibles;
 
-public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
+@Test(groups = "live", testName = "BaseSwiftApiLiveTest")
+public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLiveTest<A> {
 
    protected Set<String> regions;
    
-   public BaseSwiftApiLiveTest() {
+   protected BaseSwiftApiLiveTest() {
       provider = "openstack-swift";
    }
-   
+
    @Override
    @BeforeClass(groups = "live")
    public void setup() {
@@ -55,7 +59,7 @@ public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
         regions = api.configuredRegions();
       }
    }
-   
+
    @Override
    protected Properties setupProperties() {
       Properties props = super.setupProperties();
@@ -65,18 +69,20 @@ public class BaseSwiftApiLiveTest extends BaseApiLiveTest<SwiftApi> {
    }
 
    protected void deleteAllObjectsInContainer(String regionId, final String containerName) {
+      Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);
+      
       ObjectList objects = api.objectApiInRegionForContainer(regionId, containerName).list(new ListContainerOptions());
       if (objects == null) {
          return;
       }
       List<String> pathsToDelete = Lists.transform(objects, new Function<SwiftObject, String>() {
          public String apply(SwiftObject input) {
-            return containerName + "/" + input.name();
+            return containerName + "/" + input.getName();
          }
       });
       if (!pathsToDelete.isEmpty()) {
          BulkDeleteResponse response = api.bulkApiInRegion(regionId).bulkDelete(pathsToDelete);
-         checkState(response.errors().isEmpty(), "Errors deleting paths %s: %s", pathsToDelete, response);
+         checkState(response.getErrors().isEmpty(), "Errors deleting paths %s: %s", pathsToDelete, response);
       }
    }
 }

@@ -17,6 +17,7 @@
 package org.jclouds.openstack.swift.v1.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.ACCOUNT_TEMPORARY_URL_KEY;
 
 import java.util.Map;
 
@@ -39,16 +40,15 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 /**
- * Provides access to the Swift Account API.
+ * Provides access to the Swift Account API features.
  * 
  * <p/>
  * Account metadata prefixed with {@code X-Account-Meta-} will be converted
  * appropriately using a binder/parser.
  * 
+ * @author Jeremy Daggett
+ * 
  * @see {@link Account}
- * @see <a
- *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/storage-account-services.html">
- *      Storage Account Services API</a>
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
@@ -57,70 +57,51 @@ public interface AccountApi {
    /**
     * Gets the {@link Account}.
     * 
-    * @return the Account.
-    * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">
-    *      Get Account Metadata API</a>
+    * @return The {@link Account} object.
     */
-   @Named("GetAccount")
+   @Named("account:get")
    @HEAD
    @ResponseParser(ParseAccountFromHeaders.class)
    @Path("/")
    Account get();
 
    /**
-    * Creates or updates the Account metadata.
+    * Creates or updates the {@link Account} metadata.
     * 
-    * @param metadata
-    *           the Account metadata to create or update.
+    * @param metadata  the metadata to create or update.
     * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">
-    *      Create or Update Account Metadata API</a>
-    * 
-    * @return <code>true</code> if the Account Metadata was successfully created
-    *         or updated, false if not.
+    * @return {@code true} if the metadata was successfully created or updated,
+    *         {@code false} if not.
     */
-   @Named("UpdateAccountMetadata")
+   @Named("account:updateMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/")
    boolean updateMetadata(@BinderParam(BindAccountMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
-    * Replaces the {@link Account#temporaryUrlKey()}.
+    * Replaces the temporary URL key for the {@link Account}.
     *
-    * @param metadata
-    *           the Account metadata to create or update.
+    * @param temporaryUrlKey  the temporary URL key to update.
     *
-    * @see <a
-    *      href="http://docs.openstack.org/trunk/config-reference/content/object-storage-tempurl.html">
-    *      Temporary URL Documentation</a>
-    *
-    * @return <code>true</code> if the Temporary URL Key was successfully created
-    *         or updated, false if not.
+    * @return {@code true} if the temporary URL key was successfully updated,
+    *         {@code false} if not.
     */
-   @Named("UpdateAccountMetadata")
+   @Named("account:updateTemporaryUrlKey")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/")
-   boolean updateTemporaryUrlKey(@HeaderParam("X-Account-Meta-Temp-URL-Key") String temporaryUrlKey);
+   boolean updateTemporaryUrlKey(@HeaderParam(ACCOUNT_TEMPORARY_URL_KEY) String temporaryUrlKey);
 
    /**
-    * Deletes Account metadata.
+    * Deletes metadata from the {@link Account}.
     * 
-    * @param metadata
-    *           the Account metadata to delete.
+    * @param metadata  the metadata to delete.
     * 
-    * @return <code>true</code> if the Account Metadata was successfully
-    *         deleted, false if not.
-    * 
-    * @see <a
-    *      href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-account-metadata.html">
-    *      Delete Account Metadata API</a>
+    * @return {@code true} if the metadata was successfully deleted,
+    *         {@code false} if not.
     */
-   @Named("DeleteAccountMetadata")
+   @Named("account:deleteMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/")

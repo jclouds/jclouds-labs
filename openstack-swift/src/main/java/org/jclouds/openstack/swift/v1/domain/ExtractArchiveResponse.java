@@ -22,12 +22,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
 
+import org.jclouds.openstack.swift.v1.features.BulkApi;
+
 import com.google.common.base.Objects;
 
 /**
- * @see <a
- *      href="http://docs.openstack.org/developer/swift/misc.html#module-swift.common.middleware.bulk">
- *      Swift Bulk Middleware</a>
+ * Represents a response from an Extract Archive request.
+ *
+ * @author Jeremy Daggett
+ * 
+ * @see BulkApi
  */
 public class ExtractArchiveResponse {
    public static ExtractArchiveResponse create(int created, Map<String, String> errors) {
@@ -42,13 +46,18 @@ public class ExtractArchiveResponse {
       this.errors = checkNotNull(errors, "errors");
    }
 
-   /** number of files created. */
-   public int created() {
+   /** 
+    * @return The number of files created.
+    */
+   public int getCreated() {
       return created;
    }
 
-   /** For each path that failed to create, a corresponding error response. */
-   public Map<String, String> errors() {
+   /** 
+    * @return a {@code Map<String, String>} containing each path that failed 
+    *         to be created and its corresponding error response.
+    */
+   public Map<String, String> getErrors() {
       return errors;
    }
 
@@ -59,8 +68,8 @@ public class ExtractArchiveResponse {
       }
       if (object instanceof ExtractArchiveResponse) {
          ExtractArchiveResponse that = ExtractArchiveResponse.class.cast(object);
-         return equal(created(), that.created()) //
-               && equal(errors(), that.errors());
+         return equal(getCreated(), that.getCreated())
+               && equal(getErrors(), that.getErrors());
       } else {
          return false;
       }
@@ -68,13 +77,13 @@ public class ExtractArchiveResponse {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(created(), errors());
+      return Objects.hashCode(getCreated(), getErrors());
    }
 
    @Override
    public String toString() {
-      return toStringHelper("") //
-            .add("created", created()) //
-            .add("errors", errors()).toString();
+      return toStringHelper("")
+            .add("created", getCreated())
+            .add("errors", getErrors()).toString();
    }
 }
