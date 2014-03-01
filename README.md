@@ -14,7 +14,10 @@ Although this is a "labs" repository, some of the providers and APIs here are pr
 | openstack-neutron | API | Yes |
 | openstack-swift | API | No |
 | rackspace-autoscale | API | No |
+| rackspace-cloudfiles | API | No |
 | rackspace-autoscale-us | Provider | No |
+| rackspace-cloudfiles-uk | Provider | No |
+| rackspace-cloudfiles-us | Provider | No |
 | rackspace-cloudqueues-us | Provider | No |
 
 License
