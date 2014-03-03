@@ -64,6 +64,7 @@
     <module>rackspace-cloudbigdata</module>
     <module>rackspace-cloudbigdata-us</module>
     <module>rackspace-cloudfiles</module>
+    <module>rackspace-cloudfiles-uk</module>
     <module>rackspace-cloudfiles-us</module>
   </modules>
 
