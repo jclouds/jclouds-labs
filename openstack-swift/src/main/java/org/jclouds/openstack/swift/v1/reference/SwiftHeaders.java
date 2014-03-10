@@ -22,7 +22,7 @@ package org.jclouds.openstack.swift.v1.reference;
  * @author Jeremy Daggett
  */
 public interface SwiftHeaders {
-   
+
    // Common Metadata Prefixes
    String ACCOUNT_METADATA_PREFIX = "X-Account-Meta-";
    String CONTAINER_METADATA_PREFIX = "X-Container-Meta-";
@@ -80,4 +80,11 @@ public interface SwiftHeaders {
 
    // Static Large Object
    String STATIC_LARGE_OBJECT = "X-Static-Large-Object";
+
+   // Static Web
+   String STATIC_WEB_INDEX = CONTAINER_METADATA_PREFIX + "Web-Index";
+   String STATIC_WEB_DIRECTORY_TYPE = CONTAINER_METADATA_PREFIX + "Web-Directory-Type";
+   String STATIC_WEB_ERROR = CONTAINER_METADATA_PREFIX + "Web-Error";
+   String STATIC_WEB_LISTINGS = CONTAINER_METADATA_PREFIX + "Web-Listings";
+   String STATIC_WEB_LISTINGS_CSS = CONTAINER_METADATA_PREFIX + "Web-Listings-CSS";
 }
