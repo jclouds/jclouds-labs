@@ -1,0 +1,14 @@
+{
+   "versions":[
+      {
+         "status":"CURRENT",
+         "id":"v999.999",
+         "links":[
+            {
+               "href":"https://glance.jclouds.org:9292/v999.999/",
+               "rel":"self"
+            }
+         ]
+      },
+   ]
+}

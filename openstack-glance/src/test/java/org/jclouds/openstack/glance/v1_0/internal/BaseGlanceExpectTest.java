@@ -18,6 +18,7 @@ package org.jclouds.openstack.glance.v1_0.internal;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
 import org.jclouds.openstack.keystone.v2_0.internal.KeystoneFixture;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
@@ -31,6 +32,8 @@ public class BaseGlanceExpectTest<T> extends BaseRestApiExpectTest<T> {
    protected HttpRequest keystoneAuthWithAccessKeyAndSecretKey;
    protected String authToken;
    protected HttpResponse responseWithKeystoneAccess;
+   protected HttpRequest versionNegotiationRequest;
+   protected HttpResponse versionNegotiationResponse;
    protected HttpRequest extensionsOfGlanceRequest;
    protected HttpResponse extensionsOfGlanceResponse;
    protected HttpResponse unmatchedExtensionsOfGlanceResponse;
@@ -46,5 +49,11 @@ public class BaseGlanceExpectTest<T> extends BaseRestApiExpectTest<T> {
       responseWithKeystoneAccess = KeystoneFixture.INSTANCE.responseWithAccess();
       // now, createContext arg will need tenant prefix
       identity = KeystoneFixture.INSTANCE.getTenantName() + ":" + identity;
+      // version negotiation
+      versionNegotiationRequest = HttpRequest.builder().method("GET")
+            .endpoint("https://glance.jclouds.org:9292/")
+            .addHeader(ZoneToEndpointNegotiateVersion.VERSION_NEGOTIATION_HEADER, "true").build();
+      versionNegotiationResponse = HttpResponse.builder().statusCode(300).message("HTTP/1.1 300 Multiple Choices").payload(
+            payloadFromResourceWithContentType("/glanceVersionResponse.json", "application/json")).build();
    }
 }

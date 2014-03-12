@@ -51,7 +51,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testListWhenResponseIs2xx() throws Exception {
       HttpRequest list = HttpRequest.builder().method("GET")
-            .endpoint("https://glance.jclouds.org:9292/images")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
 
@@ -60,7 +60,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/images.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, list, listResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            list, listResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -70,21 +71,22 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testListWhenReponseIs404IsEmpty() throws Exception {
       HttpRequest list = HttpRequest.builder().method("GET")
-            .endpoint("https://glance.jclouds.org:9292/images")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
 
       HttpResponse listResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenNoExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, list, listResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            list, listResponse);
 
       assertTrue(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").list().concat().isEmpty());
    }
 
    public void testListInDetailWhenResponseIs2xx() throws Exception {
       HttpRequest listInDetail = HttpRequest.builder().method("GET")
-            .endpoint("https://glance.jclouds.org:9292/images/detail")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/detail")
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
 
@@ -93,7 +95,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/images_detail.json")).build();
 
       GlanceApi apiWhenExistInDetail = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, listInDetail, listInDetailResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            listInDetail, listInDetailResponse);
 
       assertEquals(apiWhenExistInDetail.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -103,7 +106,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testListInDetailWhenReponseIs404IsEmpty() throws Exception {
       HttpRequest listInDetail = HttpRequest.builder().method("GET")
-            .endpoint("https://glance.jclouds.org:9292/images/detail")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/detail")
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
 
@@ -111,7 +114,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
       HttpResponse listInDetailResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenNoExistInDetail = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, listInDetail, listInDetailResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            listInDetail, listInDetailResponse);
 
       assertTrue(apiWhenNoExistInDetail.getImageApiForZone("az-1.region-a.geo-1").listInDetail().concat().isEmpty());
    }
@@ -120,14 +124,15 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
       HttpRequest show = HttpRequest
             .builder()
             .method("HEAD")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("X-Auth-Token", authToken).build();
 
 
       HttpResponse showResponse = new ParseImageDetailsFromHeadersTest().response;
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, show, showResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            show, showResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -137,14 +142,15 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testShowWhenReponseIs404IsNull() throws Exception {
       HttpRequest show = HttpRequest.builder().method("HEAD")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("X-Auth-Token", authToken).build();
 
 
       HttpResponse showResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenNoExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, show, showResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            show, showResponse);
 
       assertNull(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").get("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
@@ -152,14 +158,15 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testGetAsStreamWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("GET")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("X-Auth-Token", authToken).build();
 
 
       HttpResponse getResponse = HttpResponse.builder().statusCode(200).payload(Payloads.newStringPayload("foo")).build();
       
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, getResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, getResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -169,21 +176,22 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testGetAsStreamWhenReponseIs404IsNull() throws Exception {
       HttpRequest get = HttpRequest.builder().method("GET")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("X-Auth-Token", authToken).build();
 
 
       HttpResponse getResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenNoExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, getResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, getResponse);
 
       assertNull(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").getAsStream("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
 
    public void testCreateWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("POST")
-            .endpoint("https://glance.jclouds.org:9292/images")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("x-image-meta-name", "test")
             .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken)
@@ -193,7 +201,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/image.json")).build();
       
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, createResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, createResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -204,7 +213,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    @Test(expectedExceptions = AuthorizationException.class)
    public void testCreateWhenResponseIs4xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("POST")
-            .endpoint("https://glance.jclouds.org:9292/images")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("x-image-meta-name", "test")
             .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken)
@@ -214,7 +223,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/image.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, createResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, createResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -223,7 +233,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testReserveWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("POST")
-            .endpoint("https://glance.jclouds.org:9292/images")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("x-image-meta-name", "test")
             .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
@@ -232,7 +242,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/image.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, createResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, createResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -242,7 +253,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    @Test(expectedExceptions = AuthorizationException.class)
    public void testReserveWhenResponseIs4xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("POST")
-            .endpoint("https://glance.jclouds.org:9292/images")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("x-image-meta-name", "test")
             .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
@@ -251,7 +262,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/image.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, createResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, createResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -260,7 +272,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    
    public void testUpdateMetadataWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("PUT")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .headers(
                   ImmutableMultimap.<String, String>builder()
                         .put("Accept", MediaType.APPLICATION_JSON)
@@ -278,7 +290,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .payload(payloadFromResource("/image.json")).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, updateResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, updateResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -297,7 +310,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    @Test(expectedExceptions = ResourceNotFoundException.class)
    public void testUpdateMetadataWhenResponseIs4xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("PUT")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .headers(
                   ImmutableMultimap.<String, String>builder()
                         .put("Accept", MediaType.APPLICATION_JSON)
@@ -309,7 +322,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
       HttpResponse updateResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, updateResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, updateResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -321,7 +335,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testUpdateImageWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("PUT")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken)
             .payload(payloadFromStringWithContentType("somenewdata", MediaType.APPLICATION_OCTET_STREAM))
@@ -332,7 +346,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, updateResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, updateResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -342,7 +357,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testUpdateNameAndImageWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("PUT")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .headers(
                   ImmutableMultimap.<String, String>builder()
                         .put("Accept", MediaType.APPLICATION_JSON)
@@ -356,7 +371,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, updateResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, updateResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -367,7 +383,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    @Test(expectedExceptions = AuthorizationException.class)
    public void testUpdateNameAndImageWhenResponseIs4xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("PUT")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .headers(
                   ImmutableMultimap.<String, String>builder()
                         .put("Accept", MediaType.APPLICATION_JSON)
@@ -379,7 +395,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
       HttpResponse updateResponse = HttpResponse.builder().statusCode(403).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, updateResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, updateResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -389,13 +406,14 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testDeleteWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("DELETE")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("X-Auth-Token", authToken).build();
 
       HttpResponse getResponse = HttpResponse.builder().statusCode(200).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, getResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, getResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 
@@ -404,14 +422,15 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
    public void testDeleteWhenResponseIs4xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("DELETE")
-            .endpoint("https://glance.jclouds.org:9292/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
             .addHeader("X-Auth-Token", authToken).build();
 
 
       HttpResponse getResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
-            responseWithKeystoneAccess, get, getResponse);
+            responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
+            get, getResponse);
 
       assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
 

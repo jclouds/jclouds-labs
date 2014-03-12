@@ -16,45 +16,71 @@
  */
 package org.jclouds.openstack.glance.v1_0.handlers;
 
-import static org.easymock.EasyMock.createMockBuilder;
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reportMatcher;
 import static org.easymock.EasyMock.verify;
 
 import java.net.URI;
+import java.util.Collections;
 
 import org.easymock.IArgumentMatcher;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.http.HttpResponseException;
 import org.testng.annotations.Test;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 /**
  * 
  * @author Adrian Cole
+ * @author Jasdeep Hundal
  */
 @Test(groups = "unit", testName = "GlanceErrorHandlerTest")
 public class GlanceErrorHandlerTest {
 
-
-   private void assertCodeMakes(String method, URI uri, int statusCode, String message, String content,
-            Class<? extends Exception> expected) {
-      assertCodeMakes(method, uri, statusCode, message, "text/plain", content, expected);
+   @Test
+   public void test300UnintendedVersionNegotiation() {
+      assertCodeMakes("GET", URI
+         .create("https://glance.jclouds.org:9292/"),
+         300, "Multiple Choices", "", HttpResponseException.class);
    }
 
-   private void assertCodeMakes(String method, URI uri, int statusCode, String message, String contentType,
+   @Test
+   public void test300VersionNegotiation() {
+      assertCodeMakes("GET", Multimaps.forMap(Collections.singletonMap("Is-Version-Negotiation-Request", "true")),
+         URI.create("https://glance.jclouds.org:9292/"),
+         300, "Multiple Choices", "", null);
+   }
+
+   private void assertCodeMakes(String method, URI uri, int statusCode,
+            String message, String content, Class<? extends Exception> expected) {
+      assertCodeMakes(method, Multimaps.forMap(Collections.EMPTY_MAP), uri, statusCode, message, "text/plain", content, expected);
+   }
+
+   private void assertCodeMakes(String method, Multimap<String, String> headers, URI uri, int statusCode,
+            String message, String content, Class<? extends Exception> expected) {
+      assertCodeMakes(method, headers, uri, statusCode, message, "text/plain", content, expected);
+   }
+
+   private void assertCodeMakes(String method, Multimap<String, String> headers, URI uri, int statusCode, String message, String contentType,
             String content, Class<? extends Exception> expected) {
 
       GlanceErrorHandler function = new GlanceErrorHandler();
 
-      HttpCommand command = createMockBuilder(HttpCommand.class).createMock();
-      HttpRequest request = HttpRequest.builder().method(method).endpoint(uri).build();
+      HttpCommand command = createMock(HttpCommand.class);
+      HttpRequest request = HttpRequest.builder().method(method).headers(headers).endpoint(uri).build();
       HttpResponse response = HttpResponse.builder().statusCode(statusCode).message(message).payload(content).build();
       response.getPayload().getContentMetadata().setContentType(contentType);
 
       expect(command.getCurrentRequest()).andReturn(request).atLeastOnce();
-      command.setException(classEq(expected));
+      if (expected != null) {
+         command.setException(classEq(expected));
+      }
 
       replay(command);
 

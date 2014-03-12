@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Zone;
-import org.jclouds.location.functions.ZoneToEndpoint;
+import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
 import org.jclouds.openstack.glance.v1_0.features.ImageApi;
 import org.jclouds.openstack.v2_0.features.ExtensionApi;
 import org.jclouds.rest.annotations.Delegate;
@@ -50,12 +50,12 @@ public interface GlanceApi extends Closeable {
     */
    @Delegate
    ExtensionApi getExtensionApiForZone(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+         @EndpointParam(parser = ZoneToEndpointNegotiateVersion.class) @Nullable String zone);
 
    /**
     * Provides access to Image features.
     */
    @Delegate
-   ImageApi getImageApiForZone(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   ImageApi getImageApiForZone(@EndpointParam(parser = ZoneToEndpointNegotiateVersion.class) @Nullable String zone);
 
 }

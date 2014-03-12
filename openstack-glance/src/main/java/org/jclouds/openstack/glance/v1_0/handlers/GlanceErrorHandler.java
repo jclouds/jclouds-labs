@@ -24,6 +24,7 @@ import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
 
@@ -46,6 +47,12 @@ public class GlanceErrorHandler implements HttpErrorHandler {
       message = message != null ? message : String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
                response.getStatusLine());
       switch (response.getStatusCode()) {
+         // do not throw exceptions on Glance version negotiation
+         case 300:
+            if (command.getCurrentRequest().getFirstHeaderOrNull(ZoneToEndpointNegotiateVersion.VERSION_NEGOTIATION_HEADER) != null) {
+               return;
+            }
+            break;
          case 400:
             break;
          case 401:
