@@ -1093,10 +1093,11 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
    @Test
    public void testEditVLAN() throws Exception {
       String uuid = "96537817-f4b6-496b-a861-e74192d3ccb0";
-      Map<String, String> meta = Maps.newHashMap();
+      // test depends on the order of the meta tags
+      Map<String, String> meta = Maps.newLinkedHashMap();
+      meta.put("test_key_2", "test_value_2");
       meta.put("description", "test vlan");
       meta.put("test_key_1", "test_value_1");
-      meta.put("test_key_2", "test_value_2");
 
       CloudSigma2Api api = requestSendsResponse(
             putBuilder()
@@ -1209,10 +1210,11 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
    @Test
    public void testEditIP() throws Exception {
       String uuid = "96537817-f4b6-496b-a861-e74192d3ccb0";
-      Map<String, String> meta = Maps.newHashMap();
+      // test depends on the order of the meta tags
+      Map<String, String> meta = Maps.newLinkedHashMap();
+      meta.put("test_key_2", "test_value_2");
       meta.put("description", "test vlan");
       meta.put("test_key_1", "test_value_1");
-      meta.put("test_key_2", "test_value_2");
 
       CloudSigma2Api api = requestSendsResponse(
             putBuilder()
