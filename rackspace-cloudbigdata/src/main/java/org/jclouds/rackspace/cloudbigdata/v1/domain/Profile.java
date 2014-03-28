@@ -21,7 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.beans.ConstructorProperties;
 
 import org.jclouds.openstack.v2_0.domain.Link;
-import org.jclouds.rackspace.cloudbigdata.v1.features.ProfileApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;

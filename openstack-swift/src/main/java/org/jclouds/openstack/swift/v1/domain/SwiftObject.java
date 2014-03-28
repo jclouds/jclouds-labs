@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jclouds.io.Payload;
-import org.jclouds.openstack.swift.v1.features.ObjectApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;

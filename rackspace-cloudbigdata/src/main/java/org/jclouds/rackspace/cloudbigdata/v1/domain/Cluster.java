@@ -23,7 +23,6 @@ import java.net.URI;
 import java.util.Date;
 
 import org.jclouds.openstack.v2_0.domain.Link;
-import org.jclouds.rackspace.cloudbigdata.v1.features.ClusterApi;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;

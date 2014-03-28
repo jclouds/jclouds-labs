@@ -22,8 +22,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
 
-import org.jclouds.openstack.swift.v1.features.BulkApi;
-
 import com.google.common.base.Objects;
 
 /**

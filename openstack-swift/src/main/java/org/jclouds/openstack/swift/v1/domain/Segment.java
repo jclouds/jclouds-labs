@@ -20,8 +20,6 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.openstack.swift.v1.features.StaticLargeObjectApi;
-
 import com.google.common.base.Objects;
 
 /**

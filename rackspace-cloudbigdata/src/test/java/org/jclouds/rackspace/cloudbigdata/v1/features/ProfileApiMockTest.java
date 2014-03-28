@@ -40,7 +40,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
  *
  * @author Zack Shoylev
  */
-@SuppressWarnings("javadoc")
 @Test
 public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
 

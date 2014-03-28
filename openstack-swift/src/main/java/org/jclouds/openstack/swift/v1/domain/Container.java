@@ -24,9 +24,6 @@ import java.beans.ConstructorProperties;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jclouds.openstack.swift.v1.features.ContainerApi;
-import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;

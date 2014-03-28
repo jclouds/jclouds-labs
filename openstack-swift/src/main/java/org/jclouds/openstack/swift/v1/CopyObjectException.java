@@ -16,8 +16,6 @@
  */
 package org.jclouds.openstack.swift.v1;
 
-import org.jclouds.http.HttpCommand;
-import org.jclouds.http.HttpResponse;
 import org.jclouds.rest.ResourceNotFoundException;
 
 /**

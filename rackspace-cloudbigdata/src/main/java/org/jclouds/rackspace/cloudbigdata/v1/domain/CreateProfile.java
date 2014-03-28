@@ -22,8 +22,6 @@ import java.beans.ConstructorProperties;
 
 import javax.inject.Named;
 
-import org.jclouds.rackspace.cloudbigdata.v1.features.ProfileApi;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableList;

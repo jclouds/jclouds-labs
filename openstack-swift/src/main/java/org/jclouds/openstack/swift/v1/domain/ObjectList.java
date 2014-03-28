@@ -20,8 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import org.jclouds.openstack.swift.v1.features.ObjectApi;
-
 import com.google.common.collect.ForwardingList;
 
 /**

@@ -21,8 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.beans.ConstructorProperties;
 import java.net.URI;
 
-import org.jclouds.rackspace.cloudbigdata.v1.features.ClusterApi;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 

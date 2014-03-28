@@ -38,7 +38,6 @@ import com.google.common.collect.ImmutableList;
  * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "ProfileApiLiveTest", singleThreaded = true)
-@SuppressWarnings("javadoc")
 public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {   
 
    @Override

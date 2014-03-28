@@ -20,7 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import org.jclouds.http.options.BaseHttpRequestOptions;
-import org.jclouds.openstack.swift.v1.features.ContainerApi;
 
 /**
  * Options for listing containers. 

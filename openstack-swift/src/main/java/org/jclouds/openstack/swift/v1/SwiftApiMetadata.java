@@ -23,7 +23,6 @@ import static org.jclouds.reflect.Reflection2.typeToken;
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
@@ -34,7 +33,6 @@ import org.jclouds.openstack.swift.v1.blobstore.config.SwiftBlobStoreContextModu
 import org.jclouds.openstack.swift.v1.config.SwiftHttpApiModule;
 import org.jclouds.openstack.swift.v1.config.SwiftTypeAdapters;
 import org.jclouds.openstack.v2_0.ServiceType;
-import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
