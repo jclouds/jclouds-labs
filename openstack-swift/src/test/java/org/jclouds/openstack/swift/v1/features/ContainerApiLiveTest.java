@@ -68,7 +68,16 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          assertTrue(container.getBytesUsed() == 0);
       }
    }
-   
+
+   public void testHead() throws Exception {
+      for (String regionId : regions) {
+         Container container = api.containerApiInRegion(regionId).head(name);
+         assertEquals(container.getName(), name);
+         assertTrue(container.getObjectCount() == 0);
+         assertTrue(container.getBytesUsed() == 0);
+      }
+   }
+
    public void testGet() throws Exception {
       for (String regionId : regions) {
          Container container = api.containerApiInRegion(regionId).get(name);

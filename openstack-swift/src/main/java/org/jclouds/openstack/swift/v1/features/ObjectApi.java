@@ -87,6 +87,25 @@ public interface ObjectApi {
    @Fallback(NullOnNotFoundOr404.class)
    @Path("/")
    @Nullable
+   ObjectList list();
+
+   /**
+    * Lists up to 10,000 objects. To control a large list of containers beyond
+    * 10,000 objects, use the {@code marker} and {@code endMarker} parameters in the
+    * {@link ListContainerOptions} class.
+    * 
+    * @param options  
+    *           the {@link ListContainerOptions} for controlling the returned list.
+    * 
+    * @return an {@link ObjectList} of {@link SwiftObject} ordered by name or {@code null}.
+    */
+   @Named("object:list")
+   @GET
+   @QueryParams(keys = "format", values = "json")
+   @ResponseParser(ParseObjectListFromResponse.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/")
+   @Nullable
    ObjectList list(ListContainerOptions options);
 
    /**

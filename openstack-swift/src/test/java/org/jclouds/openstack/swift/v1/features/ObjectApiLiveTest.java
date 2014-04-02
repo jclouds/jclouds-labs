@@ -123,9 +123,19 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void testList() throws Exception {
       for (String regionId : regions) {
          ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
+         ObjectList response = objectApi.list();
+         assertEquals(response.getContainer(), api.containerApiInRegion(regionId).get(containerName));
+         for (SwiftObject object : response) {
+            checkObject(object);
+         }
+      }
+   }
+
+   public void testListWithOptions() throws Exception {
+      for (String regionId : regions) {
+         ObjectApi objectApi = api.objectApiInRegionForContainer(regionId, containerName);
          ObjectList response = objectApi.list(ListContainerOptions.NONE);
          assertEquals(response.getContainer(), api.containerApiInRegion(regionId).get(containerName));
-         assertNotNull(response);
          for (SwiftObject object : response) {
             checkObject(object);
          }

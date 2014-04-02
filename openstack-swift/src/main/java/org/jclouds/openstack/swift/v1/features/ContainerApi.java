@@ -111,6 +111,23 @@ public interface ContainerApi {
    boolean createIfAbsent(@PathParam("containerName") String containerName, CreateContainerOptions options);
 
    /**
+    * Gets the {@link Container} metadata, including the number of objects in the container and 
+    * the total bytes for all objects stored in the container.
+    * 
+    * @param containerName
+    *           corresponds to {@link Container#getName()}.
+    * 
+    * @return the {@link Container}, or {@code null} if not found.
+    */
+   @Named("container:get")
+   @HEAD
+   @ResponseParser(ParseContainerFromHeaders.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   @Nullable
+   Container head(@PathParam("containerName") String containerName);
+
+   /**
     * Gets the {@link Container}.
     * 
     * @param containerName

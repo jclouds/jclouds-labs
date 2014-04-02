@@ -26,11 +26,14 @@ import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_RE
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jclouds.blobstore.ContainerNotFoundException;
+import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
@@ -97,6 +100,51 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
          assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/?format=json&marker=test");
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testContainerExists() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201)));
+      server.enqueue(addCommonHeaders(containerResponse()
+            .addHeader(CONTAINER_METADATA_PREFIX + "ApiName", "swift")
+            .addHeader(CONTAINER_METADATA_PREFIX + "ApiVersion", "v1.1")));
+
+      try {
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
+         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", anybodyRead().metadata(metadata)));
+         
+         Container container = api.containerApiInRegion("DFW").head("myContainer");
+         assertEquals(container.getName(), "myContainer");
+         assertEquals(container.getObjectCount(), 42l);
+         assertEquals(container.getBytesUsed(), 323479l);
+         for (Entry<String, String> entry : container.getMetadata().entrySet()) {
+            assertEquals(container.getMetadata().get(entry.getKey().toLowerCase()), entry.getValue());
+         }
+         assertEquals(server.getRequestCount(), 3);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "PUT", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer");
+         assertRequest(server.takeRequest(), "HEAD", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer");
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   @Test(expectedExceptions = ContainerNotFoundException.class)
+   public void testContainerDoesNotExist() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
+
+      try {
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
+         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", anybodyRead().metadata(metadata)));
+
+         // the head call will throw the ContainerNotFoundException
+         api.containerApiInRegion("DFW").head("myContainer");
       } finally {
          server.shutdown();
       }

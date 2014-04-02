@@ -89,7 +89,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ObjectList objects = api.objectApiInRegionForContainer("DFW", "myContainer").list(new ListContainerOptions());
+         ObjectList objects = api.objectApiInRegionForContainer("DFW", "myContainer").list();
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
          assertEquals(objects.getContainer().getName(), "myContainer");
          assertTrue(objects.getContainer().getAnybodyRead().get());
@@ -102,6 +102,28 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
+   public void testListWithOptions() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(containerResponse()
+            .addHeader(CONTAINER_READ, CONTAINER_ACL_ANYBODY_READ)
+            .setBody(stringFromResource("/object_list.json"))));
+
+      try {
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
+         ObjectList objects = api.objectApiInRegionForContainer("DFW", "myContainer").list(new ListContainerOptions());
+         assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
+         assertEquals(objects.getContainer().getName(), "myContainer");
+         assertTrue(objects.getContainer().getAnybodyRead().get());
+
+         assertEquals(server.getRequestCount(), 2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/?format=json");
+      } finally {
+         server.shutdown();
+      }
+   }
+   
    public void testListOptions() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
