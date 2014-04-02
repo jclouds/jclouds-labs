@@ -41,6 +41,7 @@ import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 
+import com.google.common.annotations.Beta;
 import com.google.common.base.Joiner;
 
 /**
@@ -49,6 +50,7 @@ import com.google.common.base.Joiner;
  * @author Adrian Cole
  * @author Jeremy Daggett
  */
+@Beta
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
 public interface BulkApi {

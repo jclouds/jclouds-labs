@@ -55,12 +55,15 @@ import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
+import com.google.common.annotations.Beta;
+
 /**
  * Provides access to the Swift Object API features.
  * 
  * @author Adrian Cole
  * @author Jeremy Daggett
  */
+@Beta
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
 public interface ObjectApi {

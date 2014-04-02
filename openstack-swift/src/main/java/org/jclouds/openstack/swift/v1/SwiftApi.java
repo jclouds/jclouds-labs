@@ -33,6 +33,7 @@ import org.jclouds.openstack.swift.v1.features.StaticLargeObjectApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
+import com.google.common.annotations.Beta;
 import com.google.inject.Provides;
 
 /**
@@ -45,6 +46,7 @@ import com.google.inject.Provides;
  * @author Jeremy Daggett
  * @author Zack Shoylev
  */
+@Beta
 public interface SwiftApi extends Closeable {
 
    @Provides

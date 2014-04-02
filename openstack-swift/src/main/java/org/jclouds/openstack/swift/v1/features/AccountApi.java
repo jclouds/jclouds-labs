@@ -39,6 +39,8 @@ import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
+import com.google.common.annotations.Beta;
+
 /**
  * Provides access to the Swift Account API features.
  * 
@@ -50,6 +52,7 @@ import org.jclouds.rest.annotations.ResponseParser;
  * 
  * @see {@link Account}
  */
+@Beta
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
 public interface AccountApi {

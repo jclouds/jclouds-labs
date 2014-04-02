@@ -40,12 +40,15 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
+import com.google.common.annotations.Beta;
+
 /**
  * Provides access to the Swift Static Large Object API features.
  * 
  * @author Adrian Cole
  * @author Jeremy Daggett
  */
+@Beta
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
 public interface StaticLargeObjectApi {
