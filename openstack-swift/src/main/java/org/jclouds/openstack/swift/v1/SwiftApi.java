@@ -41,7 +41,11 @@ import com.google.inject.Provides;
  * <p/>
  * OpenStack Object Storage is an object-based storage system that stores content and metadata
  * as objects. You create, modify, and get objects and metadata using this API.
- * 
+ * <p/>
+ * This API is new to jclouds and hence is in Beta. That means we need people to use it and give us feedback. Based
+ * on that feedback, minor changes to the interfaces may happen. This code will replace
+ * org.jclouds.openstack.swift.SwiftClient in jclouds 2.0 and it is recommended you adopt it sooner than later.
+ *
  * @author Adrian Cole
  * @author Jeremy Daggett
  * @author Zack Shoylev
