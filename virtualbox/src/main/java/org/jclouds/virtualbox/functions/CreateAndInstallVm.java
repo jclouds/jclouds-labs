@@ -106,7 +106,7 @@ public class CreateAndInstallVm implements Function<MasterSpec, IMachine> {
 
       SshClient client = sshClientForIMachine.apply(masterMachine);
       logger.debug(">> awaiting installation to finish node(%s)", masterName);
-      Stopwatch stopwatch = new Stopwatch();
+      Stopwatch stopwatch = Stopwatch.createUnstarted();
       stopwatch.start();
       checkState(sshResponds.apply(client), "timed out waiting for guest %s to be accessible via ssh", masterName);
       stopwatch.stop();
