@@ -56,7 +56,7 @@ public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLi
       if (providedRegion != null) {
         regions = ImmutableSet.of(providedRegion);
       } else {
-        regions = api.configuredRegions();
+        regions = api.getConfiguredRegions();
       }
    }
 
@@ -71,7 +71,7 @@ public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLi
    protected void deleteAllObjectsInContainer(String regionId, final String containerName) {
       Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);
       
-      ObjectList objects = api.objectApiInRegionForContainer(regionId, containerName).list(new ListContainerOptions());
+      ObjectList objects = api.getObjectApiForRegionAndContainer(regionId, containerName).list(new ListContainerOptions());
       if (objects == null) {
          return;
       }
@@ -81,7 +81,7 @@ public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLi
          }
       });
       if (!pathsToDelete.isEmpty()) {
-         BulkDeleteResponse response = api.bulkApiInRegion(regionId).bulkDelete(pathsToDelete);
+         BulkDeleteResponse response = api.getBulkApiForRegion(regionId).bulkDelete(pathsToDelete);
          checkState(response.getErrors().isEmpty(), "Errors deleting paths %s: %s", pathsToDelete, response);
       }
    }

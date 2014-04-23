@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
-import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -47,7 +46,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testList() throws Exception {
       for (String regionId : regions) {
-         ContainerApi containerApi = api.containerApiInRegion(regionId);
+         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
          FluentIterable<Container> response = containerApi.list();
          assertNotNull(response);
          for (Container container : response) {
@@ -62,16 +61,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
       for (String regionId : regions) {
          ListContainerOptions options = ListContainerOptions.Builder.marker(lexicographicallyBeforeName);
-         Container container = api.containerApiInRegion(regionId).list(options).get(0);
-         assertEquals(container.getName(), name);
-         assertTrue(container.getObjectCount() == 0);
-         assertTrue(container.getBytesUsed() == 0);
-      }
-   }
-
-   public void testHead() throws Exception {
-      for (String regionId : regions) {
-         Container container = api.containerApiInRegion(regionId).head(name);
+         Container container = api.getContainerApiForRegion(regionId).list(options).get(0);
          assertEquals(container.getName(), name);
          assertTrue(container.getObjectCount() == 0);
          assertTrue(container.getBytesUsed() == 0);
@@ -80,7 +70,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testGet() throws Exception {
       for (String regionId : regions) {
-         Container container = api.containerApiInRegion(regionId).get(name);
+         Container container = api.getContainerApiForRegion(regionId).get(name);
          assertEquals(container.getName(), name);
          assertTrue(container.getObjectCount() == 0);
          assertTrue(container.getBytesUsed() == 0);
@@ -91,7 +81,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
 
       for (String regionId : regions) {
-         ContainerApi containerApi = api.containerApiInRegion(regionId);
+         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
          assertTrue(containerApi.updateMetadata(name, meta));
          containerHasMetadata(containerApi, name, meta);
       }
@@ -101,7 +91,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
 
       for (String regionId : regions) {
-         ContainerApi containerApi = api.containerApiInRegion(regionId);
+         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
          // update
          assertTrue(containerApi.updateMetadata(name, meta));
          containerHasMetadata(containerApi, name, meta);
@@ -129,7 +119,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void setup() {
       super.setup();
       for (String regionId : regions) {
-         api.containerApiInRegion(regionId).createIfAbsent(name, CreateContainerOptions.NONE);
+         api.getContainerApiForRegion(regionId).create(name);
       }
    }
 
@@ -137,7 +127,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    @AfterClass(groups = "live")
    public void tearDown() {
       for (String regionId : regions) {
-         api.containerApiInRegion(regionId).deleteIfEmpty(name);
+         api.getContainerApiForRegion(regionId).deleteIfEmpty(name);
       }
       super.tearDown();
    }

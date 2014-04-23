@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 import org.jclouds.blobstore.ContainerNotFoundException;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
-import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
@@ -55,7 +54,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ImmutableList<Container> containers = api.containerApiInRegion("DFW").list().toList();
+         ImmutableList<Container> containers = api.getContainerApiForRegion("DFW").list().toList();
          assertEquals(containers, ImmutableList.of(
                Container.builder()
                      .name("test_container_1")
@@ -84,7 +83,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ImmutableList<Container> containers = api.containerApiInRegion("DFW").list(options).toList();
+         ImmutableList<Container> containers = api.getContainerApiForRegion("DFW").list(options).toList();
          assertEquals(containers, ImmutableList.of(
                Container.builder()
                      .name("test_container_1")
@@ -113,9 +112,9 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", anybodyRead().metadata(metadata)));
+         assertTrue(api.getContainerApiForRegion("DFW").create("myContainer", anybodyRead().metadata(metadata)));
          
-         Container container = api.containerApiInRegion("DFW").head("myContainer");
+         Container container = api.getContainerApiForRegion("DFW").get("myContainer");
          assertEquals(container.getName(), "myContainer");
          assertEquals(container.getObjectCount(), 42l);
          assertEquals(container.getBytesUsed(), 323479l);
@@ -139,23 +138,23 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", anybodyRead().metadata(metadata)));
+         assertTrue(api.getContainerApiForRegion("DFW").create("myContainer", anybodyRead().metadata(metadata)));
 
          // the head call will throw the ContainerNotFoundException
-         api.containerApiInRegion("DFW").head("myContainer");
+         api.getContainerApiForRegion("DFW").get("myContainer");
       } finally {
          server.shutdown();
       }
    }
 
-   public void testCreateIfAbsent() throws Exception {
+   public void testCreate() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201)));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", CreateContainerOptions.NONE));
+         assertTrue(api.getContainerApiForRegion("DFW").create("myContainer"));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -172,7 +171,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").createIfAbsent("myContainer", anybodyRead().metadata(metadata)));
+         assertTrue(api.getContainerApiForRegion("DFW").create("myContainer", anybodyRead().metadata(metadata)));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -197,7 +196,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertFalse(api.containerApiInRegion("DFW").createIfAbsent("myContainer", CreateContainerOptions.NONE));
+         assertFalse(api.getContainerApiForRegion("DFW").create("myContainer"));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -218,7 +217,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         Container container = api.containerApiInRegion("DFW").get("myContainer");
+         Container container = api.getContainerApiForRegion("DFW").get("myContainer");
          assertEquals(container.getName(), "myContainer");
          assertEquals(container.getObjectCount(), 42l);
          assertEquals(container.getBytesUsed(), 323479l);
@@ -243,7 +242,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").updateMetadata("myContainer", metadata));
+         assertTrue(api.getContainerApiForRegion("DFW").updateMetadata("myContainer", metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -265,7 +264,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").deleteMetadata("myContainer", metadata));
+         assertTrue(api.getContainerApiForRegion("DFW").deleteMetadata("myContainer", metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -287,7 +286,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.containerApiInRegion("DFW").deleteIfEmpty("myContainer"));
+         assertTrue(api.getContainerApiForRegion("DFW").deleteIfEmpty("myContainer"));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -306,7 +305,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertFalse(api.containerApiInRegion("DFW").deleteIfEmpty("myContainer"));
+         assertFalse(api.getContainerApiForRegion("DFW").deleteIfEmpty("myContainer"));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -326,7 +325,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.containerApiInRegion("DFW").deleteIfEmpty("myContainer");
+         api.getContainerApiForRegion("DFW").deleteIfEmpty("myContainer");
 
       } finally {
          assertEquals(server.getRequestCount(), 2);

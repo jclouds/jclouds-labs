@@ -60,7 +60,7 @@ public class AuthenticationMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
 
-         api.accountApiInRegion("DFW").get();
+         api.getAccountApiForRegion("DFW").get();
 
          assertEquals(server.getRequestCount(), 2);
          RecordedRequest authRequest = server.takeRequest();

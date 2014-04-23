@@ -36,7 +36,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testGet() throws Exception {
       for (String regionId : regions) {
-         AccountApi accountApi = api.accountApiInRegion(regionId);
+         AccountApi accountApi = api.getAccountApiForRegion(regionId);
          Account account = accountApi.get();
 
          assertNotNull(account);
@@ -48,7 +48,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testUpdateMetadata() throws Exception {
       for (String regionId : regions) {
-         AccountApi accountApi = api.accountApiInRegion(regionId);
+         AccountApi accountApi = api.getAccountApiForRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
 
@@ -60,7 +60,7 @@ public class AccountApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testDeleteMetadata() throws Exception {
       for (String regionId : regions) {
-         AccountApi accountApi = api.accountApiInRegion(regionId);
+         AccountApi accountApi = api.getAccountApiForRegion(regionId);
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
 

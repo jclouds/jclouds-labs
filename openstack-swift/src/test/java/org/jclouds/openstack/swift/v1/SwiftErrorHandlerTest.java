@@ -21,6 +21,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reportMatcher;
 import static org.easymock.EasyMock.verify;
+import static org.jclouds.io.Payloads.newByteSourcePayload;
 
 import java.net.URI;
 
@@ -33,8 +34,10 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.swift.v1.handlers.SwiftErrorHandler;
 import org.testng.annotations.Test;
 
+import com.google.common.io.ByteSource;
+
 /**
- * @author Adrian Cole
+ * Tests the {@link SwiftErrorHandler}
  */
 @Test(groups = "unit", testName = "SwiftErrorHandlerTest")
 public class SwiftErrorHandlerTest {
@@ -79,7 +82,8 @@ public class SwiftErrorHandlerTest {
 
       HttpCommand command = createMock(HttpCommand.class);
       HttpRequest request = HttpRequest.builder().method(method).endpoint(uri).build();
-      HttpResponse response = HttpResponse.builder().statusCode(statusCode).message(message).payload(content).build();
+      HttpResponse response = HttpResponse.builder().statusCode(statusCode).message(message)
+                                 .payload(newByteSourcePayload(ByteSource.wrap(content.getBytes()))).build();
       response.getPayload().getContentMetadata().setContentType(contentType);
 
       expect(command.getCurrentRequest()).andReturn(request).atLeastOnce();
@@ -110,5 +114,4 @@ public class SwiftErrorHandlerTest {
       });
       return null;
    }
-
 }

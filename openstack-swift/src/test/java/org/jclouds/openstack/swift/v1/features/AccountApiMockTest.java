@@ -55,7 +55,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         Account account = api.accountApiInRegion("DFW").get();
+         Account account = api.getAccountApiForRegion("DFW").get();
          assertEquals(account.getContainerCount(), 3l);
          assertEquals(account.getObjectCount(), 42l);
          assertEquals(account.getBytesUsed(), 323479l);
@@ -80,7 +80,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.accountApiInRegion("DFW").updateMetadata(metadata));
+         assertTrue(api.getAccountApiForRegion("DFW").updateMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -102,7 +102,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.accountApiInRegion("DFW").updateTemporaryUrlKey("foobar"));
+         assertTrue(api.getAccountApiForRegion("DFW").updateTemporaryUrlKey("foobar"));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -122,7 +122,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.accountApiInRegion("DFW").deleteMetadata(metadata));
+         assertTrue(api.getAccountApiForRegion("DFW").deleteMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

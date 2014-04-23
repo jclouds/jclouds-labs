@@ -17,7 +17,7 @@
 package org.jclouds.openstack.swift.v1;
 
 import static java.lang.String.format;
-import static org.jclouds.io.Payloads.newStringPayload;
+import static org.jclouds.io.Payloads.newByteSourcePayload;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
@@ -28,14 +28,13 @@ import java.util.UUID;
 
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
-import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.jclouds.util.Strings2;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.io.ByteSource;
 
 @Test(groups = "live", testName = "TemporaryUrlSignerLiveTest")
 public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
@@ -44,11 +43,11 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    private String containerName = getClass().getSimpleName() + "Container";
 
    public void signForPublicAccess() throws Exception {
-      for (String regionId : api.configuredRegions()) {
-         SwiftObject object = api.objectApiInRegionForContainer(regionId, containerName).head(name);
+      for (String regionId : api.getConfiguredRegions()) {
+         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
 
          long expires = System.currentTimeMillis() / 1000 + 5;
-         String signature = TemporaryUrlSigner.checkApiEvery(api.accountApiInRegion(regionId), 5)
+         String signature = TemporaryUrlSigner.checkApiEvery(api.getAccountApiForRegion(regionId), 5)
                .sign("GET", object.getUri().getPath(), expires);
 
          URI signed = URI.create(format("%s?temp_url_sig=%s&temp_url_expires=%s", object.getUri(), signature, expires));
@@ -71,20 +70,20 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void setup() {
       super.setup();
       String key = UUID.randomUUID().toString();
-      for (String regionId : api.configuredRegions()) {
-         api.accountApiInRegion(regionId).updateTemporaryUrlKey(key);
-         api.containerApiInRegion(regionId).createIfAbsent(containerName, CreateContainerOptions.NONE);
-         api.objectApiInRegionForContainer(regionId, containerName)
-               .replace(name, newStringPayload("swifty"), ImmutableMap.<String, String> of());
+      for (String regionId : api.getConfiguredRegions()) {
+         api.getAccountApiForRegion(regionId).updateTemporaryUrlKey(key);
+         api.getContainerApiForRegion(regionId).create(containerName);
+         api.getObjectApiForRegionAndContainer(regionId, containerName)
+               .put(name, newByteSourcePayload(ByteSource.wrap("swifty".getBytes())));
       }
    }
 
    @AfterMethod
    @AfterClass(groups = "live")
    public void tearDown() {
-      for (String regionId : api.configuredRegions()) {
-         api.objectApiInRegionForContainer(regionId, containerName).delete(name);
-         api.containerApiInRegion(regionId).deleteIfEmpty(containerName);
+      for (String regionId : api.getConfiguredRegions()) {
+         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(name);
+         api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
       }
       super.tearDown();
    }

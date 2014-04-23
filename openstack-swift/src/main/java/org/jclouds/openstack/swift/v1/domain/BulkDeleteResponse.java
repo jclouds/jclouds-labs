@@ -23,13 +23,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Map;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents a response from a Bulk Delete request.
  * 
- * @author Jeremy Daggett
- * 
- * @see BulkApi
+ * @see org.jclouds.openstack.swift.v1.features.BulkApi
  */
 public class BulkDeleteResponse {
    public static BulkDeleteResponse create(int deleted, int notFound, Map<String, String> errors) {
@@ -88,11 +87,15 @@ public class BulkDeleteResponse {
       return Objects.hashCode(getDeleted(), getNotFound(), getErrors());
    }
 
-   @Override
-   public String toString() {
-      return toStringHelper("")
+   protected ToStringHelper string() {
+      return toStringHelper(this)
             .add("deleted", getDeleted())
             .add("notFound", getNotFound())
-            .add("errors", getErrors()).toString();
+            .add("errors", getErrors());
+   }
+
+   @Override
+   public String toString() {
+      return string().toString();
    }
 }

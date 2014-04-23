@@ -20,26 +20,27 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.inject.Named;
+
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents a single segment of a multi-part upload.
  * 
- * @author Adrian Cole
- * @author Jeremy Daggett
- * 
- * @see StaticLargeObjectApi
+ * @see org.jclouds.openstack.swift.v1.features.StaticLargeObjectApi
  */
 public class Segment {
 
    private final String path;
    private final String etag;
-   private final long size_bytes;
+   @Named("size_bytes")
+   private final long sizeBytes;
 
    private Segment(String path, String etag, long sizeBytes) {
       this.path = checkNotNull(path, "path");
       this.etag = checkNotNull(etag, "etag of %s", path);
-      this.size_bytes = checkNotNull(sizeBytes, "sizeBytes of %s", path);
+      this.sizeBytes = checkNotNull(sizeBytes, "sizeBytes of %s", path);
    }
 
    /**
@@ -51,8 +52,17 @@ public class Segment {
 
    /**
     * @return The ETag of the content of the segment object.
+    * @deprecated Please use {@link #getETag()} as this method will be removed in jclouds 1.8.
     */
+   @Deprecated
    public String getEtag() {
+      return etag;
+   }
+
+   /**
+    * @return The ETag of the content of the segment object.
+    */
+   public String getETag() {
       return etag;
    }
 
@@ -60,7 +70,7 @@ public class Segment {
     * @return The size of the segment object.
     */
    public long getSizeBytes() {
-      return size_bytes;
+      return sizeBytes;
    }
 
    @Override
@@ -71,7 +81,7 @@ public class Segment {
       if (object instanceof Segment) {
          Segment that = Segment.class.cast(object);
          return equal(getPath(), that.getPath())
-               && equal(getEtag(), that.getEtag())
+               && equal(getETag(), that.getETag())
                && equal(getSizeBytes(), that.getSizeBytes());
       } else {
          return false;
@@ -80,15 +90,19 @@ public class Segment {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(getPath(), getEtag(), getSizeBytes());
+      return Objects.hashCode(getPath(), getETag(), getSizeBytes());
    }
 
    @Override
    public String toString() {
-      return toStringHelper("")
+      return string().toString();
+   }
+
+   protected ToStringHelper string() {
+      return toStringHelper(this)
             .add("path", getPath())
-            .add("etag", getEtag())
-            .add("sizeBytes", getSizeBytes()).toString();
+            .add("etag", getETag())
+            .add("sizeBytes", getSizeBytes());
    }
 
    public static Builder builder() {

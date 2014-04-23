@@ -78,8 +78,16 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    /**
     * @return The ETag of the content of this object.
+    * @deprecated Please use {@link #getETag()} as this method will be removed in jclouds 1.8.
     */
    public String getEtag() {
+      return etag;
+   }
+
+   /**
+    * @return The ETag of the content of this object.
+    */
+   public String getETag() {
       return etag;
    }
 
@@ -130,7 +138,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
          final SwiftObject that = SwiftObject.class.cast(object);
          return equal(getName(), that.getName())
                && equal(getUri(), that.getUri())
-               && equal(getEtag(), that.getEtag());
+               && equal(getETag(), that.getETag());
       } else {
          return false;
       }
@@ -138,7 +146,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(getName(), getUri(), getEtag());
+      return Objects.hashCode(getName(), getUri(), getETag());
    }
 
    @Override
@@ -147,10 +155,10 @@ public class SwiftObject implements Comparable<SwiftObject> {
    }
 
    protected ToStringHelper string() {
-      return toStringHelper("")
+      return toStringHelper(this)
             .add("name", getName())
             .add("uri", getUri())
-            .add("etag", getEtag())
+            .add("etag", getETag())
             .add("lastModified", getLastModified())
             .add("metadata", getMetadata());
    }
@@ -198,7 +206,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       }
 
       /**
-       * @see SwiftObject#getEtag()
+       * @see SwiftObject#getETag()
        */
       public Builder etag(String etag) {
          this.etag = etag;
@@ -251,7 +259,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       public Builder fromObject(SwiftObject from) {
          return name(from.getName())
                .uri(from.getUri())
-               .etag(from.getEtag())
+               .etag(from.getETag())
                .lastModified(from.getLastModified())
                .headers(from.getHeaders())
                .metadata(from.getMetadata())

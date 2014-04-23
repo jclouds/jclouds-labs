@@ -16,7 +16,6 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
-import static org.jclouds.io.Payloads.newByteArrayPayload;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -24,12 +23,15 @@ import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.exporter.TarGzExporter;
-import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
+import org.jclouds.io.ByteSources;
+import org.jclouds.io.Payload;
+import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.ExtractArchiveResponse;
+import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
 
-import com.google.common.io.ByteStreams;
+import com.google.common.io.ByteSource;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
@@ -43,7 +45,8 @@ public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       for (int i = 0; i < 10; i++) {
          files.add(content, "/file" + i);
       }
-      byte[] tarGz = ByteStreams.toByteArray(files.as(TarGzExporter.class).exportAsInputStream());
+
+      byte[] tarGz = ByteSources.asByteSource(files.as(TarGzExporter.class).exportAsInputStream()).read();
 
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -51,8 +54,9 @@ public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ExtractArchiveResponse response = api.bulkApiInRegion("DFW").extractArchive("myContainer",
-               newByteArrayPayload(tarGz), "tar.gz");
+         Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(tarGz));
+         ExtractArchiveResponse response = api.getBulkApiForRegion("DFW").extractArchive("myContainer", payload, "tar.gz");
+
          assertEquals(response.getCreated(), 10);
          assertTrue(response.getErrors().isEmpty());
 

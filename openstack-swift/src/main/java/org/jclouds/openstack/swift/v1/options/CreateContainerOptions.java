@@ -29,9 +29,13 @@ import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders;
 /**
  * Options for creating a {@link Container}. 
  * 
- * @see ContainerApi#createIfAbsent(String, CreateContainerOptions)
+ * @see ContainerApi#create(String, CreateContainerOptions)
  */
 public class CreateContainerOptions extends BaseHttpRequestOptions {
+   /**
+    * @deprecated This field will be removed in jclouds 1.8.
+    */
+   @Deprecated
    public static final CreateContainerOptions NONE = new CreateContainerOptions();
 
    /** 

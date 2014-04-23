@@ -23,13 +23,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Map;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents a response from an Extract Archive request.
  *
- * @author Jeremy Daggett
- * 
- * @see BulkApi
+ * @see org.jclouds.openstack.swift.v1.features.BulkApi
  */
 public class ExtractArchiveResponse {
    public static ExtractArchiveResponse create(int created, Map<String, String> errors) {
@@ -78,10 +77,14 @@ public class ExtractArchiveResponse {
       return Objects.hashCode(getCreated(), getErrors());
    }
 
+   protected ToStringHelper string() {
+      return toStringHelper(this)
+            .add("created", getCreated())
+            .add("errors", getErrors());
+   }
+
    @Override
    public String toString() {
-      return toStringHelper("")
-            .add("created", getCreated())
-            .add("errors", getErrors()).toString();
+      return string().toString();
    }
 }

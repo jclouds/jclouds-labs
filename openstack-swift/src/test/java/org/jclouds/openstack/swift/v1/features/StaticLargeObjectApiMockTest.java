@@ -42,7 +42,7 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertEquals(
-               api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").replaceManifest(
+               api.getStaticLargeObjectApiForRegionAndContainer("DFW", "myContainer").replaceManifest(
                      "myObject",
                      ImmutableList
                            .<Segment> builder()
@@ -77,7 +77,7 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").delete("myObject");
+         api.getStaticLargeObjectApiForRegionAndContainer("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -95,7 +95,7 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.staticLargeObjectApiInRegionForContainer("DFW", "myContainer").delete("myObject");
+         api.getStaticLargeObjectApiForRegionAndContainer("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);

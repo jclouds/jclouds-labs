@@ -52,15 +52,12 @@ import com.google.common.annotations.Beta;
 import com.google.common.collect.FluentIterable;
 
 /**
- * Provides access to the Swift Container API features.
+ * Provides access to the OpenStack Object Storage (Swift) Container API features.
  * <p/>
  * This API is new to jclouds and hence is in Beta. That means we need people to use it and give us feedback. Based
  * on that feedback, minor changes to the interfaces may happen. This code will replace
- * org.jclouds.openstack.swift.SwiftClient in jclouds 2.0 and it is recommended you adopt it sooner than later.
+ * {@code org.jclouds.openstack.swift.SwiftClient} in jclouds 2.0 and it is recommended you adopt it sooner than later.
  *
- * @author Adrian Cole
- * @author Zack Shoylev
- * @author Jeremy Daggett
  */
 @Beta
 @RequestFilters(AuthenticateRequest.class)
@@ -69,6 +66,11 @@ public interface ContainerApi {
 
    /**
     * Lists up to 10,000 containers.
+    * 
+    * <h3>NOTE</h3>
+    * This method returns a list of {@link Container} objects <b>without</b> metadata. To retrieve
+    * the {@link Container} metadata, use the {@link #get(String)} method.
+    * <p/>
     * 
     * @return a list of {@link Container containers} ordered by name.
     */
@@ -81,6 +83,11 @@ public interface ContainerApi {
 
    /**
     * Lists containers with the supplied {@link ListContainerOptions}.
+    * 
+    * <h3>NOTE</h3>
+    * This method returns a list of {@link Container} objects <b>without</b> metadata. To retrieve
+    * the {@link Container} metadata, use the {@link #get(String)} method.
+    * <p/>
     * 
     * @param options
     *          the options to control the output list.
@@ -96,36 +103,33 @@ public interface ContainerApi {
 
    /**
     * Creates a container, if not already present.
-    * 
+    *
+    * @param containerName
+    *           corresponds to {@link Container#getName()}.
+    *
+    * @return {@code true} if the container was created, {@code false} if the container already existed.
+    */
+   @Named("container:create")
+   @PUT
+   @ResponseParser(FalseOnAccepted.class)
+   @Path("/{containerName}")
+   boolean create(@PathParam("containerName") String containerName);
+
+   /**
+    * Creates a container, if not already present.
+    *
     * @param containerName
     *           corresponds to {@link Container#getName()}.
     * @param options
     *           the options to use when creating the container.
-    * 
+    *
     * @return {@code true} if the container was created, {@code false} if the container already existed.
     */
-   @Named("container:createIfAbsent")
+   @Named("container:create")
    @PUT
    @ResponseParser(FalseOnAccepted.class)
    @Path("/{containerName}")
-   boolean createIfAbsent(@PathParam("containerName") String containerName, CreateContainerOptions options);
-
-   /**
-    * Gets the {@link Container} metadata, including the number of objects in the container and 
-    * the total bytes for all objects stored in the container.
-    * 
-    * @param containerName
-    *           corresponds to {@link Container#getName()}.
-    * 
-    * @return the {@link Container}, or {@code null} if not found.
-    */
-   @Named("container:get")
-   @HEAD
-   @ResponseParser(ParseContainerFromHeaders.class)
-   @Fallback(NullOnNotFoundOr404.class)
-   @Path("/{containerName}")
-   @Nullable
-   Container head(@PathParam("containerName") String containerName);
+   boolean create(@PathParam("containerName") String containerName, CreateContainerOptions options);
 
    /**
     * Gets the {@link Container}.
@@ -194,4 +198,44 @@ public interface ContainerApi {
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{containerName}")
    boolean deleteIfEmpty(@PathParam("containerName") String containerName) throws IllegalStateException;
+
+   /**
+    * Creates a container, if not already present.
+    *
+    * @param containerName
+    *           corresponds to {@link Container#getName()}.
+    * @param options
+    *           the options to use when creating the container.
+    *
+    * @return {@code true} if the container was created, {@code false} if the container already existed.
+    *
+    * @deprecated Please use either {@link #create(String)} or {@link #create(String, CreateContainerOptions)}
+    *             as this method will be removed in jclouds 1.8.
+    */
+   @Deprecated
+   @Named("container:createIfAbsent")
+   @PUT
+   @ResponseParser(FalseOnAccepted.class)
+   @Path("/{containerName}")
+   boolean createIfAbsent(@PathParam("containerName") String containerName, CreateContainerOptions options);
+
+   /**
+    * Gets the {@link Container} metadata, including the number of objects in the container and 
+    * the total bytes for all objects stored in the container.
+    *
+    * @param containerName
+    *           corresponds to {@link Container#getName()}.
+    *
+    * @return the {@link Container}, or {@code null} if not found.
+    *
+    * @deprecated Please use {@link #get(String)} as this method will be removed in jclouds 1.8.
+    */
+   @Deprecated
+   @Named("container:get")
+   @HEAD
+   @ResponseParser(ParseContainerFromHeaders.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   @Nullable
+   Container head(@PathParam("containerName") String containerName);
 }

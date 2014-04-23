@@ -25,11 +25,9 @@ import com.google.common.collect.ForwardingList;
 /**
  * Represents a list of objects in a container.
  * 
- * @author Jeremy Daggett
- * 
  * @see Container 
  * @see SwiftObject
- * @see ObjectApi#list()
+ * @see org.jclouds.openstack.swift.v1.features.ObjectApi#list()
  */
 public class ObjectList extends ForwardingList<SwiftObject> {
 

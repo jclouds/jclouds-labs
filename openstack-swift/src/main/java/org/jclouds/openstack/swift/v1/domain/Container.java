@@ -32,10 +32,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Represents a Container in OpenStack Object Storage.
  * 
- * @author Adrian Cole
- * @author Jeremy Daggett
- * 
- * @see ContainerApi
+ * @see org.jclouds.openstack.swift.v1.features.ContainerApi
  */
 public class Container implements Comparable<Container> {
 
@@ -81,7 +78,7 @@ public class Container implements Comparable<Container> {
     * 
     * @return true  if this container is publicly readable, false otherwise.
     * 
-    * @see CreateContainerOptions#anybodyRead()
+    * @see org.jclouds.openstack.swift.v1.options.CreateContainerOptions#anybodyRead()
     */
    public Optional<Boolean> getAnybodyRead() {
       return anybodyRead;
@@ -125,7 +122,7 @@ public class Container implements Comparable<Container> {
    }
 
    protected ToStringHelper string() {
-      return toStringHelper("").omitNullValues()
+      return toStringHelper(this).omitNullValues()
             .add("name", getName())
             .add("objectCount", getObjectCount())
             .add("bytesUsed", getBytesUsed())

@@ -31,9 +31,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Represents an Account in OpenStack Object Storage.
  * 
- * @author Jeremy Daggett
- * 
- * @see AccountApi
+ * @see org.jclouds.openstack.swift.v1.features.AccountApi
  */
 public class Account {
 
@@ -116,7 +114,7 @@ public class Account {
    }
 
    protected ToStringHelper string() {
-      return toStringHelper("")
+      return toStringHelper(this)
             .add("containerCount", getContainerCount())
             .add("objectCount", getObjectCount())
             .add("bytesUsed", getBytesUsed())

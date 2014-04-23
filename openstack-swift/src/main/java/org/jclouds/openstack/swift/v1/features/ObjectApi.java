@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.v1.features;
 
+import static com.google.common.net.HttpHeaders.EXPECT;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_COPY_FROM;
 
@@ -49,6 +50,7 @@ import org.jclouds.openstack.swift.v1.functions.ETagHeader;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectFromResponse;
 import org.jclouds.openstack.swift.v1.functions.ParseObjectListFromResponse;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
+import org.jclouds.openstack.swift.v1.options.PutOptions;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
@@ -59,14 +61,11 @@ import org.jclouds.rest.annotations.ResponseParser;
 import com.google.common.annotations.Beta;
 
 /**
- * Provides access to the Swift Object API features.
+ * Provides access to the OpenStack Object Storage (Swift) Object API features.
  * <p/>
  * This API is new to jclouds and hence is in Beta. That means we need people to use it and give us feedback. Based
  * on that feedback, minor changes to the interfaces may happen. This code will replace
  * org.jclouds.openstack.swift.SwiftClient in jclouds 2.0 and it is recommended you adopt it sooner than later.
- *
- * @author Adrian Cole
- * @author Jeremy Daggett
  */
 @Beta
 @RequestFilters(AuthenticateRequest.class)
@@ -75,9 +74,6 @@ public interface ObjectApi {
 
    /**
     * Lists up to 10,000 objects.
-    * 
-    * @param options  
-    *           the {@link ListContainerOptions} for controlling the returned list.
     * 
     * @return an {@link ObjectList} of {@link SwiftObject} ordered by name or {@code null}.
     */
@@ -116,36 +112,70 @@ public interface ObjectApi {
     *           corresponds to {@link SwiftObject#getName()}.
     * @param payload
     *           corresponds to {@link SwiftObject#getPayload()}.
-    * @param metadata
-    *           corresponds to {@link SwiftObject#getMetadata()}.
-    * 
-    * @return {@link SwiftObject#getEtag()} of the object.
+    *
+    * @return {@link SwiftObject#getETag()} of the object.
     */
-   @Named("object:replace")
+   @Named("object:put")
    @PUT
+   @Headers(keys = EXPECT, values = "100-continue")
    @ResponseParser(ETagHeader.class)
    @Path("/{objectName}")
-   String replace(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload,
-         @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
+   String put(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload);
 
    /**
-    * Gets the {@link SwiftObject} metadata without its {@link Payload#getInput() body}.
+    * Creates or updates a {@link SwiftObject}.
+    * 
+    * @param objectName
+    *           corresponds to {@link SwiftObject#getName()}.
+    * @param payload
+    *           corresponds to {@link SwiftObject#getPayload()}.
+    * @param options
+    *           {@link PutOptions options} to control creating the {@link SwiftObject}.
+    * 
+    * @return {@link SwiftObject#getETag()} of the object.
+    */
+   @Named("object:put")
+   @PUT
+   @Headers(keys = EXPECT, values = "100-continue")
+   @ResponseParser(ETagHeader.class)
+   @Path("/{objectName}")
+   String put(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload,
+         PutOptions options);
+
+   /**
+    * Gets the {@link SwiftObject} metadata without its {@link Payload#openStream() body}.
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#getName()}.
     * 
     * @return the {@link SwiftObject} or {@code null}, if not found.
     */
-   @Named("object:head")
+   @Named("object:getWithoutBody")
    @HEAD
    @ResponseParser(ParseObjectFromResponse.class)
    @Fallback(NullOnNotFoundOr404.class)
    @Path("/{objectName}")
    @Nullable
-   SwiftObject head(@PathParam("objectName") String objectName);
+   SwiftObject getWithoutBody(@PathParam("objectName") String objectName);
 
    /**
-    * Gets the {@link SwiftObject} including its {@link Payload#getInput() body}.
+    * Gets the {@link SwiftObject} including its {@link Payload#openStream() body}.
+    * 
+    * @param objectName
+    *           corresponds to {@link SwiftObject#getName()}.
+    * 
+    * @return the {@link SwiftObject} or {@code null}, if not found.
+    */
+   @Named("object:get")
+   @GET
+   @ResponseParser(ParseObjectFromResponse.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{objectName}")
+   @Nullable
+   SwiftObject get(@PathParam("objectName") String objectName);
+
+   /**
+    * Gets the {@link SwiftObject} including its {@link Payload#openStream() body}.
     * 
     * @param objectName
     *           corresponds to {@link SwiftObject#getName()}.
@@ -226,7 +256,7 @@ public interface ObjectApi {
     * 
     * @return {@code true} if the object was successfully copied, {@code false} if not.
     * 
-    * @throws CopyObjectException if the source or destination container do not exist.
+    * @throws org.jclouds.openstack.swift.v1.CopyObjectException if the source or destination container do not exist.
     */
    @Named("object:copy")
    @PUT
@@ -236,4 +266,45 @@ public interface ObjectApi {
    boolean copy(@PathParam("destinationObject") String destinationObject,
                 @PathParam("sourceContainer") String sourceContainer,
                 @PathParam("sourceObject") String sourceObject);
+
+   /**
+    * Gets the {@link SwiftObject} metadata without its {@link Payload#openStream() body}.
+    *
+    * @param objectName
+    *           corresponds to {@link SwiftObject#getName()}.
+    *
+    * @return the {@link SwiftObject} or {@code null}, if not found.
+    *
+    * @deprecated Please use {@link #getWithoutBody(String)} as this method will be removed in jclouds 1.8.
+    */
+   @Deprecated
+   @Named("object:head")
+   @HEAD
+   @ResponseParser(ParseObjectFromResponse.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{objectName}")
+   @Nullable
+   SwiftObject head(@PathParam("objectName") String objectName);
+
+   /**
+    * Creates or updates a {@link SwiftObject}.
+    * 
+    * @param objectName
+    *           corresponds to {@link SwiftObject#getName()}.
+    * @param payload
+    *           corresponds to {@link SwiftObject#getPayload()}.
+    * @param metadata
+    *           corresponds to {@link SwiftObject#getMetadata()}.
+    * 
+    * @return {@link SwiftObject#getEtag()} of the object.
+    *
+    * @deprecated Please use {@link #put(String, Payload)} or {@link #put(String, Payload, PutOptions)}
+    *             as this method will be removed in jclouds 1.8.
+    */
+   @Named("object:replace")
+   @PUT
+   @ResponseParser(ETagHeader.class)
+   @Path("/{objectName}")
+   String replace(@PathParam("objectName") String objectName, @BinderParam(SetPayload.class) Payload payload,
+         @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
 }
