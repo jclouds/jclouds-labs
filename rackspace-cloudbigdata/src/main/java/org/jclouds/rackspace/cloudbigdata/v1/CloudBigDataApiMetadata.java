@@ -26,6 +26,7 @@ import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataHttpApiModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataParserModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
@@ -59,7 +60,7 @@ public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi
 
    public static Properties defaultProperties() {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
-      properties.setProperty(SERVICE_TYPE, "rax:bigdata");
+      properties.setProperty(SERVICE_TYPE, ServiceType.BIG_DATA);
       properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
       return properties;
    }

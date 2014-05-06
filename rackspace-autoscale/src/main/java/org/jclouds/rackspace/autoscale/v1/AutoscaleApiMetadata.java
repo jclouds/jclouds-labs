@@ -26,6 +26,7 @@ import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleHttpApiModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleParserModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
@@ -56,7 +57,7 @@ public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
 
    public static Properties defaultProperties() {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
-      properties.setProperty(SERVICE_TYPE, "rax:autoscale");
+      properties.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE);
       properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
       return properties;
    }

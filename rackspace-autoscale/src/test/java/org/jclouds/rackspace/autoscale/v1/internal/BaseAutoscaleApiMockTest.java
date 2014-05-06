@@ -24,6 +24,7 @@ import java.util.Properties;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
+import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 
 /**
  * Base class for writing Autoscale Expect tests
@@ -34,7 +35,7 @@ public class BaseAutoscaleApiMockTest extends BaseOpenStackMockTest<AutoscaleApi
    protected Properties overrides;
    public BaseAutoscaleApiMockTest() {
       overrides = new Properties();
-      overrides.setProperty(SERVICE_TYPE, "rax:autoscale");
       overrides.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
+      overrides.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE);
    }
 }

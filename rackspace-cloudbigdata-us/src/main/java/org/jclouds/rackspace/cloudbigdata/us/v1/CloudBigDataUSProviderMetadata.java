@@ -31,6 +31,7 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.cloudbigdata.v1.CloudBigDataApiMetadata;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataHttpApiModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataParserModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
@@ -78,7 +79,7 @@ public class CloudBigDataUSProviderMetadata extends BaseProviderMetadata {
    public static Properties defaultProperties() {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
-      properties.setProperty(SERVICE_TYPE, "rax:bigdata"); 
+      properties.setProperty(SERVICE_TYPE, ServiceType.BIG_DATA); 
       //properties.setProperty(PROPERTY_ZONES, "ORD,DFW,SYD");
       properties.setProperty(PROPERTY_ZONES, "ORD");
       properties.setProperty(PROPERTY_ZONE + ".ORD." + ISO3166_CODES, "US-IL");

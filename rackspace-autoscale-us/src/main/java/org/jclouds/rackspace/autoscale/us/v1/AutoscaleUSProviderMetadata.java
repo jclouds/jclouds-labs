@@ -31,6 +31,7 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApiMetadata;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleHttpApiModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleParserModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
@@ -66,7 +67,7 @@ public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
    public static Properties defaultProperties() {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
-      properties.setProperty(SERVICE_TYPE, "rax:autoscale"); 
+      properties.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE); 
       //properties.setProperty(PROPERTY_ZONES, "ORD,DFW,SYD");
       properties.setProperty(PROPERTY_ZONES, "ORD,DFW");
       properties.setProperty(PROPERTY_ZONE + ".ORD." + ISO3166_CODES, "US-IL");
