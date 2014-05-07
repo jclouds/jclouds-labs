@@ -16,6 +16,7 @@
  */
 package org.jclouds.digitalocean.compute.config;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_IMAGE_AVAILABLE;
 import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
 import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
@@ -52,6 +53,7 @@ import org.jclouds.digitalocean.domain.Size;
 import org.jclouds.domain.Location;
 import org.jclouds.util.Predicates2;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -106,13 +108,8 @@ public class DigitalOceanComputeServiceContextModule extends
    @Named(TIMEOUT_NODE_RUNNING)
    protected Predicate<Integer> provideDropletRunningPredicate(final DigitalOceanApi api, Timeouts timeouts,
          PollPeriod pollPeriod) {
-      return Predicates2.retry(new Predicate<Integer>() {
-         @Override
-         public boolean apply(Integer input) {
-            Event event = api.getEventApi().get(input);
-            return Event.Status.DONE == event.getStatus();
-         }
-      }, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod);
+      return Predicates2.retry(new EventDonePredicate(api), timeouts.nodeRunning, pollPeriod.pollInitialPeriod,
+            pollPeriod.pollMaxPeriod);
    }
 
    @Provides
@@ -120,13 +117,8 @@ public class DigitalOceanComputeServiceContextModule extends
    @Named(TIMEOUT_NODE_SUSPENDED)
    protected Predicate<Integer> provideDropletSuspendedPredicate(final DigitalOceanApi api, Timeouts timeouts,
          PollPeriod pollPeriod) {
-      return Predicates2.retry(new Predicate<Integer>() {
-         @Override
-         public boolean apply(Integer input) {
-            Event event = api.getEventApi().get(input);
-            return Event.Status.DONE == event.getStatus();
-         }
-      }, timeouts.nodeSuspended, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod);
+      return Predicates2.retry(new EventDonePredicate(api), timeouts.nodeSuspended, pollPeriod.pollInitialPeriod,
+            pollPeriod.pollMaxPeriod);
    }
 
    @Provides
@@ -134,13 +126,8 @@ public class DigitalOceanComputeServiceContextModule extends
    @Named(TIMEOUT_NODE_TERMINATED)
    protected Predicate<Integer> provideDropletTerminatedPredicate(final DigitalOceanApi api, Timeouts timeouts,
          PollPeriod pollPeriod) {
-      return Predicates2.retry(new Predicate<Integer>() {
-         @Override
-         public boolean apply(Integer input) {
-            Event event = api.getEventApi().get(input);
-            return Event.Status.DONE == event.getStatus();
-         }
-      }, timeouts.nodeTerminated, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod);
+      return Predicates2.retry(new EventDonePredicate(api), timeouts.nodeTerminated, pollPeriod.pollInitialPeriod,
+            pollPeriod.pollMaxPeriod);
    }
 
    @Provides
@@ -148,12 +135,32 @@ public class DigitalOceanComputeServiceContextModule extends
    @Named(TIMEOUT_IMAGE_AVAILABLE)
    protected Predicate<Integer> provideImageAvailablePredicate(final DigitalOceanApi api, Timeouts timeouts,
          PollPeriod pollPeriod) {
-      return Predicates2.retry(new Predicate<Integer>() {
-         @Override
-         public boolean apply(Integer input) {
-            Event event = api.getEventApi().get(input);
-            return Event.Status.DONE == event.getStatus();
+      return Predicates2.retry(new EventDonePredicate(api), timeouts.imageAvailable, pollPeriod.pollInitialPeriod,
+            pollPeriod.pollMaxPeriod);
+   }
+
+   @VisibleForTesting
+   static class EventDonePredicate implements Predicate<Integer> {
+
+      private final DigitalOceanApi api;
+
+      public EventDonePredicate(DigitalOceanApi api) {
+         this.api = checkNotNull(api, "api must not be null");
+      }
+
+      @Override
+      public boolean apply(Integer input) {
+         Event event = api.getEventApi().get(input);
+         switch (event.getStatus()) {
+            case DONE:
+               return true;
+            case PENDING:
+               return false;
+            case ERROR:
+            default:
+               throw new IllegalStateException("Resource is in invalid status: " + event.getStatus().name());
          }
-      }, timeouts.imageAvailable, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod);
+      }
+
    }
 }

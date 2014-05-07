@@ -37,7 +37,7 @@ import com.google.inject.name.Named;
 public class Event {
 
    public enum Status {
-      DONE, PENDING;
+      DONE, PENDING, ERROR;
 
       public static Status fromValue(String value) {
          // DigitalOcean return a 'null' status when the operation is still in
