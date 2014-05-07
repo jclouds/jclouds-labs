@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.marconi.v1.features;
 
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -25,6 +26,7 @@ import org.jclouds.openstack.marconi.v1.MarconiApi;
 import org.jclouds.openstack.marconi.v1.domain.Queue;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 import org.jclouds.openstack.marconi.v1.domain.Queues;
+import org.jclouds.openstack.marconi.v1.options.ListQueuesOptions;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
 
@@ -172,6 +174,42 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues?detailed=false HTTP/1.1");
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues?detailed=false&marker=jclouds-test HTTP/1.1");
+      }
+      finally {
+         server.shutdown();
+      }
+   }
+
+   public void listOnePageOfQueuesFail() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
+      server.enqueue(new MockResponse().setResponseCode(404));
+
+      try {
+         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
+         QueueApi queueApi = api.getQueueApiForZoneAndClient("DFW", CLIENT_ID);
+
+         FluentIterable<Queue> queues = queueApi.list(false).concat();
+
+         assertTrue(queues.isEmpty(), "Expecting empty queues but was " + queues.toString());
+      }
+      finally {
+         server.shutdown();
+      }
+   }
+
+   public void listPagedIterableCollectionQueuesFail() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(new MockResponse().setBody(accessRackspace));
+      server.enqueue(new MockResponse().setResponseCode(404));
+
+      try {
+         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
+         QueueApi queueApi = api.getQueueApiForZoneAndClient("DFW", CLIENT_ID);
+
+         Queues queues = queueApi.list(ListQueuesOptions.NONE);
+
+         assertTrue(queues.isEmpty(), "Expecting empty queues but was " + queues.toString());
       }
       finally {
          server.shutdown();

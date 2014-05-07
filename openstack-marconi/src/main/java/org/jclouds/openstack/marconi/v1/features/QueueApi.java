@@ -21,6 +21,7 @@ import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.marconi.v1.domain.Queue;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 import org.jclouds.openstack.marconi.v1.domain.Queues;
+import org.jclouds.openstack.marconi.v1.fallbacks.EmptyQueuesFallback;
 import org.jclouds.openstack.marconi.v1.functions.ParseQueueStats;
 import org.jclouds.openstack.marconi.v1.functions.ParseQueues;
 import org.jclouds.openstack.marconi.v1.functions.QueuesToPagedIterable;
@@ -47,7 +48,6 @@ import java.util.Map;
 
 import static org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
 import static org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-import static org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
 
 /**
  * Provides access to Queues via their REST API.
@@ -114,7 +114,7 @@ public interface QueueApi {
    @GET
    @ResponseParser(ParseQueues.class)
    @Consumes(MediaType.APPLICATION_JSON)
-   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
+   @Fallback(EmptyQueuesFallback.class)
    @Path("queues")
    Queues list(ListQueuesOptions options);
 
