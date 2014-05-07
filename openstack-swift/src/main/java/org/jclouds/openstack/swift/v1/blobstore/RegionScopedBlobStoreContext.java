@@ -131,7 +131,7 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
 
    @Override
    public ConsistencyModel getConsistencyModel() {
-      return ConsistencyModel.STRICT;
+      return ConsistencyModel.EVENTUAL;
    }
 
    @Override
