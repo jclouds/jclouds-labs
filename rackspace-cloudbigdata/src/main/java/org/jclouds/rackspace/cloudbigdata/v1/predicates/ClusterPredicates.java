@@ -1,4 +1,3 @@
-package org.jclouds.rackspace.cloudbigdata.v1.predicates;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,6 +15,7 @@ package org.jclouds.rackspace.cloudbigdata.v1.predicates;
  * limitations under the License.
  */
 
+package org.jclouds.rackspace.cloudbigdata.v1.predicates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
