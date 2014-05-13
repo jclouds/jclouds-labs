@@ -32,7 +32,7 @@ import org.jclouds.rest.ResourceNotFoundException;
  * @author Sergi Castro
  * @author Ignasi Barrera
  * 
- * @see ResponseStatusFromPayloadHttpCommandExecutorService
+ * @see org.jclouds.digitalocean.http.ResponseStatusFromPayloadHttpCommandExecutorService
  */
 @Singleton
 public class DigitalOceanErrorHandler implements HttpErrorHandler {

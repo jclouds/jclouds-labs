@@ -27,7 +27,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Live tests for the {@link ComputeService} integration.
+ * Live tests for the {@link org.jclouds.compute.ComputeService} integration.
  * 
  * @author Sergi Castro
  * @author Ignasi Barrera
