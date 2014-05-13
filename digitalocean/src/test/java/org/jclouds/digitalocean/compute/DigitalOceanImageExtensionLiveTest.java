@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 import com.google.inject.Module;
 
 /**
- * Live tests for the {@link ImageExtension} integration.
+ * Live tests for the {@link org.jclouds.compute.extensions.ImageExtension} integration.
  * 
  * @author Sergi Castro
  * @author Ignasi Barrera

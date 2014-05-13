@@ -39,18 +39,17 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.InputSupplier;
+import com.google.common.io.ByteSource;
 
 /**
  * Utility methods to work with DSA SSH keys.
  * <p>
- * Methods in this class should be moved to the {@link SshKeys} class.
+ * Methods in this class should be moved to the {@link org.jclouds.ssh.SshKeys} class.
  * 
  * @author Sergi Castro
  * @author Ignasi Barrera
  * 
- * @see SshKeys
+ * @see org.jclouds.ssh.SshKeys
  */
 public class DSAKeys {
 
@@ -61,34 +60,30 @@ public class DSAKeys {
    }
 
    /**
-    * Executes {@link Pems#publicKeySpecFromOpenSSH(InputSupplier)} on the
+    * Executes {@link org.jclouds.crypto.Pems#publicKeySpecFromOpenSSH(com.google.common.io.InputSupplier)} on the
     * string which was OpenSSH Base64 Encoded {@code id_rsa.pub}
     * 
     * @param idRsaPub formatted {@code ssh-dss AAAAB3NzaC1yc2EAAAADAQABAAAB...}
-    * @see Pems#publicKeySpecFromOpenSSH(InputSupplier)
+    * @see org.jclouds.crypto.Pems#publicKeySpecFromOpenSSH(com.google.common.io.InputSupplier)
     */
    public static DSAPublicKeySpec publicKeySpecFromOpenSSH(String idDsaPub) {
       try {
-         return publicKeySpecFromOpenSSH(ByteStreams.newInputStreamSupplier(idDsaPub.getBytes(Charsets.UTF_8)));
+         return publicKeySpecFromOpenSSH(ByteSource.wrap(idDsaPub.getBytes(Charsets.UTF_8)));
       } catch (IOException e) {
          throw propagate(e);
       }
    }
 
    /**
-    * Returns {@link DSAPublicKeySpec} which was OpenSSH Base64 Encoded
-    * {@code id_rsa.pub}
+    * Returns {@link DSAPublicKeySpec} which was OpenSSH Base64 Encoded {@code id_rsa.pub}
     * 
-    * @param supplier the input stream factory, formatted
-    *        {@code ssh-dss AAAAB3NzaC1yc2EAAAADAQABAAAB...}
+    * @param supplier the input stream factory, formatted {@code ssh-dss AAAAB3NzaC1yc2EAAAADAQABAAAB...}
     * 
-    * @return the {@link DSAPublicKeySpec} which was OpenSSH Base64 Encoded
-    *         {@code id_rsa.pub}
+    * @return the {@link DSAPublicKeySpec} which was OpenSSH Base64 Encoded {@code id_rsa.pub}
     * @throws IOException if an I/O error occurs
     */
-   public static DSAPublicKeySpec publicKeySpecFromOpenSSH(InputSupplier<? extends InputStream> supplier)
-         throws IOException {
-      InputStream stream = supplier.getInput();
+   public static DSAPublicKeySpec publicKeySpecFromOpenSSH(ByteSource supplier) throws IOException {
+      InputStream stream = supplier.openStream();
       Iterable<String> parts = Splitter.on(' ').split(toStringAndClose(stream).trim());
       checkArgument(size(parts) >= 2 && "ssh-dss".equals(get(parts, 0)), "bad format, should be: ssh-dss AAAAB3...");
       stream = new ByteArrayInputStream(base64().decode(get(parts, 1)));
@@ -103,8 +98,7 @@ public class DSAKeys {
 
    /**
     * @param publicKeyOpenSSH RSA public key in OpenSSH format
-    * @return fingerprint ex.
-    *         {@code 2b:a9:62:95:5b:8b:1d:61:e0:92:f7:03:10:e9:db:d9}
+    * @return fingerprint ex. {@code 2b:a9:62:95:5b:8b:1d:61:e0:92:f7:03:10:e9:db:d9}
     */
    public static String fingerprintPublicKey(String publicKeyOpenSSH) {
       DSAPublicKeySpec publicKeySpec = publicKeySpecFromOpenSSH(publicKeyOpenSSH);
@@ -112,12 +106,10 @@ public class DSAKeys {
    }
 
    /**
-    * Create a fingerprint per the following <a
-    * href="http://tools.ietf.org/html/draft-friedl-secsh-fingerprint-00"
+    * Create a fingerprint per the following <a href="http://tools.ietf.org/html/draft-friedl-secsh-fingerprint-00"
     * >spec</a>
     * 
-    * @return hex fingerprint ex.
-    *         {@code 2b:a9:62:95:5b:8b:1d:61:e0:92:f7:03:10:e9:db:d9}
+    * @return hex fingerprint ex. {@code 2b:a9:62:95:5b:8b:1d:61:e0:92:f7:03:10:e9:db:d9}
     */
    public static String fingerprint(BigInteger p, BigInteger q, BigInteger g, BigInteger y) {
       byte[] keyBlob = keyBlob(p, q, g, y);
@@ -125,14 +117,14 @@ public class DSAKeys {
    }
 
    /**
-    * @see SshKeys
+    * @see org.jclouds.ssh.SshKeys
     */
    private static String hexColonDelimited(HashCode hc) {
       return on(':').join(fixedLength(2).split(base16().lowerCase().encode(hc.asBytes())));
    }
 
    /**
-    * @see SshKeys
+    * @see org.jclouds.ssh.SshKeys
     */
    private static byte[] keyBlob(BigInteger p, BigInteger q, BigInteger g, BigInteger y) {
       try {
@@ -149,7 +141,7 @@ public class DSAKeys {
    }
 
    /**
-    * @see SshKeys
+    * @see org.jclouds.ssh.SshKeys
     */
    // http://www.ietf.org/rfc/rfc4253.txt
    private static byte[] readLengthFirst(InputStream in) throws IOException {
@@ -164,7 +156,7 @@ public class DSAKeys {
    }
 
    /**
-    * @see SshKeys
+    * @see org.jclouds.ssh.SshKeys
     */
    // http://www.ietf.org/rfc/rfc4253.txt
    private static void writeLengthFirst(byte[] array, ByteArrayOutputStream out) throws IOException {
