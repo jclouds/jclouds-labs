@@ -67,7 +67,7 @@ public class IpAddressesLoadingCache extends
       String query = String.format("/VirtualBox/GuestInfo/Net/%s/V4/IP", machineNameOrIdAndNicPort.getSlotText());
       String ipAddress = Strings.nullToEmpty(manager.get().getVBox()
             .findMachine(machineNameOrIdAndNicPort.getMachineNameOrId()).getGuestPropertyValue(query));
-      if(!ipAddress.isEmpty()) {
+      if (!ipAddress.isEmpty()) {
          logger.debug("<< vm(%s) has IP address(%s) at slot(%s)", machineNameOrIdAndNicPort.getMachineNameOrId(),
             ipAddress, machineNameOrIdAndNicPort.getSlotText());
       }

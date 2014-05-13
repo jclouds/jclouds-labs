@@ -111,7 +111,7 @@ public class AttachNATAdapterToMachineIfNotAlreadyExistsTest {
 		verify(machine, iNetworkAdapter, natEngine);
 	}
 
-	@Test(enabled=false, expectedExceptions = VBoxException.class)
+	@Test(enabled = false, expectedExceptions = VBoxException.class)
 	public void testRethrowInvalidAdapterSlotException() throws Exception {
 		Long slotId = 30l;
 		IMachine machine = createMock(IMachine.class);

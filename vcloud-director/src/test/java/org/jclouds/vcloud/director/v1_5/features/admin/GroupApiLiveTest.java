@@ -85,9 +85,9 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "PUT /admin/group/{id}", dependsOnMethods = { "testGetGroup" } )
    public void testEditGroup() {
       String oldName = group.getName();
-      String newName = "new "+oldName;
+      String newName = "new " + oldName;
       String oldDescription = group.getDescription();
-      String newDescription = "new "+oldDescription;
+      String newDescription = "new " + oldDescription;
       //TODO: check other modifiables
       
       try {

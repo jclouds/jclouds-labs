@@ -154,7 +154,7 @@ public class TaskApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
    HttpRequest cancel = HttpRequest.builder()
             .method("POST")
-            .endpoint(taskHref+ "/action/cancel")
+            .endpoint(taskHref + "/action/cancel")
             .addHeader("Accept", "*/*")
             .addHeader("x-vcloud-authorization", token)
             .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token).build();

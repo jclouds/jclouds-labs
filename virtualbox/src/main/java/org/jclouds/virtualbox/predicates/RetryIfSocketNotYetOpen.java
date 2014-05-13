@@ -79,7 +79,7 @@ public class RetryIfSocketNotYetOpen implements Predicate<HostAndPort> {
 
    @Override
    public String toString() {
-      return "retryIfSocketNotYetOpen(" + timeoutValue + " "+ timeoutUnits + ")";
+      return "retryIfSocketNotYetOpen(" + timeoutValue + " " + timeoutUnits + ")";
    }
 
    @Override

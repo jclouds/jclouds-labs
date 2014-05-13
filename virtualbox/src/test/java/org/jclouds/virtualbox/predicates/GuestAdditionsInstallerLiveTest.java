@@ -105,7 +105,7 @@ public class GuestAdditionsInstallerLiveTest extends BaseVirtualBoxClientLiveTes
          assertTrue(NetworkUtils.isIpv4(networkUtils.getIpAddressFromNicSlot(machine.getName(), 0l)));
 
       } finally {
-         if(machine!=null) {
+         if (machine != null) {
             for (String vmNameOrId : ImmutableSet.of(machine.getName())) {
                machineController.ensureMachineHasPowerDown(vmNameOrId);
                undoVm(vmNameOrId);

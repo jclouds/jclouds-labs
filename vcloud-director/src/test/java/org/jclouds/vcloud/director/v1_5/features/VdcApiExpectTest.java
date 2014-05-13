@@ -64,7 +64,7 @@ public class VdcApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    @BeforeClass
    public void before() {
       String vdcId = "e9cd3387-ac57-4d27-a481-9bee75e0690f";
-      vdcURI = URI.create(endpoint+"/vdc/"+vdcId);
+      vdcURI = URI.create(endpoint + "/vdc/" + vdcId);
    }
    
    @Test

@@ -55,7 +55,7 @@ public class AdminQueryApiExpectTest extends VCloudDirectorAdminApiExpectTest {
               .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
               .build();
 
-      HttpResponse queryResponse= HttpResponse.builder()
+      HttpResponse queryResponse = HttpResponse.builder()
               .statusCode(200)
               .payload(payloadFromResourceWithContentType("/query/admin/allGroups.xml", VCloudDirectorMediaType.QUERY_RESULT_RECORDS + ";version=1.5"))
               .build();
@@ -101,7 +101,7 @@ public class AdminQueryApiExpectTest extends VCloudDirectorAdminApiExpectTest {
               .addHeader("x-vcloud-authorization", token)
               .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token).build();
 
-      HttpResponse queryResponse= HttpResponse.builder()
+      HttpResponse queryResponse = HttpResponse.builder()
               .statusCode(200)
               .payload(payloadFromResourceWithContentType("/query/admin/allRoles.xml", VCloudDirectorMediaType.QUERY_RESULT_RECORDS + ";version=1.5"))
               .build();

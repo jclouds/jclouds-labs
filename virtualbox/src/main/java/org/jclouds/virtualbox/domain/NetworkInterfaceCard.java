@@ -112,8 +112,8 @@ public class NetworkInterfaceCard {
 
 	@Override
 	public String toString() {
-		return "NetworkInterfaceCard{slot="+ 
-				slot + 
+		return "NetworkInterfaceCard{slot=" +
+				slot +
 				", networkAdapter=" + networkAdapter +
 				", enabled=" + enabled +
 				'}';

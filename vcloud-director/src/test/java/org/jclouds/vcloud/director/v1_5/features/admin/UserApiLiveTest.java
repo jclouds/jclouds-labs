@@ -93,19 +93,19 @@ public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testEditUser() {
       User oldUser = user.toBuilder().build();
       User newUser = user.toBuilder()
-         .fullName("new"+oldUser.getFullName())
-         .emailAddress("new"+oldUser.getEmailAddress())
-         .telephone("1-"+oldUser.getTelephone())
+         .fullName("new" + oldUser.getFullName())
+         .emailAddress("new" + oldUser.getEmailAddress())
+         .telephone("1-" + oldUser.getTelephone())
          .isEnabled(true)
-         .im("new"+oldUser.getIM())
+         .im("new" + oldUser.getIM())
          .isAlertEnabled(true)
-         .alertEmailPrefix("new"+oldUser.getAlertEmailPrefix())
-         .alertEmail("new"+oldUser.getAlertEmail())
+         .alertEmailPrefix("new" + oldUser.getAlertEmailPrefix())
+         .alertEmail("new" + oldUser.getAlertEmail())
          .storedVmQuota(1)
          .deployedVmQuota(1)
          .password("newPassword")
          // TODO test setting other fields?
-//         .name("new"+oldUser.getName())
+//         .name("new" + oldUser.getName())
          .role(getRoleReferenceFor(DefaultRoles.AUTHOR.value()))
          .build();
       
@@ -207,7 +207,7 @@ public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "DELETE /admin/user/{id}", dependsOnMethods = { "testAddUser" })
    public void testRemoveUser() {
       // Create a user to be removed (so we remove dependencies on test ordering)
-      User newUser = randomTestUser("testRemoveUser"+getTestDateTimeStamp());
+      User newUser = randomTestUser("testRemoveUser" + getTestDateTimeStamp());
       User userToBeDeleted = userApi.addUserToOrg(newUser, org.getId());
 
       // Delete the user

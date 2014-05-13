@@ -551,11 +551,11 @@ public class VAppApiLiveTest extends AbstractVAppApiLiveTest {
       checkNetworkConfigSection(modified);
       
       Optional<VAppNetworkConfiguration> modifiedOptionalVAppNetwork = Iterables.tryFind(modified.getNetworkConfigs(), new IsVAppNetworkNamed(networkName));
-      if(!modifiedOptionalVAppNetwork.isPresent())
+      if (!modifiedOptionalVAppNetwork.isPresent())
          fail(String.format("Could not find vApp network named %s", networkName));
       
       Optional<VAppNetworkConfiguration> newOptionalVAppNetwork = Iterables.tryFind(newSection.getNetworkConfigs(), new IsVAppNetworkNamed(networkName));
-      if(!newOptionalVAppNetwork.isPresent())
+      if (!newOptionalVAppNetwork.isPresent())
          fail(String.format("Could not find vApp network named %s", networkName));
 
       assertEquals(modifiedOptionalVAppNetwork.get().getNetworkName(), newOptionalVAppNetwork.get().getNetworkName(), String.format(ENTITY_EQUAL, "NetworkName"));

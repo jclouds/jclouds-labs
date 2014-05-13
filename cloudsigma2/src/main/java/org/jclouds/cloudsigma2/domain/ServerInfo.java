@@ -454,7 +454,7 @@ public class ServerInfo extends Server {
             + cpusInsteadOfCores + ", enableNuma=" + enableNuma + ", hvRelaxed=" + hvRelaxed + ", "
             + "hvTsc=" + hvTsc + ", memory=" + memory + ", drives=" + drives + ", meta=" + meta + ", "
             + "nics=" + nics + ", requirements=" + requirements + ", tags=" + tags + ", "
-            +"vncPassword=" + vncPassword + ", smp=" + smp + "]";
+            + "vncPassword=" + vncPassword + ", smp=" + smp + "]";
    }
 
 }

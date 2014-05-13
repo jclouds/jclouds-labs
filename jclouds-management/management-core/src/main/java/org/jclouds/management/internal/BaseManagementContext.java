@@ -71,7 +71,7 @@ public enum BaseManagementContext implements ManagementContext {
    @Override
    public synchronized void bind(MBeanServer server) {
       this.mBeanServer = Optional.of(server);
-      for(Map.Entry<Key, ManagedBean> entry : mbeans.entrySet()) {
+      for (Map.Entry<Key, ManagedBean> entry : mbeans.entrySet()) {
          String name = entry.getKey().getName();
          ManagedBean mBean = entry.getValue();
          ManagementUtils.register(server, mBean, mBean.getType(), name);
@@ -83,7 +83,7 @@ public enum BaseManagementContext implements ManagementContext {
     */
    @Override
    public synchronized void unbind(MBeanServer server) {
-      for(Map.Entry<Key, ManagedBean> entry : mbeans.entrySet()) {
+      for (Map.Entry<Key, ManagedBean> entry : mbeans.entrySet()) {
          String name = entry.getKey().getName();
          ManagedBean mBean = entry.getValue();
          ManagementUtils.unregister(server, mBean.getType(), name);

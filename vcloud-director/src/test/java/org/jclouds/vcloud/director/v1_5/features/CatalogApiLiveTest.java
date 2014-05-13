@@ -75,7 +75,7 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       catalogApi = context.getApi().getCatalogApi();
       adminCatalogApi = adminContext.getApi().getCatalogApi();
      
-      if(catalogUrn == null) {
+      if (catalogUrn == null) {
          AdminCatalog newCatalog = AdminCatalog.builder().name(name("Test Catalog "))
                   .description("created by CatalogApiLiveTest").build();
 
@@ -99,7 +99,7 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
             logger.warn(e, "Error when deleting media '%s'", media.getName());
          }
       }
-      if(createdByTest) {
+      if (createdByTest) {
          if (catalogItem != null) {
             try {
                catalogApi.removeItem(catalogItem.getId());

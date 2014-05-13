@@ -57,7 +57,7 @@ public class IMachineToNodeMetadataTest {
    }.provideOsVersionMap(new ComputeServiceConstants.ReferenceData(), Guice.createInjector(new GsonModule())
             .getInstance(Json.class));
 
-   @Test(enabled=false)
+   @Test(enabled = false)
    public void testCreateFromMaster() throws Exception {
 
       IMachine vm = createNiceMock(IMachine.class);
@@ -97,7 +97,7 @@ public class IMachineToNodeMetadataTest {
       assertEquals("", node.getGroup());
    }
 
-   @Test(enabled=false)
+   @Test(enabled = false)
    public void testCreateFromNode() throws Exception {
 
       IMachine vm = createNiceMock(IMachine.class);

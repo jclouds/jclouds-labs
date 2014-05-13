@@ -87,7 +87,7 @@ public class SmartOSComputeServiceAdapter implements ComputeServiceAdapter<VM, V
       VmSpecification.Builder builder = VmSpecification.builder();
       String providerId = template.getHardware().getProviderId();
 
-      if( specificationMap.containsKey(providerId) ) {
+      if (specificationMap.containsKey(providerId)) {
           builder.fromVmSpecification( specificationMap.get(providerId) );
       } else {
           builder.nic(VmNIC.builder().simpleDHCPNic().build());

@@ -85,7 +85,7 @@ public class IMachineToVmSpecTest {
       assertEquals(vmSpec.getVmName(), VM_NAME);
       assertEquals(vmSpec.getVmId(), VM_ID);
       assertEquals(vmSpec.getMemory(), MEMORY_SIZE);
-      for(StorageController controller : vmSpec.getControllers()) {
+      for (StorageController controller : vmSpec.getControllers()) {
          assertEquals(controller.getName(), CONTROLLER_NAME);
          assertEquals(controller.getBus(), CONTROLLER_BUS);
          for (HardDisk hardDisk : controller.getHardDisks()) {

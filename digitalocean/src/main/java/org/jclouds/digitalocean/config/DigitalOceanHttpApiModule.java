@@ -55,7 +55,6 @@ public class DigitalOceanHttpApiModule extends HttpApiModule<DigitalOceanApi> {
          install(new SSLModule());
          bind(HttpCommandExecutorService.class).to(ResponseStatusFromPayloadHttpCommandExecutorService.class).in(
                Scopes.SINGLETON);
-         ;
       }
    }
 }

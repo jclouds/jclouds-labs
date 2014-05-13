@@ -154,7 +154,7 @@ public class BrowsingApiLiveTest extends BaseVPDCApiLiveTest {
             	   // get public ip
                   ip = Iterables.get(response.getNetworkConfigSections(), 0).getInternalToExternalNATRules().get(ip);
                   // could be null
-                  if(ip != null){
+                  if (ip != null){
                 	  assert HostSpecifier.isValid(ip) : response;
                   }
                }

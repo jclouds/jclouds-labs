@@ -37,7 +37,7 @@ public class ApplyBootOrderToMachineTest {
    public void testSetBootOrderSuccessful() throws Exception {
       Map<Long, DeviceType> positionAndDeviceType = ImmutableMap.of(1l, DeviceType.HardDisk);
       IMachine machine = createMock(IMachine.class);
-      for(long position : positionAndDeviceType.keySet()) {
+      for (long position : positionAndDeviceType.keySet()) {
          machine.setBootOrder(position, positionAndDeviceType.get(position));
       }
       machine.saveSettings();

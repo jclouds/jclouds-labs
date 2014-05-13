@@ -49,7 +49,7 @@ public final class URNToHref implements Function<Object, URI> {
    public URI apply(@Nullable Object from) {
       checkArgument(checkNotNull(from, "urn") instanceof String, "urn is a String argument");
       Entity entity = resolveEntityCache.getUnchecked(from.toString());
-      checkArgument(entity.getLinks().size()  >0,"no links found for entity %s", entity);
+      checkArgument(entity.getLinks().size() > 0, "no links found for entity %s", entity);
       return get(entity.getLinks(), 0).getHref();
    }
 }

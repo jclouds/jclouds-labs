@@ -69,13 +69,13 @@ public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       network =  lazyGetNetwork();
 
       
-      if(network instanceof ExternalNetwork) {
+      if (network instanceof ExternalNetwork) {
          Checks.checkExternalNetwork(Network.<ExternalNetwork>toSubType(network));
       } else if (network instanceof OrgNetwork) {
          Checks.checkOrgNetwork(Network.<OrgNetwork>toSubType(network));
       } else {
          fail(String.format(REQUIRED_VALUE_OBJECT_FMT, ".class", NETWORK, 
-               network.getClass(),"ExternalNetwork,. OrgNetwork"));
+               network.getClass(), "ExternalNetwork,. OrgNetwork"));
       }
    }
    
@@ -102,25 +102,25 @@ public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          
          assertTrue(equal(network.getConfiguration().getIpScope(), 
                editNetwork.getConfiguration().getIpScope()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "ipScope"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "ipScope"));
          assertTrue(equal(network.getConfiguration().getParentNetwork(), 
                editNetwork.getConfiguration().getParentNetwork()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "parentNetwork"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "parentNetwork"));
          assertTrue(equal(network.getConfiguration().getFenceMode(), 
                editNetwork.getConfiguration().getFenceMode()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "fenceMode"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "fenceMode"));
          assertTrue(equal(network.getConfiguration().retainNetInfoAcrossDeployments(), 
                editNetwork.getConfiguration().retainNetInfoAcrossDeployments()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "retainNetInfoAcrossDeployments"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "retainNetInfoAcrossDeployments"));
          assertTrue(equal(network.getConfiguration().getNetworkFeatures(), 
                editNetwork.getConfiguration().getNetworkFeatures()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "networkFeatures"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "networkFeatures"));
          assertTrue(equal(network.getConfiguration().getSyslogServerSettings(), 
                editNetwork.getConfiguration().getSyslogServerSettings()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "syslogServerSettings"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "syslogServerSettings"));
          assertTrue(equal(network.getConfiguration().getRouterInfo(), 
                editNetwork.getConfiguration().getRouterInfo()), 
-               String.format(OBJ_FIELD_UPDATABLE, NETWORK+".configuration", "routerInfo"));
+               String.format(OBJ_FIELD_UPDATABLE, NETWORK + ".configuration", "routerInfo"));
          // FIXME: fails
 //      assertTrue(equal(Network.<OrgNetwork>toSubType(network).getNetworkPool(), 
 //            editNetwork.getNetworkPool()), 
@@ -152,8 +152,8 @@ public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    private static OrgNetwork getMutatedOrgNetwork(OrgNetwork network) {
        OrgNetwork.Builder<?> networkBuilder = OrgNetwork.builder().fromNetwork(network)
              .tasks(ImmutableSet.<Task>of())
-//           .name("new "+network.getName())
-          .description("new "+network.getDescription())
+//           .name("new " + network.getName())
+          .description("new " + network.getDescription())
           .configuration(getMutatedNetworkConfiguration(network.getConfiguration()));
        
        // FIXME: fails

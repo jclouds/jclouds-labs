@@ -42,8 +42,8 @@ public class BindMapAsMetadataTest {
       HttpRequest request = HttpRequest.builder().method("GET").endpoint("http://momma").build();
       request = binder.bindToRequest(request, ImmutableMap.of("foo", "bar"));
       assertEquals(request.getPayload().getRawContent(), 
-                  XMLParser.DEFAULT_XML_HEADER + "\n"+
-                  "<Metadata xmlns=\"http://www.vmware.com/vcloud/v1.5\">" + "\n"+
+                  XMLParser.DEFAULT_XML_HEADER + "\n" +
+                  "<Metadata xmlns=\"http://www.vmware.com/vcloud/v1.5\">" + "\n" +
                   "    <MetadataEntry>" + "\n" +
                   "        <Key>foo</Key>" + "\n" +
                   "        <Value>bar</Value>" + "\n" +

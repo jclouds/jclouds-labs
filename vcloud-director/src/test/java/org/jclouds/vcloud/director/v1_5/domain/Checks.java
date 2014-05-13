@@ -271,11 +271,11 @@ public class Checks {
       // Check optional fields
       // NOTE checksum be checked
       Long size = file.getSize();
-      if(size != null && checkSize) {
-         assertTrue(size >= 0, "File size must be greater than or equal to 0, but was "+size);
+      if (size != null && checkSize) {
+         assertTrue(size >= 0, "File size must be greater than or equal to 0, but was " + size);
       }
       Long bytesTransferred = file.getBytesTransferred();
-      if(bytesTransferred != null) {
+      if (bytesTransferred != null) {
          assertTrue(bytesTransferred >= 0, "Bytes transferred must be greater than or equal to 0");
       }
       
@@ -572,19 +572,19 @@ public class Checks {
 
 
    public static void checkMetadataKeyAbsentFor(String api, Metadata metadata, String key) {
-      Map<String,String> metadataMap = metadataToMap(metadata);
+      Map<String, String> metadataMap = metadataToMap(metadata);
       assertFalse(metadataMap.containsKey(key), 
-               String.format(OBJ_DEL, api+" metadata key", key));
+               String.format(OBJ_DEL, api + " metadata key", key));
    }
 
    public static void checkMetadataFor(String api, Metadata metadata, Map<String, String> expectedMap) {
-      Map<String,String> actualMap = Checks.metadataToMap(metadata);
+      Map<String, String> actualMap = Checks.metadataToMap(metadata);
       assertEquals(actualMap, expectedMap,
                String.format(OBJ_FIELD_EQ, api, "metadata entries", expectedMap, actualMap));
    }
 
-   public static Map<String,String> metadataToMap(Metadata metadata) {
-      Map<String,String> result = Maps.newLinkedHashMap();
+   public static Map<String, String> metadataToMap(Metadata metadata) {
+      Map<String, String> result = Maps.newLinkedHashMap();
       for (MetadataEntry entry : metadata.getMetadataEntries()) {
          result.put(entry.getKey(), entry.getValue());
       }

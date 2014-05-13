@@ -122,7 +122,7 @@ public class NetworkAdapter {
 
 		public NetworkAdapter build() {
 			return new NetworkAdapter(networkAttachmentType, macAddress,
-					redirectRules,staticIp);
+					redirectRules, staticIp);
 		}
 	}
 
@@ -163,8 +163,8 @@ public class NetworkAdapter {
 
 	@Override
 	public String toString() {
-		return "NetworkAdapter{networkAttachmentType="+ 
-				networkAttachmentType + 
+		return "NetworkAdapter{networkAttachmentType=" +
+				networkAttachmentType +
 				", macAddress=" + macAddress +
 				", redirectRules=" + redirectRules +
 				'}';

@@ -52,7 +52,7 @@ public class QueryApiExpectTest extends VCloudDirectorAdminApiExpectTest {
               .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
               .build();
 
-      HttpResponse queryResponse= HttpResponse.builder()
+      HttpResponse queryResponse = HttpResponse.builder()
               .statusCode(200)
               .payload(payloadFromResourceWithContentType("/query/allCatalogs.xml", VCloudDirectorMediaType.QUERY_RESULT_RECORDS + ";version=1.5"))
               .build();
@@ -127,7 +127,7 @@ public class QueryApiExpectTest extends VCloudDirectorAdminApiExpectTest {
               .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
               .build();
 
-      HttpResponse queryResponse= HttpResponse.builder()
+      HttpResponse queryResponse = HttpResponse.builder()
               .statusCode(200)
               .payload(payloadFromResourceWithContentType("/query/allCatalogReferences.xml", VCloudDirectorMediaType.QUERY_RESULT_RECORDS + ";version=1.5"))
               .build();

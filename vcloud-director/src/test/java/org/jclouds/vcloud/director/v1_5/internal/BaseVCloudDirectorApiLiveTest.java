@@ -481,7 +481,7 @@ public abstract class BaseVCloudDirectorApiLiveTest extends BaseContextLiveTest<
 
 			@Override
 			public boolean apply(VAppTemplate input) {
-				if(input.getName().startsWith("captured-") || input.getName().startsWith("uploaded-") || input.getName().startsWith("vappTemplateClone-"))
+				if (input.getName().startsWith("captured-") || input.getName().startsWith("uploaded-") || input.getName().startsWith("vappTemplateClone-"))
 					context.getApi().getVAppTemplateApi().remove(input.getHref());
 				return false;
 			}});

@@ -36,7 +36,7 @@ public class ApplyBootOrderToMachine implements Function<IMachine, Void> {
 
    @Override
    public Void apply(IMachine machine) {
-      for(long position : positionAndDeviceType.keySet()) {
+      for (long position : positionAndDeviceType.keySet()) {
          machine.setBootOrder(position, positionAndDeviceType.get(position));
       }
       machine.saveSettings();

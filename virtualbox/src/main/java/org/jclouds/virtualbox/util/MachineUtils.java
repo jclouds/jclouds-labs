@@ -196,13 +196,13 @@ public class MachineUtils {
                   type, e.getMessage()), e);
       } finally {
          // this is a workaround for shared lock type, where session state is not updated immediately
-         if(type == LockType.Shared) {
+         if (type == LockType.Shared) {
             Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
          }
          if (session.getState().equals(SessionState.Locked)) {
             session.unlockMachine();
          } 
-         if(!session.getState().equals(SessionState.Unlocked)) {
+         if (!session.getState().equals(SessionState.Unlocked)) {
             checkSessionIsUnlocked(session, 5, 3L, TimeUnit.SECONDS);
          }
       }

@@ -40,8 +40,8 @@ public class BindStringAsMetadataValueTest {
       HttpRequest request = HttpRequest.builder().method("GET").endpoint("http://momma").build();
       request = binder.bindToRequest(request, "foo");
       assertEquals(request.getPayload().getRawContent(), 
-                  XMLParser.DEFAULT_XML_HEADER + "\n"+
-                  "<MetadataValue xmlns=\"http://www.vmware.com/vcloud/v1.5\">" + "\n"+
+                  XMLParser.DEFAULT_XML_HEADER + "\n" +
+                  "<MetadataValue xmlns=\"http://www.vmware.com/vcloud/v1.5\">" + "\n" +
                   "    <Value>foo</Value>" + "\n" +
                   "</MetadataValue>" + "\n");
       assertEquals(request.getPayload().getContentMetadata().getContentType(), MediaType.APPLICATION_XML);
