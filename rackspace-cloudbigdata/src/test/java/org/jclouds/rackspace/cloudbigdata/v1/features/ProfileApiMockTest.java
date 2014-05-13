@@ -79,12 +79,12 @@ public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
           * Check response
           */
          assertNotNull(profile);
-         assertEquals(profile.getUsername(),"john.doe");
-         assertEquals(profile.getUserId(),"12346");
-         assertEquals(profile.getTenantId(),"123456");
-         assertEquals(profile.getSSHKeys().get(0).getName(),"t@test");
-         assertEquals(profile.getSSHKeys().get(0).getPublicKey(),"ssh-rsa .....");
-         assertEquals(profile.getCredentialsUsername(),"jdoe");
+         assertEquals(profile.getUsername(), "john.doe");
+         assertEquals(profile.getUserId(), "12346");
+         assertEquals(profile.getTenantId(), "123456");
+         assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
+         assertEquals(profile.getSSHKeys().get(0).getPublicKey(), "ssh-rsa .....");
+         assertEquals(profile.getCredentialsUsername(), "jdoe");
          assertNull(profile.getCredentialsApiKey());
          assertEquals(profile.getLinks().get(0).getHref(), new URI("https://dfw.bigdata.api.rackspacecloud.com/v1.0/123456/profile"));
       } finally {
@@ -153,12 +153,12 @@ public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
           * Check response
           */
          assertNotNull(profile);
-         assertEquals(profile.getUsername(),"john.doe");
-         assertEquals(profile.getUserId(),"12346");
-         assertEquals(profile.getTenantId(),"123456");
-         assertEquals(profile.getSSHKeys().get(0).getName(),"t@test");
-         assertEquals(profile.getSSHKeys().get(0).getPublicKey(),"ssh-rsa .....");
-         assertEquals(profile.getCredentialsUsername(),"jdoe");
+         assertEquals(profile.getUsername(), "john.doe");
+         assertEquals(profile.getUserId(), "12346");
+         assertEquals(profile.getTenantId(), "123456");
+         assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
+         assertEquals(profile.getSSHKeys().get(0).getPublicKey(), "ssh-rsa .....");
+         assertEquals(profile.getCredentialsUsername(), "jdoe");
          assertNull(profile.getCredentialsApiKey());
          assertEquals(profile.getLinks().get(0).getHref(), new URI("https://dfw.bigdata.api.rackspacecloud.com/v1.0/123456/profile"));
       } finally {

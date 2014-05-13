@@ -61,17 +61,17 @@ public class ParseScalingPoliciesResponse implements Function<HttpResponse, Flue
       List<Map<String, Object>> result = singleMap.get("policies");
       ImmutableList.Builder<ScalingPolicy> scalingPoliciesList = ImmutableList.builder();
 
-      for(Map<String, Object> scalingPolicyMap : result) {
+      for (Map<String, Object> scalingPolicyMap : result) {
          ScalingPolicyTargetType targetType = null;
-         for(String key : scalingPolicyMap.keySet()) {
-            if(ScalingPolicyTargetType.getByValue(key).isPresent()) {
+         for (String key : scalingPolicyMap.keySet()) {
+            if (ScalingPolicyTargetType.getByValue(key).isPresent()) {
                targetType = ScalingPolicyTargetType.getByValue(key).get();
                break;
             }  
          }
 
          ImmutableList.Builder<Link> links = ImmutableList.builder();
-         for(Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
+         for (Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
             Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
             links.add(link);
          }

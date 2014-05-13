@@ -109,7 +109,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertEquals(g.getScalingPolicies().get(0).getLinks().size(), 1);
          assertEquals(
                g.getScalingPolicies().get(0).getLinks().get(0).getHref().toString(),
-               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() +"/");
+               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() + "/");
          assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getRelation(), Link.Relation.SELF);
          assertEquals(g.getScalingPolicies().get(0).getCooldown(), 3);
          assertEquals(g.getScalingPolicies().get(0).getTarget(), "1");
@@ -357,9 +357,10 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          GroupApi groupApi = api.getGroupApiForZone(zone);
          for (Group group : created.get(zone)) {
             PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, group.getId());
-            if(policyApi == null)continue;
-            for(ScalingPolicy sgr : policyApi.list()) {
-               if(!policyApi.delete(sgr.getId())) {
+            if (policyApi == null)
+                continue;
+            for (ScalingPolicy sgr : policyApi.list()) {
+               if (!policyApi.delete(sgr.getId())) {
                   System.out.println("Could not delete an autoscale policy after tests!");
                }
             }

@@ -76,9 +76,9 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
             Profile profile = profileApi.create(createProfile);
 
             assertNotNull(profile);
-            assertEquals(profile.getUsername(),"john.doe");
-            assertEquals(profile.getSSHKeys().get(0).getName(),"t@test");
-            assertEquals(profile.getCredentialsUsername(),"jdoe");
+            assertEquals(profile.getUsername(), "john.doe");
+            assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
+            assertEquals(profile.getCredentialsUsername(), "jdoe");
             assertNull(profile.getCredentialsApiKey());
             
             createCluster = CreateCluster.builder()
@@ -142,7 +142,7 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
    public void tearDown() {
       for (String zone : filterZones(api.getConfiguredZones())) {
          ClusterApi clusterApi = api.getClusterApiForZone(zone);
-         for(Cluster cluster : clusterApi.list()) {
+         for (Cluster cluster : clusterApi.list()) {
             ClusterPredicates.awaitAvailable(clusterApi).apply(cluster);
             clusterApi.delete(cluster.getId());
          }

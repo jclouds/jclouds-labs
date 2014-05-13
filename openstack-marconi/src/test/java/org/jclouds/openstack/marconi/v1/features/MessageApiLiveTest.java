@@ -89,7 +89,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
          MessageStream messageStream = messageApi.stream(echo(true));
 
-         while(messageStream.nextMarker().isPresent()) {
+         while (messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 1);
 
             messageStream = messageApi.stream(messageStream.nextStreamOptions());
@@ -127,10 +127,10 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
          MessageStream messageStream = messageApi.stream(echo(true).limit(2));
 
-         while(messageStream.nextMarker().isPresent()) {
+         while (messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 2);
 
-            for (Message message: messageStream) {
+            for (Message message : messageStream) {
                messageIds.get(zoneId).add(message.getId());
             }
 
@@ -150,7 +150,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
 
          assertEquals(messages.size(), 4);
 
-         for (Message message: messages) {
+         for (Message message : messages) {
             assertNotNull(message.getId());
             assertNotNull(message.getBody());
          }

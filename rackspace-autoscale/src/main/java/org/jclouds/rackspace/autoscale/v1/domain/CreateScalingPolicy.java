@@ -128,7 +128,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
     * @return The type of the schedule this policy uses.
     */
    public ScalingPolicyScheduleType getSchedulingType() {
-      if(this.args != null) {
+      if (this.args != null) {
          for (ScalingPolicyScheduleType type : ScalingPolicyScheduleType.values()) {
             if (this.args.get(type.toString()) != null) {
                return type;

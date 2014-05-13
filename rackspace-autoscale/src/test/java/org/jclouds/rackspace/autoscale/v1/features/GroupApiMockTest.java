@@ -69,7 +69,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
                .cooldown(360)
                .name("testscalinggroup198547")
                .minEntities(0)
-               .metadata(ImmutableMap.of("gc_meta_key_2","gc_meta_value_2","gc_meta_key_1","gc_meta_value_1"))
+               .metadata(ImmutableMap.of("gc_meta_key_2", "gc_meta_value_2", "gc_meta_key_1", "gc_meta_value_1"))
                .build();
 
          LaunchConfiguration launchConfiguration = LaunchConfiguration.builder()
@@ -78,8 +78,8 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
                .serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
-               .serverMetadata(ImmutableMap.of("build_config","core","meta_key_1","meta_value_1","meta_key_2","meta_value_2"))
-               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111","00000000-0000-0000-0000-000000000000"))
+               .serverMetadata(ImmutableMap.of("build_config", "core", "meta_key_1", "meta_value_1", "meta_key_2", "meta_value_2"))
+               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                .personalities(ImmutableList.of(Personality.builder().path("/root/.csivh").contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                .type(LaunchConfigurationType.LAUNCH_SERVER)
                .build();
@@ -107,7 +107,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
           * Check response
           */
          assertNotNull(g);
-         assertEquals(g.getId(),"6791761b-821a-4d07-820d-0b2afc7dd7f6");
+         assertEquals(g.getId(), "6791761b-821a-4d07-820d-0b2afc7dd7f6");
          assertEquals(g.getLinks().size(), 1);
          assertEquals(g.getLinks().get(0).getHref().toString(), "https://ord.autoscale.api.rackspacecloud.com/v1.0/829409/groups/6791761b-821a-4d07-820d-0b2afc7dd7f6/");
          assertEquals(g.getLinks().get(0).getRelation(), Link.Relation.SELF);
@@ -166,7 +166,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
                .cooldown(360)
                .name("testscalinggroup198547")
                .minEntities(0)
-               .metadata(ImmutableMap.of("gc_meta_key_2","gc_meta_value_2","gc_meta_key_1","gc_meta_value_1"))
+               .metadata(ImmutableMap.of("gc_meta_key_2", "gc_meta_value_2", "gc_meta_key_1", "gc_meta_value_1"))
                .build();
 
          LaunchConfiguration launchConfiguration = LaunchConfiguration.builder()
@@ -175,8 +175,8 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
                .serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
-               .serverMetadata(ImmutableMap.of("build_config","core","meta_key_1","meta_value_1","meta_key_2","meta_value_2"))
-               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111","00000000-0000-0000-0000-000000000000"))
+               .serverMetadata(ImmutableMap.of("build_config", "core", "meta_key_1", "meta_value_1", "meta_key_2", "meta_value_2"))
+               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                .personalities(ImmutableList.of(Personality.builder().path("/root/.csivh").contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                .type(LaunchConfigurationType.LAUNCH_SERVER)
                .build();
@@ -226,7 +226,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
          /*
           * Check response
           */
-         assertEquals(groupStates.size(),2);
+         assertEquals(groupStates.size(), 2);
 
          assertEquals(groupStates.get(0).getGroupInstances().size(), 0);
          assertEquals(groupStates.get(0).getActiveCapacity(), 0);
@@ -721,8 +721,8 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
                .serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
-               .serverMetadata(ImmutableMap.of("build_config","core","meta_key_1","meta_value_1","meta_key_2","meta_value_2"))
-               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111","00000000-0000-0000-0000-000000000000"))
+               .serverMetadata(ImmutableMap.of("build_config", "core", "meta_key_1", "meta_value_1", "meta_key_2", "meta_value_2"))
+               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                .personalities(ImmutableList.of(Personality.builder().path("/root/.csivh").contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                .type(LaunchConfigurationType.LAUNCH_SERVER)
                .build();
@@ -759,8 +759,8 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
                .serverImageRef("0d589460-f177-4b0f-81c1-8ab8903ac7d8")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
-               .serverMetadata(ImmutableMap.of("build_config","core","meta_key_1","meta_value_1","meta_key_2","meta_value_2"))
-               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111","00000000-0000-0000-0000-000000000000"))
+               .serverMetadata(ImmutableMap.of("build_config", "core", "meta_key_1", "meta_value_1", "meta_key_2", "meta_value_2"))
+               .networks(ImmutableList.of("11111111-1111-1111-1111-111111111111", "00000000-0000-0000-0000-000000000000"))
                .personalities(ImmutableList.of(Personality.builder().path("/root/.csivh").contents("VGhpcyBpcyBhIHRlc3QgZmlsZS4=").build()))
                .type(LaunchConfigurationType.LAUNCH_SERVER)
                .build();

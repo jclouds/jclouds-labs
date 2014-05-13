@@ -53,7 +53,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
       for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
 
-         for (int i=0; i < 6; i++) {
+         for (int i = 0; i < 6; i++) {
             boolean success = queueApi.create("jclouds-test-" + i);
 
             assertTrue(success);
@@ -69,7 +69,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
          assertEquals(queues.size(), 6);
 
-         for (Queue queue: queues) {
+         for (Queue queue : queues) {
             assertNotNull(queue.getName());
             assertFalse(queue.getMetadata().isPresent());
          }
@@ -81,7 +81,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
       for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
 
-         for (int i=6; i < 12; i++) {
+         for (int i = 6; i < 12; i++) {
             boolean success = queueApi.create("jclouds-test-" + i);
 
             assertTrue(success);
@@ -97,7 +97,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
          assertEquals(queues.size(), 12);
 
-         for (Queue queue: queues) {
+         for (Queue queue : queues) {
             assertNotNull(queue.getName());
             assertFalse(queue.getMetadata().isPresent());
          }
@@ -111,10 +111,10 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
          Queues queues = queueApi.list(limit(6));
 
-         while(queues.nextMarker().isPresent()) {
+         while (queues.nextMarker().isPresent()) {
             assertEquals(queues.size(), 6);
 
-            for (Queue queue: queues) {
+            for (Queue queue : queues) {
                assertNotNull(queue.getName());
                assertFalse(queue.getMetadata().isPresent());
             }
@@ -153,7 +153,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
          assertEquals(queues.size(), 12);
 
-         for (Queue queue: queues) {
+         for (Queue queue : queues) {
             assertNotNull(queue.getName());
             assertTrue(queue.getMetadata().isPresent());
 
@@ -220,7 +220,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
       for (String zoneId : zones) {
          QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
 
-         for (int i=0; i < 12; i++) {
+         for (int i = 0; i < 12; i++) {
             boolean success = queueApi.delete("jclouds-test-" + i);
 
             assertTrue(success);

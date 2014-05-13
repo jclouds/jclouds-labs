@@ -102,7 +102,7 @@ public class ParseHelper {
       if (scalingPolicy.getSchedulingType() != null
             && scalingPolicy.getType().equals(ScalingPolicyType.SCHEDULE)) {
          // Have to use getters to rebuild map
-         scalingPolicyMapBuilder.put("args", ImmutableMap.of(scalingPolicy.getSchedulingType().toString(),scalingPolicy.getSchedulingString()));
+         scalingPolicyMapBuilder.put("args", ImmutableMap.of(scalingPolicy.getSchedulingType().toString(), scalingPolicy.getSchedulingString()));
       }
 
       return scalingPolicyMapBuilder.build();

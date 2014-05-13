@@ -40,7 +40,7 @@ public class ParseImageDetailsFromHeadersTest {
    public HttpResponse response = HttpResponse.builder()
                                        .message("HTTP/1.1 200 OK")
                                        .statusCode(200)
-                                       .headers(ImmutableMultimap.<String,String>builder()
+                                       .headers(ImmutableMultimap.<String, String>builder()
                                                 .put("X-Image-Meta-Id", "fcc451d0-f6e4-4824-ad8f-70ec12326d07")
                                                 .put("X-Image-Meta-Deleted", "False")
                                                 .put("X-Image-Meta-Container_format", "bare")

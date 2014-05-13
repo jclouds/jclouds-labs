@@ -141,7 +141,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
          MessageStream messageStream = messageApi.stream();
 
-         while(messageStream.nextMarker().isPresent()) {
+         while (messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 6);
 
             messageStream = messageApi.stream(messageStream.nextStreamOptions());
@@ -173,7 +173,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
          MessageStream messageStream = messageApi.stream(limit(2));
 
-         while(messageStream.nextMarker().isPresent()) {
+         while (messageStream.nextMarker().isPresent()) {
             assertEquals(Iterables.size(messageStream), 2);
 
             messageStream = messageApi.stream(messageStream.nextStreamOptions());
@@ -207,7 +207,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
          assertEquals(messages.size(), 3);
 
-         for (Message message: messages) {
+         for (Message message : messages) {
             assertNotNull(message.getId());
             assertNotNull(message.getBody());
             assertEquals(message.getAge(), 1596);

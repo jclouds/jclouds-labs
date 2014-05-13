@@ -193,7 +193,7 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
          assertEquals(queues.size(), 12);
 
-         for (Queue queue: queues) {
+         for (Queue queue : queues) {
             assertNotNull(queue.getName());
             assertFalse(queue.getMetadata().isPresent());
          }
@@ -222,10 +222,10 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
          Queues queues = queueApi.list(limit(6));
 
-         while(queues.nextMarker().isPresent()) {
+         while (queues.nextMarker().isPresent()) {
             assertEquals(queues.size(), 6);
 
-            for (Queue queue: queues) {
+            for (Queue queue : queues) {
                assertNotNull(queue.getName());
                assertFalse(queue.getMetadata().isPresent());
             }

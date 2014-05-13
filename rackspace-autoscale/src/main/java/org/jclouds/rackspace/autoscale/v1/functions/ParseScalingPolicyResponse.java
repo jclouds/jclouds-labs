@@ -60,15 +60,15 @@ public class ParseScalingPolicyResponse implements Function<HttpResponse, Scalin
       Map<String, Object> scalingPolicyMap = (Map<String, Object>) singleMap.get("policy");
 
       ScalingPolicyTargetType targetType = null;
-      for(String key : scalingPolicyMap.keySet()) {
-         if(ScalingPolicyTargetType.getByValue(key).isPresent()) {
+      for (String key : scalingPolicyMap.keySet()) {
+         if (ScalingPolicyTargetType.getByValue(key).isPresent()) {
             targetType = ScalingPolicyTargetType.getByValue(key).get();
             break;
          }  
       }
 
       ImmutableList.Builder<Link> links = ImmutableList.builder();
-      for(Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
+      for (Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
          Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
          links.add(link);
       }

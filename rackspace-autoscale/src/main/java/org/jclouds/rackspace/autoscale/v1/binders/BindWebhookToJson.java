@@ -45,7 +45,7 @@ public class BindWebhookToJson implements MapBinder {
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
       ImmutableMap.Builder<String, Object> webhook = ImmutableMap.builder();
       webhook.put("name", postParams.get("name"));
-      ImmutableMap<String, Object> metadata = postParams.get("metadata")!=null ? 
+      ImmutableMap<String, Object> metadata = postParams.get("metadata") != null ?
             ImmutableMap.copyOf((Map<String, Object>) postParams.get("metadata")) : ImmutableMap.<String, Object>of(); 
       if (!metadata.isEmpty()) {
          webhook.put("metadata", postParams.get("metadata"));

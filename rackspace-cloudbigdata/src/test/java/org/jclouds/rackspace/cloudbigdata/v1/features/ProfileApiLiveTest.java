@@ -60,9 +60,9 @@ public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {
          Profile profile = profileApi.create(createProfile);
 
          assertNotNull(profile);
-         assertEquals(profile.getUsername(),"john.doe");
-         assertEquals(profile.getSSHKeys().get(0).getName(),"t@test");
-         assertEquals(profile.getCredentialsUsername(),"jdoe");
+         assertEquals(profile.getUsername(), "john.doe");
+         assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
+         assertEquals(profile.getCredentialsUsername(), "jdoe");
          assertNull(profile.getCredentialsApiKey());
       }
    }
@@ -85,9 +85,9 @@ public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {
          Profile profile = profileApi.create(createProfile);
 
          assertNotNull(profile);
-         assertEquals(profile.getUsername(),"john.doe2");
-         assertEquals(profile.getSSHKeys().get(0).getName(),"t@test");
-         assertEquals(profile.getCredentialsUsername(),"jdoe");         
+         assertEquals(profile.getUsername(), "john.doe2");
+         assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
+         assertEquals(profile.getCredentialsUsername(), "jdoe");
       }
    }
       
@@ -99,8 +99,8 @@ public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {
             Profile profile = profileApi.get();
 
             assertNotNull(profile);
-            assertEquals(profile.getSSHKeys().get(0).getName(),"t@test");
-            assertEquals(profile.getCredentialsUsername(),"jdoe");
+            assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
+            assertEquals(profile.getCredentialsUsername(), "jdoe");
          }
    }
 }

@@ -47,10 +47,10 @@ public class BindWebhooksToJson implements MapBinder {
    // Refactoring will depend on whether this call will change any further.
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
       ImmutableList.Builder<Map<String, Object>> webhookListBuilder = ImmutableList.builder();
-      for(CreateWebhook webhook : (List<CreateWebhook>)postParams.get("webhooks") ) {
+      for (CreateWebhook webhook : (List<CreateWebhook>)postParams.get("webhooks") ) {
          ImmutableMap.Builder<String, Object> webhookMap = ImmutableMap.builder();
          webhookMap.put("name", webhook.getName());
-         if(!webhook.getMetadata().isEmpty()) {
+         if (!webhook.getMetadata().isEmpty()) {
             webhookMap.put("metadata", webhook.getMetadata());
          }
          webhookListBuilder.add((Map<String, Object>)webhookMap.build());

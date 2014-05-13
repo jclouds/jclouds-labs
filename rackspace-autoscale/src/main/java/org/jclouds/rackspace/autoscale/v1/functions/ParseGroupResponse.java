@@ -73,16 +73,16 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
 
       ImmutableList.Builder<Personality> personalities = ImmutableList.builder();
       ImmutableList.Builder<String> networks = ImmutableList.builder();
-      for(Map<String,String> jsonPersonality : (List<Map<String,String>>) server.get("personality")) {
+      for (Map<String, String> jsonPersonality : (List<Map<String, String>>) server.get("personality")) {
          personalities.add(Personality.builder().path(jsonPersonality.get("path")).contents(jsonPersonality.get("contents")).build());
       }
 
-      for(Map<String,String> jsonNetwork : (List<Map<String,String>>) server.get("networks")) {
+      for (Map<String, String> jsonNetwork : (List<Map<String, String>>) server.get("networks")) {
          networks.add(jsonNetwork.get("uuid"));
       }
 
       ImmutableList.Builder<LoadBalancer> loadBalancers = ImmutableList.builder();
-      for(Map<String,Double> jsonLoadBalancer : (List<Map<String,Double>>) args.get("loadBalancers")) {
+      for (Map<String, Double> jsonLoadBalancer : (List<Map<String, Double>>) args.get("loadBalancers")) {
          loadBalancers.add(
                LoadBalancer.builder().id( ((Double)jsonLoadBalancer.get("loadBalancerId")).intValue() ).port( ((Double)jsonLoadBalancer.get("port")).intValue() ).build()
                );
@@ -108,17 +108,17 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
             .metadata((Map<String, String>) groupConfigurationMap.get("metadata"))
             .build();
 
-      for(Map<String, Object> scalingPolicyMap : (List<Map<String, Object>>) group.get("scalingPolicies")) {
+      for (Map<String, Object> scalingPolicyMap : (List<Map<String, Object>>) group.get("scalingPolicies")) {
          ScalingPolicyTargetType targetType = null;
-         for(String key : scalingPolicyMap.keySet()) {
-            if(ScalingPolicyTargetType.getByValue(key).isPresent()) {
+         for (String key : scalingPolicyMap.keySet()) {
+            if (ScalingPolicyTargetType.getByValue(key).isPresent()) {
                targetType = ScalingPolicyTargetType.getByValue(key).get();
                break;
             }  
          }
 
          ImmutableList.Builder<Link> links = ImmutableList.builder();
-         for(Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
+         for (Map<String, String> linkMap : (List<Map<String, String>>) scalingPolicyMap.get("links")) {
             Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
             links.add(link);
          }
@@ -140,7 +140,7 @@ public class ParseGroupResponse implements Function<HttpResponse, Group> {
       }
 
       ImmutableList.Builder<Link> links = ImmutableList.builder();
-      for(Map<String, String> linkMap : (List<Map<String, String>>) group.get("links")) {
+      for (Map<String, String> linkMap : (List<Map<String, String>>) group.get("links")) {
          Link link = Link.builder().href(URI.create(linkMap.get("href"))).relation(Relation.fromValue(linkMap.get("rel"))).build();
          links.add(link);
       }

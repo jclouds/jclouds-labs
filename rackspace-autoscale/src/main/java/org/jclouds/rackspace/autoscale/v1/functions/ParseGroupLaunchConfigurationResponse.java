@@ -62,16 +62,16 @@ public class ParseGroupLaunchConfigurationResponse implements Function<HttpRespo
       ImmutableList.Builder<Personality> personalities = ImmutableList.builder();
       ImmutableList.Builder<String> networks = ImmutableList.builder();
       
-      for(Map<String,String> jsonPersonality : (List<Map<String,String>>) server.get("personality")) {
+      for (Map<String, String> jsonPersonality : (List<Map<String, String>>) server.get("personality")) {
          personalities.add(Personality.builder().path(jsonPersonality.get("path")).contents(jsonPersonality.get("contents")).build());
       }
 
-      for(Map<String,String> jsonNetwork : (List<Map<String,String>>) server.get("networks")) {
+      for (Map<String, String> jsonNetwork : (List<Map<String, String>>) server.get("networks")) {
          networks.add(jsonNetwork.get("uuid"));
       }
 
       ImmutableList.Builder<LoadBalancer> loadBalancers = ImmutableList.builder();
-      for(Map<String,Double> jsonLoadBalancer : (List<Map<String,Double>>) args.get("loadBalancers")) {
+      for (Map<String, Double> jsonLoadBalancer : (List<Map<String, Double>>) args.get("loadBalancers")) {
          loadBalancers.add(
                LoadBalancer.builder().id( ((Double)jsonLoadBalancer.get("loadBalancerId")).intValue() ).port( ((Double)jsonLoadBalancer.get("port")).intValue() ).build()
                );

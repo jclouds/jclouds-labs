@@ -26,14 +26,12 @@ import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_RE
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jclouds.blobstore.ContainerNotFoundException;
-import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;

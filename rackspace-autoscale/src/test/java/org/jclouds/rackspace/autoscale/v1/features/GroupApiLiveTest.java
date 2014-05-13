@@ -108,7 +108,7 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertEquals(g.getScalingPolicies().get(0).getLinks().size(), 1);
          assertEquals(
                g.getScalingPolicies().get(0).getLinks().get(0).getHref().toString(),
-               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() +"/");
+               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() + "/");
          assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getRelation(), Link.Relation.SELF);
          assertEquals(g.getScalingPolicies().get(0).getCooldown(), 1);
          assertEquals(g.getScalingPolicies().get(0).getTarget(), "1");
@@ -174,8 +174,8 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
          GroupApi groupApi = api.getGroupApiForZone(zone);
          FluentIterable<GroupState> groupsList = groupApi.listGroupStates();
          String groupId = created.get(zone).get(0).getId();
-         for( GroupState groupState : groupsList) {
-            if( groupId.equals(groupState.getId()) ) {
+         for (GroupState groupState : groupsList) {
+            if (groupId.equals(groupState.getId())) {
                return;
             }
          }

@@ -86,7 +86,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          assertAuthentication(server);
          
          RecordedRequest replaceRequest = server.takeRequest();
-         assertRequest(replaceRequest,"POST", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/");
+         assertRequest(replaceRequest, "POST", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/");
          for (Entry<String, String> entry : metadata.entrySet()) {
             assertEquals(replaceRequest.getHeader(ACCOUNT_METADATA_PREFIX + entry.getKey().toLowerCase()), entry.getValue());
          }

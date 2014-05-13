@@ -38,12 +38,12 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
    private final int cooldown;
    private final int minEntities;
    private final int maxEntities;
-   private final ImmutableMap<String,String> metadata;
+   private final ImmutableMap<String, String> metadata;
 
    @ConstructorProperties({
       "name", "cooldown", "minEntities", "maxEntities", "metadata"
    })
-   protected GroupConfiguration(String name, int cooldown, int minEntities, int maxEntities, Map<String,String> metadata) {
+   protected GroupConfiguration(String name, int cooldown, int minEntities, int maxEntities, Map<String, String> metadata) {
 
       this.name = checkNotNull(name, "name required");
       checkArgument(cooldown >= 0, "cooldown should be non-negative");
@@ -52,7 +52,7 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
       this.cooldown = cooldown;
       this.minEntities = minEntities;
       this.maxEntities = maxEntities;
-      if(metadata == null) {
+      if (metadata == null) {
          this.metadata = ImmutableMap.of();
       } else {
          this.metadata = ImmutableMap.copyOf(metadata);
@@ -93,7 +93,7 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
 
    /**
     * @return the metadata map for this GroupConfiguration.
-    * @see GroupConfiguration.Builder#metadata(Map<String,String>)
+    * @see GroupConfiguration.Builder#metadata(Map<String, String>)
     */
    public ImmutableMap<String, String> getMetadata() {
       return metadata;

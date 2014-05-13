@@ -79,7 +79,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
          claimIds.put(zoneId, new ArrayList<String>());
 
-         for (Message message: messages) {
+         for (Message message : messages) {
             claimIds.get(zoneId).add(message.getClaimId().get());
 
             assertNotNull(message.getId());
@@ -100,7 +100,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
          assertEquals(claim.getMessages().size(), 2);
          assertEquals(claim.getTTL(), 300);
 
-         for (Message message: claim.getMessages()) {
+         for (Message message : claim.getMessages()) {
             assertNotNull(message.getId());
             assertTrue(message.getClaimId().isPresent());
             assertEquals(message.getTTL(), 86400);
