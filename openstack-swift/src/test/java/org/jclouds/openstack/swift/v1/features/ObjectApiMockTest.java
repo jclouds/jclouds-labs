@@ -22,7 +22,6 @@ import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
 import static org.jclouds.Constants.PROPERTY_RETRY_DELAY_START;
 import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
 import static org.jclouds.http.options.GetOptions.Builder.tail;
-import static org.jclouds.io.Payloads.newStringPayload;
 import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.containerResponse;
 import static org.jclouds.openstack.swift.v1.options.ListContainerOptions.Builder.marker;
 import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.CONTAINER_ACL_ANYBODY_READ;
@@ -43,6 +42,8 @@ import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
+import org.jclouds.io.payloads.ByteSourcePayload;
+import org.jclouds.io.payloads.StringPayload;
 import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
@@ -55,9 +56,11 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.io.ByteSource;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
 
 /**
  * Provides mock tests for the {@link ObjectApi}.
@@ -159,11 +162,47 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertEquals(
                api.objectApiInRegionForContainer("DFW", "myContainer").replace("myObject",
-                     newStringPayload("swifty"), metadata), "d9f5eb4bba4e2f2f046e54611bc8196b");
+                     new ByteSourcePayload(ByteSource.wrap("swifty".getBytes())), metadata), "d9f5eb4bba4e2f2f046e54611bc8196b");
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);         
          RecordedRequest replace = server.takeRequest();
+         assertRequest(replace, "PUT", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject");
+
+         assertEquals(new String(replace.getBody()), "swifty");
+         for (Entry<String, String> entry : metadata.entrySet()) {
+            assertEquals(replace.getHeader(OBJECT_METADATA_PREFIX + entry.getKey().toLowerCase()), entry.getValue());
+         }
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testReplace408Retry() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(408))); // 1
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(408))); // 2
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(408))); // 3
+
+      // Finally success
+      server.enqueue(addCommonHeaders(new MockResponse()
+            .setResponseCode(201)
+            .addHeader("ETag", "d9f5eb4bba4e2f2f046e54611bc8196b")));
+
+      try {
+         Properties overrides = new Properties();
+         overrides.setProperty(PROPERTY_MAX_RETRIES, 5 + "");
+
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
+         assertEquals(
+               api.objectApiInRegionForContainer("DFW", "myContainer").replace("myObject",
+                     new ByteSourcePayload(ByteSource.wrap("swifty".getBytes())), metadata), "d9f5eb4bba4e2f2f046e54611bc8196b");
+
+         assertEquals(server.getRequestCount(), 5);
+         assertAuthentication(server);
+         RecordedRequest replace = server.takeRequest();
+         // This should take a while.
          assertRequest(replace, "PUT", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject");
 
          assertEquals(new String(replace.getBody()), "swifty");
@@ -252,8 +291,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          overrides.setProperty(PROPERTY_RETRY_DELAY_START, 0 + ""); // exponential backoff already working for this call. This is the delay BETWEEN attempts.
 
          final SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
-
-         String result = api.objectApiInRegionForContainer("DFW", "myContainer").replace("myObject", newStringPayload("swifty"), metadata);
+         
+         api.objectApiInRegionForContainer("DFW", "myContainer").replace("myObject", new ByteSourcePayload(ByteSource.wrap("swifty".getBytes())), metadata);
 
          fail("testReplaceTimeout test should have failed with an HttpResponseException.");
       } finally {
