@@ -256,33 +256,6 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   public void testUpdateMetadataContentType() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(objectResponse()
-            .addHeader(OBJECT_METADATA_PREFIX + "ApiName", "swift")
-            .addHeader(OBJECT_METADATA_PREFIX + "ApiVersion", "v1.1")));
-
-      try {
-         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.objectApiInRegionForContainer("DFW", "myContainer").updateMetadata("myObject", metadata));
-
-         assertEquals(server.getRequestCount(), 2);
-         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         RecordedRequest replaceRequest = server.takeRequest();
-         assertEquals(replaceRequest.getHeaders("Content-Type").get(0), "", "updateMetadata should send an empty content-type header, but sent "
-               + replaceRequest.getHeaders("Content-Type").get(0).toString());
-
-         assertEquals(replaceRequest.getRequestLine(),
-               "POST /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject HTTP/1.1");
-         for (Entry<String, String> entry : metadata.entrySet()) {
-            assertEquals(replaceRequest.getHeader(OBJECT_METADATA_PREFIX + entry.getKey().toLowerCase()), entry.getValue());
-         }
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void deleteMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));

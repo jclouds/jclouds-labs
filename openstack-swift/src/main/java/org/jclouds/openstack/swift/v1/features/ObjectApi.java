@@ -30,7 +30,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
@@ -177,7 +176,6 @@ public interface ObjectApi {
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{objectName}")
-   @Produces("")
    boolean updateMetadata(@PathParam("objectName") String objectName,
          @BinderParam(BindObjectMetadataToHeaders.class) Map<String, String> metadata);
 
