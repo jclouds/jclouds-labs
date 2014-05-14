@@ -18,6 +18,9 @@ package org.jclouds.openstack.swift.v1.features;
 
 import static com.google.common.base.Charsets.US_ASCII;
 import static com.google.common.net.HttpHeaders.RANGE;
+import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
+import static org.jclouds.Constants.PROPERTY_RETRY_DELAY_START;
+import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
 import static org.jclouds.http.options.GetOptions.Builder.tail;
 import static org.jclouds.io.Payloads.newStringPayload;
 import static org.jclouds.openstack.swift.v1.features.ContainerApiMockTest.containerResponse;
@@ -28,13 +31,16 @@ import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_METAD
 import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_REMOVE_METADATA_PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.jclouds.date.internal.SimpleDateFormatDateService;
+import org.jclouds.http.HttpResponseException;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.CopyObjectException;
@@ -227,6 +233,29 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          assertEquals(get.getRequestLine(),
                "GET /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject HTTP/1.1");
          assertEquals(get.getHeader(RANGE), "bytes=-1");
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   @Test(expectedExceptions = HttpResponseException.class, timeOut = 20000)
+   public void testReplaceTimeout() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      // Typically we would enqueue a response for the put. However, in this case, test the timeout by not providing one.
+
+      try {
+         Properties overrides = new Properties();
+
+         overrides.setProperty(PROPERTY_SO_TIMEOUT, 5000 + ""); // This time-outs the connection
+         overrides.setProperty(PROPERTY_MAX_RETRIES, 0 + ""); // 0 retries == 1 try. Semantics.
+         overrides.setProperty(PROPERTY_RETRY_DELAY_START, 0 + ""); // exponential backoff already working for this call. This is the delay BETWEEN attempts.
+
+         final SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
+
+         String result = api.objectApiInRegionForContainer("DFW", "myContainer").replace("myObject", newStringPayload("swifty"), metadata);
+
+         fail("testReplaceTimeout test should have failed with an HttpResponseException.");
       } finally {
          server.shutdown();
       }
