@@ -28,7 +28,6 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.ContextBuilder;
@@ -40,6 +39,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import com.google.common.net.HttpHeaders;
 import com.google.inject.Module;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;

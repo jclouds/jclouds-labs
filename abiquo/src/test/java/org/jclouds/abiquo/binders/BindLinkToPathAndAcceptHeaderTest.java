@@ -21,10 +21,10 @@ import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
+
+import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link BindLinkToPathAndAcceptHeader} class.

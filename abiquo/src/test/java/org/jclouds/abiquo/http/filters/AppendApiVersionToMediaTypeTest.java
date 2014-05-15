@@ -23,8 +23,6 @@ import static org.testng.Assert.assertTrue;
 import java.net.URI;
 import java.util.Collection;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.functions.AppendApiVersionToAbiquoMimeType;
 import org.jclouds.http.HttpRequest;
@@ -34,6 +32,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link AppendApiVersionToMediaType} filter.

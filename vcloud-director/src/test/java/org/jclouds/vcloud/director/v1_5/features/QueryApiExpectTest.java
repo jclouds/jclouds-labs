@@ -20,8 +20,6 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
@@ -33,6 +31,8 @@ import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecords;
 import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorAdminApiExpectTest;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 import org.testng.annotations.Test;
+
+import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link QueryApi} by observing its side effects.

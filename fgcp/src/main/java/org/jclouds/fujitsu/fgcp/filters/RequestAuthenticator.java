@@ -37,7 +37,6 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.ws.rs.HttpMethod;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Constants;
@@ -60,6 +59,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Multimap;
+import com.google.common.net.HttpHeaders;
 
 /**
  * Generates and signs the access key id and adds the mandatory http header and

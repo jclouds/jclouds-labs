@@ -19,12 +19,12 @@ package org.jclouds.abiquo.binders;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Singleton;
-import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.http.HttpRequest;
 
 import com.abiquo.model.rest.RESTLink;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.net.HttpHeaders;
 
 /**
  * Binds the given link to the uri and the Accept header.
