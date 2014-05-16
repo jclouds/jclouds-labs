@@ -63,7 +63,7 @@ public final class VirtualBoxConstants {
    
    public static final String GUEST_OS_USER = "guestUser";
 
-   private CloudSigmaConstants() {
+   private VirtualBoxConstants() {
       throw new AssertionError("intentionally unimplemented");
    }
 }
