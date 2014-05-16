@@ -21,7 +21,7 @@ package org.jclouds.savvis.vpdc.reference;
  * 
  * @author Adrian Cole
  */
-public interface VPDCConstants {
+public final class VPDCConstants {
 
    /**
     * which email must be present for VDCs to be considered yours
@@ -30,4 +30,7 @@ public interface VPDCConstants {
 
    public static final String PROPERTY_VPDC_TIMEOUT_TASK_COMPLETED = "jclouds.vpdc.timeout.task-complete";
 
+   private VPDCConstants() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }

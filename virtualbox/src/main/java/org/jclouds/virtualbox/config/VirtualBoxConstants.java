@@ -24,7 +24,7 @@ import java.io.File;
  * @author Mattias Holmqvist, Andrea Turli, David Alves
  * 
  */
-public interface VirtualBoxConstants {
+public final class VirtualBoxConstants {
 
    public static final String VIRTUALBOX_NODE_NAME_SEPARATOR = "-0x0-";
 
@@ -62,4 +62,8 @@ public interface VirtualBoxConstants {
    public static final String GUEST_OS_PASSWORD = "guestPassword";
    
    public static final String GUEST_OS_USER = "guestUser";
+
+   private CloudSigmaConstants() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }

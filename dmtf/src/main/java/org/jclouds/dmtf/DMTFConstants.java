@@ -21,7 +21,7 @@ package org.jclouds.dmtf;
  *
  * @author grkvlt@apache.org
  */
-public class DMTFConstants {
+public final class DMTFConstants {
 
    public static final String OVF_NS = "http://schemas.dmtf.org/ovf/envelope/1";
 
@@ -32,4 +32,8 @@ public class DMTFConstants {
    public static final String CIM_VSSD_NS = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData";
    
    public static final String CIM_RASD_NS = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData";
+
+   private DMTFConstants() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }

@@ -27,7 +27,7 @@ import com.google.common.reflect.TypeToken;
  *
  * @author grkvlt@apache.org
  */
-public class VCloudDirectorConstants {
+public final class VCloudDirectorConstants {
 
    /** The XML namespace used by the apis. */
    public static final String VCLOUD_1_5_NS = "http://www.vmware.com/vcloud/v1.5";
@@ -72,4 +72,8 @@ public class VCloudDirectorConstants {
    public static final TypeToken<RestContext<SessionApi, SessionAsyncApi>> SESSION_CONTEXT_TYPE =
          new TypeToken<RestContext<SessionApi, SessionAsyncApi>>() {
 		   };
+
+   private VCloudDirectorConstants() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }

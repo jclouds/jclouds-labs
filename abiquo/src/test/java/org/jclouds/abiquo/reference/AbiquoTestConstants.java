@@ -21,7 +21,11 @@ package org.jclouds.abiquo.reference;
  * 
  * @author Ignasi Barrera
  */
-public interface AbiquoTestConstants {
+public final class AbiquoTestConstants {
    /** The prefix for test object names. */
    public static final String PREFIX = "JC-";
+
+   private AbiquoTestConstants() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }
