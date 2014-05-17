@@ -46,6 +46,7 @@ import org.jclouds.location.Provider;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Supplier;
+import com.google.common.io.ByteSource;
 
 /**
  * TODO this code needs to be completely refactored. It needs to stop using KeyStore of at all possible and definitely
@@ -101,7 +102,7 @@ public class KeyStoreSupplier implements Supplier<KeyStore> {
             } while (certsBeginIdx != -1);
 
             // parse private key
-            KeySpec keySpec = Pems.privateKeySpec(InputSuppliers.of(pemPrivateKey));
+            KeySpec keySpec = Pems.privateKeySpec(ByteSource.wrap(pemPrivateKey.getBytes(Charsets.UTF_8)));
             PrivateKey privateKey = crypto.rsaKeyFactory().generatePrivate(keySpec);
 
             // populate keystore with private key and certs

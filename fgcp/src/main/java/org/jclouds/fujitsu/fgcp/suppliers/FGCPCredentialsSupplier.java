@@ -43,6 +43,7 @@ import com.google.common.base.Throwables;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.io.ByteSource;
 import com.google.common.io.CharStreams;
 import com.google.common.io.LineProcessor;
 import com.google.common.util.concurrent.UncheckedExecutionException;
@@ -79,7 +80,7 @@ public class FGCPCredentialsSupplier implements Supplier<FGCPCredentials> {
 
             // extract private key
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PrivateKey privateKey = keyFactory.generatePrivate(Pems.privateKeySpec(Payloads.newStringPayload(pem)));
+            PrivateKey privateKey = keyFactory.generatePrivate(Pems.privateKeySpec(ByteSource.wrap(pem.getBytes(Charsets.UTF_8))));
 
             // extract certificate(s)
             Collection<X509Certificate> certs = x509Certificates(pem);
