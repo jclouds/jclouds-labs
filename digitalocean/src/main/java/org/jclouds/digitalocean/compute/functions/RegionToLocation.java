@@ -18,6 +18,7 @@ package org.jclouds.digitalocean.compute.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getOnlyElement;
+import static org.jclouds.digitalocean.compute.util.LocationNamingUtils.encodeRegionIdAndName;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -51,7 +52,7 @@ public class RegionToLocation implements Function<Region, Location> {
    public Location apply(Region input) {
       LocationBuilder builder = new LocationBuilder();
       builder.id(input.getSlug());
-      builder.description(input.getId() + "/" + input.getName());
+      builder.description(encodeRegionIdAndName(input));
       builder.scope(LocationScope.REGION);
       builder.parent(getOnlyElement(justProvider.get()));
       builder.iso3166Codes(ImmutableSet.<String> of());

@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.digitalocean.domain.Event;
 import org.jclouds.digitalocean.http.filters.AuthenticationFilter;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
@@ -55,5 +56,6 @@ public interface EventApi extends Closeable {
    @Path("/{id}")
    @Fallback(NullOnNotFoundOr404.class)
    @SelectJson("event")
+   @Nullable
    Event get(@PathParam("id") int id);
 }

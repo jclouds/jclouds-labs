@@ -19,10 +19,10 @@ package org.jclouds.digitalocean.compute.strategy;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Iterables.find;
 import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
 import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
 import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_TERMINATED;
+import static org.jclouds.digitalocean.compute.util.LocationNamingUtils.extractRegionId;
 
 import java.util.Map;
 
@@ -48,6 +48,7 @@ import org.jclouds.ssh.SshKeyPairGenerator;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.primitives.Ints;
 
 /**
  * Implementation of the Compute Service for the DigitalOcean API.
@@ -114,17 +115,11 @@ public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<
       }
 
       // Find the location where the Droplet has to be created
-      final String locationId = template.getLocation().getId();
-      Region region = find(api.getRegionApi().list(), new Predicate<Region>() {
-         @Override
-         public boolean apply(Region input) {
-            return input.getSlug().equals(locationId);
-         }
-      });
+      int regionId = extractRegionId(template.getLocation());
 
       DropletCreation dropletCreation = api.getDropletApi().create(name,
             Integer.parseInt(template.getImage().getProviderId()),
-            Integer.parseInt(template.getHardware().getProviderId()), region.getId(), options.build());
+            Integer.parseInt(template.getHardware().getProviderId()), regionId, options.build());
 
       // We have to actively wait until the droplet has been provisioned until
       // we can build the entire Droplet object we want to return
@@ -169,7 +164,10 @@ public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<
 
    @Override
    public Image getImage(String id) {
-      return api.getImageApi().get(Integer.parseInt(id));
+      // The id of the image can be an id or a slug. Use the corresponding method of the API depending on what is
+      // provided. If it can be parsed as a number, use the method to get by ID. Otherwise, get by slug.
+      Integer imageId = Ints.tryParse(id);
+      return imageId != null ? api.getImageApi().get(imageId) : api.getImageApi().get(id);
    }
 
    @Override

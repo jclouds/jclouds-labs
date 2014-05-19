@@ -43,6 +43,7 @@ import org.jclouds.logging.Logger;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.primitives.Ints;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -116,7 +117,16 @@ public class DigitalOceanImageExtension implements ImageExtension {
    @Override
    public boolean deleteImage(String id) {
       try {
-         api.getImageApi().delete(Integer.parseInt(id));
+         // The id of the image can be an id or a slug. Use the corresponding method of the API depending on what is
+         // provided. If it can be parsed as a number, use the method to destroy by ID. Otherwise, destroy by slug.
+         Integer imageId = Ints.tryParse(id);
+         if (imageId != null) {
+            logger.debug(">> image does not have a slug. Using the id to delete the image...");
+            api.getImageApi().delete(imageId);
+         } else {
+            logger.debug(">> image has a slug. Using it to delete the image...");
+            api.getImageApi().delete(id);
+         }
          return true;
       } catch (Exception ex) {
          return false;

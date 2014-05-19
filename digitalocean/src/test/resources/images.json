@@ -4,14 +4,14 @@
       {
          "id":1601,
          "name":"CentOS 5.8 x64",
-         "slug":null,
+         "slug":"centos-58-x64",
          "distribution":"CentOS",
          "public":true
       },
       {
          "id":1602,
          "name":"CentOS 5.8 x32",
-         "slug":null,
+         "slug":"centos-58-x32",
          "distribution":"CentOS",
          "public":true
       },

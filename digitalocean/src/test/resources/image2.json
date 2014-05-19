@@ -5,6 +5,6 @@
     "name" : "Fedora 17 x64 Desktop",
     "distribution" : "Fedora",
     "public" : true,
-    "slug" : null
+    "slug" : "fedora-17-x64"
   }
 }

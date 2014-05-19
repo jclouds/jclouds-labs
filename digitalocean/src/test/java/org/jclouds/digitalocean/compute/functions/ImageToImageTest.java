@@ -37,9 +37,10 @@ public class ImageToImageTest {
 
    @Test
    public void testConvertImage() {
-      Image image = new Image(1, "Ubuntu 14.04 x64", "Ubuntu 14.04 x64", true, "ubuntu-1404");
+      Image image = new Image(1, "Ubuntu 14.04 x64", "Ubuntu 14.04 x64", true, "ubuntu-1404-x86");
       org.jclouds.compute.domain.Image expected = new ImageBuilder()
-            .ids("1")
+            .id("ubuntu-1404-x86")
+            .providerId("1")
             .name("Ubuntu 14.04 x64")
             .status(AVAILABLE)
             .operatingSystem(

@@ -40,7 +40,9 @@ public class ImageToImage implements Function<Image, org.jclouds.compute.domain.
    @Override
    public org.jclouds.compute.domain.Image apply(final Image input) {
       ImageBuilder builder = new ImageBuilder();
-      builder.ids(String.valueOf(input.getId()));
+      // Private images don't have a slug
+      builder.id(input.getSlug() != null ? input.getSlug() : String.valueOf(input.getId()));
+      builder.providerId(String.valueOf(input.getId()));
       builder.name(input.getName());
       builder.description(input.getName());
       builder.status(Status.AVAILABLE);
