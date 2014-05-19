@@ -31,6 +31,7 @@ import org.jclouds.digitalocean.domain.Droplet;
 import org.jclouds.digitalocean.domain.DropletCreation;
 import org.jclouds.digitalocean.domain.options.CreateDropletOptions;
 import org.jclouds.digitalocean.http.filters.AuthenticationFilter;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
@@ -69,6 +70,7 @@ public interface DropletApi extends Closeable {
    @Path("/{id}")
    @SelectJson("droplet")
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Droplet get(@PathParam("id") int id);
 
    /**
@@ -79,6 +81,8 @@ public interface DropletApi extends Closeable {
     * @param sizeId The size to use to create the droplet.
     * @param regionId The region where the droplet must be created.
     * @return The created droplet.
+    * 
+    * @see #create(String, String, String, String)
     */
    @Named("droplet:create")
    @GET
@@ -96,6 +100,8 @@ public interface DropletApi extends Closeable {
     * @param regionId The region where the droplet must be created.
     * @param options Custom options to create the droplet.
     * @return The created droplet.
+    * 
+    * @see #create(String, String, String, String, CreateDropletOptions)
     */
    @Named("droplet:create")
    @GET
@@ -103,6 +109,44 @@ public interface DropletApi extends Closeable {
    @SelectJson("droplet")
    DropletCreation create(@QueryParam("name") String name, @QueryParam("image_id") int imageId,
          @QueryParam("size_id") int sizeId, @QueryParam("region_id") int regionId, CreateDropletOptions options);
+
+   /**
+    * Creates a new droplet.
+    * 
+    * @param name The name for the new droplet.
+    * @param imageSlug The slug of the image to use to create the droplet.
+    * @param sizeSlug The slug of the size to use to create the droplet.
+    * @param regionSlug The slug region where the droplet must be created.
+    * @return The created droplet.
+    * 
+    * @see #create(String, int, int, int)
+    */
+   @Named("droplet:create")
+   @GET
+   @Path("/new")
+   @SelectJson("droplet")
+   DropletCreation create(@QueryParam("name") String name, @QueryParam("image_slug") String imageSlug,
+         @QueryParam("size_slug") String sizeSlug, @QueryParam("region_slug") String regionSlug);
+
+   /**
+    * Creates a new droplet.
+    * 
+    * @param name The name for the new droplet.
+    * @param imageSlug The slug of the image to use to create the droplet.
+    * @param sizeSlug The slug of the size to use to create the droplet.
+    * @param regionSlug The slug region where the droplet must be created.
+    * @param options Custom options to create the droplet.
+    * @return The created droplet.
+    * 
+    * @see #create(String, int, int, int, CreateDropletOptions)
+    */
+   @Named("droplet:create")
+   @GET
+   @Path("/new")
+   @SelectJson("droplet")
+   DropletCreation create(@QueryParam("name") String name, @QueryParam("image_slug") String imageSlug,
+         @QueryParam("size_slug") String sizeSlug, @QueryParam("region_slug") String regionSlug,
+         CreateDropletOptions options);
 
    /**
     * Reboots the given droplet.
@@ -275,7 +319,7 @@ public interface DropletApi extends Closeable {
     * 
     * @param id The id of the droplet to destroy.
     * @param scrubData If true this will strictly write 0s to your prior partition to ensure that all data is completely
-    *        erased.
+    *           erased.
     * @return The id of the event to track the destroy process.
     */
    @Named("droplet:destroy")

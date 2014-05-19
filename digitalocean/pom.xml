@@ -39,7 +39,7 @@
     <test.digitalocean.identity>FIXME</test.digitalocean.identity>
     <test.digitalocean.credential>FIXME</test.digitalocean.credential>
     <!-- CentOS 6.5 x64 -->
-    <test.digitalocean.template>imageId=3448641</test.digitalocean.template>
+    <test.digitalocean.template>imageId=centos-6-5-x64</test.digitalocean.template>
     <jclouds.osgi.export>org.jclouds.digitalocean*;version="${jclouds.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>
       org.jclouds.compute.internal;version="${jclouds.version}",

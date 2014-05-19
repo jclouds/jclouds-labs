@@ -5,6 +5,6 @@
     "name" : "Arch Linux 2013.05 x32",
     "distribution" : "Arch Linux",
     "public" : true,
-    "slug" : null
+    "slug" : "arch-linux-x32"
   }
 }

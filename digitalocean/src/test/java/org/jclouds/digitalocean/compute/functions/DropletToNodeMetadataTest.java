@@ -80,14 +80,15 @@ public class DropletToNodeMetadataTest {
    @BeforeMethod
    public void setup() {
       images = ImmutableSet.of(new ImageBuilder()
-            .ids("1")
+            .id("ubuntu-1404-x86")
+            .providerId("1")
             .name("mock image")
             .status(AVAILABLE)
             .operatingSystem(
                   OperatingSystem.builder().name("Ubuntu 14.04 x86_64").description("Ubuntu").family(OsFamily.UBUNTU)
                         .version("10.04").arch("x86_64").is64Bit(true).build()).build());
 
-      hardwares = ImmutableSet.of(new HardwareBuilder().ids("1").name("mock hardware")
+      hardwares = ImmutableSet.of(new HardwareBuilder().id("2gb").providerId("1").name("mock hardware")
             .processor(new Processor(1.0, 1.0)).ram(2048)
             .volume(new VolumeBuilder().size(20f).type(Type.LOCAL).build()).build());
 
@@ -109,14 +110,34 @@ public class DropletToNodeMetadataTest {
       Droplet droplet = new Droplet(1, "mock-droplet", 1, 1, 1, false, ImmutableList.of(), ImmutableList.of(),
             "84.45.69.3", "192.168.2.5", false, ACTIVE, new Date());
 
-      NodeMetadata expected = new NodeMetadataBuilder().ids("1").hardware(getOnlyElement(hardwares)).imageId("1")
+      NodeMetadata expected = new NodeMetadataBuilder().ids("1").hardware(getOnlyElement(hardwares))
+            .imageId("ubuntu-1404-x86").status(RUNNING).location(getOnlyElement(locations)).name("mock-droplet")
+            .hostname("mock-droplet").group("mock").credentials(credentials)
+            .publicAddresses(ImmutableSet.of("84.45.69.3")).privateAddresses(ImmutableSet.of("192.168.2.5"))
+            .providerId("1").backendStatus(ACTIVE.name()).operatingSystem(getOnlyElement(images).getOperatingSystem())
+            .build();
+
+      NodeMetadata actual = function.apply(droplet);
+      assertNodeEquals(actual, expected);
+   }
+
+   @Test
+   public void testConvertDropletOldImage() throws ParseException {
+      // Use an image id that is not in the list of images
+      Droplet droplet = new Droplet(1, "mock-droplet", 9999, 1, 1, false, ImmutableList.of(), ImmutableList.of(),
+            "84.45.69.3", "192.168.2.5", false, ACTIVE, new Date());
+
+      NodeMetadata expected = new NodeMetadataBuilder().ids("1").hardware(getOnlyElement(hardwares)).imageId(null)
             .status(RUNNING).location(getOnlyElement(locations)).name("mock-droplet").hostname("mock-droplet")
             .group("mock").credentials(credentials).publicAddresses(ImmutableSet.of("84.45.69.3"))
             .privateAddresses(ImmutableSet.of("192.168.2.5")).providerId("1").backendStatus(ACTIVE.name())
-            .operatingSystem(getOnlyElement(images).getOperatingSystem()).build();
+            .operatingSystem(null).build();
 
       NodeMetadata actual = function.apply(droplet);
+      assertNodeEquals(actual, expected);
+   }
 
+   private static void assertNodeEquals(NodeMetadata actual, NodeMetadata expected) {
       assertEquals(actual, expected);
       // NodeMetadata equals method does not use all fields in equals. It assumes that same ids in same locations
       // determine the equivalence

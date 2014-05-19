@@ -40,7 +40,8 @@ public class SizeToHardware implements Function<Size, Hardware> {
    @Override
    public Hardware apply(Size input) {
       HardwareBuilder builder = new HardwareBuilder();
-      builder.ids(String.valueOf(input.getId()));
+      builder.id(input.getSlug());
+      builder.providerId(String.valueOf(input.getId()));
       builder.name(input.getName());
       builder.ram(input.getMemory());
       // DigitalOcean does not provide the processor speed. We configure it to

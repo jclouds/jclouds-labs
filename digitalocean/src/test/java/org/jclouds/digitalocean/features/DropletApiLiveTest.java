@@ -45,7 +45,9 @@ import com.google.common.base.Predicate;
 public class DropletApiLiveTest extends BaseDigitalOceanLiveTest {
 
    private DropletCreation dropletCreation;
+   private DropletCreation dropletCreationUsingSlugs;
    private Droplet droplet;
+   private Droplet dropletUsingSlugs;
    private Image snapshot;
 
    @Override
@@ -58,6 +60,10 @@ public class DropletApiLiveTest extends BaseDigitalOceanLiveTest {
    public void cleanup() {
       if (droplet != null) {
          int event = api.getDropletApi().destroy(droplet.getId(), true);
+         assertTrue(event > 0, "The event id should not be null");
+      }
+      if (dropletUsingSlugs != null) {
+         int event = api.getDropletApi().destroy(dropletUsingSlugs.getId(), true);
          assertTrue(event > 0, "The event id should not be null");
       }
       if (snapshot != null) {
@@ -73,12 +79,24 @@ public class DropletApiLiveTest extends BaseDigitalOceanLiveTest {
       assertTrue(dropletCreation.getEventId() > 0, "Droplet creation event id should be > 0");
    }
 
-   @Test(dependsOnMethods = "testCreateDroplet")
+   public void testCreateDropletUsingSlugs() {
+      dropletCreationUsingSlugs = api.getDropletApi().create("droplettestwithslugs", defaultImage.getSlug(),
+            defaultSize.getSlug(), defaultRegion.getSlug());
+
+      assertTrue(dropletCreationUsingSlugs.getId() > 0, "Created droplet id should be > 0");
+      assertTrue(dropletCreationUsingSlugs.getEventId() > 0, "Droplet creation event id should be > 0");
+   }
+
+   @Test(dependsOnMethods = { "testCreateDroplet", "testCreateDropletUsingSlugs" })
    public void testGetDroplet() {
       waitForEvent(dropletCreation.getEventId());
+      waitForEvent(dropletCreationUsingSlugs.getEventId());
+
       droplet = api.getDropletApi().get(dropletCreation.getId());
+      dropletUsingSlugs = api.getDropletApi().get(dropletCreationUsingSlugs.getId());
 
       assertNotNull(droplet, "Created droplet should not be null");
+      assertNotNull(dropletUsingSlugs, "Created droplet using slugs should not be null");
    }
 
    @Test(dependsOnMethods = "testGetDroplet")

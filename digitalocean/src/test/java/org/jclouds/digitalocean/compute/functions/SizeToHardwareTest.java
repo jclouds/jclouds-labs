@@ -38,8 +38,9 @@ public class SizeToHardwareTest {
 
    @Test
    public void testConvertSize() {
-      Size size = new Size(1, "Medium", "2GB", 2048, 1, 20, "0.05", "10");
-      Hardware expected = new HardwareBuilder().ids("1").name("Medium").processor(new Processor(1.0, 1.0)).ram(2048)
+      Size size = new Size(1, "Medium", "2gb", 2048, 1, 20, "0.05", "10");
+      Hardware expected = new HardwareBuilder().id("2gb").providerId("1").name("Medium")
+            .processor(new Processor(1.0, 1.0)).ram(2048)
             .volume(new VolumeBuilder().size(20f).type(Type.LOCAL).build())
             .userMetadata(ImmutableMap.of("costPerHour", "0.05", "costPerMonth", "10")).build();
 

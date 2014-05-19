@@ -4,7 +4,7 @@
       {
          "id":66,
          "name":"512MB",
-         "slug":null,
+         "slug":"512mb",
          "memory":512,
          "cpu":1,
          "disk":20,
@@ -14,7 +14,7 @@
       {
          "id":63,
          "name":"1GB",
-         "slug":null,
+         "slug":"1gb",
          "memory":1024,
          "cpu":1,
          "disk":30,
@@ -24,7 +24,7 @@
       {
          "id":62,
          "name":"2GB",
-         "slug":null,
+         "slug":"2gb",
          "memory":2048,
          "cpu":2,
          "disk":40,
@@ -34,7 +34,7 @@
       {
          "id":64,
          "name":"4GB",
-         "slug":null,
+         "slug":"4gb",
          "memory":4096,
          "cpu":2,
          "disk":60,

@@ -42,7 +42,9 @@ import com.google.common.base.Predicate;
 public class ImageApiLiveTest extends BaseDigitalOceanLiveTest {
 
    private Image snapshot;
+   private Image snapshotUsingSlug;
    private DropletCreation droplet;
+   private DropletCreation dropletUsingSlug;
 
    @Override
    protected void initialize() {
@@ -56,10 +58,18 @@ public class ImageApiLiveTest extends BaseDigitalOceanLiveTest {
          if (droplet != null) {
             api.getDropletApi().destroy(droplet.getId(), true);
          }
+         if (dropletUsingSlug != null) {
+            api.getDropletApi().destroy(dropletUsingSlug.getId(), true);
+         }
       } finally {
          if (snapshot != null) {
             api.getImageApi().delete(snapshot.getId());
             assertFalse(tryFind(api.getImageApi().list(), byName(snapshot.getName())).isPresent(),
+                  "Snapshot should not exist after delete");
+         }
+         if (snapshotUsingSlug != null) {
+            api.getImageApi().delete(snapshotUsingSlug.getId());
+            assertFalse(tryFind(api.getImageApi().list(), byName(snapshotUsingSlug.getName())).isPresent(),
                   "Snapshot should not exist after delete");
          }
       }
@@ -67,6 +77,10 @@ public class ImageApiLiveTest extends BaseDigitalOceanLiveTest {
 
    public void testGetImage() {
       assertNotNull(api.getImageApi().get(defaultImage.getId()), "The image should not be null");
+   }
+
+   public void testGetImageBySlug() {
+      assertNotNull(api.getImageApi().get(defaultImage.getSlug()), "The image should not be null");
    }
 
    public void testGetImageNotFound() {
@@ -91,6 +105,28 @@ public class ImageApiLiveTest extends BaseDigitalOceanLiveTest {
 
       Region newRegion = regions.get(1);
       int transferEvent = api.getImageApi().transfer(snapshot.getId(), newRegion.getId());
+      assertTrue(transferEvent > 0, "Transfer event id should be > 0");
+      waitForEvent(transferEvent);
+   }
+
+   public void testTransferImageUsingSlug() {
+      dropletUsingSlug = api.getDropletApi().create("imagetransferdropletusingslug", defaultImage.getSlug(),
+            defaultSize.getSlug(), defaultRegion.getSlug());
+
+      assertTrue(dropletUsingSlug.getId() > 0, "Created droplet id should be > 0");
+      assertTrue(dropletUsingSlug.getEventId() > 0, "Droplet creation event id should be > 0");
+
+      waitForEvent(dropletUsingSlug.getEventId());
+      int powerOffEvent = api.getDropletApi().powerOff(dropletUsingSlug.getId());
+      waitForEvent(powerOffEvent);
+
+      int snapshotEvent = api.getDropletApi().snapshot(dropletUsingSlug.getId(), "imagetransfersnapshotusingslug");
+      waitForEvent(snapshotEvent);
+
+      snapshotUsingSlug = find(api.getImageApi().list(), byName("imagetransfersnapshotusingslug"));
+
+      Region newRegion = regions.get(1);
+      int transferEvent = api.getImageApi().transfer(snapshotUsingSlug.getId(), newRegion.getId());
       assertTrue(transferEvent > 0, "Transfer event id should be > 0");
       waitForEvent(transferEvent);
    }

@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.digitalocean.domain.SshKey;
 import org.jclouds.digitalocean.http.filters.AuthenticationFilter;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
@@ -60,14 +61,14 @@ public interface KeyPairApi extends Closeable {
     * Gets the details of an existing SSH key pair.
     * 
     * @param id The id of the SSH key pair.
-    * @return The details of the SSH key pair or <code>null</code> if no key
-    *         exists with the given id.
+    * @return The details of the SSH key pair or <code>null</code> if no key exists with the given id.
     */
    @Named("key:get")
    @GET
    @Path("/{id}")
    @SelectJson("ssh_key")
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    SshKey get(@PathParam("id") int id);
 
    /**
