@@ -16,7 +16,8 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
-import java.net.URI;
+import static org.jclouds.http.Uris.uriBuilder;
+
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.io.ByteSource;
 
 public class ParseObjectListFromResponse implements Function<HttpResponse, ObjectList>,
       InvocationContext<ParseObjectListFromResponse> {
@@ -75,7 +77,7 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
       @Override
       public SwiftObject apply(InternalObject input) {
          return SwiftObject.builder()
-               .uri(URI.create(String.format("%s%s", containerUri, input.name)))
+               .uri(uriBuilder(containerUri).clearQuery().appendPath(input.name).build())
                .name(input.name)
                .etag(input.hash)
                .payload(payload(input.bytes, input.content_type))
@@ -95,10 +97,8 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
       return this;
    }
 
-   private static final byte[] NO_CONTENT = new byte[] {};
-
    private static Payload payload(long bytes, String contentType) {
-      Payload payload = Payloads.newByteArrayPayload(NO_CONTENT);
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.empty());
       payload.getContentMetadata().setContentLength(bytes);
       payload.getContentMetadata().setContentType(contentType);
       return payload;

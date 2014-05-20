@@ -24,6 +24,7 @@ import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject.Builder;
 
 import com.google.common.base.Function;
+import com.google.common.io.ByteSource;
 
 public class ToSwiftObject implements Function<StorageMetadata, SwiftObject> {
 
@@ -44,10 +45,8 @@ public class ToSwiftObject implements Function<StorageMetadata, SwiftObject> {
       return to.build();
    }
 
-   private static final byte[] NO_CONTENT = new byte[] {};
-
    private static Payload payload(long bytes, String contentType) {
-      Payload payload = Payloads.newByteArrayPayload(NO_CONTENT);
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.empty());
       payload.getContentMetadata().setContentLength(bytes);
       payload.getContentMetadata().setContentType(contentType);
       return payload;

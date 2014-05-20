@@ -189,6 +189,23 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
+   public void testCreateWithSpacesAndSpecialCharacters() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(201)));
+
+      try {
+         SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
+         assertTrue(api.getContainerApiForRegion("DFW").create("container # ! special"));
+
+         assertEquals(server.getRequestCount(), 2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "PUT", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/container%20%23%20%21%20special");
+      } finally {
+         server.shutdown();
+      }
+   }
+
    public void testAlreadyCreated() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -233,7 +250,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   public void updateMetadata() throws Exception {
+   public void testUpdateMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(containerResponse()
@@ -257,7 +274,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   public void deleteMetadata() throws Exception {
+   public void testDeleteMetadata() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(containerResponse()));
@@ -279,7 +296,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   public void deleteIfEmpty() throws Exception {
+   public void testDeleteIfEmpty() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(204)));
@@ -298,7 +315,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   public void alreadyDeleted() throws Exception {
+   public void testAlreadyDeleted() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
@@ -318,7 +335,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
    }
 
    @Test(expectedExceptions = IllegalStateException.class)
-   public void deleteWhenNotEmpty() throws Exception {
+   public void testDeleteWhenNotEmpty() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(409)));
@@ -339,7 +356,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
    private static final Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
 
-   public static MockResponse containerResponse() {
+   static MockResponse containerResponse() {
       return new MockResponse()
             .addHeader(CONTAINER_OBJECT_COUNT, "42")
             .addHeader(CONTAINER_BYTES_USED, "323479");

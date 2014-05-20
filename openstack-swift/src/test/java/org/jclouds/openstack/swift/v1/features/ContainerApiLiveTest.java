@@ -36,13 +36,25 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * @author Adrian Cole
- * @author Jeremy Daggett
+ * Provides live tests for the {@link ContainerApi}.
  */
 @Test(groups = "live", testName = "ContainerApiLiveTest")
 public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    private String name = getClass().getSimpleName();
+
+   public void testCreateWithSpacesAndSpecialCharacters() throws Exception {
+      final String nameWithSpaces = "container # ! special";
+
+      for (String regionId : regions) {
+         assertTrue(api.getContainerApiForRegion(regionId).create(nameWithSpaces));
+         Container container = api.getContainerApiForRegion(regionId).get(nameWithSpaces);
+         assertNotNull(container);
+         assertEquals(container.getName(), nameWithSpaces);
+
+         assertTrue(api.getContainerApiForRegion(regionId).deleteIfEmpty(nameWithSpaces));
+      }
+   }
 
    public void testList() throws Exception {
       for (String regionId : regions) {

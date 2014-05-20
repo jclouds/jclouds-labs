@@ -49,14 +49,32 @@ import com.google.common.io.ByteSource;
 
 /**
  * Provides live tests for the {@link ObjectApi}.
- * 
  */
 @Test(groups = "live", testName = "ObjectApiLiveTest", singleThreaded = true)
 public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    
    private String name = getClass().getSimpleName();
    private String containerName = getClass().getSimpleName() + "Container";
-   
+   static final Payload PAYLOAD = newByteSourcePayload(ByteSource.wrap("swifty".getBytes()));
+
+   public void testCreateWithSpacesAndSpecialCharacters() throws Exception {
+      final String containerName = "container # ! special";
+      final String objectName = "object # ! special";
+
+      for (String regionId : regions) {
+         assertNotNull(api.getContainerApiForRegion(regionId).create(containerName));
+         assertNotNull(api.getObjectApiForRegionAndContainer(regionId, containerName).put(objectName, PAYLOAD));
+
+         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(objectName);
+         assertEquals(object.getName(), objectName);
+         checkObject(object);
+         assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
+
+         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(objectName);
+         api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
+      }
+   }
+
    public void testCopyObject() throws Exception {
       for (String regionId : regions) {
          // source
@@ -69,9 +87,6 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          String destinationObject = "copy.txt";
          String destinationPath = "/" + destinationContainer + "/" + destinationObject;
          
-         String stringPayload = "Hello World";
-         Payload data = newByteSourcePayload(ByteSource.wrap(stringPayload.getBytes()));
-         
          ContainerApi containerApi = api.getContainerApiForRegion(regionId);
          
          // create source and destination dirs
@@ -83,12 +98,12 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          ObjectApi destApi = api.getObjectApiForRegionAndContainer(regionId, destinationContainer);
          
          // Create source object 
-         assertNotNull(srcApi.put(sourceObjectName, data));
+         assertNotNull(srcApi.put(sourceObjectName, PAYLOAD));
          SwiftObject sourceObject = srcApi.get(sourceObjectName);
          checkObject(sourceObject);
 
          // Create the destination object
-         assertNotNull(destApi.put(destinationObject, data));
+         assertNotNull(destApi.put(destinationObject, PAYLOAD));
          SwiftObject object = destApi.get(destinationObject);
          checkObject(object);
 
@@ -98,7 +113,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          
          // now get a real SwiftObject
          SwiftObject destSwiftObject = destApi.get(destinationObject);
-         assertEquals(Strings2.toString(destSwiftObject.getPayload()), stringPayload);
+         assertEquals(Strings2.toString(destSwiftObject.getPayload()), "swifty");
          
          // test exception thrown on bad source name
          try {
@@ -144,7 +159,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
          assertEquals(object.getName(), name);
          checkObject(object);
-         assertEquals(toStringAndClose(object.getPayload().openStream()), "");
+         assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
       }
    }
 
@@ -223,8 +238,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       super.setup();
       for (String regionId : regions) {
          api.getContainerApiForRegion(regionId).create(containerName);
-         api.getObjectApiForRegionAndContainer(regionId, containerName)
-            .put(name, newByteSourcePayload(ByteSource.wrap("swifty".getBytes())));
+         api.getObjectApiForRegionAndContainer(regionId, containerName).put(name, PAYLOAD);
       }
    }
 
