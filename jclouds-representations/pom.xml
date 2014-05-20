@@ -28,9 +28,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.apache.jclouds.labs</groupId>
-  <artifactId>jclouds-represetations</artifactId>
+  <artifactId>jclouds-representations</artifactId>
   <packaging>pom</packaging>
-  <name>jclouds :: represetations</name>
+  <name>jclouds :: representations</name>
   <description>Representations objects for jclouds domain objects</description>
 
   <modules>
