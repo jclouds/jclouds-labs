@@ -17,17 +17,19 @@
 package org.jclouds.fujitsu.fgcp;
 
 import static com.google.common.base.Suppliers.ofInstance;
-import static org.jclouds.util.Strings2.toStringAndClose;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 
 import org.jclouds.domain.Credentials;
 import org.jclouds.fujitsu.fgcp.suppliers.FGCPCredentialsSupplier;
@@ -40,17 +42,17 @@ public class FGCPCredentialsTest {
    /**
     * Test loading the credentials by extracting a pk from a PKCS12 keystore.
     */
-   public static FGCPCredentials loadFGCPCredentials(String pathToPem) throws IOException, NoSuchAlgorithmException,
+   public static FGCPCredentials loadFGCPCredentials(File pathToPem) throws IOException, NoSuchAlgorithmException,
          CertificateException, InvalidKeySpecException {
       FGCPCredentialsSupplier loader = new FGCPCredentialsSupplier(ofInstance(new Credentials("foo",
-            toStringAndClose(new FileInputStream(pathToPem)))),
+            Files.asCharSource(pathToPem, Charsets.UTF_8).read())),
             new FGCPCredentialsForCredentials());
       return loader.get();
    }
 
    public void testLoadPKStringFromTestCert() throws IOException, NoSuchAlgorithmException, KeyStoreException,
          CertificateException, UnrecoverableKeyException, InvalidKeySpecException {
-      FGCPCredentials creds = loadFGCPCredentials("src/test/resources/certs/jclouds-test-fgcp.pem");
+      FGCPCredentials creds = loadFGCPCredentials(new File("src/test/resources/certs/jclouds-test-fgcp.pem"));
       assertNotNull(creds);
       assertEquals(creds.identity, "foo");
       assertNotNull(creds.privateKey);

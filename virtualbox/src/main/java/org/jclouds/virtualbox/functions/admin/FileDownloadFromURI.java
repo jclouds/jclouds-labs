@@ -17,13 +17,11 @@
 package org.jclouds.virtualbox.functions.admin;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.io.ByteStreams.copy;
 import static org.jclouds.util.Closeables2.closeQuietly;
 import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_WORKINGDIR;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -39,6 +37,7 @@ import org.jclouds.rest.HttpAsyncClient;
 
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import com.google.common.io.Files;
 
 /**
  * @author Mattias Holmqvist
@@ -66,7 +65,7 @@ public class FileDownloadFromURI implements Function<URI, File> {
             final InputStream inputStream = client.get(input).get();
             checkNotNull(inputStream, "%s not found", input);
             try {
-               copy(inputStream, new FileOutputStream(file));
+               Files.asByteSink(file).writeFrom(inputStream);
                return file;
             } catch (FileNotFoundException e) {
                logger.error(e, "File %s could not be found", file.getPath());
