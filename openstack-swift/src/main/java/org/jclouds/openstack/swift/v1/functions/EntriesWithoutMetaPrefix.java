@@ -31,7 +31,7 @@ import com.google.common.collect.Multimap;
  * 
  * @return the extracted metadata without the prefixed keys. 
  */
-enum EntriesWithoutMetaPrefix implements Function<Multimap<String, String>, Map<String, String>> {
+public enum EntriesWithoutMetaPrefix implements Function<Multimap<String, String>, Map<String, String>> {
    INSTANCE;
 
    @Override

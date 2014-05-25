@@ -27,6 +27,8 @@ import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * Represents an Account in OpenStack Object Storage.
@@ -39,13 +41,16 @@ public class Account {
    private final long objectCount;
    private final long bytesUsed;
    private final Map<String, String> metadata;
+   private final Multimap<String, String> headers;
 
    // parsed from headers, so ConstructorProperties here would be misleading
-   protected Account(long containerCount, long objectCount, long bytesUsed, Map<String, String> metadata) {
+   protected Account(long containerCount, long objectCount, long bytesUsed, Map<String, String> metadata,
+         Multimap<String, String> headers) {
       this.containerCount = containerCount;
       this.objectCount = objectCount;
       this.bytesUsed = bytesUsed;
-      this.metadata = checkNotNull(metadata, "metadata");
+      this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
+      this.headers = headers == null ? ImmutableMultimap.<String, String> of() : headers;
    }
 
    /**
@@ -87,6 +92,13 @@ public class Account {
       return metadata;
    }
 
+   /**
+    * @return The HTTP headers for this account.
+    */
+   public Multimap<String, String> getHeaders() {
+      return headers;
+   }
+
    @Override
    public boolean equals(Object object) {
       if (this == object) {
@@ -126,13 +138,14 @@ public class Account {
    }
 
    public Builder toBuilder() {
-      return builder().fromContainer(this);
+      return builder().fromAccount(this);
    }
 
    public static class Builder {
       protected long containerCount;
       protected long objectCount;
       protected long bytesUsed;
+      protected Multimap<String, String> headers = ImmutableMultimap.of();
       protected Map<String, String> metadata = ImmutableMap.of();
 
       /**
@@ -183,15 +196,24 @@ public class Account {
          return this;
       }
 
-      public Account build() {
-         return new Account(containerCount, objectCount, bytesUsed, metadata);
+      /**
+       * @see Account#getHeaders()
+       */
+      public Builder headers(Multimap<String, String> headers) {
+        this.headers = headers;
+        return this;
       }
 
-      public Builder fromContainer(Account from) {
+      public Account build() {
+         return new Account(containerCount, objectCount, bytesUsed, metadata, headers);
+      }
+
+      public Builder fromAccount(Account from) {
          return containerCount(from.getContainerCount())
                .objectCount(from.getObjectCount())
                .bytesUsed(from.getBytesUsed())
-               .metadata(from.getMetadata());
+               .metadata(from.getMetadata())
+               .headers(from.getHeaders());
       }
    }
 }

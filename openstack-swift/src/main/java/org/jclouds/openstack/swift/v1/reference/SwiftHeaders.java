@@ -66,6 +66,12 @@ public interface SwiftHeaders {
    String CONTAINER_SYNC_TO = "X-Container-Sync-To";
 
    // Versioning
+   String VERSIONS_LOCATION = "X-Versions-Location";
+
+   /**
+    * @deprecated Please use {@link #VERSIONS_LOCATION}. This field will be removed in jclouds 1.8.
+    */
+   @Deprecated
    String CONTAINER_VERSIONS_LOCATION = "X-Versions-Location";
 
    // Misc functionality

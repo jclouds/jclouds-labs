@@ -27,13 +27,17 @@ import java.util.Map.Entry;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
+import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
+import org.jclouds.openstack.swift.v1.options.UpdateContainerOptions;
+import org.jclouds.openstack.swift.v1.reference.SwiftHeaders;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
 
 /**
  * Provides live tests for the {@link ContainerApi}.
@@ -42,6 +46,26 @@ import com.google.common.collect.ImmutableMap;
 public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    private String name = getClass().getSimpleName();
+
+   public void testCreateWithOptions() throws Exception {
+      for (String regionId : regions) {
+         ImmutableMultimap<String, String> headers =
+               ImmutableMultimap.of(SwiftHeaders.STATIC_WEB_INDEX, "__index.html",
+                                    SwiftHeaders.STATIC_WEB_ERROR, "__error.html");
+         CreateContainerOptions opts = new CreateContainerOptions().headers(headers);
+
+         assertNotNull(api.getContainerApiForRegion(regionId).create(name, opts));
+
+         Container container = api.getContainerApiForRegion(regionId).get(name);
+         assertNotNull(container);
+         assertEquals(container.getName(), name);
+         assertEquals(container.getMetadata().size(), 2);
+         assertEquals(container.getMetadata().get("web-index"), "__index.html");
+         assertEquals(container.getMetadata().get("web-error"), "__error.html");
+
+         assertTrue(api.getContainerApiForRegion(regionId).deleteIfEmpty(name));
+      }
+   }
 
    public void testCreateWithSpacesAndSpecialCharacters() throws Exception {
       final String nameWithSpaces = "container # ! special";
@@ -77,6 +101,33 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          assertEquals(container.getName(), name);
          assertTrue(container.getObjectCount() == 0);
          assertTrue(container.getBytesUsed() == 0);
+      }
+   }
+
+   public void testUpdate() throws Exception {
+      for (String regionId : regions) {
+         ImmutableMultimap<String, String> headers =
+               ImmutableMultimap.of(SwiftHeaders.STATIC_WEB_INDEX, "__index.html",
+                                    SwiftHeaders.STATIC_WEB_ERROR, "__error.html");
+         UpdateContainerOptions opts = new UpdateContainerOptions().headers(headers);
+
+         assertNotNull(api.getContainerApiForRegion(regionId).create(name));
+
+         Container container = api.getContainerApiForRegion(regionId).get(name);
+         assertNotNull(container);
+         assertEquals(container.getName(), name);
+         assertTrue(container.getMetadata().isEmpty());
+
+         assertNotNull(api.getContainerApiForRegion(regionId).update(name, opts));
+
+         Container updatedContainer = api.getContainerApiForRegion(regionId).get(name);
+         assertNotNull(updatedContainer);
+         assertEquals(updatedContainer.getName(), name);
+         assertEquals(updatedContainer.getMetadata().size(), 2);
+         assertEquals(updatedContainer.getMetadata().get("web-index"), "__index.html");
+         assertEquals(updatedContainer.getMetadata().get("web-error"), "__error.html");
+
+         assertTrue(api.getContainerApiForRegion(regionId).deleteIfEmpty(name));
       }
    }
 

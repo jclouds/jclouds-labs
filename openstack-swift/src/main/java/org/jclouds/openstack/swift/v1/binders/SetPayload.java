@@ -20,6 +20,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.io.BaseEncoding.base16;
 import static com.google.common.net.HttpHeaders.ETAG;
 import static com.google.common.net.HttpHeaders.TRANSFER_ENCODING;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_DELETE_AT;
+
+import java.util.Date;
+
+import javax.ws.rs.core.MediaType;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequest.Builder;
@@ -32,6 +38,11 @@ public class SetPayload implements Binder {
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       Builder<?> builder = request.toBuilder();
       Payload payload = Payload.class.cast(input);
+
+      if (payload.getContentMetadata().getContentType() == null) {
+         payload.getContentMetadata().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+      }
+
       Long contentLength = payload.getContentMetadata().getContentLength();
       if (contentLength != null && contentLength >= 0) {
          checkArgument(contentLength <= 5l * 1024 * 1024 * 1024, "maximum size for put object is 5GB, %s",
@@ -39,10 +50,18 @@ public class SetPayload implements Binder {
       } else {
          builder.replaceHeader(TRANSFER_ENCODING, "chunked").build();
       }
+
       byte[] md5 = payload.getContentMetadata().getContentMD5();
       if (md5 != null) {
          // Swift will validate the md5, if placed as an ETag header
          builder.replaceHeader(ETAG, base16().lowerCase().encode(md5));
+      }
+
+      Date expires = payload.getContentMetadata().getExpires();
+      if (expires != null) {
+         builder.replaceHeader(OBJECT_DELETE_AT, String.valueOf(
+               MILLISECONDS.toSeconds(expires.getTime())))
+               .build();
       }
       return (R) builder.payload(payload).build();
    }

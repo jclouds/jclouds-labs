@@ -29,26 +29,25 @@ import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders;
 import com.google.common.collect.Multimap;
 
 /**
- * Options for creating a {@link Container} 
- * 
- * @see ContainerApi#create(String, CreateContainerOptions)
+ * Options for updating a {@link Container}.
+ *
+ * @see org.jclouds.openstack.swift.v1.features.ContainerApi#update(String, UpdateContainerOptions)
  */
-public class CreateContainerOptions extends BaseHttpRequestOptions {
+public class UpdateContainerOptions extends BaseHttpRequestOptions {
+   public static final UpdateContainerOptions NONE = new UpdateContainerOptions();
 
-   public static final CreateContainerOptions NONE = new CreateContainerOptions();
-
-   /** 
+   /**
     * Sets the headers on a container at creation.
     */
-   public CreateContainerOptions headers(Multimap<String, String> headers) {
+   public UpdateContainerOptions headers(Multimap<String, String> headers) {
       this.headers.putAll(headers);
       return this;
    }
 
    /**
-    * Sets the metadata on a container at creation. 
+    * Sets the metadata on a container at creation.
     */
-   public CreateContainerOptions metadata(Map<String, String> metadata) {
+   public UpdateContainerOptions metadata(Map<String, String> metadata) {
       this.headers.putAll(bindMetadataToHeaders.toHeaders(metadata));
       return this;
    }
@@ -56,7 +55,7 @@ public class CreateContainerOptions extends BaseHttpRequestOptions {
    /**
     * Sets the public ACL on the container so that anybody can read it.
     */
-   public CreateContainerOptions anybodyRead() {
+   public UpdateContainerOptions anybodyRead() {
       this.headers.put(CONTAINER_READ, CONTAINER_ACL_ANYBODY_READ);
       return this;
    }
@@ -64,7 +63,7 @@ public class CreateContainerOptions extends BaseHttpRequestOptions {
    /**
     * Sets the container that will contain object versions.
     */
-   public CreateContainerOptions versionsLocation(String containerName) {
+   public UpdateContainerOptions versionsLocation(String containerName) {
       this.headers.put(VERSIONS_LOCATION, containerName);
       return this;
    }
@@ -72,34 +71,34 @@ public class CreateContainerOptions extends BaseHttpRequestOptions {
    public static class Builder {
 
       /**
-       * @see CreateContainerOptions#anybodyRead
+       * @see UpdateContainerOptions#anybodyRead
        */
-      public static CreateContainerOptions anybodyRead() {
-         CreateContainerOptions options = new CreateContainerOptions();
+      public static UpdateContainerOptions anybodyRead() {
+         UpdateContainerOptions options = new UpdateContainerOptions();
          return options.anybodyRead();
       }
 
       /**
-       * @see CreateContainerOptions#headers
+       * @see UpdateContainerOptions#headers
        */
-      public static CreateContainerOptions headers(Multimap<String, String> headers) {
-         CreateContainerOptions options = new CreateContainerOptions();
+      public static UpdateContainerOptions headers(Multimap<String, String> headers) {
+         UpdateContainerOptions options = new UpdateContainerOptions();
          return options.headers(headers);
       }
 
       /**
-       * @see CreateContainerOptions#metadata
+       * @see UpdateContainerOptions#metadata
        */
-      public static CreateContainerOptions metadata(Map<String, String> metadata) {
-         CreateContainerOptions options = new CreateContainerOptions();
+      public static UpdateContainerOptions metadata(Map<String, String> metadata) {
+         UpdateContainerOptions options = new UpdateContainerOptions();
          return options.metadata(metadata);
       }
 
       /**
-       * @see CreateContainerOptions#versionsLocation
+       * @see UpdateContainerOptions#versionsLocation
        */
-      public static CreateContainerOptions versionsLocation(String containerName) {
-         CreateContainerOptions options = new CreateContainerOptions();
+      public static UpdateContainerOptions versionsLocation(String containerName) {
+         UpdateContainerOptions options = new UpdateContainerOptions();
          return options.versionsLocation(containerName);
       }
    }

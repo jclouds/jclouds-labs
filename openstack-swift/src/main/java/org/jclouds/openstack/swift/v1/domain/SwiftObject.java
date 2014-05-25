@@ -186,7 +186,7 @@ public class SwiftObject implements Comparable<SwiftObject> {
       protected String etag;
       protected Date lastModified;
       protected Payload payload;
-      protected Multimap<String, String> headers;
+      protected Multimap<String, String> headers = ImmutableMultimap.of();
       protected Map<String, String> metadata = ImmutableMap.of();
 
       /**

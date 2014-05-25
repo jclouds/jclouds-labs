@@ -28,6 +28,8 @@ import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * Represents a Container in OpenStack Object Storage.
@@ -41,15 +43,17 @@ public class Container implements Comparable<Container> {
    private final long bytesUsed;
    private final Optional<Boolean> anybodyRead;
    private final Map<String, String> metadata;
+   private final Multimap<String, String> headers;
 
-   @ConstructorProperties({ "name", "count", "bytes", "anybodyRead", "metadata" })
+   @ConstructorProperties({ "name", "count", "bytes", "anybodyRead", "metadata", "headers"})
    protected Container(String name, long objectCount, long bytesUsed, Optional<Boolean> anybodyRead,
-         Map<String, String> metadata) {
+         Map<String, String> metadata, Multimap<String, String> headers) {
       this.name = checkNotNull(name, "name");
       this.objectCount = objectCount;
       this.bytesUsed = bytesUsed;
       this.anybodyRead = anybodyRead == null ? Optional.<Boolean> absent() : anybodyRead;
       this.metadata = metadata == null ? ImmutableMap.<String, String> of() : metadata;
+      this.headers = headers == null ? ImmutableMultimap.<String, String> of() : headers;
    }
 
    /**
@@ -93,6 +97,13 @@ public class Container implements Comparable<Container> {
     */
    public Map<String, String> getMetadata() {
       return metadata;
+   }
+
+   /**
+    * @return The HTTP headers for this account.
+    */
+   public Multimap<String, String> getHeaders() {
+      return headers;
    }
 
    @Override
@@ -153,6 +164,7 @@ public class Container implements Comparable<Container> {
       protected long bytesUsed;
       protected Optional<Boolean> anybodyRead = Optional.absent();
       protected Map<String, String> metadata = ImmutableMap.of();
+      protected Multimap<String, String> headers = ImmutableMultimap.of();
 
       /**
        * @see Container#getName()
@@ -201,8 +213,16 @@ public class Container implements Comparable<Container> {
          return this;
       }
 
+      /**
+       * @see Container#getHeaders()
+       */
+      public Builder headers(Multimap<String, String> headers) {
+         this.headers = headers;
+         return this;
+      }
+
       public Container build() {
-         return new Container(name, objectCount, bytesUsed, anybodyRead, metadata);
+         return new Container(name, objectCount, bytesUsed, anybodyRead, metadata, headers);
       }
 
       public Builder fromContainer(Container from) {
@@ -210,7 +230,8 @@ public class Container implements Comparable<Container> {
                .objectCount(from.getObjectCount())
                .bytesUsed(from.getBytesUsed())
                .anybodyRead(from.getAnybodyRead().orNull())
-               .metadata(from.getMetadata());
+               .metadata(from.getMetadata())
+               .headers(from.getHeaders());
       }
    }
 }

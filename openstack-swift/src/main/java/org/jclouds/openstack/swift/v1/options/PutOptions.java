@@ -23,36 +23,48 @@ import java.util.Map;
 import org.jclouds.http.options.BaseHttpRequestOptions;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders;
 
+import com.google.common.collect.Multimap;
+
 /**
  * Options for creating an Object. 
  */
 public class PutOptions extends BaseHttpRequestOptions {
-   /**
-    * @deprecated This field will be removed in jclouds 1.8
-    */
-   @Deprecated
+
    public static final PutOptions NONE = new PutOptions();
 
-   /** 
-    * Sets the metadata on a container at creation. 
+   /**
+    * Sets the metadata on a container at creation.
     */
    public PutOptions metadata(Map<String, String> metadata) {
-      if (!metadata.isEmpty()) {
-         this.headers.putAll(bindMetadataToHeaders.toHeaders(metadata));
-      }
+      this.headers.putAll(bindMetadataToHeaders.toHeaders(metadata));
+      return this;
+   }
+
+   /**
+    * Sets the headers on a container at creation.
+    */
+   public PutOptions headers(Multimap<String, String> headers) {
+      this.headers.putAll(headers);
       return this;
    }
 
    public static class Builder {
 
-      /** 
-       * @see PutOptions#metadata 
+      /**
+       * @see PutOptions#headers
+       */
+      public static PutOptions headers(Multimap<String, String> headers) {
+         PutOptions options = new PutOptions();
+         return options.headers(headers);
+      }
+
+      /**
+       * @see PutOptions#metadata
        */
       public static PutOptions metadata(Map<String, String> metadata) {
          PutOptions options = new PutOptions();
          return options.metadata(metadata);
       }
-
    }
 
    private static final BindMetadataToHeaders bindMetadataToHeaders = new BindMetadataToHeaders(OBJECT_METADATA_PREFIX);

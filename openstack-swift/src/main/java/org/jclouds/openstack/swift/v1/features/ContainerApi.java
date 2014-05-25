@@ -42,6 +42,7 @@ import org.jclouds.openstack.swift.v1.functions.FalseOnAccepted;
 import org.jclouds.openstack.swift.v1.functions.ParseContainerFromHeaders;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
+import org.jclouds.openstack.swift.v1.options.UpdateContainerOptions;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.QueryParams;
@@ -148,13 +149,30 @@ public interface ContainerApi {
    Container get(@PathParam("containerName") String containerName);
 
    /**
+    * Updates the {@link Container}.
+    *
+    * @param containerName
+    *           the container name corresponding to {@link Container#getName()}.
+    * @param options
+    *           the container options to update.
+    *
+    * @return {@code true} if the container metadata was successfully created or updated,
+    *         {@code false} if not.
+    */
+   @Named("container:update")
+   @POST
+   @Fallback(FalseOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   boolean update(@PathParam("containerName") String containerName, UpdateContainerOptions options);
+
+   /**
     * Creates or updates the {@link Container} metadata.
-    * 
+    *
     * @param containerName
     *           the container name corresponding to {@link Container#getName()}.
     * @param metadata
     *           the container metadata to create or update.
-    * 
+    *
     * @return {@code true} if the container metadata was successfully created or updated,
     *         {@code false} if not.
     */
