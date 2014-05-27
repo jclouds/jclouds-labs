@@ -63,14 +63,14 @@
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>1.7.3-SNAPSHOT</version>
+      <version>1.7.3</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>1.7.3-SNAPSHOT</version>
+      <version>1.7.3</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
@@ -83,7 +83,7 @@
     <dependency>
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-sshj</artifactId>
-      <version>1.7.3-SNAPSHOT</version>
+      <version>1.7.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
