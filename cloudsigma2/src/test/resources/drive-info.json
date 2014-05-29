@@ -1,0 +1,39 @@
+{
+    "affinities": [],
+    "allow_multimount": false,
+    "jobs": [
+       {
+            "resource_uri": "/api/2.0/jobs/ec01d3bc-1ec0-440d-a1c3-0a6421d0d511/",
+            "uuid": "ec01d3bc-1ec0-440d-a1c3-0a6421d0d511"
+       },
+       {
+            "resource_uri": "/api/2.0/jobs/18e73d11-a677-4aa6-b5e4-cd0f2b8b4b10/",
+            "uuid": "18e73d11-a677-4aa6-b5e4-cd0f2b8b4b10"
+       },
+       {
+            "resource_uri": "/api/2.0/jobs/8bacb5b3-6392-4f74-8094-ba3376a3f5f7/",
+            "uuid": "8bacb5b3-6392-4f74-8094-ba3376a3f5f7"
+       }
+    ],
+    "licenses": [],
+    "media": "disk",
+    "meta": {},
+    "mounted_on": [],
+    "name": "test_drive_1",
+    "owner": {
+        "resource_uri": "/api/2.0/user/42cb107b-d57a-4808-93d9-2d3f9ae4fe71/",
+        "uuid": "42cb107b-d57a-4808-93d9-2d3f9ae4fe71"
+    },
+    "resource_uri": "/api/2.0/drives/f17cce62-bcc9-4e0b-a57b-a5582b05aff0/",
+    "runtime": {
+        "is_snapshotable": true,
+        "snapshots_allocated_size": 0,
+        "storage_type": "dssd"
+    },
+    "size": 1024000000,
+    "snapshots": [],
+    "status": "unmounted",
+    "storage_type": "dssd",
+    "tags": [],
+    "uuid": "f17cce62-bcc9-4e0b-a57b-a5582b05aff0"
+}

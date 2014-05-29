@@ -16,14 +16,15 @@
  */
 package org.jclouds.cloudsigma2.domain;
 
-import com.google.common.collect.ImmutableList;
-
-import javax.inject.Named;
 import java.beans.ConstructorProperties;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Named;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author Vladimir Shevchenko
@@ -117,7 +118,7 @@ public class LibraryDrive extends DriveInfo {
        * {@inheritDoc}
        */
       @Override
-      public Builder jobs(List<String> jobs) {
+      public Builder jobs(List<Job> jobs) {
          this.jobs = ImmutableList.copyOf(jobs);
          return this;
       }
@@ -253,7 +254,7 @@ public class LibraryDrive extends DriveInfo {
          "description", "favourite", "image_type", "install_notes", "os", "paid", "url"
    })
    public LibraryDrive(String uuid, String name, URI resourceUri, BigInteger size, Owner owner, DriveStatus status,
-                       boolean allowMultimount, List<String> affinities, List<String> jobs, List<DriveLicense> licenses,
+                       boolean allowMultimount, List<String> affinities, List<Job> jobs, List<DriveLicense> licenses,
                        MediaType media, Map<String, String> meta, List<Server> mountedOn, List<String> tags,
                        String arch, List<String> category, String description, boolean favorite, String imageType,
                        String installNotes, String os, boolean paid, String url) {

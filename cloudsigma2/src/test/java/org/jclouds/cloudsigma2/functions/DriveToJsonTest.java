@@ -16,15 +16,15 @@
  */
 package org.jclouds.cloudsigma2.functions;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.inject.Guice;
+import java.math.BigInteger;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+
 import org.jclouds.cloudsigma2.domain.DriveInfo;
 import org.jclouds.cloudsigma2.domain.DriveLicense;
 import org.jclouds.cloudsigma2.domain.DriveStatus;
+import org.jclouds.cloudsigma2.domain.Job;
 import org.jclouds.cloudsigma2.domain.License;
 import org.jclouds.cloudsigma2.domain.MediaType;
 import org.jclouds.cloudsigma2.domain.Server;
@@ -32,11 +32,12 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.math.BigInteger;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.inject.Guice;
 
 /**
  * @author Vladimir Shevchenko
@@ -69,7 +70,10 @@ public class DriveToJsonTest {
       input = new DriveInfo.Builder()
             .affinities(ImmutableList.of("ssd", "sample"))
             .allowMultimount(false)
-            .jobs(new ArrayList<String>())
+            .jobs(ImmutableList.of(new Job.Builder()
+            		.resourceUri("/api/2.0/jobs/")
+            		.uuid("933133a2-4ee2-4310-9a63-c8d5e705233")
+            		.build()))
             .licenses(ImmutableList.of(new DriveLicense.Builder()
                   .amount(1)
                   .license(new License.Builder()

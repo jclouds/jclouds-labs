@@ -16,23 +16,25 @@
  */
 package org.jclouds.cloudsigma2.functions;
 
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.jclouds.cloudsigma2.domain.DriveLicense;
+import org.jclouds.cloudsigma2.domain.DriveStatus;
+import org.jclouds.cloudsigma2.domain.Job;
+import org.jclouds.cloudsigma2.domain.LibraryDrive;
+import org.jclouds.cloudsigma2.domain.MediaType;
+import org.jclouds.cloudsigma2.domain.Server;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
-import org.jclouds.cloudsigma2.domain.DriveLicense;
-import org.jclouds.cloudsigma2.domain.DriveStatus;
-import org.jclouds.cloudsigma2.domain.MediaType;
-import org.jclouds.cloudsigma2.domain.LibraryDrive;
-import org.jclouds.cloudsigma2.domain.Server;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import java.math.BigInteger;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * @author Vladimir Shevchenko
@@ -65,7 +67,7 @@ public class LibraryDriveToJsonTest {
                .isFavorite(true)
                .imageType("install")
                .installNotes("test_install_notes")
-               .jobs(Lists.<String>newArrayList())
+               .jobs(Lists.<Job>newArrayList())
                .licenses(Lists.<DriveLicense>newArrayList())
                .media(MediaType.CDROM)
                .meta(Maps.<String, String>newHashMap())

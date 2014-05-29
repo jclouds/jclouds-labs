@@ -50,7 +50,6 @@ import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -128,10 +127,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Drive> drives = api.listDrives().concat().toList();
 
-      Assert.assertEquals(drives.size(), 3);
-      Assert.assertEquals(drives.get(0).getUuid(), "92ca1450-417e-4cc1-983b-1015777e2591");
-      Assert.assertEquals(drives.get(1).getUuid(), "414ad24b-ba41-47c0-9751-ef5060b6c391");
-      Assert.assertEquals(drives.get(2).getUuid(), "7bc04bc5-bd09-4269-b45d-16b58d6f71b4");
+      assertEquals(drives.size(), 3);
+      assertEquals(drives.get(0).getUuid(), "92ca1450-417e-4cc1-983b-1015777e2591");
+      assertEquals(drives.get(1).getUuid(), "414ad24b-ba41-47c0-9751-ef5060b6c391");
+      assertEquals(drives.get(2).getUuid(), "7bc04bc5-bd09-4269-b45d-16b58d6f71b4");
    }
 
    @Test
@@ -171,10 +170,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<DriveInfo> drives = api.listDrivesInfo().concat().toList();
 
-      Assert.assertEquals(drives.size(), 3);
-      Assert.assertEquals(drives.get(0).getUuid(), "92ca1450-417e-4cc1-983b-1015777e2591");
-      Assert.assertEquals(drives.get(1).getUuid(), "414ad24b-ba41-47c0-9751-ef5060b6c391");
-      Assert.assertEquals(drives.get(2).getUuid(), "7bc04bc5-bd09-4269-b45d-16b58d6f71b4");
+      assertEquals(drives.size(), 3);
+      assertEquals(drives.get(0).getUuid(), "92ca1450-417e-4cc1-983b-1015777e2591");
+      assertEquals(drives.get(1).getUuid(), "414ad24b-ba41-47c0-9751-ef5060b6c391");
+      assertEquals(drives.get(2).getUuid(), "7bc04bc5-bd09-4269-b45d-16b58d6f71b4");
    }
 
    @Test
@@ -194,17 +193,25 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
    @Test
    public void testGetDriveInfo() throws Exception {
-      String uuid = "e96f3c63-6f50-47eb-9401-a56c5ccf6b32";
+      String uuid = "f17cce62-bcc9-4e0b-a57b-a5582b05aff0";
       CloudSigma2Api api = requestSendsResponse(
             getBuilder()
                   .endpoint(endpoint + "drives/" + uuid + "/")
                   .build(),
             responseBuilder()
-                  .payload(payloadFromResourceWithContentType("/drives-detail.json", MediaType.APPLICATION_JSON))
+                  .payload(payloadFromResourceWithContentType("/drive-info.json", MediaType.APPLICATION_JSON))
                   .build());
 
       DriveInfo result = api.getDriveInfo(uuid);
       assertNotNull(result);
+      assertEquals(result.getName(), "test_drive_1");
+      assertEquals(result.getJobs().get(0).getResourceUri(),
+            "/api/2.0/jobs/ec01d3bc-1ec0-440d-a1c3-0a6421d0d511/");
+      assertEquals(result.getJobs().get(0).getUuid(), "ec01d3bc-1ec0-440d-a1c3-0a6421d0d511");
+      
+      assertEquals(result.getJobs().get(2).getResourceUri(),
+            "/api/2.0/jobs/8bacb5b3-6392-4f74-8094-ba3376a3f5f7/");
+      assertEquals(result.getJobs().get(2).getUuid(), "8bacb5b3-6392-4f74-8094-ba3376a3f5f7");
    }
 
    @Test
@@ -359,10 +366,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<LibraryDrive> drives = api.listLibraryDrives().concat().toList();
 
-      Assert.assertEquals(drives.size(), 3);
-      Assert.assertEquals(drives.get(0).getUuid(), "8c45d8d9-4efd-44ec-9833-8d52004b4298");
-      Assert.assertEquals(drives.get(1).getUuid(), "d1ec9f26-ba44-4002-bbdf-82a31a84b611");
-      Assert.assertEquals(drives.get(2).getUuid(), "dd9da460-b1ab-419a-9fa1-804540eee4c3");
+      assertEquals(drives.size(), 3);
+      assertEquals(drives.get(0).getUuid(), "8c45d8d9-4efd-44ec-9833-8d52004b4298");
+      assertEquals(drives.get(1).getUuid(), "d1ec9f26-ba44-4002-bbdf-82a31a84b611");
+      assertEquals(drives.get(2).getUuid(), "dd9da460-b1ab-419a-9fa1-804540eee4c3");
    }
 
    @Test
@@ -440,10 +447,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Server> servers = api.listServers().concat().toList();
 
-      Assert.assertEquals(servers.size(), 3);
-      Assert.assertEquals(servers.get(0).getUuid(), "61d61337-884b-4c87-b4de-f7f48f9cfc84");
-      Assert.assertEquals(servers.get(1).getUuid(), "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154");
-      Assert.assertEquals(servers.get(2).getUuid(), "05c16b9a-f2f5-4da6-a1cb-b90722c32212");
+      assertEquals(servers.size(), 3);
+      assertEquals(servers.get(0).getUuid(), "61d61337-884b-4c87-b4de-f7f48f9cfc84");
+      assertEquals(servers.get(1).getUuid(), "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154");
+      assertEquals(servers.get(2).getUuid(), "05c16b9a-f2f5-4da6-a1cb-b90722c32212");
    }
 
    @Test
@@ -483,10 +490,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<ServerInfo> serverInfos = api.listServersInfo().concat().toList();
 
-      Assert.assertEquals(serverInfos.size(), 3);
-      Assert.assertEquals(serverInfos.get(0).getUuid(), "a19a425f-9e92-42f6-89fb-6361203071bb");
-      Assert.assertEquals(serverInfos.get(1).getUuid(), "61d61337-884b-4c87-b4de-f7f48f9cfc84");
-      Assert.assertEquals(serverInfos.get(2).getUuid(), "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154");
+      assertEquals(serverInfos.size(), 3);
+      assertEquals(serverInfos.get(0).getUuid(), "a19a425f-9e92-42f6-89fb-6361203071bb");
+      assertEquals(serverInfos.get(1).getUuid(), "61d61337-884b-4c87-b4de-f7f48f9cfc84");
+      assertEquals(serverInfos.get(2).getUuid(), "33e71c37-0d0a-4a3a-a1ea-dc7265c9a154");
    }
 
    @Test
@@ -744,9 +751,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<FirewallPolicy> firewallPolicies = api.listFirewallPolicies().concat().toList();
 
-      Assert.assertEquals(firewallPolicies.size(), 2);
-      Assert.assertEquals(firewallPolicies.get(0).getUuid(), "b68dd907-69fc-4b3c-b954-c39d0046525b");
-      Assert.assertEquals(firewallPolicies.get(1).getUuid(), "cf8479b4-c98b-46c8-ab9c-108bb00c8218");
+      assertEquals(firewallPolicies.size(), 2);
+      assertEquals(firewallPolicies.get(0).getUuid(), "b68dd907-69fc-4b3c-b954-c39d0046525b");
+      assertEquals(firewallPolicies.get(1).getUuid(), "cf8479b4-c98b-46c8-ab9c-108bb00c8218");
    }
 
    @Test
@@ -789,9 +796,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<FirewallPolicy> firewallPolicies = api.listFirewallPoliciesInfo().concat().toList();
 
-      Assert.assertEquals(firewallPolicies.size(), 2);
-      Assert.assertEquals(firewallPolicies.get(0).getUuid(), "b68dd907-69fc-4b3c-b954-c39d0046525b");
-      Assert.assertEquals(firewallPolicies.get(1).getUuid(), "cf8479b4-c98b-46c8-ab9c-108bb00c8218");
+      assertEquals(firewallPolicies.size(), 2);
+      assertEquals(firewallPolicies.get(0).getUuid(), "b68dd907-69fc-4b3c-b954-c39d0046525b");
+      assertEquals(firewallPolicies.get(1).getUuid(), "cf8479b4-c98b-46c8-ab9c-108bb00c8218");
    }
 
    @Test
@@ -1030,9 +1037,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<VLANInfo> vlans = api.listVLANs().concat().toList();
 
-      Assert.assertEquals(vlans.size(), 2);
-      Assert.assertEquals(vlans.get(0).getUuid(), "96537817-f4b6-496b-a861-e74192d3ccb0");
-      Assert.assertEquals(vlans.get(1).getUuid(), "00b445a9-3936-47e5-ba8a-38adcf43db20");
+      assertEquals(vlans.size(), 2);
+      assertEquals(vlans.get(0).getUuid(), "96537817-f4b6-496b-a861-e74192d3ccb0");
+      assertEquals(vlans.get(1).getUuid(), "00b445a9-3936-47e5-ba8a-38adcf43db20");
    }
 
    @Test
@@ -1070,9 +1077,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<VLANInfo> vlanInfos = api.listVLANInfo().concat().toList();
 
-      Assert.assertEquals(vlanInfos.size(), 2);
-      Assert.assertEquals(vlanInfos.get(0).getUuid(), "96537817-f4b6-496b-a861-e74192d3ccb0");
-      Assert.assertEquals(vlanInfos.get(1).getUuid(), "00b445a9-3936-47e5-ba8a-38adcf43db20");
+      assertEquals(vlanInfos.size(), 2);
+      assertEquals(vlanInfos.get(0).getUuid(), "96537817-f4b6-496b-a861-e74192d3ccb0");
+      assertEquals(vlanInfos.get(1).getUuid(), "00b445a9-3936-47e5-ba8a-38adcf43db20");
    }
 
    @Test
@@ -1132,9 +1139,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<IP> ips = api.listIPs().concat().toList();
 
-      Assert.assertEquals(ips.size(), 2);
-      Assert.assertEquals(ips.get(0).getUuid(), "185.12.6.183");
-      Assert.assertEquals(ips.get(1).getUuid(), "185.12.5.233");
+      assertEquals(ips.size(), 2);
+      assertEquals(ips.get(0).getUuid(), "185.12.6.183");
+      assertEquals(ips.get(1).getUuid(), "185.12.5.233");
    }
 
    @Test
@@ -1172,9 +1179,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<IPInfo> ipInfos = api.listIPInfo().concat().toList();
 
-      Assert.assertEquals(ipInfos.size(), 2);
-      Assert.assertEquals(ipInfos.get(0).getUuid(), "185.12.6.183");
-      Assert.assertEquals(ipInfos.get(1).getUuid(), "185.12.5.233");
+      assertEquals(ipInfos.size(), 2);
+      assertEquals(ipInfos.get(0).getUuid(), "185.12.6.183");
+      assertEquals(ipInfos.get(1).getUuid(), "185.12.5.233");
    }
 
    @Test
@@ -1251,9 +1258,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Tag> tags = api.listTags().concat().toList();
 
-      Assert.assertEquals(tags.size(), 2);
-      Assert.assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
-      Assert.assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
+      assertEquals(tags.size(), 2);
+      assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
+      assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
    }
 
    @Test
@@ -1294,9 +1301,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Tag> tags = api.listTagsInfo().concat().toList();
 
-      Assert.assertEquals(tags.size(), 2);
-      Assert.assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
-      Assert.assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
+      assertEquals(tags.size(), 2);
+      assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
+      assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
    }
 
 
@@ -1538,10 +1545,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Subscription> subscriptions = api.listSubscriptions().concat().toList();
 
-      Assert.assertEquals(subscriptions.size(), 3);
-      Assert.assertEquals(subscriptions.get(0).getUuid(), "509f8e27-1e64-49bb-aa5a-baec074b0210");
-      Assert.assertEquals(subscriptions.get(1).getUuid(), "c2423c1a-8768-462c-bdc3-4ca09c1e650b");
-      Assert.assertEquals(subscriptions.get(2).getUuid(), "9bb117d3-4bc5-4e2d-a907-b20abd48eaf9");
+      assertEquals(subscriptions.size(), 3);
+      assertEquals(subscriptions.get(0).getUuid(), "509f8e27-1e64-49bb-aa5a-baec074b0210");
+      assertEquals(subscriptions.get(1).getUuid(), "c2423c1a-8768-462c-bdc3-4ca09c1e650b");
+      assertEquals(subscriptions.get(2).getUuid(), "9bb117d3-4bc5-4e2d-a907-b20abd48eaf9");
    }
 
    @Test
@@ -1735,12 +1742,12 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Discount> discounts = api.listDiscounts().concat().toList();
 
-      Assert.assertEquals(discounts.size(), 5);
-      Assert.assertEquals(discounts.get(0).getValue(), 0.03);
-      Assert.assertEquals(discounts.get(1).getValue(), 0.1);
-      Assert.assertEquals(discounts.get(2).getValue(), 0.25);
-      Assert.assertEquals(discounts.get(3).getValue(), 0.35);
-      Assert.assertEquals(discounts.get(4).getValue(), 0.45);
+      assertEquals(discounts.size(), 5);
+      assertEquals(discounts.get(0).getValue(), 0.03);
+      assertEquals(discounts.get(1).getValue(), 0.1);
+      assertEquals(discounts.get(2).getValue(), 0.25);
+      assertEquals(discounts.get(3).getValue(), 0.35);
+      assertEquals(discounts.get(4).getValue(), 0.45);
    }
 
    @Test
@@ -1778,11 +1785,11 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<Transaction> transactions = api.listTransactions().concat().toList();
 
-      Assert.assertEquals(transactions.size(), 4);
-      Assert.assertEquals(transactions.get(0).getId(), "11042920");
-      Assert.assertEquals(transactions.get(1).getId(), "11042919");
-      Assert.assertEquals(transactions.get(2).getId(), "11042661");
-      Assert.assertEquals(transactions.get(3).getId(), "11042660");
+      assertEquals(transactions.size(), 4);
+      assertEquals(transactions.get(0).getId(), "11042920");
+      assertEquals(transactions.get(1).getId(), "11042919");
+      assertEquals(transactions.get(2).getId(), "11042661");
+      assertEquals(transactions.get(3).getId(), "11042660");
    }
 
    @Test
@@ -1820,10 +1827,10 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
       List<License> licenses = api.listLicenses().concat().toList();
 
-      Assert.assertEquals(licenses.size(), 3);
-      Assert.assertEquals(licenses.get(0).getName(), "msft_lwa_00135");
-      Assert.assertEquals(licenses.get(1).getName(), "msft_p73_04837");
-      Assert.assertEquals(licenses.get(2).getName(), "msft_tfa_00009");
+      assertEquals(licenses.size(), 3);
+      assertEquals(licenses.get(0).getName(), "msft_lwa_00135");
+      assertEquals(licenses.get(1).getName(), "msft_p73_04837");
+      assertEquals(licenses.get(2).getName(), "msft_tfa_00009");
    }
 
    @Test
