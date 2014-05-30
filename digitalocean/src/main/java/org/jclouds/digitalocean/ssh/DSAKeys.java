@@ -35,9 +35,6 @@ import java.security.interfaces.DSAParams;
 import java.security.interfaces.DSAPublicKey;
 import java.security.spec.DSAPublicKeySpec;
 
-import org.jclouds.crypto.Pems;
-import org.jclouds.ssh.SshKeys;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.hash.HashCode;

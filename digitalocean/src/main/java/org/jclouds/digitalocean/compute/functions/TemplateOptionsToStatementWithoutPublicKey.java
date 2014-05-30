@@ -20,8 +20,6 @@ import javax.inject.Singleton;
 
 import org.jclouds.compute.functions.TemplateOptionsToStatement;
 import org.jclouds.compute.options.TemplateOptions;
-import org.jclouds.digitalocean.compute.strategy.DigitalOceanComputeServiceAdapter;
-import org.jclouds.digitalocean.features.KeyPairApi;
 import org.jclouds.scriptbuilder.InitScript;
 import org.jclouds.scriptbuilder.domain.Statement;
 import org.jclouds.scriptbuilder.domain.StatementList;

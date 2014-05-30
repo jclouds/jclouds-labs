@@ -18,7 +18,6 @@ package org.jclouds.digitalocean.handlers;
 
 import javax.inject.Singleton;
 
-import org.jclouds.digitalocean.http.ResponseStatusFromPayloadHttpCommandExecutorService;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
