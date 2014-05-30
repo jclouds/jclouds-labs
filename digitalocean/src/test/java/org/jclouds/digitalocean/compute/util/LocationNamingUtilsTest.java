@@ -55,7 +55,7 @@ public class LocationNamingUtilsTest {
       extractRegionId(null);
    }
 
-   @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "location description should be in the form 'regionId/regionName'")
+   @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "location description should be in the form 'regionId/regionName' but was: foobar")
    public void testExtractRegionIdWithoutEncodedForm() {
       extractRegionId(location("foobar"));
    }
@@ -79,7 +79,7 @@ public class LocationNamingUtilsTest {
       extractRegionId(null);
    }
 
-   @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "location description should be in the form 'regionId/regionName'")
+   @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "location description should be in the form 'regionId/regionName' but was: foobar")
    public void testExtractRegionNameWithoutEncodedForm() {
       extractRegionId(location("foobar"));
    }

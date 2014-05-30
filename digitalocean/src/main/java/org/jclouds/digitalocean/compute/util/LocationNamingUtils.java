@@ -39,7 +39,8 @@ public class LocationNamingUtils {
       checkNotNull(location, "location cannot be null");
       String regionIdAndName = location.getDescription();
       int index = regionIdAndName.indexOf('/');
-      checkArgument(index >= 0, "location description should be in the form 'regionId/regionName'");
+      checkArgument(index >= 0, "location description should be in the form 'regionId/regionName' but was: %s",
+            regionIdAndName);
       return Integer.parseInt(regionIdAndName.substring(0, index));
    }
 
@@ -53,7 +54,8 @@ public class LocationNamingUtils {
       checkNotNull(location, "location cannot be null");
       String regionIdAndName = location.getDescription();
       int index = regionIdAndName.indexOf('/');
-      checkArgument(index >= 0, "location description should be in the form 'regionId/regionName'");
+      checkArgument(index >= 0, "location description should be in the form 'regionId/regionName' but was: %s",
+            regionIdAndName);
       return regionIdAndName.substring(index + 1);
    }
 
