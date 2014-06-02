@@ -54,7 +54,6 @@ public class Job {
    @ConstructorProperties({
       "resource_uri", "uuid"
    })
-
    public Job(String resourceUri, String uuid) {
       this.resourceUri = checkNotNull(resourceUri, "resourceUri");
       this.uuid = checkNotNull(uuid, "uuid");
