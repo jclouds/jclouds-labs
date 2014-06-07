@@ -27,9 +27,6 @@ import org.jclouds.azure.management.xml.HostedServiceHandler;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 // NOTE:without testName, this will not call @Before* and fail w/NPE during surefire
 @Test(groups = "unit", testName = "GetHostedServiceTest")
 public class GetHostedServiceTest extends BaseHandlerTest {

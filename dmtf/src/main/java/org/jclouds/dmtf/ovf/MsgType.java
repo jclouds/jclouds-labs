@@ -33,8 +33,6 @@ import com.google.common.base.Objects;
  * <pre>
  * &lt;complexType name="Msg_Type" /&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlType(name = "Msg_Type")
 public class MsgType {

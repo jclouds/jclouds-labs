@@ -28,8 +28,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Describes the usage by a virtual system.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "usageinfo")
 public class UsageInfo {

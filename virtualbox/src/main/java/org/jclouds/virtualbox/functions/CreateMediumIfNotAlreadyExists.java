@@ -39,9 +39,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 
-/**
- * @author Mattias Holmqvist
- */
 @Singleton
 public class CreateMediumIfNotAlreadyExists implements Function<HardDisk, IMedium> {
 

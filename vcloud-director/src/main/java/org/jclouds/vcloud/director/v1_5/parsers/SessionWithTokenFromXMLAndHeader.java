@@ -28,10 +28,6 @@ import org.jclouds.vcloud.director.v1_5.domain.SessionWithToken;
 
 import com.google.common.base.Function;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Singleton
 public class SessionWithTokenFromXMLAndHeader implements Function<HttpResponse, SessionWithToken> {
    @Resource

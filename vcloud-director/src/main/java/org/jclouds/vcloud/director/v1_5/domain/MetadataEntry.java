@@ -37,8 +37,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;xs:complexType name="MetadataType"&gt;
  * </pre>
- *
- * @author danikov
  */
 //TODO: this is a ridiculously complicated way of representing Map<String, String>
 @XmlRootElement(name = "MetadataEntry")

@@ -20,8 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * base class for all monitor events.
- * 
- * @author Ignasi Barrera
  */
 public class MonitorEvent<T> {
    /**

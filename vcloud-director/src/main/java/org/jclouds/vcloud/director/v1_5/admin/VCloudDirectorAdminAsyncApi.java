@@ -37,7 +37,6 @@ import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorAsyncApi;
  * Provides asynchronous access to VCloudDirector Admin via their REST API.
  * 
  * @see VCloudDirectorAdminApi
- * @author danikov
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface VCloudDirectorAdminAsyncApi extends VCloudDirectorAsyncApi {

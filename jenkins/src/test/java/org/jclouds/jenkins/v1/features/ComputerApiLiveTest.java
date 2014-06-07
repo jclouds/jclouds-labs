@@ -24,10 +24,6 @@ import org.jclouds.jenkins.v1.domain.ComputerView;
 import org.jclouds.jenkins.v1.internal.BaseJenkinsApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "ComputerApiLiveTest")
 public class ComputerApiLiveTest extends BaseJenkinsApiLiveTest {
 

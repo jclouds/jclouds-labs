@@ -26,9 +26,6 @@ import org.jclouds.fujitsu.fgcp.domain.ServerType;
 import org.jclouds.fujitsu.fgcp.domain.VSystem;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "live", enabled = true, singleThreaded = true, testName = "VirtualDCApiLiveTest")
 public class VirtualDCApiLiveTest extends BaseFGCPApiLiveTest {
 

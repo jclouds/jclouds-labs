@@ -23,9 +23,6 @@ import org.virtualbox_4_2.NetworkAttachmentType;
 
 import com.google.common.base.Function;
 
-/**
- * @author dralves
- */
 public class AttachHostOnlyAdapter implements Function<IMachine, Void> {
 
    private NetworkInterfaceCard networkInterfaceCard;

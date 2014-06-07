@@ -19,10 +19,6 @@ package org.jclouds.greenqloud.compute;
 import org.jclouds.ec2.compute.EC2ComputeServiceLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "GreenQloudComputeComputeServiceLiveTest")
 public class GreenQloudComputeComputeServiceLiveTestDisabled extends EC2ComputeServiceLiveTest {
 

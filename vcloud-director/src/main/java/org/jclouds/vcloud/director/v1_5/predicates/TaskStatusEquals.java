@@ -35,8 +35,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Test a {@link Task} status is in a particular set of {@link Task.Status statuses}.
- * 
- * @author grkvlt@apache.org
  */
 public class TaskStatusEquals implements Predicate<Task> {
 

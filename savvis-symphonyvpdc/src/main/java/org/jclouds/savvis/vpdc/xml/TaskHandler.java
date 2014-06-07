@@ -35,9 +35,6 @@ import org.jclouds.savvis.vpdc.util.Utils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-/**
- * @author Adrian Cole
- */
 public class TaskHandler extends ParseSax.HandlerWithResult<Task> {
    @javax.annotation.Resource
    protected Logger logger = Logger.NULL;

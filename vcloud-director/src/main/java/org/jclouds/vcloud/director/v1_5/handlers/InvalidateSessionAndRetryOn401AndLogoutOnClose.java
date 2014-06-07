@@ -39,9 +39,6 @@ import com.google.inject.Singleton;
  * expired, the server returns HTTP response code 401. The token expires after a configurable
  * interval of api inactivity. The default is 30 minutes after the token is created. After the
  * token expires, you must log in again to obtain a new token.
- * 
- * @author Adrian Cole
- * 
  */
 @Singleton
 public class InvalidateSessionAndRetryOn401AndLogoutOnClose extends BackoffLimitedRetryHandler {

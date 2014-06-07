@@ -25,7 +25,6 @@ import org.jclouds.azure.management.domain.OSImageParams;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157175">docs</a>
  * @see OSImageAsyncApi
- * @author Gerald Pereira, Adrian Cole
  */
 public interface OSImageApi {
 

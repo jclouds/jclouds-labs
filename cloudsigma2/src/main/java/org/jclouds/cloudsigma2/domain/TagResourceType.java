@@ -18,9 +18,6 @@ package org.jclouds.cloudsigma2.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Vladimir Shevchenko
- */
 public enum TagResourceType {
    VLANS, DRIVES, SERVERS, IPS, UNRECOGNIZED;
 

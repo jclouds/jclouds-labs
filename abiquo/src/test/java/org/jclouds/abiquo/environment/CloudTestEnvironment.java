@@ -42,8 +42,6 @@ import com.google.common.primitives.Longs;
 
 /**
  * Test environment for cloud live tests.
- * 
- * @author Francesc Montserrat
  */
 public class CloudTestEnvironment extends InfrastructureTestEnvironment {
 

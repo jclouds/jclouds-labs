@@ -30,8 +30,6 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
 
 /**
  * Infrastructure domain utilities.
- * 
- * @author Ignasi Barrera
  */
 public class InfrastructureResources {
    public static DatacenterDto datacenterPost() {

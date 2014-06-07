@@ -25,8 +25,6 @@ import com.google.inject.ImplementedBy;
 /**
  * Finds all virtual datacenters where the given {@link VirtualMachineTemplate}
  * can be deployed.
- * 
- * @author Ignasi Barrera
  */
 @ImplementedBy(FindCompatibleVirtualDatacentersForImageAndConversions.class)
 public interface FindCompatibleVirtualDatacenters {

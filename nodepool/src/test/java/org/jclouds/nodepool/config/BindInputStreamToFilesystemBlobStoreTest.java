@@ -33,9 +33,6 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
-/**
- * 
- */
 @Test(groups = "unit", testName = "BindInputStreamToFilesystemBlobStoreTest")
 public class BindInputStreamToFilesystemBlobStoreTest {
 

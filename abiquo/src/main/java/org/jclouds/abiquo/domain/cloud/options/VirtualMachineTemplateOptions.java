@@ -25,8 +25,6 @@ import com.abiquo.model.enumerator.StatefulInclusion;
 
 /**
  * Available options to query virtual machine templates.
- * 
- * @author Ignasi Barrera
  */
 public class VirtualMachineTemplateOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

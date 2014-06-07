@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class FirewallPolicy extends Item {
 
    public static class Builder extends Item.Builder {

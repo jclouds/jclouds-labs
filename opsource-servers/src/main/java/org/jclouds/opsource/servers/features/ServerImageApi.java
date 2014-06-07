@@ -23,7 +23,6 @@ import org.jclouds.opsource.servers.domain.ServerImagesList;
  * <p/>
  * 
  * @see ServerImageAsyncApi
- * @author Kedar Dave
  */
 public interface ServerImageApi {
 	

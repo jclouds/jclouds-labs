@@ -106,9 +106,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.net.InetAddresses;
 
-/**
- * @author grkvlt@apache.org
- */
 public class Checks {
 
    public static void checkResourceEntityType(ResourceEntity resourceEntity) {

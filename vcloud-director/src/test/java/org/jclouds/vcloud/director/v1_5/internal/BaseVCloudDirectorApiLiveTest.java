@@ -113,9 +113,6 @@ import com.google.inject.Guice;
 
 /**
  * Tests behavior of {@link VCloudDirectorApi} and acts as parent for other api live tests.
- * 
- * @author Adrian Cole
- * @author grkvlt@apache.org
  */
 @Listeners(FormatApiResultsListener.class)
 @Test(groups = "live")

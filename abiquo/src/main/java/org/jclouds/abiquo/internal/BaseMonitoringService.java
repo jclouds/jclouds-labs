@@ -50,9 +50,6 @@ import com.google.inject.Inject;
 
 /**
  * Utility service to monitor asynchronous operations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Singleton
 public class BaseMonitoringService implements MonitoringService {
@@ -170,7 +167,6 @@ public class BaseMonitoringService implements MonitoringService {
    /**
     * Performs the periodical monitoring tasks.
     * 
-    * @author Ignasi Barrera
     * @param <T>
     *           The type of the object being monitored.
     */

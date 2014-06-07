@@ -40,8 +40,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Tests behavior of the {@link VmApi}.
- * 
- * @author andrea turli
  */
 @Test(groups = { "live", "systemAdmin" }, singleThreaded = true, testName = "SystemAdminVmApiLiveTest")
 public class SystemAdminVmApiLiveTest extends AbstractVAppApiLiveTest {

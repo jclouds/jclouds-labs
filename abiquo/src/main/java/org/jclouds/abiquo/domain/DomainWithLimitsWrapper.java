@@ -24,8 +24,6 @@ import com.abiquo.model.transport.SingleResourceWithLimitsDto;
 /**
  * This class is used to decorate transport objects that have limits with high
  * level functionality.
- * 
- * @author Ignasi Barrera
  */
 public abstract class DomainWithLimitsWrapper<T extends SingleResourceWithLimitsDto> extends DomainWrapper<T> {
 

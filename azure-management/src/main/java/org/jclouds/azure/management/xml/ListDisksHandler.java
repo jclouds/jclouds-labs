@@ -28,9 +28,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.inject.Inject;
 
-/**
- * @author Gerald Pereira
- */
 public class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Set<Disk>> {
 
    private final DiskHandler diskHandler;

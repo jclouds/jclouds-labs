@@ -48,9 +48,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * The {@link ImageExtension} implementation for the DigitalOcean provider.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class DigitalOceanImageExtension implements ImageExtension {

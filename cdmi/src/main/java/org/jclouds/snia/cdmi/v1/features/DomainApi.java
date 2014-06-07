@@ -20,7 +20,6 @@ package org.jclouds.snia.cdmi.v1.features;
  * Domain Object Resource Operations
  * 
  * @see DomainAsyncApi
- * @author Adrian Cole
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
  */
 public interface DomainApi {

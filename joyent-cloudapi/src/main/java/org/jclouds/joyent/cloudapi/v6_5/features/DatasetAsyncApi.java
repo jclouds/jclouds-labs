@@ -39,7 +39,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * Provides asynchronous access to Dataset via their REST API.
  * <p/>
  * 
- * @author Gerald Pereira
  * @see DatasetApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#datasets">api doc</a>
  */

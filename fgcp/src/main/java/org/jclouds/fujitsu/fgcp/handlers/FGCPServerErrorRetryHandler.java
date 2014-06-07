@@ -31,8 +31,6 @@ import com.google.inject.Singleton;
 
 /**
  * Defines which requests should be retried.
- *
- * @author Dies Koper
  */
 @Singleton
 public class FGCPServerErrorRetryHandler implements HttpRetryHandler {

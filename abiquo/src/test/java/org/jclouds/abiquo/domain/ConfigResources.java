@@ -30,9 +30,6 @@ import com.google.common.io.Resources;
 
 /**
  * Enterprise domain utilities.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class ConfigResources {
    public static LicenseDto licensePost() {

@@ -29,8 +29,6 @@ import org.testng.annotations.Test;
 
 /**
  * Test the {@link GroupApi} by observing its side effects.
- * 
- * @author danikov
  */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "GroupApiExpectTest")
 public class GroupApiExpectTest extends VCloudDirectorAdminApiExpectTest {

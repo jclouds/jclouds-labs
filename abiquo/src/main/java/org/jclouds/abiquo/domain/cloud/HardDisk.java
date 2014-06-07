@@ -34,7 +34,6 @@ import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
  * destroyed when it is undeployed. If there is a need to use persistent
  * storage, a persistent {@link Volume} should be used instead.
  * 
- * @author Ignasi Barrera
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Hard+Disks+Resource">
  *      http://community.abiquo.com/display/ABI20/Hard+Disks+Resource</a>

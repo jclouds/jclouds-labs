@@ -89,8 +89,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Tests behavior of the {@link VmApi}.
- * 
- * @author grkvlt@apache.org
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VmApiLiveTest")
 public class VmApiLiveTest extends AbstractVAppApiLiveTest {

@@ -26,8 +26,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link BaseMonitoringService} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BaseMonitoringServiceTest")
 public class BaseMonitoringServiceTest extends BaseInjectionTest {

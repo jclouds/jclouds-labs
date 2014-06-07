@@ -92,9 +92,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * including downloading isos and creating cache/config directories. This also
  * implements {@link Supplier} in order to provide jetty with the current image
  * (only one master can be created at a time).
- * 
- * @author dralves, andrea turli
- * 
  */
 @Singleton
 public class MastersLoadingCache extends AbstractLoadingCache<Image, Master> {

@@ -34,8 +34,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link AdminQueryApi} by observing its side effects.
- * 
- * @author Aled Sage
  */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminQueryApiExpectTest")
 public class AdminQueryApiExpectTest extends VCloudDirectorAdminApiExpectTest {

@@ -25,9 +25,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
-/**
- * @author grkvlt@apache.org
- */
 public class VCloudDirectorException extends RuntimeException {
 
    private static final String MSG_FMT = "%s (%d) %s: %s";   

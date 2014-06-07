@@ -24,9 +24,6 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Subscription {
 
    public static class Builder {

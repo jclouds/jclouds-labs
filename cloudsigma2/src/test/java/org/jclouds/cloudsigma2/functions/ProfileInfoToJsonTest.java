@@ -27,9 +27,6 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class ProfileInfoToJsonTest {
 

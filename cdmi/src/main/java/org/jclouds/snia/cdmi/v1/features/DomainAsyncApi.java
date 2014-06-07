@@ -25,7 +25,6 @@ import org.jclouds.snia.cdmi.v1.filters.StripExtraAcceptHeader;
  * Domain Object Resource Operations
  * 
  * @see DomainApi
- * @author Adrian Cole
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
  */
 @RequestFilters({ BasicAuthenticationAndTenantId.class, StripExtraAcceptHeader.class })

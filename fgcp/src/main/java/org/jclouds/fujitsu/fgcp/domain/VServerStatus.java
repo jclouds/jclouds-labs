@@ -24,8 +24,6 @@ import com.google.common.base.CaseFormat;
 
 /**
  * Possible statuses of a virtual server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vserverStatus")
 public enum VServerStatus {

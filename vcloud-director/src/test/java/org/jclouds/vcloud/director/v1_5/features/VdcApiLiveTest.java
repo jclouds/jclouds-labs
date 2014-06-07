@@ -61,8 +61,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Tests behavior of {@link VdcApi}
- * 
- * @author danikov, Adrian Cole
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VdcApiLiveTest")
 public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {

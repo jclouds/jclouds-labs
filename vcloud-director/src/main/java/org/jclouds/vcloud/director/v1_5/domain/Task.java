@@ -47,8 +47,6 @@ import com.google.common.collect.Maps;
  * </pre>
  *
  *  TODO: this object and the hierarchy is wrong.  it is literally a Task with a Task container.  please review class diagram
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "Task")
 public class Task extends Entity {

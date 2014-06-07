@@ -46,8 +46,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Live integration tests for the {@link VirtualMachine} domain class.
- * 
- * @author Susana Acedo
  */
 @Test(groups = "live", testName = "VirtualMachineLiveTest")
 public class VirtualMachineLiveTest extends BaseAbiquoLiveApiTest {

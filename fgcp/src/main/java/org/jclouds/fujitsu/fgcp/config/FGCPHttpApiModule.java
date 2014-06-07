@@ -54,8 +54,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Configures the connection to the FGCP endpoint.
- * 
- * @author Dies Koper
  */
 @ConfiguresHttpApi
 public class FGCPHttpApiModule extends HttpApiModule<FGCPApi> {

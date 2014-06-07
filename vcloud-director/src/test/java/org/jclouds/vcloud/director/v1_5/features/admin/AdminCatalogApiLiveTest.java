@@ -46,8 +46,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Tests live behavior of {@link AdminCatalogApi}.
- * 
- * @author danikov
  */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "CatalogApiLiveTest")
 public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {

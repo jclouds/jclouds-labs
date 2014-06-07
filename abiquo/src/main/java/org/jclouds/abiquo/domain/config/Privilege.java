@@ -24,9 +24,6 @@ import com.abiquo.server.core.enterprise.PrivilegeDto;
 
 /**
  * Adds high level functionality to {@link PrivilegeDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class Privilege extends DomainWrapper<PrivilegeDto> {
    /**

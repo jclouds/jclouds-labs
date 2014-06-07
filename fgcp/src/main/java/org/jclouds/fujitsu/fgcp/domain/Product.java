@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a product for which usage information can be queried.
- * 
- * @author Dies Koper
  */
 public class Product {
    @XmlElement(name = "productName")

@@ -26,8 +26,6 @@ import com.abiquo.server.core.task.JobDto;
 
 /**
  * Adds generic high level functionality to {JobDto}.
- * 
- * @author Francesc Montserrat
  */
 public class AsyncJob extends DomainWrapper<JobDto> {
    /**

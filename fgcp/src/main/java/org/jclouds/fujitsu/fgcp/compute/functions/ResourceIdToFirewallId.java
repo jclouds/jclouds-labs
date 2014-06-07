@@ -26,8 +26,6 @@ import com.google.common.base.Function;
 /**
  * Determines the id of the firewall associated with a virtual system, server,
  * load balancer or disk.
- * 
- * @author Dies Koper
  */
 @Singleton
 public class ResourceIdToFirewallId implements Function<String, String> {

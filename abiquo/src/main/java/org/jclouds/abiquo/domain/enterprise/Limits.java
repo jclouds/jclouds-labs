@@ -33,8 +33,6 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 /**
  * Adds high level functionality to {@link DatacenterLimitsDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource"
  *      >

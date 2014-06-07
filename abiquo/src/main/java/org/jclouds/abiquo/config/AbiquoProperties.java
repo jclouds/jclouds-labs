@@ -18,8 +18,6 @@ package org.jclouds.abiquo.config;
 
 /**
  * Configuration properties and constants used in Abiquo connections.
- * 
- * @author Ignasi Barrera
  */
 public interface AbiquoProperties {
    /**

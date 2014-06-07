@@ -40,8 +40,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Live integration tests for the {@link Event} domain class.
- * 
- * @author Vivien Mahé
  */
 @Test(groups = "api", testName = "EventLiveApiTest")
 public class EventLiveApiTest extends BaseAbiquoApiLiveApiTest {

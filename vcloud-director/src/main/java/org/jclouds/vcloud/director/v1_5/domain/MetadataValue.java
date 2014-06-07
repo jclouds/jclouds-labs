@@ -22,6 +22,4 @@ package org.jclouds.vcloud.director.v1_5.domain;
  * <pre>
  * &lt;xs:complexType name="MetadataType"&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */

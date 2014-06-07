@@ -20,10 +20,6 @@ import org.jclouds.opsource.servers.domain.Account;
 import org.jclouds.opsource.servers.internal.BaseOpSourceServersApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "OpSourceServersApiExperimentLiveTest")
 public class OpSourceServersApiExperimentLiveTest extends BaseOpSourceServersApiLiveTest {
 

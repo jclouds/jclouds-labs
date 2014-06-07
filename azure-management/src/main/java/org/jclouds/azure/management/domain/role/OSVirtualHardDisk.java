@@ -22,9 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Contains the parameters Windows Azure uses to create the operating system
  * disk for the virtual machine.
- * 
- * @author gpereira
- * 
  */
 @XmlRootElement(name = "OSVirtualHardDisk")
 public class OSVirtualHardDisk extends VirtualHardDisk {

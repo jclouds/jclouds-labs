@@ -40,8 +40,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;xs:complexType name="ReferenceType"&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlSeeAlso({ VAppReference.class, CatalogReference.class, RoleReference.class })
 @XmlRootElement(name = "Reference")

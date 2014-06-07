@@ -24,8 +24,6 @@ import org.jclouds.domain.Location;
 
 /**
  * Utility class to encode and decode the region id and name in a {@link Location}.
- * 
- * @author Ignasi Barrera
  */
 public class LocationNamingUtils {
 

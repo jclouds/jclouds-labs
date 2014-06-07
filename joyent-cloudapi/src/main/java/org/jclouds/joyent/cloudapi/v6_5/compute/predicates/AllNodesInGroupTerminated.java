@@ -30,9 +30,6 @@ import org.jclouds.joyent.cloudapi.v6_5.domain.datacenterscoped.DatacenterAndNam
 
 import com.google.common.base.Predicate;
 
-/**
- * @author Adrian Cole
- */
 public class AllNodesInGroupTerminated implements Predicate<DatacenterAndName> {
    private final ComputeService computeService;
 

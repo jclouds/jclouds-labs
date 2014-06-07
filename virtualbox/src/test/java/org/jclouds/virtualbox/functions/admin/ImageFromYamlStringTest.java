@@ -31,9 +31,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit", testName = "ImageFromYamlStringTest")
 public class ImageFromYamlStringTest {
 

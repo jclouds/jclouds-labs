@@ -29,8 +29,6 @@ import com.google.common.collect.Sets;
 /**
  * Represents a virtual system with servers, additional storage, public IP
  * addresses and networks.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vsys")
 public class VSystemWithDetails extends VSystem {

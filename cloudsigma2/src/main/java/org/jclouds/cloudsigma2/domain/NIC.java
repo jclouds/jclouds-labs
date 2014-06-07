@@ -19,9 +19,6 @@ package org.jclouds.cloudsigma2.domain;
 import javax.inject.Named;
 import java.beans.ConstructorProperties;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class NIC {
    public static class Builder {
       private int bootOrder;

@@ -28,7 +28,6 @@ import com.google.common.base.Optional;
  * disk in the image repository
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
- * @author Adrian Cole
  */
 public class Disk {
    public static class Attachment {

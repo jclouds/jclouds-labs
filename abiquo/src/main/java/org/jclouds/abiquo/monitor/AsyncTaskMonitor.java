@@ -26,8 +26,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * {@link VirtualMachine} monitoring features.
- * 
- * @author Ignasi Barrera
  */
 @ImplementedBy(BaseAsyncTaskMonitor.class)
 public interface AsyncTaskMonitor extends MonitoringService {

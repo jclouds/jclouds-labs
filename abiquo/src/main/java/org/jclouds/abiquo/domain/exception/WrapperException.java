@@ -22,8 +22,6 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
 
 /**
  * Exception thrown during the wrapping process.
- * 
- * @author Ignasi Barrera
  */
 public class WrapperException extends RuntimeException {
 

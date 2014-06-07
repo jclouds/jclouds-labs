@@ -21,8 +21,6 @@ import com.google.inject.AbstractModule;
 
 /**
  * per docs, we are to use pool mode.
- * 
- * @author danikov
  */
 public class CarrenzaVCloudDirectorComputeServiceContextModule extends AbstractModule {
 

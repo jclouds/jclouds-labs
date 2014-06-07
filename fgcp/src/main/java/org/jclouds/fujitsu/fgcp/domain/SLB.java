@@ -25,8 +25,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents a software load balancer.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "slb")
 public class SLB extends BuiltinServer {

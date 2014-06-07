@@ -28,8 +28,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link DatacenterToLocation} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "DatacenterToLocationTest")
 public class DatacenterToLocationTest {

@@ -27,8 +27,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Container for {@link RESTLink} filters.
- * 
- * @author Ignasi Barrera
  */
 public class LinkPredicates {
 

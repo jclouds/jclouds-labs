@@ -44,9 +44,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code VirtualMachineTemplateApi}
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "VirtualMachineTemplateApiTest")
 public class VirtualMachineTemplateApiTest extends BaseAbiquoApiTest<VirtualMachineTemplateApi> {

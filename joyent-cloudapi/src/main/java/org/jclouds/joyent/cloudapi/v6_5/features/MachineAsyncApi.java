@@ -47,7 +47,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * Provides asynchronous access to Machine via their REST API.
  * <p/>
  * 
- * @author Gerald Pereira
  * @see MachineApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#machines">api doc</a>
  */

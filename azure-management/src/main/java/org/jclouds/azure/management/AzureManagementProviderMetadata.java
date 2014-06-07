@@ -27,8 +27,6 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 /**
  * Implementation of {@link org.jclouds.types.ProviderMetadata} for Microsoft Azure Service
  * Management Service.
- * 
- * @author Gerald Pereira
  */
 public class AzureManagementProviderMetadata extends BaseProviderMetadata {
 

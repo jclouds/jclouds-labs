@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query licenses.
- * 
- * @author Francesc Montserrat
  */
 public class LicenseOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

@@ -38,8 +38,6 @@ import com.google.common.collect.Sets;
 
 /**
  * A vCloud specific {@link ResourceAllocationSettingData} extension.
- * 
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "Item", namespace = VCLOUD_1_5_NS)
 public class RasdItem extends ResourceAllocationSettingData {

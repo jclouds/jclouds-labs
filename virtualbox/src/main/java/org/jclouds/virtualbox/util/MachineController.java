@@ -53,8 +53,6 @@ import com.google.inject.Inject;
 
 /**
  * Utilities to manage VirtualBox machine life cycle.
- * 
- * @author Adrian Cole, Mattias Holmqvist, Andrea Turli
  */
 
 @Singleton

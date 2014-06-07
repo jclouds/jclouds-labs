@@ -22,7 +22,6 @@ package org.jclouds.snia.cdmi.v1.queryparams;
  * queryParam of key=value separated by &. Rather it follows the form: ?<fieldname>;<fieldname>;....
  * ?metadata:<prefix>;... ?children:<from>-<to>;... ?value:<from>-<to>;...
  * 
- * @author Kenneth Nagin
  */
 public class CDMIObjectQueryParams {
 

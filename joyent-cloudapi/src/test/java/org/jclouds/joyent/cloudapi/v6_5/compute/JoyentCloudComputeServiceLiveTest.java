@@ -22,10 +22,6 @@ import org.testng.annotations.Test;
 
 import com.google.inject.Module;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "JoyentCloudComputeServiceLiveTest")
 public class JoyentCloudComputeServiceLiveTest extends BaseComputeServiceLiveTest {
 

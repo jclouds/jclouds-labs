@@ -53,8 +53,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="AbstractVAppType" &gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlType(name = "AbstractVAppType")
 public abstract class AbstractVAppType extends ResourceEntity {

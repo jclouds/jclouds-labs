@@ -46,9 +46,6 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.google.common.net.MediaType;
 
-/**
- * @author Kenneth Nagin
- */
 @Test(groups = "live", testName = "DataNonCDMIContentTypeApiLiveTest")
 public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
    @Test

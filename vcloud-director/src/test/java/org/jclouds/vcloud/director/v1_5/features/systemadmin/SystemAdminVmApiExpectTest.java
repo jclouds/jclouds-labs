@@ -52,8 +52,6 @@ import org.testng.internal.annotations.Sets;
 
 /**
  * Allows us to test the {@link VmApi} allowed to system administrators
- * 
- * @author andrea turli
  */
 @Test(groups = { "unit", "systemAdmin" }, singleThreaded = true, testName = "SystemAdminVmApiExpectTest")
 public class SystemAdminVmApiExpectTest extends VCloudDirectorAdminApiExpectTest {

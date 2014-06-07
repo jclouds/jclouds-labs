@@ -28,8 +28,6 @@ import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 
 /**
  * Parses a paginated unmnaged ip list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseUnmanagedIps extends BasePaginationParser<UnmanagedIpDto, UnmanagedIpsDto> {

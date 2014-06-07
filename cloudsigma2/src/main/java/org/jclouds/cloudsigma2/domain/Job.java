@@ -22,9 +22,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Named;
 
-/**
- * @author Rahul Ruikar
- */
 public class Job {
 
    public static class Builder {

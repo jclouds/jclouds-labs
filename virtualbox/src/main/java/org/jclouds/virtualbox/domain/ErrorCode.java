@@ -40,8 +40,6 @@ import com.google.common.collect.ImmutableMap;
  *    ErrorCode errorCode = ErrorCode.valueOf(faultCode);
  * }
  * </pre>
- * 
- * @author Mattias Holmqvist
  */
 public enum ErrorCode {
 

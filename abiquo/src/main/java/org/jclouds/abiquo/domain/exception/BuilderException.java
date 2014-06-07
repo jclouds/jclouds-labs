@@ -18,8 +18,6 @@ package org.jclouds.abiquo.domain.exception;
 
 /**
  * Exception thrown during domain object building.
- * 
- * @author Ignasi Barrera
  */
 public class BuilderException extends RuntimeException {
 

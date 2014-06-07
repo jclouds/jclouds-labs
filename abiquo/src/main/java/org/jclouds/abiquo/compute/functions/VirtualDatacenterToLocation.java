@@ -42,8 +42,6 @@ import com.google.common.collect.ImmutableSet;
  * Virtual datacenters will be considered zones, since images will be deployed
  * in a virtual datacenter. Each zone will be scoped into a physical datacenter
  * (region).
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class VirtualDatacenterToLocation implements Function<VirtualDatacenter, Location> {

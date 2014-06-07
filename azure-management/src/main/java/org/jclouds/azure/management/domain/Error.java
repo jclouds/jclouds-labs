@@ -25,8 +25,6 @@ import com.google.common.base.Objects;
  * additional error information that is defined by the management service. Th
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460801" >api</a>
- * 
- * @author Adrian Cole
  */
 public class Error {
 

@@ -31,8 +31,6 @@ import com.google.common.base.Throwables;
 
 /**
  * Sets up jetty so that it can serve the preseed.cfg file to automate master creation.
- * 
- * @author Andrea Turli, David Alves
  */
 public class PreseedCfgServer {
 

@@ -63,9 +63,6 @@ import com.google.inject.TypeLiteral;
  * Each tenant has a set of available locations, and a set of compute,
  * networking and storage resources that can be consumed in the assigned
  * locations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto> {
    /** The default value for the reservation restricted flag. */

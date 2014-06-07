@@ -79,8 +79,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code InfrastructureApi}
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "InfrastructureApiTest")
 public class InfrastructureApiTest extends BaseAbiquoApiTest<InfrastructureApi> {

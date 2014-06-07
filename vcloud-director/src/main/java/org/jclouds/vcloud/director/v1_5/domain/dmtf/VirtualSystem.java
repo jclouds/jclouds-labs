@@ -33,10 +33,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- */
 @XmlRootElement(name = "VirtualSystem", namespace = OVF_NS)
 public class VirtualSystem extends BaseVirtualSystem {
 

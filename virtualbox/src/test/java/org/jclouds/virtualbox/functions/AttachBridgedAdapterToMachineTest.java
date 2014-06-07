@@ -29,9 +29,6 @@ import org.virtualbox_4_2.IMachine;
 import org.virtualbox_4_2.INetworkAdapter;
 import org.virtualbox_4_2.NetworkAttachmentType;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit", testName = "AttachBridgedAdapterToMachineTest")
 public class AttachBridgedAdapterToMachineTest {
 

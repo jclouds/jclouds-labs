@@ -20,9 +20,6 @@ import org.testng.annotations.Test;
 
 /**
  * {@inheritDoc}
- * 
- * @author danikov
- * @author grkvlt
  */
 @Test(groups = { "live", "compute" }, testName = "CarrenzaVCloudDirectorTemplateBuilderLiveTest")
 public class CarrenzaVCloudDirectorTemplateBuilderLiveTest {

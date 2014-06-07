@@ -61,8 +61,6 @@ import com.google.inject.name.Names;
 
 /**
  * Unit tests for the {@link DropletToNodeMetadata} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "DropletToNodeMetadataTest")
 public class DropletToNodeMetadataTest {

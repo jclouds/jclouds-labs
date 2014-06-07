@@ -28,8 +28,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Utility method to work with {@link RESTLink} objects.
- * 
- * @author Ignasi Barrera
  */
 public class LinkUtils {
    /**

@@ -28,9 +28,6 @@ import com.google.common.base.Predicate;
 
 /**
  * DigitalOcean image distributions.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public enum Distribution {
    ARCHLINUX(OsFamily.ARCH, "Arch Linux"), 

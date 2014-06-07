@@ -43,8 +43,6 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 /**
  * Tests annotation parsing of {@code VMAsyncApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit")
 public class VMAsyncApiTest extends BaseVPDCAsyncApiTest<VMAsyncApi> {

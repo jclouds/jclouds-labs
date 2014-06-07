@@ -24,10 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.base.Objects;
 
-/**
- * 
- * 
- */
 @XmlRootElement(name = "Account", namespace = DIRECTORY)
 public class Account {
    public static Builder builder() {

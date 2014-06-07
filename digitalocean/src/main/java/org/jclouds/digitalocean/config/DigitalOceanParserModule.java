@@ -51,9 +51,6 @@ import com.google.inject.Provides;
 
 /**
  * Custom parser bindings.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class DigitalOceanParserModule extends AbstractModule {
 

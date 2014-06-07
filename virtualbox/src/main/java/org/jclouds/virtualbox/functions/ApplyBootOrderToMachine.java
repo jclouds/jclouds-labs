@@ -22,9 +22,6 @@ import org.virtualbox_4_2.IMachine;
 
 import java.util.Map;
 
-/**
- * @author Andrea Turli
- */
 public class ApplyBootOrderToMachine implements Function<IMachine, Void> {
 
 

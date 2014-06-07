@@ -40,9 +40,6 @@ import com.google.inject.name.Named;
 
 /**
  * Provides access to the Droplet management features.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @RequestFilters(AuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)

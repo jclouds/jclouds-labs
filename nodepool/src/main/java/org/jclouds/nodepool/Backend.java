@@ -29,8 +29,6 @@ import javax.inject.Qualifier;
 
 /**
  * Designates that this Resource qualifies an object to the back-end of the pool
- * 
- * @author Adrian Cole
  */
 @Target( { ANNOTATION_TYPE, FIELD, METHOD, PARAMETER })
 @Retention(RUNTIME)

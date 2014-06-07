@@ -26,12 +26,6 @@ import org.jclouds.logging.Logger;
 
 import com.google.common.base.Predicate;
 
-/**
- * 
- * @author Adrian Cole
- * @author Dies Koper
- * 
- */
 @Singleton
 public class ServerStarted implements Predicate<String> {
 

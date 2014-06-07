@@ -37,9 +37,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code TaskApi}
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "TaskApiTest")
 public class TaskApiTest extends BaseAbiquoApiTest<TaskApi> {

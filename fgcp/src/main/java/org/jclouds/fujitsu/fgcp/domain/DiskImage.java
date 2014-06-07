@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
  * Represents a disk image with pre-installed OS and/or software.
  * <p>
  * It is used as base for the system disk of a virtual server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "diskimage")
 public class DiskImage {

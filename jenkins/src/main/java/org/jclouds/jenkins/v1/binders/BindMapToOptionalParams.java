@@ -28,8 +28,6 @@ import com.google.common.collect.Multimaps;
 
 /**
  * Binds the map to parameters.
- * 
- * @author Andrea Turli
  */
 public class BindMapToOptionalParams implements Binder {
 

@@ -37,9 +37,6 @@ import com.google.common.base.Supplier;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 
-/**
- * @author danikov
- */
 @Singleton
 public class VCloudDirectorContextImpl extends RestContextImpl<VCloudDirectorApi, VCloudDirectorAsyncApi> implements
       VCloudDirectorContext {

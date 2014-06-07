@@ -26,10 +26,6 @@ import org.jclouds.jenkins.v1.domain.Node;
 import org.jclouds.json.BaseItemParserTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ParseNodeTest")
 public class ParseNodeTest extends BaseItemParserTest<Node> {
 

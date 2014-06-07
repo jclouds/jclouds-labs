@@ -25,9 +25,6 @@ import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 
 import com.google.inject.ImplementedBy;
 
-/**
- * @author danikov
- */
 @ImplementedBy(VCloudDirectorContextImpl.class)
 public interface VCloudDirectorContext extends RestContext<VCloudDirectorApi, VCloudDirectorAsyncApi> {
    

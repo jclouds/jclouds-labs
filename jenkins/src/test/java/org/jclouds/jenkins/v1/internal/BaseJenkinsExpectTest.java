@@ -20,8 +20,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing Jenkins Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseJenkinsExpectTest<T> extends BaseRestApiExpectTest<T> {
     public BaseJenkinsExpectTest() {

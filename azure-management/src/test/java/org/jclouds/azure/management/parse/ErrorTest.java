@@ -26,9 +26,6 @@ import org.jclouds.azure.management.xml.ErrorHandler;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 // NOTE:without testName, this will not call @Before* and fail w/NPE during surefire
 @Test(groups = "unit", testName = "ErrorTest")
 public class ErrorTest extends BaseHandlerTest {

@@ -33,9 +33,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * Provides high level Abiquo administration operations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @ImplementedBy(BaseAdministrationService.class)
 public interface AdministrationService {

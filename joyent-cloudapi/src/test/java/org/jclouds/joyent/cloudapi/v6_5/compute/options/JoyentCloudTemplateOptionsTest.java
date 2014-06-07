@@ -30,8 +30,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests possible uses of JoyentCloudTemplateOptions and JoyentCloudTemplateOptions.Builder.*
- * 
- * @author Adrian Cole
  */
 @Test(testName = "JoyentCloudTemplateOptionsTest")
 public class JoyentCloudTemplateOptionsTest {

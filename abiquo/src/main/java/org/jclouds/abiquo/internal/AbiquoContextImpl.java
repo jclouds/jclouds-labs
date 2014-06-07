@@ -39,8 +39,6 @@ import com.google.common.reflect.TypeToken;
 /**
  * Abiquo {@link ApiContext} implementation to expose high level Abiquo
  * functionalities.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AbiquoContextImpl extends ComputeServiceContextImpl implements AbiquoContext {

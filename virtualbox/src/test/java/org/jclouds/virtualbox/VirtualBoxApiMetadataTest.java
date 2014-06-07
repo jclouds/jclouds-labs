@@ -19,10 +19,6 @@ package org.jclouds.virtualbox;
 import org.jclouds.compute.internal.BaseComputeServiceApiMetadataTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "VirtualBoxApiMetadataTest")
 public class VirtualBoxApiMetadataTest extends BaseComputeServiceApiMetadataTest {
 

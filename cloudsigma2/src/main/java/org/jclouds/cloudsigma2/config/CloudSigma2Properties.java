@@ -16,9 +16,6 @@
  */
 package org.jclouds.cloudsigma2.config;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class CloudSigma2Properties {
 
    /**

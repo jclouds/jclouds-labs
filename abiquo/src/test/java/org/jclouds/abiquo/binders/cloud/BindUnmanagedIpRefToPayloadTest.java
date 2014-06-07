@@ -33,8 +33,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Unit tests for the {@link BindUnmanagedIpRefToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindUnmanagedIpRefToPayloadTest")
 public class BindUnmanagedIpRefToPayloadTest {

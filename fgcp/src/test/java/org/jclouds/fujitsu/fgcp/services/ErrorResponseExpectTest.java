@@ -26,9 +26,6 @@ import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "unit", testName = "ErrorResponseExpectTest", singleThreaded = true)
 public class ErrorResponseExpectTest extends BaseFGCPRestApiExpectTest {
 

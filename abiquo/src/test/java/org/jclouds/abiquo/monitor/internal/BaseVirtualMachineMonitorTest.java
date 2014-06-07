@@ -24,8 +24,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link BaseVirtualMachineMonitor} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BaseVirtualMachineMonitorTest")
 public class BaseVirtualMachineMonitorTest extends BaseInjectionTest {

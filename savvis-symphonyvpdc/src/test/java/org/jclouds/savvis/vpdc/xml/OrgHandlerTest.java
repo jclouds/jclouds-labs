@@ -33,8 +33,6 @@ import com.google.inject.Injector;
 
 /**
  * Tests behavior of {@code OrgHandler}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit")
 public class OrgHandlerTest {

@@ -25,8 +25,6 @@ import com.abiquo.server.core.config.SystemPropertyDto;
 /**
  * Adds high level functionality to {@link SystemPropertyDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/System+Property+resource"
  *      > http://community.abiquo.com/display/ABI20/System+Property+resource</a>

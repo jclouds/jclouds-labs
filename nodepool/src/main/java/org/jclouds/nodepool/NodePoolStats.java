@@ -18,9 +18,6 @@ package org.jclouds.nodepool;
 
 /**
  * NodePool statistics and status.
- * 
- * @author David Alves
- * 
  */
 public class NodePoolStats {
 

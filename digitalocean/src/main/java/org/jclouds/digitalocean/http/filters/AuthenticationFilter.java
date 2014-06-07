@@ -31,9 +31,6 @@ import com.google.common.base.Supplier;
 
 /**
  * Adds the authentication query parameters to the requests.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class AuthenticationFilter implements HttpRequestFilter {

@@ -39,8 +39,6 @@ import org.jclouds.rest.annotations.Transform;
 /**
  * API relating to system templates, also referred to as virtual
  * system descriptors.
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

@@ -25,8 +25,6 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 
 /**
  * Unit tests for the {@link VirtualMachineStateToNodeState} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualMachineStateToNodeStateTest")
 public class VirtualMachineStateToNodeStateTest {

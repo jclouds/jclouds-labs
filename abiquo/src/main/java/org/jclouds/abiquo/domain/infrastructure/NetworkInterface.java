@@ -36,8 +36,6 @@ import com.google.inject.TypeLiteral;
  * Allows to specify the {@link NetworkServiceType} for the network interface.
  * This way all network interfaces have the information of the kind of network
  * they are attached to.
- * 
- * @author Jaume Devesa
  */
 public class NetworkInterface extends DomainWrapper<NetworkInterfaceDto> {
    /**

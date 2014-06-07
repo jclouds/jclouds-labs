@@ -54,8 +54,6 @@ import com.google.common.collect.Maps;
  * <li>snapshots of virtual systems
  * </ul>
  * 
- * @author Adrian Cole
- * @author grkvlt@apache.org
  * @see <a href="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_VirtualSystemSettingData.xsd">CIM_VirtualSystemSettingData</a>
  */
 @XmlType(name = "CIM_VirtualSystemSettingData_Type", namespace = OVF_NS,

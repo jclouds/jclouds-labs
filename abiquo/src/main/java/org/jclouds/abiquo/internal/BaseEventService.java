@@ -36,9 +36,6 @@ import com.google.common.annotations.VisibleForTesting;
 
 /**
  * Provides high level Abiquo event operations.
- * 
- * @author Ignasi Barrera
- * @author Vivien Mahé
  */
 @Singleton
 public class BaseEventService implements EventService {

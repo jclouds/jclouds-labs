@@ -23,8 +23,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests live behavior of {@link AccountApi}.
- * 
- * @author Adrian Cole
  */
 @Test(groups = { "live" }, singleThreaded = true, testName = "AccountApiLiveTest")
 public class AccountApiLiveTest extends BaseOpSourceServersApiLiveTest {

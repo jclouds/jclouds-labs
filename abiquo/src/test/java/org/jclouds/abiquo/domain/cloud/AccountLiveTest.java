@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live integration tests
- * 
- * @author Susana Acedo
  */
 @Test(groups = "live", testName = "AccountLiveTest")
 public class AccountLiveTest extends BaseAbiquoLiveApiTest {

@@ -26,8 +26,6 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;element name="Property" /&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlType(name = "")
 @XmlRootElement(name = "Property")

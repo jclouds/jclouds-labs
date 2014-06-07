@@ -24,9 +24,6 @@ import com.abiquo.server.core.infrastructure.DatastoreDto;
 
 /**
  * Adds high level functionality to {@link DatastoreDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class Datastore extends DomainWrapper<DatastoreDto> {
    /**

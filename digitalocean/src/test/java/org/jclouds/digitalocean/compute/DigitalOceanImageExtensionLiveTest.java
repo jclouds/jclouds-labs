@@ -24,9 +24,6 @@ import com.google.inject.Module;
 
 /**
  * Live tests for the {@link org.jclouds.compute.extensions.ImageExtension} integration.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "live", singleThreaded = true, testName = "DigitalOceanImageExtensionLiveTest")
 public class DigitalOceanImageExtensionLiveTest extends BaseImageExtensionLiveTest {

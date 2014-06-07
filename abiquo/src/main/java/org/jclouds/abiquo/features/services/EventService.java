@@ -24,9 +24,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * Provides high level Abiquo event operations.
- * 
- * @author Ignasi Barrera
- * @author Vivien Mahé
  */
 @ImplementedBy(BaseEventService.class)
 public interface EventService {

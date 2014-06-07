@@ -48,9 +48,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.inject.Injector;
 
-/**
- * @author Adrian Cole, David Alves
- */
 @Test(groups = "unit", testName = "NodeMetadataStoreTest")
 public class NodeMetadataStoreTest {
 

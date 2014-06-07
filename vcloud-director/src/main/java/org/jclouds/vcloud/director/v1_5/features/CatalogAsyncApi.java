@@ -43,7 +43,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see CatalogApi
- * @author grkvlt@apache.org, Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface CatalogAsyncApi {

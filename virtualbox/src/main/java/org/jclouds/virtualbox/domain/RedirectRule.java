@@ -22,9 +22,6 @@ import org.virtualbox_4_2.NATProtocol;
 
 import com.google.common.base.Objects;
 
-/**
- * @author Mattias Holmqvist
- */
 public class RedirectRule {
 
    private final NATProtocol protocol;

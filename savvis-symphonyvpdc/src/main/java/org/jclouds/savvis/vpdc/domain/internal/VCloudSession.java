@@ -20,10 +20,6 @@ import java.util.Set;
 
 import org.jclouds.savvis.vpdc.domain.Resource;
 
-/**
- * 
- * @author Adrian Cole
- */
 public interface VCloudSession {
    String getVCloudToken();
 

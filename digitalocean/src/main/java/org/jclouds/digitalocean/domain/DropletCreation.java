@@ -24,9 +24,6 @@ import com.google.inject.name.Named;
 
 /**
  * An DropletCreation response.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class DropletCreation {
 

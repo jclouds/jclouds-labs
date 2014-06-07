@@ -35,11 +35,6 @@ import org.jclouds.savvis.vpdc.domain.FirewallRule;
 
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Kedar Dave
- * 
- */
 @Singleton
 public class BindFirewallRuleToXmlPayload extends BindToStringPayload implements MapBinder {
    @Override

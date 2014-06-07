@@ -43,11 +43,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Guice;
 
-/**
- * 
- * 
- * @author Adrian Cole
- */
 @Test(testName = "OrphanedGroupsByDatacenterIdTest")
 public class OrphanedGroupsByDatacenterIdTest {
 

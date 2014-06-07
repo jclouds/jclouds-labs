@@ -21,7 +21,6 @@ package org.jclouds.snia.cdmi.v1.queryparams;
  * dataApi.get(containerName,dataObjectNameIn,DataObjectQueryParams.Builder.field("parentURI"));
  * dataObject = dataApi.get(containerName,dataObjectNameIn,DataObjectQueryParams.Builder.value());
  * 
- * @author Kenneth Nagin
  */
 public class DataObjectQueryParams extends CDMIObjectQueryParams {
 

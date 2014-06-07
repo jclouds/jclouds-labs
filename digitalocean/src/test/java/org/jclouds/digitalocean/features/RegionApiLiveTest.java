@@ -26,9 +26,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live tests for the {@link RegionApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "live", testName = "RegionApiLiveTest")
 public class RegionApiLiveTest extends BaseDigitalOceanLiveTest {

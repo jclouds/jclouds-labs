@@ -24,8 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * <pre>
  * &lt;complexType name="QueryResultReferences" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "VAppReferences")
 public class VAppReferences extends QueryResultReferences {

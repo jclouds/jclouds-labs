@@ -25,8 +25,6 @@ import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents the results from a Right vCloud query as a record.
- * 
- * @author Aled Sage
  */
 public class QueryResultRightRecord extends QueryResultRecordType {
 

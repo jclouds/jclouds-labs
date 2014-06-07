@@ -22,10 +22,6 @@ import org.jclouds.ec2.compute.suppliers.EC2HardwareSupplier;
 import org.jclouds.greenqloud.compute.strategy.GreenQloudComputeReviseParsedImage;
 import org.jclouds.greenqloud.compute.suppliers.GreenQloudEC2HardwareSupplier;
 
-/**
- * 
- * @author Adrian Cole, Jos van der Til
- */
 public class GreenQloudComputeComputeServiceContextModule extends EC2ComputeServiceContextModule {
 
    @Override

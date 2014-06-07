@@ -20,9 +20,6 @@ import java.io.File;
 
 /**
  * Configuration properties used for interacting with VirtualBox instances.
- * 
- * @author Mattias Holmqvist, Andrea Turli, David Alves
- * 
  */
 public final class VirtualBoxConstants {
 

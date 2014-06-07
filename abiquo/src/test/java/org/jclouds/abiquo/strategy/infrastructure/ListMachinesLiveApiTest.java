@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live tests for the {@link ListMachines} strategy.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "ListMachinesLiveApiTest")
 public class ListMachinesLiveApiTest extends BaseAbiquoStrategyLiveApiTest {

@@ -25,9 +25,6 @@ import javax.inject.Qualifier;
 
 /**
  * The login url for the vCloud, typically {@code https://vdc_host/api/sessions}
- * 
- * @author Adrian Cole
- * 
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.METHOD, ElementType.PARAMETER })

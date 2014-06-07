@@ -50,7 +50,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see VdcApi
- * @author danikov, Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface VdcAsyncApi {

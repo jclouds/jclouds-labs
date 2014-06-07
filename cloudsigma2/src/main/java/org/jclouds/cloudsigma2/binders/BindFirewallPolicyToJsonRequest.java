@@ -28,9 +28,6 @@ import javax.ws.rs.core.MediaType;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class BindFirewallPolicyToJsonRequest implements Binder {
 

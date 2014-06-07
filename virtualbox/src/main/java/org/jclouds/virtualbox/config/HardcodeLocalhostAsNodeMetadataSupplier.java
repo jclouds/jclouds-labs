@@ -70,8 +70,6 @@ import com.google.inject.Provides;
  * 
  * People often forget to call {@link Future#get} when using {@link RunScriptOnNode.Factory#submit}.
  * Don't forget!
- * 
- * @author Adrian Cole
  */
 public class HardcodeLocalhostAsNodeMetadataSupplier extends AbstractModule {
 

@@ -43,8 +43,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Allows us to test the {@link OrgApi} via its side effects.
- * 
- * @author Adrian Cole
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "OrgApiExpectTest")
 public class OrgApiExpectTest extends VCloudDirectorAdminApiExpectTest {

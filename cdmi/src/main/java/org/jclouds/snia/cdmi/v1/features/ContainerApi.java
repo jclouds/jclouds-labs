@@ -24,7 +24,6 @@ import org.jclouds.snia.cdmi.v1.queryparams.ContainerQueryParams;
  * CDMI Container Object Resource Operations
  * 
  * @see ContainerAsyncApi
- * @author Kenneth Nagin
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
  */
 public interface ContainerApi {

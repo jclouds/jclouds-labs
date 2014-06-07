@@ -18,10 +18,6 @@ package org.jclouds.jenkins.v1.domain;
 
 import com.google.common.base.Objects.ToStringHelper;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class JobDetails extends Job {
 
    public static Builder<?> builder() {

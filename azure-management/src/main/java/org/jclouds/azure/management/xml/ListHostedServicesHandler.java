@@ -30,8 +30,6 @@ import com.google.inject.Inject;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460781">doc</a>
- * 
- * @author Adrian Cole
  */
 public class ListHostedServicesHandler extends
          ParseSax.HandlerForGeneratedRequestWithResult<Set<HostedServiceWithDetailedProperties>> {

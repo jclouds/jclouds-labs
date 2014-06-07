@@ -64,8 +64,6 @@ import com.google.common.net.HttpHeaders;
 /**
  * Generates and signs the access key id and adds the mandatory http header and
  * request parameters to the request.
- * 
- * @author Dies Koper
  */
 @Singleton
 public class RequestAuthenticator implements HttpRequestFilter, RequestSigner {

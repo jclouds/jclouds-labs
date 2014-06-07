@@ -24,9 +24,6 @@ import org.jclouds.cloudsigma2.domain.DriveInfo;
 
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class DriveToJson implements Function<DriveInfo, JsonObject> {
    @Override

@@ -26,8 +26,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live integration tests for the {@link NetworkServiceType} domain class.
- * 
- * @author Jaume Devesa
  */
 @Test(groups = "api", testName = "NetworkServiceTypeLiveApiTest")
 public class NetworkServiceTypeLiveApiTest extends BaseAbiquoApiLiveApiTest {

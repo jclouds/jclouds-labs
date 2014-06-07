@@ -25,9 +25,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class DriveInfo extends Drive {
    public static class Builder extends Drive.Builder {
 

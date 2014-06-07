@@ -27,10 +27,6 @@ import org.jclouds.Fallback;
 import com.google.common.base.Predicates;
 import com.google.common.util.concurrent.ListenableFuture;
 
-/**
- * 
- * @author Adrian Cole
- */
 public final class JenkinsFallbacks {
    private JenkinsFallbacks() {
    }

@@ -47,8 +47,6 @@ import org.jclouds.rest.annotations.Transform;
 
 /**
  * API relating to virtual systems.
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

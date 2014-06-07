@@ -18,8 +18,6 @@ package org.jclouds.abiquo.monitor;
 
 /**
  * Represents the states of a running monitor.
- * 
- * @author Serafin Sedano
  */
 public enum MonitorStatus {
    /** The monitoring job has finished. */

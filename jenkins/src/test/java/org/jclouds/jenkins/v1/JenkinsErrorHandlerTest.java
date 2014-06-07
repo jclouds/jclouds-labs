@@ -32,10 +32,6 @@ import org.jclouds.jenkins.v1.handlers.JenkinsErrorHandler;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "JenkinsErrorHandlerTest")
 public class JenkinsErrorHandlerTest {
 

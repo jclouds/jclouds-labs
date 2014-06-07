@@ -38,9 +38,6 @@ import com.google.inject.name.Named;
 
 /**
  * Provides access to the Image management features.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @RequestFilters(AuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)

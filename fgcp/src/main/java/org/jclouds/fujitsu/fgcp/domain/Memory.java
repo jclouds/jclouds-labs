@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents the memory of a virtual server.
- * 
- * @author Dies Koper
  */
 public class Memory implements Comparable<Memory> {
    @XmlElement(name = "memorySize")

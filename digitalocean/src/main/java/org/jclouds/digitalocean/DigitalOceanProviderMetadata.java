@@ -24,9 +24,6 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 
 /**
  * Implementation of {@link ProviderMetadata} for DigitalOcean.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class DigitalOceanProviderMetadata extends BaseProviderMetadata {
 

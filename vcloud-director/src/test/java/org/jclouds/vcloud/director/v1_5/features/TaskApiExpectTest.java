@@ -36,8 +36,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link TaskApi} by observing its side effects.
- * 
- * @author grkvlt@apache.org
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "TaskApiExpectTest")
 public class TaskApiExpectTest extends VCloudDirectorAdminApiExpectTest {

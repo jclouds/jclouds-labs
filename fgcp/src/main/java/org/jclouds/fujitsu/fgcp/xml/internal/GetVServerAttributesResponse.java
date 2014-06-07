@@ -23,8 +23,6 @@ import org.jclouds.fujitsu.fgcp.domain.VServer;
 
 /**
  * Wrapper for GetVServerAttributesResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetVServerAttributesResponse")
 public class GetVServerAttributesResponse extends StatusResponse implements

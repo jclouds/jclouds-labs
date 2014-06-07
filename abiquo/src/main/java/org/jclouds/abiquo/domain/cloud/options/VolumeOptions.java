@@ -21,8 +21,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query volumes.
- * 
- * @author Ignasi Barrera
  */
 public class VolumeOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

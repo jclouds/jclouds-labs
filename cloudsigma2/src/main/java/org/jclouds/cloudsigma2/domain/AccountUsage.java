@@ -20,9 +20,6 @@ import com.google.inject.name.Named;
 
 import java.beans.ConstructorProperties;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class AccountUsage {
 
    public static class Builder {

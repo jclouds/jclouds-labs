@@ -103,8 +103,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Tests behavior of the {@link VAppApi}.
- * 
- * @author grkvlt@apache.org
  */
 @Test(singleThreaded = true, testName = "VAppApiLiveTest")
 public class VAppApiLiveTest extends AbstractVAppApiLiveTest {

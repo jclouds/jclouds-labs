@@ -30,8 +30,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Unit tests for the {@link SizeToHardware} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "SizeToHardwareTest")
 public class SizeToHardwareTest {

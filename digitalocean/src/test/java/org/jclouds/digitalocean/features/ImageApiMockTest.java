@@ -37,9 +37,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link ImageApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "ImageApiMockTest")
 public class ImageApiMockTest extends BaseDigitalOceanMockTest {

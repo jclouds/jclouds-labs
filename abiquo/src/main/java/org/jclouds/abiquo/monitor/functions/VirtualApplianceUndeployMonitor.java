@@ -32,8 +32,6 @@ import com.google.common.base.Function;
 /**
  * This class takes care of monitoring the a undeploy of a
  * {@link VirtualAppliance}.
- * 
- * @author Serafin Sedano
  */
 @Singleton
 public class VirtualApplianceUndeployMonitor implements Function<VirtualAppliance, MonitorStatus> {

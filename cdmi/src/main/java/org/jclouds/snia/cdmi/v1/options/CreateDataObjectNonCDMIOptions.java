@@ -21,7 +21,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 /**
  * Contains options supported in the REST API for the CREATE container operation. <h2>
  * 
- * @author Kenneth Nagin
  */
 public class CreateDataObjectNonCDMIOptions extends BaseHttpRequestOptions {
    /**

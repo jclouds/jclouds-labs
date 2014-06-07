@@ -27,9 +27,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ReferencePredicatesTest")
 public class ReferencePredicatesTest {
    Reference ref = Reference.builder().type("application/vnd.vmware.vcloud.catalogItem+xml").name("image").href(

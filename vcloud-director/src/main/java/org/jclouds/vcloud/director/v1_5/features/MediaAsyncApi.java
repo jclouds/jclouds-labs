@@ -45,7 +45,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see MediaApi
- * @author danikov, Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface MediaAsyncApi {

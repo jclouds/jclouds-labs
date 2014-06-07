@@ -20,9 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.joyent.cloudapi.v6_5.domain.Dataset;
 
-/**
- * @author Adrian Cole
- */
 public class DatasetInDatacenter extends DatacenterAndId {
    protected final Dataset dataset;
 

@@ -40,8 +40,6 @@ import com.google.common.eventbus.EventBus;
 
 /**
  * Default monitor for {@link VirtualAppliance} objects.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BaseVirtualApplianceMonitor extends BaseMonitoringService implements VirtualApplianceMonitor {

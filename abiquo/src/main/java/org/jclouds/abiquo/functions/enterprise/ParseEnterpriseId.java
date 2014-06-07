@@ -26,8 +26,6 @@ import com.google.common.base.Function;
 
 /**
  * Parses a {@link EnterpriseDto} object to extract its id.
- * 
- * @author Francesc Montserrat
  */
 @Singleton
 public class ParseEnterpriseId implements Function<Object, String> {

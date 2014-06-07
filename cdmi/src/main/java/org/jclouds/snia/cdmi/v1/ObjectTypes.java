@@ -18,7 +18,6 @@ package org.jclouds.snia.cdmi.v1;
 
 /**
  * Object Types used in CDMI.
- * 
  */
 public interface ObjectTypes {
 

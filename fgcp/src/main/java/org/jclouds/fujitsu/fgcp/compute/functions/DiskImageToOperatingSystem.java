@@ -30,10 +30,6 @@ import org.jclouds.fujitsu.fgcp.domain.DiskImage;
 
 import com.google.common.base.Function;
 
-/**
- * 
- * @author Dies Koper
- */
 @Singleton
 public class DiskImageToOperatingSystem implements
       Function<DiskImage, OperatingSystem> {

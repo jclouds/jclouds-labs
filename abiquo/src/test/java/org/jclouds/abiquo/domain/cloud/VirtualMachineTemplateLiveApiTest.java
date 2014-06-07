@@ -31,8 +31,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live integration tests for the {@link VirtualMachineTemplate} domain class.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "VirtualMachineTemplateLiveApiTest")
 public class VirtualMachineTemplateLiveApiTest extends BaseAbiquoApiLiveApiTest {

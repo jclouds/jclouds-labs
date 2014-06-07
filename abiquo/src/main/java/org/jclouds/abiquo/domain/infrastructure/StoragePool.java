@@ -38,8 +38,6 @@ import com.google.inject.TypeLiteral;
  * Adds high level functionality to {@link StoragePoolDto}. The Storage Pool
  * Resource allows you to perform any administrative task for remote pools.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/StoragePoolResource">
  *      http://community.abiquo.com/display/ABI20/StoragePoolResource</a>

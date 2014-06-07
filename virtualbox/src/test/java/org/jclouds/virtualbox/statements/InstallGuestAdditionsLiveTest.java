@@ -26,9 +26,6 @@ import org.testng.annotations.Test;
 import org.virtualbox_4_2.CleanupMode;
 import org.virtualbox_4_2.StorageBus;
 
-/**
- * @author Andrea Turli, David Alves
- */
 @Test(testName = "InstallGuestAdditionsLiveTest", groups = "live", singleThreaded = true)
 public class InstallGuestAdditionsLiveTest extends BaseVirtualBoxClientLiveTest {
 

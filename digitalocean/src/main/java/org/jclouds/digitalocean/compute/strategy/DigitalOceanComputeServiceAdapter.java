@@ -52,9 +52,6 @@ import com.google.common.primitives.Ints;
 
 /**
  * Implementation of the Compute Service for the DigitalOcean API.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<Droplet, Size, Image, Region> {
 

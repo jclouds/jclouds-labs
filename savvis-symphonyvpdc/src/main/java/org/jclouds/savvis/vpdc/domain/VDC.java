@@ -29,8 +29,6 @@ import com.google.common.collect.Sets;
 
 /**
  * VDC is a virtual data center ,the API returns a list of VAPPs own by given bill site Id.
- * 
- * @author Adrian Cole
  */
 public class VDC extends ResourceImpl {
    public static Builder builder() {

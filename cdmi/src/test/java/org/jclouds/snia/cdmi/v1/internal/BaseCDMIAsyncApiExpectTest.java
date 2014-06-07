@@ -27,8 +27,6 @@ import com.google.inject.Module;
 
 /**
  * Base class for writing KeyStone Rest Api Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseCDMIAsyncApiExpectTest extends BaseCDMIExpectTest<CDMIAsyncApi> {
    public CDMIAsyncApi createClient(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {

@@ -50,8 +50,6 @@ import com.google.inject.Singleton;
 
 /**
  * List all virtual machine templates available to an enterprise.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ListVirtualMachineTemplates implements ListEntities<VirtualMachineTemplate, Enterprise> {

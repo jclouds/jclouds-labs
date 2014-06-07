@@ -22,8 +22,6 @@ import com.abiquo.model.enumerator.NetworkType;
 
 /**
  * Available options to query networks.
- * 
- * @author Francesc Montserrat
  */
 public class NetworkOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

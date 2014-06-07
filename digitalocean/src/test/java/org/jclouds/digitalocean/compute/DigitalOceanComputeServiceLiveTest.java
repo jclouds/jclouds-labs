@@ -27,9 +27,6 @@ import com.google.inject.Module;
 
 /**
  * Live tests for the {@link org.jclouds.compute.ComputeService} integration.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "live", singleThreaded = true, testName = "DigitalOceanComputeServiceLiveTest")
 public class DigitalOceanComputeServiceLiveTest extends BaseComputeServiceLiveTest {

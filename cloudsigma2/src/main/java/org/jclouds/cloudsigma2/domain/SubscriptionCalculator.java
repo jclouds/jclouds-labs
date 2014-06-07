@@ -22,9 +22,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class SubscriptionCalculator {
    private final double price;
    @Named("objects")

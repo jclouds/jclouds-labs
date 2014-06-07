@@ -28,8 +28,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Wrapper for GetPublicIPAttributesResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetPublicIPAttributesResponse")
 public class GetPublicIPAttributesResponse extends StatusResponse implements

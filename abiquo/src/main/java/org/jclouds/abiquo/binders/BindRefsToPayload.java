@@ -31,8 +31,6 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
 
 /**
  * Bind multiple objects to the payload of the request as a list of links.
- * 
- * @author Ignasi Barrera
  */
 public abstract class BindRefsToPayload extends BindToXMLPayload {
    @Inject

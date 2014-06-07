@@ -29,8 +29,6 @@ import com.google.common.base.Function;
 
 /**
  * This class takes care of monitoring {@link Conversion} jobs.
- * 
- * @author Sergi Castro
  */
 @Singleton
 public class ConversionStatusMonitor implements Function<Conversion, MonitorStatus> {

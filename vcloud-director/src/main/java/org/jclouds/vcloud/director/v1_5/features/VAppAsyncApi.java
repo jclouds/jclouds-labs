@@ -63,7 +63,6 @@ import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * @author grkvlt@apache.org
  * @see VAppApi
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)

@@ -17,10 +17,6 @@
 package org.jclouds.opsource.servers;
 
 
-/**
- * 
- * @author Adrian Cole
- */
 public interface OpSourceNameSpaces {
    public static final String DIRECTORY = "http://oec.api.opsource.net/schemas/directory";
    public static final String DATACENTER = "http://oec.api.opsource.net/schemas/datacenter";

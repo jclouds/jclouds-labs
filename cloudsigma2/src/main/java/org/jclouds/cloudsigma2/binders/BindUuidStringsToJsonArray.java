@@ -27,9 +27,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class BindUuidStringsToJsonArray implements Binder {
    @Override

@@ -41,7 +41,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * <p/>
  * 
  * @see SessionApi
- * @author Adrian Cole
  */
 public interface SessionAsyncApi {
 

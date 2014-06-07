@@ -18,8 +18,6 @@ package org.jclouds.joyent.cloudapi.v6_5.config;
 
 /**
  * Configuration properties and constants used in joyent JoyentCloud connections.
- * 
- * @author Adrian Cole
  */
 public class JoyentCloudProperties {
 

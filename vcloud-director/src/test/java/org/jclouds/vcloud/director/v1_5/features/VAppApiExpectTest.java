@@ -57,8 +57,6 @@ import org.testng.internal.annotations.Sets;
 
 /**
  * Allows us to test the {@link VAppApi} via its side effects.
- *
- * @author grkvlt@apache.org
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "VAppApiExpectTest")
 public class VAppApiExpectTest extends VCloudDirectorAdminApiExpectTest {

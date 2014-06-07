@@ -36,8 +36,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests behavior of {@link VdcApi}
- * 
- * @author danikov
  */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "AdminVdcApiLiveTest")
 public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {

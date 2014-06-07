@@ -38,8 +38,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests the function that transforms cloudApi-specific images to generic images.
- * 
- * @author Adrian Cole
  */
 @Test(testName = "DatasetInDatacenterToImageTest")
 public class DatasetInDatacenterToImageTest {

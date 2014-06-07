@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Allows us to test the {@link ServerImageApi}
- * 
- * @author Kedar Dave
  */
 @Test(groups = { "unit" }, singleThreaded = true, testName = "ServerImageApiExpectTest")
 public class ServerImageApiExpectTest extends BaseOpSourceServersRestApiExpectTest {

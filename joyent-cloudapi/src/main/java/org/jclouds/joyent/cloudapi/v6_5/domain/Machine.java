@@ -40,7 +40,6 @@ import com.google.common.collect.Maps;
 /**
  * a SmartMachine or traditional Virtual Machine
  * 
- * @author Gerald Pereira
  * @see <a href= "http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#machines" />
  */
 public class Machine implements Comparable<Machine> {

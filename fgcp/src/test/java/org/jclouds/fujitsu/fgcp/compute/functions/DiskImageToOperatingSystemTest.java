@@ -32,9 +32,6 @@ import org.jclouds.fujitsu.fgcp.domain.DiskImage;
 import org.jclouds.fujitsu.fgcp.domain.DiskImage.Builder;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "unit", testName = "DiskImageToOperatingSystemTest")
 public class DiskImageToOperatingSystemTest {
    // Operating Systems available JAN 2012 (taken from osName)

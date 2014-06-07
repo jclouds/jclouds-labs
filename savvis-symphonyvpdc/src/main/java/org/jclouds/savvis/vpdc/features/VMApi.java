@@ -26,7 +26,6 @@ import org.jclouds.savvis.vpdc.domain.VMSpec;
  * <p/>
  * 
  * @see <a href="https://api.sandbox.savvis.net/doc/spec/api/" />
- * @author Adrian Cole
  */
 public interface VMApi {
 

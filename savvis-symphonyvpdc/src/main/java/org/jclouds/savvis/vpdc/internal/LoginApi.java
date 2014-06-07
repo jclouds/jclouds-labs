@@ -18,9 +18,6 @@ package org.jclouds.savvis.vpdc.internal;
 
 import org.jclouds.savvis.vpdc.domain.internal.VCloudSession;
 
-/**
- * @author Adrian Cole
- */
 public interface LoginApi {
 
    /**

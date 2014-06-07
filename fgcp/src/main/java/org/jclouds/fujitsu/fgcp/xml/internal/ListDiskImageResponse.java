@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for ListDiskImageResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListDiskImageResponse")
 public class ListDiskImageResponse extends SetWithStatusResponse<DiskImage> {

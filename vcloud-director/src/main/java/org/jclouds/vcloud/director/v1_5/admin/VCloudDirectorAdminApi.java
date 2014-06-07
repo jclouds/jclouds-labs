@@ -35,7 +35,6 @@ import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
  * Provides synchronous access to VCloudDirector Admin.
  * 
  * @see VCloudDirectorAsyncApi
- * @author Adrian Cole
  */
 public interface VCloudDirectorAdminApi extends VCloudDirectorApi {
    /**

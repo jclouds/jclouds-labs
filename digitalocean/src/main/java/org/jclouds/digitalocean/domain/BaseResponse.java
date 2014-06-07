@@ -30,9 +30,6 @@ import com.google.inject.name.Named;
 
 /**
  * Information of an error.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class BaseResponse {
 

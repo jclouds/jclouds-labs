@@ -32,9 +32,6 @@ import com.google.common.base.Predicate;
  * Template Definition List provides a way to organize multiple Template
  * Definitions. A single Template Definition can be shared by many lists. Its
  * compatible with ovfindex.xml format.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionListDto> {
    /** The enterprise where the list belongs. */

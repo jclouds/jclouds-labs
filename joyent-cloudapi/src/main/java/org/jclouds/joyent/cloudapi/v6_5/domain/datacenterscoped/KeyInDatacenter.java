@@ -20,9 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.joyent.cloudapi.v6_5.domain.Key;
 
-/**
- * @author Adrian Cole
- */
 public class KeyInDatacenter extends DatacenterAndName {
    protected final Key key;
 

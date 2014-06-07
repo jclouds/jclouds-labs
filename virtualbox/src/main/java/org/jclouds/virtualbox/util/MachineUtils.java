@@ -49,8 +49,6 @@ import static org.jclouds.util.Predicates2.retry;
 
 /**
  * Utilities for executing functions on a VirtualBox machine.
- * 
- * @author Adrian Cole, Mattias Holmqvist, Andrea Turli, David Alves
  */
 
 @Singleton

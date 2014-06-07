@@ -28,8 +28,6 @@ import org.jclouds.http.HttpRequest;
  * <p>
  * This method assumes that the input object is a {@link RemoteServiceType}
  * enumeration.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AppendRemoteServiceTypeToPath extends AppendToPath {

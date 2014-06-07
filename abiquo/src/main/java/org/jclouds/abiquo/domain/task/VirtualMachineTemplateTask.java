@@ -26,8 +26,6 @@ import com.abiquo.server.core.task.TaskDto;
 
 /**
  * Task that produces a {@link VirtualMachineTemplate}.
- * 
- * @author Ignasi Barrera
  */
 public class VirtualMachineTemplateTask extends AsyncTask<VirtualMachineTemplate, VirtualMachineTemplateDto> {
    protected VirtualMachineTemplateTask(final ApiContext<AbiquoApi> context, final TaskDto target) {

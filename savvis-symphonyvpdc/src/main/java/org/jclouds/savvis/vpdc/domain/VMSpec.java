@@ -28,8 +28,6 @@ import com.google.common.collect.Maps;
 
 /**
  * A specification to launch a virtual machine
- * 
- * @author Adrian Cole
  */
 public class VMSpec {
 

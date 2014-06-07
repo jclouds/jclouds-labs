@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * API returns a firewall rule in a firewall service
- * 
- * @author Kedar Dave
  */
 public class FirewallRule extends ResourceImpl {
 

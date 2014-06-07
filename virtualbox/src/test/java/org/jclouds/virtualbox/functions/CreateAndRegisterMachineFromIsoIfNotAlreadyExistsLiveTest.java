@@ -41,9 +41,6 @@ import org.virtualbox_4_2.VBoxException;
 
 import com.google.inject.Injector;
 
-/**
- * @author Mattias Holmqvist
- */
 @Test(groups = "live", singleThreaded = true, testName = "CreateAndRegisterMachineFromIsoIfNotAlreadyExistsLiveTest")
 public class CreateAndRegisterMachineFromIsoIfNotAlreadyExistsLiveTest extends BaseVirtualBoxClientLiveTest {
 

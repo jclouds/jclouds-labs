@@ -24,7 +24,6 @@ import org.jclouds.snia.cdmi.v1.queryparams.DataObjectQueryParams;
  * Data Object Resource Operations
  * 
  * @see DataAsyncApi
- * @author Kenneth Nagin
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
  */
 public interface DataApi {

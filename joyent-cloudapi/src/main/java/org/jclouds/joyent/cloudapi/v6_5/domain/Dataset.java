@@ -40,7 +40,6 @@ import com.google.common.collect.Maps;
  * will be available on newly provisioned machines. In the case of virtual machines, the dataset
  * also includes the operating system.
  * 
- * @author Gerald Pereira
  * @see <a href= "http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#ListDatasets" >docs</a>
  */
 public class Dataset implements Comparable<Dataset> {

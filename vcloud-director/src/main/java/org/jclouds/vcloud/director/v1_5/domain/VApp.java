@@ -32,8 +32,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="VApp" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "VApp")
 @XmlType(name = "VAppType")

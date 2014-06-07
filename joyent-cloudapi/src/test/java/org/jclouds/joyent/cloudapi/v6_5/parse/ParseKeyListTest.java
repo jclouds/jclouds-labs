@@ -31,9 +31,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ParseKeyListTest")
 public class ParseKeyListTest extends BaseSetParserTest<Key> {
 

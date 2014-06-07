@@ -36,8 +36,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Configures the Jenkins connection.
- * 
- * @author Adrian Cole
  */
 @ConfiguresRestClient
 public class JenkinsRestClientModule extends RestClientModule<JenkinsApi, JenkinsAsyncApi> {

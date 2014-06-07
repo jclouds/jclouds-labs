@@ -41,8 +41,6 @@ import com.google.common.collect.Maps;
  * <pre>
  * &lt;xs:complexType name="LinkType"&gt;
  * </pre>
- *
- * @author Adrian Cole
  */
 @XmlRootElement(name = "Link")
 public class Link extends Reference {

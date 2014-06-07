@@ -28,9 +28,6 @@ import org.jclouds.javax.annotation.Nullable;
 
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class TagToJson implements Function<Tag, JsonObject> {
    @Override

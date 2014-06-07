@@ -23,8 +23,6 @@ import org.jclouds.fujitsu.fgcp.domain.PublicIPStatus;
 
 /**
  * Wrapper for GetPublicIPStatusResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetPublicIPStatusResponse")
 public class GetPublicIPStatusResponse extends StatusResponse implements

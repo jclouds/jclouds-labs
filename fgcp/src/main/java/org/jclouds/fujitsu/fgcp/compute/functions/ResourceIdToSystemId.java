@@ -29,8 +29,6 @@ import com.google.common.base.Function;
 /**
  * Determines the id of the virtual system that a server, load balancer or disk
  * is part of.
- * 
- * @author Dies Koper
  */
 @Singleton
 public class ResourceIdToSystemId implements Function<String, String> {

@@ -32,7 +32,6 @@ import org.jclouds.savvis.vpdc.options.GetVMOptions;
  * <p/>
  * 
  * @see <a href="https://api.sandbox.savvis.net/doc/spec/api/" />
- * @author Adrian Cole
  */
 public interface BrowsingApi {
    /**

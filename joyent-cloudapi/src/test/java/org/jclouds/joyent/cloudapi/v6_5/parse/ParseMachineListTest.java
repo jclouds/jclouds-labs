@@ -34,9 +34,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-/**
- * @author Gerald Pereira
- */
 @Test(groups = "unit", testName = "ParseMachineListTest")
 public class ParseMachineListTest extends BaseSetParserTest<Machine> {
 

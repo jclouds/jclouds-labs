@@ -18,8 +18,6 @@ package org.jclouds.dmtf;
 
 /**
  * Constants used by DMTF.
- *
- * @author grkvlt@apache.org
  */
 public final class DMTFConstants {
 

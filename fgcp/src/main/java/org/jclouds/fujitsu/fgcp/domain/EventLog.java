@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents an entry in the event log.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "errorlog")
 public class EventLog {

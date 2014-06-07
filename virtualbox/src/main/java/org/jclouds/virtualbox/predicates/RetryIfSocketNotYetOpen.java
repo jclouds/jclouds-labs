@@ -36,9 +36,6 @@ import com.google.common.net.HostAndPort;
  * 
  * 
  * Not singleton as seconds are mutable
- * 
- * @author Adrian Cole
- * 
  */
 public class RetryIfSocketNotYetOpen implements Predicate<HostAndPort> {
    @Resource

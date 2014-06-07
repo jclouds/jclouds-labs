@@ -21,8 +21,6 @@ import org.jclouds.compute.options.TemplateOptions;
 /**
  * Contains options supported by the ComputeService on the <em>Abiquo</em>
  * provider.
- * 
- * @author Ignasi Barrera
  */
 public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable {
    public static final AbiquoTemplateOptions NONE = new AbiquoTemplateOptions();

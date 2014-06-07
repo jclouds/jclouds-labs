@@ -18,11 +18,6 @@ package org.jclouds.savvis.vpdc.domain;
 
 import org.jclouds.javax.annotation.Nullable;
 
-/**
- * 
- * 
- * @author Adrian Cole
- */
 public class TaskError {
 
    public static Builder builder() {

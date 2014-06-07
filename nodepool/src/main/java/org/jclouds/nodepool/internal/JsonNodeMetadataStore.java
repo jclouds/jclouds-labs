@@ -43,9 +43,6 @@ import com.google.inject.Singleton;
 /**
  * An implementation of {@link NodeMetadataStore} that stores all that is needed by building a json
  * string.
- * 
- * @author David Alves
- * 
  */
 @Singleton
 public class JsonNodeMetadataStore implements NodeMetadataStore {

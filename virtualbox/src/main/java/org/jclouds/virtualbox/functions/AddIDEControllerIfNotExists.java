@@ -24,11 +24,6 @@ import org.virtualbox_4_2.VBoxException;
 
 import com.google.common.base.Function;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 public class AddIDEControllerIfNotExists implements Function<IMachine, Void> {
    private final StorageController storageController;
 

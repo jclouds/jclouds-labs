@@ -20,8 +20,6 @@ import org.jclouds.jenkins.v1.JenkinsApi;
 
 /**
  * Base class for writing Jenkins Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseJenkinsApiExpectTest extends BaseJenkinsExpectTest<JenkinsApi> {
 

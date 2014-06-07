@@ -22,9 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class CloudSigma2ParserTest {
 
    public String EMPTY_OBJECTS_ARRAY = "{\"objects\" : []}";

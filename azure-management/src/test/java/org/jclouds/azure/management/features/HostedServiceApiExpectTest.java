@@ -32,9 +32,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "HostedServiceApiExpectTest")
 public class HostedServiceApiExpectTest extends BaseAzureManagementApiExpectTest {
 

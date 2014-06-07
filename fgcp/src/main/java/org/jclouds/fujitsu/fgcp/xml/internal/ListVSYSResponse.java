@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for ListVSYSResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListVSYSResponse")
 public class ListVSYSResponse extends SetWithStatusResponse<VSystem> {

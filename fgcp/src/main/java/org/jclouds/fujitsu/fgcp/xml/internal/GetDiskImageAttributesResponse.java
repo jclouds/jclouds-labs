@@ -23,8 +23,6 @@ import org.jclouds.fujitsu.fgcp.domain.DiskImage;
 
 /**
  * Wrapper for GetDiskImageAttributesResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetDiskImageAttributesResponse")
 public class GetDiskImageAttributesResponse extends StatusResponse implements

@@ -37,8 +37,6 @@ import com.google.common.collect.Iterables;
  * hp.getSlot();      // returns 1
  * hp.toString();     // returns "myMachine:1"
  * </pre>
- *
- * @author Andrea Turli
  */
 public final class MachineNameOrIdAndNicSlot {
 

@@ -33,8 +33,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Bind the link reference to an {@link AbstractIpDto} object into the payload.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindUnmanagedIpRefToPayload extends BindToXMLPayload {

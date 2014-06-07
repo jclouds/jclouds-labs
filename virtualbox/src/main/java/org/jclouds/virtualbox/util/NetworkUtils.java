@@ -69,8 +69,6 @@ import com.google.inject.Inject;
 
 /**
  * Utilities to manage VirtualBox networks on guests
- * 
- * @author Andrea Turli
  */
 
 @Singleton

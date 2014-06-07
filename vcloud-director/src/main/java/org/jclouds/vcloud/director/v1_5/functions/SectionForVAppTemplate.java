@@ -24,9 +24,6 @@ import org.jclouds.vcloud.director.v1_5.domain.VAppTemplate;
 
 import com.google.common.base.Function;
 
-/**
- * @author danikov
- */
 @Singleton
 public class SectionForVAppTemplate<S extends SectionType> implements Function<VAppTemplate, S> {
    

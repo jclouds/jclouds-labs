@@ -59,8 +59,6 @@ import com.google.common.util.concurrent.Atomics;
 /**
  * The adapter used by the JoyentCloudComputeServiceContextModule to interface the
  * JoyentCloud-specific domain model to the computeService generic domain model.
- * 
- * @author Adrian Cole
  */
 public class JoyentCloudComputeServiceAdapter implements
       ComputeServiceAdapter<MachineInDatacenter, PackageInDatacenter, DatasetInDatacenter, Location> {

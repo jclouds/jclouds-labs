@@ -30,8 +30,6 @@ import com.google.common.collect.Maps;
 
 /**
  * Available options to query events.
- * 
- * @author Vivien Mahé
  */
 public class EventOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

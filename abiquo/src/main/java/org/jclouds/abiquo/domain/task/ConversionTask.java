@@ -26,8 +26,6 @@ import com.abiquo.server.core.task.TaskDto;
 
 /**
  * Task that produces a {@link Conversion}.
- * 
- * @author Ignasi Barrera
  */
 public class ConversionTask extends AsyncTask<Conversion, ConversionDto> {
    protected ConversionTask(final ApiContext<AbiquoApi> context, final TaskDto target) {

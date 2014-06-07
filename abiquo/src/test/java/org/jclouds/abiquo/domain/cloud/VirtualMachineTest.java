@@ -22,8 +22,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link VirtualMachine} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualMachineTest")
 public class VirtualMachineTest {

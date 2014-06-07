@@ -31,9 +31,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * Utility service to monitor asynchronous operations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @ImplementedBy(BaseMonitoringService.class)
 public interface MonitoringService {

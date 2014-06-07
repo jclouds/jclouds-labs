@@ -18,10 +18,6 @@ package org.jclouds.savvis.vpdc.domain;
 
 import org.jclouds.ovf.Section;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class NetworkConnectionSection extends Section<NetworkConnectionSection> {
 
    @SuppressWarnings("unchecked")

@@ -30,8 +30,6 @@ import com.google.common.base.Function;
  * A value that uniquely identifies a request made against the management service. For an
  * asynchronous operation, you can call get operation status with the value of the header to
  * determine whether the operation is complete, has failed, or is still in progress.
- * 
- * @author Gerald Pereira
  */
 @Singleton
 public class ParseRequestIdHeader implements Function<HttpResponse, String> {

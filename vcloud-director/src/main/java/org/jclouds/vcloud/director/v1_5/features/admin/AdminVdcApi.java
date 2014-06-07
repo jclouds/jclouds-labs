@@ -26,7 +26,6 @@ import org.jclouds.vcloud.director.v1_5.features.VdcApi;
  * Provides synchronous access to {@link AdminVdc}.
  * 
  * @see AdminVdcAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface AdminVdcApi extends VdcApi {
 

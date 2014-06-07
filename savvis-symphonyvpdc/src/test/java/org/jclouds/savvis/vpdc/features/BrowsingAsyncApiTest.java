@@ -38,8 +38,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code BrowsingAsyncApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit", testName = "BrowsingAsyncApiTest")
 public class BrowsingAsyncApiTest extends BaseVPDCAsyncApiTest<BrowsingAsyncApi> {

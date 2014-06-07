@@ -18,10 +18,6 @@ package org.jclouds.dmtf.ovf;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- */
 @XmlRootElement(name = "Network")
 public class Network {
    public static Builder builder() {

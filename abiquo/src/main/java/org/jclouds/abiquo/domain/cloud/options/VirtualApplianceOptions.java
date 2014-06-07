@@ -20,9 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query virtual appliances.
- * 
- * @author Francesc Montserrat
- * @author Ignasi Barrera
  */
 public class VirtualApplianceOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

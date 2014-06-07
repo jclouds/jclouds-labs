@@ -26,11 +26,6 @@ import org.jclouds.logging.Logger;
 
 import com.google.common.base.Predicate;
 
-/**
- * 
- * @author Dies Koper
- * 
- */
 @Singleton
 public class SystemStatusNormal implements Predicate<String> {
 

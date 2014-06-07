@@ -33,7 +33,6 @@ import com.google.common.io.Files;
  * CreateDataObjectOptions options supported in the REST API for the CREATE CDMI Data Object
  * operation. <h2>
  * 
- * @author Kenneth Nagin
  */
 public class CreateDataObjectOptions extends CreateCDMIObjectOptions {
 

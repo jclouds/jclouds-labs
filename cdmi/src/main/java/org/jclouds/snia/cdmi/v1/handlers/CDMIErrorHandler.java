@@ -33,9 +33,6 @@ import org.jclouds.rest.AuthorizationException;
 
 /**
  * This will parse and set an appropriate exception on the command data.
- * 
- * @author Adrian Cole
- * 
  */
 // TODO: is there error spec someplace? let's type errors, etc.
 @Singleton

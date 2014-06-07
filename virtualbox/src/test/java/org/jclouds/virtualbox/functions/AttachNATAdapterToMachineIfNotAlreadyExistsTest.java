@@ -38,9 +38,6 @@ import org.virtualbox_4_2.INetworkAdapter;
 import org.virtualbox_4_2.NetworkAttachmentType;
 import org.virtualbox_4_2.VBoxException;
 
-/**
- * @author Mattias Holmqvist, Andrea Turli
- */
 @Test(groups = "unit", testName = "AttachNATAdapterToMachineIfNotAlreadyExistsTest")
 public class AttachNATAdapterToMachineIfNotAlreadyExistsTest {
 

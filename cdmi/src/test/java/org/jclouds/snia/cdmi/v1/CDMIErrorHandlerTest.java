@@ -33,10 +33,6 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.snia.cdmi.v1.handlers.CDMIErrorHandler;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "CDMIErrorHandlerTest")
 public class CDMIErrorHandlerTest {
 

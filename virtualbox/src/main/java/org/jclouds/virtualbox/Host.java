@@ -25,9 +25,6 @@ import javax.inject.Qualifier;
 
 /**
  * Signals the annotated target pertains to the vbox host and not to one of the nodes.
- * 
- * @author dralves
- * 
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })

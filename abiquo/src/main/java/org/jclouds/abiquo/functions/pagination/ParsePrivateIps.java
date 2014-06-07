@@ -28,8 +28,6 @@ import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 
 /**
  * Parses a paginated private ip list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParsePrivateIps extends BasePaginationParser<PrivateIpDto, PrivateIpsDto> {

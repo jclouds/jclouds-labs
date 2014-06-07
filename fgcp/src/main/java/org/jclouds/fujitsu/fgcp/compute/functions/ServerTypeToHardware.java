@@ -32,8 +32,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Created by IntelliJ IDEA.
- * 
- * @author Dies Koper
  */
 @Singleton
 public class ServerTypeToHardware implements Function<ServerType, Hardware> {

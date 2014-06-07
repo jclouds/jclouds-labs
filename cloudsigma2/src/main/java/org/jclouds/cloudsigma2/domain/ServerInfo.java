@@ -26,9 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class ServerInfo extends Server {
 
    public static class Builder extends Server.Builder {

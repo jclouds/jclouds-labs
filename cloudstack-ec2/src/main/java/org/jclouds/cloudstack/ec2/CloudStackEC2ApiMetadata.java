@@ -32,8 +32,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for the CloudStack's EC2-clone API
- * 
- * @author Adrian Cole
  */
 public class CloudStackEC2ApiMetadata extends EC2ApiMetadata {
 

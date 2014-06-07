@@ -33,8 +33,6 @@ import com.google.common.cache.LoadingCache;
 
 /**
  * Resolves URN to its HREF via the entity Resolver
- * 
- * @author Adrian Cole
  */
 @Singleton
 public final class URNToHref implements Function<Object, URI> {

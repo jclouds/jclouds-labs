@@ -39,8 +39,6 @@ import com.google.common.primitives.Longs;
 
 /**
  * Live integration tests for the {@link VirtualAppliance} domain class.
- * 
- * @author Susana Acedo
  */
 @Test(groups = "live", testName = "VirtualApplianceLiveTest")
 public class VirtualApplianceLiveTest extends BaseAbiquoLiveApiTest {

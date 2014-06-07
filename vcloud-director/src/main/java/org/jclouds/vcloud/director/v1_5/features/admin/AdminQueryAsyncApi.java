@@ -35,7 +35,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * Provides asynchronous access to {@link AdminQuery} objects.
  * 
  * @see AdminQueryApi
- * @author Aled Sage
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface AdminQueryAsyncApi extends QueryAsyncApi {

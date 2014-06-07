@@ -32,8 +32,6 @@ import com.abiquo.model.enumerator.NetworkType;
 
 /**
  * Live integration tests for the {@link Network} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "GenericNetworkLiveApiTest")
 public class GenericNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {

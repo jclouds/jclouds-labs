@@ -21,10 +21,6 @@ import org.jclouds.ec2.EC2Client;
 import org.jclouds.ec2.config.EC2RestClientModule;
 import org.jclouds.rest.ConfiguresRestClient;
 
-/**
- * 
- * @author Adrian Cole
- */
 @ConfiguresRestClient
 public class CloudStackEC2RestClientModule extends EC2RestClientModule<EC2Client, EC2AsyncClient> {
 

@@ -18,8 +18,6 @@ package org.jclouds.fujitsu.fgcp.reference;
 
 /**
  * Configuration parameters and constants used in HTTP requests.
- * 
- * @author Dies Koper
  */
 public interface RequestParameters {
 

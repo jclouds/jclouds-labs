@@ -28,8 +28,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents a virtual server with virtual storage and NICs.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vserver")
 public class VServerWithDetails extends VServerWithVNICs {

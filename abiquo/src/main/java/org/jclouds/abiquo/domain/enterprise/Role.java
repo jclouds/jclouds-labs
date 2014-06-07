@@ -33,8 +33,6 @@ import com.abiquo.server.core.enterprise.RoleDto;
 /**
  * Adds high level functionality to {@link RoleDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Roles+Resource">
  *      http://community.abiquo.com/display/ABI20/Roles+Resource</a>
  */

@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query virtual datacenters.
- * 
- * @author Francesc Montserrat
  */
 public class VirtualDatacenterOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

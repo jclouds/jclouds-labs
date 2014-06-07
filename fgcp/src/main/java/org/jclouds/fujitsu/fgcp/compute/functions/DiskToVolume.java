@@ -28,8 +28,6 @@ import com.google.common.base.Function;
 
 /**
  * Created by IntelliJ IDEA.
- * 
- * @author Dies Koper
  */
 @Singleton
 public class DiskToVolume implements Function<Disk, Volume> {

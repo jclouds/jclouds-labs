@@ -28,8 +28,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Tests behavior of {@code CDMIApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live")
 public class BaseCDMIApiLiveTest extends BaseContextLiveTest<RestContext<CDMIApi, CDMIAsyncApi>> {

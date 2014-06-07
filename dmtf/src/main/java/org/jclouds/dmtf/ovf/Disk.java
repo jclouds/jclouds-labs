@@ -20,10 +20,6 @@ import java.net.URI;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- */
 @XmlRootElement(name = "Disk")
 public class Disk implements Comparable<Disk>{
    public static Builder builder() {

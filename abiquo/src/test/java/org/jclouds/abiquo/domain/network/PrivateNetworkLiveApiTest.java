@@ -41,8 +41,6 @@ import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 
 /**
  * Live integration tests for the {@link PrivateNetwork} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "PrivateNetworkLiveApiTest")
 public class PrivateNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {

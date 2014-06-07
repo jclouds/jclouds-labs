@@ -23,8 +23,6 @@ import org.jclouds.logging.Logger;
 
 /**
  * Base class for all {@link MonitorEvent} handlers.
- * 
- * @author Ignasi Barrera
  */
 public abstract class AbstractEventHandler<T> {
    @Resource

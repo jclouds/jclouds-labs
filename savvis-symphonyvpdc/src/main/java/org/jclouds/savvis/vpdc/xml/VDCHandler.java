@@ -32,9 +32,6 @@ import org.xml.sax.SAXException;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * @author Adrian Cole
- */
 public class VDCHandler extends ParseSax.HandlerWithResult<VDC> {
 
    protected StringBuilder currentText = new StringBuilder();

@@ -25,8 +25,6 @@ import com.abiquo.server.core.infrastructure.network.NicDto;
 /**
  * Adds high level functionality to {@link NicDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a href=
  *      "http://community.abiquo.com/display/ABI20/VirtualMachineNetworkConfiguration"
  *      > http://community.abiquo.com/display/ABI20/

@@ -40,9 +40,6 @@ import com.google.common.collect.Lists;
  * <pre>
  * &lt;xs:complexType name="EntityType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
- * @author Adam Lowe
  */
 @XmlRootElement(name = "Entity")
 @XmlType(name = "EntityType")

@@ -23,7 +23,6 @@ import org.jclouds.io.Payload;
  * Provides synchronous access to upload.
  * 
  * @see UploadAsyncApi
- * @author danikov
  */
 public interface UploadApi {
 

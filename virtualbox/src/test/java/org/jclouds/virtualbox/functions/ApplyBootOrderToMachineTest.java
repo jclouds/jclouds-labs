@@ -27,9 +27,6 @@ import org.virtualbox_4_2.IMachine;
 
 import java.util.Map;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit", testName = "ApplyBootOrderToMachineTest")
 public class ApplyBootOrderToMachineTest {
 

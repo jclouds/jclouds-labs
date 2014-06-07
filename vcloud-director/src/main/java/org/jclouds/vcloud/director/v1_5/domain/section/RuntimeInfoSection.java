@@ -38,8 +38,6 @@ import com.google.common.collect.Lists;
  * <pre>
  * &lt;complexType name="RuntimeInfoSectionType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "RuntimeInfoSection")
 @XmlType(name = "RuntimeInfoSectionType")

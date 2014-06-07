@@ -20,9 +20,6 @@ import org.virtualbox_4_2.IMachine;
 
 import com.google.common.base.Function;
 
-/**
- * @author Mattias Holmqvist
- */
 public class ApplyMemoryToMachine implements Function<IMachine, Void> {
 
    private long memorySize;

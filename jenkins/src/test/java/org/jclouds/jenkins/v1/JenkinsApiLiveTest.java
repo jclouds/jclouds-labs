@@ -22,10 +22,6 @@ import org.jclouds.jenkins.v1.domain.Node;
 import org.jclouds.jenkins.v1.internal.BaseJenkinsApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "JenkinsApiLiveTest")
 public class JenkinsApiLiveTest extends BaseJenkinsApiLiveTest {
 

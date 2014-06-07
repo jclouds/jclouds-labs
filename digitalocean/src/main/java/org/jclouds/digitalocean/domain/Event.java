@@ -30,9 +30,6 @@ import com.google.inject.name.Named;
 
 /**
  * An Event.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class Event {
 

@@ -31,9 +31,6 @@ import org.xml.sax.SAXException;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * @author Adrian Cole
- */
 public class NetworkHandler extends ParseSax.HandlerWithResult<Network> {
 
    protected StringBuilder currentText = new StringBuilder();

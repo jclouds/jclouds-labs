@@ -23,9 +23,6 @@ import org.jclouds.javax.annotation.Nullable;
 
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class CreateSubscriptionRequestToJson implements Function<CreateSubscriptionRequest, JsonObject> {
    @Override

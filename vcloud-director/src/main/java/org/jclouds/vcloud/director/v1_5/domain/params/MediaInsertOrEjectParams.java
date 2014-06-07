@@ -32,8 +32,6 @@ import com.google.common.base.Objects;
  * <pre>
  * &lt;complexType name="MediaInsertOrEjectParams" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "MediaInsertOrEjectParams")
 @XmlType(name = "MediaInsertOrEjectParamsType")

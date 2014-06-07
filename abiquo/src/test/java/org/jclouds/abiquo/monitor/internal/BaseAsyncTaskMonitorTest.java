@@ -24,8 +24,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link BaseAsyncTaskMonitor} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BaseAsyncTaskMonitorTest")
 public class BaseAsyncTaskMonitorTest extends BaseInjectionTest {

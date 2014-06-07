@@ -32,9 +32,6 @@ import javax.inject.Singleton;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ParseVLANs extends ParseJson<ParseVLANs.VLANs> {
    static class VLANs extends PaginatedCollection<VLANInfo> {

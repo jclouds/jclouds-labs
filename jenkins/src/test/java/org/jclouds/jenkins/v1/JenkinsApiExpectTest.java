@@ -24,10 +24,6 @@ import org.jclouds.jenkins.v1.internal.BaseJenkinsApiExpectTest;
 import org.jclouds.jenkins.v1.parse.ParseNodeTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "JenkinsApiExpectTest")
 public class JenkinsApiExpectTest extends BaseJenkinsApiExpectTest {
 

@@ -21,8 +21,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query users.
- * 
- * @author Carlos Garcia
  */
 public class UserOptions extends BaseHttpRequestOptions implements Cloneable {
    public static Builder builder() {

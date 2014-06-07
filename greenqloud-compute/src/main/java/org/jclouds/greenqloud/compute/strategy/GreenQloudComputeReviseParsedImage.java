@@ -32,9 +32,6 @@ import org.jclouds.compute.util.ComputeServiceUtils;
 import org.jclouds.ec2.compute.strategy.ReviseParsedImage;
 import org.jclouds.logging.Logger;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class GreenQloudComputeReviseParsedImage implements ReviseParsedImage {
    public static final Pattern DEFAULT_PATTERN = Pattern.compile("(([^ ]*) ([0-9.]+) ?.*)");

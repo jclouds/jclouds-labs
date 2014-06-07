@@ -22,9 +22,6 @@ import org.jclouds.compute.domain.Volume;
 import org.jclouds.dmtf.cim.ResourceAllocationSettingData;
 import org.jclouds.dmtf.cim.functions.HardwareBuilderFromResourceAllocations;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class VCloudHardwareBuilderFromResourceAllocations extends HardwareBuilderFromResourceAllocations {
    @Override

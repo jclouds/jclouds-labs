@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Wrapper for CreateVDiskResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "CreateVDiskResponse")
 public class CreateVDiskResponse extends StatusResponse implements

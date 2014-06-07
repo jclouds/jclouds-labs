@@ -23,8 +23,6 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 /**
  * Binds the given link to the uri appends the supported devices action path.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindSupportedDevicesLinkToPath extends BindToPath {

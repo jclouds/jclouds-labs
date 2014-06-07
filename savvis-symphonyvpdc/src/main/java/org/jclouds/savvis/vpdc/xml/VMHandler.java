@@ -42,9 +42,6 @@ import org.xml.sax.SAXException;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * @author Kedar Dave
- */
 public class VMHandler extends BaseVirtualSystemHandler<VM, VM.Builder> {
 
    @SuppressWarnings("unchecked")

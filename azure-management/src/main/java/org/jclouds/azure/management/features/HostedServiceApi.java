@@ -28,7 +28,6 @@ import org.jclouds.azure.management.options.CreateHostedServiceOptions;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460812">docs</a>
  * @see HostedServiceAsyncApi
- * @author Gerald Pereira, Adrian Cole
  */
 public interface HostedServiceApi {
 

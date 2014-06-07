@@ -63,8 +63,6 @@ import com.google.common.collect.FluentIterable;
  * Virtual datacenters expose a set of compute, storage and networking resources
  * that can be consumed by the tenants.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a href=
  *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource">
  *      http

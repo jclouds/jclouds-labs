@@ -46,9 +46,6 @@ import com.google.common.annotations.VisibleForTesting;
 
 /**
  * Provides high level Abiquo cloud operations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Singleton
 public class BaseCloudService implements CloudService {

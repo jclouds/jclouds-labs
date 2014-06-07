@@ -29,8 +29,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Wrapper for ListServerTypeResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListServerTypeResponse")
 public class ListServerTypeResponse extends SetWithStatusResponse<ServerType> {

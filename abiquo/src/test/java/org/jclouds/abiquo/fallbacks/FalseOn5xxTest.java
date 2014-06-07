@@ -30,8 +30,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link FalseOn5xx} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "FalseOn5xxTest")
 public class FalseOn5xxTest {

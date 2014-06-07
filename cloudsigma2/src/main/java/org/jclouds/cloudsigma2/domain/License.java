@@ -20,9 +20,6 @@ import javax.inject.Named;
 import java.beans.ConstructorProperties;
 import java.net.URI;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class License {
 
    public static class Builder {

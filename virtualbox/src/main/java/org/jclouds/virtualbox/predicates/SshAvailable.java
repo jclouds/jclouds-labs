@@ -28,10 +28,6 @@ import org.jclouds.ssh.SshException;
 
 import com.google.common.base.Predicate;
 
-/**
- * 
- * @author Andrea Turli
- */
 public class SshAvailable implements Predicate<String> {
 
    @Resource

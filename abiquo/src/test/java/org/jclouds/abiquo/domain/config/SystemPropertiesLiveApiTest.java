@@ -23,8 +23,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live integration tests for the {@link User} domain class.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "SystemPropertiesLiveApiTest")
 public class SystemPropertiesLiveApiTest extends BaseAbiquoApiLiveApiTest {

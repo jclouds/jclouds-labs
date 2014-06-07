@@ -19,7 +19,6 @@ package org.jclouds.snia.cdmi.v1.options;
 /**
  * Optional get CDMI container operations
  * 
- * @author Kenneth Nagin
  */
 public class GetContainerOptions extends GetCDMIObjectOptions {
 

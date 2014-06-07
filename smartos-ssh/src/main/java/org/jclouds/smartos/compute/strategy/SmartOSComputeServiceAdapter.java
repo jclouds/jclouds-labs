@@ -42,7 +42,6 @@ import com.google.common.collect.Maps;
 /**
  * defines the connection between the {@link org.jclouds.smartos.compute.domain.SmartOSHostController}
  * implementation and the jclouds {@link ComputeService}
- * 
  */
 @Singleton
 public class SmartOSComputeServiceAdapter implements ComputeServiceAdapter<VM, VmSpecification, DataSet, SmartOSHostController> {

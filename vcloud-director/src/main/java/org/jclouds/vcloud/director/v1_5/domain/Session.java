@@ -37,8 +37,6 @@ import com.google.common.collect.Sets;
  * Returns a representation of the current session that can serve as a single entry point to the
  * system, as it provides user, admin, and extension (sysadmin) entry links depending on the
  * privileges of the current user.
- *
- * @author Adrian Cole
  */
 @XmlRootElement(name = "Session")
 public class Session {

@@ -44,8 +44,6 @@ import com.google.common.eventbus.Subscribe;
 
 /**
  * Unit tests for the {@link AsyncMonitor} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AsyncMonitorTest")
 public class AsyncMonitorTest {

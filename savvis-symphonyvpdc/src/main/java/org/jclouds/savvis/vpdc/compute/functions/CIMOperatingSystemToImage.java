@@ -25,9 +25,6 @@ import org.jclouds.compute.domain.Image.Status;
 
 import com.google.common.base.Function;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class CIMOperatingSystemToImage implements Function<CIMOperatingSystem, Image> {
 

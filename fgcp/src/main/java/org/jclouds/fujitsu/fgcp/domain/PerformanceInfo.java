@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Holds the statistics of a virtual server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "performanceinfo")
 public class PerformanceInfo implements Comparable<PerformanceInfo> {

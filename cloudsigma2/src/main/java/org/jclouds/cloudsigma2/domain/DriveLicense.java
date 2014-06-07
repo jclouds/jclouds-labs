@@ -18,9 +18,6 @@ package org.jclouds.cloudsigma2.domain;
 
 import java.beans.ConstructorProperties;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class DriveLicense {
 
    public static class Builder {

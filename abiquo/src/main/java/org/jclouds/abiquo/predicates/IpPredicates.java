@@ -23,8 +23,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Container for {@link Network} filters.
- * 
- * @author Francesc Montserrat
  */
 public class IpPredicates {
 

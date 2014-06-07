@@ -21,9 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * {@inheritDoc}
- * 
- * @author danikov
- * @author grkvlt
  */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "CarrenzaVCloudDirectorAdminNetworkApiLiveTest")
 public class CarrenzaVCloudDirectorAdminNetworkApiLiveTest extends AdminNetworkApiLiveTest {

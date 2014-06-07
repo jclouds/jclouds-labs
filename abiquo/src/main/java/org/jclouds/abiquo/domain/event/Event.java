@@ -25,9 +25,6 @@ import org.jclouds.rest.ApiContext;
 import com.abiquo.model.enumerator.SeverityType;
 import com.abiquo.server.core.event.EventDto;
 
-/**
- * @author Vivien Mahé
- */
 public class Event extends DomainWrapper<EventDto> {
    /**
     * Constructor to be used only by the builder.

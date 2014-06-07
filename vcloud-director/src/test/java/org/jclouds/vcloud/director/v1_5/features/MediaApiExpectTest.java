@@ -43,8 +43,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Test the {@link MediaApi} via its side effects.
- * 
- * @author danikov
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "MediaApiExpectTest")
 public class MediaApiExpectTest extends VCloudDirectorAdminApiExpectTest {

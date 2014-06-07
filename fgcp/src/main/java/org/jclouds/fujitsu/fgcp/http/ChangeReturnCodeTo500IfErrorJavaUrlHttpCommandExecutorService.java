@@ -46,8 +46,6 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 /**
  * Changes super class' behaviour to return an HTTP response with status code 500 instead of the 200 returned by
  * the FGCP API endpoint when the XML payload indicates an error with the request.
- *
- * @author Dies Koper
  */
 @Singleton
 public class ChangeReturnCodeTo500IfErrorJavaUrlHttpCommandExecutorService extends

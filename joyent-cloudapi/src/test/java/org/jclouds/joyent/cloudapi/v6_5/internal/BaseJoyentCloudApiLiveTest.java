@@ -28,8 +28,6 @@ import com.google.inject.Module;
 
 /**
  * Tests behavior of {@code JoyentCloudApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live")
 public class BaseJoyentCloudApiLiveTest extends BaseComputeServiceContextLiveTest {

@@ -25,11 +25,6 @@ import org.jclouds.rest.Binder;
 import com.google.common.base.Throwables;
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @Singleton
 public class BindOSImageParamsToXmlPayload implements Binder {
 

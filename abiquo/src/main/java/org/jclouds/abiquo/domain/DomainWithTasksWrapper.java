@@ -33,8 +33,6 @@ import com.google.common.primitives.Longs;
 /**
  * This class is used to decorate transport objects that are owners of some
  * {@link TaskDto}
- * 
- * @author Ignasi Barrera
  */
 public abstract class DomainWithTasksWrapper<T extends SingleResourceTransportDto> extends DomainWrapper<T> {
 

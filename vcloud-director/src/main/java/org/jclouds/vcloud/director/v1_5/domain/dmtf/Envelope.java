@@ -22,9 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jclouds.dmtf.ovf.internal.BaseEnvelope;
 
-/**
- * @author grkvlt@apache.org
- */
 @XmlRootElement(name = "Envelope", namespace = OVF_NS)
 public class Envelope extends BaseEnvelope<VirtualSystem, Envelope> {
 

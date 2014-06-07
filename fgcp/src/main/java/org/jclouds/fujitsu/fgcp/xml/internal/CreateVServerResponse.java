@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Wrapper for CreateVServerResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "CreateVServerResponse")
 public class CreateVServerResponse extends StatusResponse implements

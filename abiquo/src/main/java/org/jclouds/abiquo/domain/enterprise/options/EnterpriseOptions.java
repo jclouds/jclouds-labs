@@ -22,9 +22,6 @@ import org.jclouds.rest.annotations.SinceApiVersion;
 
 /**
  * Available options to query enterprises.
- * 
- * @author Francesc Montserrat
- * @author Ignasi Barrera
  */
 public class EnterpriseOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

@@ -34,8 +34,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link org.jclouds.types.ApiMetadata} for Savvis Symphony VPDC services.
- * 
- * @author Kedar Dave
  */
 public class VPDCApiMetadata extends BaseRestApiMetadata {
 

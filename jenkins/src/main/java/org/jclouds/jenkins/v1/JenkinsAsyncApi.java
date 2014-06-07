@@ -39,7 +39,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see JenkinsApi
  * @see <a href="https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API">api doc</a>
- * @author Adrian Cole
  */
 @RequestFilters(BasicAuthenticationUnlessAnonymous.class)
 public interface JenkinsAsyncApi {

@@ -40,10 +40,6 @@ import com.google.common.collect.Iterables;
  * <pre>
  * &lt;complexType name="ResourceEntity" /&gt;
  * </pre>
- *
- * @author danikov
- * @author Adam Lowe
- * @author grkvlt@apache.org
  */
 @XmlType(name = "ResourceEntityType")
 public abstract class ResourceEntity extends Entity {

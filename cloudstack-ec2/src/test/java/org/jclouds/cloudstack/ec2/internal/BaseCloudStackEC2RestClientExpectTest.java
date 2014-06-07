@@ -25,10 +25,6 @@ import org.jclouds.rest.internal.BaseRestClientExpectTest;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 
-/**
- * 
- * @author Adrian Cole
- */
 public abstract class BaseCloudStackEC2RestClientExpectTest extends BaseRestClientExpectTest<EC2Client> {
    protected static final String CONSTANT_DATE = "2012-04-16T15:54:08.897Z";
 

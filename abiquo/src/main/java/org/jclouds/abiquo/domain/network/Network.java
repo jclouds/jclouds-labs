@@ -35,9 +35,6 @@ import com.google.common.base.Function;
 
 /**
  * Adds generic high level functionality to {@link VLANNetworkDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public abstract class Network<T extends Ip<?, ?>> extends DomainWrapper<VLANNetworkDto> {
    /**

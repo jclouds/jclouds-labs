@@ -22,8 +22,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing JoyentCloud Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseJoyentCloudExpectTest<T> extends BaseRestApiExpectTest<T> {
    protected HttpRequest getDatacenters = HttpRequest.builder()

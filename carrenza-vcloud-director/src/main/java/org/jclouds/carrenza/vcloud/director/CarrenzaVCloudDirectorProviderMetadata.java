@@ -33,9 +33,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link org.jclouds.types.ProviderMetadata} for Carrenza vCloud hosting
- * 
- * @author Adrian Cole
- * @author grkvlt@apache.org
  */
 @SuppressWarnings("serial")
 public class CarrenzaVCloudDirectorProviderMetadata extends BaseProviderMetadata {

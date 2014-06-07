@@ -38,10 +38,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.Iterables;
 import com.google.inject.Module;
 
-/**
- * 
- * @author Adrian Cole, David Alves
- */
 @Test(groups = "live", testName = "BYONBackendLiveTest")
 public class BYONBackendLiveTest extends BaseComputeServiceContextLiveTest {
 

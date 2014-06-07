@@ -51,8 +51,6 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 /**
  * Loads {@link FGCPCredentials} from a pem file containing certificate and
  * private key.
- *
- * @author Dies Koper
  */
 public class FGCPCredentialsSupplier implements Supplier<FGCPCredentials> {
    private final Supplier<Credentials> creds;

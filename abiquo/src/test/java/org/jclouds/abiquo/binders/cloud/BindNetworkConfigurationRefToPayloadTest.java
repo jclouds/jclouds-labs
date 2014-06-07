@@ -44,8 +44,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Unit tests for the {@link BindNetworkConfigurationRefToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindNetworkConfigurationRefToPayloadTest")
 public class BindNetworkConfigurationRefToPayloadTest {

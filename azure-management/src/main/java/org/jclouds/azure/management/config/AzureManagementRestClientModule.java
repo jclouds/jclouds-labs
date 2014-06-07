@@ -46,8 +46,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Configures the Azure Service Management connection.
- * 
- * @author Gerald Pereira
  */
 @ConfiguresRestClient
 public class AzureManagementRestClientModule extends RestClientModule<AzureManagementApi, AzureManagementAsyncApi> {

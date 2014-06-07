@@ -39,8 +39,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Unit tests for the {@link BindToPath} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindToPathTest")
 public class BindToPathTest {

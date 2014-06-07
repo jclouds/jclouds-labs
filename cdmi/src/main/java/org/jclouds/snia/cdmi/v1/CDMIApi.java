@@ -31,7 +31,6 @@ import org.jclouds.snia.cdmi.v1.features.DomainApi;
  * 
  * @see CDMIAsyncApi
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
- * @author Adrian Cole
  */
 public interface CDMIApi {
 

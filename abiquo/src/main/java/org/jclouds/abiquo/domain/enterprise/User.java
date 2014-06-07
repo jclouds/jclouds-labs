@@ -40,8 +40,6 @@ import com.google.common.collect.Lists;
 /**
  * Adds high level functionality to {@link UserDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Users+Resource">
  *      http://community.abiquo.com/display/ABI20/Users+Resource</a>
  */

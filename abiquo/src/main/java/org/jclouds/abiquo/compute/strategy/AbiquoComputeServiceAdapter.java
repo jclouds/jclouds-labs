@@ -75,7 +75,6 @@ import com.google.inject.Inject;
  * Defines the connection between the {@link AbiquoApi} implementation and the
  * jclouds {@link ComputeService}.
  * 
- * @author Ignasi Barrera
  * 
  * @see CreateGroupBeforeCreatingNodes
  */

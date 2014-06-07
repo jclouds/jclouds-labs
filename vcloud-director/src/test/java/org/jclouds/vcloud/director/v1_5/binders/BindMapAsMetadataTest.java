@@ -29,7 +29,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests behavior of {@code BindMapAsMetadata}.
- * 
  */
 @Test(groups = "unit", testName = "BindMapAsMetadataTest")
 public class BindMapAsMetadataTest {

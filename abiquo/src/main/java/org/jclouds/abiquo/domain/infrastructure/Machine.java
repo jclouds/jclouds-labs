@@ -51,8 +51,6 @@ import com.google.inject.TypeLiteral;
  * Adds high level functionality to {@link MachineDto}. This resource allows you
  * to manage physical machines in the cloud infrastructure.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/MachineResource">
  *      http://community.abiquo.com/display/ABI20/MachineResource</a>

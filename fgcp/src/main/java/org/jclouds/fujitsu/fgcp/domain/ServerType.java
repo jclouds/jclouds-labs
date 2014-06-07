@@ -28,8 +28,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Describes the hardware of a virtual server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "servertype")
 public class ServerType implements Comparable<ServerType> {

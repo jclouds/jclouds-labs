@@ -25,8 +25,6 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 
 /**
  * Base implementation of {@link org.jclouds.providers.ProviderMetadata} for FGCP.
- * 
- * @author Dies Koper
  */
 public class FGCPProviderMetadata extends BaseProviderMetadata {
 

@@ -33,9 +33,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Adds generic high level functionality to {@link PrivateIpDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class PrivateIp extends Ip<PrivateIpDto, PrivateNetwork> {
    /**

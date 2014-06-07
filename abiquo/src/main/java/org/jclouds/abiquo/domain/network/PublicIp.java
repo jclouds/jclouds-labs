@@ -33,9 +33,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Adds generic high level functionality to {@link PublicIpDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class PublicIp extends AbstractPublicIp<PublicIpDto, PublicNetwork> {
    /**

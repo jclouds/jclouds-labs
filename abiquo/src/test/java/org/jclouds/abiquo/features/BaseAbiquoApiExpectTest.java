@@ -39,8 +39,6 @@ import com.google.inject.Module;
 
 /**
  * Base class for Abiquo expect tests.
- * 
- * @author Ignasi Barrera
  */
 public abstract class BaseAbiquoApiExpectTest<S> extends BaseRestApiExpectTest<S> {
    protected final String tokenAuth = "auth=mock-token";

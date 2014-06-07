@@ -18,8 +18,6 @@ package org.jclouds.abiquo.monitor.events;
 
 /**
  * Event dispatched when a monitoring job times out.
- * 
- * @author Ignasi Barrera
  */
 public class TimeoutEvent<T> extends MonitorEvent<T> {
    public TimeoutEvent(final T target) {

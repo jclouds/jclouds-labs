@@ -29,8 +29,6 @@ import com.abiquo.model.transport.error.ErrorsDto;
 
 /**
  * Unit tests for the {@link PropagateAbiquoExceptionOnNotFoundOr4xx} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "PropagateAbiquoExceptionOnNotFoundOr4xxTest")
 public class PropagateAbiquoExceptionOnNotFoundOr4xxTest {

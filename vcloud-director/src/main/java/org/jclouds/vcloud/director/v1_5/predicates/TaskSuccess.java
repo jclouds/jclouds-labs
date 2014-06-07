@@ -33,8 +33,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Test a {@link Task} to see if it has {@link Task.Status#SUCCESS succeeded}.
- * 
- * @author grkvlt@apache.org
  */
 @Singleton
 public class TaskSuccess implements Predicate<Task> {

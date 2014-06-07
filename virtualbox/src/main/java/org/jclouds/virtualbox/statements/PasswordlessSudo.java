@@ -25,9 +25,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Assign to user the passwordless sudo rights
- * 
- * @author andrea turli
- * 
  */
 public class PasswordlessSudo implements Statement {
 

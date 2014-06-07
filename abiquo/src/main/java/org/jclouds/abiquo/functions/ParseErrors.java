@@ -27,8 +27,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Parses a errors object.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseErrors extends ParseXMLWithJAXB<ErrorsDto> {

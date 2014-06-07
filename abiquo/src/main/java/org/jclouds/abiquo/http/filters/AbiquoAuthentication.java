@@ -33,8 +33,6 @@ import com.google.common.net.HttpHeaders;
 /**
  * Authenticates using Basic Authentication or a generated token from previous
  * API sessions.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AbiquoAuthentication implements HttpRequestFilter {

@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for ListEFMBackupResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListEFMBackupResponse")
 public class ListEFMBackupResponse extends

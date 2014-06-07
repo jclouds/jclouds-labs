@@ -39,9 +39,6 @@ import com.google.common.collect.Maps;
 /**
  * A {@link LoadingCache} for ip addresses. If the requested ip address has been
  * previously extracted this returns it, if not it calls vbox api.
- * 
- * @author Andrea Turli
- * 
  */
 @Singleton
 public class IpAddressesLoadingCache extends

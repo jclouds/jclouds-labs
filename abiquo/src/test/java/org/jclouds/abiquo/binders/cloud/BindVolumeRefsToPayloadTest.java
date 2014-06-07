@@ -32,8 +32,6 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
  * Unit tests for the {@link BindVolumeRefsToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindVolumeRefsToPayloadTest")
 public class BindVolumeRefsToPayloadTest {

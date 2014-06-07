@@ -25,9 +25,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a network service
- *
- * @author danikov
- * @author Adam Lowe
  */
 @XmlSeeAlso({
    DhcpService.class,

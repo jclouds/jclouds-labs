@@ -38,8 +38,6 @@ import com.google.common.io.Closeables;
 
 /**
  * Parse Abiquo API errors and set the appropriate exception.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AbiquoErrorHandler implements HttpErrorHandler {

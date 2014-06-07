@@ -33,8 +33,6 @@ import com.google.common.base.Function;
  * <p>
  * If the context is created with an already existing token, it is up to the
  * user to renew it when it expires.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class GetTokenFromCredentials implements Function<Credentials, String> {

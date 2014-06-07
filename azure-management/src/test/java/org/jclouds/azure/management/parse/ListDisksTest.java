@@ -31,9 +31,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Gérald Pereira
- */
 // NOTE:without testName, this will not call @Before* and fail w/NPE during surefire
 @Test(groups = "unit", testName = "ListDisksTest")
 public class ListDisksTest extends BaseHandlerTest {

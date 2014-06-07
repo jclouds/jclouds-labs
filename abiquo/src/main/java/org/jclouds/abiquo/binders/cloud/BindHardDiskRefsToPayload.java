@@ -25,8 +25,6 @@ import org.jclouds.xml.XMLParser;
 /**
  * Bind multiple {@link DiskManagementDto} objects to the payload of the request
  * as a list of links.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindHardDiskRefsToPayload extends BindRefsToPayload {

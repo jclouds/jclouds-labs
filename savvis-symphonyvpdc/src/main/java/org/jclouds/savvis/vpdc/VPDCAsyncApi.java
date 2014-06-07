@@ -35,7 +35,6 @@ import com.google.inject.Provides;
  * 
  * @see VPDCApi
  * @see <a href="https://api.sandbox.savvis.net/doc/spec/api/index.html" />
- * @author Adrian Cole
  */
 public interface VPDCAsyncApi {
 

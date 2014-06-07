@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Wrapper for GetVServerInitialPasswordResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetVServerInitialPasswordResponse")
 public class GetVServerInitialPasswordResponse extends StatusResponse implements

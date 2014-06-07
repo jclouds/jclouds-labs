@@ -31,8 +31,6 @@ import com.google.common.collect.Sets;
 
 /**
  * A list of IpAddresses.
- *
- * @author danikov
  */
 @XmlRootElement(name = "IpRanges")
 public class IpRanges {

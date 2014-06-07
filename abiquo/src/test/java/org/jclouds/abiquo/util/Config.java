@@ -23,8 +23,6 @@ import java.util.Properties;
 
 /**
  * Test configuration.
- * 
- * @author Ignasi Barrera
  */
 public class Config {
    /** The main configuration file. */

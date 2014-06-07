@@ -34,8 +34,6 @@ import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
  * 
  * They are scoped at {@link Datacenter} level: two {@link NetworkServiceType}
  * can have the same name if they belong to a different {@link Datacenter}
- * 
- * @author Jaume Devesa
  */
 public class NetworkServiceType extends DomainWrapper<NetworkServiceTypeDto> {
    public static Builder builder(final ApiContext<AbiquoApi> context, final Datacenter datacenter) {
@@ -45,7 +43,6 @@ public class NetworkServiceType extends DomainWrapper<NetworkServiceTypeDto> {
    /**
     * Helper class to build {@link NetworkServiceType} in a controlled way.
     * 
-    * @author Jaume Devesa
     */
    public static class Builder {
       private ApiContext<AbiquoApi> context;

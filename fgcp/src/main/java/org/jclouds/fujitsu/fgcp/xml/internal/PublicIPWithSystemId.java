@@ -22,8 +22,6 @@ import org.jclouds.fujitsu.fgcp.domain.PublicIP;
 
 /**
  * Represents a public IP address with its system id.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "publicip")
 public class PublicIPWithSystemId extends PublicIP {

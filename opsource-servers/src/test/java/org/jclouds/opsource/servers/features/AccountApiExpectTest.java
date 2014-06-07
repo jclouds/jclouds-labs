@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Allows us to test the {@link AccountApi} via its side effects.
- * 
- * @author Adrian Cole
  */
 @Test(groups = { "unit" }, singleThreaded = true, testName = "AccountApiExpectTest")
 public class AccountApiExpectTest extends BaseOpSourceServersRestApiExpectTest {

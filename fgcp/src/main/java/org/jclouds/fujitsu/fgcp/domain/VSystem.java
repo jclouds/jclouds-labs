@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a virtual system.
- * 
- * @author Dies Koper
  */
 public class VSystem {
    @XmlElement(name = "vsysId")

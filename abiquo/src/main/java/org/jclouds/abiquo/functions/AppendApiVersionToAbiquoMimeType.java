@@ -28,8 +28,6 @@ import com.google.common.base.Function;
 
 /**
  * Appends the Api version to the given mime type.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AppendApiVersionToAbiquoMimeType implements Function<String, String> {

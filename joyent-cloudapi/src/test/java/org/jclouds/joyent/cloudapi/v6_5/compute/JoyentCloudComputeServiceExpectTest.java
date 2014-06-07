@@ -44,10 +44,6 @@ import com.google.common.collect.Iterables;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "JoyentCloudComputeServiceExpectTest")
 public class JoyentCloudComputeServiceExpectTest extends BaseJoyentCloudComputeServiceExpectTest {
    Properties onlySW = new Properties();

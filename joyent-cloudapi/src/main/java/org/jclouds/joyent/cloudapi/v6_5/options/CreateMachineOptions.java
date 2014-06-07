@@ -31,11 +31,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 public class CreateMachineOptions extends BaseHttpRequestOptions {
    private String name;
    private String pkg;

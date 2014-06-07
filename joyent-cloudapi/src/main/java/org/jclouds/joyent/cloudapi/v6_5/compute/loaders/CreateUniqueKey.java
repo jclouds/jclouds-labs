@@ -36,9 +36,6 @@ import org.jclouds.ssh.SshKeyPairGenerator;
 import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class CreateUniqueKey extends CacheLoader<DatacenterAndName, KeyAndPrivateKey> {
    @Resource

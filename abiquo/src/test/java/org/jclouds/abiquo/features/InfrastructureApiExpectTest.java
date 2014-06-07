@@ -45,8 +45,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Expect tests for the {@link InfrastructureApi} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "InfrastructureApiExpectTest")
 public class InfrastructureApiExpectTest extends BaseAbiquoApiExpectTest<InfrastructureApi> {

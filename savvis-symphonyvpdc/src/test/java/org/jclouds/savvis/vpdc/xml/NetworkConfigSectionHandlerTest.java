@@ -31,8 +31,6 @@ import com.google.inject.Injector;
 
 /**
  * Tests behavior of {@code NetworkConfigSectionHandler}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit")
 public class NetworkConfigSectionHandlerTest {

@@ -24,7 +24,6 @@ import org.jclouds.azure.management.domain.Disk;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157188">docs</a>
  * @see DiskAsyncApi
- * @author Gerald Pereira
  */
 public interface DiskApi {
 

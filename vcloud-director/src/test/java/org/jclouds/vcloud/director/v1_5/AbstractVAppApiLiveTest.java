@@ -75,8 +75,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Shared code to test the behaviour of {@link VAppApi} and {@link VAppTemplateApi}.
- * 
- * @author grkvlt@apache.org
  */
 public abstract class AbstractVAppApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 

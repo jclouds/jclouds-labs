@@ -59,9 +59,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-/**
- * @author Andrea Turli, Mattias Holmqvist
- */
 @Test(groups = "live", singleThreaded = true, testName = "CreateAndInstallVmLiveTest")
 public class CreateAndInstallVmLiveTest extends BaseVirtualBoxClientLiveTest {
 

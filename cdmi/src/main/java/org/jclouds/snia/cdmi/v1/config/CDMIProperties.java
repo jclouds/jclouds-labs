@@ -18,8 +18,6 @@ package org.jclouds.snia.cdmi.v1.config;
 
 /**
  * Configuration properties and constants used in SNIA CDMI connections.
- * 
- * @author Adrian Cole
  */
 public class CDMIProperties {
 

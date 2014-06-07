@@ -28,8 +28,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Tests behavior of {@link OpSourceServersApi} and acts as parent for other api live tests.
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live")
 public abstract class BaseOpSourceServersApiLiveTest extends

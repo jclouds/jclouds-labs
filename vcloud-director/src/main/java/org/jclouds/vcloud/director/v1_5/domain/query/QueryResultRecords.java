@@ -38,8 +38,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="QueryResultRecords" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "QueryResultRecords")
 public class QueryResultRecords extends ContainerType {

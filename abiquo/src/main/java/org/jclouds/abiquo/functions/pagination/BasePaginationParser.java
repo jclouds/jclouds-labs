@@ -32,7 +32,6 @@ import com.google.common.base.Function;
  * Parses the response with the given parser, and wraps the results in a
  * {@link PaginatedCollection} so it can be properly iterated.
  * 
- * @author Ignasi Barrera
  * 
  * @see PaginatedCollection
  * @see PagedIterable

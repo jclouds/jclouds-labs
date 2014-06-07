@@ -27,8 +27,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Predicates for working with {@link EntityType} collections.
- * 
- * @author grkvlt@apache.org, Adrian Cole
  */
 public class EntityPredicates {
    

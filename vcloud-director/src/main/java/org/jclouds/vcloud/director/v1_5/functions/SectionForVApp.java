@@ -21,9 +21,6 @@ import org.jclouds.vcloud.director.v1_5.domain.AbstractVAppType;
 
 import com.google.common.base.Function;
 
-/**
- * @author danikov
- */
 public class SectionForVApp<S extends SectionType> implements Function<AbstractVAppType, S> {
    
    private final Class<? extends SectionType> sectionType;

@@ -35,8 +35,6 @@ import com.google.common.base.Supplier;
 
 /**
  * A function for transforming a cloudApi-specific Image into a generic Image object.
- * 
- * @author Adrian Cole
  */
 public class DatasetInDatacenterToImage implements Function<DatasetInDatacenter, Image> {
    private final Function<Dataset, OperatingSystem> imageToOs;

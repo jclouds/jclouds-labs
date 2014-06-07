@@ -23,8 +23,6 @@ import org.testng.annotations.Test;
 
 /**
  * Base class for live and domain tests.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "BaseAbiquoApiLiveApiTest", singleThreaded = true)
 public abstract class BaseAbiquoApiLiveApiTest extends BaseAbiquoLiveApiTest {

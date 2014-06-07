@@ -32,8 +32,6 @@ import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 
 /**
  * Unit tests for the {@link BindHardDiskRefsToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindHardDiskRefsToPayloadTest")
 public class BindHardDiskRefsToPayloadTest {

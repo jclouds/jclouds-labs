@@ -18,8 +18,6 @@ package org.jclouds.abiquo.reference;
 
 /**
  * Configuration constants and properties used in Abiquo tests.
- * 
- * @author Ignasi Barrera
  */
 public final class AbiquoTestConstants {
    /** The prefix for test object names. */

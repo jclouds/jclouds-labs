@@ -19,10 +19,6 @@ package org.jclouds.joyent.cloudapi.v6_5.compute.internal;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceContext;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class BaseJoyentCloudComputeServiceExpectTest extends BaseJoyentCloudComputeServiceContextExpectTest<ComputeService> {
 
    @Override

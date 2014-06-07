@@ -22,9 +22,6 @@ import org.jclouds.javax.annotation.Nullable;
 import java.beans.ConstructorProperties;
 import java.net.URI;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Drive extends Item {
 
    public static class Builder extends Item.Builder {

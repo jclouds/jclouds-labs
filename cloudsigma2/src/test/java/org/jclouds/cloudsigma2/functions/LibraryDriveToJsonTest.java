@@ -36,9 +36,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class LibraryDriveToJsonTest {
 

@@ -23,8 +23,6 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates the link to be used to generate the endpoint for the request.
- * 
- * @author Ignasi Barrera
  */
 @Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

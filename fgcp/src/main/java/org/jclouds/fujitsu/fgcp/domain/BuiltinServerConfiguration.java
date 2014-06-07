@@ -27,8 +27,6 @@ import com.google.common.base.CaseFormat;
  * In addition to statuses that apply to regular virtual servers, it includes
  * statuses relevant to the upgrade process for functionality of the built-in
  * server.
- * 
- * @author Dies Koper
  */
 public enum BuiltinServerConfiguration {
    FW_NAT_RULE,

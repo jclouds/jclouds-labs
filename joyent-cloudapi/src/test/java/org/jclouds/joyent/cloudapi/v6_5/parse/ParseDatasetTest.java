@@ -29,9 +29,6 @@ import org.testng.annotations.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-/**
- * @author Gerald Pereira
- */
 @Test(groups = "unit", testName = "ParseDatasetTest")
 public class ParseDatasetTest extends BaseItemParserTest<Dataset> {
 

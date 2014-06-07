@@ -19,9 +19,6 @@ package org.jclouds.greenqloud.storage.blobstore;
 import org.jclouds.s3.blobstore.integration.S3BlobMapIntegrationLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "GreenQloudStorageBlobMapIntegrationLiveTest")
 public class GreenQloudStorageBlobMapIntegrationLiveTest extends S3BlobMapIntegrationLiveTest {
 

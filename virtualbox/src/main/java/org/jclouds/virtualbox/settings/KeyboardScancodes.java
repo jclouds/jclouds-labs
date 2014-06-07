@@ -22,7 +22,6 @@ import com.google.common.collect.Multimap;
 /**
  * 
  * @see <a href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html" />
- *
  */
 public class KeyboardScancodes {
 

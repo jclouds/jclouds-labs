@@ -28,8 +28,6 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
 /**
  * Parses a paginated virtual machine template list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseVirtualMachineTemplates extends

@@ -31,10 +31,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "JobApiLiveTest")
 public class JobApiLiveTest extends BaseJenkinsApiLiveTest {
 

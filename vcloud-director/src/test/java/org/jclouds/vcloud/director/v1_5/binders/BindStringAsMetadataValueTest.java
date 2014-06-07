@@ -27,7 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests behavior of {@code BindStringAsMetadataValue}.
- * 
  */
 @Test(groups = "unit", testName = "BindStringAsMetadataValueTest")
 public class BindStringAsMetadataValueTest {

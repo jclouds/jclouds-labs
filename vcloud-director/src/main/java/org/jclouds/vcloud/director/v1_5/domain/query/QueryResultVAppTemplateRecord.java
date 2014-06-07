@@ -33,8 +33,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryResultVAppTemplateRecordType" /&gt;
  * </pre>
- * 
- * @author Aled Sage
  */
 @XmlRootElement(name = "VAppTemplateRecord")
 @XmlType(name = "QueryResultVAppTemplateRecordType")

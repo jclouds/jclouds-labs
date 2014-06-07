@@ -28,9 +28,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "KeyApiExpectTest")
 public class KeyApiExpectTest extends BaseJoyentCloudApiExpectTest {
    public HttpRequest list = HttpRequest.builder().method("GET")

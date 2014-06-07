@@ -38,9 +38,6 @@ import org.virtualbox_4_2.StorageBus;
 import org.virtualbox_4_2.VBoxException;
 import org.virtualbox_4_2.VirtualBoxManager;
 
-/**
- * @author Mattias Holmqvist
- */
 @Test(groups = "unit", testName = "AttachMediumToMachineIfNotAlreadyAttachedTest")
 public class AttachMediumToMachineIfNotAlreadyAttachedTest {
 

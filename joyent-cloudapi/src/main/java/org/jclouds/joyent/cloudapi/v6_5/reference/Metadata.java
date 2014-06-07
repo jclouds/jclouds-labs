@@ -26,8 +26,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Known keys for metadata
- * 
- * @author Adrian Cole
  */
 public enum Metadata {
    ROOT_AUTHORIZED_KEYS(typeToken(String.class).getType()),

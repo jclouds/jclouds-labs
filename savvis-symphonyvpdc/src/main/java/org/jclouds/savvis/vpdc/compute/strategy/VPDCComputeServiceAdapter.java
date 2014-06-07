@@ -54,7 +54,6 @@ import com.google.inject.Inject;
 /**
  * defines the connection between the {@link VPDCApi} implementation and the
  * jclouds {@link ComputeService}
- * 
  */
 @Singleton
 public class VPDCComputeServiceAdapter implements ComputeServiceAdapter<VM, VMSpec, CIMOperatingSystem, Network> {

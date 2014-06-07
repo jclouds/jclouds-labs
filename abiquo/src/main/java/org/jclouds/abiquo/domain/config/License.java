@@ -25,9 +25,6 @@ import com.abiquo.server.core.config.LicenseDto;
 
 /**
  * Adds high level functionality to {@link LicenseDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class License extends DomainWrapper<LicenseDto> {
    /**

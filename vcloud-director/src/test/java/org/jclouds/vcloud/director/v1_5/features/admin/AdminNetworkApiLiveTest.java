@@ -42,8 +42,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests live behavior of {@link AdminNetworkApi}.
- * 
- * @author danikov
  */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "AdminNetworkLiveTest")
 public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {

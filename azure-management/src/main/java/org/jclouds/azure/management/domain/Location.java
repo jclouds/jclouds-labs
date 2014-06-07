@@ -28,8 +28,6 @@ import com.google.common.collect.ImmutableSet;
  * A geographical region in which a service or storage account will be hosted.
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
- * 
- * @author Adrian Cole
  */
 public class Location {
    public static Builder builder() {

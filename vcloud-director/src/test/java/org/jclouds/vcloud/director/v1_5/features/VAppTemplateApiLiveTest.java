@@ -67,8 +67,6 @@ import com.google.common.collect.Iterables;
  * Tests the request/response behavior of {@link VAppTemplateApi}
  * 
  * NOTE The environment MUST have at least one template configured
- * 
- * @author Aled Sage
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VAppTemplateApiLiveTest")
 public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {

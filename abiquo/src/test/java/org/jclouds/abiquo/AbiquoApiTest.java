@@ -34,8 +34,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code AbiquoApi}.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AbiquoApiTest")
 public class AbiquoApiTest extends BaseAbiquoApiTest<AbiquoApi> {

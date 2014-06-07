@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live tests for the {@link ListVirtualAppliances} strategy.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "ListVirtualAppliancesLiveApiTest")
 public class ListVirtualAppliancesLiveApiTest extends BaseAbiquoStrategyLiveApiTest {

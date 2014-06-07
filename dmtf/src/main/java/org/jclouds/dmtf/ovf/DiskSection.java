@@ -32,9 +32,6 @@ import com.google.common.collect.Sets;
  * A DiskSection describes meta-information about virtual disks in the OVF package. Virtual disks
  * and their metadata are described outside the virtual hardware to facilitate sharing between
  * virtual machines within an OVF package.
- *
- * @author Adrian Cole
- * @author Adam Lowe
  */
 @XmlRootElement(name = "DiskSection")
 @XmlType(propOrder = {

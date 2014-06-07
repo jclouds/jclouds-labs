@@ -26,8 +26,6 @@ import com.abiquo.server.core.task.TaskDto;
 
 /**
  * Task that produces a {@link VirtualMachine}.
- * 
- * @author Ignasi Barrera
  */
 public class VirtualMachineTask extends AsyncTask<VirtualMachine, VirtualMachineWithNodeExtendedDto> {
    protected VirtualMachineTask(final ApiContext<AbiquoApi> context, final TaskDto target) {

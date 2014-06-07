@@ -33,9 +33,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Adds generic high level functionality to {@link UnmanagedIpDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class UnmanagedIp extends AbstractPublicIp<UnmanagedIpDto, UnmanagedNetwork> {
    /**

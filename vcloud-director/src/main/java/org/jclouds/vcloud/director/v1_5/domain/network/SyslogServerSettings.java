@@ -26,8 +26,6 @@ import com.google.common.base.Objects;
 /**
  * Syslog server settings. If logging is configured for firewall rules, the logs
  * will be directed to these syslog servers.
- *
- * @author danikov
  */
 @XmlRootElement(name = "SyslogServerSettings")
 public class SyslogServerSettings {

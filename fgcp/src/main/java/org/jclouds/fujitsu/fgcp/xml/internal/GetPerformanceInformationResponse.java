@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for GetPerformanceInformationResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetPerformanceInformationResponse")
 public class GetPerformanceInformationResponse extends

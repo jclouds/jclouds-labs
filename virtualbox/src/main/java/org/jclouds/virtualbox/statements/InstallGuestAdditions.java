@@ -43,9 +43,6 @@ import com.google.common.collect.Lists;
 /**
  * Mounts the DVD with guest additions that was downloaded and attached as removable storage. If no
  * guest additions is attached to the vmspec then it is downloaded.
- * 
- * @author David Alves
- * 
  */
 public class InstallGuestAdditions implements Statement {
 

@@ -44,8 +44,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Configures the JoyentCloud connection.
- * 
- * @author Adrian Cole
  */
 @ConfiguresRestClient
 public class JoyentCloudRestClientModule extends RestClientModule<JoyentCloudApi, JoyentCloudAsyncApi> {

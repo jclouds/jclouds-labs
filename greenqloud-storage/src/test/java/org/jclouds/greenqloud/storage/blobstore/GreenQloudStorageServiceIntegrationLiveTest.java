@@ -23,9 +23,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "GreenQloudStorageServiceIntegrationLiveTest")
 public class GreenQloudStorageServiceIntegrationLiveTest extends S3ServiceIntegrationLiveTest {
 

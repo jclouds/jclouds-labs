@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for GetEventLogResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetEventLogResponse")
 public class GetEventLogResponse extends SetWithStatusResponse<EventLog> {

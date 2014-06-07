@@ -38,8 +38,6 @@ import com.google.inject.Module;
 
 /**
  * Base class for Abiquo api tests.
- * 
- * @author Ignasi Barrera
  */
 public abstract class BaseAbiquoApiTest<T> extends BaseAsyncClientTest<T> {
    private XMLParser xml;

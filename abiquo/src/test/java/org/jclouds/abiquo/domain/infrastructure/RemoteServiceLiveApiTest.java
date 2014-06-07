@@ -41,8 +41,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link RemoteService} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "RemoteServiceLiveApiTest")
 public class RemoteServiceLiveApiTest extends BaseAbiquoApiLiveApiTest {

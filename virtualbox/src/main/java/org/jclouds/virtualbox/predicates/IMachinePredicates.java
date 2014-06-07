@@ -30,10 +30,6 @@ import org.virtualbox_4_2.IMedium;
 
 import com.google.common.base.Predicate;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class IMachinePredicates {
    /**
     * TODO: andrea please explain

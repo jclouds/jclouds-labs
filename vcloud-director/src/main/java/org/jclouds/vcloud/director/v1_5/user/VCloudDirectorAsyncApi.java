@@ -52,7 +52,6 @@ import com.google.inject.Provides;
  * Provides asynchronous access to VCloudDirector via their REST API.
  * 
  * @see VCloudDirectorApi
- * @author Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface VCloudDirectorAsyncApi {

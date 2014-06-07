@@ -30,9 +30,6 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 
 /**
  * VM template domain utilities.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class TemplateResources {
    public static DatacenterRepositoryDto datacenterRepositoryPut() {

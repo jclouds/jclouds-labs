@@ -30,8 +30,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link LocationNamingUtils} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "LocationNamingUtilsTest")
 public class LocationNamingUtilsTest {

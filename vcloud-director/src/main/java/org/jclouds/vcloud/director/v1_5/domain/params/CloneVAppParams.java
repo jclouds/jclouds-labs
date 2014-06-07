@@ -25,8 +25,6 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="CloneVAppParams" /&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlType(name = "CloneVAppParams")
 @XmlRootElement(name = "CloneVAppParams")

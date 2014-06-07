@@ -63,9 +63,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Configures the compute service classes for the DigitalOcean API.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class DigitalOceanComputeServiceContextModule extends
       ComputeServiceAdapterContextModule<Droplet, Size, Image, Region> {

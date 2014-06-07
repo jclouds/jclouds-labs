@@ -20,10 +20,6 @@ import javax.inject.Inject;
 
 import org.jclouds.azure.management.domain.HostedServiceWithDetailedProperties;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class HostedServiceWithDetailedPropertiesHandler extends HostedServiceHandler {
 
    @Inject

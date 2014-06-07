@@ -23,8 +23,6 @@ import org.jclouds.fujitsu.fgcp.domain.VSystem;
 
 /**
  * Wrapper for GetVSYSAttributesResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetVSYSAttributesResponse")
 public class GetVSYSAttributesResponse extends StatusResponse implements

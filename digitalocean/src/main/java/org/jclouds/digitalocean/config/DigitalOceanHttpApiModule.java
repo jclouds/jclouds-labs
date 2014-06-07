@@ -34,9 +34,6 @@ import com.google.inject.Scopes;
 
 /**
  * Configures the DigitalOcean connection.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @ConfiguresHttpApi
 public class DigitalOceanHttpApiModule extends HttpApiModule<DigitalOceanApi> {

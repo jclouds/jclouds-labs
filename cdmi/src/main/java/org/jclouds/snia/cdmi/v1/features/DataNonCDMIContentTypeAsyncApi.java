@@ -48,7 +48,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see DataNonCDMIContentTypeApi
  * @see DataAsyncApi
- * @author Kenneth Nagin
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
  */
 @RequestFilters({ BasicAuthenticationAndTenantId.class, StripExtraAcceptHeader.class })

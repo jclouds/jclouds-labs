@@ -50,8 +50,6 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 /**
  * Creates the group before concurrently creating the nodes, to avoid creating
  * more than one group with the same name.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class CreateGroupBeforeCreatingNodes extends CreateNodesWithGroupEncodedIntoNameThenAddToSet {

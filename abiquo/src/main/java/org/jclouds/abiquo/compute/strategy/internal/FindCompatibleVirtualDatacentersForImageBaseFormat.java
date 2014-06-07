@@ -46,8 +46,6 @@ import com.google.common.base.Predicate;
  * have conversions to other formats.
  * <p>
  * This strategy will only consider the base disk format of the image.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class FindCompatibleVirtualDatacentersForImageBaseFormat implements FindCompatibleVirtualDatacenters {

@@ -29,9 +29,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * Provides high level Abiquo cloud operations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @ImplementedBy(BaseCloudService.class)
 public interface CloudService {

@@ -46,8 +46,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Links a {@link VirtualMachine} object to a {@link NodeMetadata} one.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, NodeMetadata> {

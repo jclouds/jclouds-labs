@@ -25,9 +25,6 @@ import com.abiquo.am.model.TemplateStatusEnumType;
 
 /**
  * Adds high level functionality to {@link TemplateStateDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class TemplateState extends DomainWrapper<TemplateStateDto> {
    /**

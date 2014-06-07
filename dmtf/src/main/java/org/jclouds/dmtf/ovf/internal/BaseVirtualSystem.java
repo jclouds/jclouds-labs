@@ -33,9 +33,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * @author Adrian Cole
- */
 public abstract class BaseVirtualSystem extends SectionType {
 
    public abstract static class Builder<B extends Builder<B>> extends SectionType.Builder<B> {

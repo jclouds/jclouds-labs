@@ -26,9 +26,6 @@ import javax.inject.Named;
 
 import com.google.common.collect.ImmutableList;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class LibraryDrive extends DriveInfo {
 
    public static class Builder extends DriveInfo.Builder {

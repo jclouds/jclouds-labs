@@ -25,9 +25,6 @@ import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 
 /**
  * Adds generic high level functionality to {@link AbstractIpDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public abstract class Ip<T extends AbstractIpDto, N extends Network<?>> extends DomainWrapper<T> {
    /**

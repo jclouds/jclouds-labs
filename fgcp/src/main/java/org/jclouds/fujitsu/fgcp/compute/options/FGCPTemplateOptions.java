@@ -18,10 +18,6 @@ package org.jclouds.fujitsu.fgcp.compute.options;
 
 import org.jclouds.compute.options.TemplateOptions;
 
-/**
- * 
- * @author Dies Koper
- */
 public class FGCPTemplateOptions extends TemplateOptions {
 
 }

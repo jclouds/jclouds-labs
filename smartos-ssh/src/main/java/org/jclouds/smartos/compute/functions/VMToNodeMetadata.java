@@ -45,9 +45,6 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Nigel Magnay
- */
 @Singleton
 public class VMToNodeMetadata implements Function<VM, NodeMetadata> {
 

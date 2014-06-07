@@ -23,7 +23,6 @@ import org.jclouds.vcloud.director.v1_5.domain.User;
  * Provides synchronous access to {@link User} objects.
  * 
  * @see UserAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface UserApi {
 

@@ -39,9 +39,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link DropletApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "DropletApiMockTest")
 public class DropletApiMockTest extends BaseDigitalOceanMockTest {

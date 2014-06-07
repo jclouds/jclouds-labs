@@ -27,8 +27,6 @@ import com.abiquo.model.rest.RESTLink;
 
 /**
  * Binds the given link to the uri.
- * 
- * @author Francesc Montserrat
  */
 @Singleton
 public class BindLinkToPath extends BindToPath {

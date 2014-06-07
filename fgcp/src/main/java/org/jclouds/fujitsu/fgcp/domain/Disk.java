@@ -22,8 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Describes a disk as part of the description of hardware represented by a
  * virtual server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement
 public class Disk {

@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests possible uses of ListContainerOptions and ListContainerOptions.Builder.*
- * 
- * @author Adrian Cole
  */
 @Test(testName = "ListContainersOptionsTest")
 public class ListContainersOptionsTest {

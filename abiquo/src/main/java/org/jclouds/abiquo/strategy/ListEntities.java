@@ -20,8 +20,6 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 
 /**
  * List all entities of the given type.
- * 
- * @author Ignasi Barrera
  */
 public interface ListEntities<T extends DomainWrapper<?>, P extends DomainWrapper<?>> {
    Iterable<T> execute(P parent);

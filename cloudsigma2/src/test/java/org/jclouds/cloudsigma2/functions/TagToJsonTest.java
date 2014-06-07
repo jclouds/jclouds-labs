@@ -33,9 +33,6 @@ import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class TagToJsonTest {
 

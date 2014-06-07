@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query machines.
- * 
- * @author Francesc Montserrat
  */
 public class MachineOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

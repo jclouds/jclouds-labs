@@ -34,8 +34,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryResultVAppRecordType" /&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "VAppRecord")
 @XmlType(name = "QueryResultVAppRecordType")

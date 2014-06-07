@@ -29,8 +29,6 @@ import com.google.common.base.Function;
 
 /**
  * This class takes care of monitoring {@link AsyncTask} jobs.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AsyncTaskStatusMonitor implements Function<AsyncTask<?, ?>, MonitorStatus> {

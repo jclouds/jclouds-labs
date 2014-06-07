@@ -39,8 +39,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Unit tests for the {@link ReturnTaskReferenceOrNull} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "ReturnTaskReferenceOrNullTest")
 public class ReturnTaskReferenceOrNullTest {

@@ -27,7 +27,6 @@ import org.jclouds.rest.annotations.Delegate;
  * 
  * @see JenkinsAsyncApi
  * @see <a href="https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API">api doc</a>
- * @author Adrian Cole
  */
 public interface JenkinsApi {
    /**

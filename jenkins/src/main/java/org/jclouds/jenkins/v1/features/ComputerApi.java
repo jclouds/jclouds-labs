@@ -23,7 +23,6 @@ import org.jclouds.jenkins.v1.domain.ComputerView;
  * Computer Services
  * 
  * @see ComputerAsyncApi
- * @author Adrian Cole
  * @see <a href= "http://ci.jruby.org/computer/api/" >api doc</a>
  */
 public interface ComputerApi {

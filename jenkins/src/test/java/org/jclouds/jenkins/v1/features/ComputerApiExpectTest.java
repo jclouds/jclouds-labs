@@ -26,10 +26,6 @@ import org.jclouds.jenkins.v1.parse.ParseComputerTest;
 import org.jclouds.jenkins.v1.parse.ParseComputerViewTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ComputerApiExpectTest")
 public class ComputerApiExpectTest extends BaseJenkinsApiExpectTest {
 

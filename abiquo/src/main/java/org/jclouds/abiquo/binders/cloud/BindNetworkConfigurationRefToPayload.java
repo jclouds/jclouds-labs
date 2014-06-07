@@ -37,8 +37,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Bind multiple objects to the payload of the request as a list of links.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindNetworkConfigurationRefToPayload extends BindToXMLPayload {

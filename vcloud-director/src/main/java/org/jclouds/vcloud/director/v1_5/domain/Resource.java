@@ -44,7 +44,6 @@ import com.google.common.collect.Sets;
  * &lt;xs:complexType name="ResourceType" /&gt;
  * </pre>
  *
- * @author Adrian Cole
  *
  * @since 0.9
  */

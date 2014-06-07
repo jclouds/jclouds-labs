@@ -35,8 +35,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="CatalogItemType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "CatalogItem")
 public class CatalogItem extends Entity {

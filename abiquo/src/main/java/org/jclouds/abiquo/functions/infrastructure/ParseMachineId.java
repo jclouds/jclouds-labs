@@ -26,8 +26,6 @@ import com.google.common.base.Function;
 
 /**
  * Parses a {@link MachineDto} object to extract its id.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseMachineId implements Function<Object, String> {

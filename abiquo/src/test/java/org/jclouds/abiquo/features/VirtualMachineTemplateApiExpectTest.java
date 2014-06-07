@@ -35,9 +35,6 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
 /**
  * Expect tests for the {@link VirtualMachineTemplateApi}.
- * 
- * @author Ignasi Barrera
- * 
  */
 @Test(groups = "unit", testName = "VirtualMachineTemplateApiExpectTest")
 public class VirtualMachineTemplateApiExpectTest extends BaseAbiquoApiExpectTest<VirtualMachineTemplateApi> {

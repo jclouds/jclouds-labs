@@ -23,9 +23,6 @@ import org.jclouds.vcloud.director.v1_5.login.SessionApiExpectTest;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "VCloudDirectorApi")
 public class VCloudDirectorApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 

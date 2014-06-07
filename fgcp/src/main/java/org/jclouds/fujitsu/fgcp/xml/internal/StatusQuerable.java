@@ -18,8 +18,6 @@ package org.jclouds.fujitsu.fgcp.xml.internal;
 
 /**
  * Exposes methods to obtain the status and message from the API server.
- * 
- * @author Dies Koper
  */
 public interface StatusQuerable {
    String getResponseMessage();

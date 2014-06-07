@@ -33,8 +33,6 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 /**
  * Bind multiple {@link VolumeManagementDto} objects to the payload of the
  * request as a list of links.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload {

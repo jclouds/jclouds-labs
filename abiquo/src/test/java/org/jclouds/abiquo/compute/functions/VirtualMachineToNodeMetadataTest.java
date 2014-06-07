@@ -57,8 +57,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Unit tests for the {@link VirtualMachineToNodeMetadata} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualMachineToNodeMetadataTest")
 public class VirtualMachineToNodeMetadataTest {

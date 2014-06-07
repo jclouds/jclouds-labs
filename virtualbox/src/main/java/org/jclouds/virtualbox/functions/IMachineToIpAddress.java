@@ -30,8 +30,6 @@ import com.google.common.base.Function;
 
 /**
  * Get an IP address from an IMachine using arp of the host machine.
- * 
- * @author Mattias Holmqvist, Andrea Turli
  */
 public class IMachineToIpAddress implements Function<IMachine, String> {
 

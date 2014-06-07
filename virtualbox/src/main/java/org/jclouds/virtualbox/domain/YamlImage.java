@@ -103,9 +103,6 @@ import com.google.common.collect.Maps;
  *                       #Use mirror
  *                       choose-mirror-bin mirror/http/proxy string
  * </pre>
- * 
- * @author Kelvin Kakugawa
- * @author Adrian Cole
  */
 public class YamlImage {
    public String id;

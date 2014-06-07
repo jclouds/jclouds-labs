@@ -32,9 +32,6 @@ import javax.inject.Singleton;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ParseDrives extends ParseJson<ParseDrives.Drives> {
    static class Drives extends PaginatedCollection<Drive> {

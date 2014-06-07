@@ -30,9 +30,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link RegionApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "RegionApiMockTest")
 public class RegionApiMockTest extends BaseDigitalOceanMockTest {

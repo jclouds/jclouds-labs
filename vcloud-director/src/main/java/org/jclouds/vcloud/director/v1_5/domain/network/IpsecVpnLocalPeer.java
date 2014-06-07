@@ -37,8 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlRootElement(name = "IpsecVpnLocalPeer")
 public class IpsecVpnLocalPeer

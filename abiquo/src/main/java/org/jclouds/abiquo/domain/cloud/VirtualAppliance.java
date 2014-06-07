@@ -48,8 +48,6 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  * A virtual appliance is a logic container for virtual machines that together
  * make an appliance.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource"
  *      >

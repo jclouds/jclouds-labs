@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Describes the address range pool in a contract used for allocating private IP
  * address network segments for virtual systems.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "addressrange")
 public class AddressRange {

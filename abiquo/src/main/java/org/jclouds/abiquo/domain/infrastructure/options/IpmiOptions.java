@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query ipmi config.
- * 
- * @author scastro
  */
 public class IpmiOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

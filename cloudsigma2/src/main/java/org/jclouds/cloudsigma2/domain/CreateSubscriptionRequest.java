@@ -16,9 +16,6 @@
  */
 package org.jclouds.cloudsigma2.domain;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class CreateSubscriptionRequest {
 
    public static class Builder {

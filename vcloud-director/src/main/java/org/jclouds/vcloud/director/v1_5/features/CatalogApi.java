@@ -25,7 +25,6 @@ import org.jclouds.vcloud.director.v1_5.domain.CatalogItem;
  * Provides synchronous access to {@link Catalog} objects.
  * 
  * @see CatalogAsyncApi
- * @author grkvlt@apache.org, Adrian Cole
  */
 public interface CatalogApi {
 

@@ -26,8 +26,6 @@ import com.google.common.collect.Sets;
  * Grouping of firewall rules pertaining to a particular direction in network
  * traffic, e.g. from the Internet to a server in the DMZ zone, or from a server
  * in the SECURE2 zone to the SECURE1 zone, etc.
- * 
- * @author Dies Koper
  */
 public class Direction {
    private String from;

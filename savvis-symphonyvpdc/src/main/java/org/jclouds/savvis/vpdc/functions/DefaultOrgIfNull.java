@@ -25,10 +25,6 @@ import org.jclouds.savvis.vpdc.internal.Org;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class DefaultOrgIfNull implements Function<Object, String> {
 
    private final Supplier<String> defaultOrg;

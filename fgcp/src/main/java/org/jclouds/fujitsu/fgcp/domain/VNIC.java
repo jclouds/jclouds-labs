@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a virtual network interface card (NIC).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vnic")
 public class VNIC {

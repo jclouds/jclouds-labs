@@ -25,8 +25,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link AppendToPath} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AppendToPathTest")
 public class AppendToPathTest {

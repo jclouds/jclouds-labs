@@ -47,8 +47,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Added in FGCPContextBuilder
- * 
- * @author Dies Koper
  */
 public class FGCPComputeServiceContextModule
       extends

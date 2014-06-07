@@ -21,9 +21,6 @@ import com.google.common.collect.ImmutableList;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Pricing {
 
    public static class Builder {

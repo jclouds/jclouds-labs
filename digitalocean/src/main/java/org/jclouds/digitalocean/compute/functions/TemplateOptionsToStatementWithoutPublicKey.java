@@ -32,9 +32,6 @@ import com.google.common.collect.ImmutableList;
  * <p>
  * The {@link org.jclouds.digitalocean.compute.strategy.DigitalOceanComputeServiceAdapter} already takes care of
  * installing it using the {@link org.jclouds.digitalocean.features.KeyPairApi}.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class TemplateOptionsToStatementWithoutPublicKey extends TemplateOptionsToStatement {

@@ -39,7 +39,6 @@ import com.google.common.eventbus.Subscribe;
  * Issue 786</a> {@link #handle(MonitorEvent)} is marked <code>final</code>to
  * avoid having duplicate events.
  * 
- * @author Ignasi Barrera
  * @param <T>
  *           The monitored object.
  */

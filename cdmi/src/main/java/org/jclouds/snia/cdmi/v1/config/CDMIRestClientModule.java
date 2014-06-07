@@ -40,8 +40,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Configures the CDMI connection.
- * 
- * @author Adrian Cole
  */
 @ConfiguresRestClient
 public class CDMIRestClientModule extends RestClientModule<CDMIApi, CDMIAsyncApi> {

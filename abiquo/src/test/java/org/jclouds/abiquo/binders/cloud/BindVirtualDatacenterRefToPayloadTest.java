@@ -32,8 +32,6 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
 /**
  * Unit tests for the {@link BindVirtualDatacenterRefToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindVirtualDatacenterRefToPayloadTest")
 public class BindVirtualDatacenterRefToPayloadTest {

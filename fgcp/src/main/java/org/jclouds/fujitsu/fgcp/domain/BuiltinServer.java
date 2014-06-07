@@ -22,8 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Represents a built-in server, also called extended function module (EFM),
  * such as a firewall or load balancer (SLB).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "efm")
 public class BuiltinServer {

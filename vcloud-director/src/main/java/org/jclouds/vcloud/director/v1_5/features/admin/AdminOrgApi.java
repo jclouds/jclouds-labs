@@ -32,7 +32,6 @@ import org.jclouds.vcloud.director.v1_5.features.OrgApi;
  * Provides synchronous access to {@link Org} objects.
  * 
  * @see AdminOrgAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface AdminOrgApi extends OrgApi {
 

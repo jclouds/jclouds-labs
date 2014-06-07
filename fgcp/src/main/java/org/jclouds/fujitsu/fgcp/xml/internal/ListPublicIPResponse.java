@@ -32,8 +32,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Wrapper for ListPublicIPResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListPublicIPResponse")
 public class ListPublicIPResponse extends

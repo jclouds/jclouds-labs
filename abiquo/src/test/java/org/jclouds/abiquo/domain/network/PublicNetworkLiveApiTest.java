@@ -40,8 +40,6 @@ import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 
 /**
  * Live integration tests for the {@link PublicNetwork} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "PublicNetworkLiveApiTest")
 public class PublicNetworkLiveApiTest extends BaseAbiquoApiLiveApiTest {

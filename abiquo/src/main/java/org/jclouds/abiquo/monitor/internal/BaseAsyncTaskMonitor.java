@@ -39,8 +39,6 @@ import com.google.common.eventbus.EventBus;
 
 /**
  * Default monitor for {@link AsyncTask} objects.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BaseAsyncTaskMonitor extends BaseMonitoringService implements AsyncTaskMonitor {

@@ -36,8 +36,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link GetTokenFromApi} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "GetTokenFromApiTest")
 public class GetTokenFromApiTest {

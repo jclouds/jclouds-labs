@@ -38,10 +38,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap.Builder;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class Utils {
 
    public static Resource newResource(Map<String, String> attributes, String defaultType) {

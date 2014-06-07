@@ -40,9 +40,6 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Expect tests for the {@link EnterpriseApi} class.
- * 
- * @author Carlos Garcia
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "EnterpriseApiExpectTest")
 public class EnterpriseApiExpectTest extends BaseAbiquoApiExpectTest<EnterpriseApi> {

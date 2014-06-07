@@ -36,8 +36,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link AppendApiVersionToMediaType} filter.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AppendApiVersionToMediaTypeTest")
 public class AppendApiVersionToMediaTypeTest {

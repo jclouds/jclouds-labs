@@ -29,10 +29,6 @@ import org.jclouds.ec2.compute.suppliers.EC2HardwareSupplier;
 
 import java.util.Set;
 
-/**
- *
- * @author Jos van der Til
- */
 @Singleton
 public class GreenQloudEC2HardwareSupplier extends EC2HardwareSupplier {
 

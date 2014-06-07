@@ -38,8 +38,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="QueryResultRecordType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlSeeAlso({
       QueryResultVAppTemplateRecord.class,

@@ -28,9 +28,6 @@ import org.jclouds.cloudsigma2.domain.ServerInfo;
 
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ServerInfoToJson implements Function<ServerInfo, JsonObject> {
    @Override

@@ -43,10 +43,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "VirtualBoxExperimentLiveTest")
 public class VirtualBoxExperimentLiveTest extends BaseVirtualBoxClientLiveTest {
 

@@ -36,8 +36,6 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
  * <p>
  * This method should be used in {@link PUT} methods to automatically extract
  * the path parameters from the edit link of the updated object.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindToXMLPayloadAndPath extends BindToXMLPayload {

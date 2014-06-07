@@ -30,9 +30,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class BindServerInfoListToJsonRequest implements Binder {
    private final ServerInfoToJson createServerInfoRequestToJson;

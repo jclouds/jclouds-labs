@@ -45,8 +45,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link AdminCatalogApi} by observing its side effects.
- * 
- * @author grkvlt@apache.org, Adrian Cole
  */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminCatalogApiExpectTest")
 public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest {

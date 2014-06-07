@@ -31,9 +31,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Abiquo API exception.
- * 
- * @author Francesc Montserrat
- * @author Ignasi Barrera
  */
 public class AbiquoException extends RuntimeException {
 

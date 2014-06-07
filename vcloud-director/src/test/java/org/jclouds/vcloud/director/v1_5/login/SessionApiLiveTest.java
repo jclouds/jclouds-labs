@@ -39,8 +39,6 @@ import com.google.common.reflect.TypeToken;
 /**
  * Tests behavior of {@link SessionApi}. Note this class is tested completely independently of
  * {@link VCloudDirectorApi} as it is a dependency of the {@code vcloud-director} context working.
- * 
- * @author Adrian Cole
  */
 @Listeners(FormatApiResultsListener.class)
 @Test(groups = { "live", "user" }, testName = "SessionApiLiveTest")

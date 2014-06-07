@@ -28,9 +28,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.inject.Inject;
 
-/**
- * @author Adrian Cole
- */
 public class ListOSImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Set<OSImage>> {
 
    private final OSImageHandler locationHandler;

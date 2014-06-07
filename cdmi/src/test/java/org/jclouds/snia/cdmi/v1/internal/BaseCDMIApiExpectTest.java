@@ -20,8 +20,6 @@ import org.jclouds.snia.cdmi.v1.CDMIApi;
 
 /**
  * Base class for writing KeyStone Rest Api Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseCDMIApiExpectTest extends BaseCDMIExpectTest<CDMIApi> {
 

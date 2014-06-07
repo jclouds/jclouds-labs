@@ -28,8 +28,6 @@ import com.google.common.collect.Maps;
 
 /**
  * Various network features such NAT Public IP, Gateway and Netmask.
- * 
- * @author Adrian Cole
  */
 public class Network extends ResourceImpl {
    public static Builder builder() {

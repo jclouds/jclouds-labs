@@ -35,8 +35,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link org.jclouds.providers.ProviderMetadata} for Greenqloud Compute Cloud.
- * 
- * @author Adrian Cole
  */
 public class GreenQloudComputeProviderMetadata extends BaseProviderMetadata {
 

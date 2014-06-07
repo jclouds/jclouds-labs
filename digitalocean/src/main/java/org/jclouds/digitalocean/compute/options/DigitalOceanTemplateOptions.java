@@ -27,9 +27,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Custom options for the DigitalOcean API.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class DigitalOceanTemplateOptions extends TemplateOptions implements Cloneable {
 

@@ -24,9 +24,6 @@ import com.google.inject.Singleton;
 import org.jclouds.cloudsigma2.domain.VLANInfo;
 import org.jclouds.javax.annotation.Nullable;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class VLANInfoToJson implements Function<VLANInfo, JsonObject> {
 

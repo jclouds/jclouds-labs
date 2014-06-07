@@ -26,7 +26,6 @@ import com.google.common.base.Objects;
 
 /**
  * Holds operating system information for {@link ServerImage}
- * @author Kedar Dave
  */
 @XmlRootElement(name = "operatingSystem", namespace = SERVER)
 public class OperatingSystem {

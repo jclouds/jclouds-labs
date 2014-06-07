@@ -22,8 +22,6 @@ import org.testng.annotations.Test;
 /**
  * The VPDCProviderTest tests the
  * org.jclouds.savvis.vpdc.VPDCProviderMetadata class.
- * 
- * @author Kedar Dave
  */
 @Test(groups = "unit", testName = "VPDCProviderTest")
 public class VPDCProviderTest extends BaseProviderMetadataTest {

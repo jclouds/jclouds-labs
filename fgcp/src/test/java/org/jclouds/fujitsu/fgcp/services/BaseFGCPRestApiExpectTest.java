@@ -42,9 +42,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.io.Resources;
 import com.google.inject.Module;
 
-/**
- * @author Dies Koper
- */
 public class BaseFGCPRestApiExpectTest extends BaseRestApiExpectTest<FGCPApi> {
 
    /**

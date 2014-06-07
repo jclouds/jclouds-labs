@@ -24,10 +24,6 @@ import javax.inject.Singleton;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Singleton
 public class BindGetVMOptions implements Binder {
 

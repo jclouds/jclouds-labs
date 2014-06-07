@@ -27,8 +27,6 @@ import com.google.common.base.Function;
 /**
  * Parses a {@link ParseRemoteServiceType} object to extract its type in the
  * format that the API expects it.
- * 
- * @author Francesc Montserrat
  */
 @Singleton
 public class ParseRemoteServiceType implements Function<Object, String> {

@@ -39,8 +39,6 @@ import com.google.inject.TypeLiteral;
  * <li>202 with the asynchronous task reference in the body if the operation has
  * been submitted and will be executed asynchronously</li>
  * </ul>
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ReturnTaskReferenceOrNull extends ParseXMLWithJAXB<AcceptedRequestDto<String>> {

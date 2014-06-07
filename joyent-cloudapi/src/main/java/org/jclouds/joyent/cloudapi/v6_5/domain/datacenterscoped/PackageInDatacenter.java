@@ -18,9 +18,6 @@ package org.jclouds.joyent.cloudapi.v6_5.domain.datacenterscoped;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Adrian Cole
- */
 public class PackageInDatacenter extends DatacenterAndName {
    protected final org.jclouds.joyent.cloudapi.v6_5.domain.Package pkg;
 

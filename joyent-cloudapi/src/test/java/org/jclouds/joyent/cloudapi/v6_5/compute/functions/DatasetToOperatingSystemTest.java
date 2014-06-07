@@ -32,8 +32,6 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Tests for the function for transforming a cloudApi specific Image into a generic
  * OperatingSystem object.
- * 
- * @author Adrian Cole
  */
 @Test(testName = "DatasetToOperatingSystemTest")
 public class DatasetToOperatingSystemTest {

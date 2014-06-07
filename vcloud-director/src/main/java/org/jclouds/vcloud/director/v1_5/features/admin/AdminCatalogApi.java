@@ -28,7 +28,6 @@ import org.jclouds.vcloud.director.v1_5.features.CatalogApi;
  * Provides synchronous access to {@link AdminCatalog} objects.
  * 
  * @see AdminCatalogAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface AdminCatalogApi extends CatalogApi {
 

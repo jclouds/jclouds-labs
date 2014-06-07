@@ -28,10 +28,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * @author Adrian Cole
- * @author grkvlt@apache.org
- */
 public abstract class BaseEnvelope<V extends BaseVirtualSystem, E extends BaseEnvelope<V, E>> {
    
    public abstract Builder<?, V, E> toBuilder();

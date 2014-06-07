@@ -43,8 +43,6 @@ import com.google.common.base.Supplier;
 /**
  * Takes PK and chain from credentials to build a SSLContext for HTTPS with
  * client authentication.
- *
- * @author Dies Koper
  */
 @Singleton
 public class SSLContextWithKeysSupplier implements Supplier<SSLContext> {

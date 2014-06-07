@@ -35,8 +35,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Unit tests for the {@link BindSupportedDevicesLinkToPath} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindSupportedDevicesLinkToPathTest")
 public class BindSupportedDevicesLinkToPathTest {

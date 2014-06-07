@@ -45,8 +45,6 @@ import com.google.common.base.Supplier;
 
 /**
  * Unit tests for the {@link VirtualMachineTemplateToImage} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualMachineTemplateToImageTest")
 public class VirtualMachineTemplateToImageTest {

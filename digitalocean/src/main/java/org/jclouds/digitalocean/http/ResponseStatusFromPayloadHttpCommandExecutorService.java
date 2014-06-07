@@ -59,9 +59,6 @@ import com.google.common.util.concurrent.ListeningExecutorService;
  * <code>ERROR</code> string in the response payload.
  * <p>
  * This class will read the body of the response and populate a 500 status code if an error is found.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class ResponseStatusFromPayloadHttpCommandExecutorService extends JavaUrlHttpCommandExecutorService {

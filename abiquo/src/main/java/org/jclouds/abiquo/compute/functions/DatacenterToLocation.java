@@ -31,8 +31,6 @@ import com.google.common.collect.ImmutableSet;
  * Converts a {@link Datacenter} to a {@link Location} one.
  * <p>
  * Physical datacenters will be considered regions.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class DatacenterToLocation implements Function<Datacenter, Location> {

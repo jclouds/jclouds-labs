@@ -22,9 +22,6 @@ import org.jclouds.collect.IterableWithMarker;
 
 import java.util.Iterator;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class PaginatedCollection<T> extends IterableWithMarker<T> {
 
    private Iterable<T> objects;

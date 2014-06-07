@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Adrian Cole
  * @see <a
  *      href="http://ci.jruby.org/computer/api/">api
  *      doc</a>

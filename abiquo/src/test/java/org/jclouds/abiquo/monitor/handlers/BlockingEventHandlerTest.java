@@ -29,8 +29,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link BlockingEventHandler} handler.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BlockingEventHandlerTest")
 public class BlockingEventHandlerTest {

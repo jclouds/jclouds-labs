@@ -23,8 +23,6 @@ import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
- * 
- * @author Adrian Cole
  */
 public class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Attachment> {
 

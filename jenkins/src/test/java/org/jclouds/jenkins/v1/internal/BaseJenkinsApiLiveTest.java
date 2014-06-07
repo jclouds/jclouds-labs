@@ -28,8 +28,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Tests behavior of {@code JenkinsApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live")
 public class BaseJenkinsApiLiveTest extends BaseContextLiveTest<RestContext<JenkinsApi, JenkinsAsyncApi>> {

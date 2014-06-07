@@ -42,10 +42,6 @@ import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
-/**
- * 
- * @author danikov
- */
 public class VCloudDirectorComputeUtils {
    
    public static OperatingSystem toComputeOs(VApp vApp, OperatingSystem defaultOs) {

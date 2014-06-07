@@ -21,7 +21,6 @@ package org.jclouds.snia.cdmi.v1.queryparams;
  * containerApi.get(containerName,ContainerQueryParams.Builder.field("parentURI")); container =
  * containerApi.get(containerName,ContainerQueryParams.Builder.children(0,3));
  * 
- * @author Kenneth Nagin
  */
 public class ContainerQueryParams extends CDMIObjectQueryParams {
 

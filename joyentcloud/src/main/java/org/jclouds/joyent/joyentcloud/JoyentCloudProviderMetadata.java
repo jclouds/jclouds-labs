@@ -29,7 +29,6 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 
 /**
  * Implementation of {@link org.jclouds.types.ProviderMetadata} for SDC.
- * @author Adrian Cole
  */
 public class JoyentCloudProviderMetadata extends BaseProviderMetadata {
 

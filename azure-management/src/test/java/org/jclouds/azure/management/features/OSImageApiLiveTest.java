@@ -34,9 +34,6 @@ import org.testng.annotations.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "OSImageApiLiveTest")
 public class OSImageApiLiveTest extends BaseAzureManagementApiLiveTest {
 

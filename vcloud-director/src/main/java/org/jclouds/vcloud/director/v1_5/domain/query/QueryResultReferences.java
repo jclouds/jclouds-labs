@@ -37,8 +37,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="QueryResultReferences" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 public class QueryResultReferences extends ContainerType {
 

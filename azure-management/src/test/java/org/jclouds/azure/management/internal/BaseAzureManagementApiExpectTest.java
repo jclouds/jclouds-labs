@@ -18,10 +18,6 @@ package org.jclouds.azure.management.internal;
 
 import org.jclouds.azure.management.AzureManagementApi;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class BaseAzureManagementApiExpectTest extends BaseAzureManagementExpectTest<AzureManagementApi> {
 
 }

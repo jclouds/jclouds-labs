@@ -25,8 +25,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link ParseEnterpriseId} function.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "ParseEnterpriseIdTest")
 public class ParseEnterpriseIdTest {

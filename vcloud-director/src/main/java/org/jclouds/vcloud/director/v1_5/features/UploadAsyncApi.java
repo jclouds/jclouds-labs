@@ -29,7 +29,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see UploadApi
- * @author danikov
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface UploadAsyncApi {

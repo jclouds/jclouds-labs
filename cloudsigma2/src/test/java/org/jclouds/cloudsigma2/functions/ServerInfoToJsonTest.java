@@ -41,9 +41,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class ServerInfoToJsonTest {
 

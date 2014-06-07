@@ -21,8 +21,6 @@ package org.jclouds.abiquo.environment;
  * <p>
  * This class should be used to populate and clean the test environment used in
  * live tests.
- * 
- * @author Ignasi Barrera
  */
 public interface TestEnvironment {
    /**

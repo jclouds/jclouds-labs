@@ -39,8 +39,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="RasdItemsList" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "RasdItemsList")
 @XmlType(name = "RasdItemsList")

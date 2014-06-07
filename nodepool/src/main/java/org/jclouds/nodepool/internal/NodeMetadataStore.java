@@ -23,9 +23,6 @@ import org.jclouds.compute.options.TemplateOptions;
 
 /**
  * Stores/Loads frontend {@link NodeMetadata} mappings.
- * 
- * @author David Alves
- * 
  */
 public interface NodeMetadataStore {
    

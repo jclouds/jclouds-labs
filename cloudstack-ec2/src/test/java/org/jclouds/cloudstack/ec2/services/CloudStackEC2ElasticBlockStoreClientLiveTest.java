@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2.services;
 import org.jclouds.ec2.services.ElasticBlockStoreClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "CloudStackEC2ElasticBlockStoreClientLiveTest")
 public class CloudStackEC2ElasticBlockStoreClientLiveTest extends ElasticBlockStoreClientLiveTest {
    public CloudStackEC2ElasticBlockStoreClientLiveTest() {

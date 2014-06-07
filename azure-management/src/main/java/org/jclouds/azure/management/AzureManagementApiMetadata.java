@@ -34,8 +34,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Microsoft Service Management Service API
- * 
- * @author Gerald Pereira
  */
 public class AzureManagementApiMetadata extends BaseRestApiMetadata {
 

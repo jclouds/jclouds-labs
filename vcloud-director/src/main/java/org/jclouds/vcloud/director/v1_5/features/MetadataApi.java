@@ -24,7 +24,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Task;
  * Provides synchronous access to {@link Metadata}.
  * 
  * @see MetadataAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface MetadataApi {
    /**

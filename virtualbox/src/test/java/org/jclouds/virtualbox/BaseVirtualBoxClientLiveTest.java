@@ -73,8 +73,6 @@ import com.google.inject.Module;
 
 /**
  * Tests behavior of {@code VirtualBoxClient}
- * 
- * @author Adrian Cole, David Alves
  */
 @Test(groups = "live", singleThreaded = true, testName = "BaseVirtualBoxClientLiveTest")
 public class BaseVirtualBoxClientLiveTest extends BaseComputeServiceContextLiveTest {

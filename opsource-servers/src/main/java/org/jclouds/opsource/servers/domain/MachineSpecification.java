@@ -24,10 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.base.Objects;
 
-/**
- * 
- * 
- */
 @XmlRootElement(name = "machineSpecification", namespace = SERVER)
 public class MachineSpecification {
    public static Builder builder() {

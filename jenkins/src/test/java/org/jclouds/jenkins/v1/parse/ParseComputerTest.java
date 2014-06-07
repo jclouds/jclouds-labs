@@ -23,10 +23,6 @@ import org.jclouds.jenkins.v1.domain.Computer;
 import org.jclouds.json.BaseItemParserTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ParseComputerTest")
 public class ParseComputerTest extends BaseItemParserTest<Computer> {
 

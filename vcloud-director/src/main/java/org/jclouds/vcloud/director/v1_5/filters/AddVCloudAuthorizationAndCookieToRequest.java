@@ -28,10 +28,6 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.net.HttpHeaders;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Singleton
 public class AddVCloudAuthorizationAndCookieToRequest implements HttpRequestFilter {
 

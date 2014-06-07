@@ -30,10 +30,6 @@ import org.jclouds.jenkins.v1.parse.ParseJobDetailsTest;
 import org.jclouds.util.Strings2;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "JobApiExpectTest")
 public class JobApiExpectTest extends BaseJenkinsApiExpectTest {
 

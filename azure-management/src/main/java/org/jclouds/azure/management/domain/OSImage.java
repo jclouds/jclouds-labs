@@ -28,7 +28,6 @@ import com.google.common.base.Optional;
  * OS images from the image repository
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
- * @author Adrian Cole
  */
 public class OSImage {
    public static Builder<?> builder() {

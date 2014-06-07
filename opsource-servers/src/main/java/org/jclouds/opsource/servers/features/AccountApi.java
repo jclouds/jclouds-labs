@@ -24,7 +24,6 @@ import org.jclouds.opsource.servers.domain.DataCentersList;
  * <p/>
  * 
  * @see AccountAsyncApi
- * @author Adrian Cole
  */
 public interface AccountApi {
 

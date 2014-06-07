@@ -31,8 +31,6 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
  * only logical levels of QoS and the real QoS (networking speed, volume
  * replication, availability) must be configured manually in the infrastructure.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a href="http://community.abiquo.com/display/ABI20/TierResource">
  *      http://community.abiquo.com/display/ABI20/TierResource</a>
  */

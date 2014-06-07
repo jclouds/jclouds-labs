@@ -76,9 +76,6 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 
-/**
- * @author Mattias Holmqvist, Andrea Turli
- */
 @SuppressWarnings("unchecked")
 public class VirtualBoxComputeServiceContextModule extends
          ComputeServiceAdapterContextModule<IMachine, Hardware, Image, Location> {

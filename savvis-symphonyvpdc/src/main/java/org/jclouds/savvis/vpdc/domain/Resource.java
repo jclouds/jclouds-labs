@@ -20,9 +20,6 @@ import java.net.URI;
 
 /**
  * Location of a Rest resource
- * 
- * @author Adrian Cole
- * 
  */
 public interface Resource extends Comparable<Resource> {
 

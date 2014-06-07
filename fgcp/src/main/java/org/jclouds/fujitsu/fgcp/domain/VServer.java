@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a virtual server.
- * 
- * @author Dies Koper
  */
 public class VServer {
    @XmlElement(name = "vserverId")

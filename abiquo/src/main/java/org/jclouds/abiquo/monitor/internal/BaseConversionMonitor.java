@@ -39,8 +39,6 @@ import com.google.common.eventbus.EventBus;
 
 /**
  * Default monitor for {@link Conversion} objects.
- * 
- * @author Sergi Castro
  */
 @Singleton
 public class BaseConversionMonitor extends BaseMonitoringService implements ConversionMonitor {

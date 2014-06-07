@@ -26,9 +26,6 @@ import org.testng.annotations.Test;
 import org.virtualbox_4_2.IMachine;
 import org.virtualbox_4_2.VBoxException;
 
-/**
- * @author Mattias Holmqvist
- */
 @Test(groups = "unit", testName = "ApplyMemoryToMachineTest")
 public class ApplyMemoryToMachineTest {
 

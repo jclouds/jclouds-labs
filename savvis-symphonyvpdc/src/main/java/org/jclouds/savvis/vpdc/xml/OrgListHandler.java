@@ -31,9 +31,6 @@ import org.xml.sax.SAXException;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 
-/**
- * @author Adrian Cole
- */
 public class OrgListHandler extends ParseSax.HandlerWithResult<Set<Resource>> {
 
    private Builder<Resource> org = ImmutableSet.builder();

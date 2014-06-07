@@ -41,8 +41,6 @@ import org.jclouds.rest.annotations.Transform;
 
 /**
  * API relating to additional storage.
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

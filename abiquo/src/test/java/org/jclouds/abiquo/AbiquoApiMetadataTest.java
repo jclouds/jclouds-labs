@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link AbiquoApiMetadata} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AbiquoApiMetadataTest")
 public class AbiquoApiMetadataTest extends BaseComputeServiceApiMetadataTest {

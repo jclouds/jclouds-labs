@@ -22,10 +22,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Dies Koper
- * 
- */
 @Test(groups = "live", enabled = true, singleThreaded = true, testName = "FGCPAUTemplateBuilderLiveTest")
 public class FGCPAUTemplateBuilderLiveTest extends
       FGCPBaseTemplateBuilderLiveTest {

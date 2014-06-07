@@ -23,7 +23,6 @@ import org.jclouds.azure.management.domain.Operation;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460796">docs</a>
  * @see OperationAsyncApi
- * @author Gerald Pereira
  */
 public interface OperationApi {
 

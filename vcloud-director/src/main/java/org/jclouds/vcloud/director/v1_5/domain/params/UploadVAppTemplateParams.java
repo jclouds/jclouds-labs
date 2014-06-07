@@ -31,7 +31,6 @@ import com.google.common.base.Objects;
  * &lt;complexType name="UploadVAppTemplateParamsType" /&gt;
  * </pre>
  *
- * @author grkvlt@apache.org
  * @since 0.9
  */
 @XmlRootElement(name = "UploadVAppTemplateParams")

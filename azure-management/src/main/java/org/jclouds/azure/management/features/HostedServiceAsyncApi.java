@@ -57,7 +57,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460812">docs</a>
  * @see HostedServiceApi
- * @author Gerald Pereira, Adrian Cole
  */
 @Headers(keys = "x-ms-version", values = "2012-03-01")
 public interface HostedServiceAsyncApi {

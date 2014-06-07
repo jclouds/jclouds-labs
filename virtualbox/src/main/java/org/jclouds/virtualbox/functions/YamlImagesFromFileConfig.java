@@ -34,9 +34,6 @@ import com.google.common.io.Files;
 /**
  * A supplier for vbox yaml config that reads a yaml whose path is stored under
  * VirtualBoxConstants.VIRTUALBOX_IMAGES_DESCRIPTOR.
- * 
- * @author dralves
- * 
  */
 public class YamlImagesFromFileConfig implements Supplier<String> {
 

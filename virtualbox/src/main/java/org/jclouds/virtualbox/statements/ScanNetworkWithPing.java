@@ -27,9 +27,6 @@ import org.jclouds.scriptbuilder.util.Utils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-/**
- * @author Andrea Turli
- */
 public class ScanNetworkWithPing implements Statement {
 
    public static final Map<OsFamily, String> OS_TO_PING = ImmutableMap

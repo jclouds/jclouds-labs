@@ -28,9 +28,6 @@ import com.google.common.base.Preconditions;
 /**
  * Credentials for the FGCP that include a private key to sign the access key id
  * and its chain of certificates for HTTPS client authentication.
- *
- * @author Dies Koper
- *
  */
 public class FGCPCredentials extends Credentials {
    public final PrivateKey privateKey;

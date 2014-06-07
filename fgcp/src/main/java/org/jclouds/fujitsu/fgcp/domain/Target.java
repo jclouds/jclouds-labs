@@ -20,8 +20,6 @@ import com.google.common.base.Objects;
 
 /**
  * Describes the target server of a load balancer.
- * 
- * @author Dies Koper
  */
 public class Target {
    private String serverId;

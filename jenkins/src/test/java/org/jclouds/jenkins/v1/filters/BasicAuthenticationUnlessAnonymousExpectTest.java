@@ -26,10 +26,6 @@ import org.jclouds.jenkins.v1.internal.BaseJenkinsApiExpectTest;
 import org.jclouds.jenkins.v1.parse.ParseComputerViewTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "BasicAuthenticationUnlessAnonymousExpectTest")
 public class BasicAuthenticationUnlessAnonymousExpectTest extends BaseJenkinsApiExpectTest {
    

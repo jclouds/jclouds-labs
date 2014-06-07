@@ -29,8 +29,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Base class for Abiquo live tests.
- * 
- * @author Ignasi Barrera
  */
 public abstract class BaseAbiquoLiveApiTest extends BaseViewLiveTest<AbiquoContext> {
    public BaseAbiquoLiveApiTest() {

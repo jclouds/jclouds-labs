@@ -29,9 +29,6 @@ import com.google.common.collect.Sets;
 
 /**
  * The NetworkSection element shall list all logical networks used in the OVF package.
- *
- * @author Adrian Cole
- * @author Adam Lowe
  */
 @XmlRootElement(name = "NetworkSection")
 @XmlType(name = "NetworkSection_Type")

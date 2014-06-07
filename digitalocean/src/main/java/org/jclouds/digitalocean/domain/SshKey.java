@@ -27,9 +27,6 @@ import com.google.inject.name.Named;
 
 /**
  * A SSH Key.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class SshKey {
 

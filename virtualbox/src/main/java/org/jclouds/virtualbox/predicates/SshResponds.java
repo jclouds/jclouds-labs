@@ -24,10 +24,6 @@ import org.jclouds.ssh.SshException;
 
 import com.google.common.base.Predicate;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class SshResponds implements Predicate<SshClient> {
    @Resource
    protected Logger logger = Logger.NULL;

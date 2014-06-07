@@ -25,11 +25,6 @@ import org.jclouds.savvis.vpdc.domain.VMSpec;
 
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @Singleton
 public class BindVMSpecToXmlPayload extends BaseBindVMSpecToXmlPayload<VMSpec> {
 

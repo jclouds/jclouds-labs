@@ -35,8 +35,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Implementation of {@link ApiMetadata} for VCloudDirector 1.5 API
- * 
- * @author Adrian Cole
  */
 public class VCloudDirectorApiMetadata extends BaseRestApiMetadata {
 

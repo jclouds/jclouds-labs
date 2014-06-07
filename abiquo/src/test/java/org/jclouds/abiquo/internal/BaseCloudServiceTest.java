@@ -23,8 +23,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link BaseCloudService} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BaseCloudServiceTest")
 public class BaseCloudServiceTest extends BaseInjectionTest {

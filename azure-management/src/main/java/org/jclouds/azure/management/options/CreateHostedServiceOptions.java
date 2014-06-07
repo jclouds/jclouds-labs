@@ -25,8 +25,6 @@ import com.google.common.base.Optional;
  * Optional parameters for creating a hosted service
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441304" >docs</a>
- * 
- * @author Adrian Cole
  */
 public class CreateHostedServiceOptions implements Cloneable {
 

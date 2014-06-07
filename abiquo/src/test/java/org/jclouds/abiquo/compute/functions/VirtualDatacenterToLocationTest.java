@@ -41,8 +41,6 @@ import com.google.common.base.Supplier;
 
 /**
  * Unit tests for the {@link VirtualDatacenterToLocation} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualDatacenterToLocationTest")
 public class VirtualDatacenterToLocationTest {

@@ -27,7 +27,6 @@ import org.jclouds.vcloud.director.v1_5.domain.params.CloneMediaParams;
  * Provides synchronous access to {@link Media}.
  * 
  * @see MediaAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface MediaApi {
 

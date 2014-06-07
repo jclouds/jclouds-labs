@@ -31,7 +31,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents set of OS Server Images from which servers may be deployed
- * @author Kedar Dave
  */
 @XmlRootElement(namespace = SERVER, name = "ServerImages")
 public class ServerImagesList {

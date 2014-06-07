@@ -20,9 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.joyent.cloudapi.v6_5.domain.Machine;
 
-/**
- * @author Adrian Cole
- */
 public class MachineInDatacenter extends DatacenterAndId {
    protected final Machine machine;
 

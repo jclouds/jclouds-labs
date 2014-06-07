@@ -18,8 +18,6 @@ package org.jclouds.vcloud.director.v1_5.domain.network;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-/**
- */
 @XmlSeeAlso({
       IpsecVpnLocalPeer.class,
       IpsecVpnRemotePeer.class,

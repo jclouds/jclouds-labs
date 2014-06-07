@@ -30,8 +30,6 @@ import com.google.inject.Module;
 
 /**
  * Base class for writing Expect tests with the ComputeService abstraction
- * 
- * @author Adrian Cole
  */
 public abstract class BaseJoyentCloudComputeServiceContextExpectTest<T> extends BaseJoyentCloudExpectTest<T> implements
          Function<ComputeServiceContext, T> {

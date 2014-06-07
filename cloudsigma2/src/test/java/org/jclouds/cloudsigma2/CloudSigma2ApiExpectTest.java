@@ -61,9 +61,6 @@ import java.util.Map;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2Api> {
 

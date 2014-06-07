@@ -34,8 +34,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link EventDonePredicate} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "EventDonePredicateTest")
 public class EventDonePredicateTest {

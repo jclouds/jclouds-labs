@@ -18,10 +18,6 @@ package org.jclouds.joyent.joyentcloud;
 
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "JoyentCloudComputeServiceLiveTest")
 public class JoyentCloudComputeServiceLiveTest extends org.jclouds.joyent.cloudapi.v6_5.compute.JoyentCloudComputeServiceLiveTest {
 

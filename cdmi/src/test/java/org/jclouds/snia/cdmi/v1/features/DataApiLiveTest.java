@@ -41,9 +41,6 @@ import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
-/**
- * @author Kenneth Nagin
- */
 @Test(groups = "live", testName = "DataApiLiveTest")
 public class DataApiLiveTest extends BaseCDMIApiLiveTest {
    @Test

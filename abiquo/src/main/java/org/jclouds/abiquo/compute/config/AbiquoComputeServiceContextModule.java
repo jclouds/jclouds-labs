@@ -46,8 +46,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Abiquo Compute service configuration module.
- * 
- * @author Ignasi Barrera
  */
 public class AbiquoComputeServiceContextModule
       extends

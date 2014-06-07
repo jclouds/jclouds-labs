@@ -49,8 +49,6 @@ import com.google.inject.Inject;
 /**
  * CloneAndRegisterMachineFromIMachineIfNotAlreadyExists will take care of the followings: - cloning
  * the master - register the clone machine.
- * 
- * @author Andrea Turli
  */
 public class CloneAndRegisterMachineFromIMachineIfNotAlreadyExists implements Function<CloneSpec, IMachine> {
 

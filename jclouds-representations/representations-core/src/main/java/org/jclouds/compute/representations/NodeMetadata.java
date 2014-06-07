@@ -26,9 +26,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Adrian Cole
- */
 public class NodeMetadata implements Serializable {
 
    private static final long serialVersionUID = 948372788993429243L;

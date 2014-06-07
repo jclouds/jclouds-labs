@@ -21,7 +21,6 @@ import java.util.Set;
  * Provides synchronous access to Packages.
  * <p/>
  * 
- * @author Gerald Pereira
  * @see PackageAsyncApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#packages">api doc</a>
  */

@@ -35,7 +35,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
  * GET <root URI>/<ContainerName>/<DataObjectName>?value:<range>;... GET <root
  * URI>/<ContainerName>/<DataObjectName>?metadata:<prefix>;...
  * 
- * @author Kenneth Nagin
  */
 public class GetCDMIObjectOptions extends BaseHttpRequestOptions {
 

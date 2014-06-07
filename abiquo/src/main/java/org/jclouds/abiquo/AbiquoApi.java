@@ -47,7 +47,6 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @author Ignasi Barrera
  */
 @RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
 public interface AbiquoApi extends Closeable {

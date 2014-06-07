@@ -25,9 +25,6 @@ import java.util.Date;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class CalcSubscription {
 
    public static class Builder {

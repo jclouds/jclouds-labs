@@ -21,8 +21,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query virtual machine.
- * 
- * @author Alessia Prete
  */
 public class VirtualMachineOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

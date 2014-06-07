@@ -35,9 +35,6 @@ import org.jclouds.vcloud.director.v1_5.functions.SectionForVAppTemplate;
 import com.google.common.base.Function;
 import com.google.common.cache.LoadingCache;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class ValidateVAppTemplateAndReturnEnvelopeOrThrowIllegalArgumentException implements
          Function<VAppTemplate, Envelope> {

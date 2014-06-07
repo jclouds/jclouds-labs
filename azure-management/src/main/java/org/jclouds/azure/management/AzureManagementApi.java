@@ -31,7 +31,6 @@ import org.jclouds.rest.annotations.Delegate;
  * 
  * @see AzureManagementAsyncApi
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460799" >doc</a>
- * @author Gerald Pereira, Adrian Cole
  */
 public interface AzureManagementApi {
    /**

@@ -28,8 +28,6 @@ import com.google.common.collect.Sets;
 /**
  * Holds information on the system disk image of a virtual server, including the
  * OS and software pre-installed on it.
- * 
- * @author Dies Koper
  */
 public class Image {
    private String id;

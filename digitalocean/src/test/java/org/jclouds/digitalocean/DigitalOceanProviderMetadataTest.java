@@ -21,9 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link DigitalOceanApiMetadata}.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "DigitalOceanProviderMetadataTest")
 public class DigitalOceanProviderMetadataTest extends BaseProviderMetadataTest {

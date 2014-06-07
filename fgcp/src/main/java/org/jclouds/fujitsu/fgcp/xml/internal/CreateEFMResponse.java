@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Wrapper for CreateEFMResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "CreateEFMResponse")
 public class CreateEFMResponse extends StatusResponse implements

@@ -30,9 +30,6 @@ import org.jclouds.smartos.SmartOSHostController;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 
-/**
- * @author Nigel Magnay
- */
 @Singleton
 public class DatacenterToLocation implements Function<SmartOSHostController, Location> {
    private final Provider<Supplier<Location>> provider;

@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for ListVDiskResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListVDiskResponse")
 public class ListVDiskResponse extends SetWithStatusResponse<VDisk> {

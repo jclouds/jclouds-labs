@@ -24,8 +24,6 @@ import com.abiquo.server.core.infrastructure.storage.StorageDeviceMetadataDto;
 
 /**
  * metadata describing a Storage Device.
- * 
- * @author Ignasi Barrera
  */
 public class StorageDeviceMetadata extends DomainWrapper<StorageDeviceMetadataDto> {
    /**

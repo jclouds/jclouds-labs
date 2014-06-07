@@ -36,8 +36,6 @@ import com.google.common.collect.Iterables;
  * Outputs test status to the {@code jclouds.vcloud.api} logger.
  * 
  * Adapted from {@link org.jclouds.test.testng.UnitTestTestNGListener}.
- * 
- * @author Adrian Cole
  */
 public class FormatApiResultsListener extends TestListenerAdapter {
 

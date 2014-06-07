@@ -28,8 +28,6 @@ import com.abiquo.server.core.event.EventsDto;
 
 /**
  * Parses a paginated event list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseEvents extends BasePaginationParser<EventDto, EventsDto> {

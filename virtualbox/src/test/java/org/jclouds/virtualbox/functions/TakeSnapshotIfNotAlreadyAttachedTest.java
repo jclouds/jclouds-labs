@@ -35,9 +35,6 @@ import org.virtualbox_4_2.VirtualBoxManager;
 
 import com.google.common.base.Suppliers;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit", testName = "TakeSnapshotIfNotAlreadyAttachedTest")
 public class TakeSnapshotIfNotAlreadyAttachedTest {
 

@@ -28,9 +28,6 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "unit", testName = "BuiltinServerApiExpectTest", singleThreaded = true)
 public class BuiltinServerApiExpectTest extends BaseFGCPRestApiExpectTest {
 

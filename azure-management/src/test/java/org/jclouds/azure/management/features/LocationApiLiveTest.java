@@ -30,9 +30,6 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "LocationApiLiveTest")
 public class LocationApiLiveTest extends BaseAzureManagementApiLiveTest {
 

@@ -26,9 +26,6 @@ import org.jclouds.ssh.SshKeys;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "KeyApiLiveTest")
 public class KeyApiLiveTest extends BaseJoyentCloudApiLiveTest {
 

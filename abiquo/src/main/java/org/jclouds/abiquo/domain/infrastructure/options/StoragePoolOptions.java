@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query storage pools.
- * 
- * @author Francesc Montserrat
  */
 
 public class StoragePoolOptions extends BaseHttpRequestOptions {

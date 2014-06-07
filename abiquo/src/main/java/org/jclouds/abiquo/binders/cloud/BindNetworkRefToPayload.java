@@ -32,8 +32,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Bind the link reference to an {@link VLANNetworkDto} object into the payload.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindNetworkRefToPayload extends BindToXMLPayload {

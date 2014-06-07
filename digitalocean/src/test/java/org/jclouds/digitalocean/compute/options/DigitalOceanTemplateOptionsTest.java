@@ -25,8 +25,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Unit tests for the {@link DigitalOceanTemplateOptions} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "DigitalOceanTemplateOptionsTest")
 public class DigitalOceanTemplateOptionsTest {

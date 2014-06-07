@@ -27,9 +27,6 @@ import com.google.common.collect.Lists;
  * To create a new deployment/role
  * 
  * Warning : the OSType must be the one of the source image used to create the VM
- * 
- * @author Gérald Pereira
- * 
  */
 public class DeploymentParams {
 

@@ -41,8 +41,6 @@ import com.google.inject.Provides;
 
 /**
  * Configures the Abiquo authentication.
- * 
- * @author Ignasi Barrera
  */
 public class AbiquoAuthenticationModule extends AbstractModule {
 

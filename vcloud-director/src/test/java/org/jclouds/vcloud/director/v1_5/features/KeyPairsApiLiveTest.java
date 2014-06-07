@@ -60,8 +60,6 @@ import com.google.inject.Inject;
 
 /**
  * Tests behavior of {@code Key Pairs}
- * 
- * @author andrea turli
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "KeyPairsApiLiveTest")
 public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {

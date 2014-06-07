@@ -29,8 +29,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for CDMI 1.0.1 API
- * 
- * @author Adrian Cole
  */
 public class CDMIApiMetadata extends BaseRestApiMetadata {
 

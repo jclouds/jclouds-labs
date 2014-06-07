@@ -28,8 +28,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link BindLinkToPathAndAcceptHeader} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindLinkToPathAndAcceptHeaderTest")
 public class BindLinkToPathAndAcceptHeaderTest {

@@ -18,9 +18,6 @@ package org.jclouds.cloudsigma2;
 
 import org.testng.annotations.Test;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = {"live"})
 public class CloudSigma2WashingtonLiveTest extends CloudSigma2ApiLiveTest {
     public CloudSigma2WashingtonLiveTest() {

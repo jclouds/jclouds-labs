@@ -33,8 +33,6 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
  * resource offers the functionality of managing the remote services of a
  * datacenter in a logical way.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/RemoteServiceResource">
  *      http://community.abiquo.com/display/ABI20/RemoteServiceResource</a>

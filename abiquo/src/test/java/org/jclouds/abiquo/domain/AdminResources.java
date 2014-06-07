@@ -26,9 +26,6 @@ import com.abiquo.server.core.enterprise.UserDto;
 
 /**
  * Enterprise domain utilities.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class AdminResources {
    public static RoleDto rolePost() {

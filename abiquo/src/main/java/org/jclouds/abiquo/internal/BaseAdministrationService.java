@@ -63,9 +63,6 @@ import com.google.common.base.Supplier;
 
 /**
  * Provides high level Abiquo administration operations.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Singleton
 public class BaseAdministrationService implements AdministrationService {

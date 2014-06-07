@@ -25,10 +25,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * 
- * @author Kenneth Nagin
- */
 public class Container extends CDMIObject {
 
    public static Builder<?> builder() {

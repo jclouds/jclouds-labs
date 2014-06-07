@@ -25,8 +25,6 @@ import com.google.common.base.Objects;
 
 /**
  * Specify network settings like gateway, network mask, DNS servers, IP ranges, etc.
- *
- * @author danikov
  */
 @XmlRootElement(name = "IpScope")
 public class IpScope {

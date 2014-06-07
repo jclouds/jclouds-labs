@@ -49,8 +49,6 @@ import com.google.inject.Singleton;
 
 /**
  * List virtual appliances in each virtual datacenter.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ListVirtualAppliances implements ListRootEntities<VirtualAppliance> {

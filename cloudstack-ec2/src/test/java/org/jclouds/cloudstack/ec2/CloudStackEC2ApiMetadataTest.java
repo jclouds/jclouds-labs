@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2;
 import org.jclouds.compute.internal.BaseComputeServiceApiMetadataTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "CloudStackEC2ApiMetadataTest")
 public class CloudStackEC2ApiMetadataTest extends BaseComputeServiceApiMetadataTest {
 

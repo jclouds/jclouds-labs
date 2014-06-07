@@ -35,8 +35,6 @@ import com.abiquo.server.core.event.EventsDto;
 
 /**
  * Expect tests for the {@link EventApi}.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "EventApiExpectTest")
 public class EventApiExpectTest extends BaseAbiquoApiExpectTest<EventApi> {

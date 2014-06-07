@@ -26,9 +26,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Sets the ipaddress using ssh. Used for host-only networking
- * 
- * @author dralves
- * 
  */
 public class SetIpAddress implements Statement {
 

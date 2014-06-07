@@ -27,7 +27,6 @@ import org.jclouds.vcloud.director.v1_5.features.NetworkApi;
  * Provides synchronous access to admin {@link Network} objects.
  * 
  * @see AdminNetworkAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface AdminNetworkApi extends NetworkApi {
 

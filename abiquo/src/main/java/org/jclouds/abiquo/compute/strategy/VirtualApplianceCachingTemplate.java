@@ -38,7 +38,6 @@ import com.google.common.base.Objects;
  * <p>
  * This class is not public as it is intended to be used internally.
  * 
- * @author Ignasi Barrera
  * 
  * @see CreateGroupBeforeCreatingNodes
  * @see AbiquoComputeServiceAdapter

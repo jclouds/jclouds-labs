@@ -18,10 +18,6 @@ package org.jclouds.azure.management.domain;
 
 import java.net.URI;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class HostedServiceWithDetailedProperties extends HostedService {
 
    public static Builder<?> builder() {

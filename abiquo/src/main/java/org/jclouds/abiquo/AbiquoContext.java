@@ -29,8 +29,6 @@ import com.google.inject.ImplementedBy;
 /**
  * Abiquo {@link ComputeServiceContext} implementation to expose high level
  * Abiquo functionalities.
- * 
- * @author Ignasi Barrera
  */
 @ImplementedBy(AbiquoContextImpl.class)
 public interface AbiquoContext extends ComputeServiceContext {

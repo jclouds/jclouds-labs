@@ -30,7 +30,6 @@ import com.google.common.collect.ComparisonChain;
  * smart machine or a virtual machine. These resources include (but are not limited to) RAM, CPUs,
  * CPU Caps, Lightweight Threads, Disk Space, Swap size, and Logical Networks.
  * 
- * @author Gerald Pereira
  * @see <a href= "http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#packages" >docs</a>
  */
 public class Package implements Comparable<Package> {

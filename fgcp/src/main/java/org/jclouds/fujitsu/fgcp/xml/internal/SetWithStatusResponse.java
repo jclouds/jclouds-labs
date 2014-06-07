@@ -26,8 +26,6 @@ import com.google.common.collect.ForwardingSet;
  * <p>
  * This is useful for methods that return a Set and the XML response has no
  * other elements but the set of elements (and message and status of course).
- * 
- * @author Dies Koper
  */
 public abstract class SetWithStatusResponse<T> extends ForwardingSet<T>
       implements StatusQuerable {

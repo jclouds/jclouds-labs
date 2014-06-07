@@ -38,9 +38,6 @@ import com.google.inject.Key;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- */
 @Test(groups = "unit", testName = "BindBackendComputeServiceTest")
 public class BindBackendComputeServiceTest {
 

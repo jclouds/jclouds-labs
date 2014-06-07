@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Describes an intermediate CA certificate for use with a load balancer (SLB).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ccacert")
 public class IntermediateCACert implements Comparable<IntermediateCACert> {

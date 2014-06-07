@@ -24,7 +24,6 @@ import org.jclouds.vcloud.director.v1_5.domain.network.Network;
  * Provides synchronous access to {@link Network}.
  * 
  * @see NetworkAsyncApi
- * @author danikov, Adrian Cole
  */
 public interface NetworkApi {
 

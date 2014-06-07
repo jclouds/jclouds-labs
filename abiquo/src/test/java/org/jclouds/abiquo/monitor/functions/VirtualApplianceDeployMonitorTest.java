@@ -30,8 +30,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link VirtualApplianceDeployMonitor} function.
- * 
- * @author Serafin Sedano
  */
 @Test(groups = "unit", testName = "VirtualApplianceDeployMonitorTest")
 public class VirtualApplianceDeployMonitorTest {

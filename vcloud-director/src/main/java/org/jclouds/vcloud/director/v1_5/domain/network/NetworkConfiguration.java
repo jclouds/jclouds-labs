@@ -30,8 +30,6 @@ import com.google.common.base.Objects;
 
 /**
  * Returns a network configuration
- *
- * @author danikov
  */
 @XmlType(name = "NetworkConfiguration")
 @XmlRootElement(name = "NetworkConfiguration")

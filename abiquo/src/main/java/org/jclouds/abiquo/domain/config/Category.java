@@ -25,8 +25,6 @@ import com.abiquo.server.core.appslibrary.CategoryDto;
 /**
  * Adds high level functionality to {@link CategoryDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Category+Resource">
  *      http://community.abiquo.com/display/ABI20/Category+Resource</a>

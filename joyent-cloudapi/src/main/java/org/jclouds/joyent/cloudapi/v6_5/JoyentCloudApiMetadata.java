@@ -34,8 +34,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for JoyentCloud ~6.5 API
- * 
- * @author Adrian Cole
  */
 public class JoyentCloudApiMetadata extends BaseRestApiMetadata {
 

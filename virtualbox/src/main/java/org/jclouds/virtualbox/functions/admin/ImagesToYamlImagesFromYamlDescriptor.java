@@ -36,9 +36,6 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 
-/**
- * @author Andrea Turli
- */
 @Singleton
 public class ImagesToYamlImagesFromYamlDescriptor implements Supplier<Map<Image, YamlImage>> {
 

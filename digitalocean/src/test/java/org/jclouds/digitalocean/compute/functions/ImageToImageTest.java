@@ -29,8 +29,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Unit tests for the {@link ImageToImage} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "ImageToImageTest")
 public class ImageToImageTest {

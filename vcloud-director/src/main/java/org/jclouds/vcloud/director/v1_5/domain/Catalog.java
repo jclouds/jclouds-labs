@@ -38,8 +38,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;complexType name="CatalogType" /&gt;
  * </pre>
- *
- * @author danikov
  */
 @XmlSeeAlso({ AdminCatalog.class })
 @XmlRootElement(name = "Catalog")

@@ -22,7 +22,6 @@ import java.util.Map;
  * Datacenter Services
  * 
  * @see DatacenterAsyncApi
- * @author Adrian Cole
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#datacenters">api doc</a>
  */
 public interface DatacenterApi {

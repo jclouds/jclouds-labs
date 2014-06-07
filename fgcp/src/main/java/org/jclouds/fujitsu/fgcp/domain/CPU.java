@@ -23,8 +23,6 @@ import com.google.common.base.Objects;
 
 /**
  * Describes the virtual CPU of a server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "cpu")
 public class CPU {

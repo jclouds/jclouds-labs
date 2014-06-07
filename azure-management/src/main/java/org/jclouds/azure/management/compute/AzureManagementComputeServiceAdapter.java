@@ -36,7 +36,6 @@ import org.jclouds.logging.Logger;
 /**
  * defines the connection between the {@link AzureApi} implementation and the
  * jclouds {@link ComputeService}
- * 
  */
 @Singleton
 public class AzureManagementComputeServiceAdapter implements

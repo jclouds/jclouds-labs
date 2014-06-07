@@ -21,7 +21,6 @@ import java.util.Map;
 /**
  * Optional Create CDMI Contain options
  * 
- * @author Kenneth Nagin
  */
 public class CreateContainerOptions extends CreateCDMIObjectOptions {
    /**

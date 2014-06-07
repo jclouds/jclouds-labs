@@ -40,8 +40,6 @@ import com.google.common.base.Function;
  * Each {@link Image} ({@link VirtualMachineTemplate}) will have one
  * {@link Hardware} entity for each zone (scoped to a virtualization technology)
  * supported by the image.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class VirtualMachineTemplateInVirtualDatacenterToHardware implements

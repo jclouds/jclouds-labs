@@ -19,9 +19,6 @@ package org.jclouds.fujitsu.fgcp;
 import org.jclouds.providers.internal.BaseProviderMetadataTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "unit", testName = "FGCPAUProviderTest")
 public class FGCPAUProviderTest extends BaseProviderMetadataTest {
 

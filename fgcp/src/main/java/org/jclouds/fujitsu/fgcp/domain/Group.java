@@ -26,8 +26,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Describes attributes of a software load balancer's (SLB) configuration.
- * 
- * @author Dies Koper
  */
 public class Group {
    private int id;

@@ -20,9 +20,6 @@ import javax.inject.Named;
 import java.beans.ConstructorProperties;
 import java.net.URI;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Owner {
    public static class Builder {
       private String uuid;

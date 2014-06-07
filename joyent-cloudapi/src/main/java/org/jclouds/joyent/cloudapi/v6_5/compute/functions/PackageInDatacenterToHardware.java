@@ -36,8 +36,6 @@ import com.google.common.base.Supplier;
 /**
  * A function for transforming the cloudApi specific PackageInDatacenter object to
  * the generic Hardware object.
- * 
- * @author Adrian Cole
  */
 public class PackageInDatacenterToHardware implements Function<PackageInDatacenter, Hardware> {
 

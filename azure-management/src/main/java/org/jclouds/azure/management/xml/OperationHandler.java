@@ -30,7 +30,6 @@ import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460783" >api</a>
- * @author Adrian Cole
  */
 public class OperationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Operation> {
 

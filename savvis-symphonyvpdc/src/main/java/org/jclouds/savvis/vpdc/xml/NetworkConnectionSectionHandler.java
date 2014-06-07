@@ -29,9 +29,6 @@ import org.jclouds.savvis.vpdc.domain.NetworkConnectionSection;
 import org.jclouds.util.SaxUtils;
 import org.xml.sax.Attributes;
 
-/**
- * @author Adrian Cole
- */
 public class NetworkConnectionSectionHandler extends
          SectionHandler<NetworkConnectionSection, NetworkConnectionSection.Builder> {
 

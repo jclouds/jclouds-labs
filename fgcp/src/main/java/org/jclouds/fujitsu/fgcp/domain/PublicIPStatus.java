@@ -27,8 +27,6 @@ import com.google.common.base.CaseFormat;
  * <p>
  * An attached public IP address is enabled for a particular virtual system and
  * or may not be mapped to a virtual server.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "publicipStatus")
 public enum PublicIPStatus {

@@ -49,8 +49,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Requests a new authentication token.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class GetTokenFromApi implements Function<Credentials, String> {

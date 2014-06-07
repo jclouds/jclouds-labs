@@ -29,8 +29,6 @@ import com.google.common.base.Objects;
  * A public IP address can be allocated to a virtual system, then needs to be
  * enabled/attached before it can be mapped to a virtual server by configuring
  * the NAT settings of virtual system's firewall.
- * 
- * @author Dies Koper
  */
 public class PublicIP {
 

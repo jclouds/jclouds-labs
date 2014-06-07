@@ -35,9 +35,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Task List
- * 
- * 
- * @author Adrian Cole
  */
 @XmlRootElement(name = "TasksList")
 public class TasksList extends Resource implements Set<Task> {

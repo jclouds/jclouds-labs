@@ -29,8 +29,6 @@ import com.google.inject.name.Names;
 
 /**
  * Unit tests for the {@link SchedulerModule} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "SchedulerModuleTest")
 public class SchedulerModuleTest extends BaseInjectionTest {

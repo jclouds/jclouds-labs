@@ -30,11 +30,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- * @author grkvlt@apache.org
- */
 @XmlType(name = "Property")
 @XmlSeeAlso({ ProductSectionProperty.class })
 public class Property {

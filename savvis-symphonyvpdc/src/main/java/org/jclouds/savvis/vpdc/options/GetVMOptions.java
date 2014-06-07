@@ -30,7 +30,6 @@ package org.jclouds.savvis.vpdc.options;
  * vApp = context.getApi().getBrowsingApi().getVAppInVDC(orgId, vdcId, vAppId, withPowerState());
  * <code>
  * 
- * @author Adrian Cole
  * @see <a href= "https://api.sandbox.savvis.net/doc/spec/api/getVAppPowerState.html"
  *      />
  */

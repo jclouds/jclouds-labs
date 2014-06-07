@@ -26,8 +26,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Holds statistics of the load on a load balancer (SLB).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "loadstatistics")
 public class LoadStatistics {

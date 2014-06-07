@@ -47,9 +47,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.net.HostAndPort;
 import com.google.inject.Module;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "MachineApiLiveTest")
 public class MachineApiLiveTest extends BaseJoyentCloudApiLiveTest {
 

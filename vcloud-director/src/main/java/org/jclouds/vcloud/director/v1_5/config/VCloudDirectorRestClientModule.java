@@ -100,8 +100,6 @@ import com.google.inject.name.Named;
 
 /**
  * Configures the cloudstack connection.
- * 
- * @author Adrian Cole
  */
 @ConfiguresRestClient
 public class VCloudDirectorRestClientModule extends RestClientModule<VCloudDirectorApi, VCloudDirectorAsyncApi> {

@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live integration tests for the {@link User} domain class.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "LicenseLiveApiTest")
 public class LicenseLiveApiTest extends BaseAbiquoApiLiveApiTest {

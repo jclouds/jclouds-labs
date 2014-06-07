@@ -44,7 +44,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * CDMI Container Object Resource Operations
  * 
  * @see ContainerApi
- * @author Kenneth Nagin
  * @see <a href="http://www.snia.org/cdmi">api doc</a>
  */
 @RequestFilters({ BasicAuthenticationAndTenantId.class, StripExtraAcceptHeader.class })

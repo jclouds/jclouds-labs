@@ -31,7 +31,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents list of data centers for an account
- * @author Kedar Dave
  */
 @XmlRootElement(namespace = SERVER, name = "PendingDeployServers")
 public class PendingDeployServersList {

@@ -36,8 +36,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link Volume} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "VolumeLiveApiTest")
 public class VolumeLiveApiTest extends BaseAbiquoApiLiveApiTest {

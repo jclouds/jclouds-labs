@@ -27,10 +27,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * 
- * @author Kenneth Nagin
- */
 @Test(groups = "unit", testName = "ParseContainerTest")
 public class ParseContainerTest extends BaseItemParserTest<Container> {
 

@@ -32,9 +32,6 @@ import javax.inject.Singleton;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ParseFirewallPolicies extends ParseJson<ParseFirewallPolicies.FirewallPolicies> {
    static class FirewallPolicies extends PaginatedCollection<FirewallPolicy> {

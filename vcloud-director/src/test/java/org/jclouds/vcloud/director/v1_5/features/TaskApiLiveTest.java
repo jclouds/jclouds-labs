@@ -41,8 +41,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Tests live behavior of {@link TaskApi}.
- * 
- * @author grkvlt@apache.org
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "TaskApiLiveTest")
 public class TaskApiLiveTest extends BaseVCloudDirectorApiLiveTest {

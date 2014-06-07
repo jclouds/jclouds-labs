@@ -33,9 +33,6 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "unit", testName = "VirtualDCApiExpectTest", singleThreaded = true)
 public class VirtualDCApiExpectTest extends BaseFGCPRestApiExpectTest {
 

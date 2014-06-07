@@ -23,8 +23,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import com.google.common.base.Objects;
 
-/**
- */
 @XmlSeeAlso(
       IpsecVpnLocalPeer.class
 )

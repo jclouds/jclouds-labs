@@ -23,9 +23,6 @@ import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.fujitsu.fgcp.FGCPApi;
 
 
-/**
- * @author Dies Koper
- */
 public class BaseFGCPApiLiveTest extends BaseApiLiveTest<FGCPApi> {
 
    public BaseFGCPApiLiveTest() {

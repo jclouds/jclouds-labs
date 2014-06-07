@@ -23,8 +23,6 @@ import org.jclouds.fujitsu.fgcp.domain.VDisk;
 
 /**
  * Wrapper for GetVDiskAttributesResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetVDiskAttributesResponse")
 public class GetVDiskAttributesResponse extends StatusResponse implements

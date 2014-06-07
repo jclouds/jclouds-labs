@@ -39,8 +39,6 @@ import org.jclouds.rest.annotations.Transform;
 
 /**
  * API relating to public IP addresses.
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

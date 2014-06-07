@@ -22,9 +22,6 @@ import org.jclouds.joyent.cloudapi.v6_5.domain.Key;
 
 import com.google.common.base.Objects;
 
-/**
- * @author Adrian Cole
- */
 public class KeyAndPrivateKey {
 
    public static KeyAndPrivateKey fromKeyAndPrivateKey(Key key, String privateKey) {

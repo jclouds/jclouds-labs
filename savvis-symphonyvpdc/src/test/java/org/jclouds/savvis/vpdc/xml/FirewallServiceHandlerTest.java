@@ -33,8 +33,6 @@ import com.google.inject.Injector;
 
 /**
  * Tests behavior of {@code FirewallServiceHandler and @code FirewallRuleHandler}
- * 
- * @author Kedar Dave
  */
 @Test(groups = "unit")
 public class FirewallServiceHandlerTest {

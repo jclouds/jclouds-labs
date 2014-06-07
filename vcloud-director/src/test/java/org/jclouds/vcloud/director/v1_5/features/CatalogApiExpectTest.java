@@ -46,8 +46,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link CatalogApi} by observing its side effects.
- * 
- * @author grkvlt@apache.org, Adrian Cole
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "CatalogApiExpectTest")
 public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {

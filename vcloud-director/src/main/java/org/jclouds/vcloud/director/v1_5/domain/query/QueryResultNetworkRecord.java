@@ -31,8 +31,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryResultNetworkRecordType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "OrgNetworkRecord")
 @XmlType(name = "QueryResultNetworkRecordType")

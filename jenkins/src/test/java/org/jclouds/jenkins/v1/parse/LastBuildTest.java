@@ -25,10 +25,6 @@ import org.jclouds.jenkins.v1.domain.LastBuild;
 import org.jclouds.json.BaseItemParserTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Andrea Turli
- */
 @Test(groups = "unit", testName = "LastBuildTest")
 public class LastBuildTest extends BaseItemParserTest<LastBuild> {
 

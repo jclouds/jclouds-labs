@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests behavior of {@code S3Client}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live", singleThreaded = true, testName = "GreenQloudStorageClientLiveTest")
 public class GreenQloudStorageClientLiveTest extends S3ClientLiveTest {

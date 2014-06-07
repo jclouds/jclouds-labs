@@ -53,8 +53,6 @@ import com.google.common.collect.Iterables;
  * 
  * Todo: caching - provider/region won't change. if vsys still exists, network
  * won't change
- * 
- * @author Dies Koper
  */
 @Singleton
 public class SystemAndNetworkSegmentToLocationSupplier implements LocationsSupplier {

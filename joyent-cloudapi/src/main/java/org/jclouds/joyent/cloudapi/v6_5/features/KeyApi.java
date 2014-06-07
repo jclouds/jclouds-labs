@@ -23,7 +23,6 @@ import org.jclouds.joyent.cloudapi.v6_5.domain.Key;
  * Keys are the means by which you operate on your SSH/signing keys. Currently
  * CloudAPI supports uploads of public keys in the OpenSSH format.
  * 
- * @author Adrian Cole
  * @see KeyAsyncApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#keys">api doc</a>
  */

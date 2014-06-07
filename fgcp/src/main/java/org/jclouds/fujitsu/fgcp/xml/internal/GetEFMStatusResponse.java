@@ -23,8 +23,6 @@ import org.jclouds.fujitsu.fgcp.domain.BuiltinServerStatus;
 
 /**
  * Wrapper for GetEFMStatusResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetEFMStatusResponse")
 public class GetEFMStatusResponse extends StatusResponse implements

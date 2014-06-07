@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2.services;
 import org.jclouds.ec2.services.SecurityGroupClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "CloudStackEC2SecurityGroupClientLiveTest")
 public class CloudStackEC2SecurityGroupClientLiveTest extends SecurityGroupClientLiveTest {
    public CloudStackEC2SecurityGroupClientLiveTest() {

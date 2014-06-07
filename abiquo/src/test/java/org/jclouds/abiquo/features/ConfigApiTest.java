@@ -44,9 +44,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code ConfigApi}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "ConfigApiTest")
 public class ConfigApiTest extends BaseAbiquoApiTest<ConfigApi> {

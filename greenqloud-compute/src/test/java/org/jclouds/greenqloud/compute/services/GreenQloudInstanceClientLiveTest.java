@@ -19,10 +19,6 @@ package org.jclouds.greenqloud.compute.services;
 import org.jclouds.ec2.services.InstanceClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "GreenQloudInstanceClientLiveTest")
 public class GreenQloudInstanceClientLiveTest extends InstanceClientLiveTest {
    public GreenQloudInstanceClientLiveTest() {

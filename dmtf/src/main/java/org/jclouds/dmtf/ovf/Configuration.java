@@ -24,10 +24,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Objects;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- */
 @XmlType(name = "Configuration", namespace = OVF_NS, propOrder = {
       "label", "description"
 })

@@ -31,8 +31,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryResultDatastoreRecordType" /&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "DatastoreRecord")
 @XmlType(name = "QueryResultDatastoreRecordType")

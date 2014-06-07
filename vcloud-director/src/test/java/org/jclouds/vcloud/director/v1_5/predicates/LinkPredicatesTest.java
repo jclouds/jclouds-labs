@@ -25,10 +25,6 @@ import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 import org.jclouds.vcloud.director.v1_5.domain.Link;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "LinkPredicatesTest")
 public class LinkPredicatesTest {
    Link ref = Link.builder().type("application/vnd.vmware.vcloud.media+xml").rel("add").href(

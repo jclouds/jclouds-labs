@@ -49,8 +49,6 @@ import com.google.inject.Guice;
 /**
  * Tests for the function for transforming a cloudApi specific Machine into a generic
  * NodeMetadata object.
- * 
- * @author Adrian Cole
  */
 @Test(testName = "MachineInDatacenterToNodeMetadataTest")
 public class MachineInDatacenterToNodeMetadataTest {

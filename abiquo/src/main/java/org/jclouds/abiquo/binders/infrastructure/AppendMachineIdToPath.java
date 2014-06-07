@@ -25,8 +25,6 @@ import org.jclouds.http.HttpRequest;
 
 /**
  * Append the {@link Machine} id to the request URI.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AppendMachineIdToPath extends AppendToPath {

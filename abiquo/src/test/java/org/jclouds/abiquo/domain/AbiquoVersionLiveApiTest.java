@@ -29,8 +29,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live integration tests for the Abiquo versioning support.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "AbiquoVersionLiveApiTest")
 public class AbiquoVersionLiveApiTest extends BaseAbiquoLiveApiTest {

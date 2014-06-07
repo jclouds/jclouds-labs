@@ -45,7 +45,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see MetadataApi
- * @author Adrian Cole, danikov
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface MetadataAsyncApi {

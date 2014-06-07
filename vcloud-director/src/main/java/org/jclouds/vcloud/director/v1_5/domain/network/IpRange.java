@@ -25,8 +25,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a range of IP addresses, start and end inclusive.
- *
- * @author danikov
  */
 @XmlRootElement(name = "IpRange")
 public class IpRange {

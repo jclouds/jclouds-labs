@@ -27,8 +27,6 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
  * Binds the move volume action to the request endpoint.
- * 
- * @author Ignasi Barrera
  */
 public class BindMoveVolumeToPath extends BindToPath {
 

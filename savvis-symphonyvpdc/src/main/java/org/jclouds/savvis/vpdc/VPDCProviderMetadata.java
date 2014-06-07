@@ -26,8 +26,6 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 
 /**
  * Implementation of {@link org.jclouds.types.ProviderMetadata} for Savvis Symphony VPDC services.
- * 
- * @author Kedar Dave
  */
 public class VPDCProviderMetadata extends BaseProviderMetadata {
 

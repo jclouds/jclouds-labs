@@ -30,9 +30,6 @@ import org.testng.annotations.Test;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit")
 public class ExportIpAddressForVMNamedTest {
    

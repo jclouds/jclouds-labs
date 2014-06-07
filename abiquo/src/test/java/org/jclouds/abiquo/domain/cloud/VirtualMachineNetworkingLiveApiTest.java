@@ -48,8 +48,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Live integration tests for the {@link VirtualMachine} networking operations.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "VirtualMachineNetworkingLiveApiTest")
 public class VirtualMachineNetworkingLiveApiTest extends BaseAbiquoApiLiveApiTest {

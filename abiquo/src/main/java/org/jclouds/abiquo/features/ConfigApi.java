@@ -56,8 +56,6 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
 @Path("/config")

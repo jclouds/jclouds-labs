@@ -32,8 +32,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Fujitsu's Global Cloud Platform (FGCP)
- * 
- * @author Dies Koper
  */
 public class FGCPApiMetadata extends BaseHttpApiMetadata<FGCPApi> {
 

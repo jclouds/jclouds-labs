@@ -43,8 +43,6 @@ import com.google.inject.TypeLiteral;
 /**
  * Adds high level functionality to external {@link VLANNetworkDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource"
  *      > http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>

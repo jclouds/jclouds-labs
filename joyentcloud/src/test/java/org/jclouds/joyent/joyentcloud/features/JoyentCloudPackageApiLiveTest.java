@@ -19,9 +19,6 @@ package org.jclouds.joyent.joyentcloud.features;
 import org.jclouds.joyent.cloudapi.v6_5.features.PackageApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "JoyentCloudPackageApiLiveTest")
 public class JoyentCloudPackageApiLiveTest extends PackageApiLiveTest {
 

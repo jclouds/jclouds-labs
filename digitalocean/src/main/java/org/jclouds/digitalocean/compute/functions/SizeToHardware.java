@@ -30,9 +30,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Transforms an {@link Size} to the jclouds portable model.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class SizeToHardware implements Function<Size, Hardware> {

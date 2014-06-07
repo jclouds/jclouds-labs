@@ -29,8 +29,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Unit tests for the {@link AbiquoAuthentication} filter.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AbiquoAuthenticationTest")
 public class AbiquoAuthenticationTest {

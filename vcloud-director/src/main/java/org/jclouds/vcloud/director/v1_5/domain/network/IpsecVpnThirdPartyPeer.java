@@ -36,8 +36,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlRootElement(name = "IpsecVpnThirdPartyPeer")
 public class IpsecVpnThirdPartyPeer extends IpsecVpnUnmanagedPeerType<IpsecVpnThirdPartyPeer> {

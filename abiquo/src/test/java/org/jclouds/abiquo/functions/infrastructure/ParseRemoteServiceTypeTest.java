@@ -25,8 +25,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link ParseRemoteServiceType} functions.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "ParseRemoteServiceTypeTest")
 public class ParseRemoteServiceTypeTest {

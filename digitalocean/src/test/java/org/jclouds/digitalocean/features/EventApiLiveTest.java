@@ -26,9 +26,6 @@ import org.testng.annotations.Test;
 
 /**
  * Live tests for the {@link EventApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "live", testName = "EventApiLiveTest")
 public class EventApiLiveTest extends BaseDigitalOceanLiveTest {

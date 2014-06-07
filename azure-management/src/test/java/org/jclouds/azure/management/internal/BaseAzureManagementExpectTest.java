@@ -25,10 +25,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 import com.google.inject.Module;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class BaseAzureManagementExpectTest<T> extends BaseRestApiExpectTest<T> {
    protected String subscriptionId = "a01234b5c-d6e7-8f9g-h0123-4567i890j1k";
    

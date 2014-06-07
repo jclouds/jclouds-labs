@@ -41,8 +41,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Tests live behavior of {@link OrgApi}.
- * 
- * @author grkvlt@apache.org
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "OrgApiLiveTest")
 public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {

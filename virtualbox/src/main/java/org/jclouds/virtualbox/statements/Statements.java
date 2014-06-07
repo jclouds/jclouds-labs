@@ -21,8 +21,6 @@ import org.jclouds.scriptbuilder.domain.Statement;
 
 /**
  * VboxManage statements used in shell scripts .
- * 
- * @author Andrea Turli
  */
 public class Statements {
 

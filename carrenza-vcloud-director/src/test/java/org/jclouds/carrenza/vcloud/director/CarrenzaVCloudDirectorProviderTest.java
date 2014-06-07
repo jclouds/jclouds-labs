@@ -20,10 +20,6 @@ import org.jclouds.providers.internal.BaseProviderMetadataTest;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorApiMetadata;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author danikov
- */
 @Test(groups = "unit", testName = "CarrenzaVCloudDirectorProviderTest")
 public class CarrenzaVCloudDirectorProviderTest extends BaseProviderMetadataTest {
 

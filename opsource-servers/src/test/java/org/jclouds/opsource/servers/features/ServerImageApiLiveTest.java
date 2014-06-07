@@ -22,8 +22,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests live behavior of {@link ServerImageApi}.
- * 
- * @author Kedar Dave
  */
 @Test(groups = { "live" }, singleThreaded = true, testName = "ServerImageApiLiveTest")
 public class ServerImageApiLiveTest extends BaseOpSourceServersApiLiveTest {

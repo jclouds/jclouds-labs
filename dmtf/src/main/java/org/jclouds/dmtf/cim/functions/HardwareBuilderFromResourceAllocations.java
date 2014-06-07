@@ -32,9 +32,6 @@ import org.jclouds.dmtf.cim.ResourceAllocationSettingData.ResourceType;
 
 import com.google.common.base.Function;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class HardwareBuilderFromResourceAllocations implements
          Function<Iterable<? extends ResourceAllocationSettingData>, HardwareBuilder> {

@@ -27,9 +27,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Gérald Pereira
- */
 @Test(groups = "unit", testName = "DiskApiExpectTest")
 public class DiskApiExpectTest extends BaseAzureManagementApiExpectTest {
 

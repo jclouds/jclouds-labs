@@ -26,8 +26,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests behavior of {@code BindVMSpecToXmlPayload}
- * 
- * @author Kedar Dave
  */
 @Test(groups = "unit")
 public class BindCaptureVAppTemplateToXmlPayloadTest {

@@ -32,9 +32,6 @@ import javax.inject.Singleton;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ParseIPs extends ParseJson<ParseIPs.IPs> {
    static class IPs extends PaginatedCollection<IP> {

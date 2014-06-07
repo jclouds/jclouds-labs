@@ -32,8 +32,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Container for {@link VirtualDatacenter} filters.
- * 
- * @author Ignasi Barrera
  */
 public class VirtualDatacenterPredicates {
 

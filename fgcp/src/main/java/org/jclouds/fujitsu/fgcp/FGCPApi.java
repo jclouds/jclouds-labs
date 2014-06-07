@@ -31,8 +31,6 @@ import org.jclouds.rest.annotations.Delegate;
 
 /**
  * Provides access to FGCP services.
- * 
- * @author Dies Koper
  */
 public interface FGCPApi extends Closeable {
    public static final String VERSION = "2012-02-18";

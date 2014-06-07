@@ -32,8 +32,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.Invokable;
 /**
  * Tests annotation parsing of {@code FirewallAsyncApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit")
 public class FirewallAsyncApiTest extends BaseVPDCAsyncApiTest<FirewallAsyncApi> {

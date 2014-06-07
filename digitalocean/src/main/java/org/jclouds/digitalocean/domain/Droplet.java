@@ -35,9 +35,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * A droplet.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class Droplet {
 

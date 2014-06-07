@@ -74,9 +74,6 @@ package org.jclouds.virtualbox.functions;
 /**
  * Creates nodes, by cloning a master vm and based on the provided {@link NodeSpec}. Must be
  * synchronized mainly because of snapshot creation (must be synchronized on a per-master-basis).
- * 
- * @author David Alves, Andrea Turli
- * 
  */
 @Singleton
 public class NodeCreator implements Function<NodeSpec, NodeAndInitialCredentials<IMachine>> {

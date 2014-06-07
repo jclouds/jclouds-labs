@@ -33,8 +33,6 @@ import com.google.common.collect.Lists;
  * <pre>
  * &lt;complexType name="VAppChildren" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlType(name = "VAppChildren")
 public class VAppChildren {

@@ -22,9 +22,6 @@ import java.beans.ConstructorProperties;
 
 /**
  * A Region.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class Region {
 

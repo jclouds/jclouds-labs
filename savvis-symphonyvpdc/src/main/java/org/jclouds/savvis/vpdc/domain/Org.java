@@ -40,8 +40,6 @@ import com.google.common.collect.Sets;
  * available in a single Organization but a few might have privileges in other Organizations, if
  * allowed by the administrators of those Organizations.</li>
  * </ul>
- * 
- * @author Adrian Cole
  */
 public class Org extends ResourceImpl {
    public static Builder builder() {

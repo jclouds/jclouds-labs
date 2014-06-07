@@ -21,9 +21,6 @@ import java.beans.ConstructorProperties;
 import java.util.Date;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class ProfileInfo {
 
    public static class Builder {

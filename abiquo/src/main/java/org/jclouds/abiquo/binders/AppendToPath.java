@@ -27,8 +27,6 @@ import org.jclouds.rest.Binder;
 
 /**
  * Appends the parameter value to the end of the request URI.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AppendToPath implements Binder {

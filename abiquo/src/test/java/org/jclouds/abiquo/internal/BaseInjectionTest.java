@@ -33,8 +33,6 @@ import com.google.inject.Module;
 
 /**
  * Unit tests for the {@link BaseCloudService} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BaseEventServiceTest")
 public class BaseInjectionTest {

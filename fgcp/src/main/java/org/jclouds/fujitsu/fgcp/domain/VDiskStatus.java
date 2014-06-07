@@ -24,8 +24,6 @@ import com.google.common.base.CaseFormat;
 
 /**
  * Possible statuses of an attachable virtual disk.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vdiskStatus")
 public enum VDiskStatus {

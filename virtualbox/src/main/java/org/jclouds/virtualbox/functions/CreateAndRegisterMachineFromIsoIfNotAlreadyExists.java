@@ -54,9 +54,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
-/**
- * @author Mattias Holmqvist
- */
 @Singleton
 public class CreateAndRegisterMachineFromIsoIfNotAlreadyExists implements Function<MasterSpec, IMachine> {
 

@@ -25,8 +25,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents a firewall (FW).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "fw")
 public class Firewall {

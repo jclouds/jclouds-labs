@@ -30,9 +30,6 @@ import com.google.common.collect.Maps;
 
 /**
  * Enterprise domain utilities.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class EnterpriseResources {
    public static EnterpriseDto enterprisePost() {

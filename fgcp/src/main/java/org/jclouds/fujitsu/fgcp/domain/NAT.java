@@ -24,8 +24,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Holds the network address translation rules of a firewall.
- * 
- * @author Dies Koper
  */
 public class NAT {
    private Set<Rule> rules = Sets.newLinkedHashSet();

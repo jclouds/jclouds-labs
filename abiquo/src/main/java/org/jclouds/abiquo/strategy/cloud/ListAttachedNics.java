@@ -45,8 +45,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * List all NICs attached to a given virtual machine.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ListAttachedNics implements ListEntities<Ip<?, ?>, VirtualMachine> {

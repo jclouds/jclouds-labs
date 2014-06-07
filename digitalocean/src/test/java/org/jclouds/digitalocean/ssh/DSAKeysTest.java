@@ -30,9 +30,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link DSAKeys} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "DSAKeysTest")
 public class DSAKeysTest {

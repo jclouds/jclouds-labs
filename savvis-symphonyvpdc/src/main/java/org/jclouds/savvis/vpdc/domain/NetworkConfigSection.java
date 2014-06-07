@@ -25,10 +25,6 @@ import org.jclouds.ovf.Section;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class NetworkConfigSection extends Section<NetworkConfigSection> {
 
    @SuppressWarnings("unchecked")

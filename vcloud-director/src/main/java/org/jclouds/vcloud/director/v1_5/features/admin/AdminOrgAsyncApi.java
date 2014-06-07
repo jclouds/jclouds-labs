@@ -48,7 +48,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see AdminOrgApi
- * @author danikov, Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface AdminOrgAsyncApi extends OrgAsyncApi {

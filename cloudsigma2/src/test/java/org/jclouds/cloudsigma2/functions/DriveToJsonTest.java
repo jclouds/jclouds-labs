@@ -39,9 +39,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.inject.Guice;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class DriveToJsonTest {
 

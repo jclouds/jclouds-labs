@@ -31,7 +31,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see ServerApi
- * @author Kedar Dave
  */
 @RequestFilters(BasicAuthentication.class)
 public interface ServerAsyncApi {

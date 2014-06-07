@@ -50,9 +50,6 @@ import com.google.common.collect.Sets.SetView;
 /**
  * An eager {@link NodePoolComputeService}. Eagerly builds and maintains a pool of nodes. It's only
  * "started" after min nodes are allocated and available.
- * 
- * @author David Alves
- * 
  */
 @Singleton
 public class EagerNodePoolComputeServiceAdapter extends BaseNodePoolComputeServiceAdapter {

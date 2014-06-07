@@ -27,8 +27,6 @@ import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents the results from a Media vCloud query as a record.
- * 
- * @author Aled Sage
  */
 public class QueryResultMediaRecord extends QueryResultRecordType {
 

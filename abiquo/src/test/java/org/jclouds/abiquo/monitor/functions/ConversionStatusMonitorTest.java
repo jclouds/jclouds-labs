@@ -30,8 +30,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link ConversionStatusMonitor} function.
- * 
- * @author Sergi Castro
  */
 @Test(groups = "unit", testName = "ConversionStatusMonitorTest")
 public class ConversionStatusMonitorTest {

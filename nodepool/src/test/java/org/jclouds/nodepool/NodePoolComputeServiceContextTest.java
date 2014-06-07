@@ -32,9 +32,6 @@ import com.google.common.base.Supplier;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- */
 @Test(groups = "unit", testName = "NodePoolComputeServiceContextTest")
 public class NodePoolComputeServiceContextTest {
 

@@ -32,8 +32,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link BaseHttpApiMetadata} for the Cloud Sigma API
- *
- * @author Vladimir Shevchenko
  */
 public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> {
 

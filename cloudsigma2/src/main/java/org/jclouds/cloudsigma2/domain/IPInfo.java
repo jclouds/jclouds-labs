@@ -23,9 +23,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class IPInfo extends IP {
    public static class Builder extends IP.Builder {
       private Map<String, String> meta;

@@ -22,8 +22,6 @@ import org.testng.annotations.Test;
 
 /**
  * The GreenQloudStorageProviderTest tests the {@link GreenQloudStorageProviderMetadata} class.
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit", testName = "GreenQloudStorageProviderTest")
 public class GreenQloudStorageProviderTest extends BaseProviderMetadataTest {

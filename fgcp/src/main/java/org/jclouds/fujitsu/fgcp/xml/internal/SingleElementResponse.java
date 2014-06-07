@@ -18,8 +18,6 @@ package org.jclouds.fujitsu.fgcp.xml.internal;
 
 /**
  * Wrapper for CreateVSYSResponse.
- * 
- * @author Dies Koper
  */
 public interface SingleElementResponse {
 

@@ -30,8 +30,6 @@ import org.jclouds.rest.Binder;
 
 /**
  * Adds system id to resource id and binds them to query parameters
- * 
- * @author Dies Koper
  */
 @Singleton
 public class BindAlsoToSystemId implements Binder {

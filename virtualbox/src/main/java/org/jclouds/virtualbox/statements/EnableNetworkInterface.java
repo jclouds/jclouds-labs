@@ -30,9 +30,6 @@ import org.jclouds.virtualbox.domain.NetworkInterfaceCard;
 
 /**
  * Up the network interface chosen
- * 
- * @author Andrea Turli
- * 
  */
 public class EnableNetworkInterface implements Statement {
 

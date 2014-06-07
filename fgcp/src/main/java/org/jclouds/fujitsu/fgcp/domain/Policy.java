@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Describes a firewall rule in detail.
- * 
- * @author Dies Koper
  */
 public class Policy implements Comparable<Policy> {
    private int id;

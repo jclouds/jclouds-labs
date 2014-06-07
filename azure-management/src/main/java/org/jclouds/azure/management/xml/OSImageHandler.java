@@ -28,7 +28,6 @@ import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
- * @author Adrian Cole
  */
 public class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<OSImage> {
 

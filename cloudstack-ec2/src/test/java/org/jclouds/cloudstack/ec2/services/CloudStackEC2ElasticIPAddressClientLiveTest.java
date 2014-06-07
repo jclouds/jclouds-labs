@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2.services;
 import org.jclouds.ec2.services.ElasticIPAddressClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "CloudStackEC2ElasticIPAddressClientLiveTest")
 public class CloudStackEC2ElasticIPAddressClientLiveTest extends ElasticIPAddressClientLiveTest {
    public CloudStackEC2ElasticIPAddressClientLiveTest() {

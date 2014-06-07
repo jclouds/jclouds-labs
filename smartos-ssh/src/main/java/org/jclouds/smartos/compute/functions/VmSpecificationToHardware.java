@@ -26,9 +26,6 @@ import org.jclouds.smartos.compute.domain.VmSpecification;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
-/**
- * @author Nigel Magnay
- */
 @Singleton
 public class VmSpecificationToHardware implements Function<VmSpecification, Hardware> {
 

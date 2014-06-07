@@ -33,8 +33,6 @@ import com.google.common.collect.Maps;
 
 /**
  * The base type for all objects in the CDMI model.
- * 
- * @author Kenneth Nagin
  */
 public class CDMIObject {
 

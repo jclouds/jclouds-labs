@@ -31,8 +31,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryResultVMRecordType" /&gt;
  * </pre>
- * 
- * @author Aled Sage
  */
 @XmlRootElement(name = "VMRecord")
 @XmlType(name = "QueryResultVMRecordType")

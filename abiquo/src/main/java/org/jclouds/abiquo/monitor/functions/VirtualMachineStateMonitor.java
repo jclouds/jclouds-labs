@@ -30,7 +30,6 @@ import com.google.common.base.Function;
 /**
  * This class takes care of monitoring the state of a {@link VirtualMachine}.
  * 
- * @author Ignasi Barrera
  * @see MonitoringService
  */
 public class VirtualMachineStateMonitor implements Function<VirtualMachine, MonitorStatus> {

@@ -57,8 +57,6 @@ import com.google.common.base.Supplier;
 /**
  * A function for transforming a cloudApi-specific Machine into a generic
  * NodeMetadata object.
- * 
- * @author Adrian Cole
  */
 public class MachineInDatacenterToNodeMetadata implements Function<MachineInDatacenter, NodeMetadata> {
    @Resource

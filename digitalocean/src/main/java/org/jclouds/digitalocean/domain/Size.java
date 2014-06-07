@@ -24,9 +24,6 @@ import javax.inject.Named;
 
 /**
  * A Size.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class Size {
 

@@ -28,8 +28,6 @@ import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
  * <pre>
  * &lt;complexType name="PropertyType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "Property")
 public class Property {

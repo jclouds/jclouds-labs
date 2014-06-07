@@ -35,8 +35,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Tests behavior of {@code VPDCApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live", singleThreaded = true, testName = "BaseVPDCApiLiveTest")
 public class BaseVPDCApiLiveTest extends BaseComputeServiceContextLiveTest {

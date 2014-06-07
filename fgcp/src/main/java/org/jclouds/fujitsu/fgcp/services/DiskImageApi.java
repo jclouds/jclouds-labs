@@ -38,8 +38,6 @@ import org.jclouds.rest.annotations.Transform;
 
 /**
  * API relating to disk images.
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

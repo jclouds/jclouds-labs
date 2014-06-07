@@ -28,9 +28,6 @@ import org.jclouds.rest.annotations.Delegate;
 
 /**
  * Provides synchronous access to DigitalOcean API.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public interface DigitalOceanApi extends Closeable {
 

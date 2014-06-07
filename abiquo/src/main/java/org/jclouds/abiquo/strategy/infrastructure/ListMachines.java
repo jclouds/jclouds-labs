@@ -52,8 +52,6 @@ import com.google.inject.Singleton;
 
 /**
  * List machines in each datacenter and rack.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ListMachines implements ListRootEntities<Machine> {

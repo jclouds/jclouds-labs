@@ -33,8 +33,6 @@ import com.abiquo.model.transport.error.ErrorDto;
 
 /**
  * Assertion utilities.
- * 
- * @author Ignasi Barrera
  */
 public class Assert {
    /**

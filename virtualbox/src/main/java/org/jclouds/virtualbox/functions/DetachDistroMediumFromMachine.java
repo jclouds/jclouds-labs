@@ -21,9 +21,6 @@ import org.virtualbox_4_2.VBoxException;
 
 import com.google.common.base.Function;
 
-/**
- * @author Andrea Turli
- */
 public class DetachDistroMediumFromMachine implements Function<IMachine, Void> {
 
    private final String controller;

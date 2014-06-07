@@ -37,7 +37,6 @@ import com.google.common.collect.Lists;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460804" >api</a>
- * @author Gérald Pereira
  */
 public class DeploymentHandler extends
 		ParseSax.HandlerForGeneratedRequestWithResult<Deployment> {

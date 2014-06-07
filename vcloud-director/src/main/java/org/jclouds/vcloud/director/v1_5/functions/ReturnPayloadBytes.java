@@ -26,9 +26,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.io.ByteStreams;
 
-/**
- * @author grkvlt@apache.org
- */
 @Singleton
 public class ReturnPayloadBytes implements Function<HttpResponse, byte[]> {
 

@@ -26,9 +26,6 @@ import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminApi;
 import com.google.common.base.Function;
 import com.google.inject.Module;
 
-/**
- * @author Adrian Cole
- */
 public abstract class VCloudDirectorAdminApiExpectTest extends
          BaseVCloudDirectorExpectTest<VCloudDirectorAdminApi> implements
          Function<VCloudDirectorContext, VCloudDirectorAdminApi> {

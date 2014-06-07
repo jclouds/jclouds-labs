@@ -20,10 +20,6 @@ import static com.google.common.base.Objects.equal;
 
 import com.google.common.base.Objects;
 
-/**
- * 
- * 
- */
 public abstract class BaseServer {
 
    protected BaseServer() {

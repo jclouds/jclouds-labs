@@ -34,8 +34,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * fallbacks common to abiquo
- * 
- * @author Ignasi Barrera
  */
 public final class AbiquoFallbacks {
    private AbiquoFallbacks() {

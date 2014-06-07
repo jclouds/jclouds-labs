@@ -29,9 +29,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Gerald Pereira
- */
 @Test(groups = "unit", testName = "MachineApiExpectTest")
 public class MachineApiExpectTest extends BaseJoyentCloudApiExpectTest {
    public HttpRequest list = HttpRequest.builder().method("GET")

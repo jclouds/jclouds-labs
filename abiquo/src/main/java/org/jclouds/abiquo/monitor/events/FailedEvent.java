@@ -18,8 +18,6 @@ package org.jclouds.abiquo.monitor.events;
 
 /**
  * Event dispatched when a monitoring job completes with errors.
- * 
- * @author Ignasi Barrera
  */
 public class FailedEvent<T> extends MonitorEvent<T> {
    public FailedEvent(final T target) {

@@ -25,9 +25,6 @@ import org.jclouds.javax.annotation.Nullable;
 
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ProfileInfoToJson implements Function<ProfileInfo, JsonObject> {
    @Override

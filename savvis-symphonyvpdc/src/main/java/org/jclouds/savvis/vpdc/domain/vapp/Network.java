@@ -16,10 +16,6 @@
  */
 package org.jclouds.savvis.vpdc.domain.vapp;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class Network {
    private final String name;
    private final String description;

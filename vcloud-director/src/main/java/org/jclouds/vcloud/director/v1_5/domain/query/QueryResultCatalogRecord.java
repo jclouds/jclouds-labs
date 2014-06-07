@@ -35,8 +35,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryResultCatalogRecordType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "CatalogRecord")
 @XmlType(name = "QueryResultCatalogRecordType")

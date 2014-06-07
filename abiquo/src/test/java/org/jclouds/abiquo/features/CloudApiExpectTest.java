@@ -54,8 +54,6 @@ import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 
 /**
  * Expect tests for the {@link CloudApi} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "CloudApiExpectTest")
 public class CloudApiExpectTest extends BaseAbiquoApiExpectTest<CloudApi> {

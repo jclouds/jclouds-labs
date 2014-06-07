@@ -25,8 +25,6 @@ import com.google.common.base.Objects;
  * A rule either maps a public IP address to the NIC of a virtual server for
  * incoming network traffic, or specifies the public IP address used as source
  * address for traffic from all servers in the virtual system.
- * 
- * @author Dies Koper
  */
 public class Rule {
    private String publicIp;

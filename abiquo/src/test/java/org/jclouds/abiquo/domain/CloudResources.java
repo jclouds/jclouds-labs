@@ -35,9 +35,6 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
  * Cloud domain utilities.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class CloudResources {
    public static VirtualDatacenterDto virtualDatacenterPost() {

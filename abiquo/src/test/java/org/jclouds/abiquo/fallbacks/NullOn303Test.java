@@ -30,8 +30,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link NullOn303} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "NullOn303Test")
 public class NullOn303Test {

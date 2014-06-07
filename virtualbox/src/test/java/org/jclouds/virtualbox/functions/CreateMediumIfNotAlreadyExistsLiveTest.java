@@ -32,9 +32,6 @@ import org.virtualbox_4_2.IMedium;
 import org.virtualbox_4_2.IProgress;
 import org.virtualbox_4_2.VBoxException;
 
-/**
- * @author Mattias Holmqvist
- */
 public class CreateMediumIfNotAlreadyExistsLiveTest extends BaseVirtualBoxClientLiveTest {
 
    @Test

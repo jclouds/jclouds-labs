@@ -22,8 +22,6 @@ import com.abiquo.model.rest.RESTLink;
 
 /**
  * Utility class to build domain objects used in tests.
- * 
- * @author Ignasi Barrera
  */
 public class DomainUtils {
    /**

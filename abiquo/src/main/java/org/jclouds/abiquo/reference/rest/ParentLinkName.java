@@ -18,8 +18,6 @@ package org.jclouds.abiquo.reference.rest;
 
 /**
  * Names of the "rel" attribute of the links that point to parent objects.
- * 
- * @author Francesc Montserrat
  */
 public class ParentLinkName {
    public static final String RACK = "rack";

@@ -27,9 +27,6 @@ import org.jclouds.javax.annotation.Nullable;
 
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class FirewallPolicyToJson implements Function<FirewallPolicy, JsonObject> {
    @Override

@@ -31,8 +31,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 /**
  * Adds high level functionality to private {@link VLANNetworkDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource"
  *      > http://community.abiquo.com/display/ABI20/Private+Network+Resource</a>

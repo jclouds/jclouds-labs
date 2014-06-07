@@ -35,8 +35,6 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
  * Adds high level functionality to {@link StorageDeviceDto}. The Storage Device
  * Resource offers the functionality of managing the external storage.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/StorageDeviceResource">
  *      http://community.abiquo.com/display/ABI20/StorageDeviceResource</a>

@@ -18,9 +18,6 @@ package org.jclouds.cloudsigma2.domain;
 
 import java.util.Iterator;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class DrivesListRequestFieldsGroup {
    private final Iterable<String> fields;
 

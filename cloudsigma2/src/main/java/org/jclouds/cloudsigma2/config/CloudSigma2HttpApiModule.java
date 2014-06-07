@@ -27,8 +27,6 @@ import org.jclouds.rest.config.HttpApiModule;
 
 /**
  * Configures the CloudSigma connection.
- *
- * @author Vladimir Shevchenko
  */
 @ConfiguresHttpApi
 public class CloudSigma2HttpApiModule extends HttpApiModule<CloudSigma2Api> {

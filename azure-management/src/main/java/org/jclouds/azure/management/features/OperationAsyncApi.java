@@ -38,7 +38,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460796">docs</a>
  * @see OperationApi
- * @author Gerald Pereira
  */
 @Headers(keys = "x-ms-version", values = "2012-03-01")
 public interface OperationAsyncApi {

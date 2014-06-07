@@ -44,9 +44,6 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
-/**
- * @author Adrian Cole
- */
 public abstract class BaseVPDCAsyncApiTest<T> extends BaseAsyncApiTest<T> {
 
    @Override

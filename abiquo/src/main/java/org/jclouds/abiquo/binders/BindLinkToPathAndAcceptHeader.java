@@ -28,8 +28,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Binds the given link to the uri and the Accept header.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindLinkToPathAndAcceptHeader extends BindLinkToPath {

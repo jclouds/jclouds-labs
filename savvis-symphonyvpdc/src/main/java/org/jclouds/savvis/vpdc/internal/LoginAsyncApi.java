@@ -32,7 +32,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * <p/>
  * 
  * @see <a href="https://community.vcloudexpress.terremark.com/en-us/discussion_forums/f/60.aspx" />
- * @author Adrian Cole
  */
 @RequestFilters(BasicAuthentication.class)
 public interface LoginAsyncApi {

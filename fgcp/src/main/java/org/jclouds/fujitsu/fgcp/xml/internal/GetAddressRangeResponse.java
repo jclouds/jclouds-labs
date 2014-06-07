@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for GetAddressRangeResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "GetAddressRangeResponse")
 public class GetAddressRangeResponse extends

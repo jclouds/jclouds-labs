@@ -22,9 +22,6 @@ import javax.inject.Named;
 import java.beans.ConstructorProperties;
 import java.net.URI;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Item {
    public static class Builder {
       protected String uuid;

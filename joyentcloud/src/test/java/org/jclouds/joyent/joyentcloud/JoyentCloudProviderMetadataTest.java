@@ -20,10 +20,6 @@ import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudApiMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadataTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "JoyentCloudProviderMetadataTest")
 public class JoyentCloudProviderMetadataTest extends BaseProviderMetadataTest {
 

@@ -32,9 +32,6 @@ import javax.inject.Singleton;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ParseTransactions extends ParseJson<ParseTransactions.Transactions> {
    static class Transactions extends PaginatedCollection<Transaction> {

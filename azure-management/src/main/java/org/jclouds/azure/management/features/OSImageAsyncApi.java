@@ -49,7 +49,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj5775">docs</a>
  * @see OSImageApi
- * @author Gerald Pereira, Adrian Cole
  */
 @Headers(keys = "x-ms-version", values = "2012-03-01")
 public interface OSImageAsyncApi {

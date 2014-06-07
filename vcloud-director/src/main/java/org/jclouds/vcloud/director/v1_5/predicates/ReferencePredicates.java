@@ -27,8 +27,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Predicates for working with {@link Reference} collections.
- * 
- * @author Adrian Cole
  */
 public class ReferencePredicates {
 

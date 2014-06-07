@@ -39,8 +39,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Get a VmSpec from an IMachine
- * 
- * @author Andrea Turli
  */
 public class IMachineToVmSpec implements Function<IMachine, VmSpec> {
 

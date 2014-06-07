@@ -16,9 +16,6 @@
  */
 package org.jclouds.vcloud.director.v1_5;
 
-/**
- * @author grkvlt@apache.org
- */
 public final class VCloudDirectorLiveTestConstants {
 
    /* regular expressions for pattern matching */

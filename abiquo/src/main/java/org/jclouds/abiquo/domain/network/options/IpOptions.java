@@ -21,8 +21,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query ips.
- * 
- * @author Francesc Montserrat
  */
 public class IpOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

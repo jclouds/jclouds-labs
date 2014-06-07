@@ -34,8 +34,6 @@ import com.google.common.base.Strings;
 /**
  * Not currently used but leaving for reference when implementing multipart POST
  * methods.
- * 
- * @author Dies Koper
  */
 public class BindParamsToXmlPayload extends BindToStringPayload implements
       MapBinder {

@@ -31,8 +31,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents features of a network.
- *
- * @author danikov
  */
 @XmlRootElement(name = "Features")
 public class NetworkFeatures {

@@ -42,7 +42,6 @@ import com.google.inject.Provides;
  * Provides synchronous access to VCloudDirector.
  * 
  * @see VCloudDirectorAsyncApi
- * @author danikov
  */
 public interface VCloudDirectorApi {
 

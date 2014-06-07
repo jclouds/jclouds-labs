@@ -26,9 +26,6 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "OperationApiExpectTest")
 public class OperationApiExpectTest extends BaseAzureManagementApiExpectTest {
    private static final String REQUEST_ID ="request-id";

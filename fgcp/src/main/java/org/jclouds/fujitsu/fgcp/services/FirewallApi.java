@@ -38,8 +38,6 @@ import org.jclouds.rest.annotations.Transform;
 /**
  * API relating to a built-in server, also called extended function
  * module (EFM), of type firewall.
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

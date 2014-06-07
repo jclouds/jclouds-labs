@@ -45,9 +45,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.TypeLiteral;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "CreateUniqueKeyTest")
 public class CreateUniqueKeyTest {
    private ImmutableMap<String, String> keyPair = ImmutableMap.of("public", "ssh-rsa AAAAB3NzaC...", "private",

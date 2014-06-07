@@ -24,8 +24,6 @@ import java.util.Properties;
 
 /**
  * Implementation of {@link org.jclouds.providers.internal.BaseProviderMetadata} for CloudSigma Washington DC.
- * 
- * @author Vladimir Shevchenko
  */
 public class CloudSigma2WashingtonProviderMetadata extends BaseProviderMetadata {
 

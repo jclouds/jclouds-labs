@@ -25,8 +25,6 @@ import com.google.common.base.Function;
 
 /**
  * Parses payload from HTTP response .
- * 
- * @author Kenneth Nagin
  */
 public class ParseObjectFromHeadersAndHttpContent implements Function<HttpResponse, Payload>,
          InvocationContext<ParseObjectFromHeadersAndHttpContent> {

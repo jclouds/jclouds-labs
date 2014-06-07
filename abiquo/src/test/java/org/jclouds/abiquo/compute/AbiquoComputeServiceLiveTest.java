@@ -38,8 +38,6 @@ import com.google.inject.Module;
 
 /**
  * Live tests for the Abiquo ComputeService.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "live", testName = "AbiquoComputeServiceLiveTest", singleThreaded = true)
 // Since the base class has test configuration, even if we disable tests here,

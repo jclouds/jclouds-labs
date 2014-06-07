@@ -33,8 +33,6 @@ import com.google.common.collect.Sets;
 
 /**
  * A list of organizations.
- *
- * @author Adrian Cole
  */
 @XmlRootElement(name = "OrgList")
 public class OrgList extends ForwardingSet<Reference> {

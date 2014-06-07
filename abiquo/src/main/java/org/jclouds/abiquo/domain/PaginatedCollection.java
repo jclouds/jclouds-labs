@@ -40,7 +40,6 @@ import com.google.common.base.Optional;
  * Contains a single page of the collection, and all the information needed to
  * fetch the next page on demand.
  * 
- * @author Ignasi Barrera
  * 
  * @see PagedIterable
  */
@@ -86,7 +85,6 @@ public class PaginatedCollection<T, W extends WrapperDto<T>> extends IterableWit
     * parser parameter, so this function can be injected in the different api
     * methods and be used as a transformer for the returned collection.
     * 
-    * @author Ignasi Barrera
     */
    public static class ToPagedIterable<T, W extends WrapperDto<T>> implements
          Function<PaginatedCollection<T, W>, PagedIterable<T>> {

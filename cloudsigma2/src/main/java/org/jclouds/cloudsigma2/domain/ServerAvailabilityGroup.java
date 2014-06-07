@@ -19,9 +19,6 @@ package org.jclouds.cloudsigma2.domain;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class ServerAvailabilityGroup {
 
    private final List<String> uuids;

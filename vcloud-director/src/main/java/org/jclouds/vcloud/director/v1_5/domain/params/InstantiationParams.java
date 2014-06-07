@@ -48,7 +48,6 @@ import com.google.common.collect.Sets;
 /**
  * Represents a list of {@code ovf:Section} to configure for instantiating a VApp.
  *
- * @author grkvlt@apache.org
  * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/InstantiationParamsType.html">
  *    vCloud REST API - InstantiationParamsType</a>
  * @since 0.9

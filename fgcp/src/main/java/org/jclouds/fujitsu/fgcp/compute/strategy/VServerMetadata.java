@@ -32,8 +32,6 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Holds metadata on a virtual server, both static (name, id, type, etc.) and
  * dynamic (status, mapped public IPs, etc.).
- * 
- * @author Dies Koper
  */
 public class VServerMetadata {
 

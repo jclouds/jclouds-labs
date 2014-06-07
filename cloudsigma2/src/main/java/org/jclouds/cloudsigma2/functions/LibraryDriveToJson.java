@@ -24,9 +24,6 @@ import org.jclouds.javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class LibraryDriveToJson implements Function<LibraryDrive, JsonObject> {
 

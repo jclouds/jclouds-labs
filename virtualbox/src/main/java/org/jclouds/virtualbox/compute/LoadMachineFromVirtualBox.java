@@ -37,8 +37,6 @@ import com.google.common.cache.CacheLoader;
 
 /**
  * Loads a node from a VirtualBox IMachine
- * 
- * @author Mattias Holmqvist
  */
 public class LoadMachineFromVirtualBox extends CacheLoader<String, Node> {
 

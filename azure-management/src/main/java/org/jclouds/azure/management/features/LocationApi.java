@@ -26,7 +26,6 @@ import org.jclouds.azure.management.domain.Location;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299" />
  * @see LocationAsyncApi
- * @author Adrian Cole
  */
 public interface LocationApi {
 

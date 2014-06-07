@@ -21,9 +21,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 import javax.inject.Named;
 import java.beans.ConstructorProperties;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class PaginationOptions extends BaseHttpRequestOptions {
 
    public static class Builder {

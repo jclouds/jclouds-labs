@@ -38,9 +38,6 @@ import com.google.common.collect.Iterables;
  * Tests that jetty is able to serve the preseed.cfg from the provided yaml
  * image. This test is here to have access to the defaultProperties() method in
  * {@link VirtualBoxPropertiesBuilder}.
- * 
- * @author dralves
- * 
  */
 @Test(groups = "live", singleThreaded = true, testName = "PreseedCfgServerTest")
 public class PreseedCfgServerTest {

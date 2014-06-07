@@ -23,9 +23,6 @@ import java.util.Set;
 import org.jclouds.joyent.cloudapi.v6_5.internal.BaseJoyentCloudApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "JoyentCloudApiLiveTest")
 public class JoyentCloudApiLiveTest extends BaseJoyentCloudApiLiveTest {
 

@@ -24,7 +24,6 @@ import org.jclouds.savvis.vpdc.domain.Task;
  * <p/>
  * 
  * @see <a href="https://api.sandbox.savvis.net/doc/spec/api/" />
- * @author Adrian Cole
  */
 public interface ServiceManagementApi {
    /**

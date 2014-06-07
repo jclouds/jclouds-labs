@@ -19,8 +19,6 @@ package org.jclouds.fujitsu.fgcp.domain;
 /**
  * Describes the period over which error statistics of a load balancer (SLB) are
  * kept.
- * 
- * @author Dies Koper
  */
 public class Period {
    private String current;

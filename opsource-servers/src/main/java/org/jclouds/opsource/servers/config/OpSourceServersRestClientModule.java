@@ -41,8 +41,6 @@ import com.google.inject.Scopes;
 
 /**
  * Configures the OpSourceServers connection.
- * 
- * @author Adrian Cole
  */
 @ConfiguresRestClient
 public class OpSourceServersRestClientModule extends

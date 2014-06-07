@@ -20,8 +20,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing CDMI Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseCDMIExpectTest<T> extends BaseRestApiExpectTest<T> {
 

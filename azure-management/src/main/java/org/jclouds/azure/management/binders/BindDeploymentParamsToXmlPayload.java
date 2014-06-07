@@ -27,11 +27,6 @@ import org.jclouds.rest.Binder;
 import com.google.common.base.Throwables;
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author gpereira
- *
- */
 @Singleton
 public class BindDeploymentParamsToXmlPayload implements Binder {
 

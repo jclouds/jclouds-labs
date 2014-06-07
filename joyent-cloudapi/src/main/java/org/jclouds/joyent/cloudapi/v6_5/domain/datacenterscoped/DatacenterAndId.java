@@ -23,9 +23,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
-/**
- * @author Adrian Cole
- */
 public class DatacenterAndId {
    public static DatacenterAndId fromSlashEncoded(String id) {
       Iterable<String> parts = Splitter.on('/').split(checkNotNull(id, "id"));

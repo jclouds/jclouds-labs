@@ -53,9 +53,6 @@ import com.google.inject.TypeLiteral;
 /**
  * This class is used to decorate transport objects with high level
  * functionality.
- * 
- * @author Francesc Montserrat
- * @author Ignasi Barrera
  */
 public abstract class DomainWrapper<T extends SingleResourceTransportDto> {
    /** The rest context. */

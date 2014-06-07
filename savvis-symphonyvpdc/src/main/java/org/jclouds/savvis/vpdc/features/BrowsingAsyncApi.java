@@ -54,7 +54,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * <p/>
  * 
  * @see <a href="https://api.sandbox.savvis.net/doc/spec/api/index.html" />
- * @author Adrian Cole
  */
 @RequestFilters(SetVCloudTokenCookie.class)
 public interface BrowsingAsyncApi {

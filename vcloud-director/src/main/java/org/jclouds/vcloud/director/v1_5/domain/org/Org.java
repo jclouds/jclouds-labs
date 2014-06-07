@@ -36,8 +36,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;xs:complexType name="OrgType"&gt;
  * </pre>
- *
- * @author Adrian Cole
  */
 @XmlRootElement(name = "Org")
 @XmlSeeAlso({ AdminOrg.class })

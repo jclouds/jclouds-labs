@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Base class with fields for the elements that FGCP XML responses specify.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "OViSSResponse")
 public class StatusResponse implements StatusQuerable {

@@ -25,9 +25,6 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
-/**
- * @author Dies Koper
- */
 @Test(groups = "unit", testName = "VirtualServerApiExpectTest", singleThreaded = true)
 public class VirtualServerApiExpectTest extends BaseFGCPRestApiExpectTest {
 

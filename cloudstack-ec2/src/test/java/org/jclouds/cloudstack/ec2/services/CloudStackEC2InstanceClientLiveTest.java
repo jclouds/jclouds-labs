@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2.services;
 import org.jclouds.ec2.services.InstanceClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "CloudStackInstanceClientLiveTest")
 public class CloudStackEC2InstanceClientLiveTest extends InstanceClientLiveTest {
    public CloudStackEC2InstanceClientLiveTest() {

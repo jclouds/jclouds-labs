@@ -28,8 +28,6 @@ import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 
 /**
  * Parses a paginated virtual machine list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseVirtualMachines extends

@@ -61,8 +61,6 @@ import com.google.common.collect.Multimaps;
 
 /**
  * Allows us to test the {@link VmApi} via its side effects.
- *
- * @author grkvlt@apache.org
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "VmApiExpectTest")
 public class VmApiExpectTest extends VCloudDirectorAdminApiExpectTest {

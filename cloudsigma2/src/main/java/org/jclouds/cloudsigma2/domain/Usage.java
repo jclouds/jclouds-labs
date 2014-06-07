@@ -19,9 +19,6 @@ package org.jclouds.cloudsigma2.domain;
 import java.beans.ConstructorProperties;
 import java.math.BigInteger;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Usage {
 
    public static class Builder {

@@ -20,8 +20,6 @@ import com.google.common.base.Objects;
 
 /**
  * Holds information relating to the FGCP service.
- * 
- * @author Dies Koper
  */
 public class Information {
    private int seqno;

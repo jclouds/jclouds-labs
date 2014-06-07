@@ -26,8 +26,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * {@link Conversion} monitoring features.
- * 
- * @author Sergi Castro
  */
 @ImplementedBy(BaseConversionMonitor.class)
 public interface ConversionMonitor extends MonitoringService {

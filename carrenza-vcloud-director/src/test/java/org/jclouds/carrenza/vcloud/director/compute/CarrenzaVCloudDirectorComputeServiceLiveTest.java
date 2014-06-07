@@ -20,9 +20,6 @@ import org.testng.annotations.Test;
 
 /**
  * {@inheritDoc}
- * 
- * @author danikov
- * @author grkvlt
  */
 @Test(groups = { "live", "compute" }, singleThreaded = true, testName = "CarrenzaVCloudDirectorComputeServiceLiveTest")
 public class CarrenzaVCloudDirectorComputeServiceLiveTest { // FIXME: enable when compute service done

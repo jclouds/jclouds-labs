@@ -40,8 +40,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Return false on service error exceptions.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class MovedVolume implements Fallback<VolumeManagementDto> {

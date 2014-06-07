@@ -19,10 +19,6 @@ package org.jclouds.greenqloud.compute.services;
 import org.jclouds.ec2.services.SecurityGroupClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "GreenQloudSecurityGroupClientLiveTest")
 public class GreenQloudSecurityGroupClientLiveTest extends SecurityGroupClientLiveTest {
    public GreenQloudSecurityGroupClientLiveTest() {

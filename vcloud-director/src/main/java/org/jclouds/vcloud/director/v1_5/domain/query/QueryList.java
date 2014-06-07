@@ -27,8 +27,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="QueryList" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlType(name = "QueryList")
 public class QueryList extends ContainerType {

@@ -47,7 +47,6 @@ import com.google.common.base.Function;
  * VBOX_E_IPRT_ERROR: Launching process for machine failed. VBOX_E_VM_ERROR:
  * Failed to assign machine to session.
  *
- * @author Mattias Holmqvist
  * @see ErrorCode
  */
 public class LaunchMachineIfNotAlreadyRunning implements Function<IMachine, ISession> {

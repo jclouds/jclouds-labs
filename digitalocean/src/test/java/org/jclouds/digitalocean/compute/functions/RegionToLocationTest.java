@@ -34,8 +34,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Unit tests for the {@link RegionToLocation} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "RegionToLocationTest")
 public class RegionToLocationTest {

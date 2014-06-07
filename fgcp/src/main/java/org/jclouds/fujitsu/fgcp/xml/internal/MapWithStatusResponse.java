@@ -26,8 +26,6 @@ import com.google.common.collect.ForwardingMap;
  * <p>
  * This is useful for methods that return a set of elements that are better
  * represented as key value pairs.
- * 
- * @author Dies Koper
  */
 public abstract class MapWithStatusResponse<K, V> extends ForwardingMap<K, V>
       implements StatusQuerable {

@@ -50,8 +50,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Tests the request/response behavior of {@link org.jclouds.vcloud.director.v1_5.features.VAppTemplateApi}
- *
- * @author Adam Lowe
  */
 @Test(groups = { "unit", "user" }, testName = "VAppTemplateApiExpectTest")
 public class VAppTemplateApiExpectTest extends VCloudDirectorAdminApiExpectTest {

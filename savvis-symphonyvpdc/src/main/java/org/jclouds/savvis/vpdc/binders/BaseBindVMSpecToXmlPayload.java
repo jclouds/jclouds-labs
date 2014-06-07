@@ -38,11 +38,6 @@ import org.jclouds.savvis.vpdc.domain.VMSpec;
 import com.google.common.base.Throwables;
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 public abstract class BaseBindVMSpecToXmlPayload<T> extends BindToStringPayload implements MapBinder {
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object toBind) {

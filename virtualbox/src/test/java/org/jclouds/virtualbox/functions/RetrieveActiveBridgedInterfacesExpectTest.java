@@ -26,9 +26,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
 
-/**
- * @author Andrea Turli
- */
 @Test(singleThreaded = true, testName = "RetrieveActiveBridgedInterfacesExpectTest")
 public class RetrieveActiveBridgedInterfacesExpectTest {
 

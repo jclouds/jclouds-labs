@@ -33,10 +33,6 @@ import org.jclouds.smartos.compute.strategy.SmartOSComputeServiceAdapter;
 import com.google.common.base.Function;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- * @author Nigel Magnay
- */
 public class SmartOSComputeServiceContextModule extends
          ComputeServiceAdapterContextModule<VM, VmSpecification, DataSet, SmartOSHostController> {
 

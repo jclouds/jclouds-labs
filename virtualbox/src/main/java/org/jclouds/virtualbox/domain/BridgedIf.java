@@ -26,9 +26,6 @@ import com.google.common.base.Objects;
  * IPV6NetworkMaskPrefixLength: 0 HardwareAddress: 28:cf:da:f2:91:7a MediumType:
  * Ethernet Status: Up VBoxNetworkName: HostInterfaceNetworking-en1: Wi-Fi
  * (AirPort)
- * 
- * @author Andrea Turli
- * 
  */
 public class BridgedIf {
 

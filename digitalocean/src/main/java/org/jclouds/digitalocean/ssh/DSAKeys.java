@@ -46,8 +46,6 @@ import com.google.common.io.ByteSource;
  * <p>
  * Methods in this class should be moved to the {@link org.jclouds.ssh.SshKeys} class.
  * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  * 
  * @see org.jclouds.ssh.SshKeys
  */

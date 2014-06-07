@@ -33,8 +33,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="VmPendingQuestion" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlType(name = "VmPendingQuestion")
 public class VmPendingQuestion extends Resource {

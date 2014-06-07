@@ -37,10 +37,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class OrphanedGroupsByDatacenterId implements Function<Set<? extends NodeMetadata>, Multimap<String, String>> {
    private final Predicate<DatacenterAndName> allNodesInGroupTerminated;
 

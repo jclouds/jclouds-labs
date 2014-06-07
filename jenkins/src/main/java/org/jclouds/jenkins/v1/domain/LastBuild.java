@@ -28,8 +28,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * Minimal info about a LastBuild
  * 
  * GET http://host/job/project/lastBuild/api/json
- * 
- * @author Andrea Turli
  */
 public class LastBuild {
 

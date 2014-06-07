@@ -32,8 +32,6 @@ import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 
 /**
  * Bind the link reference to an {@link AbstractIpDto} object into the payload.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindIpRefToPayload extends BindToXMLPayload {

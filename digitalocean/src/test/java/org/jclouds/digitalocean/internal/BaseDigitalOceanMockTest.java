@@ -46,9 +46,6 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 /**
  * Base class for all DigitalOcean mock tests.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class BaseDigitalOceanMockTest {
    private final Set<Module> modules = ImmutableSet.<Module> of(new ExecutorServiceModule(sameThreadExecutor(),

@@ -28,8 +28,6 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 
 /**
  * Unit tests for the {@link AppendRemoteServiceTypeToPath} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AppendRemoteServiceTypeToPathTest")
 public class AppendRemoteServiceTypeToPathTest {

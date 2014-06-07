@@ -74,11 +74,6 @@ import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @ConfiguresRestClient
 public class VPDCRestClientModule extends RestClientModule<VPDCApi, VPDCAsyncApi> {
    @Override

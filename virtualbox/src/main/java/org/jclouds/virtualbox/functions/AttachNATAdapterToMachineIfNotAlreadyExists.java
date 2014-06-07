@@ -28,9 +28,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
-/**
- * @author Mattias Holmqvist, Andrea Turli
- */
 public class AttachNATAdapterToMachineIfNotAlreadyExists implements Function<IMachine, Void> {
 
    private NetworkInterfaceCard networkInterfaceCard;

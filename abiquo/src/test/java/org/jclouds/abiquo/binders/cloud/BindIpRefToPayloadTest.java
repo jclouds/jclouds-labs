@@ -33,8 +33,6 @@ import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 
 /**
  * Unit tests for the {@link BindIpRefToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindIpRefToPayloadTest")
 public class BindIpRefToPayloadTest {

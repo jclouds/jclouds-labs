@@ -25,10 +25,6 @@ import org.jclouds.azure.management.domain.OSImageParams;
 
 import com.google.common.base.Function;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Singleton
 public class OSImageParamsName implements Function<Object, String> {
    @Override

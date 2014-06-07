@@ -27,10 +27,6 @@ import org.jclouds.rest.RestContext;
 
 import com.google.common.reflect.TypeToken;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class BaseAzureManagementApiLiveTest extends
          BaseContextLiveTest<RestContext<AzureManagementApi, AzureManagementAsyncApi>> {
 

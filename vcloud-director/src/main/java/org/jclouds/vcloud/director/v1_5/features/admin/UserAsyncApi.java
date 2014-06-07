@@ -43,7 +43,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see UserApi
- * @author danikov, Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface UserAsyncApi {

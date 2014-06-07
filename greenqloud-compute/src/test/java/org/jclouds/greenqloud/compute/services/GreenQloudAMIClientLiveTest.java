@@ -19,10 +19,6 @@ package org.jclouds.greenqloud.compute.services;
 import org.jclouds.ec2.services.AMIClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "GreenQloudAMIClientLiveTest")
 public class GreenQloudAMIClientLiveTest extends AMIClientLiveTest {
    public GreenQloudAMIClientLiveTest() {

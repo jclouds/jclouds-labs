@@ -28,8 +28,6 @@ import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 
 /**
  * Parses a paginated external ip list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseExternalIps extends BasePaginationParser<ExternalIpDto, ExternalIpsDto> {

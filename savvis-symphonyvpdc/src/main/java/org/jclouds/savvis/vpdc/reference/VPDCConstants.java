@@ -18,8 +18,6 @@ package org.jclouds.savvis.vpdc.reference;
 
 /**
  * Configuration properties and constants used in VCloud connections.
- * 
- * @author Adrian Cole
  */
 public final class VPDCConstants {
 

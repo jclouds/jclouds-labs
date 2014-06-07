@@ -41,8 +41,6 @@ import com.google.common.collect.Sets;
  * <pre>
  * &lt;xs:complexType name="Metadata"&gt;
  * </pre>
- * 
- * @author danikov
  */
 @XmlRootElement(name = "Metadata")
 public class Metadata extends Resource implements Map<String, String> {

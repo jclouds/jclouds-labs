@@ -27,8 +27,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests live behavior of {@link VCloudDirectorApi}.
- * 
- * @author Adrian Cole
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VCloudDirectorApiLiveTest")
 public class VCloudDirectorApiLiveTest extends BaseVCloudDirectorApiLiveTest {

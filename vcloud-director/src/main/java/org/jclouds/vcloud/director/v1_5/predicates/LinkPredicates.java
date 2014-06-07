@@ -28,8 +28,6 @@ import com.google.common.cache.LoadingCache;
 
 /**
  * Predicates handy when working with Links
- * 
- * @author Adrian Cole
  */
 
 public class LinkPredicates {

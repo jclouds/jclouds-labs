@@ -35,9 +35,6 @@ import org.jclouds.rest.ResourceNotFoundException;
 /**
  * This will parse the XML payload and set an appropriate exception on the
  * command object.
- *
- * @author Dies Koper
- *
  */
 @Singleton
 public class ResponseNotSuccessHandler implements HttpErrorHandler {

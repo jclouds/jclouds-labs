@@ -39,7 +39,6 @@ import com.google.common.collect.Maps;
 /**
  * Represents vApp/VM undeployment parameters.
  * 
- * @author grkvlt@apache.org
  * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/UndeployVAppParamsType.html">
  *    vCloud REST API - UndeployVAppParamsType</a>
  * @since 0.9

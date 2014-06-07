@@ -22,8 +22,6 @@ import com.google.common.collect.Multimap;
 
 /**
  * Available options to filter and pagination methods.
- * 
- * @author Francesc Montserrat
  */
 public class FilterOptions extends BaseHttpRequestOptions {
    @Override

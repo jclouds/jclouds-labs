@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query icons.
- * 
- * @author Francesc Montserrat
  */
 public class IconOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

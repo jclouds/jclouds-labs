@@ -25,10 +25,6 @@ import org.jclouds.http.HttpResponse;
 import com.google.common.base.Function;
 import com.google.inject.Module;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class BaseAzureManagementAsyncApiExpectTest extends BaseAzureManagementExpectTest<AzureManagementAsyncApi> {
    public AzureManagementAsyncApi createApi(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {
       return createInjector(fn, module, props).getInstance(AzureManagementAsyncApi.class);

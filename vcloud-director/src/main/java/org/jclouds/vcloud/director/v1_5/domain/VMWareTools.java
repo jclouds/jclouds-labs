@@ -24,9 +24,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Objects;
 
-/**
- * @author grkvlt@apache.org
- */
 @XmlRootElement(name = "VMWareTools")
 @XmlType(name = "VMWareTools")
 public class VMWareTools {

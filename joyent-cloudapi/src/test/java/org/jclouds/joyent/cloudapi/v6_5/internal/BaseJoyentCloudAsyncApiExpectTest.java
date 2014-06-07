@@ -27,8 +27,6 @@ import com.google.inject.Module;
 
 /**
  * Base class for writing Cloud Api Rest Api Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseJoyentCloudAsyncApiExpectTest extends BaseJoyentCloudExpectTest<JoyentCloudAsyncApi> {
    public JoyentCloudAsyncApi createClient(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {

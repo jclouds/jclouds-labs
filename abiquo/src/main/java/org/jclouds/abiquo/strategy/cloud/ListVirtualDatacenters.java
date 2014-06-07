@@ -49,8 +49,6 @@ import com.google.inject.Singleton;
 
 /**
  * List virtual datacenters.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ListVirtualDatacenters implements ListRootEntities<VirtualDatacenter> {

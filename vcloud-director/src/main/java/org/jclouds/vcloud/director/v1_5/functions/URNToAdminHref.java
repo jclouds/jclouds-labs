@@ -36,8 +36,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Resolves URN to its Admin HREF via the entity Resolver
- * 
- * @author Adrian Cole
  */
 @Singleton
 public final class URNToAdminHref implements Function<Object, URI> {

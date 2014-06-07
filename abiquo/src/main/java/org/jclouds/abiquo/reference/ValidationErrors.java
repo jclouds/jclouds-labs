@@ -18,8 +18,6 @@ package org.jclouds.abiquo.reference;
 
 /**
  * Error constants.
- * 
- * @author Francesc Montserrat
  */
 public class ValidationErrors {
    public static final String NULL_RESOURCE = "The resource should be assigned to a ";

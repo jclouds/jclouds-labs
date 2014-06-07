@@ -37,8 +37,6 @@ import com.google.common.collect.Lists;
  * <pre>
  * &lt;complexType name="ComposeVAppParams" /&gt;
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "ComposeVAppParams")
 @XmlType(name = "ComposeVAppParamsType")

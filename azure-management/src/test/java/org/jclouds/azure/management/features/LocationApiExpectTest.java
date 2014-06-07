@@ -27,9 +27,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "LocationApiExpectTest")
 public class LocationApiExpectTest extends BaseAzureManagementApiExpectTest {
 

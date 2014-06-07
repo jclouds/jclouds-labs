@@ -25,9 +25,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Deletes /etc/gshadow.lock. see https://bugs.launchpad.net/ubuntu/+source/qemu/+bug/732864.
- * 
- * @author dralves
- * 
  */
 public class DeleteGShadowLock implements Statement {
 

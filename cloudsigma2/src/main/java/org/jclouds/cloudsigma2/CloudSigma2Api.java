@@ -101,7 +101,6 @@ import java.util.List;
 /**
  * Provides synchronous access to CloudSigma v2 API.
  *
- * @author Vladimir Shevchenko
  * @see <a href="https://zrh.cloudsigma.com/docs/" />
  */
 @RequestFilters(BasicAuthentication.class)

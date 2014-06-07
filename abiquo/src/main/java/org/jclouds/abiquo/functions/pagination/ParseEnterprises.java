@@ -28,8 +28,6 @@ import com.abiquo.server.core.enterprise.EnterprisesDto;
 
 /**
  * Parses a paginated enterprise list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseEnterprises extends BasePaginationParser<EnterpriseDto, EnterprisesDto> {

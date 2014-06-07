@@ -46,9 +46,6 @@ import com.google.common.collect.Iterables;
 /**
  * A base class for {@link NodePoolComputeService}, takes care of keeping (not changing assignments)
  * and of everything that does not change the pool.
- * 
- * @author David Alves
- * 
  */
 public abstract class BaseNodePoolComputeServiceAdapter implements NodePoolComputeServiceAdapter {
 

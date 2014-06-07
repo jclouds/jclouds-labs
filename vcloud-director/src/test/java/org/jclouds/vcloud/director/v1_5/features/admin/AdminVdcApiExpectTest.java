@@ -30,8 +30,6 @@ import org.testng.annotations.Test;
 
 /**
  * Test the {@link AdminVdcApi} by observing its side effects.
- * 
- * @author danikov
  */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminVdcApiExpectTest")
 public class AdminVdcApiExpectTest extends VCloudDirectorAdminApiExpectTest {

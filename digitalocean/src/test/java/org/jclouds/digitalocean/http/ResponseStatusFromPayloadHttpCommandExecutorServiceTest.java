@@ -38,9 +38,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link ResponseStatusFromPayloadHttpCommandExecutorService} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "ResponseStatusFromPayloadHttpCommandExecutorServiceTest")
 public class ResponseStatusFromPayloadHttpCommandExecutorServiceTest extends BaseDigitalOceanMockTest {

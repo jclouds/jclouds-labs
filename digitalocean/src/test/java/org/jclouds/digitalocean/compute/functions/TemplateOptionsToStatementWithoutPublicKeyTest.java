@@ -32,8 +32,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link TemplateOptionsToStatementWithoutPublicKey} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "TemplateOptionsToStatementWithoutPublicKeyTest")
 public class TemplateOptionsToStatementWithoutPublicKeyTest {

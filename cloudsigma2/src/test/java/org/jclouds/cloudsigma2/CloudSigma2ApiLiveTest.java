@@ -66,9 +66,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "live")
 public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 

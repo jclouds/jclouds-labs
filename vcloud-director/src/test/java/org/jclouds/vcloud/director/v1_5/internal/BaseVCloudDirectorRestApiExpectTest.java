@@ -18,9 +18,6 @@ package org.jclouds.vcloud.director.v1_5.internal;
 
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 
-/**
- * @author Adrian Cole
- */
 public abstract class BaseVCloudDirectorRestApiExpectTest extends BaseVCloudDirectorExpectTest<VCloudDirectorApi> {
 
 }

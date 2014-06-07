@@ -30,10 +30,6 @@ import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class DatacentersAreZonesModule extends AbstractModule {
 
    @Override

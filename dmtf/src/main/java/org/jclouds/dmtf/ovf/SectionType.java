@@ -29,10 +29,6 @@ import com.google.common.base.Objects;
  * Metadata about a virtual machine or grouping of them.
  *
  * Base type for Sections, subclassing this is the most common form of extensibility. Subtypes define more specific elements.
- * 
- * @author Adrian Cole
- * @author Adam Lowe
- * @author grkvlt@apache.org
  */
 @XmlType(name = "Section_Type")
 public abstract class SectionType {

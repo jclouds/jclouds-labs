@@ -24,7 +24,6 @@ import org.jclouds.vcloud.director.v1_5.features.QueryApi;
  * Provides synchronous access to {@link AdminQuery} objects.
  * 
  * @see AdminQueryAsyncApi
- * @author Aled Sage
  */
 public interface AdminQueryApi extends QueryApi {
    

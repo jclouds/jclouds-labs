@@ -20,8 +20,6 @@ import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudApi;
 
 /**
  * Base class for writing Cloud Api Rest Api Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseJoyentCloudApiExpectTest extends BaseJoyentCloudExpectTest<JoyentCloudApi> {
 

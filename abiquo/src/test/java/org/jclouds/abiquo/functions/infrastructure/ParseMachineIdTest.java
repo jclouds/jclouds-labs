@@ -25,8 +25,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link ParseMachineId} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "ParseMachineIdTest")
 public class ParseMachineIdTest {

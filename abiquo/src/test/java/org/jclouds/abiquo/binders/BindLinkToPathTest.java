@@ -24,8 +24,6 @@ import com.abiquo.model.rest.RESTLink;
 
 /**
  * Unit tests for the {@link BindLinkToPath} class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindLinkToPathTest")
 public class BindLinkToPathTest {

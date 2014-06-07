@@ -45,7 +45,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * Job Services
  * 
  * @see JobApi
- * @author Adrian Cole
  * @see <a href="http://ci.jruby.org/computer/api/">api doc</a>
  */
 @RequestFilters(BasicAuthenticationUnlessAnonymous.class)

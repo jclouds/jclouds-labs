@@ -25,7 +25,6 @@ import org.jclouds.rest.annotations.Delegate;
  * Provides synchronous access to OpSourceServers.
  * 
  * @see OpSourceServersAsyncApi
- * @author Adrian Cole
  */
 public interface OpSourceServersApi {
 

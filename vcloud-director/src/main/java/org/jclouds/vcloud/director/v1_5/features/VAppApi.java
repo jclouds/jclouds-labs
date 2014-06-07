@@ -34,7 +34,6 @@ import org.jclouds.vcloud.director.v1_5.domain.section.NetworkConfigSection;
 /**
  * Provides synchronous access to {@link VApp} objects.
  * 
- * @author grkvlt@apache.org, Adrian Cole
  * @see VAppAsyncApi
  * @version 1.5
  */

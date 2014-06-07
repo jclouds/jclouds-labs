@@ -24,8 +24,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Constants used by VCloudDirector apis
- *
- * @author grkvlt@apache.org
  */
 public final class VCloudDirectorConstants {
 

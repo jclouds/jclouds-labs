@@ -71,8 +71,6 @@ import com.google.inject.TypeLiteral;
 /**
  * Adds high level functionality to {@link VirtualMachineWithNodeExtendedDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/VirtualMachineResource">
  *      http://community.abiquo.com/display/ABI20/VirtualMachineResource</a>

@@ -32,10 +32,6 @@ import org.jclouds.compute.domain.NodeMetadata;
 import com.google.common.base.Function;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- * @author Gérald Pereira
- */
 public class AzureManagementComputeServiceContextModule extends
          ComputeServiceAdapterContextModule<Deployment, RoleSize, OSImage, String> {
 

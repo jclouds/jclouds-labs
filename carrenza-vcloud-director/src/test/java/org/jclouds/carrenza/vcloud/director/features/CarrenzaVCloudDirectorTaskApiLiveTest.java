@@ -21,9 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * {@inheritDoc}
- * 
- * @author danikov
- * @author grkvlt
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "CarrenzaVCloudDirectorTaskApiLiveTest")
 public class CarrenzaVCloudDirectorTaskApiLiveTest extends TaskApiLiveTest {

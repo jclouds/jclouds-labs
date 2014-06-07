@@ -42,8 +42,6 @@ import com.google.common.eventbus.EventBus;
 
 /**
  * Default monitor for {@link VirtualMachine} objects.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BaseVirtualMachineMonitor extends BaseMonitoringService implements VirtualMachineMonitor {

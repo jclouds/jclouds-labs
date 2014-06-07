@@ -29,9 +29,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class BindFirewallPoliciesListToJsonRequest implements Binder {
 
    private final FirewallPolicyToJson policyJsonObjectFunction;

@@ -22,8 +22,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests behavior of {@link NetworkApi}
- * 
- * @author danikov
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "UploadApiLiveTest")
 public class UploadApiLiveTest extends BaseVCloudDirectorApiLiveTest {

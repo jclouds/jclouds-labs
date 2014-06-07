@@ -24,10 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.base.Objects;
 
-/**
- * 
- * @author Kedar Dave
- */
 @XmlRootElement(namespace = SERVER, name = "ServerImage")
 public class ServerImage {
    public static Builder builder() {

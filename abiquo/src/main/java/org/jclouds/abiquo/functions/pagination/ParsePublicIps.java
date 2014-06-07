@@ -28,8 +28,6 @@ import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 
 /**
  * Parses a paginated public ip list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParsePublicIps extends BasePaginationParser<PublicIpDto, PublicIpsDto> {

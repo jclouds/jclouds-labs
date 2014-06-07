@@ -26,7 +26,6 @@ import com.google.gson.JsonObject;
 /**
  * Contains options supported in the REST API for the CREATE container operation. <h2>
  * 
- * @author Kenneth Nagin
  */
 public class CreateCDMIObjectOptions extends BaseHttpRequestOptions {
    protected JsonObject jsonObjectBody = new JsonObject();

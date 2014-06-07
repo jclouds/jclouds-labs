@@ -24,8 +24,6 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 
 /**
  * Implementation of {@link org.jclouds.providers.internal.BaseProviderMetadata} for CloudSigma Las Vegas.
- * 
- * @author Vladimir Shevchenko
  */
 public class CloudSigma2LasVegasProviderMetadata extends BaseProviderMetadata {
 

@@ -30,9 +30,6 @@ import org.jclouds.smartos.compute.domain.DataSet;
 
 import com.google.common.base.Function;
 
-/**
- * @author Nigel Magnay
- */
 @Singleton
 public class DataSetToImage implements Function<DataSet, Image> {
    @Resource

@@ -31,9 +31,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link EventApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "EventApiMockTest")
 public class EventApiMockTest extends BaseDigitalOceanMockTest {

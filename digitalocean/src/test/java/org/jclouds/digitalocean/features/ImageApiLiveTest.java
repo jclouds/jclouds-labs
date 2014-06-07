@@ -34,9 +34,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Live tests for the {@link ImageApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "live", testName = "ImageApiLiveTest")
 public class ImageApiLiveTest extends BaseDigitalOceanLiveTest {

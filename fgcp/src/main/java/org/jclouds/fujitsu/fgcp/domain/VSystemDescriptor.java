@@ -27,8 +27,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Describes a virtual system template.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vsysdescriptor")
 public class VSystemDescriptor {

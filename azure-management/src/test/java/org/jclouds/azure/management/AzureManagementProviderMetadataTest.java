@@ -19,10 +19,6 @@ package org.jclouds.azure.management;
 import org.jclouds.providers.internal.BaseProviderMetadataTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "AzureManagementProviderMetadataTest")
 public class AzureManagementProviderMetadataTest extends BaseProviderMetadataTest {
 

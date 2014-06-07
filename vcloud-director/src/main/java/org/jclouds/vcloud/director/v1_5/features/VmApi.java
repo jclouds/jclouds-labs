@@ -39,7 +39,6 @@ import org.jclouds.vcloud.director.v1_5.domain.section.VirtualHardwareSection;
 /**
  * Provides synchronous access to {@link Vm} objects.
  * 
- * @author grkvlt@apache.org, Adrian Cole
  * @see VmAsyncApi
  * @version 1.5
  */

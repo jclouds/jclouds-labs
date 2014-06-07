@@ -32,8 +32,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Live integration tests for the {@link VirtualAppliance} domain class.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "VirtualApplianceLiveApiTest")
 public class VirtualApplianceLiveApiTest extends BaseAbiquoApiLiveApiTest {

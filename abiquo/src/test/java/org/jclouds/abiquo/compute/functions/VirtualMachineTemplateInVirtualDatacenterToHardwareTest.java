@@ -46,8 +46,6 @@ import com.google.common.base.Function;
 /**
  * Unit tests for the
  * {@link VirtualMachineTemplateInVirtualDatacenterToHardware} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualMachineTemplateInVirtualDatacenterToHardwareTest")
 public class VirtualMachineTemplateInVirtualDatacenterToHardwareTest {

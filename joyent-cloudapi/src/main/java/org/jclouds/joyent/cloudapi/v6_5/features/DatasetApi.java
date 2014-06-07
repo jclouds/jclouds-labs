@@ -23,7 +23,6 @@ import org.jclouds.joyent.cloudapi.v6_5.domain.Dataset;
  * Provides synchronous access to Datasets.
  * <p/>
  * 
- * @author Gerald Pereira
  * @see DatasetAsyncApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#datasets">api doc</a>
  */

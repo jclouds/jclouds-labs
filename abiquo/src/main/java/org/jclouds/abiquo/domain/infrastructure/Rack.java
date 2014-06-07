@@ -32,8 +32,6 @@ import com.abiquo.server.core.infrastructure.RackDto;
  * Adds high level functionality to {@link RackDto}. Represents unmanaged racks
  * in the Abiquo platform.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a href="http://community.abiquo.com/display/ABI20/RackResource">
  *      http://community.abiquo.com/display/ABI20/RackResource</a>
  */

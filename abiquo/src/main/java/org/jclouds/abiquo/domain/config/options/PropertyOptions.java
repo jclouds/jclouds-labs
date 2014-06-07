@@ -20,8 +20,6 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query system properties.
- * 
- * @author Francesc Montserrat
  */
 public class PropertyOptions extends BaseHttpRequestOptions {
    public static Builder builder() {

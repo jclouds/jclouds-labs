@@ -24,8 +24,6 @@ import com.google.common.base.Objects;
 /**
  * Holds information on a backup of a built-in server, such as a firewall or
  * load balancer (SLB).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "backup")
 public class BuiltinServerBackup {

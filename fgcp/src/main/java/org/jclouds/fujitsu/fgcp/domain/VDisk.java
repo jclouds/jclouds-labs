@@ -23,8 +23,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents attachable storage in the form of a virtual disk.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vdisk")
 public class VDisk {

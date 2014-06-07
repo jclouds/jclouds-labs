@@ -24,7 +24,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
 /**
- * @author Adrian Cole
  * @see <a
  *      href="http://ci.jruby.org/computer/api/">api
  *      doc</a>

@@ -27,8 +27,6 @@ import com.google.common.base.Optional;
  * Determines whether the operation has succeeded, failed, or is still in progress.
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460783" >api</a>
- * 
- * @author Adrian Cole
  */
 public class Operation {
 

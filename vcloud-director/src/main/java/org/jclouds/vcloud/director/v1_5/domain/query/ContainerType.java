@@ -31,8 +31,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="Container" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 public class ContainerType extends Resource {
 

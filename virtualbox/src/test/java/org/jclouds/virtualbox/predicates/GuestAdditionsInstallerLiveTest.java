@@ -47,9 +47,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "live", singleThreaded = true, testName = "GuestAdditionsInstallerLiveTest")
 public class GuestAdditionsInstallerLiveTest extends BaseVirtualBoxClientLiveTest {
 

@@ -36,8 +36,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests the function used to transform Package objects into Hardware objects
- * 
- * @author Adrian Cole
  */
 @Test(testName = "PackageInDatacenterToHardwareTest")
 public class PackageInDatacenterToHardwareTest {

@@ -25,7 +25,6 @@ import org.jclouds.vcloud.director.v1_5.domain.SessionWithToken;
  * <p/>
  * 
  * @see SessionAsyncApi
- * @author Adrian Cole
  */
 public interface SessionApi {
 

@@ -36,7 +36,6 @@ import com.google.inject.Provides;
  * 
  * @see JoyentCloudAsyncApi
  * @see <a href="http://cloudApi.joyent.org/cloudApiapi.html">api doc</a>
- * @author Adrian Cole
  */
 public interface JoyentCloudApi {
 

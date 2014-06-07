@@ -18,9 +18,6 @@ package org.jclouds.cloudsigma2.domain;
 
 import java.beans.ConstructorProperties;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class AccountBalance {
 
    private final double balance;

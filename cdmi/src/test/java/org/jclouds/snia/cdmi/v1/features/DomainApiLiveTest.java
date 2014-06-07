@@ -19,9 +19,6 @@ package org.jclouds.snia.cdmi.v1.features;
 import org.jclouds.snia.cdmi.v1.internal.BaseCDMIApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "ContainerApiLiveTest")
 public class DomainApiLiveTest extends BaseCDMIApiLiveTest {
 

@@ -21,8 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Wrapper to hold the information of a virtual machine template scoped to a
  * concrete hypervisor type.
- * 
- * @author Ignasi Barrera
  */
 public class VirtualMachineTemplateInVirtualDatacenter {
    private VirtualMachineTemplate template;

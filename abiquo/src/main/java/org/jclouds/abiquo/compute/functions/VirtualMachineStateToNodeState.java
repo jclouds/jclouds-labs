@@ -25,8 +25,6 @@ import com.google.common.base.Function;
 
 /**
  * Converts a {@link VirtualMachineState} object to a {@link Status} one.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class VirtualMachineStateToNodeState implements Function<VirtualMachineState, Status> {

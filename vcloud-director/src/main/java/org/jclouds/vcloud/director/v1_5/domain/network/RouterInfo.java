@@ -25,8 +25,6 @@ import com.google.common.base.Objects;
 
 /**
  * Specifies router information.
- *
- * @author danikov
  */
 @XmlRootElement(name = "RouterInfo")
 public class RouterInfo {

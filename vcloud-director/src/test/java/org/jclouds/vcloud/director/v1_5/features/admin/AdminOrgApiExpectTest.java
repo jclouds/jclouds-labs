@@ -39,8 +39,6 @@ import org.testng.annotations.Test;
 /**
  * Test the {@link AdminOrgApi} by observing its side effects. TODO: this needs to be rewritten to
  * test both URN and href access
- * 
- * @author danikov
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "AdminOrgApiExpectTest")
 public class AdminOrgApiExpectTest extends VCloudDirectorAdminApiExpectTest {

@@ -25,8 +25,6 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="PropertyConfigurationValue_Type">
  * </pre>
- * 
- * @author grkvlt@apache.org
  */
 @XmlType(name = "PropertyConfigurationValue_Type")
 public class PropertyConfigurationValueType {

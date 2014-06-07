@@ -41,8 +41,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link UserApi} by observing its side effects.
- * 
- * @author danikov, Adrian Cole
  */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "UserApiExpectTest")
 public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {

@@ -24,9 +24,6 @@ import org.virtualbox_4_2.INetworkAdapter;
 
 import com.google.common.base.Function;
 
-/**
- * @author Andrea Turli
- */
 public class AttachBridgedAdapterToMachine implements Function<IMachine, Void> {
 
   private NetworkInterfaceCard networkInterfaceCard;

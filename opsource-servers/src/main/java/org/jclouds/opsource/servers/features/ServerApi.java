@@ -24,7 +24,6 @@ import org.jclouds.opsource.servers.domain.PendingDeployServersList;
  * <p/>
  * 
  * @see ServerAsyncApi
- * @author Kedar Dave
  */
 public interface ServerApi {
 	

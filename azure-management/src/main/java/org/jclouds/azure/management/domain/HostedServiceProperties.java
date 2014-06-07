@@ -28,7 +28,6 @@ import com.google.common.base.Optional;
  * is not part of an affinity group.
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
- * @author Adrian Cole
  */
 public class HostedServiceProperties {
    public static Builder<?> builder() {

@@ -66,8 +66,6 @@ import com.google.common.base.Function;
 /**
  * Adds high level functionality to {@link DatacenterDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/DatacenterResource">
  *      http://community.abiquo.com/display/ABI20/DatacenterResource</a>

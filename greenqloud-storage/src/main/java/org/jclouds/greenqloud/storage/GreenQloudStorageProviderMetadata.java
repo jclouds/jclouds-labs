@@ -30,8 +30,6 @@ import org.jclouds.s3.S3ApiMetadata;
 
 /**
  * Implementation of {@link org.jclouds.providers.ProviderMetadata} for GreenQloud Simple Storage Service (S3).
- * 
- * @author Adrian Cole
  */
 public class GreenQloudStorageProviderMetadata extends BaseProviderMetadata {
 

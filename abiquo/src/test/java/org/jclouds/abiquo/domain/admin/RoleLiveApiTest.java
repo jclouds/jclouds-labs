@@ -39,8 +39,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Live integration tests for the {@link Role} domain class.
- * 
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "RoleLiveApiTest")
 public class RoleLiveApiTest extends BaseAbiquoApiLiveApiTest {

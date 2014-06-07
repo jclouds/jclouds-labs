@@ -33,10 +33,6 @@ import org.jclouds.savvis.vpdc.domain.VMSpec;
 import com.google.common.base.Function;
 import com.google.inject.TypeLiteral;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class VPDCComputeServiceContextModule extends
          ComputeServiceAdapterContextModule<VM, VMSpec, CIMOperatingSystem, Network> {
 

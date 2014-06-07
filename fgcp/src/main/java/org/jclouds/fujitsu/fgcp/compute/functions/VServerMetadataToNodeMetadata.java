@@ -52,9 +52,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-/**
- * @author Dies Koper
- */
 @Singleton
 public class VServerMetadataToNodeMetadata implements
       Function<VServerMetadata, NodeMetadata> {

@@ -22,9 +22,6 @@ import org.jclouds.scriptbuilder.domain.OsFamily;
 import org.jclouds.virtualbox.statements.ScanNetworkWithPing;
 import org.testng.annotations.Test;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit")
 public class ScanNetworkWithPingTest {
 

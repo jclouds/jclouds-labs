@@ -24,9 +24,6 @@ import org.virtualbox_4_2.NetworkAttachmentType;
 
 import com.google.common.base.Function;
 
-/**
- * @author Andrea Turli
- */
 public class AttachNicToMachine implements Function<NetworkInterfaceCard, Void> {
 
    private final String vmName;

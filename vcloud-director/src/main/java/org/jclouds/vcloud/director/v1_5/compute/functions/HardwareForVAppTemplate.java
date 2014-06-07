@@ -36,9 +36,6 @@ import org.jclouds.vcloud.director.v1_5.predicates.LinkPredicates;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class HardwareForVAppTemplate implements Function<VAppTemplate, Hardware> {
 

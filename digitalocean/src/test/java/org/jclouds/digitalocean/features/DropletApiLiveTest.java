@@ -37,9 +37,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Live tests for the {@link DropletApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "live", testName = "DropletApiLiveTest")
 public class DropletApiLiveTest extends BaseDigitalOceanLiveTest {

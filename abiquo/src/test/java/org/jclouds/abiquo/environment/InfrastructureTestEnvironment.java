@@ -63,8 +63,6 @@ import com.google.common.io.Resources;
 
 /**
  * Test environment for infrastructure live tests.
- * 
- * @author Ignasi Barrera
  */
 public class InfrastructureTestEnvironment implements TestEnvironment {
    /** The rest context. */

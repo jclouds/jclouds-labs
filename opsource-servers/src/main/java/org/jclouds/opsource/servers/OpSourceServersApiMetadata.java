@@ -28,8 +28,6 @@ import com.google.common.reflect.TypeToken;
 
 /**
  * Implementation of {@link ApiMetadata} for API
- * 
- * @author Adrian Cole
  */
 public class OpSourceServersApiMetadata extends BaseRestApiMetadata {
    

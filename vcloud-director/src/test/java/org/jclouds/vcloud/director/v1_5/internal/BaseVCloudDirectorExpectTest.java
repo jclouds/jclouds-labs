@@ -39,8 +39,6 @@ import com.jamesmurty.utils.XMLBuilder;
 
 /**
  * Base class for writing vCloud Director REST api expect tests.
- * 
- * @author Adrian Cole
  */
 public abstract class BaseVCloudDirectorExpectTest<T> extends BaseRestApiExpectTest<T> {
    
@@ -99,7 +97,6 @@ public abstract class BaseVCloudDirectorExpectTest<T> extends BaseRestApiExpectT
     * Implicitly adds x-vcloud-authorization header with token. 
     * Provides convenience methods for priming a HttpRequest.Builder for vCloud testing
     *
-    * @author danikov
     */
    @Deprecated
    public class VcloudHttpRequestPrimer {

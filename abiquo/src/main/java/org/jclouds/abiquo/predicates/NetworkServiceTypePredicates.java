@@ -22,8 +22,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Container for {@link NetworkServiceType} filters.
- * 
- * @author Jaume Devesa
  */
 public class NetworkServiceTypePredicates {
    public static Predicate<NetworkServiceType> isDefault() {

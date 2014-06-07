@@ -39,9 +39,6 @@ import org.jclouds.savvis.vpdc.domain.VDC;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 
-/**
- * @author Adrian Cole
- */
 @Singleton
 public class NetworkToLocation implements Function<Network, Location> {
    // rest/api/v0.8/org/1/vdc/22/network/VM-Tier01

@@ -27,10 +27,6 @@ import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class DetailedHostedServiceProperties extends HostedServiceProperties {
    public static Builder<?> builder() {
       return new ConcreteBuilder();

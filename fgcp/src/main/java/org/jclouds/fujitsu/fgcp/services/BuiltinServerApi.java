@@ -45,8 +45,6 @@ import org.jclouds.rest.annotations.Transform;
 /**
  * API relating to built-in servers, also called extended function
  * module (EFM), such as a firewall or load balancer (SLB).
- * 
- * @author Dies Koper
  */
 @RequestFilters(RequestAuthenticator.class)
 @QueryParams(keys = RequestParameters.VERSION, values = FGCPApi.VERSION)

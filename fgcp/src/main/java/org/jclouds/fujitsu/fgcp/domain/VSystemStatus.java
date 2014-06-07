@@ -24,8 +24,6 @@ import com.google.common.base.CaseFormat;
 
 /**
  * Possible statuses of a virtual system.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vsysStatus")
 public enum VSystemStatus {

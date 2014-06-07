@@ -35,11 +35,6 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Kedar Dave
- * 
- */
 @Singleton
 public class BindCloneVMToXmlPayload extends BindToStringPayload implements MapBinder {
    @Override

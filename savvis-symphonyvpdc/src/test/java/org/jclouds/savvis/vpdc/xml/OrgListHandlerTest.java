@@ -35,8 +35,6 @@ import com.google.inject.Injector;
 
 /**
  * Tests behavior of {@code OrgListHandler}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit")
 public class OrgListHandlerTest {

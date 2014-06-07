@@ -21,8 +21,6 @@ import org.jclouds.vcloud.director.v1_5.config.VCloudDirectorRestClientModule;
 
 /**
  * Configures the VCloud authentication service connection, including logging and http transport.
- * 
- * @author danikov
  */
 @ConfiguresRestClient
 public class CarrenzaVCloudDirectorRestClientModule extends VCloudDirectorRestClientModule {

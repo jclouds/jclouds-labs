@@ -38,8 +38,6 @@ import com.google.common.collect.Lists;
 
 /**
  * Live tests for the {@link ListAttachedNics} strategy.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "ListAttachedNicsLiveApiTest")
 public class ListAttachedNicsLiveApiTest extends BaseAbiquoStrategyLiveApiTest {

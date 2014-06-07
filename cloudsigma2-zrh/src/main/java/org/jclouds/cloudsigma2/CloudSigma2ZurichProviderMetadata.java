@@ -24,8 +24,6 @@ import java.util.Properties;
 
 /**
  * Implementation of {@link org.jclouds.providers.internal.BaseProviderMetadata} for CloudSigma Zurich.
- * 
- * @author Vladimir Shevchenko
  */
 public class CloudSigma2ZurichProviderMetadata extends BaseProviderMetadata {
 

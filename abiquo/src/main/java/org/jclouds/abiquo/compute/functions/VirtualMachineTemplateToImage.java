@@ -42,8 +42,6 @@ import com.google.common.base.Supplier;
  * Transforms a {@link VirtualMachineTemplate} into an {@link Image}.
  * <p>
  * Images are scoped to a region (physical datacenter).
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class VirtualMachineTemplateToImage implements Function<VirtualMachineTemplate, Image> {

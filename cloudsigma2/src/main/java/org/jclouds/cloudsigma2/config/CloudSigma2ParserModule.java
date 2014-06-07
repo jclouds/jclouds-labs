@@ -19,9 +19,6 @@ package org.jclouds.cloudsigma2.config;
 import com.google.inject.AbstractModule;
 import org.jclouds.json.config.GsonModule;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class CloudSigma2ParserModule extends AbstractModule {
    @Override
    protected void configure() {

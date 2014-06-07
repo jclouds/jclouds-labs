@@ -27,10 +27,6 @@ import org.jclouds.http.functions.ReturnStringIf2xx;
 import com.google.common.base.Function;
 import com.google.inject.Singleton;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Singleton
 public class RegexValueParser implements Function<HttpResponse, String> {
    Pattern pattern = Pattern.compile("<Value>([^<]+)</Value>");

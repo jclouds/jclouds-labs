@@ -23,8 +23,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing OpSourceServersApi Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseOpSourceServersRestApiExpectTest extends BaseRestApiExpectTest<OpSourceServersApi> {
 

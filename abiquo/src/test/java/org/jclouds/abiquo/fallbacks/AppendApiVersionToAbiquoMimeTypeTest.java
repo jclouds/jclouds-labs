@@ -26,8 +26,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link AppendApiVersionToAbiquoMimeType} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AppendApiVersionToAbiquoMimeTypeTest")
 public class AppendApiVersionToAbiquoMimeTypeTest {

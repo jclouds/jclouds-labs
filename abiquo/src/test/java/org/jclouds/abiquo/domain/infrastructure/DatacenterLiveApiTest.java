@@ -36,8 +36,6 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Live integration tests for the {@link Datacenter} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "DatacenterLiveApiTest")
 public class DatacenterLiveApiTest extends BaseAbiquoApiLiveApiTest {

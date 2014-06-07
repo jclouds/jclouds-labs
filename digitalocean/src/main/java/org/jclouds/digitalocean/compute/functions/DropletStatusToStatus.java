@@ -27,9 +27,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Transforms an {@link Status} to the jclouds portable model.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class DropletStatusToStatus implements Function<Droplet.Status, Status> {

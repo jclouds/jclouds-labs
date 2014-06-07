@@ -25,9 +25,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Options to customize droplet creation.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 public class CreateDropletOptions extends BaseHttpRequestOptions {
 

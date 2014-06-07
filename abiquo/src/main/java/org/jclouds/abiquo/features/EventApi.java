@@ -41,8 +41,6 @@ import com.abiquo.server.core.event.EventsDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @author Ignasi Barrera
- * @author Vivien Mahé
  */
 @RequestFilters({ AbiquoAuthentication.class, AppendApiVersionToMediaType.class })
 @Path("/events")

@@ -23,10 +23,6 @@ import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "VCloudDirectorApiExperimentLiveTest")
 public class VCloudDirectorApiExperimentLiveTest extends BaseVCloudDirectorApiLiveTest {
 

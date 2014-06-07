@@ -34,7 +34,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see NetworkApi
- * @author danikov
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface NetworkAsyncApi {

@@ -60,8 +60,6 @@ import com.google.common.collect.Sets;
  * Tests the request/response behavior of {@link VAppTemplateApi}
  * 
  * NOTE The environment MUST have at least one template configured
- *
- * @author Andrea Turli
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VAppNetworksLiveTest")
 public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {

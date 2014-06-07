@@ -32,7 +32,6 @@ import com.google.inject.Module;
  * per vm. Hence this test does not complete and is disabled until performance
  * improves.
  * 
- * @author Kedar Dave
  * 
  */
 @Test(enabled = true, groups = "live")

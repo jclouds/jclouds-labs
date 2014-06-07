@@ -24,9 +24,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link OperatingSystem} class.
- * 
- * @author Sergi Casto
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "OperatingSystemTest")
 public class OperatingSystemTest {

@@ -33,11 +33,6 @@ import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @Singleton
 public class VPDCErrorHandler implements HttpErrorHandler {
    @Resource

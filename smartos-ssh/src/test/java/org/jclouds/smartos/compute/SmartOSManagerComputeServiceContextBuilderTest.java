@@ -30,11 +30,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @Test(groups = "unit", testName = "ServerManagerContextBuilderTest")
 public class SmartOSManagerComputeServiceContextBuilderTest {
 

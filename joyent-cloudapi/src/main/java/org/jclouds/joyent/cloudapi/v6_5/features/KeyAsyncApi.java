@@ -41,7 +41,6 @@ import org.jclouds.rest.binders.BindToJsonPayload;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * @author Adrian Cole
  * @see KeyApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#keys">api doc</a>
  */

@@ -26,8 +26,6 @@ import com.google.common.collect.Sets;
 
 /**
  * API returns the firewall service containing firewall rules for a given VDC
- * 
- * @author Kedar Dave
  */
 public class FirewallService extends ResourceImpl {
 

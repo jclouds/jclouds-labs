@@ -39,8 +39,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Binds the given object to the path..
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class BindToPath implements Binder {

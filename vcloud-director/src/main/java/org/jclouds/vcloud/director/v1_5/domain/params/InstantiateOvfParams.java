@@ -31,8 +31,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * <pre>
  * &lt;complexType name="InstantiateOvfParams" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlType(name = "InstantiateOvfParams")
 public class InstantiateOvfParams extends VAppCreationParams {

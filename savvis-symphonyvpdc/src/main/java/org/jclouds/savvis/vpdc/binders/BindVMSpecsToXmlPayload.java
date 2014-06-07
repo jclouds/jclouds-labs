@@ -28,11 +28,6 @@ import org.jclouds.savvis.vpdc.domain.VMSpec;
 import com.google.common.collect.Iterables;
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @Singleton
 public class BindVMSpecsToXmlPayload extends BaseBindVMSpecToXmlPayload<Iterable<VMSpec>> {
 

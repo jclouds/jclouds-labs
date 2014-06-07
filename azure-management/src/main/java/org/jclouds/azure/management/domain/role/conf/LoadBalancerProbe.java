@@ -24,9 +24,6 @@ import org.jclouds.azure.management.domain.role.Protocol;
 /**
  * Contains properties that specify the endpoint settings which the Windows Azure load balancer uses
  * to monitor the availability of this virtual machine before forwarding traffic to the endpoint.
- * 
- * @author gpereira
- * 
  */
 @XmlRootElement(name = "LoadBalancerProbe")
 public class LoadBalancerProbe {

@@ -18,9 +18,6 @@ package org.jclouds.cloudsigma2.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Adrian Cole
- */
 public enum Model {
    NE2K_ISA, I82551, I82557b, I82559ER, NE2K_PCI, PCNET, RTL8139, E1000, VIRTIO, UNRECOGNIZED;
 

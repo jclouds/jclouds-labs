@@ -18,8 +18,6 @@ package org.jclouds.jenkins.v1.config;
 
 /**
  * Configuration properties and constants used in Jenkins connections.
- *
- * @author Adrian Cole
  */
 public class JenkinsProperties {
 

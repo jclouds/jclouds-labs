@@ -32,8 +32,6 @@ import org.testng.annotations.Test;
 
 /**
  * Allows us to test the {@link VAppApi} allowed to system administrators
- * 
- * @author andrea turli
  */
 @Test(singleThreaded = true, testName = "SystemAdminVAppApiLiveTest")
 public class SystemAdminVAppApiLiveTest extends AbstractVAppApiLiveTest {

@@ -48,8 +48,6 @@ import com.google.common.collect.Sets;
  * system), however the virtualization system may use time-slicing to schedule
  * the the virtual processor to only allow it to use 1 GHz.
  * 
- * @author Adrian Cole
- * @author grkvlt@apache.org
  * @see <a href="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_ResourceAllocationSettingData.xsd">CIM_ResourceAllocationSettingData</a>
  */
 @XmlType(name = "CIM_ResourceAllocationSettingData_Type", namespace = OVF_NS,

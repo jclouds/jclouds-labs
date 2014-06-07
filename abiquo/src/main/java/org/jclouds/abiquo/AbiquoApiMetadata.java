@@ -35,8 +35,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Abiquo API.
- * 
- * @author Ignasi Barrera
  */
 public class AbiquoApiMetadata extends BaseHttpApiMetadata<AbiquoApi> {
 

@@ -27,8 +27,6 @@ import com.google.inject.Module;
 
 /**
  * Base class for writing KeyStone Rest Api Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseJenkinsAsyncApiExpectTest extends BaseJenkinsExpectTest<JenkinsAsyncApi> {
    public JenkinsAsyncApi createClient(Function<HttpRequest, HttpResponse> fn, Module module, Properties props) {

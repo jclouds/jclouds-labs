@@ -27,8 +27,6 @@ import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents the results from a AdminVdc vCloud query as a record.
- * 
- * @author Aled Sage
  */
 @XmlRootElement(name = "VdcRecord")
 @XmlType(name = "QueryResultAdminVdcRecordType")

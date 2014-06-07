@@ -28,8 +28,6 @@ import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 
 /**
  * Parses a paginated volume list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseVolumes extends BasePaginationParser<VolumeManagementDto, VolumesManagementDto> {

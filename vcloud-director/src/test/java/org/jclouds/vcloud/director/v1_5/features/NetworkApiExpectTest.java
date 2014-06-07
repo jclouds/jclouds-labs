@@ -55,8 +55,6 @@ import com.google.common.net.HttpHeaders;
 
 /**
  * Test the {@link NetworkApi} via its side effects.
- * 
- * @author danikov
  */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "NetworkApiExpectTest")
 public class NetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest {

@@ -45,8 +45,6 @@ import com.google.common.base.Objects;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * @author Adam Lowe
  */
 @XmlRootElement(name = "DhcpService")
 @XmlType(propOrder = {

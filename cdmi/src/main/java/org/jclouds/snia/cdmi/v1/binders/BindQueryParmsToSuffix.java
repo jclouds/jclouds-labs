@@ -27,8 +27,6 @@ import org.jclouds.snia.cdmi.v1.queryparams.CDMIObjectQueryParams;
 
 /**
  * This binding solves the problem jax-rs encoding ? ; : which some servers can not handle
- * 
- * @author Kenneth Nagin
  */
 @Singleton
 public class BindQueryParmsToSuffix implements Binder {

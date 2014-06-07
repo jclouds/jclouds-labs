@@ -71,9 +71,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code CloudApi}
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "CloudApiTest")
 public class CloudApiTest extends BaseAbiquoApiTest<CloudApi> {

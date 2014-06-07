@@ -30,8 +30,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Wrapper for ListEFMResponse.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "ListEFMResponse")
 public class ListEFMResponse extends SetWithStatusResponse<BuiltinServer> {

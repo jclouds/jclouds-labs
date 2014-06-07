@@ -23,9 +23,6 @@ import org.testng.annotations.Test;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "unit", testName = "MacAddressToBSDTest")
 public class MacAddressToBSDTest {
 

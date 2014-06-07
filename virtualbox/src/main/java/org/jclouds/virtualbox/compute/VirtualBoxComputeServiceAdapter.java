@@ -65,8 +65,6 @@ import com.google.inject.Singleton;
 /**
  * Defines the connection between the {@link org.virtualbox_4_2.VirtualBoxManager} implementation
  * and the jclouds {@link org.jclouds.compute.ComputeService}
- * 
- * @author Mattias Holmqvist, Andrea Turli, David Alves
  */
 @Singleton
 public class VirtualBoxComputeServiceAdapter implements ComputeServiceAdapter<IMachine, Hardware, Image, Location> {

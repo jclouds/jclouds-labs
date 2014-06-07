@@ -52,9 +52,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Transforms an {@link Droplet} to the jclouds portable model.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Singleton
 public class DropletToNodeMetadata implements Function<Droplet, NodeMetadata> {

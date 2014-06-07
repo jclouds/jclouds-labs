@@ -26,8 +26,6 @@ import com.google.common.base.Function;
 
 /**
  * Parses a {@link DatacenterDto} object to extract its id.
- * 
- * @author Francesc Montserrat
  */
 @Singleton
 public class ParseDatacenterId implements Function<Object, String> {

@@ -71,8 +71,6 @@ import com.google.inject.name.Names;
 
 /**
  * Module for building a compute service context for Cloud Api
- * 
- * @author Adrian Cole
  */
 public class JoyentCloudComputeServiceContextModule extends
       ComputeServiceAdapterContextModule<MachineInDatacenter, PackageInDatacenter, DatasetInDatacenter, Location> {

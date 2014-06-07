@@ -23,8 +23,6 @@ import org.testng.annotations.Test;
 
 /**
  * Unit tests for the {@link BaseEventService} class.
- * 
- * @author Vivien Mahé
  */
 @Test(groups = "unit", testName = "BaseEventServiceTest")
 public class BaseEventServiceTest extends BaseInjectionTest {

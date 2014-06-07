@@ -32,9 +32,6 @@ import org.jclouds.json.Json;
 import java.beans.ConstructorProperties;
 import java.util.List;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Singleton
 public class ParseIPInfos extends ParseJson<ParseIPInfos.IPInfos> {
    static class IPInfos extends PaginatedCollection<IPInfo> {

@@ -51,8 +51,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Tests live behavior of {@link QueryApi}.
- * 
- * @author grkvlt@apache.org
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "QueryApiLiveTest")
 public class QueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {

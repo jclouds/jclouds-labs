@@ -33,9 +33,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Adds generic high level functionality to {@link ExternalIpDto}.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class ExternalIp extends AbstractPublicIp<ExternalIpDto, ExternalNetwork> {
    /**

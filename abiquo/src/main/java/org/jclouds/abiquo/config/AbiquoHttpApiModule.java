@@ -50,8 +50,6 @@ import com.google.inject.Singleton;
 
 /**
  * Configures the Abiquo connection.
- * 
- * @author Ignasi Barrera
  */
 @ConfiguresHttpApi
 public class AbiquoHttpApiModule extends HttpApiModule<AbiquoApi> {

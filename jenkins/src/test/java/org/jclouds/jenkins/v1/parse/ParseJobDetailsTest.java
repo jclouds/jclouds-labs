@@ -25,10 +25,6 @@ import org.jclouds.jenkins.v1.domain.JobDetails;
 import org.jclouds.json.BaseItemParserTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ParseJobDetailsTest")
 public class ParseJobDetailsTest extends BaseItemParserTest<JobDetails> {
 

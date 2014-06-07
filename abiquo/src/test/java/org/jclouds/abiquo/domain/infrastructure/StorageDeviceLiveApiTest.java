@@ -28,9 +28,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Live integration tests for the {@link StorageDevice} domain class.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Test(groups = "api", testName = "StorageDeviceLiveApiTest")
 public class StorageDeviceLiveApiTest extends BaseAbiquoApiLiveApiTest {

@@ -27,8 +27,6 @@ import com.google.inject.ImplementedBy;
 
 /**
  * {@link VirtualMachine} monitoring features.
- * 
- * @author Ignasi Barrera
  */
 @ImplementedBy(BaseVirtualMachineMonitor.class)
 public interface VirtualMachineMonitor extends MonitoringService {

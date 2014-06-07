@@ -19,8 +19,6 @@ package org.jclouds.azure.management.config;
 /**
  * Configuration properties and constants used in Azure Service Management
  * connections.
- * 
- * @author Gerald Pereira
  */
 public class AzureManagementProperties {
 	/**

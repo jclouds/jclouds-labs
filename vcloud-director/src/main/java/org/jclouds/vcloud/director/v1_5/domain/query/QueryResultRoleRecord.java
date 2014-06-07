@@ -27,8 +27,6 @@ import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents the results from a Role vCloud query as a record.
- * 
- * @author Aled Sage
  */
 @XmlRootElement(name = "RoleRecord")
 @XmlType(name = "QueryResultRoleRecordType")

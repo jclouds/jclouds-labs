@@ -28,8 +28,6 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 
 /**
  * Unit tests for the {@link AppendMachineIdToPath} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AppendMachineIdToPathTest")
 public class AppendMachineIdToPathTest {

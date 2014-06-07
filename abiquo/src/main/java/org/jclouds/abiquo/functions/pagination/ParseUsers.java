@@ -42,8 +42,6 @@ import com.google.common.collect.Multimap;
 
 /**
  * Parses a paginated user list.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class ParseUsers extends BasePaginationParser<UserDto, UsersDto> {
@@ -97,7 +95,6 @@ public class ParseUsers extends BasePaginationParser<UserDto, UsersDto> {
     * The issue has already been fixed but still not been deployed in
     * production. Once that is done, this class should be removed.
     * 
-    * @author Ignasi Barrera
     */
    private static class UserPaginatedCollection extends PaginatedCollection<UserDto, UsersDto> {
       public UserPaginatedCollection(AbiquoApi api, UsersDto delegate, ParseXMLWithJAXB<UsersDto> parser) {

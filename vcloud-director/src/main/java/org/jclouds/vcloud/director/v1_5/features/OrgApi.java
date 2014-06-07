@@ -25,7 +25,6 @@ import org.jclouds.vcloud.director.v1_5.domain.org.OrgList;
  * Provides synchronous access to {@link Org}.
  * 
  * @see OrgAsyncApi
- * @author Adrian Cole
  */
 public interface OrgApi {
 

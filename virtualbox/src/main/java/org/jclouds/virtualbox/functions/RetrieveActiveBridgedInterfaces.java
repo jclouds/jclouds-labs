@@ -46,9 +46,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-/**
- * @author Andrea Turli
- */
 public class RetrieveActiveBridgedInterfaces implements Function<NodeMetadata, List<BridgedIf>> {
 
 @Resource

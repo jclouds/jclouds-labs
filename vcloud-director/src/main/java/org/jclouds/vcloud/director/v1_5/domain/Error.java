@@ -42,8 +42,6 @@ import com.google.common.collect.Iterables;
  * <pre>
  * &lt;xs:complexType name="ErrorType" /&gt;
  * </pre>
- *
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "Error")
 public class Error {

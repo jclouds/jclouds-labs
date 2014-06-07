@@ -21,8 +21,6 @@ import org.testng.annotations.BeforeClass;
 
 /**
  * Base class for strategy live tests.
- * 
- * @author Ignasi Barrera
  */
 public abstract class BaseAbiquoStrategyLiveApiTest extends BaseAbiquoApiLiveApiTest {
    @BeforeClass(groups = "api")

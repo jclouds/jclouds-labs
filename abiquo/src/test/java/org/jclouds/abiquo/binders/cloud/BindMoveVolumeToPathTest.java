@@ -36,8 +36,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Unit tests for the {@link BindMoveVolumeToPath} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindMoveVolumeToPathTest")
 public class BindMoveVolumeToPathTest {

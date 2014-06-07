@@ -28,9 +28,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Network domain utilities.
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 public class NetworkResources {
    public static VLANNetworkDto vlanPost() {

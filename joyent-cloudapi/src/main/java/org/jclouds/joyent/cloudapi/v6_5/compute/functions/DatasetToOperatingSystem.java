@@ -36,8 +36,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * A function for transforming a cloudApi specific Dataset into a generic OperatingSystem object.
- * 
- * @author Adrian Cole
  */
 public class DatasetToOperatingSystem implements Function<Dataset, OperatingSystem> {
 

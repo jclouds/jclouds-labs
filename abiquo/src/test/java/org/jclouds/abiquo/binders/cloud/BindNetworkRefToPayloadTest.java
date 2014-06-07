@@ -32,8 +32,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
  * Unit tests for the {@link BindNetworkRefToPayload} binder.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "BindNetworkRefToPayloadTest")
 public class BindNetworkRefToPayloadTest {

@@ -21,10 +21,6 @@ import org.virtualbox_4_2.IMediumAttachment;
 
 import com.google.common.base.Function;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class IMediumAttachments {
    static enum ToMedium implements Function<IMediumAttachment, IMedium> {
       INSTANCE;

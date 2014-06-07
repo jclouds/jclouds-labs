@@ -34,8 +34,6 @@ import static org.osgi.framework.BundleEvent.STOPPED;
  * A {@link org.osgi.framework.BundleListener} that listens for {@link org.osgi.framework.BundleEvent} and searches for
  * {@link org.jclouds.providers.ProviderMetadata} and {@link org.jclouds.apis.ApiMetadata} in newly installed Bundles.
  * This is used as a workaround for OSGi environments where the ServiceLoader cannot cross bundle boundaries.
- *
- * @author iocanel
  */
 public class ManagementFactoryBundleListener implements BundleListener {
 

@@ -42,8 +42,6 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * <p>
  * This strategy assumes that the datacenter will have different hypervisor
  * technologies, and images will have conversions to each of them.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class FindCompatibleVirtualDatacentersForImageAndConversions implements FindCompatibleVirtualDatacenters {

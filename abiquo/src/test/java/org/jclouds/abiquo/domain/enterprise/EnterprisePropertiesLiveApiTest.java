@@ -26,8 +26,6 @@ import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 
 /**
  * Live integration tests for the {@link Enterprise} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "EnterprisePropertiesLiveApiTest")
 public class EnterprisePropertiesLiveApiTest extends BaseAbiquoApiLiveApiTest {

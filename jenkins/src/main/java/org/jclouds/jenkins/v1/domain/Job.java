@@ -26,8 +26,6 @@ import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Minimal info about a Job
- * 
- * @author Adrian Cole
  */
 public class Job {
 

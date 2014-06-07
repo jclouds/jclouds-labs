@@ -29,9 +29,6 @@ import org.virtualbox_4_2.IStorageController;
 import org.virtualbox_4_2.StorageBus;
 import org.virtualbox_4_2.VBoxException;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "AddIDEControllerIfNotExistsTest")
 public class AddIDEControllerIfNotExistsTest {
 

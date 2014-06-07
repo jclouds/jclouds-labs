@@ -39,8 +39,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests the request/response behavior of {@link org.jclouds.vcloud.director.v1_5.features.MetadataApi}
- *
- * @author Adam Lowe
  */
 @Test(groups = { "unit", "user" }, testName = "MetadataApiExpectTest")
 public class MetadataApiExpectTest extends VCloudDirectorAdminApiExpectTest {

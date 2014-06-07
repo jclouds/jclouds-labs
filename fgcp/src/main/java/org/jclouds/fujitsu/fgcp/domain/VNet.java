@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a virtual network.
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "vnet")
 public class VNet {

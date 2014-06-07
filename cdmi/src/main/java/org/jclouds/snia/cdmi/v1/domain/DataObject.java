@@ -31,10 +31,6 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.common.io.InputSupplier;
 
-/**
- * 
- * @author Kenneth Nagin
- */
 public class DataObject extends CDMIObject {
 
    public static Builder<?> builder() {

@@ -25,7 +25,6 @@ import org.jclouds.azure.management.domain.role.PersistentVMRole;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157206">docs</a>
  * @see RoleAsyncApi
- * @author Gerald Pereira, Adrian Cole
  */
 public interface RoleApi {
 

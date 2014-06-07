@@ -34,10 +34,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * 
- * @author Adrian Cole, Jos van der Til
- */
 @Test(groups = "live", testName = "GreenQloudComputeTemplateBuilderLiveTest")
 public class GreenQloudComputeTemplateBuilderLiveTest extends BaseTemplateBuilderLiveTest {
 

@@ -19,9 +19,6 @@ package org.jclouds.joyent.joyentcloud.features;
 import org.jclouds.joyent.cloudapi.v6_5.features.DatasetApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "JoyentCloudDatasetApiLiveTest")
 public class JoyentCloudDatasetApiLiveTest extends DatasetApiLiveTest {
    public JoyentCloudDatasetApiLiveTest() {

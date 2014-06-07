@@ -44,7 +44,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see AdminNetworkApi
- * @author danikov
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface AdminNetworkAsyncApi extends NetworkAsyncApi {

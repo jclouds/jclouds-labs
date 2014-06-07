@@ -24,7 +24,6 @@ import org.jclouds.joyent.cloudapi.v6_5.options.CreateMachineOptions;
  * Provides synchronous access to Machine.
  * <p/>
  * 
- * @author Gerald Pereira
  * @see MachineAsyncApi
  * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#machines">api doc</a>
  */

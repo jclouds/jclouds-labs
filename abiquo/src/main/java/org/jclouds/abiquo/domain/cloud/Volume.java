@@ -43,7 +43,6 @@ import com.google.inject.TypeLiteral;
 /**
  * Adds high level functionality to {@link VolumeManagementDto}.
  * 
- * @author Ignasi Barrera
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Volume+Resource">
  *      http://community.abiquo.com/display/ABI20/Volume+Resource</a>

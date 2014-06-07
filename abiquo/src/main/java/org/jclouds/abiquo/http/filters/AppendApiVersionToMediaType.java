@@ -33,8 +33,6 @@ import com.google.common.net.HttpHeaders;
 /**
  * Appends the api version to the Abiquo mime types to ensure the input and
  * output of api calls will be in the desired format.
- * 
- * @author Ignasi Barrera
  */
 @Singleton
 public class AppendApiVersionToMediaType implements HttpRequestFilter {

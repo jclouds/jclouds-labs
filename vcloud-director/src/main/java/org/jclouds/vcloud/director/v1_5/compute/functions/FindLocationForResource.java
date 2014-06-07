@@ -32,9 +32,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Reference;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 
-/**
- * @author danikov
- */
 @Singleton
 public class FindLocationForResource implements Function<Reference, Location> {
 

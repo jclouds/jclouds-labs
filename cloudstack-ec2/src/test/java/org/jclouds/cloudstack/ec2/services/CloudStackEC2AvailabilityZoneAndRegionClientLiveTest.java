@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2.services;
 import org.jclouds.ec2.services.AvailabilityZoneAndRegionClientLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", singleThreaded = true, testName = "CloudStackEC2AvailabilityZoneAndRegionClientLiveTest")
 public class CloudStackEC2AvailabilityZoneAndRegionClientLiveTest extends AvailabilityZoneAndRegionClientLiveTest {
    public CloudStackEC2AvailabilityZoneAndRegionClientLiveTest() {

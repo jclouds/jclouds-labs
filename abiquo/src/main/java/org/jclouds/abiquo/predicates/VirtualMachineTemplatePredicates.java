@@ -22,8 +22,6 @@ import com.google.common.base.Predicate;
 
 /**
  * Container for {@link VirtualMachineTemplate} filters.
- * 
- * @author Francesc Montserrat
  */
 public class VirtualMachineTemplatePredicates {
 

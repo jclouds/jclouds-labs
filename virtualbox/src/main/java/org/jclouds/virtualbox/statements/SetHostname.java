@@ -25,9 +25,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Set hostname
- * 
- * @author andrea turli
- * 
  */
 public class SetHostname implements Statement {
 

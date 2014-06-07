@@ -24,9 +24,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- * @author Vladimir Shevchenko
- */
 @Test(groups = "unit")
 public class CreateSubscriptionRequestToJsonTest {
 

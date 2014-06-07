@@ -26,9 +26,6 @@ import org.testng.annotations.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-/**
- * @author Gerald Pereira
- */
 @Test(groups = "unit", testName = "ParsePackageTest")
 public class ParsePackageTest extends BaseItemParserTest<org.jclouds.joyent.cloudapi.v6_5.domain.Package> {
 

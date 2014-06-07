@@ -50,8 +50,6 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests live behavior of {@link CatalogApi}.
- * 
- * @author grkvlt@apache.org
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "CatalogApiLiveTest")
 public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {

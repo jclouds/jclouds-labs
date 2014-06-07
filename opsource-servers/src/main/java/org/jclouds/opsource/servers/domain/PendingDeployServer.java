@@ -23,10 +23,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.base.Objects;
 
-/**
- * 
- * @author Kedar Dave
- */
 @XmlRootElement(namespace = SERVER, name = "PendingDeployServer")
 public class PendingDeployServer extends BaseServer{
    public static Builder builder() {

@@ -20,9 +20,6 @@ import javax.inject.Named;
 import java.beans.ConstructorProperties;
 import java.util.Date;
 
-/**
- * @author Vladimir Shevchenko
- */
 public class Transaction {
 
    public static class Builder {

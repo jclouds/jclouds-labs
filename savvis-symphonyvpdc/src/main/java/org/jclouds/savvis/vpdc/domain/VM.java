@@ -36,8 +36,6 @@ import com.google.common.collect.Sets;
  * A virtual application (vApp) is a software solution, packaged in OVF containing one or more
  * virtual machines. A vApp can be authored by Developers at ISVs and VARs or by IT Administrators
  * in Enterprises and Service Providers.
- * 
- * @author Adrian Cole
  */
 public class VM extends BaseVirtualSystem<VM> implements Resource {
    /**
@@ -51,7 +49,6 @@ public class VM extends BaseVirtualSystem<VM> implements Resource {
     * 
     * @since vcloud api 0.8
     * 
-    * @author Adrian Cole
     */
    public enum Status {
 

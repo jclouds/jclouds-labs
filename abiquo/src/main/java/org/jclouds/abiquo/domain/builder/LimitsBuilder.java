@@ -19,7 +19,6 @@ package org.jclouds.abiquo.domain.builder;
 /**
  * Base class for all builders that represent limits.
  * 
- * @author Ignasi Barrera
  * @param <T>
  *           The type of the target builder.
  */

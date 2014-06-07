@@ -39,9 +39,6 @@ import com.google.common.reflect.Invokable;
 
 /**
  * Tests annotation parsing of {@code AdminApi}
- * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Test(groups = "unit", testName = "AdminApiTest")
 public class AdminApiTest extends BaseAbiquoApiTest<AdminApi> {

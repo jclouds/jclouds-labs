@@ -29,7 +29,6 @@ import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 /**
  * Adds high level functionality to {@link EnterprisePropertiesDto}.
  * 
- * @author Francesc Montserrat
  * @see API: <a href=
  *      "http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource"
  *      >

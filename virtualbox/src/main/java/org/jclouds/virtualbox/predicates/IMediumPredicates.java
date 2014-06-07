@@ -25,10 +25,6 @@ import org.virtualbox_4_2.IMedium;
 
 import com.google.common.base.Predicate;
 
-/**
- * 
- * @author Adrian Cole
- */
 public class IMediumPredicates {
    public static class DeviceTypeEquals implements Predicate<IMedium> {
       private final DeviceType deviceType;

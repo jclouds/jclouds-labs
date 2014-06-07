@@ -27,8 +27,6 @@ import com.abiquo.model.enumerator.HypervisorType;
 
 /**
  * Live integration tests for the {@link HardDisk} domain class.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "api", testName = "HardDiskLiveApiTest")
 public class HardDiskLiveApiTest extends BaseAbiquoApiLiveApiTest {

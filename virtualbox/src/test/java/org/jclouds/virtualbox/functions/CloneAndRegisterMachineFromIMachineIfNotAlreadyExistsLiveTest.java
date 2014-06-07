@@ -42,9 +42,6 @@ import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 
-/**
- * @author Andrea Turli
- */
 @Test(groups = "live", singleThreaded = true, testName = "CloneAndRegisterMachineFromIMachineIfNotAlreadyExistsLiveTest")
 public class CloneAndRegisterMachineFromIMachineIfNotAlreadyExistsLiveTest extends BaseVirtualBoxClientLiveTest {
 

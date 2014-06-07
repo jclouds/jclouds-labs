@@ -28,8 +28,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests asynchronous and synchronous API delegates.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "AbiquoDelegateApiTest")
 public class AbiquoDelegateApiTest extends BaseAbiquoApiTest<AbiquoApi> {

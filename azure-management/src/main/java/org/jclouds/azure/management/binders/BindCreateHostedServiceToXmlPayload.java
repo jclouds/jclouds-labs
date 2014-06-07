@@ -33,11 +33,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.jamesmurty.utils.XMLBuilder;
 
-/**
- * 
- * @author Adrian Cole
- * 
- */
 @Singleton
 public class BindCreateHostedServiceToXmlPayload implements MapBinder {
 

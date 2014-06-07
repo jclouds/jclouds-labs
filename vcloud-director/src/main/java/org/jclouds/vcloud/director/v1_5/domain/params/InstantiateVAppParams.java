@@ -34,7 +34,6 @@ import com.google.common.base.Objects.ToStringHelper;
 /**
  * Represents vApp instantiation parameters.
  *
- * @author grkvlt@apache.org
  * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/InstantiateVAppParamsType.html">
  *    vCloud REST API - InstantiateVAppParamsType</a>
  * @since 0.9

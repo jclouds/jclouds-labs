@@ -36,9 +36,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link KeyPairApi} class.
- * 
- * @author Sergi Castro
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "KeyPairApiMockTest")
 public class KeyPairApiMockTest extends BaseDigitalOceanMockTest {

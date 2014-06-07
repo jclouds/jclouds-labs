@@ -31,7 +31,6 @@ import com.google.inject.Singleton;
 /**
  * This class takes care of monitoring the a deploy of a {@link VirtualMachine}.
  * 
- * @author Serafin Sedano
  * @see MonitoringService
  */
 @Singleton

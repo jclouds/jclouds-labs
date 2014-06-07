@@ -39,8 +39,6 @@ import com.google.inject.TypeLiteral;
 /**
  * Adds high level functionality to {@link ConversionDto}.
  * 
- * @author Ignasi Barrera
- * @author Francesc Montserrat
  * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Conversion+Resource">
  *      http://community.abiquo.com/display/ABI20/Conversion+Resource</a>

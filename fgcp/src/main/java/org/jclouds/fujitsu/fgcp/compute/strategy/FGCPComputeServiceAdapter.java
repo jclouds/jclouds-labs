@@ -59,8 +59,6 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Defines the connection between the {@link org.jclouds.fujitsu.fgcp.FGCPApi}
  * implementation and the jclouds {@link org.jclouds.compute.ComputeService}.
- * 
- * @author Dies Koper
  */
 @Singleton
 public class FGCPComputeServiceAdapter implements

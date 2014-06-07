@@ -34,7 +34,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see QueryApi
- * @author grkvlt@apache.org
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface QueryAsyncApi {

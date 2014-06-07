@@ -24,8 +24,6 @@ import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460801" >api</a>
- * 
- * @author Adrian Cole
  */
 public class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Error> {
 

@@ -25,9 +25,6 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.testng.annotations.Test;
 
-/**
- * @author Gérald Pereira
- */
 @Test(groups = "unit", testName = "RoleApiExpectTest")
 public class RoleApiExpectTest extends BaseAzureManagementApiExpectTest {
 

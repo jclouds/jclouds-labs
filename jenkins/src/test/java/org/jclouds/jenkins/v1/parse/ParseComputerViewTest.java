@@ -26,10 +26,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ParseComputerViewTest")
 public class ParseComputerViewTest extends BaseItemParserTest<ComputerView> {
 

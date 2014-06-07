@@ -38,8 +38,6 @@ import com.google.inject.TypeLiteral;
 
 /**
  * Unit tests for the {@link MovedVolume} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "MovedVolumeTest")
 public class MovedVolumeTest {

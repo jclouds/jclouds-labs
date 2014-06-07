@@ -30,8 +30,6 @@ import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link VirtualMachineStateMonitor} function.
- * 
- * @author Ignasi Barrera
  */
 @Test(groups = "unit", testName = "VirtualMachineStateMonitorTest")
 public class VirtualMachineStateMonitorTest {

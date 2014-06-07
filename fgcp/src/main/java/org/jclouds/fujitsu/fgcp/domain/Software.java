@@ -20,8 +20,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents the software installed on a disk.
- * 
- * @author Dies Koper
  */
 public class Software {
    private String name;

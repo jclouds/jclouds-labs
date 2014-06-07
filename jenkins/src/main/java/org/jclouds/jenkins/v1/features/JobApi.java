@@ -24,7 +24,6 @@ import org.jclouds.jenkins.v1.domain.LastBuild;
  * Job Services
  * 
  * @see JobAsyncApi
- * @author Adrian Cole
  * @see <a href= "http://ci.jruby.org/computer/api/" >api doc</a>
  */
 public interface JobApi {

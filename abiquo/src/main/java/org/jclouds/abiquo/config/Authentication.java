@@ -25,8 +25,6 @@ import javax.inject.Qualifier;
 
 /**
  * Qualifies an authentication object.
- * 
- * @author Ignasi Barrera
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })

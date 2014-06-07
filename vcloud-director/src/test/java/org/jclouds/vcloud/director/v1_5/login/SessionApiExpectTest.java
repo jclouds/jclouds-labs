@@ -36,8 +36,6 @@ import com.google.common.collect.ImmutableMultimap;
 /**
  * 
  * Allows us to test a api via its side effects.
- * 
- * @author Adrian Cole
  */
 @Test(groups = "unit", testName = "SessionApiExpectTest")
 public class SessionApiExpectTest extends BaseRestApiExpectTest<SessionApi> {

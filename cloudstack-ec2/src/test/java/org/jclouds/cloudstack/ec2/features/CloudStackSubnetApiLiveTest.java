@@ -19,10 +19,6 @@ package org.jclouds.cloudstack.ec2.features;
 import org.jclouds.ec2.features.SubnetApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "live", testName = "CloudStackSubnetApiLiveTest")
 public class CloudStackSubnetApiLiveTest extends SubnetApiLiveTest {
    public CloudStackSubnetApiLiveTest() {

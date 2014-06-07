@@ -24,7 +24,6 @@ import org.jclouds.vcloud.director.v1_5.domain.TasksList;
  * Provides synchronous access to {@link Task} objects.
  * 
  * @see TaskAsyncApi
- * @author grkvlt@apache.org, Adrian Cole
  */
 public interface TaskApi {
 

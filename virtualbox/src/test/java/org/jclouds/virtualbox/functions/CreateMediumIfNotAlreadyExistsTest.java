@@ -43,9 +43,6 @@ import org.virtualbox_4_2.VirtualBoxManager;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 
-/**
- * @author Mattias Holmqvist
- */
 public class CreateMediumIfNotAlreadyExistsTest {
    
    private String adminDiskPath;

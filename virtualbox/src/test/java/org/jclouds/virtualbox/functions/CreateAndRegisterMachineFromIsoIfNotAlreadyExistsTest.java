@@ -46,9 +46,6 @@ import org.virtualbox_4_2.VirtualBoxManager;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Suppliers;
 
-/**
- * @author Mattias Holmqvist
- */
 @Test(groups = "unit", testName = "CreateAndRegisterMachineFromIsoIfNotAlreadyExistsTest")
 public class CreateAndRegisterMachineFromIsoIfNotAlreadyExistsTest {
 

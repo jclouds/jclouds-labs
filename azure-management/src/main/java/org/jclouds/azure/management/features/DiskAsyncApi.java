@@ -44,7 +44,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157188">docs</a>
  * @see DiskApi
- * @author Gerald Pereira
  */
 @Headers(keys = "x-ms-version", values = "2012-03-01")
 public interface DiskAsyncApi {

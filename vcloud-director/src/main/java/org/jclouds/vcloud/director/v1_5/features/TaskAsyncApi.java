@@ -37,7 +37,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * @see TaskApi
- * @author grkvlt@apache.org, Adrian Cole
  */
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface TaskAsyncApi {

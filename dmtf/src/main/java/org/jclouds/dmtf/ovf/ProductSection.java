@@ -35,10 +35,6 @@ import com.google.common.collect.Sets;
 /**
  * The ProductSection element specifies product-information for an appliance, such as product name,
  * version, and vendor.
- * 
- * @author Adrian Cole
- * @author Adam Lowe
- * @author grkvlt@apache.org
  */
 @XmlRootElement(name = "ProductSection")
 @XmlType(name = "ProductSection_Type")

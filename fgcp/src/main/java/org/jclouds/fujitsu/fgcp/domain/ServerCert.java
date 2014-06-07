@@ -22,8 +22,6 @@ import com.google.common.base.Objects;
 
 /**
  * Describes a server certificate for use with a load balancer (SLB).
- * 
- * @author Dies Koper
  */
 @XmlRootElement(name = "servercert")
 public class ServerCert implements Comparable<ServerCert> {
