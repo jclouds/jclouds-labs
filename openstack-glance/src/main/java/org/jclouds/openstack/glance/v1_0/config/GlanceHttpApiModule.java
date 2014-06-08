@@ -47,8 +47,6 @@ import com.google.inject.Provides;
 
 /**
  * Configures the Glance connection.
- * 
- * @author Adrian Cole
  */
 @ConfiguresHttpApi
 public class GlanceHttpApiModule extends HttpApiModule<GlanceApi> {

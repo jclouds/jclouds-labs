@@ -39,8 +39,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Tests ProfileApi Guice wiring and parsing
- *
- * @author Zack Shoylev
  */
 @Test
 public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {

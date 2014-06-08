@@ -31,7 +31,6 @@ import com.google.common.collect.ImmutableList;
  * This class is used when creating a new Profile.
  * You must create a profile before you can manage clusters for an account.
  * @see ProfileApi#create
- * @author Zack Shoylev
  */
 public class CreateProfile implements Comparable<CreateProfile> {
    private final String username;

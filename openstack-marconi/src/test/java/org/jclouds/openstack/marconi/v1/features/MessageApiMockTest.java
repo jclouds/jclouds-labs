@@ -37,9 +37,6 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-/**
- * @author Everett Toews
- */
 @Test
 public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
    private static final UUID CLIENT_ID = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");

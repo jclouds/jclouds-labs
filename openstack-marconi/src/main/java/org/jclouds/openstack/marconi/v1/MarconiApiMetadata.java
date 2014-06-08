@@ -37,8 +37,6 @@ import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERV
 
 /**
  * Implementation of {@link org.jclouds.apis.ApiMetadata} for Marconi 1.0 API
- *
- * @author Everett Toews
  */
 public class MarconiApiMetadata extends BaseHttpApiMetadata<MarconiApi> {
 

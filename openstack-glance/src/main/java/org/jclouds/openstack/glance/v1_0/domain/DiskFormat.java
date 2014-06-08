@@ -23,7 +23,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * appliance vendors have different formats for laying out the information contained in a virtual
  * machine disk image.
  * 
- * @author Adrian Cole
  * @see <a href= "http://glance.openstack.org/formats.html" />
  */
 public enum DiskFormat {

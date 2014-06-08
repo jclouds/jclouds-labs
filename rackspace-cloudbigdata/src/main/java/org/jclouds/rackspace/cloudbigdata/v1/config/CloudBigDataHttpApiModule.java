@@ -41,8 +41,6 @@ import com.google.inject.Provides;
 
 /**
  * Configures the Cloud Big Data connection.
- * 
- * @author Zack Shoylev
  */
 @ConfiguresHttpApi
 public class CloudBigDataHttpApiModule extends HttpApiModule<CloudBigDataApi> {

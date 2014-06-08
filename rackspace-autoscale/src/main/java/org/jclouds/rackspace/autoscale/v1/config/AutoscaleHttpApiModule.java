@@ -41,8 +41,6 @@ import com.google.inject.Provides;
 
 /**
  * Configures the Autoscale connection.
- * 
- * @author Zack Shoylev
  */
 @ConfiguresHttpApi
 public class AutoscaleHttpApiModule extends HttpApiModule<AutoscaleApi> {

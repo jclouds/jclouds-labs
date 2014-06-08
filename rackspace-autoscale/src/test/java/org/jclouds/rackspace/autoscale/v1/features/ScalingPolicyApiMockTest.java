@@ -41,8 +41,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Tests Scaling Policy Api Guice wiring and parsing
- *
- * @author Zack Shoylev
  */
 @Test(groups = "unit", testName = "ScalingPolicyApiMockTest")
 public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {

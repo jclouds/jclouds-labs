@@ -35,7 +35,6 @@ import com.google.common.collect.ImmutableMap;
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, java.util.List)
  * @see Group#getScalingPolicies()
  * @see ScalingPolicy
- * @author Zack Shoylev
  */
 public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
    private final String name;

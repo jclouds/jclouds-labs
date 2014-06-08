@@ -31,7 +31,6 @@ import com.google.common.collect.ImmutableList;
  * A Profile must be created before Clusters can be created.
  * 
  * @see ProfileApi#create
- * @author Zack Shoylev
  */
 public class Profile extends CreateProfile {
    private final String userId;

@@ -18,8 +18,6 @@ package org.jclouds.openstack.glance.v1_0.config;
 
 /**
  * Configuration properties and constants used in openstack Glance connections.
- *
- * @author Adrian Cole
  */
 public class GlanceProperties {
 

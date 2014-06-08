@@ -24,7 +24,6 @@ import java.net.URL;
 import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
 
 /**
- * @author Zack Shoylev
  * 
  * This is more of an example code of how to execute the anonymous webhook call without jclouds.
  * A POST call to the Webhook capability Link executes the scaling policy that webhook belongs to.

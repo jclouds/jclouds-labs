@@ -32,7 +32,6 @@ import com.google.common.collect.ImmutableList;
  * Autoscale ScalingPolicyResponse. Extends ScalingPolicy with id and links.
  * 
  * @see Group#getScalingPolicies()
- * @author Zack Shoylev
  */
 public class ScalingPolicy extends CreateScalingPolicy{
    private final ImmutableList<Link> links;

@@ -35,11 +35,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
-/**
- * 
- * @author Adrian Cole
- * @author Jasdeep Hundal
- */
 @Test(groups = "unit", testName = "GlanceErrorHandlerTest")
 public class GlanceErrorHandlerTest {
 

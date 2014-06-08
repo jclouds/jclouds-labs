@@ -38,9 +38,6 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
-/**
- * @author Jeremy Daggett
- */
 @Test(groups = "unit", testName = "AccountApiMockTest")
 public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 

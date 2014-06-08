@@ -40,10 +40,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for the Swift API.
- * 
- * @author Adrian Cole
- * @author Zack Shoylev
- * @author Jeremy Daggett
  */
 public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
    

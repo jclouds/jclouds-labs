@@ -38,7 +38,6 @@ import com.google.inject.Module;
  * Implementation of {@link ApiMetadata} for the Rackspace Autoscale API
  * 
  * @see AutoscaleApi
- * @author Zack Shoylev
  */
 public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
 

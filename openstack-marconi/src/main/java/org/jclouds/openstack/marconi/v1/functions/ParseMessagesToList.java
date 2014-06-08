@@ -30,9 +30,6 @@ import static com.google.common.collect.Iterables.transform;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
 
-/**
- * @author Everett Toews
- */
 public class ParseMessagesToList implements Function<HttpResponse, List<Message>> {
 
    private final ParseJson<List<MessageWithHref>> json;

@@ -24,8 +24,6 @@ import org.jclouds.rackspace.cloudbigdata.v1.CloudBigDataApi;
 
 /**
  * Tests behavior of CLoud Big Data live.
- * 
- * @author Zack Shoylev
  */
 public class BaseCloudBigDataApiLiveTest extends BaseApiLiveTest<CloudBigDataApi> {
 

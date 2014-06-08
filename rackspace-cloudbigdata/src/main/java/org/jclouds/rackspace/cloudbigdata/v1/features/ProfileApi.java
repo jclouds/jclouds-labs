@@ -41,7 +41,6 @@ import org.jclouds.rest.annotations.WrapWith;
  * A profile is the configuration for the administration and login account for the cluster.
  * Only one profile is allowed for each user or account.
  * Any updates or additions override the existing profile.
- * @author Zack Shoylev
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)

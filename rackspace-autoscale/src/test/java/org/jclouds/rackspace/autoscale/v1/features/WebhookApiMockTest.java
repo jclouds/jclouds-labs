@@ -37,8 +37,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Tests WebhookApi Guice wiring and parsing
- *
- * @author Zack Shoylev
  */
 @Test(groups = "unit", testName = "WebhookApiMockTest")
 public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {

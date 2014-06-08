@@ -46,7 +46,6 @@ import org.jclouds.openstack.v2_0.options.PaginationOptions;
  * list = api.list(name("newName"), limit(10), minDisk(5));
  * <code>
  * 
- * @author Adam Lowe
  * @see <a href="http://glance.openstack.org/glanceapi.html"/>
  */
 public class ListImageOptions extends PaginationOptions {

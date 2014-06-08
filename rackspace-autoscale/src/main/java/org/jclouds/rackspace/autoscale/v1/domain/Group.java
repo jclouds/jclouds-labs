@@ -27,8 +27,6 @@ import com.google.common.collect.ImmutableList;
 /**
  * Autoscale Group.
  * This domain object contains information about an autoscaling group.
- * 
- * @author Zack Shoylev
  */
 
 public class Group {

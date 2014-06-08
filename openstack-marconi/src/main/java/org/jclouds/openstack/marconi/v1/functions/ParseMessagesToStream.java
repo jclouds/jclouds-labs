@@ -36,9 +36,6 @@ import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.common.collect.Iterables.transform;
 import static org.jclouds.http.utils.Queries.queryParser;
 
-/**
- * @author Everett Toews
- */
 public class ParseMessagesToStream implements Function<HttpResponse, MessageStream> {
 
    private final ParseJson<MessagesWithHref> json;

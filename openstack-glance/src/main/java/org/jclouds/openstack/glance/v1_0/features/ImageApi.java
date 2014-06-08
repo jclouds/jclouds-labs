@@ -58,8 +58,6 @@ import org.jclouds.rest.annotations.Transform;
 /**
  * Image Services
  * 
- * @author Adrian Cole
- * @author Adam Lowe
  * @see <a href="http://glance.openstack.org/glanceapi.html">api doc</a>
  * @see <a
  *      href="https://github.com/openstack/glance/blob/master/glance/api/v1/images.py">api

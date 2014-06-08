@@ -25,9 +25,6 @@ import javax.inject.Singleton;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Everett Toews
- */
 @Singleton
 public class BindIdsToQueryParam implements Binder {
 

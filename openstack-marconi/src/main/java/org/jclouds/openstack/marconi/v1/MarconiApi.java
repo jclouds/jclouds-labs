@@ -35,8 +35,6 @@ import java.util.UUID;
 
 /**
  * Marconi is a robust, web-scale message queuing service to support the distributed nature of large web applications.
- *
- * @author Everett Toews
  */
 public interface MarconiApi extends Closeable {
    /**

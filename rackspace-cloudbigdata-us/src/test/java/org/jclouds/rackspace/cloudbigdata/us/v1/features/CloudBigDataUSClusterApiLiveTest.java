@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests GroupApi - live
- *
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "AutoscaleUSGroupApiLiveTest", singleThreaded = true)
 public class CloudBigDataUSClusterApiLiveTest extends ClusterApiLiveTest {

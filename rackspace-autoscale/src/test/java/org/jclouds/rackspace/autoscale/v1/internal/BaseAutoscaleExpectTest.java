@@ -24,9 +24,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing Autoscale Expect tests
- * 
- * @author Adrian Cole
- * @author Zack Shoylev
  */
 public class BaseAutoscaleExpectTest<T> extends BaseRestApiExpectTest<T> {
    protected HttpRequest keystoneAuthWithUsernameAndPassword;

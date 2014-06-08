@@ -34,9 +34,6 @@ import java.util.UUID;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.openstack.marconi.v1.options.ListQueuesOptions.Builder.queryParameters;
 
-/**
- * @author Everett Toews
- */
 @Beta
 public class QueuesToPagedIterable extends ArgsToPagedIterable.FromCaller<Queue, QueuesToPagedIterable> {
 

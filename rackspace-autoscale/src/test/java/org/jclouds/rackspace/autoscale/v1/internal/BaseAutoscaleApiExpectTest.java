@@ -20,8 +20,6 @@ import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
 
 /**
  * Base class for writing Autoscale Expect tests
- * 
- * @author Zack Shoylev
  */
 public class BaseAutoscaleApiExpectTest extends BaseAutoscaleExpectTest<AutoscaleApi> {
 }

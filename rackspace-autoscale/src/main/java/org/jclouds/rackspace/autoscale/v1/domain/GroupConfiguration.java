@@ -31,7 +31,6 @@ import com.google.common.collect.ImmutableMap;
  * Autoscale GroupConfiguration.
  * 
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, java.util.List)
- * @author Zack Shoylev
  */
 public class GroupConfiguration implements Comparable<GroupConfiguration>{
    private final String name;

@@ -24,8 +24,6 @@ import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
 
 /**
  * Tests behavior of AutoscaleApi
- * 
- * @author Zack Shoylev
  */
 public class BaseAutoscaleApiLiveTest extends BaseApiLiveTest<AutoscaleApi> {
 

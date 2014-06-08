@@ -35,8 +35,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Glance 1.0 API
- * 
- * @author Adrian Cole
  */
 public class GlanceApiMetadata extends BaseHttpApiMetadata<GlanceApi> {
 

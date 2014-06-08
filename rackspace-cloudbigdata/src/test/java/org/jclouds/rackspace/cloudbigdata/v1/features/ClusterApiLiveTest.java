@@ -44,8 +44,6 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Profile live test
- * 
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "ProfileApiLiveTest", singleThreaded = true)
 public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {   

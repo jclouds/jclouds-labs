@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests Scaling Policy Api - live
- *
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "AutoscaleUSScalingPolicyApiLiveTest", singleThreaded = true)
 public class AutoscaleUSScalingPolicyApiLiveTest extends ScalingPolicyApiLiveTest {

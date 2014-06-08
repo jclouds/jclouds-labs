@@ -28,7 +28,6 @@ import com.google.gson.annotations.SerializedName;
  * Autoscale LoadBalancer. Part of the launch configuration.
  * 
  * @see LaunchConfiguration#getLoadBalancers()
- * @author Zack Shoylev
  */
 public class LoadBalancer {
    private final int port;

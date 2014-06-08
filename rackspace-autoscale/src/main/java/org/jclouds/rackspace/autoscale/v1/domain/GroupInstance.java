@@ -30,7 +30,6 @@ import com.google.common.collect.ImmutableList;
  * Autoscale Group Instance (as in hardware instance). Part of the group state.
  * 
  * @see GroupState#getGroupInstances()
- * @author Zack Shoylev
  */
 public class GroupInstance {
    private final String id;

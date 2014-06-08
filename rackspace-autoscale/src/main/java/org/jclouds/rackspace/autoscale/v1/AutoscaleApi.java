@@ -40,7 +40,6 @@ import com.google.inject.Provides;
  *  
  * @see <a href="https://rackspace-autoscale.readthedocs.org">API Doc</a>
  * @see <a href="http://docs.autoscale.apiary.io/">Apiary API Doc</a>
- * @author Zack Shoylev
  */
 public interface AutoscaleApi extends Closeable{
    /**

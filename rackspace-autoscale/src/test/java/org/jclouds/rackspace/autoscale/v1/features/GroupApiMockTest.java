@@ -49,8 +49,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Tests GroupApi Guice wiring and parsing
- *
- * @author Zack Shoylev
  */
 @Test//(groups = "unit", testName = "GroupApiMockTest")
 public class GroupApiMockTest extends BaseAutoscaleApiMockTest {

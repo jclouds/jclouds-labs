@@ -28,7 +28,6 @@ import com.google.inject.Inject;
 
 /**
  * Bind parameters to a webhook
- * @author Zack Shoylev
  */
 public class BindWebhookToJson implements MapBinder {
 

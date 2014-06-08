@@ -21,9 +21,6 @@ import org.jclouds.json.config.GsonModule.DateAdapter;
 
 import com.google.inject.AbstractModule;
 
-/**
- * @author Zack Shoylev
- */
 public class AutoscaleParserModule extends AbstractModule {
    @Override
    protected void configure() {

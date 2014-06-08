@@ -44,7 +44,6 @@ import com.google.common.collect.FluentIterable;
 /**
  * The API for controlling clusters.
  * A cluster is a group of servers (nodes). In Cloud Big Data, the servers are virtual.
- * @author Zack Shoylev
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)

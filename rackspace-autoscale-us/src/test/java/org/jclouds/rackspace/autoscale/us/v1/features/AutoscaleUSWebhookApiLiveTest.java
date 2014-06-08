@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests WebhookApi - live
- *
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "AutoscaleUSWebhookApiLiveTest", singleThreaded = true)
 public class AutoscaleUSWebhookApiLiveTest extends WebhookApiLiveTest {

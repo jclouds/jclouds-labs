@@ -27,9 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
 
-/**
- * @author Everett Toews
- */
 public class ParseMessage implements Function<HttpResponse, Message> {
 
    private final ParseJson<MessageWithHref> json;

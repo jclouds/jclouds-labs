@@ -27,8 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A claim for messages in a queue.
- *
- * @author Everett Toews
  */
 public class Claim {
 

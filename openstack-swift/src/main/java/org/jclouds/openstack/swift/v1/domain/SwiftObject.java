@@ -36,8 +36,6 @@ import com.google.common.collect.Multimap;
 /**
  * Represents an object in OpenStack Object Storage.
  * 
- * @author Adrian Cole
- * @author Jeremy Daggett
  * 
  * @see ObjectApi
  */

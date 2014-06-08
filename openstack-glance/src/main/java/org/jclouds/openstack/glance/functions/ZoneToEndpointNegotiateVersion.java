@@ -50,10 +50,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Iterables;
 
-/**
- *
- * @author Jasdeep Hundal
- */
 @Singleton
 public class ZoneToEndpointNegotiateVersion implements Function<Object, URI> {
 

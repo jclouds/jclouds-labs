@@ -25,8 +25,6 @@ import java.beans.ConstructorProperties;
 
 /**
  * Statistics on messages in this queue.
- *
- * @author Everett Toews
  */
 public class MessagesStats {
 

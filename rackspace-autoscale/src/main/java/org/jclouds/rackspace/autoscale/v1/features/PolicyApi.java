@@ -51,7 +51,6 @@ import com.google.common.collect.FluentIterable;
 /**
  * The API for controlling the configuration of scaling groups.
  * A scaling group is a high-level autoscaling concept that encompasses a group configuration, a launch configuration, and a set of scaling policies.
- * @author Zack Shoylev
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)

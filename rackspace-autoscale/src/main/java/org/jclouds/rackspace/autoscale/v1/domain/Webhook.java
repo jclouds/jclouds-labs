@@ -36,7 +36,6 @@ import com.google.common.collect.ImmutableList;
  * Autoscale WebhookResponse. Extends Webhook with id and links.
  * 
  * @see CreateWebhook#getWebhooks()
- * @author Zack Shoylev
  */
 public class Webhook extends CreateWebhook {
    private final ImmutableList<Link> links;

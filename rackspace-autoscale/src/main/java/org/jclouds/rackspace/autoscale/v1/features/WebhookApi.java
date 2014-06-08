@@ -49,7 +49,6 @@ import com.google.common.collect.FluentIterable;
 
 /**
  * The API for controlling autoscale webhooks.
- * @author Zack Shoylev
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)

@@ -30,9 +30,6 @@ import java.util.UUID;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-/**
- * @author Everett Toews
- */
 @Test
 public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
    private static final UUID CLIENT_ID = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");

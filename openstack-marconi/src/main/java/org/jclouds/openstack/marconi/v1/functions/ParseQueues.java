@@ -27,9 +27,6 @@ import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Everett Toews
- */
 public class ParseQueues implements Function<HttpResponse, PaginatedCollection<Queue>> {
 
    private final ParseJson<Queues> json;

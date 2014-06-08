@@ -32,7 +32,6 @@ import com.google.common.base.Optional;
 /**
  * An image the Glance server knows about
  *
- * @author Adrian Cole
  * @see <a href= "http://glance.openstack.org/glanceapi.html" />
  * @see <a href= "https://github.com/openstack/glance/blob/master/glance/api/v1/images.py" />
  */

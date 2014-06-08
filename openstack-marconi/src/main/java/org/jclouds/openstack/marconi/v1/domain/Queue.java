@@ -27,8 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A queue.
- *
- * @author Everett Toews
  */
 public class Queue {
 

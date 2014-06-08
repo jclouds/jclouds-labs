@@ -21,8 +21,6 @@ import org.jclouds.rest.ResourceNotFoundException;
 /**
  * Thrown when an object cannot be copied.
  *  
- * @author Everett Toews
- * @author Jeremy Daggett
  * 
  * @see {@link SwiftErrorHandler#handleError(HttpCommand, HttpResponse)}
  */

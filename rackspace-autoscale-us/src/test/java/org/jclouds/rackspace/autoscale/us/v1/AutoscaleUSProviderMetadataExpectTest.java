@@ -28,8 +28,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * This test ensures that the wiring in {@link AutoscaleUSProviderMetadata} is correct.
- * 
- * @author Zack Shoylev
  */
 @Test(groups = "unit", testName = "AutoscaleUSProviderMetadataExpectTest")
 public class AutoscaleUSProviderMetadataExpectTest extends BaseAutoscaleApiExpectTest {

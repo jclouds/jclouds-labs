@@ -29,10 +29,6 @@ import org.jclouds.rest.MapBinder;
 
 import com.google.common.collect.Maps;
 
-/**
- * 
- * @author Zack Shoylev
- */
 public class BindToGroupConfigurationRequestPayload implements MapBinder {
 
    protected final Json jsonBinder;

@@ -24,8 +24,6 @@ import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing Glance Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseGlanceExpectTest<T> extends BaseRestApiExpectTest<T> {
    protected HttpRequest keystoneAuthWithUsernameAndPassword;

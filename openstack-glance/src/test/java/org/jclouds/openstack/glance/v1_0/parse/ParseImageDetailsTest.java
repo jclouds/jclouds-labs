@@ -28,10 +28,6 @@ import org.jclouds.openstack.glance.v1_0.domain.ImageDetails;
 import org.jclouds.rest.annotations.SelectJson;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Adam Lowe
- */
 @Test(groups = "unit", testName = "ParseImageDetailTest")
 public class ParseImageDetailsTest extends BaseItemParserTest<ImageDetails> {
 

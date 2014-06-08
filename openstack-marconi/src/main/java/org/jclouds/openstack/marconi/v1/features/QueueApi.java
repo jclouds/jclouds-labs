@@ -51,8 +51,6 @@ import static org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 
 /**
  * Provides access to Queues via their REST API.
- *
- * @author Everett Toews
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)

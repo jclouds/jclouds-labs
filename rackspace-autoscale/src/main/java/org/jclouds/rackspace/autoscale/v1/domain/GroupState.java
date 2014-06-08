@@ -32,7 +32,6 @@ import com.google.gson.annotations.SerializedName;
  * @see Group
  * @see GroupApi#listGroupStates()
  * @see GroupApi#getState(String)
- * @author Zack Shoylev
  */
 public class GroupState implements Comparable<GroupState> {
    private final String id;

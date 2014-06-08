@@ -33,7 +33,6 @@ import org.jclouds.openstack.glance.v1_0.domain.StoreType;
  * details = api.create("imageName", minDisk(10), isPublic(true), property("mykey", "somevalue"));
  * <code>
 
- * @author Adam Lowe
  * @see <a href="http://glance.openstack.org/glanceapi.html"/>
  */
 public class CreateImageOptions extends UpdateImageOptions {

@@ -27,8 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The response to creating messages on a queue.
- *
- * @author Everett Toews
  */
 public class MessagesCreated {
 

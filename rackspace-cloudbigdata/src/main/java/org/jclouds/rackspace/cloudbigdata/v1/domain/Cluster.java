@@ -32,7 +32,6 @@ import com.google.common.collect.ImmutableList;
  * Cloud Big Data Cluster.
  * Contains information about a Cloud Big Data cluster.
  * @see ClusterApi#create
- * @author Zack Shoylev
  */
 public class Cluster extends CreateCluster {
    private final String id;

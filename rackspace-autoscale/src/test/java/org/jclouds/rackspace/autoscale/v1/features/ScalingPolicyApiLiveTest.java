@@ -50,8 +50,6 @@ import com.google.common.util.concurrent.Uninterruptibles;
 
 /**
  * Scaling Policy live test
- * 
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "ScalingPolicyApiLiveTest", singleThreaded = true)
 public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {

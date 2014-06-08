@@ -47,8 +47,6 @@ import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
 /**
  * Provides access to Messages via their REST API.
- *
- * @author Everett Toews
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)

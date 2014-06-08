@@ -40,8 +40,6 @@ import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERV
 
 /**
  * Implementation of Rackspace Cloud Queues.
- * 
- * @author Everett Toews
  */
 public class CloudQueuesUKProviderMetadata extends BaseProviderMetadata {
 

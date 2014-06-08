@@ -30,7 +30,6 @@ import com.google.inject.Inject;
 
 /**
  * Decouple building the json object from the domain objects structure by using the binder
- * @author Zack Shoylev
  */
 public class BindCreateGroupToJson implements MapBinder {
 

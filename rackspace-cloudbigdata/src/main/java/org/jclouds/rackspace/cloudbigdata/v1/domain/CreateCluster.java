@@ -29,7 +29,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * This is used to describe how to create a Cloud Big Data cluster, a collection of machines that can be used to run distributed data processing.
  * This class implements the Builder pattern.
  * @see ClusterApi#create
- * @author Zack Shoylev
  */
 public class CreateCluster implements Comparable<CreateCluster> {
    private final String name;

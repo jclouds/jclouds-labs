@@ -30,9 +30,6 @@ import org.jclouds.rest.ResourceNotFoundException;
 
 /**
  * This will parse and set an appropriate exception on the command object.
- * 
- * @author Adrian Cole
- * 
  */
 // TODO: is there error spec someplace? let's type errors, etc.
 @Singleton

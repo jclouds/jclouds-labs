@@ -19,7 +19,6 @@ package org.jclouds.openstack.glance.v1_0.domain;
 /**
  * Backing store types for glance images
  * 
- * @author Adam Lowe
  * @see <a href= "http://glance.openstack.org/architecture.html#what-is-a-store" />
  */
 public enum StoreType {

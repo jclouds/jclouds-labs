@@ -57,8 +57,6 @@ import com.google.common.util.concurrent.Uninterruptibles;
 
 /**
  * Webhook live test
- * 
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "WebhookApiLiveTest", singleThreaded = true)
 public class WebhookApiLiveTest extends BaseAutoscaleApiLiveTest {

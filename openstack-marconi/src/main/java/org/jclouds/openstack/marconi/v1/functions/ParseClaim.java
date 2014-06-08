@@ -33,9 +33,6 @@ import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.M
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_ID_FROM_HREF;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
 
-/**
- * @author Everett Toews
- */
 public class ParseClaim implements Function<HttpResponse, Claim> {
 
    protected static final Function<ClaimWithHref, Claim> TO_CLAIM = new Function<ClaimWithHref, Claim>() {

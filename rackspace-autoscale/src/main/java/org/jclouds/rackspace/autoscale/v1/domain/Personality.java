@@ -27,7 +27,6 @@ import com.google.common.base.Objects.ToStringHelper;
  * Autoscale Personality. Part of the launch configuration.
  * 
  * @see LaunchConfiguration#getPersonalities()
- * @author Zack Shoylev
  */
 public class Personality {
    private final String path;

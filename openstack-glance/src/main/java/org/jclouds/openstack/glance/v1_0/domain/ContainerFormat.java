@@ -28,7 +28,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * components, so it is safe to simply specify {@link #BARE} as the container format if you are
  * unsure.
  * 
- * @author Adrian Cole
  * @see <a href= "http://glance.openstack.org/formats.html" />
  */
 public enum ContainerFormat {

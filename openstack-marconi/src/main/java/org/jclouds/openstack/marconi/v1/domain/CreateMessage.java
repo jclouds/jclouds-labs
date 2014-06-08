@@ -24,8 +24,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A message to be sent to a queue.
- *
- * @author Everett Toews
  */
 public class CreateMessage {
 

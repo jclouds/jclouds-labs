@@ -25,8 +25,6 @@ import org.testng.annotations.Test;
 
 /**
  * Tests behavior of {@code GlanceApi}
- * 
- * @author Adrian Cole
  */
 @Test(groups = "live")
 public class BaseGlanceApiLiveTest extends BaseApiLiveTest<GlanceApi> {

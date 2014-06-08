@@ -28,8 +28,6 @@ import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 
 /**
  * Base class for writing Autoscale Expect tests
- * 
- * @author Zack Shoylev
  */
 public class BaseAutoscaleApiMockTest extends BaseOpenStackMockTest<AutoscaleApi> {
    protected Properties overrides;

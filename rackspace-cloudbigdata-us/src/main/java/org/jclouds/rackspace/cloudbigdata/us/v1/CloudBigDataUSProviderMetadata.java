@@ -41,8 +41,6 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ProviderMetadata} for Rackspace CloudBigData API
- * 
- * @author Zack Shoylev
  */
 public class CloudBigDataUSProviderMetadata extends BaseProviderMetadata {
 

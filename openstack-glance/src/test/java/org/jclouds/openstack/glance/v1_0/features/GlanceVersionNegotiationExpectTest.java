@@ -25,9 +25,6 @@ import org.jclouds.openstack.glance.v1_0.internal.BaseGlanceApiExpectTest;
 import org.jclouds.openstack.glance.v1_0.parse.ParseImagesTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Jasdeep Hundal
- */
 @Test(groups = "unit", testName = "GlanceVersionNegotiationExpectTest")
 public class GlanceVersionNegotiationExpectTest extends BaseGlanceApiExpectTest {
 

@@ -29,8 +29,6 @@ import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.T
 
 /**
  * This parses the stats of a queue.
- * 
- * @author Everett
  */
 public class ParseQueueStats implements Function<HttpResponse, QueueStats> {
 

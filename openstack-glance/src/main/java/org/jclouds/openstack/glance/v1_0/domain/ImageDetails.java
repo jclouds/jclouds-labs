@@ -36,7 +36,6 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Detailed listing of an Image
  *
- * @author Adrian Cole
  * @see <a href= "http://glance.openstack.org/glanceapi.html" />
  * @see <a href= "https://github.com/openstack/glance/blob/master/glance/api/v1/images.py" />
  * @see <a href= "https://github.com/openstack/glance/blob/master/glance/registry/db/api.py" />

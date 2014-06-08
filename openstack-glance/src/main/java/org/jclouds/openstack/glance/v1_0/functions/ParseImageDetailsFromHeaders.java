@@ -45,8 +45,6 @@ import com.google.common.base.Function;
 
 /**
  * This parses {@link ImageDetails} from HTTP headers.
- * 
- * @author Adrian Cole
  */
 public class ParseImageDetailsFromHeaders implements Function<HttpResponse, ImageDetails> {
    private final DateService dateService;

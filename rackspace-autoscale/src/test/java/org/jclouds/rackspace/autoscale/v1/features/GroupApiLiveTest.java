@@ -49,8 +49,6 @@ import com.google.common.collect.Maps;
 
 /**
  * Group live test
- * 
- * @author Zack Shoylev
  */
 @Test(groups = "live", testName = "GroupApiLiveTest", singleThreaded = true)
 public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {

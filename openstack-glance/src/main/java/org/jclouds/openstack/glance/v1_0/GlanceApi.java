@@ -34,7 +34,6 @@ import com.google.inject.Provides;
  * <p/>
  * 
  * @see <a href="http://glance.openstack.org/glanceapi.html">api doc</a>
- * @author Adrian Cole
  */
 public interface GlanceApi extends Closeable {
    /**

@@ -33,7 +33,6 @@ import com.google.inject.Provides;
  * Provides access to Rackspace Cloud Big Data.
  * Rackspace Cloud Big Data is an on-demand Apache Hadoop service on the Rackspace open cloud. The service supports a RESTful API and alleviates the pain associated with deploying, managing, and scaling Hadoop clusters.
  * @see <a href="http://docs.rackspace.com/cbd/api/v1.0/cbd-devguide/content/overview.html">API Doc</a>
- * @author Zack Shoylev
  */
 public interface CloudBigDataApi extends Closeable{
    /**

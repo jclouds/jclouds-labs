@@ -38,7 +38,6 @@ import com.google.inject.Module;
  * Implementation of {@link ApiMetadata} for the Rackspace Cloud Big Data API
  * 
  * @see CloudBigDataApi
- * @author Zack Shoylev
  */
 public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi> {
 

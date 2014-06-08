@@ -19,9 +19,6 @@ package org.jclouds.rackspace.cloudqueues.uk;
 import org.jclouds.openstack.marconi.v1.features.ClaimApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Everett Toews
- */
 @Test(groups = "live", testName = "CloudQueuesUKClaimApiLiveTest")
 public class CloudQueuesUKClaimApiLiveTest extends ClaimApiLiveTest {
    public CloudQueuesUKClaimApiLiveTest() {

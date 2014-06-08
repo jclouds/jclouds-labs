@@ -30,8 +30,6 @@ import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.T
 
 /**
  * This parses the messages created on a queue.
- * 
- * @author Everett Toews
  */
 public class ParseMessagesCreated implements Function<HttpResponse, MessagesCreated> {
 

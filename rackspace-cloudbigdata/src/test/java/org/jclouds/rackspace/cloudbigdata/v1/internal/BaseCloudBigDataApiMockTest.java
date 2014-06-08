@@ -28,8 +28,6 @@ import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
 
 /**
  * Base class for writing Cloud Big Data Expect tests
- * 
- * @author Zack Shoylev
  */
 public class BaseCloudBigDataApiMockTest extends BaseOpenStackMockTest<CloudBigDataApi> {
    protected Properties overrides;

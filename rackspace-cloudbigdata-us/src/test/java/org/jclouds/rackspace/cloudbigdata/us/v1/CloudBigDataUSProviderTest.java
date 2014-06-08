@@ -20,9 +20,6 @@ import org.jclouds.providers.internal.BaseProviderMetadataTest;
 import org.jclouds.rackspace.cloudbigdata.v1.CloudBigDataApiMetadata;
 import org.testng.annotations.Test;
 
-/**
- * @author Zack Shoylev
- */
 @Test(groups = "unit", testName = "AutoscaleUSProviderTest")
 public class CloudBigDataUSProviderTest extends BaseProviderMetadataTest {
 

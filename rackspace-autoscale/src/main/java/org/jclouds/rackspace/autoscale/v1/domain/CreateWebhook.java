@@ -32,7 +32,6 @@ import com.google.common.collect.ImmutableMap;
  * 
  * @see Group
  * @see CreateScalingPolicy
- * @author Zack Shoylev
  */
 public class CreateWebhook {
    private final String name;

@@ -38,7 +38,6 @@ import com.google.inject.Inject;
 
 /**
  * This parses the scaling policy response and decouples domain objects from the json object returned by the service.
- * @author Zack Shoylev
  */
 public class ParseScalingPoliciesResponse implements Function<HttpResponse, FluentIterable<ScalingPolicy>> {
 

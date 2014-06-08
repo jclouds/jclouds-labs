@@ -42,10 +42,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- */
 @Test(groups = "unit", testName = "ImageApiExpectTest")
 public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 

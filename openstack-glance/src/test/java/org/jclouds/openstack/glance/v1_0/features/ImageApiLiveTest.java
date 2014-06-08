@@ -36,10 +36,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 
-/**
- * @author Adrian Cole
- * @author Adam Lowe
- */
 @Test(groups = "live", testName = "ImageApiLiveTest")
 public class ImageApiLiveTest extends BaseGlanceApiLiveTest {
 

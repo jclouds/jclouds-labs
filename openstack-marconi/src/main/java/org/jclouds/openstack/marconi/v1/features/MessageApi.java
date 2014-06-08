@@ -52,8 +52,6 @@ import static org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginat
 
 /**
  * Provides access to Messages via their REST API.
- *
- * @author Everett Toews
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)

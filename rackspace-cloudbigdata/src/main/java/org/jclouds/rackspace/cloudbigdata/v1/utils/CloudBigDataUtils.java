@@ -16,10 +16,6 @@
  */
 package org.jclouds.rackspace.cloudbigdata.v1.utils;
 
-/**
- * @author Zack Shoylev
- * 
- */
 public class CloudBigDataUtils {
    
 }

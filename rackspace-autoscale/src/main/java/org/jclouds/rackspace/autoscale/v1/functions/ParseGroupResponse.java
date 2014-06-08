@@ -43,7 +43,6 @@ import com.google.inject.Inject;
 
 /**
  * This parses the group response and decouples domain objects from the json object returned by the service.
- * @author Zack Shoylev
  */
 public class ParseGroupResponse implements Function<HttpResponse, Group> {
 

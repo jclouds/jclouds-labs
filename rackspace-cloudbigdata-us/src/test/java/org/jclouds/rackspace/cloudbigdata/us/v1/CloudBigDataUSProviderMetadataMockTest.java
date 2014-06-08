@@ -21,8 +21,6 @@ import org.testng.annotations.Test;
 
 /**
  * This test ensures that the wiring in {@link CloudBigDataUSProviderMetadata} is correct.
- * 
- * @author Zack Shoylev
  */
 @Test(groups = "unit", testName = "AutoscaleUSProviderMetadataExpectTest")
 public class CloudBigDataUSProviderMetadataMockTest extends BaseCloudBigDataApiMockTest {

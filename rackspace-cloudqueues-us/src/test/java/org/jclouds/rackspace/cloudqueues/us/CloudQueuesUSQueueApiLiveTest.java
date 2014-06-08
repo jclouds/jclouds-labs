@@ -19,9 +19,6 @@ package org.jclouds.rackspace.cloudqueues.us;
 import org.jclouds.openstack.marconi.v1.features.QueueApiLiveTest;
 import org.testng.annotations.Test;
 
-/**
- * @author Everett Toews
- */
 @Test(groups = "live", testName = "CloudQueuesUSQueueApiLiveTest")
 public class CloudQueuesUSQueueApiLiveTest extends QueueApiLiveTest {
     public CloudQueuesUSQueueApiLiveTest() {

@@ -23,8 +23,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Queue statistics, including how many messages are in the queue.
- *
- * @author Everett Toews
  */
 public class QueueStats {
 

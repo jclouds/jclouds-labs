@@ -26,7 +26,6 @@ import com.google.common.base.Objects.ToStringHelper;
 /**
  * Cloud Big Data ProfileSSHKey.
  * Used to provide a key pair for a Profile.
- * @author Zack Shoylev
  */
 public class ProfileSSHKey implements Comparable<ProfileSSHKey> {
    private String name;

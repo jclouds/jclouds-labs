@@ -18,8 +18,6 @@ package org.jclouds.openstack.swift.v1.reference;
 
 /**
  * Common headers in Swift.
- * 
- * @author Jeremy Daggett
  */
 public interface SwiftHeaders {
 

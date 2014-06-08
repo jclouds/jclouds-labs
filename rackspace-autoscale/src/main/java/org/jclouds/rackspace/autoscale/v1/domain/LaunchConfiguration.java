@@ -32,7 +32,6 @@ import com.google.common.collect.ImmutableMap;
  * Autoscale LaunchConfiguration.
  * 
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, List)
- * @author Zack Shoylev
  */
 public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
    private final ImmutableList<LoadBalancer> loadBalancers;

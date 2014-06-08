@@ -28,10 +28,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMultimap;
 
-/**
- * 
- * @author Adrian Cole
- */
 @Test(groups = "unit", testName = "ParseImageDetailsFromHeadersTest")
 public class ParseImageDetailsFromHeadersTest {
 

@@ -20,8 +20,6 @@ import org.jclouds.openstack.glance.v1_0.GlanceApi;
 
 /**
  * Base class for writing KeyStone Rest Api Expect tests
- * 
- * @author Adrian Cole
  */
 public class BaseGlanceApiExpectTest extends BaseGlanceExpectTest<GlanceApi> {
 

@@ -32,8 +32,6 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 /**
  * @see KeystoneProperties#CREDENTIAL_TYPE
- * 
- * @author Adrian Cole
  */
 @Test
 public class AuthenticationMockTest extends BaseOpenStackMockTest<SwiftApi> {

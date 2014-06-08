@@ -31,7 +31,6 @@ import com.google.common.primitives.Ints;
 import static org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 
 /**
- * @author Zack Shoylev
  * 
  * Helper methods for parsing autoscale JSON
  */
