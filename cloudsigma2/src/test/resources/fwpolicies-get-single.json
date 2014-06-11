@@ -1,0 +1,61 @@
+{
+    "meta": {},
+    "name": "My awesome policy",
+    "owner": {
+        "resource_uri": "/api/2.0/user/a2d33327-87d6-4be9-ba7e-0082d89eb21a/",
+        "uuid": "a2d33327-87d6-4be9-ba7e-0082d89eb21a"
+    },
+    "resource_uri": "/api/2.0/fwpolicies/9001b532-857a-405a-8e50-54e342871e77/",
+    "rules": [
+        {
+            "action": "drop",
+            "comment": "Drop traffic from the VM to IP address 23.0.0.0/32",
+            "direction": "out", "dst_ip": "23.0.0.0/32",
+            "dst_port": null,
+            "ip_proto": null,
+            "src_ip": null,
+            "src_port": null},
+        {
+            "action": "accept",
+            "comment": "Allow SSH traffic to the VM from our office in Dubai",
+            "direction": "in", "dst_ip": null,
+            "dst_port": "22",
+            "ip_proto": "tcp",
+            "src_ip": "172.66.32.0/24",
+            "src_port": null
+        },
+        {
+            "action": "drop",
+            "comment": "Drop all other SSH traffic to the VM",
+            "direction": "in",
+            "dst_ip": null,
+            "dst_port": "22",
+            "ip_proto": "tcp",
+            "src_ip": null,
+            "src_port": null
+        },
+        {
+            "action": "drop",
+            "comment": "Drop all UDP traffic to the VM, not originating from 172.66.32.55",
+            "direction": "in",
+            "dst_ip": null,
+            "dst_port": null,
+            "ip_proto": "udp",
+            "src_ip": "!172.66.32.55/32",
+            "src_port": null
+        },
+        {
+            "action": "drop",
+            "comment": "Drop any traffic, to the VM with destination port not between 1-1024",
+            "direction": "in",
+            "dst_ip": null,
+            "dst_port": "!1:1024",
+            "ip_proto": "tcp",
+            "src_ip": null,
+            "src_port": null
+        }
+    ],
+    "servers": [],
+    "tags": [],
+    "uuid": "9001b532-857a-405a-8e50-54e342871e77"
+}

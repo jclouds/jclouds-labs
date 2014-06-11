@@ -16,8 +16,16 @@
  */
 package org.jclouds.cloudsigma2;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.MediaType;
+
 import org.jclouds.cloudsigma2.domain.AccountBalance;
 import org.jclouds.cloudsigma2.domain.CalcSubscription;
 import org.jclouds.cloudsigma2.domain.CreateSubscriptionRequest;
@@ -52,14 +60,8 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.core.MediaType;
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 @Test(groups = "unit")
 public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2Api> {
@@ -323,7 +325,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
    @Test
    public void testCloneDrive() throws Exception {
-      String uuid = "e96f3c63-6f50-47eb-9401-a56c5ccf6b32";
+      String uuid = "92ca1450-417e-4cc1-983b-1015777e2591";
       CloudSigma2Api api = requestSendsResponse(
             postBuilder()
                   .payload(payloadFromResourceWithContentType("/drives-create-request.json",
@@ -331,7 +333,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
                   .endpoint(endpoint + "drives/" + uuid + "/action/?do=clone")
                   .build(),
             responseBuilder()
-                  .payload(payloadFromResourceWithContentType("/drives-detail.json", MediaType.APPLICATION_JSON))
+                  .payload(payloadFromResourceWithContentType("/drive-cloned.json", MediaType.APPLICATION_JSON))
                   .build());
 
       DriveInfo result = api.cloneDrive(uuid, new DriveInfo.Builder()
@@ -404,7 +406,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
 
    @Test
    public void testCloneLibraryDrive() throws Exception {
-      String uuid = "e96f3c63-6f50-47eb-9401-a56c5ccf6b32";
+      String uuid = "8c45d8d9-4efd-44ec-9833-8d52004b4298";
       CloudSigma2Api api = requestSendsResponse(
             postBuilder()
                   .payload(payloadFromResourceWithContentType("/libdrives-create-request.json",
@@ -412,7 +414,7 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
                   .endpoint(endpoint + "libdrives/" + uuid + "/action/?do=clone")
                   .build(),
             responseBuilder()
-                  .payload(payloadFromResourceWithContentType("/libdrives-single.json", MediaType.APPLICATION_JSON))
+                  .payload(payloadFromResourceWithContentType("/libdrives-cloned.json", MediaType.APPLICATION_JSON))
                   .build());
 
       DriveInfo result = api.cloneLibraryDrive(uuid, new LibraryDrive.Builder()
@@ -817,6 +819,27 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
    }
 
    @Test
+   public void testGetFirewallPolicy() throws Exception {
+      String uuid = "9001b532-857a-405a-8e50-54e342871e77";
+      CloudSigma2Api api = requestsSendResponses(
+            getBuilder()
+                  .endpoint(endpoint + "fwpolicies/" + uuid + "/")
+                  .build(),
+            responseBuilder()
+                  .payload(payloadFromResourceWithContentType("/fwpolicies-get-single.json",
+                        MediaType.APPLICATION_JSON))
+                  .build(),
+            getBuilder()
+                  .endpoint(endpoint + "fwpolicies/failure")
+                  .build(),
+            HttpResponse.builder()
+                  .statusCode(404)
+                  .build());
+
+      assertNotNull(api.getFirewallPolicy(uuid));
+   }
+
+   @Test
    public void testCreateFirewallPolicies() throws Exception {
       CloudSigma2Api api = requestSendsResponse(
             postBuilder()
@@ -997,6 +1020,26 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
                   .build());
 
       assertNotNull(result);
+   }
+
+   @Test
+   public void testDeleteFirewallPolicy() throws Exception {
+      String uuid = "9001b532-857a-405a-8e50-54e342871e77";
+
+      CloudSigma2Api api = requestsSendResponses(
+            deleteBuilder()
+                  .endpoint(endpoint + "fwpolicies/" + uuid + "/")
+                  .build(),
+            responseBuilder()
+                  .build(),
+            deleteBuilder()
+                  .endpoint(endpoint + "fwpolicies/failure")
+                  .build(),
+            HttpResponse.builder()
+                  .statusCode(404)
+                  .build());
+
+      api.deleteFirewallPolicy(uuid);
    }
 
    @Test
@@ -1271,50 +1314,6 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
                   .build());
 
       for (Tag tag : api.listTags(new PaginationOptions.Builder().limit(2).offset(2).build())) {
-         assertNotNull(tag);
-      }
-   }
-
-   @Test
-   public void testListTagsInfo() throws Exception {
-      CloudSigma2Api api = requestsSendResponses(
-            getBuilder()
-                  .endpoint(endpoint + "tags/detail/")
-                  .build(),
-            responseBuilder()
-                  .payload(payloadFromResourceWithContentType("/tags-detail-first-page.json",
-                        MediaType.APPLICATION_JSON))
-                  .build(),
-            getBuilder()
-                  .endpoint(endpoint + "tags/detail/")
-                  .addQueryParam("limit", "1")
-                  .addQueryParam("offset", "1")
-                  .build(),
-            responseBuilder()
-                  .payload(payloadFromResourceWithContentType("/tags-detail-last-page.json",
-                        MediaType.APPLICATION_JSON))
-                  .build());
-
-
-      List<Tag> tags = api.listTagsInfo().concat().toList();
-
-      assertEquals(tags.size(), 2);
-      assertEquals(tags.get(0).getUuid(), "956e2ca0-dee3-4b3f-a1be-a6e86f90946f");
-      assertEquals(tags.get(1).getUuid(), "68bb0cfc-0c76-4f37-847d-7bb705c5ae46");
-   }
-
-
-   @Test
-   public void testListTagsInfoPaginatedCollection() throws Exception {
-      CloudSigma2Api api = requestSendsResponse(
-            getBuilder()
-                  .endpoint(endpoint + "tags/detail/?limit=2&offset=2")
-                  .build(),
-            responseBuilder()
-                  .payload(payloadFromResourceWithContentType("/tags-detail.json", MediaType.APPLICATION_JSON))
-                  .build());
-
-      for (Tag tag : api.listTagsInfo(new PaginationOptions.Builder().limit(2).offset(2).build())) {
          assertNotNull(tag);
       }
    }

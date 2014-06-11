@@ -39,7 +39,7 @@ public class ServerInfo extends Server {
       private Map<String, String> meta;
       private List<NIC> nics;
       private List<String> requirements;
-      private List<String> tags;
+      private List<Tag> tags;
       private String vncPassword;
       private int smp;
 
@@ -137,7 +137,7 @@ public class ServerInfo extends Server {
        * @param tags list of tags this server is associated with
        * @return ServerInfo Builder
        */
-      public Builder tags(List<String> tags) {
+      public Builder tags(List<Tag> tags) {
          this.tags = ImmutableList.copyOf(tags);
          return this;
       }
@@ -278,7 +278,7 @@ public class ServerInfo extends Server {
    private final Map<String, String> meta;
    private final List<NIC> nics;
    private final List<String> requirements;
-   private final List<String> tags;
+   private final List<Tag> tags;
    @Named("vnc_password")
    private final String vncPassword;
    private final int smp;
@@ -292,7 +292,7 @@ public class ServerInfo extends Server {
    public ServerInfo(String uuid, String name, URI resourceUri, Owner owner, ServerStatus status, ServerRuntime runtime,
                      int cpu, boolean cpusInsteadOfCores, List<ServerDrive> drives, boolean enableNuma,
                      boolean hvRelaxed, boolean hvTsc, BigInteger memory, Map<String, String> meta, List<NIC> nics,
-                     List<String> requirements, List<String> tags, String vncPassword, int smp) {
+                     List<String> requirements, List<Tag> tags, String vncPassword, int smp) {
       super(uuid, name, resourceUri, owner, status, runtime);
       this.cpu = cpu;
       this.cpusInsteadOfCores = cpusInsteadOfCores;
@@ -382,7 +382,7 @@ public class ServerInfo extends Server {
    /**
     * @return list of tags this server is associated with
     */
-   public List<String> getTags() {
+   public List<Tag> getTags() {
       return tags;
    }
 

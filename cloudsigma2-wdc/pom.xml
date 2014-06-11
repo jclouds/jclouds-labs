@@ -39,7 +39,8 @@
     <test.cloudsigma2-wdc.build-version />
     <test.cloudsigma2-wdc.identity>FIXME</test.cloudsigma2-wdc.identity>
     <test.cloudsigma2-wdc.credential>FIXME</test.cloudsigma2-wdc.credential>
-    <test.cloudsigma2-wdc.template />
+    <!-- Ubuntu 14.04 Cloud Image -->
+    <test.cloudsigma2-wdc.template>imageId=677f3f9a-840a-4f6e-8a21-987dcb59c81a,loginUser=ubuntu</test.cloudsigma2-wdc.template>
     <jclouds.osgi.export>org.jclouds.cloudsigma2*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>
       org.jclouds.compute.internal;version="${project.version}",

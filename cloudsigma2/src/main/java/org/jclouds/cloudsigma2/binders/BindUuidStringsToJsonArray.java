@@ -18,17 +18,20 @@ package org.jclouds.cloudsigma2.binders;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;
+
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Singleton
 public class BindUuidStringsToJsonArray implements Binder {
+   @SuppressWarnings("unchecked")
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
       checkArgument(payload instanceof List, "this binder is only valid for List<String>!");

@@ -22,12 +22,12 @@ import java.beans.ConstructorProperties;
 public class ServerDrive {
 
    public static class Builder {
-      private int bootOrder;
+      private Integer bootOrder;
       private String deviceChannel;
       private DeviceEmulationType deviceEmulationType;
       private Drive drive;
 
-      public Builder bootOrder(int bootOrder) {
+      public Builder bootOrder(Integer bootOrder) {
          this.bootOrder = bootOrder;
          return this;
       }
@@ -53,7 +53,7 @@ public class ServerDrive {
    }
 
    @Named("boot_order")
-   private final int bootOrder;
+   private final Integer bootOrder;
    @Named("dev_channel")
    private final String deviceChannel;
    @Named("device")
@@ -71,7 +71,7 @@ public class ServerDrive {
    @ConstructorProperties({
          "boot_order", "dev_channel", "device", "drive"
    })
-   public ServerDrive(int bootOrder, String deviceChannel, DeviceEmulationType deviceEmulationType, Drive drive) {
+   public ServerDrive(Integer bootOrder, String deviceChannel, DeviceEmulationType deviceEmulationType, Drive drive) {
       this.bootOrder = bootOrder;
       this.deviceChannel = deviceChannel;
       this.deviceEmulationType = deviceEmulationType;
@@ -96,7 +96,7 @@ public class ServerDrive {
    /**
     * @return drive boot order
     */
-   public int getBootOrder() {
+   public Integer getBootOrder() {
       return bootOrder;
    }
 
@@ -131,31 +131,37 @@ public class ServerDrive {
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof ServerDrive)) return false;
+      if (o == null || getClass() != o.getClass()) return false;
 
       ServerDrive that = (ServerDrive) o;
 
-      if (bootOrder != that.bootOrder) return false;
-      if (deviceChannel != null ? !deviceChannel.equals(that.deviceChannel) : that.deviceChannel != null)
-         return false;
+      if (bootOrder != null ? !bootOrder.equals(that.bootOrder) : that.bootOrder != null) return false;
+      if (deviceChannel != null ? !deviceChannel.equals(that.deviceChannel) : that.deviceChannel != null) return false;
       if (deviceEmulationType != that.deviceEmulationType) return false;
       if (drive != null ? !drive.equals(that.drive) : that.drive != null) return false;
+      if (driveUuid != null ? !driveUuid.equals(that.driveUuid) : that.driveUuid != null) return false;
 
       return true;
    }
 
    @Override
    public int hashCode() {
-      int result = bootOrder;
+      int result = bootOrder != null ? bootOrder.hashCode() : 0;
       result = 31 * result + (deviceChannel != null ? deviceChannel.hashCode() : 0);
       result = 31 * result + (deviceEmulationType != null ? deviceEmulationType.hashCode() : 0);
       result = 31 * result + (drive != null ? drive.hashCode() : 0);
+      result = 31 * result + (driveUuid != null ? driveUuid.hashCode() : 0);
       return result;
    }
 
    @Override
    public String toString() {
-      return "[bootOrder=" + bootOrder + ", deviceChannel=" + deviceChannel
-            + ", deviceEmulationType=" + deviceEmulationType + ", drive=" + drive + "]";
+      return "ServerDrive{" +
+            "bootOrder=" + bootOrder +
+            ", deviceChannel='" + deviceChannel + '\'' +
+            ", deviceEmulationType=" + deviceEmulationType +
+            ", drive=" + drive +
+            ", driveUuid='" + driveUuid + '\'' +
+            '}';
    }
 }

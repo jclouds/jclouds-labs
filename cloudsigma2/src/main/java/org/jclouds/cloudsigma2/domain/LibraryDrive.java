@@ -38,6 +38,7 @@ public class LibraryDrive extends DriveInfo {
       private String os;
       private boolean isPaid;
       private String url;
+      private String version;
 
       public Builder arch(String arch) {
          this.arch = arch;
@@ -81,6 +82,11 @@ public class LibraryDrive extends DriveInfo {
 
       public Builder url(String url) {
          this.url = url;
+         return this;
+      }
+
+      public Builder version(String version) {
+         this.version = version;
          return this;
       }
 
@@ -226,7 +232,7 @@ public class LibraryDrive extends DriveInfo {
       public LibraryDrive build() {
          return new LibraryDrive(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs,
                licenses, media, meta, mountedOn, tags, arch, category, description, isFavorite, imageType, installNotes,
-               os, isPaid, url);
+               os, isPaid, url, version);
       }
    }
 
@@ -243,18 +249,20 @@ public class LibraryDrive extends DriveInfo {
    @Named("paid")
    private final boolean isPaid;
    private final String url;
+   private final String version;
 
    @ConstructorProperties({
          "uuid", "name", "resource_uri", "size", "owner", "status",
          "allow_multimount", "affinities", "jobs", "licenses",
          "media", "meta", "mounted_on", "tags", "arch", "category",
-         "description", "favourite", "image_type", "install_notes", "os", "paid", "url"
+         "description", "favourite", "image_type", "install_notes",
+         "os", "paid", "url", "version"
    })
    public LibraryDrive(String uuid, String name, URI resourceUri, BigInteger size, Owner owner, DriveStatus status,
                        boolean allowMultimount, List<String> affinities, List<Job> jobs, List<DriveLicense> licenses,
                        MediaType media, Map<String, String> meta, List<Server> mountedOn, List<String> tags,
                        String arch, List<String> category, String description, boolean favorite, String imageType,
-                       String installNotes, String os, boolean paid, String url) {
+                       String installNotes, String os, boolean paid, String url, String version) {
       super(uuid, name, resourceUri, size, owner, status, allowMultimount, affinities, jobs, licenses, media, meta,
             mountedOn, tags);
       this.arch = arch;
@@ -266,6 +274,7 @@ public class LibraryDrive extends DriveInfo {
       this.os = os;
       this.isPaid = paid;
       this.url = url;
+      this.version = version;
    }
 
    /**
@@ -331,10 +340,17 @@ public class LibraryDrive extends DriveInfo {
       return url;
    }
 
+   /**
+    * @return Operating system version.
+    */
+   public String getVersion() {
+      return version;
+   }
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof LibraryDrive)) return false;
+      if (o == null || getClass() != o.getClass()) return false;
       if (!super.equals(o)) return false;
 
       LibraryDrive that = (LibraryDrive) o;
@@ -348,6 +364,7 @@ public class LibraryDrive extends DriveInfo {
       if (installNotes != null ? !installNotes.equals(that.installNotes) : that.installNotes != null) return false;
       if (os != null ? !os.equals(that.os) : that.os != null) return false;
       if (url != null ? !url.equals(that.url) : that.url != null) return false;
+      if (version != null ? !version.equals(that.version) : that.version != null) return false;
 
       return true;
    }
@@ -364,15 +381,14 @@ public class LibraryDrive extends DriveInfo {
       result = 31 * result + (os != null ? os.hashCode() : 0);
       result = 31 * result + (isPaid ? 1 : 0);
       result = 31 * result + (url != null ? url.hashCode() : 0);
+      result = 31 * result + (version != null ? version.hashCode() : 0);
       return result;
    }
 
    @Override
    public String toString() {
-      return "[uuid=" + uuid + ", name=" + name + ", size=" + size + ", owner=" + owner + ", status=" + status
-            + ", affinities=" + affinities + ", jobs=" + jobs + ", licenses=" + licenses + ", media=" + media
-            + ", meta=" + meta + ", mountedOn=" + mountedOn + ", tags=" + tags +
-            ", arch='" + arch + '\'' +
+      return "LibraryDrive{" +
+            "arch='" + arch + '\'' +
             ", category=" + category +
             ", description='" + description + '\'' +
             ", isFavorite=" + isFavorite +
@@ -381,6 +397,7 @@ public class LibraryDrive extends DriveInfo {
             ", os='" + os + '\'' +
             ", isPaid=" + isPaid +
             ", url='" + url + '\'' +
-            "]";
+            ", version='" + version + '\'' +
+            '}';
    }
 }

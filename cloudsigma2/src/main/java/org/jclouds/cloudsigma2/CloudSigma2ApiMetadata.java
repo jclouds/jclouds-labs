@@ -16,15 +16,19 @@
  */
 package org.jclouds.cloudsigma2;
 
+import static org.jclouds.cloudsigma2.config.CloudSigma2Properties.PROPERTY_DELETE_DRIVES;
+import static org.jclouds.cloudsigma2.config.CloudSigma2Properties.PROPERTY_VNC_PASSWORD;
+import static org.jclouds.cloudsigma2.config.CloudSigma2Properties.TIMEOUT_DRIVE_CLONED;
 import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
+import org.jclouds.cloudsigma2.compute.config.CloudSigma2ComputeServiceContextModule;
 import org.jclouds.cloudsigma2.config.CloudSigma2HttpApiModule;
 import org.jclouds.cloudsigma2.config.CloudSigma2ParserModule;
-import org.jclouds.cloudsigma2.config.CloudSigma2Properties;
+import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
@@ -50,12 +54,10 @@ public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> 
 
    public static Properties defaultProperties() {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
-      properties.setProperty(CloudSigma2Properties.PROPERTY_VNC_PASSWORD, "IL9vs34d");
-      // passwords are set post-boot, so auth failures are possible
-      // from a race condition applying the password set script
-      properties.setProperty("jclouds.ssh.max-retries", "7");
-      properties.setProperty("jclouds.ssh.retry-auth", "true");
-      properties.setProperty(TEMPLATE, "osFamily=UBUNTU,imageNameMatches=.*[Aa]utomated SSH Access.*,os64Bit=true");
+      properties.setProperty(PROPERTY_VNC_PASSWORD, "IL9vs34d");
+      properties.setProperty(TIMEOUT_DRIVE_CLONED, "60000");
+      properties.setProperty(PROPERTY_DELETE_DRIVES, "true");
+      properties.setProperty(TEMPLATE, "imageNameMatches=Ubuntu.*[Cc]loud [Ii]mage.*,loginUser=ubuntu");
       return properties;
    }
 
@@ -65,19 +67,17 @@ public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> 
          super(CloudSigma2Api.class);
          id("cloudsigma2")
                .name("CloudSigma API")
-               .defaultIdentity("email")
                .identityName("Email")
-               .defaultCredential("Password")
                .credentialName("Password")
                .documentation(URI.create("http://cloudsigma.com/en/platform-details/the-api"))
                .version("2.0")
                .defaultEndpoint("https://zrh.cloudsigma.com/api/2.0")
                .defaultProperties(CloudSigma2ApiMetadata.defaultProperties())
-               // Uncomment once the ComputeService is implemented 
-               //.view(typeToken(ComputeServiceContext.class))
+               .view(ComputeServiceContext.class)
                .defaultModules(ImmutableSet.<Class<? extends Module>>of(
                      CloudSigma2HttpApiModule.class,
-                     CloudSigma2ParserModule.class));
+                     CloudSigma2ParserModule.class,
+                     CloudSigma2ComputeServiceContextModule.class));
       }
 
       @Override

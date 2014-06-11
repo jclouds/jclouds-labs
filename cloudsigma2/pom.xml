@@ -38,7 +38,7 @@
         <test.cloudsigma2.api-version>2.0</test.cloudsigma2.api-version>
         <test.cloudsigma2.identity>FIXME</test.cloudsigma2.identity>
         <test.cloudsigma2.credential>FIXME</test.cloudsigma2.credential>
-        <test.cloudsigma2.template>imageId=f3c7c665-cd54-4a78-8fd2-7ec2f028cf29</test.cloudsigma2.template>
+        <test.cloudsigma2.template>imageId=f3c7c665-cd54-4a78-8fd2-7ec2f028cf29,loginUser=ubuntu</test.cloudsigma2.template>
         <jclouds.osgi.export>org.jclouds.cloudsigma2*;version="${project.version}"</jclouds.osgi.export>
         <jclouds.osgi.import>
             org.jclouds.compute.internal;version="${project.version}",
