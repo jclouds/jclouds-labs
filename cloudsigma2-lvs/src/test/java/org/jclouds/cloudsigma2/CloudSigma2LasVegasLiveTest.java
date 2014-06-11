@@ -18,9 +18,10 @@ package org.jclouds.cloudsigma2;
 
 import org.testng.annotations.Test;
 
-@Test(groups = {"live"})
-public class CloudSigma2LasVegasLiveTest extends CloudSigma2ApiLiveTest{
-    public CloudSigma2LasVegasLiveTest() {
-        provider = "cloudsigma2-lvs";
-    }
+@Test(groups = "live", testName = "CloudSigma2LasVegasLiveTest")
+public class CloudSigma2LasVegasLiveTest extends CloudSigma2ApiLiveTest {
+
+   public CloudSigma2LasVegasLiveTest() {
+      provider = "cloudsigma2-lvs";
+   }
 }

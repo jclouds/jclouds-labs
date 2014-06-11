@@ -30,6 +30,7 @@ public class FirewallPolicy extends Item {
       private Map<String, String> meta;
       private Owner owner;
       private List<FirewallRule> rules;
+      private List<Tag> tags;
       private List<Server> servers;
 
       /**
@@ -69,6 +70,15 @@ public class FirewallPolicy extends Item {
       }
 
       /**
+       * @param tags Many related resources. Can be either a list of URIs or list of individually nested resource data.
+       * @return
+       */
+      public Builder tags(List<Tag> tags) {
+         this.tags = ImmutableList.copyOf(tags);
+         return this;
+      }
+
+      /**
        * @param resourceUri Resource URI
        * @return
        */
@@ -98,25 +108,37 @@ public class FirewallPolicy extends Item {
          return this;
       }
 
+      public static Builder fromFirewallPolicy(FirewallPolicy firewallPolicy) {
+         return new Builder()
+               .resourceUri(firewallPolicy.getResourceUri())
+               .uuid(firewallPolicy.getUuid())
+               .rules(firewallPolicy.getRules())
+               .name(firewallPolicy.getName())
+               .meta(firewallPolicy.getMeta())
+               .tags(firewallPolicy.getTags());
+      }
+
       public FirewallPolicy build() {
-         return new FirewallPolicy(meta, name, owner, resourceUri, rules, servers, uuid);
+         return new FirewallPolicy(meta, name, owner, resourceUri, rules, servers, tags, uuid);
       }
    }
 
    private final Map<String, String> meta;
    private final Owner owner;
    private final List<FirewallRule> rules;
+   private final List<Tag> tags;
    private final List<Server> servers;
 
    @ConstructorProperties({
-         "meta", "name", "owner", "resource_uri", "rules", "servers", "uuid"
+         "meta", "name", "owner", "resource_uri", "rules", "servers", "tags", "uuid"
    })
    public FirewallPolicy(Map<String, String> meta, String name, Owner owner, URI resourceUri, List<FirewallRule> rules,
-                         List<Server> servers, String uuid) {
+                         List<Server> servers, List<Tag> tags, String uuid) {
       super(uuid, name, resourceUri);
       this.meta = meta;
       this.owner = owner;
       this.rules = rules == null ? new ArrayList<FirewallRule>() : rules;
+      this.tags = tags == null ? new ArrayList<Tag>() : tags;
       this.servers = servers == null ? new ArrayList<Server>() : servers;
    }
 
@@ -163,6 +185,13 @@ public class FirewallPolicy extends Item {
    }
 
    /**
+    * @return Related resources URI list.
+    */
+   public List<Tag> getTags() {
+      return tags;
+   }
+
+   /**
     * @return UUID of the policy
     */
    public String getUuid() {
@@ -172,7 +201,7 @@ public class FirewallPolicy extends Item {
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof FirewallPolicy)) return false;
+      if (o == null || getClass() != o.getClass()) return false;
       if (!super.equals(o)) return false;
 
       FirewallPolicy that = (FirewallPolicy) o;
@@ -181,6 +210,7 @@ public class FirewallPolicy extends Item {
       if (owner != null ? !owner.equals(that.owner) : that.owner != null) return false;
       if (rules != null ? !rules.equals(that.rules) : that.rules != null) return false;
       if (servers != null ? !servers.equals(that.servers) : that.servers != null) return false;
+      if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
 
       return true;
    }
@@ -191,6 +221,7 @@ public class FirewallPolicy extends Item {
       result = 31 * result + (meta != null ? meta.hashCode() : 0);
       result = 31 * result + (owner != null ? owner.hashCode() : 0);
       result = 31 * result + (rules != null ? rules.hashCode() : 0);
+      result = 31 * result + (tags != null ? tags.hashCode() : 0);
       result = 31 * result + (servers != null ? servers.hashCode() : 0);
       return result;
    }
@@ -199,12 +230,10 @@ public class FirewallPolicy extends Item {
    public String toString() {
       return "[" +
             "meta=" + meta +
-            ", name='" + name + '\'' +
             ", owner=" + owner +
-            ", resourceUri='" + resourceUri + '\'' +
             ", rules=" + rules +
+            ", tags=" + tags +
             ", servers=" + servers +
-            ", uuid='" + uuid + '\'' +
             "]";
    }
 

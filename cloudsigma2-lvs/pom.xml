@@ -39,7 +39,8 @@
     <test.cloudsigma2-lvs.build-version />
     <test.cloudsigma2-lvs.identity>FIXME</test.cloudsigma2-lvs.identity>
     <test.cloudsigma2-lvs.credential>FIXME</test.cloudsigma2-lvs.credential>
-    <test.cloudsigma2-lvs.template />
+    <!-- Ubuntu 14.04 Cloud Image -->
+    <test.cloudsigma2-lvs.template>imageId=9e0400ab-d911-4232-971d-f552330b61be,loginUser=ubuntu</test.cloudsigma2-lvs.template>
     <jclouds.osgi.export>org.jclouds.cloudsigma2*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>
       org.jclouds.compute.internal;version="${project.version}",

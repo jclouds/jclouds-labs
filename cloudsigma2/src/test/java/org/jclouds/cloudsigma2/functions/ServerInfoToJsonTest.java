@@ -16,12 +16,11 @@
  */
 package org.jclouds.cloudsigma2.functions;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.inject.Guice;
+import java.math.BigInteger;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
 import org.jclouds.cloudsigma2.domain.Drive;
 import org.jclouds.cloudsigma2.domain.IPConfiguration;
@@ -32,14 +31,16 @@ import org.jclouds.cloudsigma2.domain.Owner;
 import org.jclouds.cloudsigma2.domain.ServerDrive;
 import org.jclouds.cloudsigma2.domain.ServerInfo;
 import org.jclouds.cloudsigma2.domain.ServerStatus;
+import org.jclouds.cloudsigma2.domain.Tag;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.math.BigInteger;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Map;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.inject.Guice;
 
 @Test(groups = "unit")
 public class ServerInfoToJsonTest {
@@ -104,7 +105,7 @@ public class ServerInfoToJsonTest {
             .runtime(null)
             .smp(1)
             .status(ServerStatus.STOPPED)
-            .tags(ImmutableList.of("tag_uuid_1", "tag_uuid_2"))
+            .tags(ImmutableList.of(new Tag.Builder().name("tag_uuid_1").build(), new Tag.Builder().name("tag_uuid_2").build()))
             .uuid("a19a425f-9e92-42f6-89fb-6361203071bb")
             .vncPassword("tester")
             .build();
@@ -120,9 +121,16 @@ public class ServerInfoToJsonTest {
       expected.add("requirements", new JsonArray());
 
       JsonArray tagsArray = new JsonArray();
-      tagsArray.add(new JsonPrimitive("tag_uuid_1"));
-      tagsArray.add(new JsonPrimitive("tag_uuid_2"));
+      JsonObject tagObject1 = new JsonObject();
+      tagObject1.add("resources", new JsonArray());
+      tagObject1.addProperty("name", "tag_uuid_1");
+      JsonObject tagObject2 = new JsonObject();
+      tagObject2.add("resources", new JsonArray());
+      tagObject2.addProperty("name", "tag_uuid_2");
+      tagsArray.add(tagObject1);
+      tagsArray.add(tagObject2);
       expected.add("tags", tagsArray);
+
       expected.addProperty("vnc_password", "tester");
 
       JsonObject nicJson = new JsonObject();
@@ -140,7 +148,7 @@ public class ServerInfoToJsonTest {
 
       JsonArray drivesArray = new JsonArray();
       JsonObject driveJson1 = new JsonObject();
-      driveJson1.addProperty("boot_order", 0);
+      driveJson1.addProperty("boot_order", (Number) null);
       driveJson1.addProperty("dev_channel", "0:0");
       driveJson1.addProperty("device", "ide");
       driveJson1.addProperty("drive", "ae78e68c-9daa-4471-8878-0bb87fa80260");

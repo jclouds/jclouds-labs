@@ -19,8 +19,19 @@ package org.jclouds.cloudsigma2.config;
 public class CloudSigma2Properties {
 
    /**
-    * default VNC password used on new machines
+    * Default VNC password used on new machines
     */
    public static final String PROPERTY_VNC_PASSWORD = "jclouds.cloudsigma.vnc-password";
-
+   
+   /**
+    * Time in milliseconds to wait for a drive to be cloned
+    * Default: 60000 
+    */
+   public static final String TIMEOUT_DRIVE_CLONED = "jclouds.cloudsigma.timeout.drive-cloned";
+   
+   /**
+    * Controls if the drives of a server should be destroyed when deleting the server
+    * Default: true 
+    */
+   public static final String PROPERTY_DELETE_DRIVES = "jclouds.cloudsigma.delete-drives";
 }

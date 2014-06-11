@@ -70,10 +70,13 @@ import com.google.common.collect.Maps;
 public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
 
    private DriveInfo createdDrive;
+   private DriveInfo clonedDrive;
+   private LibraryDrive clonedLibraryDrive;
    private List<DriveInfo> createdDrives;
    private ServerInfo createdServer;
    private List<ServerInfo> createdServers;
    private FirewallPolicy createdFirewallPolicy;
+   private List<FirewallPolicy> createdFirewallPolicies;
    private Tag createdTag;
    private List<Tag> createdTags;
 
@@ -142,11 +145,23 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkDrive(editedDrive, api.editDrive(createdDrive.getUuid(), editedDrive));
    }
 
+   @Test(dependsOnMethods = {"testCreateDrive"})
+   public void testCloneDrive() throws Exception {
+      clonedDrive = api.cloneDrive(createdDrive.getUuid(), null);
+      checkDrive(createdDrive, clonedDrive);
+   }
+
    @Test(dependsOnMethods = {"testEditDrive", "testCreateTag", "testEditTag"})
    public void testDeleteDrive() throws Exception {
       String uuid = createdDrive.getUuid();
       api.deleteDrive(uuid);
       assertNull(api.getDriveInfo(uuid));
+      String clonedDriveUuid = clonedDrive.getUuid();
+      api.deleteDrive(clonedDriveUuid);
+      assertNull(api.getDriveInfo(clonedDriveUuid));
+      String clonedLibraryDriveUuid = clonedLibraryDrive.getUuid();
+      api.deleteDrive(clonedLibraryDriveUuid);
+      assertNull(api.getDriveInfo(clonedLibraryDriveUuid));
    }
 
    @Test(dependsOnMethods = {"testCreateDrives"})
@@ -173,6 +188,13 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       for (LibraryDrive libraryDrive : api.listLibraryDrives().concat()) {
          assertNotNull(libraryDrive.getUuid());
       }
+   }
+
+   @Test
+   public void testCloneLibraryDrive() throws Exception {
+      LibraryDrive libraryDrive = api.listLibraryDrives().concat().get(0);
+      clonedLibraryDrive = api.cloneLibraryDrive(libraryDrive.getUuid(), null);
+      checkLibraryDrive(libraryDrive, clonedLibraryDrive);
    }
 
    @Test(dependsOnMethods = {"testCreateServers"})
@@ -273,6 +295,15 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       assertNotNull(api.listFirewallPoliciesInfo());
    }
 
+   @Test(dependsOnMethods = {"testCreateFirewallPolicies"})
+   public void testGetFirewallPolicy() throws Exception {
+      for (FirewallPolicy firewallPolicy : api.listFirewallPoliciesInfo().concat()) {
+         FirewallPolicy receivedPolicy = api.getFirewallPolicy(firewallPolicy.getUuid());
+         checkFirewallPolicy(firewallPolicy, receivedPolicy);
+         assertEquals(firewallPolicy.getUuid(), receivedPolicy.getUuid());
+      }
+   }
+
    @Test
    public void testCreateFirewallPolicies() throws Exception {
       List<FirewallPolicy> newFirewallPolicies = ImmutableList.of(
@@ -329,7 +360,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
                         .build()))
                   .build());
 
-      List<FirewallPolicy> createdFirewallPolicies = api.createFirewallPolicies(newFirewallPolicies);
+      createdFirewallPolicies = api.createFirewallPolicies(newFirewallPolicies);
       assertEquals(newFirewallPolicies.size(), createdFirewallPolicies.size());
 
       for (int i = 0; i < newFirewallPolicies.size(); i++) {
@@ -403,6 +434,23 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       checkFirewallPolicy(editedPolicy, api.editFirewallPolicy(createdFirewallPolicy.getUuid(), editedPolicy));
    }
 
+   @Test(dependsOnMethods = {"testEditFirewallPolicy", "testCreateFirewallPolicies"})
+   public void deleteFirewallPolicies() throws Exception {
+      ImmutableList.Builder<String> stringListBuilder = ImmutableList.builder();
+
+      stringListBuilder.add(createdFirewallPolicy.getUuid());
+      api.deleteFirewallPolicy(createdFirewallPolicy.getUuid());
+
+      for (FirewallPolicy firewallPolicy : createdFirewallPolicies) {
+         stringListBuilder.add(firewallPolicy.getUuid());
+         api.deleteFirewallPolicy(firewallPolicy.getUuid());
+      }
+
+      ImmutableList<String> uuids = stringListBuilder.build();
+      FluentIterable<FirewallPolicy> servers = api.listFirewallPolicies().concat();
+      assertFalse(any(transform(servers, extractUuid()), in(uuids)));
+   }
+
    @Test
    public void testListVLANs() throws Exception {
       assertNotNull(api.listVLANs());
@@ -429,7 +477,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .meta(meta)
             .build();
 
-      if (!api.listVLANs().isEmpty()) {
+      if (!api.listVLANs().concat().isEmpty()) {
          checkVlAN(vlanInfo, api.editVLAN(api.listVLANs().concat().get(0).getUuid(), vlanInfo));
       }
    }
@@ -460,7 +508,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .meta(meta)
             .build();
 
-      if (!api.listIPs().isEmpty()) {
+      if (!api.listIPs().concat().isEmpty()) {
          checkIP(ip, api.editIP(api.listIPs().concat().get(0).getUuid(), ip));
       }
    }
@@ -468,11 +516,6 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    @Test(dependsOnMethods = {"testCreateTags"})
    public void testListTags() throws Exception {
       assertNotNull(api.listTags());
-   }
-
-   @Test(dependsOnMethods = {"testCreateTags"})
-   public void testListTagsInfo() throws Exception {
-      assertNotNull(api.listTagsInfo());
    }
 
    @Test(dependsOnMethods = {"testCreateTags"})
@@ -650,6 +693,18 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
    private void checkDrive(DriveInfo newDrive, DriveInfo createdDrive) {
       assertEquals(newDrive.getName(), createdDrive.getName());
       assertEquals(newDrive.getMedia(), createdDrive.getMedia());
+   }
+
+   private void checkLibraryDrive(LibraryDrive newDrive, LibraryDrive createdDrive) {
+      checkDrive(newDrive, createdDrive);
+      Map<String, String> meta = createdDrive.getMeta();
+
+      assertEquals(newDrive.getArch() == null ? "None" : newDrive.getArch(), meta.get("arch"));
+      assertEquals(newDrive.getDescription() == null ? "None" : newDrive.getDescription(), meta.get("description"));
+      assertEquals(newDrive.getImageType() == null ? "None" : newDrive.getImageType(), meta.get("image_type"));
+      assertEquals(newDrive.getInstallNotes() == null ? "None" : newDrive.getInstallNotes(), meta.get("install_notes"));
+      assertEquals(newDrive.getOs() == null ? "None" : newDrive.getOs(), meta.get("os"));
+      assertEquals(newDrive.getVersion() == null ? "None" : newDrive.getVersion(), meta.get("version"));
    }
 
    private void checkServer(ServerInfo newServer, ServerInfo createdServer) {

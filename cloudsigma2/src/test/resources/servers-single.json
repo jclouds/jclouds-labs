@@ -56,8 +56,8 @@
             "smp": 1,
             "status": "stopped",
             "tags": [
-                "tag_uuid_1",
-                "tag_uuid_2"
+                { "uuid": "tag_uuid_1" },
+                { "uuid": "tag_uuid_2" }
             ],
             "uuid": "a19a425f-9e92-42f6-89fb-6361203071bb",
             "vnc_password": "tester"

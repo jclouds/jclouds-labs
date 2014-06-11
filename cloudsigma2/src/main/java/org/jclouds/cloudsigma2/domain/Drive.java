@@ -166,7 +166,7 @@ public class Drive extends Item {
     * @param deviceChannel       device channel in format {controller:unit} ex. 0:1, 0:2, etc.
     * @param deviceEmulationType device emulation type
     */
-   public ServerDrive toServerDrive(int bootOrder, String deviceChannel, DeviceEmulationType deviceEmulationType) {
+   public ServerDrive toServerDrive(Integer bootOrder, String deviceChannel, DeviceEmulationType deviceEmulationType) {
       return new ServerDrive(bootOrder, deviceChannel, deviceEmulationType, this.uuid);
    }
 }

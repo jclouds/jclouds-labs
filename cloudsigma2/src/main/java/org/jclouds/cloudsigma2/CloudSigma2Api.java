@@ -174,7 +174,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid drive uuid to get
     * @return null, if not found
     */
-   @Named("drive:getDriveInfo/{uuid}")
+   @Named("drive:getDriveInfo")
    @GET
    @Path("/drives/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -212,7 +212,7 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid what to delete
     */
-   @Named("drive:deleteDrive/{uuid}")
+   @Named("drive:deleteDrive")
    @DELETE
    @Path("/drives/{uuid}/")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
@@ -236,7 +236,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param driveInfo  drive parameters to change
     * @return changed drive
     */
-   @Named("drive:editDrive/{uuid}")
+   @Named("drive:editDrive")
    @PUT
    @Path("/drives/{uuid}/")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
@@ -250,10 +250,12 @@ public interface CloudSigma2Api extends Closeable {
     * @param driveInfo  drive parameters to change
     * @return new drive
     */
-   @Named("drive:cloneDrive/{uuid}")
+   @Named("drive:cloneDrive")
    @POST
    @Path("/drives/{uuid}/action/?do=clone")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
+   @SelectJson("objects")
+   @OnlyElement
    DriveInfo cloneDrive(@PathParam("uuid") String sourceUuid,
                         @Nullable @BinderParam(BindDriveToJson.class) DriveInfo driveInfo);
 
@@ -286,7 +288,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid uuid of library drive to be listed
     * @return drive information or null if not found
     */
-   @Named("libdrive:getLibraryDrive/{uuid}")
+   @Named("libdrive:getLibraryDrive")
    @GET
    @Path("/libdrives/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -299,10 +301,12 @@ public interface CloudSigma2Api extends Closeable {
     * @param libraryDrive cloned drive
     * @return cloned drive information or null if not found
     */
-   @Named("libdrive:cloneLibraryDrive/{uuid}")
+   @Named("libdrive:cloneLibraryDrive")
    @POST
    @Path("/libdrives/{uuid}/action/?do=clone")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
+   @SelectJson("objects")
+   @OnlyElement
    LibraryDrive cloneLibraryDrive(@PathParam("uuid") String uuid
          , @Nullable @BinderParam(BindLibraryDriveToJson.class) LibraryDrive libraryDrive);
 
@@ -389,7 +393,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param server data to change
     * @return modified server
     */
-   @Named("server:editServer/{uuid}")
+   @Named("server:editServer")
    @PUT
    @Path("/servers/{uuid}/")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
@@ -401,7 +405,7 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid uuid of server to delete
     */
-   @Named("server:deleteServer/{uuid}")
+   @Named("server:deleteServer")
    @DELETE
    @Path("/servers/{uuid}/")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
@@ -427,7 +431,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid server what to clone
     * @return cloned server
     */
-   @Named("server:cloneServer/{uuid}")
+   @Named("server:cloneServer")
    @POST
    @Path("/servers/{uuid}/action/?do=clone")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
@@ -439,7 +443,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid server uuid
     * @return server info or null, if not found
     */
-   @Named("server:getServerInfo/{uuid}")
+   @Named("server:getServerInfo")
    @GET
    @Path("/servers/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -450,10 +454,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid uuid of server to start
     */
-   @Named("server:startServer/{uuid}")
+   @Named("server:startServer")
    @POST
    @Path("/servers/{uuid}/action/?do=start")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void startServer(@PathParam("uuid") String uuid);
 
    /**
@@ -461,10 +465,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid uuid of server to stop
     */
-   @Named("server:stopServer/{uuid}")
+   @Named("server:stopServer")
    @POST
    @Path("/servers/{uuid}/action/?do=stop")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void stopServer(@PathParam("uuid") String uuid);
 
    /**
@@ -478,10 +482,10 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid      uuid of server to start
     * @param uuidGroup availability group to avoid
     */
-   @Named("server:startServerInSeparateAvailabilityGroup/{uuid}")
+   @Named("server:startServerInSeparateAvailabilityGroup")
    @POST
    @Path("/servers/{uuid}/action/?do=start")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void startServerInSeparateAvailabilityGroup(@PathParam("uuid") String uuid,
                                                @QueryParam("avoid") List<String> uuidGroup);
 
@@ -490,10 +494,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid uuid of server to open VNC tunnel
     */
-   @Named("server:openServerVNCTunnel/{uuid}")
+   @Named("server:openServerVNCTunnel")
    @POST
    @Path("/servers/{uuid}/action/?do=open_vnc")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void openServerVNCTunnel(@PathParam("uuid") String uuid);
 
    /**
@@ -501,10 +505,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid uuid of server to close VNC tunnel
     */
-   @Named("server:closeServerVCNTunnel/{uuid}")
+   @Named("server:closeServerVCNTunnel")
    @POST
    @Path("/servers/{uuid}/action/?do=close_vnc")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void closeServerVCNTunnel(@PathParam("uuid") String uuid);
 
    /**
@@ -521,7 +525,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid Uuid of server to find availability group
     * @return an array holding server UUIDs. The response includes also the UUID of the queried server.
     */
-   @Named("server:getServerAvailabilityGroup/{uuid}")
+   @Named("server:getServerAvailabilityGroup")
    @GET
    @PathParam("/servers/availability_groups/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -574,6 +578,17 @@ public interface CloudSigma2Api extends Closeable {
    PaginatedCollection<FirewallPolicy> listFirewallPoliciesInfo(PaginationOptions options);
 
    /**
+    * Gets firewall policy.
+    *
+    * @return firewall policy
+    */
+   @Named("fwpolicy:getFirewallPolicy")
+   @GET
+   @Path("/fwpolicies/{uuid}/")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   FirewallPolicy getFirewallPolicy(@PathParam("uuid") String uuid);
+
+   /**
     * Creates firewall policies.
     *
     * @param firewallPolicies firewall policies to create
@@ -607,11 +622,22 @@ public interface CloudSigma2Api extends Closeable {
     * @param firewallPolicy firewall policy data to update
     * @return updated firewall policy
     */
-   @Named("fwpolicy:editFirewallPolicy/{uuid}")
+   @Named("fwpolicy:editFirewallPolicy")
    @PUT
    @Path("/fwpolicies/{uuid}/")
    FirewallPolicy editFirewallPolicy(@PathParam("uuid") String uuid
          , @BinderParam(BindFirewallPolicyToJsonRequest.class) FirewallPolicy firewallPolicy);
+
+   /**
+    * Deletes a single firewall policy.
+    *
+    * @param uuid uuid of firewall policy to delete
+    */
+   @Named("tag:deleteFirewallPolicy")
+   @DELETE
+   @Path("/fwpolicies/{uuid}/")
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
+   void deleteFirewallPolicy(@PathParam("uuid") String uuid);
 
    /**
     * Gets detailed information for VLAN identified by VLAN uuid.
@@ -619,7 +645,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid uuid of VLAN to get
     * @return null, if not found
     */
-   @Named("vlan:getVLANInfo/{uuid}")
+   @Named("vlan:getVLANInfo")
    @GET
    @Path("/vlans/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -678,7 +704,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param vlanInfo data to change
     * @return changed VLAN
     */
-   @Named("vlan:listVLANInfo/{uuid}")
+   @Named("vlan:listVLANInfo")
    @PUT
    @Path("/vlans/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -737,7 +763,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param uuid uuid of IP to get
     * @return null, if not found
     */
-   @Named("ip:getIPInfo/{uuid}")
+   @Named("ip:getIPInfo")
    @GET
    @Path("/ips/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -750,7 +776,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param ipInfo data to change
     * @return changed IP
     */
-   @Named("ip:editIP/{uuid}")
+   @Named("ip:editIP")
    @PUT
    @Path("/ips/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -781,37 +807,12 @@ public interface CloudSigma2Api extends Closeable {
    PaginatedCollection<Tag> listTags(PaginationOptions options);
 
    /**
-    * Gets the detailed list of tags with additional information to which the authenticated user has access,
-    * like the tagged resource
-    *
-    * @return detailed listings of your tags
-    */
-   @Named("tag:listTagsInfo")
-   @GET
-   @Path("/tags/detail/")
-   @ResponseParser(ParseTags.class)
-   @Transform(ParseTags.ToPagedIterableInfo.class)
-   PagedIterable<Tag> listTagsInfo();
-
-   /**
-    * Gets the detailed list of tags with additional information to which the authenticated user has access,
-    * like the tagged resource
-    *
-    * @return PaginatedCollection of detailed tags
-    */
-   @Named("tag:listTagsInfo")
-   @GET
-   @Path("/tags/detail/")
-   @ResponseParser(ParseTags.class)
-   PaginatedCollection<Tag> listTagsInfo(PaginationOptions options);
-
-   /**
     * Gets detailed information for tag identified by tag uuid.
     *
     * @param uuid tag uuid
     * @return detailed info of tag
     */
-   @Named("tag:getTagInfo/{uuid}")
+   @Named("tag:getTagInfo")
    @GET
    @Path("/tags/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -825,7 +826,7 @@ public interface CloudSigma2Api extends Closeable {
     * @param tag  info to change
     * @return detailed info of tag
     */
-   @Named("tag:editTag/{uuid}")
+   @Named("tag:editTag")
    @PUT
    @Path("/tags/{uuid}/")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -849,10 +850,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param uuid uuid of tag to delete
     */
-   @Named("tag:deleteTag/{uuid}")
+   @Named("tag:deleteTag")
    @DELETE
    @Path("/tags/{uuid}/")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void deleteTag(@PathParam("uuid") String uuid);
 
    /**
@@ -1002,10 +1003,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param id id of subscription to extend
     */
-   @Named("subscription:extendSubscription/{id}")
+   @Named("subscription:extendSubscription")
    @POST
    @Path("/subscriptions/{id}/action/?do=extend")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void extendSubscription(@PathParam("id") String id);
 
    /**
@@ -1013,10 +1014,10 @@ public interface CloudSigma2Api extends Closeable {
     *
     * @param id id of subscription to enable autorenew
     */
-   @Named("subscription:enableSubscriptionAutorenew/{id}")
+   @Named("subscription:enableSubscriptionAutorenew")
    @POST
    @Path("/subscriptions/{id}/action/?do=auto_renew")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void enableSubscriptionAutorenew(@PathParam("id") String id);
 
    /**

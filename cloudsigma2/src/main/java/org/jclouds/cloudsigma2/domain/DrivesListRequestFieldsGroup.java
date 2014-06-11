@@ -16,7 +16,7 @@
  */
 package org.jclouds.cloudsigma2.domain;
 
-import com.google.common.base.Joiner;
+import java.util.Iterator;
 
 public class DrivesListRequestFieldsGroup {
    private final Iterable<String> fields;
@@ -31,6 +31,18 @@ public class DrivesListRequestFieldsGroup {
 
    @Override
    public String toString() {
-      return Joiner.on(',').join(fields);
+      String returnString = "";
+
+      Iterator<?> iterator = fields.iterator();
+
+      while (iterator.hasNext()) {
+         returnString += iterator.next();
+
+         if (iterator.hasNext()) {
+            returnString += ",";
+         }
+      }
+
+      return returnString;
    }
 }

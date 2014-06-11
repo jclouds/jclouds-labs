@@ -67,25 +67,4 @@ public class ParseTags extends ParseJson<ParseTags.Tags> {
          };
       }
    }
-
-   public static class ToPagedIterableInfo extends ArgsToPagedIterable<Tag, ToPagedIterable> {
-
-      private CloudSigma2Api api;
-
-      @Inject
-      public ToPagedIterableInfo(CloudSigma2Api api) {
-         this.api = api;
-      }
-
-      @Override
-      protected Function<Object, IterableWithMarker<Tag>> markerToNextForArgs(List<Object> args) {
-         return new Function<Object, IterableWithMarker<Tag>>() {
-            @Override
-            public IterableWithMarker<Tag> apply(Object input) {
-               PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-               return api.listTagsInfo(paginationOptions);
-            }
-         };
-      }
-   }
 }
