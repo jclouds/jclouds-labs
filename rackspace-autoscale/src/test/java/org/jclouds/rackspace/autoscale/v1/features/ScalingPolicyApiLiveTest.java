@@ -74,7 +74,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .builder()
                .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
                .serverName("autoscale_server")
-               .serverImageRef("c52a0ca6-c1f2-4cd1-b7d6-afbcd1ebda22")
+               .serverImageRef("5cc098a5-7286-4b96-b3a2-49f4c4f82537")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
                .serverMetadata(

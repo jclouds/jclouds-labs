@@ -151,26 +151,25 @@
                 "type":"compute"
             },
             {
-                "name":"autoscale",
-                "endpoints":[
+                "name": "autoscale",
+                "endpoints": [
                     {
-                        "region":"ORD",
-                        "tenantId":"888888",
-                        "publicURL":"https:\/\/ord.autoscale.api.rackspacecloud.com\/v1.0\/888888",
-                        "versionInfo":null,
-                        "versionList":null,
-                        "versionId":"1.0"
+                        "region": "DFW",
+                        "tenantId": "888888",
+                        "publicURL": "https:\/\/dfw.autoscale.api.rackspacecloud.com\/v1.0\/888888"
                     },
                     {
-                        "region":"DFW",
-                        "tenantId":"888888",
-                        "publicURL":"https:\/\/dfw.autoscale.api.rackspacecloud.com\/v1.0\/888888",
-                        "versionInfo":null,
-                        "versionList":null,
-                        "versionId":"1.0"
+                        "region": "ORD",
+                        "tenantId": "888888",
+                        "publicURL": "https:\/\/ord.autoscale.api.rackspacecloud.com\/v1.0\/888888"
+                    },
+                    {
+                        "region": "IAD",
+                        "tenantId": "888888",
+                        "publicURL": "https:\/\/iad.autoscale.api.rackspacecloud.com\/v1.0\/888888"
                     }
                 ],
-                "type":"rax:autoscale"
+                "type": "rax:autoscale"
             },
             {
                 "name":"cloudMonitoring",

@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jclouds.openstack.v2_0.domain.Link;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.domain.Group;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupState;
@@ -33,9 +36,6 @@ import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration.LaunchConfigurationType;
 import org.jclouds.rackspace.autoscale.v1.domain.LoadBalancer;
 import org.jclouds.rackspace.autoscale.v1.domain.Personality;
-import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
-import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyTargetType;
-import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 import org.jclouds.rackspace.autoscale.v1.internal.BaseAutoscaleApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -73,7 +73,7 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                .builder()
                .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
                .serverName("autoscale_server")
-               .serverImageRef("57b8a366-ab2c-454b-939f-215303a4431f")
+               .serverImageRef("5cc098a5-7286-4b96-b3a2-49f4c4f82537")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
                .serverMetadata(
@@ -235,7 +235,7 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
                .builder()
                .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
                .serverName("autoscale_server")
-               .serverImageRef("57b8a366-ab2c-454b-939f-215303a4431f")
+               .serverImageRef("5cc098a5-7286-4b96-b3a2-49f4c4f82537")
                .serverFlavorRef("2")
                .serverDiskConfig("AUTO")
                .serverMetadata(

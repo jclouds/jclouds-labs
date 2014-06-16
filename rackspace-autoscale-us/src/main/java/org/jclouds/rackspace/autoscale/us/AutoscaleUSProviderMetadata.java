@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.rackspace.autoscale.us.v1;
+package org.jclouds.rackspace.autoscale.us;
 
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONE;
@@ -41,11 +41,7 @@ import com.google.inject.Module;
 
 /**
  * Implementation of {@link ProviderMetadata} for Rackspace US Auto Scale API.
- *
- * @deprecated Please use {@link org.jclouds.rackspace.autoscale.us.AutoscaleUSProviderMetadata} as
- *             this method will be removed in jclouds 2.0.
  */
-@Deprecated
 public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {
@@ -68,7 +64,7 @@ public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
    public static Properties defaultProperties() {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
-      properties.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE);
+      properties.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE); 
 
       properties.setProperty(PROPERTY_ZONES, "ORD,DFW,IAD,SYD,HKG");
       properties.setProperty(PROPERTY_ZONE + ".ORD." + ISO3166_CODES, "US-IL");

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.rackspace.autoscale.us.v1;
+package org.jclouds.rackspace.autoscale.uk;
 
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONE;
@@ -40,13 +40,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Implementation of {@link ProviderMetadata} for Rackspace US Auto Scale API.
- *
- * @deprecated Please use {@link org.jclouds.rackspace.autoscale.us.AutoscaleUSProviderMetadata} as
- *             this method will be removed in jclouds 2.0.
+ * Implementation of {@link ProviderMetadata} for the Rackspace UK Auto Scale API.
  */
-@Deprecated
-public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
+public class AutoscaleUKProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {
       return new Builder();
@@ -57,38 +53,33 @@ public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
       return builder().fromProviderMetadata(this);
    }
 
-   public AutoscaleUSProviderMetadata() {
+   public AutoscaleUKProviderMetadata() {
       super(builder());
    }
 
-   public AutoscaleUSProviderMetadata(Builder builder) {
+   public AutoscaleUKProviderMetadata(Builder builder) {
       super(builder);
    }
 
    public static Properties defaultProperties() {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
-      properties.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE);
+      properties.setProperty(SERVICE_TYPE, ServiceType.AUTO_SCALE); 
 
-      properties.setProperty(PROPERTY_ZONES, "ORD,DFW,IAD,SYD,HKG");
-      properties.setProperty(PROPERTY_ZONE + ".ORD." + ISO3166_CODES, "US-IL");
-      properties.setProperty(PROPERTY_ZONE + ".DFW." + ISO3166_CODES, "US-TX");
-      properties.setProperty(PROPERTY_ZONE + ".IAD." + ISO3166_CODES, "US-VA");
-      properties.setProperty(PROPERTY_ZONE + ".SYD." + ISO3166_CODES, "AU-NSW");
-      properties.setProperty(PROPERTY_ZONE + ".HKG." + ISO3166_CODES, "HK");
-
+      properties.setProperty(PROPERTY_ZONES, "LON");
+      properties.setProperty(PROPERTY_ZONE + ".LON." + ISO3166_CODES, "GB-SLG");
       return properties;
    }
 
    public static class Builder extends BaseProviderMetadata.Builder {
 
       protected Builder(){
-         id("rackspace-autoscale-us")
-         .name("Rackspace Auto Scale US")
+         id("rackspace-autoscale-uk")
+         .name("Rackspace Auto Scale UK")
          .apiMetadata(new AutoscaleApiMetadata().toBuilder()
                .identityName("${userName}")
                .credentialName("${apiKey}")
-               .defaultEndpoint("https://identity.api.rackspacecloud.com/v2.0/")
+               .defaultEndpoint("https://lon.identity.api.rackspacecloud.com/v2.0/")
                .endpointName("Rackspace Cloud Identity service URL ending in /v2.0/")
                .documentation(URI.create("http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/Overview.html"))
                .version("1.0")
@@ -100,20 +91,20 @@ public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
                      .add(AutoscaleHttpApiModule.class)
                      .build())
                .build())
-         .homepage(URI.create("http://www.rackspace.com/cloud/public/autoscale/"))
-         .console(URI.create("https://mycloud.rackspace.com"))
-         .linkedServices("rackspace-cloudbigdata-us", "rackspace-cloudblockstorage-us",
-               "rackspace-clouddatabases-us", "rackspace-clouddns-us", "rackspace-cloudfiles-us",
-               "rackspace-cloudloadbalancers-us", "rackspace-cloudqueues-us",
-               "rackspace-cloudservers-us")
-         .iso3166Codes("US-IL", "US-TX", "US-VA", "AU-NSW", "HK")
-         .endpoint("https://identity.api.rackspacecloud.com/v2.0/")
-         .defaultProperties(AutoscaleUSProviderMetadata.defaultProperties());
+         .homepage(URI.create("http://www.rackspace.com/cloud/autoscale/"))
+         .console(URI.create("https://mycloud.rackspace.co.uk"))
+         .linkedServices("rackspace-cloudbigdata-uk", "rackspace-cloudblockstorage-uk",
+               "rackspace-clouddatabases-uk", "rackspace-clouddns-uk", "rackspace-cloudfiles-uk",
+               "rackspace-cloudloadbalancers-uk", "rackspace-cloudqueues-uk",
+               "rackspace-cloudservers-uk")
+         .iso3166Codes("GB-SLG")
+         .endpoint("https://lon.identity.api.rackspacecloud.com/v2.0/")
+         .defaultProperties(AutoscaleUKProviderMetadata.defaultProperties());
       }
 
       @Override
-      public AutoscaleUSProviderMetadata build() {
-         return new AutoscaleUSProviderMetadata(this);
+      public AutoscaleUKProviderMetadata build() {
+         return new AutoscaleUKProviderMetadata(this);
       }
 
       @Override

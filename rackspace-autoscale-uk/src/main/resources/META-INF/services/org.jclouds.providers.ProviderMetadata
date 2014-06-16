@@ -14,4 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-org.jclouds.rackspace.autoscale.us.AutoscaleUSProviderMetadata
+
+org.jclouds.rackspace.autoscale.uk.AutoscaleUKProviderMetadata

@@ -58,6 +58,7 @@
     <module>openstack-swift</module>
     <module>openstack-marconi</module>
     <module>rackspace-autoscale</module>
+    <module>rackspace-autoscale-uk</module>
     <module>rackspace-autoscale-us</module>
     <module>rackspace-cloudqueues-us</module>
     <module>rackspace-cloudqueues-uk</module>

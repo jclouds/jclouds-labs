@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.rackspace.autoscale.us.v1;
+package org.jclouds.rackspace.autoscale.uk;
 
 import static org.testng.Assert.assertEquals;
 
@@ -27,13 +27,14 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * This test ensures that the wiring in {@link AutoscaleUSProviderMetadata} is correct.
+ * This test ensures that the wiring in {@link AutoscaleUKProviderMetadata} is correct.
+ * 
  */
-@Test(groups = "unit", testName = "AutoscaleUSProviderMetadataExpectTest")
-public class AutoscaleUSProviderMetadataExpectTest extends BaseAutoscaleApiExpectTest {
+@Test(groups = "unit", testName = "AutoscaleUKProviderMetadataExpectTest")
+public class AutoscaleUKProviderMetadataExpectTest extends BaseAutoscaleApiExpectTest {
 
-   public AutoscaleUSProviderMetadataExpectTest() {
-      this.provider = "rackspace-autoscale-us";
+   public AutoscaleUKProviderMetadataExpectTest() {
+      this.provider = "rackspace-autoscale-uk";
       this.identity = "myUsername";
       this.credential = "myApiKey";
    }
@@ -41,21 +42,20 @@ public class AutoscaleUSProviderMetadataExpectTest extends BaseAutoscaleApiExpec
    public void testCanGetConfiguredZones() {
 
       HttpRequest authenticate = HttpRequest.builder().method("POST")
-            .endpoint("https://identity.api.rackspacecloud.com/v2.0/tokens")
+            .endpoint("https://lon.identity.api.rackspacecloud.com/v2.0/tokens")
             .addHeader("Accept", "application/json")
             .payload(payloadFromStringWithContentType(
                   "{\"auth\":{\"RAX-KSKEY:apiKeyCredentials\":{\"username\":\"myUsername\",\"apiKey\":\"myApiKey\"}}}"
                   , "application/json")).build();
 
-
       HttpResponse authenticationResponse = HttpResponse.builder()
             .statusCode(200)
-            .payload(payloadFromResourceWithContentType("/access_rax_us.json", "application/json"))
+            .payload(payloadFromResourceWithContentType("/access_rax_uk.json", "application/json"))
             .build();
 
       AutoscaleApi whenNovaRegionExists = requestSendsResponse(authenticate, authenticationResponse);
 
-      assertEquals(whenNovaRegionExists.getConfiguredZones(), ImmutableSet.of("DFW", "ORD", "IAD"));
+      assertEquals(whenNovaRegionExists.getConfiguredZones(), ImmutableSet.of("LON"));
 
    }
 
