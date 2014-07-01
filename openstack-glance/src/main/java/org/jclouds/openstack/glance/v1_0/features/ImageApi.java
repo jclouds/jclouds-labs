@@ -21,6 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 
 import java.io.InputStream;
 
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -47,8 +48,8 @@ import org.jclouds.openstack.glance.v1_0.options.CreateImageOptions;
 import org.jclouds.openstack.glance.v1_0.options.ListImageOptions;
 import org.jclouds.openstack.glance.v1_0.options.UpdateImageOptions;
 import org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
-import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
@@ -56,111 +57,102 @@ import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.rest.annotations.Transform;
 
 /**
- * Image Services
- * 
- * @see <a href="http://glance.openstack.org/glanceapi.html">api doc</a>
- * @see <a
- *      href="https://github.com/openstack/glance/blob/master/glance/api/v1/images.py">api
- *      src</a>
+ * Image Services for the OpenStack Image (Glance) v1 API.
  */
+@Consumes(APPLICATION_JSON)
 @RequestFilters(AuthenticateRequest.class)
+@Path("/images")
 public interface ImageApi {
 
    /**
-    * List all images (IDs, names, links)
-    * 
+    * Lists all images (IDs, names, links)
+    *
     * @return all images (IDs, names, links)
     */
+   @Named("image:list")
    @GET
-   @Consumes(APPLICATION_JSON)
-   @Path("/images")
-   @RequestFilters(AuthenticateRequest.class)
    @ResponseParser(ParseImages.class)
    @Transform(ParseImages.ToPagedIterable.class)
    @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
-   PagedIterable<? extends Image> list();
+   PagedIterable<Image> list();
 
+   @Named("image:list")
    @GET
-   @Consumes(APPLICATION_JSON)
-   @Path("/images")
-   @RequestFilters(AuthenticateRequest.class)
    @ResponseParser(ParseImages.class)
    @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
-   PaginatedCollection<? extends Image> list(ListImageOptions options);
+   PaginatedCollection<Image> list(ListImageOptions options);
 
    /**
-    * List all images (all details)
-    * 
+    * Lists all images (all details)
+    *
     * @return all images (all details)
     */
+   @Named("image:listInDetail")
    @GET
-   @Consumes(APPLICATION_JSON)
-   @Path("/images/detail")
-   @RequestFilters(AuthenticateRequest.class)
+   @Path("/detail")
    @ResponseParser(ParseImageDetails.class)
    @Transform(ParseImageDetails.ToPagedIterable.class)
    @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
-   PagedIterable<? extends ImageDetails> listInDetail();
+   PagedIterable<ImageDetails> listInDetail();
 
+   @Named("image:listInDetail")
    @GET
-   @Consumes(APPLICATION_JSON)
-   @Path("/images/detail")
-   @RequestFilters(AuthenticateRequest.class)
+   @Path("/detail")
    @ResponseParser(ParseImageDetails.class)
    @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
-   PaginatedCollection<? extends ImageDetails> listInDetail(ListImageOptions options);
+   PaginatedCollection<ImageDetails> listInDetail(ListImageOptions options);
 
    /**
-    * Return metadata about an image with id
+    * Returns metadata about an image with id
     */
+   @Named("image:get")
    @HEAD
-   @Path("/images/{id}")
+   @Path("/{id}")
    @ResponseParser(ParseImageDetailsFromHeaders.class)
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
    ImageDetails get(@PathParam("id") String id);
 
    /**
-    * Return image data for image with id
+    * Returns image data for image with id
     */
+   @Named("image:getAsStream")
    @GET
-   @Path("/images/{id}")
+   @Path("/{id}")
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
    InputStream getAsStream(@PathParam("id") String id);
 
    /**
-    * Create a new image
-    * 
+    * Creates a new image
+    *
     * @return detailed metadata about the newly stored image
     */
+   @Named("image:create")
    @POST
-   @Path("/images")
    @Produces(APPLICATION_OCTET_STREAM)
    @SelectJson("image")
-   @Consumes(APPLICATION_JSON)
    ImageDetails create(@HeaderParam("x-image-meta-name") String name, Payload payload, CreateImageOptions... options);
 
    /**
-    * Reserve a new image to be uploaded later
-    * 
+    * Reserves a new image to be uploaded later
+    *
     * @return detailed metadata about the newly stored image
     * @see #upload
     */
+   @Named("image:reserve")
    @POST
-   @Path("/images")
    @SelectJson("image")
-   @Consumes(APPLICATION_JSON)
    ImageDetails reserve(@HeaderParam("x-image-meta-name") String name, CreateImageOptions... options);
 
    /**
-    * Upload image data for a previously-reserved image
+    * Uploads image data for a previously-reserved image
     * <p/>
     * If an image was previously reserved, and thus is in the queued state, then
     * image data can be added using this method. If the image already as data
     * associated with it (e.g. not in the queued state), then you will receive a
     * 409 Conflict exception.
-    * 
+    *
     * @param imageData
     *           the new image to upload
     * @param options
@@ -169,31 +161,32 @@ public interface ImageApi {
     * @return detailed metadata about the updated image
     * @see #reserve
     */
+   @Named("image:upload")
    @PUT
-   @Path("/images/{id}")
+   @Path("/{id}")
    @Produces(APPLICATION_OCTET_STREAM)
    @SelectJson("image")
-   @Consumes(APPLICATION_JSON)
    ImageDetails upload(@PathParam("id") String id, Payload imageData, UpdateImageOptions... options);
 
    /**
-    * Adjust the metadata stored for an existing image
-    * 
+    * Adjusts the metadata stored for an existing image
+    *
     * @return detailed metadata about the updated image
     */
+   @Named("image:update")
    @PUT
-   @Path("/images/{id}")
+   @Path("/{id}")
    @SelectJson("image")
-   @Consumes(APPLICATION_JSON)
    ImageDetails update(@PathParam("id") String id, UpdateImageOptions... options);
 
    /**
-    * Delete the image with the specified id
-    * 
+    * Deletes the image with the specified id
+    *
     * @return true if successful
     */
+   @Named("image:delete")
    @DELETE
-   @Path("/images/{id}")
+   @Path("/{id}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("id") String id);
 }

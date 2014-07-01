@@ -29,7 +29,7 @@ import org.jclouds.io.Payloads;
 import org.jclouds.io.payloads.StringPayload;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
 import org.jclouds.openstack.glance.v1_0.functions.ParseImageDetailsFromHeadersTest;
-import org.jclouds.openstack.glance.v1_0.internal.BaseGlanceApiExpectTest;
+import org.jclouds.openstack.glance.v1_0.internal.BaseGlanceExpectTest;
 import org.jclouds.openstack.glance.v1_0.options.UpdateImageOptions;
 import org.jclouds.openstack.glance.v1_0.parse.ParseImageDetailsTest;
 import org.jclouds.openstack.glance.v1_0.parse.ParseImagesInDetailTest;
@@ -43,14 +43,13 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 
 @Test(groups = "unit", testName = "ImageApiExpectTest")
-public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
+public class ImageApiExpectTest extends BaseGlanceExpectTest {
 
    public void testListWhenResponseIs2xx() throws Exception {
       HttpRequest list = HttpRequest.builder().method("GET")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images")
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
-
 
       HttpResponse listResponse = HttpResponse.builder().statusCode(200)
             .payload(payloadFromResource("/images.json")).build();
@@ -86,7 +85,6 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
 
-
       HttpResponse listInDetailResponse = HttpResponse.builder().statusCode(200)
             .payload(payloadFromResource("/images_detail.json")).build();
 
@@ -106,7 +104,6 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
             .addHeader("Accept", "application/json")
             .addHeader("X-Auth-Token", authToken).build();
 
-
       HttpResponse listInDetailResponse = HttpResponse.builder().statusCode(404).build();
 
       GlanceApi apiWhenNoExistInDetail = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
@@ -117,12 +114,10 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    }
 
    public void testShowWhenResponseIs2xx() throws Exception {
-      HttpRequest show = HttpRequest
-            .builder()
-            .method("HEAD")
+      HttpRequest show = HttpRequest.builder().method("HEAD")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
-
 
       HttpResponse showResponse = new ParseImageDetailsFromHeadersTest().response;
 
@@ -139,6 +134,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    public void testShowWhenReponseIs404IsNull() throws Exception {
       HttpRequest show = HttpRequest.builder().method("HEAD")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
 
 
@@ -150,16 +146,16 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
       assertNull(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").get("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
-   
+
 
    public void testGetAsStreamWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("GET")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
 
-
       HttpResponse getResponse = HttpResponse.builder().statusCode(200).payload(Payloads.newStringPayload("foo")).build();
-      
+
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, getResponse);
@@ -173,8 +169,8 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    public void testGetAsStreamWhenReponseIs404IsNull() throws Exception {
       HttpRequest get = HttpRequest.builder().method("GET")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
-
 
       HttpResponse getResponse = HttpResponse.builder().statusCode(404).build();
 
@@ -195,7 +191,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
       HttpResponse createResponse = HttpResponse.builder().statusCode(200)
             .payload(payloadFromResource("/image.json")).build();
-      
+
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, createResponse);
@@ -265,7 +261,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
 
       apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").reserve("test");
    }
-   
+
    public void testUpdateMetadataWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("PUT")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
@@ -403,6 +399,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    public void testDeleteWhenResponseIs2xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("DELETE")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
 
       HttpResponse getResponse = HttpResponse.builder().statusCode(200).build();
@@ -419,6 +416,7 @@ public class ImageApiExpectTest extends BaseGlanceApiExpectTest {
    public void testDeleteWhenResponseIs4xx() throws Exception {
       HttpRequest get = HttpRequest.builder().method("DELETE")
             .endpoint("https://glance.jclouds.org:9292/v1.0/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
+            .addHeader("Accept", MediaType.APPLICATION_JSON)
             .addHeader("X-Auth-Token", authToken).build();
 
 

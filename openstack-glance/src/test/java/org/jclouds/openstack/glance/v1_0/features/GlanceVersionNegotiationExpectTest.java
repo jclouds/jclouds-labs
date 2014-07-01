@@ -21,12 +21,12 @@ import static org.testng.Assert.assertEquals;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
-import org.jclouds.openstack.glance.v1_0.internal.BaseGlanceApiExpectTest;
+import org.jclouds.openstack.glance.v1_0.internal.BaseGlanceExpectTest;
 import org.jclouds.openstack.glance.v1_0.parse.ParseImagesTest;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "GlanceVersionNegotiationExpectTest")
-public class GlanceVersionNegotiationExpectTest extends BaseGlanceApiExpectTest {
+public class GlanceVersionNegotiationExpectTest extends BaseGlanceExpectTest {
 
     /*
      * Test that if Glance returns a URL for a version with a different scheme

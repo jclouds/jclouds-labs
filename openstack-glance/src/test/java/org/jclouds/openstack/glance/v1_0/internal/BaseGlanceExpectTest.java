@@ -19,13 +19,15 @@ package org.jclouds.openstack.glance.v1_0.internal;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
+import org.jclouds.openstack.glance.v1_0.GlanceApi;
 import org.jclouds.openstack.keystone.v2_0.internal.KeystoneFixture;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 
 /**
  * Base class for writing Glance Expect tests
  */
-public class BaseGlanceExpectTest<T> extends BaseRestApiExpectTest<T> {
+public abstract class BaseGlanceExpectTest extends BaseRestApiExpectTest<GlanceApi> {
+
    protected HttpRequest keystoneAuthWithUsernameAndPassword;
    protected HttpRequest keystoneAuthWithAccessKeyAndSecretKey;
    protected String authToken;
