@@ -23,33 +23,25 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Zone;
 import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
 import org.jclouds.openstack.glance.v1_0.features.ImageApi;
-import org.jclouds.openstack.v2_0.features.ExtensionApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
 import com.google.inject.Provides;
 
 /**
- * Provides access to Glance.
+ * Provides access to the OpenStack Image (Glance) v1 API.
  * <p/>
- * 
- * @see <a href="http://glance.openstack.org/glanceapi.html">api doc</a>
+ *
  */
 public interface GlanceApi extends Closeable {
    /**
-    * 
-    * @return the Zone codes configured
+    * Gets the configured zones.
+    *
+    * @return the zone codes currently configured
     */
    @Provides
    @Zone
    Set<String> getConfiguredZones();
-
-   /**
-    * Provides access to Extension features.
-    */
-   @Delegate
-   ExtensionApi getExtensionApiForZone(
-         @EndpointParam(parser = ZoneToEndpointNegotiateVersion.class) @Nullable String zone);
 
    /**
     * Provides access to Image features.
