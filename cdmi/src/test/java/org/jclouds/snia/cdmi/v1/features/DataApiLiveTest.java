@@ -38,7 +38,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
-import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
 @Test(groups = "live", testName = "DataApiLiveTest")
@@ -446,9 +445,8 @@ public class DataApiLiveTest extends BaseCDMIApiLiveTest {
          System.out.println(dataObject);
          System.out.println("value: " + dataObject.getValueAsString());
          assertEquals(dataObject.getValueAsString(), value);
-         assertNotNull(dataObject.getValueAsInputSupplier());
-         assertEquals(CharStreams.toString(CharStreams.newReaderSupplier(
-                  dataObject.getValueAsInputSupplier(Charsets.UTF_8), Charsets.UTF_8)), value);
+         assertNotNull(dataObject.getValueAsByteSource());
+         assertEquals(dataObject.getValueAsByteSource(Charsets.UTF_8).asCharSource(Charsets.UTF_8).read(), value);
          assertEquals(Integer.parseInt(dataObject.getSystemMetadata().get("cdmi_size")), value.length());
          assertEquals(dataObject.getObjectName(), dataObjectNameIn);
          assertEquals(dataObject.getObjectType(), "application/cdmi-object");

@@ -19,7 +19,6 @@ package org.jclouds.snia.cdmi.v1.domain;
 import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -27,9 +26,8 @@ import java.nio.charset.Charset;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
-import com.google.common.io.ByteStreams;
+import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
 
 public class DataObject extends CDMIObject {
 
@@ -103,8 +101,8 @@ public class DataObject extends CDMIObject {
     * 
     * @return value
     */
-   public InputSupplier<ByteArrayInputStream> getValueAsInputSupplier() {
-      return ByteStreams.newInputStreamSupplier(value.getBytes(Charsets.UTF_8));
+   public ByteSource getValueAsByteSource() {
+      return ByteSource.wrap(value.getBytes(Charsets.UTF_8));
    }
 
    /**
@@ -114,8 +112,8 @@ public class DataObject extends CDMIObject {
     *           value character set
     * @return value
     */
-   public InputSupplier<ByteArrayInputStream> getValueAsInputSupplier(Charset charset) {
-      return ByteStreams.newInputStreamSupplier(value.getBytes(charset));
+   public ByteSource getValueAsByteSource(Charset charset) {
+      return ByteSource.wrap(value.getBytes(charset));
    }
 
    /**
@@ -147,7 +145,7 @@ public class DataObject extends CDMIObject {
     */
    public File getValueAsFile(File destDir) throws IOException {
       File fileOut = new File(destDir, this.getObjectName());
-      Files.copy(getValueAsInputSupplier(), fileOut);
+      getValueAsByteSource().copyTo(Files.asByteSink(fileOut));
       return fileOut;
    }
 
@@ -160,7 +158,7 @@ public class DataObject extends CDMIObject {
     */
    public File getValueAsFile(File destDir, Charset charset) throws IOException {
       File fileOut = new File(destDir, this.getObjectName());
-      Files.copy(getValueAsInputSupplier(charset), fileOut);
+      getValueAsByteSource(charset).copyTo(Files.asByteSink(fileOut));
       return fileOut;
    }
 

@@ -42,7 +42,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
-import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import com.google.common.net.MediaType;
 
@@ -175,7 +175,12 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          // assertEquals(Strings2.toString(payloadOut), value);
          // byte[] _bytes = ByteStreams.toByteArray(payloadOut);
          tmpFileOut = new File(Files.createTempDir(), "temp.txt");
-         Files.copy(payloadOut, tmpFileOut);
+         is = payloadOut.openStream();
+         try {
+            Files.asByteSink(tmpFileOut).writeFrom(is);
+         } finally {
+            Closeables.closeQuietly(is);
+         }
          assertEquals(Files.equal(tmpFileOut, tmpFileIn), true);
          tmpFileOut.delete();
 
@@ -223,7 +228,12 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          payloadOut = dataNonCDMIContentTypeApi.getValue(inFile.getName());
          assertNotNull(payloadOut);
          tmpFileOut = new File(Files.createTempDir(), "temp.jpg");
-         Files.copy(payloadOut, tmpFileOut);
+         is = payloadOut.openStream();
+         try {
+            Files.asByteSink(tmpFileOut).writeFrom(is);
+         } finally {
+            Closeables.closeQuietly(is);
+         }
          assertEquals(Files.equal(tmpFileOut, inFile), true);
          tmpFileOut.delete();
 
@@ -246,9 +256,8 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          System.out.println(dataObject);
          System.out.println("value: " + dataObject.getValueAsString());
          assertEquals(dataObject.getValueAsString(), value);
-         assertNotNull(dataObject.getValueAsInputSupplier());
-         assertEquals(CharStreams.toString(CharStreams.newReaderSupplier(
-                  dataObject.getValueAsInputSupplier(Charsets.UTF_8), Charsets.UTF_8)), value);
+         assertNotNull(dataObject.getValueAsByteSource());
+         assertEquals(dataObject.getValueAsByteSource(Charsets.UTF_8).asCharSource(Charsets.UTF_8).read(), value);
          assertEquals(dataObject.getUserMetadata().isEmpty(), true);
          System.out.println("My Metadata: " + dataObject.getUserMetadata());
          assertEquals(Integer.parseInt(dataObject.getSystemMetadata().get("cdmi_size")), value.length());
@@ -272,7 +281,12 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          payloadOut = dataNonCDMIContentTypeApi.getValue(inFile.getName());
          assertNotNull(payloadOut);
          tmpFileOut = new File(Files.createTempDir(), "temp.jpg");
-         Files.copy(payloadOut, tmpFileOut);
+         is = payloadOut.openStream();
+         try {
+            Files.asByteSink(tmpFileOut).writeFrom(is);
+         } finally {
+            Closeables.closeQuietly(is);
+         }
          assertEquals(Files.equal(tmpFileOut, inFile), true);
          tmpFileOut.delete();
 
