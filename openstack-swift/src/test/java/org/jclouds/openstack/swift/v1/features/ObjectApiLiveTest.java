@@ -39,7 +39,6 @@ import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
-import org.jclouds.util.Strings2;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -52,7 +51,7 @@ import com.google.common.io.ByteSource;
  */
 @Test(groups = "live", testName = "ObjectApiLiveTest", singleThreaded = true)
 public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
-   
+
    private String name = getClass().getSimpleName();
    private String containerName = getClass().getSimpleName() + "Container";
    static final Payload PAYLOAD = newByteSourcePayload(ByteSource.wrap("swifty".getBytes()));
@@ -81,23 +80,23 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          String sourceContainer = "src" + containerName;
          String sourceObjectName = "original.txt";
          String badSource = "badSource";
-         
+
          // destination
          String destinationContainer = "dest" + containerName;
          String destinationObject = "copy.txt";
          String destinationPath = "/" + destinationContainer + "/" + destinationObject;
-         
+
          ContainerApi containerApi = api.getContainerApiForRegion(regionId);
-         
+
          // create source and destination dirs
          containerApi.create(sourceContainer);
          containerApi.create(destinationContainer);
-         
+
          // get the api for this region and container
          ObjectApi srcApi = api.getObjectApiForRegionAndContainer(regionId, sourceContainer);
          ObjectApi destApi = api.getObjectApiForRegionAndContainer(regionId, destinationContainer);
-         
-         // Create source object 
+
+         // Create source object
          assertNotNull(srcApi.put(sourceObjectName, PAYLOAD));
          SwiftObject sourceObject = srcApi.get(sourceObjectName);
          checkObject(sourceObject);
@@ -107,14 +106,14 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          SwiftObject object = destApi.get(destinationObject);
          checkObject(object);
 
-         // check the copy operation 
+         // check the copy operation
          assertTrue(destApi.copy(destinationObject, sourceContainer, sourceObjectName));
          assertNotNull(destApi.get(destinationObject));
-         
+
          // now get a real SwiftObject
          SwiftObject destSwiftObject = destApi.get(destinationObject);
-         assertEquals(Strings2.toString(destSwiftObject.getPayload()), "swifty");
-         
+         assertEquals(toStringAndClose(destSwiftObject.getPayload().openStream()), "swifty");
+
          // test exception thrown on bad source name
          try {
             destApi.copy(destinationObject, badSource, sourceObjectName);
@@ -166,10 +165,10 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void testUpdateMetadata() throws Exception {
       for (String regionId : regions) {
          ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
-         
+
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
          assertTrue(objectApi.updateMetadata(name, meta));
-         
+
          SwiftObject object = objectApi.get(name);
          for (Entry<String, String> entry : meta.entrySet()) {
             // note keys are returned in lower-case!
@@ -223,10 +222,10 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
-          
+
          assertTrue(objectApi.updateMetadata(name, meta));
          assertFalse(objectApi.get(name).getMetadata().isEmpty());
-         
+
          assertTrue(objectApi.deleteMetadata(name, meta));
          assertTrue(objectApi.get(name).getMetadata().isEmpty());
       }
@@ -250,10 +249,10 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          api.getObjectApiForRegionAndContainer(regionId, containerName).delete(name);
          api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
       }
-      
+
       super.tearDown();
    }
-   
+
    static void checkObject(SwiftObject object) {
       assertNotNull(object.getName());
       assertNotNull(object.getUri());
