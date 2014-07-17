@@ -94,15 +94,9 @@ public class CloudSigmaErrorHandler implements HttpErrorHandler {
       if (response.getPayload() == null)
          return null;
       try {
-         return Strings2.toString(response.getPayload());
+         return Strings2.toStringAndClose(response.getPayload().openStream());
       } catch (IOException e) {
          throw Throwables.propagate(e);
-      } finally {
-         try {
-            response.getPayload().getInput().close();
-         } catch (IOException e) {
-            throw Throwables.propagate(e);
-         }
       }
    }
 }
