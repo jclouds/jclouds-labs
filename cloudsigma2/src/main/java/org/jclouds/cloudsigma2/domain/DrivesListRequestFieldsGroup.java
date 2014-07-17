@@ -33,7 +33,7 @@ public class DrivesListRequestFieldsGroup {
    public String toString() {
       String returnString = "";
 
-      Iterator iterator = fields.iterator();
+      Iterator<String> iterator = fields.iterator();
 
       while (iterator.hasNext()) {
          returnString += iterator.next();

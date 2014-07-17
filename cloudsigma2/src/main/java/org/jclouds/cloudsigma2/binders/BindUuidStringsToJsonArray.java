@@ -32,7 +32,7 @@ public class BindUuidStringsToJsonArray implements Binder {
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
       checkArgument(payload instanceof List, "this binder is only valid for List<String>!");
-      List list = List.class.cast(payload);
+      List<?> list = List.class.cast(payload);
       for (Object o : list) {
          checkArgument(o instanceof String, "this binder is only valid for List<String>!");
       }

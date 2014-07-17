@@ -131,7 +131,7 @@ public class BaseVirtualBoxClientLiveTest extends BaseComputeServiceContextLiveT
       // try and get a master from the cache, this will initialize the config/download isos and
       // prepare everything IF a master is not available, subsequent calls should be pretty fast
       Template template = view.getComputeService().templateBuilder().build();
-      checkNotNull(mastersCache.apply(template.getImage()));
+      checkNotNull(mastersCache.getUnchecked(template.getImage()));
 
       masterName = VIRTUALBOX_IMAGE_PREFIX + template.getImage().getId();
       isosDir = workingDir + File.separator + "isos";

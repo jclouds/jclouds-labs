@@ -41,7 +41,7 @@ public class BindFirewallPoliciesListToJsonRequest implements Binder {
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       checkArgument(input instanceof List, "this binder is only valid for List<FirewallPolicy>!");
-      List list = List.class.cast(input);
+      List<?> list = List.class.cast(input);
       for (Object o : list) {
          checkArgument(o instanceof FirewallPolicy, "this binder is only valid for List<FirewallPolicy>!");
       }

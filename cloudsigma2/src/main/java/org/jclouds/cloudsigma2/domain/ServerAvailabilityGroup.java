@@ -52,7 +52,7 @@ public class ServerAvailabilityGroup {
    public String toString() {
       String returnString = "";
 
-      Iterator iterator = uuids.iterator();
+      Iterator<String> iterator = uuids.iterator();
 
       while (iterator.hasNext()) {
          returnString += iterator.next();
