@@ -17,6 +17,8 @@
 package org.jclouds.blobstore.codec;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.ByteSource;
+
 import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
@@ -61,7 +63,7 @@ public class BlobStoreConversionsTest {
       blobStore.createContainerInLocation(null, "container");
       blobStore.createDirectory("container", "one");
 
-      blobStore.putBlob("container", blobStore.blobBuilder("myblob").payload("testcontent").build());
+      blobStore.putBlob("container", blobStore.blobBuilder("myblob").payload(ByteSource.wrap("testcontent".getBytes())).build());
       Blob representation = ToBlob.INSTANCE.apply(blobStore.getBlob("container", "myblob"));
       assertNotNull(representation);
       assertNotNull(representation.getBlobMetadata());

@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.io.ByteSource;
 import com.google.common.net.HttpHeaders;
 
 /**
@@ -114,7 +115,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testAppendVersionToPayloadHeadersWithStandardPayload() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/xml");
 
       HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).payload(payload)
@@ -129,7 +130,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testAppendVersionToPayloadHeadersWithDefaultPayload() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
 
       HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).payload(payload)
             .build();
@@ -143,7 +144,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testAppendVersionToPayloadHeadersWithVersionInPayload() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/vnd.abiquo.racks+xml;version=1.8.5");
 
       HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).payload(payload)
@@ -159,7 +160,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testAppendVersionToPayloadHeadersWithoutVersionInPayload() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/vnd.abiquo.racks+xml");
 
       HttpRequest request = HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).payload(payload)
@@ -175,7 +176,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testFilterWithAcceptAndContentTypeWithVersion() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/vnd.abiquo.racks+xml;version=2.1-SNAPSHOT");
 
       Multimap<String, String> headers = LinkedHashMultimap.<String, String> create();
@@ -198,7 +199,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testFilterWithAcceptAndContentTypeWithoutVersion() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/vnd.abiquo.racks+xml");
 
       Multimap<String, String> headers = LinkedHashMultimap.<String, String> create();
@@ -221,7 +222,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testFilterWithversionInAccept() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/vnd.abiquo.racks+xml");
 
       Multimap<String, String> headers = LinkedHashMultimap.<String, String> create();
@@ -244,7 +245,7 @@ public class AppendApiVersionToMediaTypeTest {
    }
 
    public void testFilterWithversionInContentType() {
-      Payload payload = Payloads.newByteArrayPayload(new byte[] {});
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(new byte[0]));
       payload.getContentMetadata().setContentType("application/vnd.abiquo.racks+xml;version=1.8.5");
 
       Multimap<String, String> headers = LinkedHashMultimap.<String, String> create();

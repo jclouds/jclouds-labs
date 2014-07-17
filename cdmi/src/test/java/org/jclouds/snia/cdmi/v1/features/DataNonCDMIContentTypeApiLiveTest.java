@@ -23,15 +23,15 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.jclouds.io.Payload;
+import org.jclouds.io.Payloads;
 import org.jclouds.io.payloads.BaseMutableContentMetadata;
-import org.jclouds.io.payloads.ByteArrayPayload;
 import org.jclouds.io.payloads.FilePayload;
 import org.jclouds.io.payloads.InputStreamPayload;
-import org.jclouds.io.payloads.StringPayload;
 import org.jclouds.snia.cdmi.v1.domain.Container;
 import org.jclouds.snia.cdmi.v1.domain.DataObject;
 import org.jclouds.snia.cdmi.v1.internal.BaseCDMIApiLiveTest;
@@ -42,6 +42,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.google.common.io.ByteSource;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import com.google.common.net.MediaType;
@@ -93,7 +94,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          assertNotNull(payloadOut);
          assertEquals(Strings2.toStringAndClose(payloadOut.openStream()), value);
 
-         payloadIn = new StringPayload(value);
+         payloadIn = newPayload(value);
          payloadIn.setContentMetadata(BaseMutableContentMetadata.fromContentMetadata(payloadIn.getContentMetadata()
                   .toBuilder().contentType(MediaType.PLAIN_TEXT_UTF_8.toString()).build()));
          dataNonCDMIContentTypeApi.create(dataObjectNameIn, payloadIn);
@@ -121,7 +122,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          // exercise create data object with none cdmi put with payload byte array.
          value = "Hello CDMI World non-cdmi byte array";
          bytes = value.getBytes(Charsets.UTF_8);
-         payloadIn = new ByteArrayPayload(bytes);
+         payloadIn = Payloads.newByteSourcePayload(ByteSource.wrap(bytes));
          payloadIn.setContentMetadata(BaseMutableContentMetadata.fromContentMetadata(payloadIn.getContentMetadata()
                   .toBuilder().contentType(MediaType.PLAIN_TEXT_UTF_8.toString()).build()));
          dataNonCDMIContentTypeApi.create(dataObjectNameIn, payloadIn);
@@ -296,7 +297,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
 
          // exercise get with none cdmi get range.
          value = "Hello CDMI World non-cdmi String";
-         payloadIn = new StringPayload(value);
+         payloadIn = newPayload(value);
          payloadIn.setContentMetadata(BaseMutableContentMetadata.fromContentMetadata(payloadIn.getContentMetadata()
                   .toBuilder().contentType(MediaType.PLAIN_TEXT_UTF_8.toString()).build()));
          dataNonCDMIContentTypeApi.create(dataObjectNameIn, payloadIn);
@@ -318,7 +319,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          // server does not actually support cdmi partial but
          // trace allows me to see that request was constructed properly
          value = "Hello CDMI World non-cdmi String";
-         payloadIn = new StringPayload(value);
+         payloadIn = Payloads.newByteSourcePayload(ByteSource.wrap(value.getBytes(Charset.forName("UTF-8"))));
          payloadIn.setContentMetadata(BaseMutableContentMetadata.fromContentMetadata(payloadIn.getContentMetadata()
                   .toBuilder().contentType(MediaType.PLAIN_TEXT_UTF_8.toString()).build()));
          dataNonCDMIContentTypeApi.createPartial(dataObjectNameIn, payloadIn);
@@ -340,9 +341,10 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
       } finally {
          tmpFileIn.delete();
          containerApi.delete(containerName);
-
       }
-
    }
 
+   private Payload newPayload(String value) {
+      return Payloads.newByteSourcePayload(ByteSource.wrap(value.getBytes(Charset.forName("UTF-8"))));
+   }
 }

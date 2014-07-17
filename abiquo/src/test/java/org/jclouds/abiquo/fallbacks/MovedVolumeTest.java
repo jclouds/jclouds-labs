@@ -34,6 +34,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.common.io.ByteSource;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -66,7 +67,7 @@ public class MovedVolumeTest {
 
       HttpResponse response = EasyMock.createMock(HttpResponse.class);
       HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
-      Payload payload = Payloads.newPayload(xmlParser.toXML(movedRef));
+      Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(xmlParser.toXML(movedRef).getBytes()));
 
       // Status code is called once
       expect(response.getStatusCode()).andReturn(Status.MOVED_PERMANENTLY.getStatusCode());
