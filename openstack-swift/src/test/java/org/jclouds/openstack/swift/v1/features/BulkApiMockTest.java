@@ -23,7 +23,7 @@ import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.exporter.TarGzExporter;
-import org.jclouds.io.ByteSources;
+import org.jclouds.io.ByteStreams2;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.SwiftApi;
@@ -46,7 +46,7 @@ public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          files.add(content, "/file" + i);
       }
 
-      byte[] tarGz = ByteSources.asByteSource(files.as(TarGzExporter.class).exportAsInputStream()).read();
+      byte[] tarGz = ByteStreams2.toByteArrayAndClose(files.as(TarGzExporter.class).exportAsInputStream());
 
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));

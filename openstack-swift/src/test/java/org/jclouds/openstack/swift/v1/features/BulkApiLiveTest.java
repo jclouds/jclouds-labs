@@ -27,7 +27,7 @@ import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.exporter.TarGzExporter;
-import org.jclouds.io.ByteSources;
+import org.jclouds.io.ByteStreams2;
 import org.jclouds.io.Payload;
 import org.jclouds.io.payloads.ByteSourcePayload;
 import org.jclouds.openstack.swift.v1.SwiftApi;
@@ -107,7 +107,7 @@ public class BulkApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       }
 
       try {
-         tarGz = ByteSources.asByteSource(files.as(TarGzExporter.class).exportAsInputStream()).read();
+         tarGz = ByteStreams2.toByteArrayAndClose(files.as(TarGzExporter.class).exportAsInputStream());
       } catch (IOException e) {
          throw Throwables.propagate(e);
       }
