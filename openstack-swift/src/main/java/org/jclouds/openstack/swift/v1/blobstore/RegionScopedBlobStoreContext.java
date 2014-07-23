@@ -43,14 +43,14 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 /**
  * Implementation of {@link BlobStoreContext} which allows you to employ
  * multiple regions.
- * 
+ *
  * Example.
- * 
+ *
  * <pre>
  * ctx = contextBuilder.buildView(RegionScopedBlobStoreContext.class);
- * 
+ *
  * Set&lt;String&gt; regionIds = ctx.configuredRegions();
- * 
+ *
  * // isolated to a specific region
  * BlobStore texasBlobStore = ctx.blobStoreInRegion(&quot;US-TX&quot;);
  * BlobStore virginiaBlobStore = ctx.blobStoreInRegion(&quot;US-VA&quot;);
@@ -60,8 +60,19 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
 
    /**
     * @return regions supported in this context.
+    *
+    * @deprecated Please use {{@link #getConfiguredRegions()} as this method will be
+    *             removed in jclouds 2.0.
     */
+   @Deprecated
    public Set<String> configuredRegions() {
+      return getConfiguredRegions();
+   }
+
+   /**
+    * @return regions supported in this context.
+    */
+   public Set<String> getConfiguredRegions() {
       return regionIds.get();
    }
 
@@ -70,8 +81,22 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
     *           valid region id from {@link #configuredRegions()}
     * @throws IllegalArgumentException
     *            if {@code regionId} was invalid.
+    *
+    * @deprecated Please use {{@link #getConfiguredRegions()} as this method will be
+    *             removed in jclouds 2.0.
     */
+   @Deprecated
    public BlobStore blobStoreInRegion(String regionId) {
+      return getBlobStoreForRegion(regionId);
+   }
+
+   /**
+    * @param regionId
+    *           valid region id from {@link #getConfiguredRegions()}
+    * @throws IllegalArgumentException
+    *            if {@code regionId} was invalid.
+    */
+   public BlobStore getBlobStoreForRegion(String regionId) {
       checkRegionId(regionId);
       return blobStore.apply(regionId);
    }
@@ -81,8 +106,22 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
     *           valid region id from {@link #configuredRegions()}
     * @throws IllegalArgumentException
     *            if {@code regionId} was invalid.
+    *
+    * @deprecated Please use {{@link #getSignerInRegion(String)} as this method will be
+    *             removed in jclouds 2.0.
     */
+   @Deprecated
    public BlobRequestSigner signerInRegion(String regionId) {
+      return getSignerForRegion(regionId);
+   }
+
+   /**
+    * @param regionId
+    *           valid region id from {@link #getConfiguredRegions()}
+    * @throws IllegalArgumentException
+    *            if {@code regionId} was invalid.
+    */
+   public BlobRequestSigner getSignerForRegion(String regionId) {
       checkRegionId(regionId);
       return blobRequestSigner.apply(regionId);
    }
@@ -95,15 +134,26 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
     *            {@link org.jclouds.blobstore.BlobStore}
     */
    @Deprecated
-   public org.jclouds.blobstore.AsyncBlobStore asyncBlobStoreInRegion(String regionId) {
+   public org.jclouds.blobstore.AsyncBlobStore getAsyncBlobStoreForRegion(String regionId) {
       checkRegionId(regionId);
       return new org.jclouds.openstack.swift.v1.blobstore.internal.SubmissionAsyncBlobStore(
             blobStoreInRegion(regionId), executor);
    }
+   /**
+    * @param regionId
+    *           valid region id from {@link #configuredRegions()}
+    * @throws IllegalArgumentException
+    *            if {@code regionId} was invalid. longer supported. Please use
+    *            {@link org.jclouds.blobstore.BlobStore}
+    */
+   @Deprecated
+   public org.jclouds.blobstore.AsyncBlobStore asyncBlobStoreInRegion(String regionId) {
+      return getAsyncBlobStoreForRegion(regionId);
+   }
 
    protected void checkRegionId(String regionId) {
-      checkArgument(configuredRegions().contains(checkNotNull(regionId, "regionId was null")), "region %s not in %s",
-            regionId, configuredRegions());
+      checkArgument(getConfiguredRegions().contains(checkNotNull(regionId, "regionId was null")), "region %s not in %s",
+            regionId, getConfiguredRegions());
    }
 
    private final Supplier<Set<String>> regionIds;
@@ -136,18 +186,18 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
 
    @Override
    public BlobStore getBlobStore() {
-      return blobStoreInRegion(implicitRegionId.get());
+      return getBlobStoreForRegion(implicitRegionId.get());
    }
 
    @Override
    public BlobRequestSigner getSigner() {
-      return signerInRegion(implicitRegionId.get());
+      return getSignerForRegion(implicitRegionId.get());
    }
 
    @Override
    @Deprecated
    public org.jclouds.blobstore.AsyncBlobStore getAsyncBlobStore() {
-      return asyncBlobStoreInRegion(implicitRegionId.get());
+      return getAsyncBlobStoreForRegion(implicitRegionId.get());
    }
 
    @Override

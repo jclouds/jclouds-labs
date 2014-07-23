@@ -51,14 +51,14 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
 
    @Test
    public void regionsAreNotEmpty() {
-      assertFalse(RegionScopedBlobStoreContext.class.cast(view).configuredRegions().isEmpty());
+      assertFalse(RegionScopedBlobStoreContext.class.cast(view).getConfiguredRegions().isEmpty());
    }
 
    @Test
    public void locationsMatch() {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
-      for (String regionId : ctx.configuredRegions()) {
-         Set<? extends Location> locations = ctx.blobStoreInRegion(regionId).listAssignableLocations();
+      for (String regionId : ctx.getConfiguredRegions()) {
+         Set<? extends Location> locations = ctx.getBlobStoreForRegion(regionId).listAssignableLocations();
          assertEquals(locations.size(), 1, "expected one region " + regionId + " " + locations);
          Location location = locations.iterator().next();
          assertEquals(location.getId(), regionId, "region id " + regionId + " didn't match getId(): " + location);
@@ -68,16 +68,16 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    @Test
    public void tryList() throws InterruptedException, ExecutionException {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
-      for (String regionId : ctx.configuredRegions()) {
-         assertEquals(ctx.asyncBlobStoreInRegion(regionId).list().get(), ctx.blobStoreInRegion(regionId).list());
+      for (String regionId : ctx.getConfiguredRegions()) {
+         assertEquals(ctx.getAsyncBlobStoreForRegion(regionId).list().get(), ctx.getBlobStoreForRegion(regionId).list());
       }
    }
 
    @Test
    public void trySign() throws InterruptedException, ExecutionException {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
-      for (String regionId : ctx.configuredRegions()) {
-         BlobStore region = ctx.blobStoreInRegion(regionId);
+      for (String regionId : ctx.getConfiguredRegions()) {
+         BlobStore region = ctx.getBlobStoreForRegion(regionId);
          PageSet<? extends StorageMetadata> containers = region.list();
          if (containers.isEmpty()) {
             continue;
@@ -88,7 +88,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
             continue;
          }
          String blobName = Iterables.getLast(blobs).getName();
-         HttpRequest request = ctx.signerInRegion(regionId).signGetBlob(containerName, blobName);
+         HttpRequest request = ctx.getSignerForRegion(regionId).signGetBlob(containerName, blobName);
          assertNotNull(request, "regionId=" + regionId + ", container=" + containerName + ", blob=" + blobName);
       }
    }
