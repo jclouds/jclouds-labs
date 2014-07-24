@@ -32,7 +32,10 @@ import org.jclouds.http.HttpRequest.Builder;
 import org.jclouds.io.Payload;
 import org.jclouds.rest.Binder;
 
+import com.google.common.hash.HashCode;
+
 public class SetPayload implements Binder {
+
    @SuppressWarnings("unchecked")
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
@@ -40,6 +43,7 @@ public class SetPayload implements Binder {
       Payload payload = Payload.class.cast(input);
 
       if (payload.getContentMetadata().getContentType() == null) {
+         // TODO: use `X-Detect-Content-Type` here. Should be configurable via a property.
          payload.getContentMetadata().setContentType(MediaType.APPLICATION_OCTET_STREAM);
       }
 
@@ -51,18 +55,18 @@ public class SetPayload implements Binder {
          builder.replaceHeader(TRANSFER_ENCODING, "chunked").build();
       }
 
-      byte[] md5 = payload.getContentMetadata().getContentMD5();
+      HashCode md5 = payload.getContentMetadata().getContentMD5AsHashCode();
       if (md5 != null) {
          // Swift will validate the md5, if placed as an ETag header
-         builder.replaceHeader(ETAG, base16().lowerCase().encode(md5));
+         builder.replaceHeader(ETAG, base16().lowerCase().encode(md5.asBytes()));
       }
 
       Date expires = payload.getContentMetadata().getExpires();
       if (expires != null) {
-         builder.replaceHeader(OBJECT_DELETE_AT, String.valueOf(
-               MILLISECONDS.toSeconds(expires.getTime())))
-               .build();
+         builder.addHeader(OBJECT_DELETE_AT,
+               String.valueOf(MILLISECONDS.toSeconds(expires.getTime()))).build();
       }
+
       return (R) builder.payload(payload).build();
    }
 }

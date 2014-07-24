@@ -17,7 +17,6 @@
 package org.jclouds.openstack.swift.v1.blobstore.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.io.BaseEncoding.base16;
 
 import org.jclouds.blobstore.domain.MutableBlobMetadata;
 import org.jclouds.blobstore.domain.StorageType;
@@ -48,11 +47,12 @@ public class ToBlobMetadata implements Function<SwiftObject, MutableBlobMetadata
          to.setPublicUri(from.getUri());
       }
       to.setUri(from.getUri());
-      to.setETag(from.getEtag());
+      to.setETag(from.getETag());
       to.setName(from.getName());
       to.setLastModified(from.getLastModified());
       to.setContentMetadata(from.getPayload().getContentMetadata());
-      to.getContentMetadata().setContentMD5(base16().lowerCase().decode(from.getEtag()));
+      to.getContentMetadata().setContentMD5(from.getPayload().getContentMetadata().getContentMD5AsHashCode());
+      to.getContentMetadata().setExpires(from.getPayload().getContentMetadata().getExpires());
       to.setUserMetadata(from.getMetadata());
       String directoryName = ifDirectoryReturnName.execute(to);
       if (directoryName != null) {

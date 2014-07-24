@@ -27,18 +27,23 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+
+import javax.ws.rs.PathParam;
 
 import org.jclouds.http.options.GetOptions;
 import org.jclouds.io.Payload;
 import org.jclouds.openstack.swift.v1.CopyObjectException;
 import org.jclouds.openstack.swift.v1.SwiftApi;
+import org.jclouds.openstack.swift.v1.binders.SetPayload;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.internal.BaseSwiftApiLiveTest;
 import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
+import org.jclouds.rest.annotations.BinderParam;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -74,6 +79,28 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       }
    }
 
+   public void testPutWithExpiration() throws Exception {
+      String objectName = "test-expiration";
+
+      long expireMillis = new Date().getTime() + 1000 * 60 * 60 * 24;
+      Date expireAt = new Date(expireMillis);
+
+      Payload payload = newByteSourcePayload(ByteSource.wrap("swifty".getBytes()));
+      payload.getContentMetadata().setExpires(expireAt);
+
+      for (String regionId : regions) {
+         String etag = api.getObjectApiForRegionAndContainer(regionId, containerName)
+               .put(objectName, payload);
+         assertNotNull(etag);
+
+         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(objectName);
+         assertEquals(object.getName(), objectName);
+         checkObject(object);
+         assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
+
+         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(objectName);
+      }
+   }
    public void testCopyObject() throws Exception {
       for (String regionId : regions) {
          // source

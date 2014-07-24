@@ -47,6 +47,7 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
       long bytes;
       String content_type;
       Date last_modified;
+      Date expires;
    }
 
    private final ParseJson<List<InternalObject>> json;
@@ -80,7 +81,7 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
                .uri(uriBuilder(containerUri).clearQuery().appendPath(input.name).build())
                .name(input.name)
                .etag(input.hash)
-               .payload(payload(input.bytes, input.content_type))
+               .payload(payload(input.bytes, input.content_type, input.expires))
                .lastModified(input.last_modified).build();
       }
    }
@@ -97,10 +98,11 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
       return this;
    }
 
-   private static Payload payload(long bytes, String contentType) {
+   private static Payload payload(long bytes, String contentType, Date expires) {
       Payload payload = Payloads.newByteSourcePayload(ByteSource.empty());
       payload.getContentMetadata().setContentLength(bytes);
       payload.getContentMetadata().setContentType(contentType);
+      payload.getContentMetadata().setExpires(expires);
       return payload;
    }
 }

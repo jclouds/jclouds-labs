@@ -18,14 +18,18 @@ package org.jclouds.openstack.swift.v1.functions;
 
 import static com.google.common.net.HttpHeaders.ETAG;
 import static com.google.common.net.HttpHeaders.LAST_MODIFIED;
+import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_DELETE_AT;
 
 import java.net.URI;
+import java.util.Date;
 
 import javax.inject.Inject;
 
 import org.jclouds.date.DateService;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.io.MutableContentMetadata;
+import org.jclouds.io.Payload;
 import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.rest.InvocationContext;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -46,11 +50,22 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
 
    @Override
    public SwiftObject apply(HttpResponse from) {
+
+      Payload payload = from.getPayload();
+      MutableContentMetadata contentMeta = payload.getContentMetadata();
+
+      String deleteAt = from.getFirstHeaderOrNull(OBJECT_DELETE_AT);
+      if (deleteAt != null) {
+         long fromEpoch = Long.parseLong(from.getFirstHeaderOrNull(OBJECT_DELETE_AT)) * 1000;
+         contentMeta.setExpires(new Date(fromEpoch));
+         payload.setContentMetadata(contentMeta);
+      }
+
       return SwiftObject.builder()
             .uri(URI.create(uri))
             .name(name)
             .etag(from.getFirstHeaderOrNull(ETAG))
-            .payload(from.getPayload())
+            .payload(payload)
             .lastModified(dates.rfc822DateParse(from.getFirstHeaderOrNull(LAST_MODIFIED)))
             .headers(from.getHeaders())
             .metadata(EntriesWithoutMetaPrefix.INSTANCE.apply(from.getHeaders())).build();

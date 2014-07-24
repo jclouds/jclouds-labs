@@ -17,7 +17,9 @@
 package org.jclouds.openstack.swift.v1.features;
 
 import static com.google.common.base.Charsets.US_ASCII;
+import static com.google.common.net.HttpHeaders.EXPIRES;
 import static com.google.common.net.HttpHeaders.RANGE;
+import static com.google.common.net.HttpHeaders.LAST_MODIFIED;
 import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
 import static org.jclouds.Constants.PROPERTY_RETRY_DELAY_START;
 import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
@@ -37,6 +39,7 @@ import static org.testng.Assert.fail;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -77,19 +80,19 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
                   .name("test_obj_1")
                   .uri(URI.create(baseUri + "/test_obj_1"))
                   .etag("4281c348eaf83e70ddce0e07221c3d28")
-                  .payload(payload(14, "application/octet-stream"))
+                  .payload(payload(14, "application/octet-stream", new Date(1406243553)))
                   .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build(),
             SwiftObject.builder()
                   .name("test_obj_2")
                   .uri(URI.create(baseUri + "/test_obj_2"))
                   .etag("b039efe731ad111bc1b0ef221c3849d0")
-                  .payload(payload(64l, "application/octet-stream"))
+                  .payload(payload(64l, "application/octet-stream", null))
                   .lastModified(dates.iso8601DateParse("2009-02-03T05:26:32.612278")).build(),
             SwiftObject.builder()
                   .name("test obj 3")
                   .uri(URI.create(baseUri + "/test%20obj%203"))
                   .etag("0b2e80bd0744d9ebb20484149a57c82e")
-                  .payload(payload(14, "application/octet-stream"))
+                  .payload(payload(14, "application/octet-stream", new Date()))
                   .lastModified(dates.iso8601DateParse("2014-05-20T05:26:32.612278")).build());
    }
 
@@ -136,7 +139,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          server.shutdown();
       }
    }
-   
+
    public void testListOptions() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -160,7 +163,8 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse()
             .setResponseCode(201)
-            .addHeader("ETag", "d9f5eb4bba4e2f2f046e54611bc8196b")));
+            .addHeader("ETag", "d9f5eb4bba4e2f2f046e54611bc8196b"))
+            .addHeader("Expires", "1406243553"));
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
@@ -261,7 +265,6 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          for (Entry<String, String> entry : object.getMetadata().entrySet()) {
             assertEquals(object.getMetadata().get(entry.getKey().toLowerCase()), entry.getValue());
          }
-         assertEquals(object.getPayload().getContentMetadata().getContentLength(), new Long(4));
          assertEquals(object.getPayload().getContentMetadata().getContentType(), "text/plain; charset=UTF-8");
          assertEquals(toStringAndClose(object.getPayload().openStream()), "");
 
@@ -290,17 +293,19 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          for (Entry<String, String> entry : object.getMetadata().entrySet()) {
             assertEquals(object.getMetadata().get(entry.getKey().toLowerCase()), entry.getValue());
          }
-         assertEquals(object.getPayload().getContentMetadata().getContentLength(), new Long(4));
-         assertEquals(object.getPayload().getContentMetadata().getContentType(), "text/plain; charset=UTF-8");
-         // note MWS doesn't process Range header at the moment
-         assertEquals(toStringAndClose(object.getPayload().openStream()), "ABCD");
+
+         Payload payload = object.getPayload();
+         assertEquals(payload.getContentMetadata().getContentLength(), new Long(4));
+         assertEquals(payload.getContentMetadata().getContentType(), "text/plain; charset=UTF-8");
+         assertEquals(payload.getContentMetadata().getExpires(), dates.rfc822DateParse("Wed, 23 Jul 2014 14:00:00 GMT"));
+
+         assertEquals(toStringAndClose(payload.openStream()), "ABCD");
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
          RecordedRequest get = server.takeRequest();
          assertEquals(get.getRequestLine(),
                "GET /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject HTTP/1.1");
-         assertEquals(get.getHeader(RANGE), "bytes=-1");
       } finally {
          server.shutdown();
       }
@@ -320,7 +325,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          overrides.setProperty(PROPERTY_RETRY_DELAY_START, 0 + ""); // exponential backoff already working for this call. This is the delay BETWEEN attempts.
 
          final SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
-         
+
          api.getObjectApiForRegionAndContainer("DFW", "myContainer").put("myObject", new ByteSourcePayload(ByteSource.wrap("swifty".getBytes())), metadata(metadata));
 
          fail("testReplaceTimeout test should have failed with an HttpResponseException.");
@@ -439,7 +444,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          server.shutdown();
       }
    }
-   
+
    public void testCopyObject() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -449,10 +454,10 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertTrue(api.getObjectApiForRegionAndContainer("DFW", "foo")
             .copy("bar.txt", "bar", "foo.txt"));
-              
+
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         
+
          RecordedRequest copyRequest = server.takeRequest();
          assertEquals(copyRequest.getRequestLine(),
                "PUT /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/foo/bar.txt HTTP/1.1");
@@ -460,23 +465,23 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          server.shutdown();
       }
    }
-   
+
    @Test(expectedExceptions = CopyObjectException.class)
    public void testCopyObjectFail() throws InterruptedException, IOException {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
       server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)
             .addHeader(SwiftHeaders.OBJECT_COPY_FROM, "/bogus/foo.txt")));
-      
+
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          // the following line will throw the CopyObjectException
-         api.getObjectApiForRegionAndContainer("DFW", "foo").copy("bar.txt", "bogus", "foo.txt"); 
+         api.getObjectApiForRegionAndContainer("DFW", "foo").copy("bar.txt", "bogus", "foo.txt");
       } finally {
          server.shutdown();
-      }  
+      }
    }
-   
+
    private static final Map<String, String> metadata = ImmutableMap.of("ApiName", "swift", "ApiVersion", "v1.1");
 
    static MockResponse objectResponse() {
@@ -486,13 +491,16 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
             // TODO: MWS doesn't allow you to return content length w/o content
             // on HEAD!
             .setBody("ABCD".getBytes(US_ASCII))
-            .addHeader("Content-Length", "4").addHeader("Content-Type", "text/plain; charset=UTF-8");
+            .addHeader("Content-Length", "4")
+            .addHeader("Content-Type", "text/plain; charset=UTF-8")
+            .addHeader(EXPIRES, "Wed, 23 Jul 2014 14:00:00 GMT");
    }
 
-   static Payload payload(long bytes, String contentType) {
+   static Payload payload(long bytes, String contentType, Date expires) {
       Payload payload = newByteSourcePayload(ByteSource.empty());
       payload.getContentMetadata().setContentLength(bytes);
       payload.getContentMetadata().setContentType(contentType);
+      payload.getContentMetadata().setExpires(expires);
       return payload;
    }
 }
