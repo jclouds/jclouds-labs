@@ -48,17 +48,17 @@ public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ProfileApi api = cbdApi.getProfileApiForZone("ORD");
+         ProfileApi api = cbdApi.getProfileApi("ORD");
 
          CreateProfile createProfile = CreateProfile.builder()
                .username("john.doe")
                .password("j0Hnd03")
                .sshKeys(ImmutableList.of(ProfileSSHKey.builder().name("t@test")
-                     .publicKey("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtUFnkFrqDDCgEqW1akQkpMOX\n" + 
-                           "Owwvg73PLn5Z5QgvxjvJhRCg9ZTR/OWXpWcYqFVNagH4Zs8NOb9921TyQ+ydMnatOM\n" + 
-                           "haxMh1ZwTgaUcvndOF8fY+kcERiw1l0iT95w42F8IdUH42Z+8KihZM8gVsbMS6qYTi\n" + 
-                           "OM29WHX7y37wuJIzqf3N2TiVXrqfjwugvY/bZ+47EUn78uk6aPZYJGXdDgaFqnIXUV\n" + 
-                           "N+hRFYXgKnU0Ui0aQkuYwnAW8KmanLoNU2xodrb6/XqWnSAAmwl7aoGKFunQsT6xDW\n" + 
+                     .publicKey("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtUFnkFrqDDCgEqW1akQkpMOX\n" +
+                           "Owwvg73PLn5Z5QgvxjvJhRCg9ZTR/OWXpWcYqFVNagH4Zs8NOb9921TyQ+ydMnatOM\n" +
+                           "haxMh1ZwTgaUcvndOF8fY+kcERiw1l0iT95w42F8IdUH42Z+8KihZM8gVsbMS6qYTi\n" +
+                           "OM29WHX7y37wuJIzqf3N2TiVXrqfjwugvY/bZ+47EUn78uk6aPZYJGXdDgaFqnIXUV\n" +
+                           "N+hRFYXgKnU0Ui0aQkuYwnAW8KmanLoNU2xodrb6/XqWnSAAmwl7aoGKFunQsT6xDW\n" +
                            "yQk+ncUHUcdofDUqgd3lXmHGrTmQW97vqexDEnhsJ+AwbLGD5dukr t@test")
                            .build()))
                            .credentialsUsername("jdoe")
@@ -97,17 +97,17 @@ public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ProfileApi api = cbdApi.getProfileApiForZone("ORD");
+         ProfileApi api = cbdApi.getProfileApi("ORD");
 
          CreateProfile createProfile = CreateProfile.builder()
                .username("john.doe")
                .password("j0Hnd03")
                .sshKeys(ImmutableList.of(ProfileSSHKey.builder().name("t@test")
-                     .publicKey("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtUFnkFrqDDCgEqW1akQkpMOX\n" + 
-                           "Owwvg73PLn5Z5QgvxjvJhRCg9ZTR/OWXpWcYqFVNagH4Zs8NOb9921TyQ+ydMnatOM\n" + 
-                           "haxMh1ZwTgaUcvndOF8fY+kcERiw1l0iT95w42F8IdUH42Z+8KihZM8gVsbMS6qYTi\n" + 
-                           "OM29WHX7y37wuJIzqf3N2TiVXrqfjwugvY/bZ+47EUn78uk6aPZYJGXdDgaFqnIXUV\n" + 
-                           "N+hRFYXgKnU0Ui0aQkuYwnAW8KmanLoNU2xodrb6/XqWnSAAmwl7aoGKFunQsT6xDW\n" + 
+                     .publicKey("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtUFnkFrqDDCgEqW1akQkpMOX\n" +
+                           "Owwvg73PLn5Z5QgvxjvJhRCg9ZTR/OWXpWcYqFVNagH4Zs8NOb9921TyQ+ydMnatOM\n" +
+                           "haxMh1ZwTgaUcvndOF8fY+kcERiw1l0iT95w42F8IdUH42Z+8KihZM8gVsbMS6qYTi\n" +
+                           "OM29WHX7y37wuJIzqf3N2TiVXrqfjwugvY/bZ+47EUn78uk6aPZYJGXdDgaFqnIXUV\n" +
+                           "N+hRFYXgKnU0Ui0aQkuYwnAW8KmanLoNU2xodrb6/XqWnSAAmwl7aoGKFunQsT6xDW\n" +
                            "yQk+ncUHUcdofDUqgd3lXmHGrTmQW97vqexDEnhsJ+AwbLGD5dukr t@test")
                            .build()))
                            .credentialsUsername("jdoe")
@@ -138,7 +138,7 @@ public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ProfileApi api = cbdApi.getProfileApiForZone("ORD");
+         ProfileApi api = cbdApi.getProfileApi("ORD");
          Profile profile = api.get();
 
          /*
@@ -171,7 +171,7 @@ public class ProfileApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ProfileApi api = cbdApi.getProfileApiForZone("ORD");
+         ProfileApi api = cbdApi.getProfileApi("ORD");
          Profile profile = api.get();
 
          /*

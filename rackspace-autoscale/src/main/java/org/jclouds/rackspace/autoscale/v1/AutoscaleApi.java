@@ -23,8 +23,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.location.Zone;
-import org.jclouds.location.functions.ZoneToEndpoint;
+import org.jclouds.location.Region;
+import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.keystone.v2_0.domain.Tenant;
 import org.jclouds.rackspace.autoscale.v1.features.GroupApi;
 import org.jclouds.rackspace.autoscale.v1.features.PolicyApi;
@@ -36,33 +36,32 @@ import com.google.common.base.Optional;
 import com.google.inject.Provides;
 
 /**
- * Provides access to Rackspace Autoscale.
- *  
- * @see <a href="https://rackspace-autoscale.readthedocs.org">API Doc</a>
- * @see <a href="http://docs.autoscale.apiary.io/">Apiary API Doc</a>
+ * Provides access to Rackspace Auto Scale v1 API.
+ *
  */
-public interface AutoscaleApi extends Closeable{
+public interface AutoscaleApi extends Closeable {
    /**
-    * Provides a set of all zones available.
-    * 
-    * @return the Zone codes configured
+    * Provides a set of all regions available.
+    *
+    * @return the Region codes configured
     */
    @Provides
-   @Zone
-   Set<String> getConfiguredZones();
+   @Region
+   Set<String> getConfiguredRegions();
 
    /**
     * Provides access to all scaling Group features.
     */
    @Delegate
-   GroupApi getGroupApiForZone(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   GroupApi getGroupApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
 
    /**
     * Provides access to all policy features for scaling Groups.
     */
    @Delegate
    @Path("/groups/{groupId}")
-   PolicyApi getPolicyApiForZoneAndGroup(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+   PolicyApi getPolicyApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
          @PathParam("groupId") String groupId);
 
    /**
@@ -70,13 +69,46 @@ public interface AutoscaleApi extends Closeable{
     */
    @Delegate
    @Path("/groups/{groupId}/policies/{policyId}")
-   WebhookApi getWebhookApiForZoneAndGroupAndPolicy(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone,
+   WebhookApi getWebhookApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
          @PathParam("groupId") String groupId,
          @PathParam("policyId") String policyId);
 
    /**
     * Provides the Tenant.
     */
-   @Provides 
+   @Provides
    Optional<Tenant> getCurrentTenantId();
+
+   /**
+    * @return the configured zone codes
+    * @deprecated Please use {@link #getConfiguredRegions()} as this method will be removed in jclouds 3.0.
+    */
+   @Deprecated
+   @Provides
+   @Region
+   Set<String> getConfiguredZones();
+
+   /**
+    * Provides access to all policy features for scaling Groups.
+    * @deprecated Please use {@link #getPolicyApi(String, String)} as this method will be removed
+    *             in jclouds 3.0.
+    */
+   @Deprecated
+   @Delegate
+   @Path("/groups/{groupId}")
+   PolicyApi getPolicyApiForGroup(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @PathParam("groupId") String groupId);
+
+   /**
+    * Provides access to webhook management features.
+    * @deprecated Please use {@link #getWebhookApi(String, String, String)} as this method will be removed
+    *             in jclouds 3.0.
+    */
+   @Deprecated
+   @Delegate
+   @Path("/groups/{groupId}/policies/{policyId}")
+   WebhookApi getWebhookApiForGroupAndPolicy(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @PathParam("groupId") String groupId,
+         @PathParam("policyId") String policyId);
+
 }

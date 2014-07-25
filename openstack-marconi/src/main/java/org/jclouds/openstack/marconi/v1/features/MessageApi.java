@@ -16,6 +16,23 @@
  */
 package org.jclouds.openstack.marconi.v1.features;
 
+import java.util.List;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.marconi.v1.binders.BindIdsToQueryParam;
 import org.jclouds.openstack.marconi.v1.domain.CreateMessage;
@@ -34,27 +51,13 @@ import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SkipEncoding;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
-
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-import static org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
-
 /**
  * Provides access to Messages via their REST API.
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)
+@Consumes(MediaType.APPLICATION_JSON)
+@Path("/messages")
 public interface MessageApi {
    /**
     * Create message(s) on a queue.
@@ -64,9 +67,9 @@ public interface MessageApi {
     */
    @Named("message:create")
    @POST
-   @Path("/messages")
    @ResponseParser(ParseMessagesCreated.class)
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    MessagesCreated create(@BinderParam(BindToJsonPayload.class) List<CreateMessage> messages);
 
    /**
@@ -78,9 +81,7 @@ public interface MessageApi {
    @Named("message:stream")
    @GET
    @ResponseParser(ParseMessagesToStream.class)
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
-   @Path("/messages")
    MessageStream stream(StreamMessagesOptions... options);
 
    /**
@@ -91,8 +92,6 @@ public interface MessageApi {
    @Named("message:list")
    @GET
    @ResponseParser(ParseMessagesToList.class)
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/messages")
    @Fallback(EmptyListOnNotFoundOr404.class)
    List<Message> list(@BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
 
@@ -103,10 +102,10 @@ public interface MessageApi {
     */
    @Named("message:get")
    @GET
+   @Path("/{message_id}")
    @ResponseParser(ParseMessage.class)
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/messages/{message_id}")
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Message get(@PathParam("message_id") String id);
 
    /**
@@ -117,8 +116,6 @@ public interface MessageApi {
     */
    @Named("message:delete")
    @DELETE
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/messages")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@BinderParam(BindIdsToQueryParam.class) Iterable<String> ids);
 
@@ -133,8 +130,7 @@ public interface MessageApi {
     */
    @Named("message:delete")
    @DELETE
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/messages/{message_id}")
+   @Path("/{message_id}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean deleteByClaim(@PathParam("message_id") String id,
                          @QueryParam("claim_id") String claimId);

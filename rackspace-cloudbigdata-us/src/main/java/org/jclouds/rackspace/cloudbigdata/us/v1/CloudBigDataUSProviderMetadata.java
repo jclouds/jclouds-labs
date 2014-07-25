@@ -17,15 +17,15 @@
 package org.jclouds.rackspace.cloudbigdata.us.v1;
 
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
-import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONE;
-import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONES;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
 import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
+import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.cloudbigdata.v1.CloudBigDataApiMetadata;
@@ -77,12 +77,12 @@ public class CloudBigDataUSProviderMetadata extends BaseProviderMetadata {
    public static Properties defaultProperties() {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
-      properties.setProperty(SERVICE_TYPE, ServiceType.BIG_DATA); 
-      //properties.setProperty(PROPERTY_ZONES, "ORD,DFW,SYD");
-      properties.setProperty(PROPERTY_ZONES, "ORD");
-      properties.setProperty(PROPERTY_ZONE + ".ORD." + ISO3166_CODES, "US-IL");
-      //properties.setProperty(PROPERTY_ZONE + ".DFW." + ISO3166_CODES, "US-TX");
-      //properties.setProperty(PROPERTY_ZONE + ".SYD." + ISO3166_CODES, "AU-NSW");
+      properties.setProperty(SERVICE_TYPE, ServiceType.BIG_DATA);
+      //properties.setProperty(PROPERTY_REGIONS, "ORD,DFW,SYD");
+      properties.setProperty(PROPERTY_REGIONS, "ORD");
+      properties.setProperty(PROPERTY_REGION + ".ORD." + ISO3166_CODES, "US-IL");
+      //properties.setProperty(PROPERTY_REGION + ".DFW." + ISO3166_CODES, "US-TX");
+      //properties.setProperty(PROPERTY_REGION + ".SYD." + ISO3166_CODES, "AU-NSW");
       return properties;
    }
 
@@ -103,7 +103,7 @@ public class CloudBigDataUSProviderMetadata extends BaseProviderMetadata {
                .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                      .add(CloudIdentityAuthenticationApiModule.class)
                      .add(CloudIdentityAuthenticationModule.class)
-                     .add(ZoneModule.class)
+                     .add(RegionModule.class)
                      .add(CloudBigDataParserModule.class)
                      .add(CloudBigDataHttpApiModule.class).build())
                      .build())

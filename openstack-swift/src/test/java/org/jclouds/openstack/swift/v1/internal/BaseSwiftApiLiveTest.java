@@ -43,7 +43,7 @@ import com.google.common.util.concurrent.Uninterruptibles;
 public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLiveTest<A> {
 
    protected Set<String> regions;
-   
+
    protected BaseSwiftApiLiveTest() {
       provider = "openstack-swift";
    }
@@ -70,8 +70,8 @@ public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLi
 
    protected void deleteAllObjectsInContainer(String regionId, final String containerName) {
       Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);
-      
-      ObjectList objects = api.getObjectApiForRegionAndContainer(regionId, containerName).list(new ListContainerOptions());
+
+      ObjectList objects = api.getObjectApiForContainer(regionId, containerName).list(new ListContainerOptions());
       if (objects == null) {
          return;
       }
@@ -81,7 +81,7 @@ public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLi
          }
       });
       if (!pathsToDelete.isEmpty()) {
-         BulkDeleteResponse response = api.getBulkApiForRegion(regionId).bulkDelete(pathsToDelete);
+         BulkDeleteResponse response = api.getBulkApi(regionId).bulkDelete(pathsToDelete);
          checkState(response.getErrors().isEmpty(), "Errors deleting paths %s: %s", pathsToDelete, response);
       }
    }

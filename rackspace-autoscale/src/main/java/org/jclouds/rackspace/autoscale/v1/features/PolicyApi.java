@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.autoscale.v1.binders.BindScalingPoliciesToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindScalingPolicyToJson;
@@ -54,6 +55,7 @@ import com.google.common.collect.FluentIterable;
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)
+@Path("/policies")
 public interface PolicyApi extends Closeable {
    /**
     * Create a scaling policy.
@@ -62,9 +64,9 @@ public interface PolicyApi extends Closeable {
     * @see CreateScalingPolicy
     * @see ScalingPolicy
     */
-   @Named("Policy:create")
+   @Named("policy:create")
    @POST
-   @Path("/policies")
+   //@Path("/policies")
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @MapBinder(BindScalingPoliciesToJson.class)
    @ResponseParser(ParseScalingPoliciesResponse.class)
@@ -75,9 +77,9 @@ public interface PolicyApi extends Closeable {
     * @return A list of scaling policy responses.
     * @see ScalingPolicy
     */
-   @Named("Policy:list")
+   @Named("policy:list")
    @GET
-   @Path("/policies")
+   //@Path("/policies")
    @ResponseParser(ParseScalingPoliciesResponse.class)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    FluentIterable<ScalingPolicy> list();
@@ -87,11 +89,12 @@ public interface PolicyApi extends Closeable {
     * @return Existing scaling policy details
     * @see ScalingPolicy
     */
-   @Named("Policy:get")
+   @Named("policy:get")
    @GET
-   @Path("/policies/{scalingPolicyId}")
+   @Path("/{scalingPolicyId}")
    @ResponseParser(ParseScalingPolicyResponse.class)
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    ScalingPolicy get(@PathParam("scalingPolicyId") String scalingPolicyId);
 
    /**
@@ -99,21 +102,22 @@ public interface PolicyApi extends Closeable {
     * @return true if successful.
     * @see CreateScalingPolicy
     */
-   @Named("Policy:update")
+   @Named("policy:update")
    @PUT
-   @Path("/policies/{scalingPolicyId}")
+   @Path("/{scalingPolicyId}")
    @MapBinder(BindScalingPolicyToJson.class)
    @Fallback(FalseOnNotFoundOr404.class)
-   boolean update(@PathParam("scalingPolicyId") String scalingPolicyId, @PayloadParam("scalingPolicy") CreateScalingPolicy scalingPolicy);
+   boolean update(@PathParam("scalingPolicyId") String scalingPolicyId,
+         @PayloadParam("scalingPolicy") CreateScalingPolicy scalingPolicy);
 
    /**
     * This operation deletes a specific scaling policy.
     * @return true if successful.
     * @see CreateScalingPolicy
     */
-   @Named("Policy:delete")
+   @Named("policy:delete")
    @DELETE
-   @Path("/policies/{scalingPolicyId}")
+   @Path("/{scalingPolicyId}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("scalingPolicyId") String scalingPolicyId);
 
@@ -122,9 +126,9 @@ public interface PolicyApi extends Closeable {
     * @return true if successful.
     * @see CreateScalingPolicy
     */
-   @Named("Policy:execute")
+   @Named("policy:execute")
    @POST
-   @Path("/policies/{scalingPolicyId}/execute")
+   @Path("/{scalingPolicyId}/execute")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean execute(@PathParam("scalingPolicyId") String scalingPolicyId);
 }

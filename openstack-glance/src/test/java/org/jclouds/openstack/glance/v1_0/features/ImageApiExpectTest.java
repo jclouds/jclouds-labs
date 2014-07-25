@@ -58,9 +58,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             list, listResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").list().concat().toString(),
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").list().concat().toString(),
             new ParseImagesTest().expected().toString());
    }
 
@@ -76,7 +76,7 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             list, listResponse);
 
-      assertTrue(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").list().concat().isEmpty());
+      assertTrue(apiWhenNoExist.getImageApi("az-1.region-a.geo-1").list().concat().isEmpty());
    }
 
    public void testListInDetailWhenResponseIs2xx() throws Exception {
@@ -92,9 +92,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             listInDetail, listInDetailResponse);
 
-      assertEquals(apiWhenExistInDetail.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExistInDetail.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExistInDetail.getImageApiForZone("az-1.region-a.geo-1").listInDetail().concat().toString(),
+      assertEquals(apiWhenExistInDetail.getImageApi("az-1.region-a.geo-1").listInDetail().concat().toString(),
             new ParseImagesInDetailTest().expected().toString());
    }
 
@@ -110,7 +110,7 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             listInDetail, listInDetailResponse);
 
-      assertTrue(apiWhenNoExistInDetail.getImageApiForZone("az-1.region-a.geo-1").listInDetail().concat().isEmpty());
+      assertTrue(apiWhenNoExistInDetail.getImageApi("az-1.region-a.geo-1").listInDetail().concat().isEmpty());
    }
 
    public void testShowWhenResponseIs2xx() throws Exception {
@@ -125,9 +125,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             show, showResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").get("fcc451d0-f6e4-4824-ad8f-70ec12326d07").toString(),
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").get("fcc451d0-f6e4-4824-ad8f-70ec12326d07").toString(),
             new ParseImageDetailsFromHeadersTest().expected().toString());
    }
 
@@ -144,7 +144,7 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             show, showResponse);
 
-      assertNull(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").get("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
+      assertNull(apiWhenNoExist.getImageApi("az-1.region-a.geo-1").get("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
 
 
@@ -160,9 +160,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, getResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(Strings2.toStringAndClose(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").getAsStream("fcc451d0-f6e4-4824-ad8f-70ec12326d07")),
+      assertEquals(Strings2.toStringAndClose(apiWhenExist.getImageApi("az-1.region-a.geo-1").getAsStream("fcc451d0-f6e4-4824-ad8f-70ec12326d07")),
                "foo");
    }
 
@@ -178,7 +178,7 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, getResponse);
 
-      assertNull(apiWhenNoExist.getImageApiForZone("az-1.region-a.geo-1").getAsStream("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
+      assertNull(apiWhenNoExist.getImageApi("az-1.region-a.geo-1").getAsStream("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
 
    public void testCreateWhenResponseIs2xx() throws Exception {
@@ -196,9 +196,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, createResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").create("test", new StringPayload("somedata")),
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").create("test", new StringPayload("somedata")),
             new ParseImageDetailsTest().expected());
    }
 
@@ -218,9 +218,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, createResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").create("test", new StringPayload("somedata"));
+      apiWhenExist.getImageApi("az-1.region-a.geo-1").create("test", new StringPayload("somedata"));
    }
 
    public void testReserveWhenResponseIs2xx() throws Exception {
@@ -237,9 +237,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, createResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").reserve("test"), new ParseImageDetailsTest().expected());
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").reserve("test"), new ParseImageDetailsTest().expected());
    }
 
    @Test(expectedExceptions = AuthorizationException.class)
@@ -257,9 +257,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, createResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").reserve("test");
+      apiWhenExist.getImageApi("az-1.region-a.geo-1").reserve("test");
    }
 
    public void testUpdateMetadataWhenResponseIs2xx() throws Exception {
@@ -285,9 +285,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, updateResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1")
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1")
             .update("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
                   UpdateImageOptions.Builder.name("newname"),
                   UpdateImageOptions.Builder.isPublic(true),
@@ -317,9 +317,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, updateResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      apiWhenExist.getImageApiForZone("az-1.region-a.geo-1")
+      apiWhenExist.getImageApi("az-1.region-a.geo-1")
             .update("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
                   UpdateImageOptions.Builder.name("newname"),
                   UpdateImageOptions.Builder.isPublic(true));
@@ -341,9 +341,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, updateResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").upload("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").upload("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
             new StringPayload("somenewdata")), new ParseImageDetailsTest().expected());
    }
 
@@ -366,9 +366,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, updateResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").upload("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").upload("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
             new StringPayload("somenewdata"), UpdateImageOptions.Builder.name("anothernewname")), new ParseImageDetailsTest().expected());
    }
 
@@ -390,9 +390,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, updateResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").upload("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
+      apiWhenExist.getImageApi("az-1.region-a.geo-1").upload("fcc451d0-f6e4-4824-ad8f-70ec12326d07",
             new StringPayload("somenewdata"), UpdateImageOptions.Builder.name("anothernewname"));
    }
 
@@ -408,9 +408,9 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, getResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertTrue(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").delete("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
+      assertTrue(apiWhenExist.getImageApi("az-1.region-a.geo-1").delete("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
 
    public void testDeleteWhenResponseIs4xx() throws Exception {
@@ -426,8 +426,8 @@ public class ImageApiExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             get, getResponse);
 
-      assertEquals(apiWhenExist.getConfiguredZones(), ImmutableSet.of("az-1.region-a.geo-1"));
+      assertEquals(apiWhenExist.getConfiguredRegions(), ImmutableSet.of("az-1.region-a.geo-1"));
 
-      assertFalse(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").delete("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
+      assertFalse(apiWhenExist.getImageApi("az-1.region-a.geo-1").delete("fcc451d0-f6e4-4824-ad8f-70ec12326d07"));
    }
 }

@@ -27,21 +27,21 @@ import java.util.Set;
 
 public class BaseMarconiApiLiveTest extends BaseApiLiveTest<MarconiApi> {
 
-   protected Set<String> zones = Sets.newHashSet();
+   protected Set<String> regions = Sets.newHashSet();
 
    public BaseMarconiApiLiveTest() {
       provider = "openstack-marconi";
    }
 
    @BeforeClass
-   public void setupZones() {
-      String key = "test." + provider + ".zone";
+   public void setupRegions() {
+      String key = "test." + provider + ".region";
 
       if (System.getProperties().containsKey(key)) {
-         zones.add(System.getProperty(key));
+         regions.add(System.getProperty(key));
       }
       else {
-         zones = api.getConfiguredZones();
+         regions = api.getConfiguredRegions();
       }
    }
 

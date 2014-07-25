@@ -41,10 +41,7 @@ import com.google.inject.Provides;
  * <p/>
  * OpenStack Object Storage is an object-based storage system that stores content and metadata
  * as objects. You create, modify, and get objects and metadata using this API.
- * <p/>
- * This API is new to jclouds and hence is in Beta. That means we need people to use it and give us feedback. Based
- * on that feedback, minor changes to the interfaces may happen. This code will replace
- * {@code org.jclouds.openstack.swift.SwiftClient} in jclouds 2.0 and it is recommended you adopt it sooner than later.
+ * <p/>8
  */
 @Beta
 public interface SwiftApi extends Closeable {
@@ -54,73 +51,57 @@ public interface SwiftApi extends Closeable {
    Set<String> getConfiguredRegions();
 
    @Delegate
+   AccountApi getAccountApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
+   @Delegate
+   BulkApi getBulkApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
+   @Delegate
+   ContainerApi getContainerApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
+   @Delegate
+   @Path("/{containerName}")
+   ObjectApi getObjectApiForContainer(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @PathParam("containerName") String containerName);
+
+   @Delegate
+   @Path("/{containerName}")
+   StaticLargeObjectApi getStaticLargeObjectApiForContainer(
+         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @PathParam("containerName") String containerName);
+
+   /**
+    * @deprecated Please use {@link #getAccountApi(String)} as this method will be removed in jclouds 2.0.
+    */
+   @Delegate
    AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
+   /**
+    * @deprecated Please use {@link #getBulkApi(String)} as this method will be removed in jclouds 2.0.
+    */
    @Delegate
    BulkApi getBulkApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
+   /**
+    * @deprecated Please use {@link #getContainerApi(String)} as this method will be removed in jclouds 2.0.
+    */
    @Delegate
    ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
 
+   /**
+    * @deprecated Please use {@link #getObjectApiForContainer(String)} as this method will be removed in jclouds 2.0.
+    */
    @Delegate
    @Path("/{containerName}")
    ObjectApi getObjectApiForRegionAndContainer(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
          @PathParam("containerName") String containerName);
 
+   /**
+    * @deprecated Please use {@link #getStaticLargeObjectApiForContainer(String)} as this method will be removed in jclouds 2.0.
+    */
    @Delegate
    @Path("/{containerName}")
    StaticLargeObjectApi getStaticLargeObjectApiForRegionAndContainer(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
-         @PathParam("containerName") String containerName);
-
-   /**
-    * @deprecated Please use {@link #getConfiguredRegions()} as this method will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Provides
-   @Region
-   Set<String> configuredRegions();
-
-   /**
-    * @deprecated Please use {@link #getAccountApiForRegion(String)} as this method will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Delegate
-   AccountApi accountApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
-
-   /**
-    * @deprecated Please use {@link #getBulkApiForRegion(String)} as this method will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Delegate
-   BulkApi bulkApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
-
-   /**
-    * @deprecated Please use {@link #getContainerApiForRegion(String)} as this method will be removed in
-    *             jclouds 1.8.
-    */
-   @Deprecated
-   @Delegate
-   ContainerApi containerApiInRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
-
-   /**
-    * @deprecated Please use {@link #getObjectApiForRegionAndContainer(String, String)} as this method will be
-    *             removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Delegate
-   @Path("/{containerName}")
-   ObjectApi objectApiInRegionForContainer(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
-         @PathParam("containerName") String containerName);
-
-   /**
-    * @deprecated Please use {@link #getStaticLargeObjectApiForRegionAndContainer(String, String)} as this method
-    *             will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Delegate
-   @Path("/{containerName}")
-   StaticLargeObjectApi staticLargeObjectApiInRegionForContainer(
          @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
          @PathParam("containerName") String containerName);
 }

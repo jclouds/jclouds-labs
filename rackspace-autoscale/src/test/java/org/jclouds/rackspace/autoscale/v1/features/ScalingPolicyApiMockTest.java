@@ -52,7 +52,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -95,7 +95,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -132,7 +132,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -179,7 +179,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -226,7 +226,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          FluentIterable<ScalingPolicy> scalingPolicyResponse = api.list();
 
@@ -258,7 +258,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          FluentIterable<ScalingPolicy> scalingPolicyResponse = api.list();
 
@@ -284,7 +284,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          ScalingPolicy scalingPolicyResponse = api.get("policyId");
 
@@ -315,7 +315,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");         
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          ScalingPolicy scalingPolicyResponse = api.get("policyId");
 
@@ -341,7 +341,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(6)
@@ -375,7 +375,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          CreateScalingPolicy scalingPolicy = CreateScalingPolicy.builder()
                .cooldown(6)
@@ -409,7 +409,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          boolean result = api.delete("policyId");
 
@@ -435,7 +435,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          boolean result = api.delete("policyId");
 
@@ -461,7 +461,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          boolean result = api.execute("policyId");
 
@@ -487,7 +487,7 @@ public class ScalingPolicyApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         PolicyApi api = autoscaleApi.getPolicyApiForZoneAndGroup("DFW", "groupId1");
+         PolicyApi api = autoscaleApi.getPolicyApi("DFW", "groupId1");
 
          boolean result = api.execute("policyId");
 

@@ -20,8 +20,8 @@ import java.io.Closeable;
 import java.util.Set;
 
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.location.Zone;
-import org.jclouds.location.functions.ZoneToEndpoint;
+import org.jclouds.location.Region;
+import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.rackspace.cloudbigdata.v1.features.ClusterApi;
 import org.jclouds.rackspace.cloudbigdata.v1.features.ProfileApi;
 import org.jclouds.rest.annotations.Delegate;
@@ -30,33 +30,64 @@ import org.jclouds.rest.annotations.EndpointParam;
 import com.google.inject.Provides;
 
 /**
- * Provides access to Rackspace Cloud Big Data.
- * Rackspace Cloud Big Data is an on-demand Apache Hadoop service on the Rackspace open cloud. The service supports a RESTful API and alleviates the pain associated with deploying, managing, and scaling Hadoop clusters.
- * @see <a href="http://docs.rackspace.com/cbd/api/v1.0/cbd-devguide/content/overview.html">API Doc</a>
+ * Provides access to the Rackspace Cloud Big Data v1 API.
+ *
+ * Rackspace Cloud Big Data is an on-demand Apache Hadoop service on the Rackspace open cloud. The service
+ * supports a RESTful API and alleviates the pain associated with deploying, managing, and scaling Hadoop clusters.
  */
-public interface CloudBigDataApi extends Closeable{
+public interface CloudBigDataApi extends Closeable {
    /**
-    * Provides a set of all zones available.
-    * 
-    * @return the Zone codes configured
+    * Provides a set of all regions available.
+    *
+    * @return the Region codes configured
     */
    @Provides
-   @Zone
+   @Region
+   Set<String> getConfiguredRegions();
+
+   /**
+    * Provides access to all Profile features.
+    * @param region The region for the profile API.
+    * @return A profile API context.
+    */
+   @Delegate
+   ProfileApi getProfileApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
+   /**
+    * Provides access to all Cluster features.
+    * @param region The region for the profile API.
+    * @return A cluster API context.
+    */
+   @Delegate
+   ClusterApi getClusterApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+
+   /**
+    * @return the Zone codes configured
+    * @deprecated Please use {@link #getConfiguredRegions()} as this method will be removed in jclouds 3.0.
+    */
+   @Deprecated
+   @Provides
+   @Region
    Set<String> getConfiguredZones();
 
    /**
     * Provides access to all Profile features.
     * @param zone The zone (region) for the profile API.
     * @return A profile API context.
+    * @deprecated Please use {@link #getProfileApi(String)} as this method will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
-   ProfileApi getProfileApiForZone(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   ProfileApi getProfileApiForZone(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone);
 
    /**
     * Provides access to all Cluster features.
     * @param zone The zone (region) for the profile API.
     * @return A cluster API context.
+    * @deprecated Please use {@link #getClusterApi(String)} as this method will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
-   ClusterApi getClusterApiForZone(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String zone);
+   ClusterApi getClusterApiForZone(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone);
+
 }

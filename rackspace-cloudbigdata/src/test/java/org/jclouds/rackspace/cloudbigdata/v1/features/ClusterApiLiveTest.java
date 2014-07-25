@@ -29,10 +29,10 @@ import java.util.UUID;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.Cluster;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.Cluster.Status;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.CreateCluster;
+import org.jclouds.rackspace.cloudbigdata.v1.domain.CreateCluster.ClusterType;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.CreateProfile;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.Profile;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.ProfileSSHKey;
-import org.jclouds.rackspace.cloudbigdata.v1.domain.CreateCluster.ClusterType;
 import org.jclouds.rackspace.cloudbigdata.v1.internal.BaseCloudBigDataApiLiveTest;
 import org.jclouds.rackspace.cloudbigdata.v1.predicates.ClusterPredicates;
 import org.jclouds.ssh.SshKeys;
@@ -46,20 +46,20 @@ import com.google.common.collect.ImmutableList;
  * Profile live test
  */
 @Test(groups = "live", testName = "ProfileApiLiveTest", singleThreaded = true)
-public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {   
+public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
 
    @Override
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
-      for (String zone : filterZones(api.getConfiguredZones())) {
-         ClusterApi clusterApi = api.getClusterApiForZone(zone);
+      for (String region : filterRegions(api.getConfiguredRegions())) {
+         ClusterApi clusterApi = api.getClusterApi(region);
 
          CreateCluster createCluster = null;
          try {
             // A Profile must exist before a cluster is created.
-            
-            ProfileApi profileApi = api.getProfileApiForZone(zone);
+
+            ProfileApi profileApi = api.getProfileApi(region);
 
             CreateProfile createProfile = CreateProfile.builder()
                   .username("john.doe")
@@ -78,7 +78,7 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
             assertEquals(profile.getSSHKeys().get(0).getName(), "t@test");
             assertEquals(profile.getCredentialsUsername(), "jdoe");
             assertNull(profile.getCredentialsApiKey());
-            
+
             createCluster = CreateCluster.builder()
                   .name("slice")
                   .clusterType(ClusterType.HADOOP_HDP1_3.name())
@@ -94,7 +94,7 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
          Cluster cluster = clusterApi.create(createCluster);
          ClusterPredicates.awaitAvailable(clusterApi).apply(cluster);
          cluster = clusterApi.get(cluster.getId()); // update cluster for status
-         
+
          assertNotNull(cluster);
          assertNotNull(cluster.getId());
          assertNotNull(cluster.getCreated());
@@ -107,12 +107,12 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
          assertEquals(cluster.getStatus(), Status.ACTIVE);
       }
    }
-      
+
    @Test
    public void getCluster() {
-      for (String zone : filterZones(api.getConfiguredZones())) {
-         ClusterApi clusterApi = api.getClusterApiForZone(zone);
-         
+      for (String region : filterRegions(api.getConfiguredRegions())) {
+         ClusterApi clusterApi = api.getClusterApi(region);
+
          Cluster clusterFromList = clusterApi.list().get(0);
          Cluster clusterFromGet = clusterApi.get(clusterFromList.getId());
          assertNotNull(clusterFromGet.getId());
@@ -120,17 +120,17 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
          assertEquals(clusterFromGet, clusterFromList);
       }
    }
-   
+
    @Test
    public void resizeCluster() {
-      for (String zone : filterZones(api.getConfiguredZones())) {
-         ClusterApi clusterApi = api.getClusterApiForZone(zone);
-         
+      for (String region : filterRegions(api.getConfiguredRegions())) {
+         ClusterApi clusterApi = api.getClusterApi(region);
+
          Cluster cluster = clusterApi.list().get(0);
          Cluster clusterResized = clusterApi.resize(cluster.getId(), 2);
          ClusterPredicates.awaitAvailable(clusterApi).apply(cluster);
          cluster = clusterApi.get(cluster.getId()); // update cluster for status
-         
+
          assertEquals(clusterResized.getNodeCount(), 2);
       }
    }
@@ -138,8 +138,8 @@ public class ClusterApiLiveTest extends BaseCloudBigDataApiLiveTest {
    @Override
    @AfterClass(groups = { "integration", "live" })
    public void tearDown() {
-      for (String zone : filterZones(api.getConfiguredZones())) {
-         ClusterApi clusterApi = api.getClusterApiForZone(zone);
+      for (String region : filterRegions(api.getConfiguredRegions())) {
+         ClusterApi clusterApi = api.getClusterApi(region);
          for (Cluster cluster : clusterApi.list()) {
             ClusterPredicates.awaitAvailable(clusterApi).apply(cluster);
             clusterApi.delete(cluster.getId());

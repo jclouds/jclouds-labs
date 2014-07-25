@@ -50,7 +50,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          CreateCluster createCluster = CreateCluster.builder()
                .name("slice")
@@ -96,7 +96,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          CreateCluster createCluster = CreateCluster.builder()
                .name("slice")
@@ -130,7 +130,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          Cluster cluster = api.get("5");
 
@@ -168,7 +168,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          Cluster cluster = api.get("5");
 
@@ -194,7 +194,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          FluentIterable<Cluster> clusters = api.list();
 
@@ -234,7 +234,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          FluentIterable<Cluster> clusters = api.list();
 
@@ -261,7 +261,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          Cluster cluster = api.delete("5");
 
@@ -299,7 +299,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          Cluster cluster = api.delete("5");
 
@@ -325,7 +325,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          Cluster cluster = api.resize("5", 10);
 
@@ -363,7 +363,7 @@ public class ClusterApiMockTest extends BaseCloudBigDataApiMockTest {
 
       try {
          CloudBigDataApi cbdApi = api(server.getUrl("/").toString(), "rackspace-cloudbigdata", overrides);
-         ClusterApi api = cbdApi.getClusterApiForZone("ORD");         
+         ClusterApi api = cbdApi.getClusterApi("ORD");
 
          Cluster cluster = api.resize("5", 10);
 

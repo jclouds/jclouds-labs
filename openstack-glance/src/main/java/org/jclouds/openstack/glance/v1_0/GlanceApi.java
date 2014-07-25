@@ -20,8 +20,8 @@ import java.io.Closeable;
 import java.util.Set;
 
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.location.Zone;
-import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
+import org.jclouds.location.Region;
+import org.jclouds.openstack.glance.functions.RegionToEndpointNegotiateVersion;
 import org.jclouds.openstack.glance.v1_0.features.ImageApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
@@ -35,18 +35,18 @@ import com.google.inject.Provides;
  */
 public interface GlanceApi extends Closeable {
    /**
-    * Gets the configured zones.
+    * Gets the configured regions.
     *
-    * @return the zone codes currently configured
+    * @return the region codes currently configured
     */
    @Provides
-   @Zone
-   Set<String> getConfiguredZones();
+   @Region
+   Set<String> getConfiguredRegions();
 
    /**
     * Provides access to Image features.
     */
    @Delegate
-   ImageApi getImageApiForZone(@EndpointParam(parser = ZoneToEndpointNegotiateVersion.class) @Nullable String zone);
+   ImageApi getImageApi(@EndpointParam(parser = RegionToEndpointNegotiateVersion.class) @Nullable String region);
 
 }

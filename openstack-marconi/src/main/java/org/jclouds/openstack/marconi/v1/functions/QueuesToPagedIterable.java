@@ -46,10 +46,10 @@ public class QueuesToPagedIterable extends ArgsToPagedIterable.FromCaller<Queue,
 
    @Override
    protected Function<Object, IterableWithMarker<Queue>> markerToNextForArgs(List<Object> args) {
-      String zone = String.class.cast(args.get(0));
+      String region = String.class.cast(args.get(0));
       UUID clientId = UUID.class.cast(args.get(1));
 
-      return new ListQueuesAtMarker(api.getQueueApiForZoneAndClient(zone, clientId));
+      return new ListQueuesAtMarker(api.getQueueApi(region, clientId));
    }
 
    private static class ListQueuesAtMarker implements Function<Object, IterableWithMarker<Queue>> {

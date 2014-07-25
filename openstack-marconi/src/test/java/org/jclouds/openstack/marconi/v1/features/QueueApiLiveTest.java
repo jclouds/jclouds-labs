@@ -40,8 +40,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
    private static final UUID CLIENT_ID = UUID.fromString("3381af92-2b9e-11e3-b191-71861300734c");
 
    public void listZeroPagesOfQueues() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          List<Queue> queues = queueApi.list(false).concat().toList();
 
          assertTrue(queues.isEmpty());
@@ -50,8 +50,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listZeroPagesOfQueues" })
    public void create() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
 
          for (int i = 0; i < 6; i++) {
             boolean success = queueApi.create("jclouds-test-" + i);
@@ -63,8 +63,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "create" })
    public void listOnePageOfQueues() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          List<Queue> queues = queueApi.list(false).concat().toList();
 
          assertEquals(queues.size(), 6);
@@ -78,8 +78,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listOnePageOfQueues" })
    public void createMore() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
 
          for (int i = 6; i < 12; i++) {
             boolean success = queueApi.create("jclouds-test-" + i);
@@ -91,8 +91,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createMore" })
    public void listManyPagesOfQueues() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          List<Queue> queues = queueApi.list(false).concat().toList();
 
          assertEquals(queues.size(), 12);
@@ -106,8 +106,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listManyPagesOfQueues" })
    public void listManyPagesOfQueuesManually() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
 
          Queues queues = queueApi.list(limit(6));
 
@@ -126,8 +126,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listManyPagesOfQueuesManually" })
    public void exists() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          boolean success = queueApi.exists("jclouds-test-1");
 
          assertTrue(success);
@@ -136,8 +136,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "exists" })
    public void setMetadata() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          Map<String, String> metadata = ImmutableMap.of("key1", "value1");
          boolean success = queueApi.setMetadata("jclouds-test-1", metadata);
 
@@ -147,8 +147,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "setMetadata" })
    public void listManyPagesOfQueuesWithDetails() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          List<Queue> queues = queueApi.list(true).concat().toList();
 
          assertEquals(queues.size(), 12);
@@ -169,8 +169,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "listManyPagesOfQueuesWithDetails" })
    public void getMetadata() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          Map<String, String> metadata = queueApi.getMetadata("jclouds-test-1");
 
          assertEquals(metadata.get("key1"), "value1");
@@ -179,8 +179,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getMetadata" })
    public void getStatsWithoutTotal() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          QueueStats stats = queueApi.getStats("jclouds-test-1");
 
          assertEquals(stats.getMessagesStats().getClaimed(), 0);
@@ -193,8 +193,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getStatsWithoutTotal" })
    public void getStatsWithTotal() throws Exception {
-      for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test-1");
+      for (String regionId : regions) {
+         MessageApi messageApi = api.getMessageApi(regionId, CLIENT_ID, "jclouds-test-1");
 
          String json1 = "{\"event\":{\"type\":\"hockey\",\"players\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage message1 = CreateMessage.builder().ttl(120).body(json1).build();
@@ -202,7 +202,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
          messageApi.create(message);
 
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          QueueStats stats = queueApi.getStats("jclouds-test-1");
 
          assertEquals(stats.getMessagesStats().getClaimed(), 0);
@@ -217,8 +217,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getStatsWithTotal" })
    public void delete() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
 
          for (int i = 0; i < 12; i++) {
             boolean success = queueApi.delete("jclouds-test-" + i);
@@ -230,8 +230,8 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "delete" })
    public void doesNotExist() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          boolean success = queueApi.exists("jclouds-test-1");
 
          assertFalse(success);

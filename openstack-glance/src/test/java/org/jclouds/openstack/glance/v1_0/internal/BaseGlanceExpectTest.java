@@ -18,7 +18,7 @@ package org.jclouds.openstack.glance.v1_0.internal;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
-import org.jclouds.openstack.glance.functions.ZoneToEndpointNegotiateVersion;
+import org.jclouds.openstack.glance.functions.RegionToEndpointNegotiateVersion;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
 import org.jclouds.openstack.keystone.v2_0.internal.KeystoneFixture;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
@@ -50,7 +50,7 @@ public abstract class BaseGlanceExpectTest extends BaseRestApiExpectTest<GlanceA
       // version negotiation
       versionNegotiationRequest = HttpRequest.builder().method("GET")
             .endpoint("https://glance.jclouds.org:9292/")
-            .addHeader(ZoneToEndpointNegotiateVersion.VERSION_NEGOTIATION_HEADER, "true").build();
+            .addHeader(RegionToEndpointNegotiateVersion.VERSION_NEGOTIATION_HEADER, "true").build();
       versionNegotiationResponse = HttpResponse.builder().statusCode(300).message("HTTP/1.1 300 Multiple Choices").payload(
             payloadFromResourceWithContentType("/glanceVersionResponse.json", "application/json")).build();
    }

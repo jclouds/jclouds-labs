@@ -41,8 +41,8 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
    private final Map<String, List<String>> claimIds = Maps.newHashMap();
 
    public void createQueues() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          boolean success = queueApi.create("jclouds-test");
 
          assertTrue(success);
@@ -51,8 +51,8 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createQueues" })
    public void createMessages() throws Exception {
-      for (String zoneId : zones) {
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+      for (String regionId : regions) {
+         MessageApi messageApi = api.getMessageApi(regionId, CLIENT_ID, "jclouds-test");
 
          String json1 = "{\"event\":{\"name\":\"Austin Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage message1 = CreateMessage.builder().ttl(86400).body(json1).build();
@@ -71,16 +71,16 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "createMessages" })
    public void claimMessages() throws Exception {
-      for (String zoneId : zones) {
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+      for (String regionId : regions) {
+         ClaimApi claimApi = api.getClaimApi(regionId, CLIENT_ID, "jclouds-test");
 
          List<Message> messages = claimApi.claim(300, 200, 2);
          assertEquals(messages.size(), 2);
 
-         claimIds.put(zoneId, new ArrayList<String>());
+         claimIds.put(regionId, new ArrayList<String>());
 
          for (Message message : messages) {
-            claimIds.get(zoneId).add(message.getClaimId().get());
+            claimIds.get(regionId).add(message.getClaimId().get());
 
             assertNotNull(message.getId());
             assertTrue(message.getClaimId().isPresent());
@@ -91,10 +91,10 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "claimMessages" })
    public void getClaim() throws Exception {
-      for (String zoneId : zones) {
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+      for (String regionId : regions) {
+         ClaimApi claimApi = api.getClaimApi(regionId, CLIENT_ID, "jclouds-test");
 
-         Claim claim = claimApi.get(claimIds.get(zoneId).get(0));
+         Claim claim = claimApi.get(claimIds.get(regionId).get(0));
 
          assertNotNull(claim.getId());
          assertEquals(claim.getMessages().size(), 2);
@@ -110,10 +110,10 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "getClaim" })
    public void updateClaim() throws Exception {
-      for (String zoneId : zones) {
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+      for (String regionId : regions) {
+         ClaimApi claimApi = api.getClaimApi(regionId, CLIENT_ID, "jclouds-test");
 
-         boolean success = claimApi.update(claimIds.get(zoneId).get(0), 400);
+         boolean success = claimApi.update(claimIds.get(regionId).get(0), 400);
 
          assertTrue(success);
       }
@@ -121,10 +121,10 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "updateClaim" })
    public void releaseClaim() throws Exception {
-      for (String zoneId : zones) {
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue(zoneId, CLIENT_ID, "jclouds-test");
+      for (String regionId : regions) {
+         ClaimApi claimApi = api.getClaimApi(regionId, CLIENT_ID, "jclouds-test");
 
-         boolean success = claimApi.release(claimIds.get(zoneId).get(0));
+         boolean success = claimApi.release(claimIds.get(regionId).get(0));
 
          assertTrue(success);
       }
@@ -132,8 +132,8 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
 
    @Test(dependsOnMethods = { "releaseClaim" })
    public void delete() throws Exception {
-      for (String zoneId : zones) {
-         QueueApi queueApi = api.getQueueApiForZoneAndClient(zoneId, CLIENT_ID);
+      for (String regionId : regions) {
+         QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          boolean success = queueApi.delete("jclouds-test");
 
          assertTrue(success);

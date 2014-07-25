@@ -16,6 +16,23 @@
  */
 package org.jclouds.openstack.marconi.v1.features;
 
+import java.util.List;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.marconi.v1.domain.Claim;
 import org.jclouds.openstack.marconi.v1.domain.Message;
@@ -29,27 +46,13 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SkipEncoding;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
-
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-
 /**
  * Provides access to Messages via their REST API.
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)
+@Consumes(MediaType.APPLICATION_JSON)
+@Path("/claims")
 public interface ClaimApi {
    /**
     * This operation claims a set of messages (up to the value of the limit parameter) from oldest to newest and skips
@@ -85,13 +88,10 @@ public interface ClaimApi {
     */
    @Named("claim:claim")
    @POST
-   @Path("/claims")
+   @Payload("%7B\"ttl\":{ttl},\"grace\":{grace}%7D")
    @ResponseParser(ParseMessagesToList.class)
    @Fallback(EmptyListOnNotFoundOr404.class)
-   @Payload("%7B\"ttl\":{ttl},\"grace\":{grace}%7D")
-   List<Message> claim(@PayloadParam("ttl") int ttl,
-                       @PayloadParam("grace") int grace,
-                       @QueryParam("limit") int limit);
+   List<Message> claim(@PayloadParam("ttl") int ttl, @PayloadParam("grace") int grace, @QueryParam("limit") int limit);
 
    /**
     * Gets a specific claim and the associated messages.
@@ -100,10 +100,10 @@ public interface ClaimApi {
     */
    @Named("claim:get")
    @GET
+   @Path("/{claim_id}")
    @ResponseParser(ParseClaim.class)
-   @Consumes(MediaType.APPLICATION_JSON)
-   @Path("/claims/{claim_id}")
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Claim get(@PathParam("claim_id") String claimId);
 
    /**
@@ -118,12 +118,11 @@ public interface ClaimApi {
     */
    @Named("claim:update")
    @PATCH
-   @Path("/claims/{claim_id}")
-   @Fallback(FalseOnNotFoundOr404.class)
-   @Payload("%7B\"ttl\":{ttl}%7D")
+   @Path("/{claim_id}")
    @Produces(MediaType.APPLICATION_JSON)
-   boolean update(@PathParam("claim_id") String claimId,
-                  @PayloadParam("ttl") int ttl);
+   @Payload("%7B\"ttl\":{ttl}%7D")
+   @Fallback(FalseOnNotFoundOr404.class)
+   boolean update(@PathParam("claim_id") String claimId, @PayloadParam("ttl") int ttl);
 
    /**
     * This operation immediately releases a claim, making any remaining, undeleted messages that are associated with
@@ -135,7 +134,7 @@ public interface ClaimApi {
     */
    @Named("claim:delete")
    @DELETE
-   @Path("/claims/{claim_id}")
+   @Path("/{claim_id}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean release(@PathParam("claim_id") String claimId);
 }

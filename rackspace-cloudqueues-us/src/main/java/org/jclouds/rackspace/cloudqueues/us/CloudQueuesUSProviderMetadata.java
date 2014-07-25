@@ -16,9 +16,16 @@
  */
 package org.jclouds.rackspace.cloudqueues.us;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
+import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
+import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+
+import java.net.URI;
+import java.util.Properties;
+
+import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.openstack.marconi.v1.MarconiApiMetadata;
 import org.jclouds.openstack.marconi.v1.config.MarconiHttpApiModule;
 import org.jclouds.openstack.marconi.v1.config.MarconiTypeAdapters;
@@ -29,14 +36,8 @@ import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticati
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
-import java.net.URI;
-import java.util.Properties;
-
-import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
-import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONE;
-import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONES;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 /**
  * Implementation of Rackspace Cloud Queues.
@@ -65,16 +66,16 @@ public class CloudQueuesUSProviderMetadata extends BaseProviderMetadata {
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
       properties.setProperty(SERVICE_TYPE, ServiceType.QUEUES);
 
-      properties.setProperty(PROPERTY_ZONES, "ORD,DFW,IAD,SYD,HKG");
-      properties.setProperty(PROPERTY_ZONE + ".ORD." + ISO3166_CODES, "US-IL");
-      properties.setProperty(PROPERTY_ZONE + ".DFW." + ISO3166_CODES, "US-TX");
-      properties.setProperty(PROPERTY_ZONE + ".IAD." + ISO3166_CODES, "US-VA");
-      properties.setProperty(PROPERTY_ZONE + ".SYD." + ISO3166_CODES, "AU-NSW");
-      properties.setProperty(PROPERTY_ZONE + ".HKG." + ISO3166_CODES, "HK");
+      properties.setProperty(PROPERTY_REGIONS, "ORD,DFW,IAD,SYD,HKG");
+      properties.setProperty(PROPERTY_REGION + ".ORD." + ISO3166_CODES, "US-IL");
+      properties.setProperty(PROPERTY_REGION + ".DFW." + ISO3166_CODES, "US-TX");
+      properties.setProperty(PROPERTY_REGION + ".IAD." + ISO3166_CODES, "US-VA");
+      properties.setProperty(PROPERTY_REGION + ".SYD." + ISO3166_CODES, "AU-NSW");
+      properties.setProperty(PROPERTY_REGION + ".HKG." + ISO3166_CODES, "HK");
 
       return properties;
    }
-   
+
    public static class Builder extends BaseProviderMetadata.Builder {
 
       protected Builder(){
@@ -89,7 +90,7 @@ public class CloudQueuesUSProviderMetadata extends BaseProviderMetadata {
                   .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                                               .add(CloudIdentityAuthenticationApiModule.class)
                                               .add(CloudIdentityAuthenticationModule.class)
-                                              .add(ZoneModule.class)
+                                              .add(RegionModule.class)
                                               .add(MarconiTypeAdapters.class)
                                               .add(MarconiHttpApiModule.class).build())
                   .build())

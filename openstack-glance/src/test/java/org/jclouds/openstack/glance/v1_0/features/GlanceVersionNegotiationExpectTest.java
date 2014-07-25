@@ -53,7 +53,7 @@ public class GlanceVersionNegotiationExpectTest extends BaseGlanceExpectTest {
             responseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             list, listResponse);
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").list().concat().toString(),
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").list().concat().toString(),
             new ParseImagesTest().expected().toString());
    }
 
@@ -70,7 +70,7 @@ public class GlanceVersionNegotiationExpectTest extends BaseGlanceExpectTest {
       GlanceApi apiWhenExist = requestsSendResponses(keystoneAuthWithUsernameAndPassword,
             responseWithKeystoneAccess, versionNegotiationRequest, localVersionNegotiationResponse);
 
-      apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").list();
+      apiWhenExist.getImageApi("az-1.region-a.geo-1").list();
    }
 
     /*
@@ -95,7 +95,7 @@ public class GlanceVersionNegotiationExpectTest extends BaseGlanceExpectTest {
             localResponseWithKeystoneAccess, versionNegotiationRequest, versionNegotiationResponse,
             list, listResponse);
 
-      assertEquals(apiWhenExist.getImageApiForZone("az-1.region-a.geo-1").list().concat().toString(),
+      assertEquals(apiWhenExist.getImageApi("az-1.region-a.geo-1").list().concat().toString(),
             new ParseImagesTest().expected().toString());
    }
 }

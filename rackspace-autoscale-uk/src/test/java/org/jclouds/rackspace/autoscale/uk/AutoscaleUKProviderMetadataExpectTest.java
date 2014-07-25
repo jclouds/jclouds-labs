@@ -28,7 +28,7 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * This test ensures that the wiring in {@link AutoscaleUKProviderMetadata} is correct.
- * 
+ *
  */
 @Test(groups = "unit", testName = "AutoscaleUKProviderMetadataExpectTest")
 public class AutoscaleUKProviderMetadataExpectTest extends BaseAutoscaleApiExpectTest {
@@ -39,7 +39,7 @@ public class AutoscaleUKProviderMetadataExpectTest extends BaseAutoscaleApiExpec
       this.credential = "myApiKey";
    }
 
-   public void testCanGetConfiguredZones() {
+   public void testCanGetConfiguredRegions() {
 
       HttpRequest authenticate = HttpRequest.builder().method("POST")
             .endpoint("https://lon.identity.api.rackspacecloud.com/v2.0/tokens")
@@ -55,7 +55,7 @@ public class AutoscaleUKProviderMetadataExpectTest extends BaseAutoscaleApiExpec
 
       AutoscaleApi whenNovaRegionExists = requestSendsResponse(authenticate, authenticationResponse);
 
-      assertEquals(whenNovaRegionExists.getConfiguredZones(), ImmutableSet.of("LON"));
+      assertEquals(whenNovaRegionExists.getConfiguredRegions(), ImmutableSet.of("LON"));
 
    }
 

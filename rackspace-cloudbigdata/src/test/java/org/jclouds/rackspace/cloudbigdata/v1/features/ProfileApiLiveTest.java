@@ -36,14 +36,14 @@ import com.google.common.collect.ImmutableList;
  * Profile live test
  */
 @Test(groups = "live", testName = "ProfileApiLiveTest", singleThreaded = true)
-public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {   
+public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {
 
    @Override
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
-      for (String zone : filterZones(api.getConfiguredZones())) {
-         ProfileApi profileApi = api.getProfileApiForZone(zone);
+      for (String region : filterRegions(api.getConfiguredRegions())) {
+         ProfileApi profileApi = api.getProfileApi(region);
 
          CreateProfile createProfile = CreateProfile.builder()
                .username("john.doe")
@@ -67,8 +67,8 @@ public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {
 
    @Test
    public void updateProfile() {
-      for (String zone : filterZones(api.getConfiguredZones())) {
-         ProfileApi profileApi = api.getProfileApiForZone(zone);
+      for (String region : filterRegions(api.getConfiguredRegions())) {
+         ProfileApi profileApi = api.getProfileApi(region);
 
          CreateProfile createProfile = CreateProfile.builder()
                .username("john.doe2")
@@ -88,11 +88,11 @@ public class ProfileApiLiveTest extends BaseCloudBigDataApiLiveTest {
          assertEquals(profile.getCredentialsUsername(), "jdoe");
       }
    }
-      
+
       @Test
       public void getProfile() {
-         for (String zone : filterZones(api.getConfiguredZones())) {
-            ProfileApi profileApi = api.getProfileApiForZone(zone);
+         for (String region : filterRegions(api.getConfiguredRegions())) {
+            ProfileApi profileApi = api.getProfileApi(region);
 
             Profile profile = profileApi.get();
 

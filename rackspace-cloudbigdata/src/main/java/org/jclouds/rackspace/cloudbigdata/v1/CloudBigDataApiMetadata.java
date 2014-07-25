@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
+import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataHttpApiModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataParserModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
@@ -35,8 +35,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Implementation of {@link ApiMetadata} for the Rackspace Cloud Big Data API
- * 
+ * Implementation of {@link org.jclouds.apis.ApiMetadata} for the Rackspace Cloud Big Data API
+ *
  * @see CloudBigDataApi
  */
 public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi> {
@@ -47,7 +47,7 @@ public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi
    }
 
    /**
-    * 
+    *
     */
    public CloudBigDataApiMetadata() {
       this(new Builder());
@@ -69,7 +69,7 @@ public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi
     */
    public static class Builder extends BaseHttpApiMetadata.Builder<CloudBigDataApi, Builder> {
 
-      protected Builder() {   
+      protected Builder() {
          id("rackspace-cloudbigdata")
          .name("Rackspace Cloud Big Data API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
@@ -82,7 +82,7 @@ public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                .add(CloudIdentityAuthenticationApiModule.class)
                .add(CloudIdentityAuthenticationModule.class)
-               .add(ZoneModule.class)
+               .add(RegionModule.class)
                .add(CloudBigDataParserModule.class)
                .add(CloudBigDataHttpApiModule.class)
                .build());

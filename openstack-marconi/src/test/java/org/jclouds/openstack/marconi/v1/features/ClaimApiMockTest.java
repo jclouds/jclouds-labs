@@ -41,7 +41,7 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         ClaimApi claimApi = api.getClaimApi("DFW", CLIENT_ID, "jclouds-test");
 
          List<Message> messages = claimApi.claim(300, 200, 2);
 
@@ -69,7 +69,7 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         ClaimApi claimApi = api.getClaimApi("DFW", CLIENT_ID, "jclouds-test");
 
          Claim claim = claimApi.get("52a8d23eb04a584f1bbd4f47");
 
@@ -110,7 +110,7 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         ClaimApi claimApi = api.getClaimApi("DFW", CLIENT_ID, "jclouds-test");
 
          boolean success = claimApi.update("52a8d23eb04a584f1bbd4f47", 400);
 
@@ -132,7 +132,7 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         ClaimApi claimApi = api.getClaimApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         ClaimApi claimApi = api.getClaimApi("DFW", CLIENT_ID, "jclouds-test");
 
          boolean success = claimApi.release("52a8d23eb04a584f1bbd4f47");
 

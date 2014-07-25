@@ -25,11 +25,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.Cluster;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.CreateCluster;
@@ -47,7 +47,8 @@ import com.google.common.collect.FluentIterable;
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+//@Produces(MediaType.APPLICATION_JSON)
+@Path("/clusters")
 public interface ClusterApi extends Closeable {
 
    /**
@@ -58,51 +59,52 @@ public interface ClusterApi extends Closeable {
     * @see Cluster
     * @see CreateCluster
     */
-   @Named("Cluster:create")
+   @Named("cluster:create")
    @POST
-   @Path("/clusters")
-   @Fallback(NullOnNotFoundOr404.class)
    @SelectJson("cluster")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Cluster create(@WrapWith("cluster") CreateCluster cluster);
-   
+
    /**
     * List all clusters.
     * @return A list containing information about all the clusters.
     * @see Cluster
     */
-   @Named("Cluster:list")
+   @Named("cluster:list")
    @GET
-   @Path("/clusters")
-   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @SelectJson("clusters")
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    FluentIterable<Cluster> list();
-   
+
    /**
     * Get information about a specific cluster.
     * @param clusterId The id of the cluster queried.
     * @return Detailed information about a specific cluster.
     * @see Cluster
     */
-   @Named("Cluster:get")
+   @Named("cluster:get")
    @GET
-   @Path("/clusters/{clusterId}")
-   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{clusterId}")
    @SelectJson("cluster")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Cluster get(@PathParam("clusterId") String clusterId);
-   
+
    /**
     * Delete a cluster.
     * @param clusterId The id of the cluster to be deleted.
     * @return Detailed information about the cluster to be deleted.
     * @see Cluster
     */
-   @Named("Cluster:delete")
+   @Named("cluster:delete")
    @DELETE
-   @Path("/clusters/{clusterId}")
-   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{clusterId}")
    @SelectJson("cluster")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Cluster delete(@PathParam("clusterId") String clusterId);
-   
+
    /**
     * Resize a cluster. Changes the number of nodes for this cluster.
     * @param clusterId The id of the cluster to be deleted.
@@ -110,11 +112,12 @@ public interface ClusterApi extends Closeable {
     * @return Detailed information about the cluster to be resized.
     * @see Cluster
     */
-   @Named("Cluster:resize")
+   @Named("cluster:resize")
    @POST
-   @Path("/clusters/{clusterId}/action")
+   @Path("/{clusterId}/action")
    @WrapWith("resize")
-   @Fallback(NullOnNotFoundOr404.class)
    @SelectJson("cluster")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Cluster resize(@PathParam("clusterId") String clusterId, @PayloadParam("nodeCount") int nodeCount);
 }

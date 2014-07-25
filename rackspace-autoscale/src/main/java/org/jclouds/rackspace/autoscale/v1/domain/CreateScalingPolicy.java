@@ -23,15 +23,19 @@ import java.beans.ConstructorProperties;
 import java.util.EnumSet;
 import java.util.Map;
 
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+
+import org.jclouds.rackspace.autoscale.v1.features.GroupApi;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 /**
  * Auto Scale ScalingPolicy. This class is used for requests.
- * 
+ *
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, java.util.List)
  * @see Group#getScalingPolicies()
  * @see ScalingPolicy
@@ -63,7 +67,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
     */
    public String getName() {
       return this.name;
-   }   
+   }
 
    /**
     * @return the type for this ScalingPolicy.
@@ -84,7 +88,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
 
    /**
     * @return the target for this ScalingPolicy. This is a numeric value, but could represent a 0-100% for some target types. Scale-down policies might have negative values.
-    * 
+    *
     * @see CreateScalingPolicy.Builder#target(int)
     */
    public String getTarget() {
@@ -147,7 +151,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
       CreateScalingPolicy that = CreateScalingPolicy.class.cast(obj);
-      return Objects.equal(this.name, that.name) && 
+      return Objects.equal(this.name, that.name) &&
             Objects.equal(this.type, that.type) &&
             Objects.equal(this.cooldown, that.cooldown) &&
             Objects.equal(this.target, that.target) &&
@@ -170,11 +174,11 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
       return string().toString();
    }
 
-   public static Builder builder() { 
+   public static Builder builder() {
       return new Builder();
    }
 
-   public Builder toBuilder() { 
+   public Builder toBuilder() {
       return new Builder().fromScalingPolicy(this);
    }
 
@@ -186,7 +190,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
       protected ScalingPolicyTargetType targetType;
       protected Map<String, String> args;
 
-      /** 
+      /**
        * @param name The name of this ScalingPolicy.
        * @return The builder object.
        * @see CreateScalingPolicy#getName()
@@ -196,7 +200,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
          return this;
       }
 
-      /** 
+      /**
        * @param type The type for this ScalingPolicy.
        * @return The builder object.
        * @see ScalingPolicyType
@@ -207,7 +211,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
          return this;
       }
 
-      /** 
+      /**
        * @param cooldown The cooldown of this ScalingPolicy.
        * @return The builder object.
        * @see CreateScalingPolicy#getCooldown()
@@ -217,7 +221,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
          return this;
       }
 
-      /** 
+      /**
        * @param target The target of this ScalingPolicy.
        * @return The builder object.
        * @see CreateScalingPolicy#getTarget()
@@ -227,7 +231,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
          return this;
       }
 
-      /** 
+      /**
        * @param targetType The target type of this ScalingPolicy.
        * @return The builder object.
        * @see ScalingPolicyTargetType
@@ -238,8 +242,8 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
          return this;
       }
 
-      /** 
-       * @param cron This parameter specifies the recurring time when the policy will be executed as a cron entry. 
+      /**
+       * @param cron This parameter specifies the recurring time when the policy will be executed as a cron entry.
        * For example, if this is parameter is set to "1 0 * * *",
        * the policy will be executed at one minute past midnight (00:01)
        * every day of the month, and every day of the week.
@@ -255,7 +259,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
          return this;
       }
 
-      /** 
+      /**
        * @param at This parameter specifies the time at which this policy will be executed.
        * This property is mutually exclusive with the "cron" parameter.
        * You can either provide "cron" or "at" for a given policy, but not both.
@@ -294,7 +298,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
                .target(in.getTarget())
                .targetType(in.getTargetType())
                .scheduleArgs(in.getSchedulingArgs());
-      }        
+      }
    }
 
    @Override

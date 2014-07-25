@@ -35,24 +35,24 @@ import com.google.common.base.Predicate;
  * <pre>
  * {@code
  * Cluster Cluster = ClusterApi.create(100);
- * 
+ *
  * RetryablePredicate<String> awaitAvailable = RetryablePredicate.create(
  *    ClusterPredicates.available(ClusterApi), 600, 10, 10, TimeUnit.SECONDS);
- * 
+ *
  * if (!awaitAvailable.apply(Cluster.getId())) {
- *    throw new TimeoutException("Timeout on Cluster: " + Cluster); 
- * }    
+ *    throw new TimeoutException("Timeout on Cluster: " + Cluster);
+ * }
  * }
  * </pre>
- * 
+ *
  * You can also use the static convenience methods as follows.
- * 
+ *
  * <pre>
  * {@code
  * Cluster Cluster = ClusterApi.create(100);
- * 
+ *
  * if (!ClusterPredicates.awaitAvailable(ClusterApi).apply(Cluster.getId())) {
- *    throw new TimeoutException("Timeout on Cluster: " + Cluster);     
+ *    throw new TimeoutException("Timeout on Cluster: " + Cluster);
  * }
  * }
  * </pre>
@@ -60,8 +60,8 @@ import com.google.common.base.Predicate;
 public class ClusterPredicates {
    /**
     * Wait until an Cluster is Available.
-    * 
-    * @param clusterApi The ClusterApi in the zone where your Cluster resides.
+    *
+    * @param clusterApi The ClusterApi in the region where your Cluster resides.
     * @return RetryablePredicate That will check the status every 5 seconds for a maxiumum of 10 minutes.
     */
    public static Predicate<Cluster> awaitAvailable(ClusterApi clusterApi) {
@@ -71,8 +71,8 @@ public class ClusterPredicates {
 
    /**
     * Wait until an Cluster no longer exists.
-    * 
-    * @param clusterApi The ClusterApi in the zone where your Cluster resides.
+    *
+    * @param clusterApi The ClusterApi in the region where your Cluster resides.
     * @return RetryablePredicate That will check whether the Cluster exists.
     * every 5 seconds for a maximum of 10 minutes.
     */
@@ -80,11 +80,11 @@ public class ClusterPredicates {
       DeletedPredicate deletedPredicate = new DeletedPredicate(clusterApi);
       return retry(deletedPredicate, 600, 5, 5, SECONDS);
    }
-   
+
    /**
     * Wait until Cluster is in the status specified.
-    * 
-    * @param clusterApi The ClusterApi in the zone where your Cluster resides.
+    *
+    * @param clusterApi The ClusterApi in the region where your Cluster resides.
     * @param status Wait until Cluster in in this status.
     * @param maxWaitInSec Maximum time to wait.
     * @param periodInSec Interval between retries.
@@ -95,7 +95,7 @@ public class ClusterPredicates {
       StatusUpdatedPredicate statusPredicate = new StatusUpdatedPredicate(clusterApi, status);
       return retry(statusPredicate, maxWaitInSec, periodInSec, periodInSec, SECONDS);
    }
-   
+
    private static class StatusUpdatedPredicate implements Predicate<Cluster> {
       private ClusterApi clusterApi;
       private Status status;
@@ -111,14 +111,14 @@ public class ClusterPredicates {
       @Override
       public boolean apply(Cluster cluster) {
          checkNotNull(cluster, "Cluster must be defined");
-         
+
          if (status.equals(cluster.getStatus())) {
             return true;
          }
          else {
             Cluster ClusterUpdated = clusterApi.get(cluster.getId());
             checkNotNull(ClusterUpdated, "Cluster %s not found.", cluster.getId());
-            
+
             return status.equals(ClusterUpdated.getStatus());
          }
       }

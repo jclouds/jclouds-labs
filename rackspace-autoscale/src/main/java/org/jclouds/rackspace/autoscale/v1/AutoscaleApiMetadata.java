@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ZoneModule;
+import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleHttpApiModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleParserModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
@@ -35,8 +35,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Implementation of {@link ApiMetadata} for the Rackspace Autoscale API
- * 
+ * Implementation of {@link org.jclouds.apis.ApiMetadata} for the Rackspace Auto Scale API.
+ *
  * @see AutoscaleApi
  */
 public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
@@ -63,7 +63,7 @@ public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
 
    public static class Builder extends BaseHttpApiMetadata.Builder<AutoscaleApi, Builder> {
 
-      protected Builder() {   
+      protected Builder() {
          id("rackspace-autoscale")
          .name("Rackspace Autoscale API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
@@ -76,7 +76,7 @@ public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                .add(CloudIdentityAuthenticationApiModule.class)
                .add(CloudIdentityAuthenticationModule.class)
-               .add(ZoneModule.class)
+               .add(RegionModule.class)
                .add(AutoscaleParserModule.class)
                .add(AutoscaleHttpApiModule.class)
                .build());

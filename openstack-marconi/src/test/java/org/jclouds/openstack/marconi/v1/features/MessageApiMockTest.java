@@ -48,7 +48,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          String json1 = "{\"event\":{\"name\":\"Edmonton Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage createMessage1 = CreateMessage.builder().ttl(120).body(json1).build();
@@ -76,7 +76,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          String json1 = "{\"event\":{\"name\":\"Austin Java User Group\",\"attendees\":[\"bob\",\"jim\",\"sally\"]}}";
          CreateMessage createMessage1 = CreateMessage.builder().ttl(120).body(json1).build();
@@ -110,7 +110,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          MessageStream messageStream = messageApi.stream();
 
@@ -134,7 +134,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          MessageStream messageStream = messageApi.stream();
 
@@ -166,7 +166,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          MessageStream messageStream = messageApi.stream(limit(2));
 
@@ -197,7 +197,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
          List<String> ids = ImmutableList.of("52928896b04a584f24883227", "52928896b04a584f24883228", "52928896b04a584f24883229");
 
          List<Message> messages = messageApi.list(ids);
@@ -227,7 +227,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          Message message = messageApi.get("5292b30cef913e6d026f4dec");
 
@@ -252,7 +252,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
          List<String> ids = ImmutableList.of("52936b8a3ac24e6ef4c067dd", "5292b30cef913e6d026f4dec");
 
          boolean success = messageApi.delete(ids);
@@ -275,7 +275,7 @@ public class MessageApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
 
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         MessageApi messageApi = api.getMessageApiForZoneAndClientAndQueue("DFW", CLIENT_ID, "jclouds-test");
+         MessageApi messageApi = api.getMessageApi("DFW", CLIENT_ID, "jclouds-test");
 
          boolean success = messageApi.deleteByClaim("52936b8a3ac24e6ef4c067dd", "5292b30cef913e6d026f4dec");
 

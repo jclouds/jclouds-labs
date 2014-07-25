@@ -41,7 +41,7 @@ public class TemporaryUrlSignerMockTest extends BaseOpenStackMockTest<SwiftApi> 
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         String signature = TemporaryUrlSigner.checkApiEvery(api.getAccountApiForRegion("DFW"), 10000)
+         String signature = TemporaryUrlSigner.checkApiEvery(api.getAccountApi("DFW"), 10000)
                .sign("GET", "/v1/AUTH_account/container/object", 1323479485l);
 
          assertEquals(signature, "d9fc2067e52b06598421664cf6610bfc8fc431f6");
@@ -63,7 +63,7 @@ public class TemporaryUrlSignerMockTest extends BaseOpenStackMockTest<SwiftApi> 
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         TemporaryUrlSigner.checkApiEvery(api.accountApiInRegion("DFW"), 10000)
+         TemporaryUrlSigner.checkApiEvery(api.getAccountApi("DFW"), 10000)
             .sign("GET", "/v1/AUTH_account/container/object", 1323479485l);
       } finally {
          assertEquals(server.getRequestCount(), 2);

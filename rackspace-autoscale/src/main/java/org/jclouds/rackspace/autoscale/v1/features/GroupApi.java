@@ -31,15 +31,16 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.autoscale.v1.binders.BindCreateGroupToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindLaunchConfigurationToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindToGroupConfigurationRequestPayload;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.domain.Group;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.GroupState;
 import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
-import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.functions.ParseGroupLaunchConfigurationResponse;
 import org.jclouds.rackspace.autoscale.v1.functions.ParseGroupResponse;
 import org.jclouds.rest.annotations.Fallback;
@@ -57,6 +58,7 @@ import com.google.common.collect.FluentIterable;
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)
+@Path("/groups")
 public interface GroupApi extends Closeable {
 
    /**
@@ -70,13 +72,13 @@ public interface GroupApi extends Closeable {
     * @see CreateScalingPolicy
     * @see Group
     */
-   @Named("Group:create")
+   @Named("group:create")
    @POST
-   @Path("/groups")
-   @Fallback(NullOnNotFoundOr404.class)
    @MapBinder(BindCreateGroupToJson.class)
    @ResponseParser(ParseGroupResponse.class)
-   Group create(@PayloadParam("groupConfiguration") GroupConfiguration groupConfiguration, 
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
+   Group create(@PayloadParam("groupConfiguration") GroupConfiguration groupConfiguration,
          @PayloadParam("launchConfiguration") LaunchConfiguration launchConfiguration,
          @PayloadParam("scalingPolicies") List<CreateScalingPolicy> scalingPolicies);
 
@@ -87,9 +89,9 @@ public interface GroupApi extends Closeable {
     * @return true if successful.
     * @see GroupApi#resume(String)
     */
-   @Named("Groups:pause/{groupId}")
+   @Named("group:pause")
    @POST
-   @Path("/groups/{groupId}/pause")
+   @Path("/{groupId}/pause")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean pause(@PathParam("groupId") String groupId);
 
@@ -100,9 +102,9 @@ public interface GroupApi extends Closeable {
     * @return true if successful.
     * @see GroupApi#pause(String)
     */
-   @Named("Groups:resume/{groupId}")
+   @Named("group:resume")
    @POST
-   @Path("/groups/{groupId}/resume")
+   @Path("/{groupId}/resume")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean resume(@PathParam("groupId") String groupId);
 
@@ -112,9 +114,9 @@ public interface GroupApi extends Closeable {
     * @param groupId The id for the specified Group.
     * @return true if successful.
     */
-   @Named("Groups:delete/{id}")
+   @Named("group:delete")
    @DELETE
-   @Path("/groups/{id}")
+   @Path("/{id}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("id") String groupId);
 
@@ -123,11 +125,12 @@ public interface GroupApi extends Closeable {
     * @param id The unique identifier of the scaling group.
     * @return Group Full details for the scaling group.
     */
-   @Named("Group:get/{id}")
+   @Named("group:get")
    @GET
-   @Path("/groups/{id}")
+   @Path("/{id}")
    @ResponseParser(ParseGroupResponse.class)
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Group get(@PathParam("id") String id);
 
    /**
@@ -136,11 +139,12 @@ public interface GroupApi extends Closeable {
     * @return The state of the Group.
     * @see GroupState
     */
-   @Named("Group:state")
+   @Named("group:getState")
    @GET
-   @Path("/groups/{id}/state")
+   @Path("/{id}/state")
    @SelectJson("group")
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    GroupState getState(@PathParam("id") String id);
 
    /**
@@ -148,59 +152,60 @@ public interface GroupApi extends Closeable {
     * @return A list of group states for all scaling groups.
     * @see GroupState
     */
-   @Named("Group:states")
+   @Named("group:listGroupStates")
    @GET
-   @Path("/groups")
    @SelectJson("groups")
    FluentIterable<GroupState> listGroupStates();
-   
+
    /**
     * This operation gets the configuration for the scaling group.
     * @return The group configuration for the scaling group.
     * @see GroupConfiguration
     */
-   @Named("Group:configuration")
+   @Named("group:getGroupConfiguration")
    @GET
-   @Path("/groups/{groupId}/config")
+   @Path("/{groupId}/config")
    @SelectJson("groupConfiguration")
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    GroupConfiguration getGroupConfiguration(@PathParam("groupId") String id);
-   
+
    /**
     * This operation updates the configuration for the scaling group.
     * @return true if successful.
     * @see GroupConfiguration
     */
-   @Named("Group:updateConfiguration")
+   @Named("group:updateGroupConfiguration")
    @PUT
-   @Path("/groups/{groupId}/config")
+   @Path("/{groupId}/config")
    @Fallback(FalseOnNotFoundOr404.class)
    @MapBinder(BindToGroupConfigurationRequestPayload.class)
    boolean updateGroupConfiguration(@PathParam("groupId") String id,
          @PayloadParam("groupConfiguration") GroupConfiguration groupConfiguration);
-   
+
    /**
     * This operation gets the launch configuration for the scaling group.
     * @return The launch configuration for the scaling group.
     * @see LaunchConfiguration
     */
-   @Named("Group:launchConfiguration")
+   @Named("group:getLaunchConfiguration")
    @GET
-   @Path("/groups/{groupId}/launch")
-   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{groupId}/launch")
    @ResponseParser(ParseGroupLaunchConfigurationResponse.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    LaunchConfiguration getLaunchConfiguration(@PathParam("groupId") String id);
-   
+
    /**
     * This operation updates the launch configuration for the scaling group.
     * @return true if successful.
     * @see LaunchConfiguration
     */
-   @Named("Group:updateLaunchConfiguration")
+   @Named("group:updateLaunchConfiguration")
    @PUT
-   @Path("/groups/{groupId}/launch")
+   @Path("/{groupId}/launch")
    @Fallback(FalseOnNotFoundOr404.class)
    @MapBinder(BindLaunchConfigurationToJson.class)
-   boolean updateLaunchConfiguration(@PathParam("groupId") String id, 
+   boolean updateLaunchConfiguration(@PathParam("groupId") String id,
          @PayloadParam("launchConfiguration") LaunchConfiguration launchConfiguration);
 }

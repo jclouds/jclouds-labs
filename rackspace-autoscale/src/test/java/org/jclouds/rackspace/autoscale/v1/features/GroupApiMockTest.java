@@ -60,7 +60,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupConfiguration groupConfiguration = GroupConfiguration.builder()
                .maxEntities(10)
@@ -157,7 +157,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupConfiguration groupConfiguration = GroupConfiguration.builder()
                .maxEntities(10)
@@ -211,7 +211,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          FluentIterable<GroupState> groupStates = api.listGroupStates();
 
@@ -248,7 +248,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          FluentIterable<GroupState> groupStates = api.listGroupStates();
 
@@ -274,7 +274,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          Group g = api.get("1234567890");
 
@@ -301,7 +301,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          Group g = api.get("1234567890");
 
@@ -327,7 +327,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          boolean success = api.delete("1234567890");
 
@@ -353,7 +353,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          boolean success = api.delete("1234567890");
 
@@ -379,7 +379,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupState gs = api.getState("1234567890");
 
@@ -407,7 +407,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupState gs = api.getState("1234567890");
 
@@ -433,7 +433,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          boolean success = api.pause("1234567890");
 
@@ -459,7 +459,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          boolean success = api.pause("1234567890");
 
@@ -485,7 +485,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          boolean success = api.resume("1234567890");
 
@@ -511,7 +511,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          boolean success = api.resume("1234567890");
 
@@ -537,7 +537,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupConfiguration gc = api.getGroupConfiguration("1234567890");
 
@@ -564,7 +564,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupConfiguration gc = api.getGroupConfiguration("1234567890");
 
@@ -590,7 +590,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          LaunchConfiguration lc = api.getLaunchConfiguration("1234567890");
 
@@ -617,7 +617,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          LaunchConfiguration lc = api.getLaunchConfiguration("1234567890");
 
@@ -643,7 +643,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupConfiguration gc = GroupConfiguration.builder()
                .name("workers")
@@ -677,7 +677,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          GroupConfiguration gc = GroupConfiguration.builder()
                .name("workers")
@@ -711,7 +711,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          LaunchConfiguration lc = LaunchConfiguration.builder()
                .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))
@@ -749,7 +749,7 @@ public class GroupApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         GroupApi api = autoscaleApi.getGroupApiForZone("DFW");
+         GroupApi api = autoscaleApi.getGroupApi("DFW");
 
          LaunchConfiguration lc = LaunchConfiguration.builder()
                .loadBalancers(ImmutableList.of(LoadBalancer.builder().port(8080).id(9099).build()))

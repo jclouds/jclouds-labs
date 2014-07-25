@@ -41,8 +41,8 @@ public class ImageApiLiveTest extends BaseGlanceApiLiveTest {
 
    @Test
    public void testList() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
-         ImageApi imageApi = api.getImageApiForZone(zoneId);
+      for (String region : api.getConfiguredRegions()) {
+         ImageApi imageApi = api.getImageApi(region);
          Set<? extends Image> response = imageApi.list().concat().toSet();
          assert null != response;
          for (Image image : response) {
@@ -59,8 +59,8 @@ public class ImageApiLiveTest extends BaseGlanceApiLiveTest {
 
    @Test
    public void testListInDetail() throws Exception {
-      for (String zoneId : api.getConfiguredZones()) {
-         ImageApi imageApi = api.getImageApiForZone(zoneId);
+      for (String region : api.getConfiguredRegions()) {
+         ImageApi imageApi = api.getImageApi(region);
          Set<? extends ImageDetails> response = imageApi.listInDetail().concat().toSet();
          assert null != response;
          for (ImageDetails image : response) {
@@ -87,16 +87,16 @@ public class ImageApiLiveTest extends BaseGlanceApiLiveTest {
    @Test
    public void testCreateUpdateAndDeleteImage() {
       StringPayload imageData = new StringPayload("This isn't really an image!");
-      for (String zoneId : api.getConfiguredZones()) {
-         ImageApi imageApi = api.getImageApiForZone(zoneId);
+      for (String region : api.getConfiguredRegions()) {
+         ImageApi imageApi = api.getImageApi(region);
          ImageDetails details = imageApi.create("jclouds-live-test", imageData, diskFormat(DiskFormat.RAW), containerFormat(ContainerFormat.BARE));
          assertEquals(details.getName(), "jclouds-live-test");
          assertEquals(details.getSize().get().longValue(), imageData.getRawContent().length());
-         
+
          details = imageApi.update(details.getId(), UpdateImageOptions.Builder.name("jclouds-live-test2"), UpdateImageOptions.Builder.minDisk(10));
          assertEquals(details.getName(), "jclouds-live-test2");
          assertEquals(details.getMinDisk(), 10);
-         
+
          Image fromListing = imageApi.list(
                   ListImageOptions.Builder.containerFormat(ContainerFormat.BARE).name("jclouds-live-test2").limit(2))
                   .get(0);
@@ -106,7 +106,7 @@ public class ImageApiLiveTest extends BaseGlanceApiLiveTest {
          assertEquals(Iterables.getOnlyElement(imageApi.listInDetail(ListImageOptions.Builder.name("jclouds-live-test2"))), details);
 
          assertTrue(imageApi.delete(details.getId()));
-         
+
          assertTrue(imageApi.list(ListImageOptions.Builder.name("jclouds-live-test2")).isEmpty());
       }
    }
@@ -114,11 +114,11 @@ public class ImageApiLiveTest extends BaseGlanceApiLiveTest {
    @Test
    public void testReserveUploadAndDeleteImage() {
       StringPayload imageData = new StringPayload("This isn't an image!");
-      for (String zoneId : api.getConfiguredZones()) {
-         ImageApi imageApi = api.getImageApiForZone(zoneId);
+      for (String region : api.getConfiguredRegions()) {
+         ImageApi imageApi = api.getImageApi(region);
          ImageDetails details = imageApi.reserve("jclouds-live-res-test", diskFormat(DiskFormat.RAW), containerFormat(ContainerFormat.BARE));
          assertEquals(details.getName(), "jclouds-live-res-test");
- 
+
          details = imageApi.upload(details.getId(), imageData, UpdateImageOptions.Builder.name("jclouds-live-res-test2"), UpdateImageOptions.Builder.minDisk(10));
          assertEquals(details.getName(), "jclouds-live-res-test2");
          assertEquals(details.getSize().get().longValue(), imageData.getRawContent().length());

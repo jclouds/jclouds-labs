@@ -16,6 +16,21 @@
  */
 package org.jclouds.openstack.marconi.v1.features;
 
+import java.util.Map;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
+import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.marconi.v1.domain.Queue;
@@ -34,26 +49,13 @@ import org.jclouds.rest.annotations.SkipEncoding;
 import org.jclouds.rest.annotations.Transform;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import java.util.Map;
-
-import static org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
-import static org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-
 /**
  * Provides access to Queues via their REST API.
  */
 @SkipEncoding({'/', '='})
 @RequestFilters(AuthenticateRequest.class)
+@Consumes(MediaType.APPLICATION_JSON)
+@Path("/queues")
 public interface QueueApi {
    /**
     * Create a queue.
@@ -63,7 +65,7 @@ public interface QueueApi {
     */
    @Named("queue:create")
    @PUT
-   @Path("queues/{name}")
+   @Path("/{name}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean create(@PathParam("name") String name);
 
@@ -75,7 +77,7 @@ public interface QueueApi {
     */
    @Named("queue:delete")
    @DELETE
-   @Path("queues/{name}")
+   @Path("/{name}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("name") String name);
 
@@ -87,7 +89,7 @@ public interface QueueApi {
     */
    @Named("queue:get")
    @GET
-   @Path("queues/{name}")
+   @Path("/{name}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean exists(@PathParam("name") String name);
 
@@ -98,10 +100,8 @@ public interface QueueApi {
     */
    @Named("queue:list")
    @GET
-   @Consumes(MediaType.APPLICATION_JSON)
    @ResponseParser(ParseQueues.class)
    @Transform(QueuesToPagedIterable.class)
-   @Path("queues")
    @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<Queue> list(@QueryParam("detailed") boolean detailed);
 
@@ -111,9 +111,7 @@ public interface QueueApi {
    @Named("queue:list")
    @GET
    @ResponseParser(ParseQueues.class)
-   @Consumes(MediaType.APPLICATION_JSON)
    @Fallback(EmptyQueuesFallback.class)
-   @Path("queues")
    Queues list(ListQueuesOptions options);
 
    /**
@@ -130,7 +128,7 @@ public interface QueueApi {
     */
    @Named("queue:setMetadata")
    @PUT
-   @Path("queues/{name}/metadata")
+   @Path("/{name}/metadata")
    @Produces(MediaType.APPLICATION_JSON)
    @Fallback(FalseOnNotFoundOr404.class)
    boolean setMetadata(@PathParam("name") String name,
@@ -144,8 +142,7 @@ public interface QueueApi {
     */
    @Named("queue:getMetadata")
    @GET
-   @Path("queues/{name}/metadata")
-   @Consumes(MediaType.APPLICATION_JSON)
+   @Path("/{name}/metadata")
    @Fallback(FalseOnNotFoundOr404.class)
    Map<String, String> getMetadata(@PathParam("name") String name);
 
@@ -158,8 +155,7 @@ public interface QueueApi {
     */
    @Named("queue:getStats")
    @GET
-   @Path("queues/{name}/stats")
-   @Consumes(MediaType.APPLICATION_JSON)
+   @Path("/{name}/stats")
    @ResponseParser(ParseQueueStats.class)
    @Fallback(FalseOnNotFoundOr404.class)
    QueueStats getStats(@PathParam("name") String name);

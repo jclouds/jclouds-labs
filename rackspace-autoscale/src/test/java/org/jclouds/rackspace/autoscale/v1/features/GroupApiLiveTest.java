@@ -59,10 +59,10 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
          List<Group> createdGroupList = Lists.newArrayList();
-         created.put(zone, createdGroupList);
-         GroupApi groupApi = api.getGroupApiForZone(zone);
+         created.put(region, createdGroupList);
+         GroupApi groupApi = api.getGroupApi(region);
 
          GroupConfiguration groupConfiguration = GroupConfiguration.builder().maxEntities(10).cooldown(360)
                .name("testscalinggroup198547").minEntities(0)
@@ -99,14 +99,14 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertNotNull(g.getId());
          assertEquals(g.getLinks().size(), 1);
          assertEquals(g.getLinks().get(0).getHref().toString(),
-               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/");
+               "https://" + region.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/");
          assertEquals(g.getLinks().get(0).getRelation(), Link.Relation.SELF);
 
          assertNotNull(g.getScalingPolicies().get(0).getId());
          assertEquals(g.getScalingPolicies().get(0).getLinks().size(), 1);
          assertEquals(
                g.getScalingPolicies().get(0).getLinks().get(0).getHref().toString(),
-               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() + "/");
+               "https://" + region.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() + "/");
          assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getRelation(), Link.Relation.SELF);
          assertEquals(g.getScalingPolicies().get(0).getCooldown(), 1);
          assertEquals(g.getScalingPolicies().get(0).getTarget(), "1");
@@ -145,9 +145,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testGetGroup() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         String groupId = created.get(region).get(0).getId();
          Group testGroup = groupApi.get(groupId);
          assertEquals(testGroup.getId(), groupId);
          assertEquals(testGroup.getGroupConfiguration().getCooldown(), 360);
@@ -158,9 +158,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testGetState() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         String groupId = created.get(region).get(0).getId();
          GroupState testGroup = groupApi.getState(groupId);
          assertNull(testGroup.getId()); // The id recently changed to not be included when getting state.
       }
@@ -168,10 +168,10 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testListGroups() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
          FluentIterable<GroupState> groupsList = groupApi.listGroupStates();
-         String groupId = created.get(zone).get(0).getId();
+         String groupId = created.get(region).get(0).getId();
          for (GroupState groupState : groupsList) {
             if (groupId.equals(groupState.getId())) {
                return;
@@ -184,18 +184,18 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
    /* TODO: uncomment when implemented
    @Test
    public void testPause() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApiForRegions(region);
+         String groupId = created.get(region).get(0).getId();
          assertTrue(groupApi.pause(groupId));
       }
    }
 
    @Test
    public void testResume() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApiForRegions(region);
+         String groupId = created.get(region).get(0).getId();
          assertTrue(groupApi.resume(groupId));
       }
    }
@@ -203,9 +203,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testGetGroupConfiguration() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         String groupId = created.get(region).get(0).getId();
          GroupConfiguration testGroupConfiguration = groupApi.getGroupConfiguration(groupId);
          assertEquals(testGroupConfiguration.getCooldown(), 360);
          assertEquals(testGroupConfiguration.getMaxEntities(), 10);
@@ -215,9 +215,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testGetGroupLaunchConfiguration() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         String groupId = created.get(region).get(0).getId();
          LaunchConfiguration testLaunchConfiguration = groupApi.getLaunchConfiguration(groupId);
          assertEquals(testLaunchConfiguration.getLoadBalancers().get(0).getPort(), 8080);
          assertEquals(testLaunchConfiguration.getType(), LaunchConfigurationType.LAUNCH_SERVER);
@@ -227,9 +227,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testUpdateLaunchConfiguration() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         String groupId = created.get(region).get(0).getId();
 
          LaunchConfiguration launchConfiguration = LaunchConfiguration
                .builder()
@@ -255,9 +255,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testUpdateGroupConfiguration() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         String groupId = created.get(zone).get(0).getId();
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         String groupId = created.get(region).get(0).getId();
 
          GroupConfiguration groupConfiguration = GroupConfiguration.builder().maxEntities(10).cooldown(360)
                .name("testscalinggroup198547").minEntities(0)
@@ -272,9 +272,9 @@ public class GroupApiLiveTest extends BaseAutoscaleApiLiveTest {
    @Override
    @AfterClass(groups = { "integration", "live" })
    public void tearDown() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         for (Group group : created.get(zone)) {
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         for (Group group : created.get(region)) {
             if (!groupApi.delete(group.getId()))
                throw new RuntimeException("Could not delete an autoscale group after tests!");
          }

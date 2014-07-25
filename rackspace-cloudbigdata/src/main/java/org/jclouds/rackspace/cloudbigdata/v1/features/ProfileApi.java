@@ -23,10 +23,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.CreateProfile;
 import org.jclouds.rackspace.cloudbigdata.v1.domain.Profile;
@@ -44,7 +44,8 @@ import org.jclouds.rest.annotations.WrapWith;
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+//@Produces(MediaType.APPLICATION_JSON)
+@Path("/profile")
 public interface ProfileApi extends Closeable {
 
    /**
@@ -55,13 +56,13 @@ public interface ProfileApi extends Closeable {
     * @see Profile
     * @see CreateProfile
     */
-   @Named("Profile:create")
+   @Named("profile:create")
    @POST
-   @Path("/profile")
-   @Fallback(NullOnNotFoundOr404.class)
    @SelectJson("profile")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Profile create(@WrapWith("profile") CreateProfile profile);
-   
+
    /**
     * This operation returns detailed profile information for the current user.
     * Before creating a cluster, a profile has to be created.
@@ -69,10 +70,10 @@ public interface ProfileApi extends Closeable {
     * @see Profile
     * @see CreateProfile
     */
-   @Named("Profile:get")
+   @Named("profile:get")
    @GET
-   @Path("/profile")
-   @Fallback(NullOnNotFoundOr404.class)
    @SelectJson("profile")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Profile get();
 }

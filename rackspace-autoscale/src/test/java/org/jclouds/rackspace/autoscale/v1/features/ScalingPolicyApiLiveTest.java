@@ -60,10 +60,10 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
          List<Group> createdGroupList = Lists.newArrayList();
-         created.put(zone, createdGroupList);
-         GroupApi groupApi = api.getGroupApiForZone(zone);
+         created.put(region, createdGroupList);
+         GroupApi groupApi = api.getGroupApi(region);
 
          GroupConfiguration groupConfiguration = GroupConfiguration.builder().maxEntities(10).cooldown(3)
                .name("testscalinggroup198547").minEntities(0)
@@ -100,14 +100,14 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          assertNotNull(g.getId());
          assertEquals(g.getLinks().size(), 1);
          assertEquals(g.getLinks().get(0).getHref().toString(),
-               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/");
+               "https://" + region.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/");
          assertEquals(g.getLinks().get(0).getRelation(), Link.Relation.SELF);
 
          assertNotNull(g.getScalingPolicies().get(0).getId());
          assertEquals(g.getScalingPolicies().get(0).getLinks().size(), 1);
          assertEquals(
                g.getScalingPolicies().get(0).getLinks().get(0).getHref().toString(),
-               "https://" + zone.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() + "/");
+               "https://" + region.toLowerCase() + ".autoscale.api.rackspacecloud.com/v1.0/" + api.getCurrentTenantId().get().getId() + "/groups/" + g.getId() + "/policies/" + g.getScalingPolicies().get(0).getId() + "/");
          assertEquals(g.getScalingPolicies().get(0).getLinks().get(0).getRelation(), Link.Relation.SELF);
          assertEquals(g.getScalingPolicies().get(0).getCooldown(), 3);
          assertEquals(g.getScalingPolicies().get(0).getTarget(), "1");
@@ -146,9 +146,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testCreatePolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -170,9 +170,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testCreateScheduleCronPolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -197,9 +197,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testCreateScheduleAtPolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -224,9 +224,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testListPolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.list();
          assertNotNull(scalingPolicyResponse.iterator().next().getId());
@@ -235,9 +235,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testGetPolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          assertNotNull(policyApi);
          ScalingPolicy listResponse = policyApi.list().iterator().next();
@@ -254,9 +254,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testUpdatePolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -298,9 +298,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testDeletePolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -311,7 +311,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .targetType(ScalingPolicyTargetType.INCREMENTAL)
                .target("1")
                .build();
-         scalingPolicies.add(scalingPolicy);         
+         scalingPolicies.add(scalingPolicy);
 
          FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          String policyId = scalingPolicyResponse.iterator().next().getId();
@@ -324,9 +324,9 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
 
    @Test
    public void testExecutePolicy() {
-      for (String zone : api.getConfiguredZones()) {
+      for (String region : api.getConfiguredRegions()) {
 
-         PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, created.get(zone).get(0).getId());
+         PolicyApi policyApi = api.getPolicyApi(region, created.get(region).get(0).getId());
 
          List<CreateScalingPolicy> scalingPolicies = Lists.newArrayList();
 
@@ -337,7 +337,7 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
                .targetType(ScalingPolicyTargetType.INCREMENTAL)
                .target("1")
                .build();
-         scalingPolicies.add(scalingPolicy);         
+         scalingPolicies.add(scalingPolicy);
 
          FluentIterable<ScalingPolicy> scalingPolicyResponse = policyApi.create(scalingPolicies);
          String policyId = scalingPolicyResponse.iterator().next().getId();
@@ -346,15 +346,15 @@ public class ScalingPolicyApiLiveTest extends BaseAutoscaleApiLiveTest {
          boolean result = policyApi.execute(policyId);
          assertTrue(result);
       }
-   }   
+   }
 
    @Override
    @AfterClass(groups = { "integration", "live" })
    public void tearDown() {
-      for (String zone : api.getConfiguredZones()) {
-         GroupApi groupApi = api.getGroupApiForZone(zone);
-         for (Group group : created.get(zone)) {
-            PolicyApi policyApi = api.getPolicyApiForZoneAndGroup(zone, group.getId());
+      for (String region : api.getConfiguredRegions()) {
+         GroupApi groupApi = api.getGroupApi(region);
+         for (Group group : created.get(region)) {
+            PolicyApi policyApi = api.getPolicyApi(region, group.getId());
             if (policyApi == null)
                 continue;
             for (ScalingPolicy sgr : policyApi.list()) {

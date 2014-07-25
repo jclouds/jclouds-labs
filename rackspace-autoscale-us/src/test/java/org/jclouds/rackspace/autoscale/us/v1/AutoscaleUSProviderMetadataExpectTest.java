@@ -53,10 +53,9 @@ public class AutoscaleUSProviderMetadataExpectTest extends BaseAutoscaleApiExpec
             .payload(payloadFromResourceWithContentType("/access_rax_us.json", "application/json"))
             .build();
 
-      AutoscaleApi whenNovaRegionExists = requestSendsResponse(authenticate, authenticationResponse);
+      AutoscaleApi whenAutoscaleRegionExists = requestSendsResponse(authenticate, authenticationResponse);
 
-      assertEquals(whenNovaRegionExists.getConfiguredZones(), ImmutableSet.of("DFW", "ORD", "IAD"));
-
+      assertEquals(whenAutoscaleRegionExists.getConfiguredRegions(), ImmutableSet.of("DFW", "ORD", "IAD"));
    }
 
 }

@@ -33,11 +33,14 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.rackspace.autoscale.v1.binders.BindWebhookToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindWebhookUpdateToJson;
 import org.jclouds.rackspace.autoscale.v1.binders.BindWebhooksToJson;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
 import org.jclouds.rackspace.autoscale.v1.domain.CreateWebhook;
+import org.jclouds.rackspace.autoscale.v1.domain.Group;
 import org.jclouds.rackspace.autoscale.v1.domain.Webhook;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -48,15 +51,16 @@ import org.jclouds.rest.annotations.SelectJson;
 import com.google.common.collect.FluentIterable;
 
 /**
- * The API for controlling autoscale webhooks.
+ * The API for controlling Auto Scale Webhooks.
  */
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(MediaType.APPLICATION_JSON)
+@Path("/webhooks")
 public interface WebhookApi extends Closeable {
    /**
     * Create a webhook.
     * @param name The webhook name. Required.
-    * @param metadata A map of associated metadata. Use String keys. Required. 
+    * @param metadata A map of associated metadata. Use String keys. Required.
     * @return WebhookResponse The webhook created by this call.
     * @see CreateWebhook
     * @see Webhook
@@ -65,11 +69,11 @@ public interface WebhookApi extends Closeable {
     */
    @Named("Webhook:create")
    @POST
-   @Path("/webhooks")
-   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
-   @MapBinder(BindWebhookToJson.class)
    @SelectJson("webhooks")
-   FluentIterable<Webhook> create(@PayloadParam("name") String name, @PayloadParam("metadata") Map<String, Object> metadata);
+   @MapBinder(BindWebhookToJson.class)
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
+   FluentIterable<Webhook> create(@PayloadParam("name") String name,
+         @PayloadParam("metadata") Map<String, Object> metadata);
 
    /**
     * Create webhooks.
@@ -80,14 +84,13 @@ public interface WebhookApi extends Closeable {
     * @see Group
     * @see CreateScalingPolicy
     */
-   @Named("Webhook:create")
+   @Named("webhook:create")
    @POST
-   @Path("/webhooks")
-   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
-   @MapBinder(BindWebhooksToJson.class)
    @SelectJson("webhooks")
+   @MapBinder(BindWebhooksToJson.class)
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    FluentIterable<Webhook> create(@PayloadParam("webhooks") List<CreateWebhook> webhooks);
-   
+
    /**
     * List webhooks.
     * @return A list of webhooks
@@ -98,9 +101,8 @@ public interface WebhookApi extends Closeable {
     */
    @Named("Webhook:list")
    @GET
-   @Path("/webhooks")
-   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    @SelectJson("webhooks")
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    FluentIterable<Webhook> list();
 
    /**
@@ -112,11 +114,12 @@ public interface WebhookApi extends Closeable {
     * @see Group
     * @see CreateScalingPolicy
     */
-   @Named("Webhook:get")
+   @Named("webhook:get")
    @GET
-   @Path("/webhooks/{webhookId}")   
-   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{webhookId}")
    @SelectJson("webhook")
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Webhook get(@PathParam("webhookId") String id);
 
    /**
@@ -130,12 +133,13 @@ public interface WebhookApi extends Closeable {
     * @see Group
     * @see CreateScalingPolicy
     */
-   @Named("Webhook:update")
+   @Named("webhook:update")
    @PUT
-   @Path("/webhooks/{webhookId}")   
-   @Fallback(FalseOnNotFoundOr404.class)
+   @Path("/{webhookId}")
    @MapBinder(BindWebhookUpdateToJson.class)
-   boolean update(@PathParam("webhookId") String id, @PayloadParam("name") String name, @PayloadParam("metadata") Map<String, Object> metadata);
+   @Fallback(FalseOnNotFoundOr404.class)
+   boolean update(@PathParam("webhookId") String id, @PayloadParam("name") String name,
+         @PayloadParam("metadata") Map<String, Object> metadata);
 
    /**
     * Delete a webhook.
@@ -146,9 +150,9 @@ public interface WebhookApi extends Closeable {
     * @see Group
     * @see CreateScalingPolicy
     */
-   @Named("Webhook:delete")
+   @Named("webhook:delete")
    @DELETE
-   @Path("/webhooks/{webhookId}")   
+   @Path("/{webhookId}")
    @Fallback(FalseOnNotFoundOr404.class)
    boolean delete(@PathParam("webhookId") String id);
 }

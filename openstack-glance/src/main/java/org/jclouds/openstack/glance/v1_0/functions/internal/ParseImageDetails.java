@@ -35,14 +35,14 @@ import org.jclouds.openstack.glance.v1_0.GlanceApi;
 import org.jclouds.openstack.glance.v1_0.domain.ImageDetails;
 import org.jclouds.openstack.glance.v1_0.features.ImageApi;
 import org.jclouds.openstack.glance.v1_0.functions.internal.ParseImageDetails.Images;
-import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 import org.jclouds.openstack.v2_0.domain.Link;
+import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
+import org.jclouds.openstack.v2_0.options.PaginationOptions;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.inject.TypeLiteral;
-import org.jclouds.openstack.v2_0.options.PaginationOptions;
 
 /**
  * boiler plate until we determine a better way
@@ -75,8 +75,8 @@ public class ParseImageDetails extends ParseJson<Images> {
 
       @Override
       protected Function<Object, IterableWithMarker<ImageDetails>> markerToNextForArg0(Optional<Object> arg0) {
-         String zone = arg0.isPresent() ? arg0.get().toString() : null;
-         final ImageApi imageApi = api.getImageApiForZone(zone);
+         String region = arg0.isPresent() ? arg0.get().toString() : null;
+         final ImageApi imageApi = api.getImageApi(region);
          return new Function<Object, IterableWithMarker<ImageDetails>>() {
 
             @SuppressWarnings("unchecked")
@@ -90,7 +90,7 @@ public class ParseImageDetails extends ParseJson<Images> {
                }
                else {
                   return IterableWithMarkers.EMPTY;
-               }                 
+               }
             }
 
             @Override

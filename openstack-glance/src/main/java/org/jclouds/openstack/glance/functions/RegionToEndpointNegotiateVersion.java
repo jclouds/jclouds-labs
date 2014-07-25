@@ -21,8 +21,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -35,9 +35,9 @@ import javax.inject.Singleton;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import org.jclouds.location.Zone;
-import org.jclouds.rest.annotations.ApiVersion;
+import org.jclouds.location.Region;
 import org.jclouds.rest.HttpClient;
+import org.jclouds.rest.annotations.ApiVersion;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Function;
@@ -51,7 +51,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Iterables;
 
 @Singleton
-public class ZoneToEndpointNegotiateVersion implements Function<Object, URI> {
+public class RegionToEndpointNegotiateVersion implements Function<Object, URI> {
 
    public static final String VERSION_NEGOTIATION_HEADER = "Is-Version-Negotiation-Request";
 
@@ -70,14 +70,14 @@ public class ZoneToEndpointNegotiateVersion implements Function<Object, URI> {
       public List<Version> versions;
    }
 
-   private final Supplier<Map<String, Supplier<URI>>> zoneToEndpointSupplier;
+   private final Supplier<Map<String, Supplier<URI>>> regionToEndpointSupplier;
    private final String apiVersion;
    private final LoadingCache<URI, URI> endpointCache;
 
    @Inject
-   public ZoneToEndpointNegotiateVersion(@Zone Supplier<Map<String, Supplier<URI>>> zoneToEndpointSupplier,
+   public RegionToEndpointNegotiateVersion(@Region Supplier<Map<String, Supplier<URI>>> regionToEndpointSupplier,
          @ApiVersion String rawApiVersionString, final HttpClient client, final Json json) {
-      this.zoneToEndpointSupplier = checkNotNull(zoneToEndpointSupplier, "zoneToEndpointSupplier");
+      this.regionToEndpointSupplier = checkNotNull(regionToEndpointSupplier, "regionToEndpointSupplier");
       if (!rawApiVersionString.startsWith("v")) {
          this.apiVersion = "v" + rawApiVersionString;
       } else {
@@ -125,12 +125,12 @@ public class ZoneToEndpointNegotiateVersion implements Function<Object, URI> {
 
    @Override
    public URI apply(Object from) {
-      checkArgument(from instanceof String, "you must specify a zone, as a String argument");
-      Map<String, Supplier<URI>> zoneToEndpoint = zoneToEndpointSupplier.get();
-      checkState(!zoneToEndpoint.isEmpty(), "no zone name to endpoint mappings configured!");
-      checkArgument(zoneToEndpoint.containsKey(from),
-               "requested location %s, which is not in the configured locations: %s", from, zoneToEndpoint);
-      URI uri = zoneToEndpointSupplier.get().get(from).get();
+      checkArgument(from instanceof String, "you must specify a region, as a String argument");
+      Map<String, Supplier<URI>> regionToEndpoint = regionToEndpointSupplier.get();
+      checkState(!regionToEndpoint.isEmpty(), "no region name to endpoint mappings configured!");
+      checkArgument(regionToEndpoint.containsKey(from),
+               "requested location %s, which is not in the configured locations: %s", from, regionToEndpoint);
+      URI uri = regionToEndpointSupplier.get().get(from).get();
 
       try {
          return endpointCache.get(uri);

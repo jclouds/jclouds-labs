@@ -48,7 +48,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          FluentIterable<Webhook> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
 
@@ -75,7 +75,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          FluentIterable<Webhook> webhooks = api.create("PagerDuty", ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook"));
 
@@ -101,7 +101,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          FluentIterable<Webhook> webhooks = api.create(ImmutableList.of(
                CreateWebhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
@@ -132,7 +132,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          FluentIterable<Webhook> webhooks = api.create(ImmutableList.of(
                CreateWebhook.builder().name("PagerDuty").metadata(ImmutableMap.<String, Object>of("notes", "PagerDuty will fire this webhook")).build(),
@@ -161,7 +161,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          FluentIterable<Webhook> webhooks = api.list();
 
@@ -189,7 +189,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          FluentIterable<Webhook> webhooks = api.list();
 
@@ -215,7 +215,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          boolean success = api.update("5555", "alice", ImmutableMap.<String, Object>of("notes", "this is for Alice"));
 
@@ -241,7 +241,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          boolean success = api.update("5555", "alice", ImmutableMap.<String, Object>of("notes", "this is for Alice"));
 
@@ -267,7 +267,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          Webhook webhook = api.get("5555");
 
@@ -294,7 +294,7 @@ public class WebhookApiMockTest extends BaseAutoscaleApiMockTest {
 
       try {
          AutoscaleApi autoscaleApi = api(server.getUrl("/").toString(), "rackspace-autoscale", overrides);
-         WebhookApi api = autoscaleApi.getWebhookApiForZoneAndGroupAndPolicy("DFW", "1234567890", "321456");         
+         WebhookApi api = autoscaleApi.getWebhookApi("DFW", "1234567890", "321456");
 
          Webhook webhook = api.get("5555");
 
