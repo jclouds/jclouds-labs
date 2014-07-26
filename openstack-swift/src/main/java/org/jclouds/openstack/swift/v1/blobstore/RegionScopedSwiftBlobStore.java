@@ -285,6 +285,15 @@ public class RegionScopedSwiftBlobStore implements BlobStore {
       containerCache.invalidate(container);
    }
 
+   @Override
+   public boolean deleteContainerIfEmpty(String container) {
+      boolean deleted = api.getContainerApiForRegion(regionId).deleteIfEmpty(container);
+      if (deleted) {
+         containerCache.invalidate(container);
+      }
+      return deleted;
+   }
+
    protected final LoadingCache<String, Optional<Container>> containerCache = CacheBuilder.newBuilder().build(
          new CacheLoader<String, Optional<Container>>() {
             public Optional<Container> load(String container) {

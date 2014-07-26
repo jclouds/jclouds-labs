@@ -172,6 +172,15 @@ public class SubmissionAsyncBlobStore extends ForwardingObject implements AsyncB
    }
 
    @Override
+   public ListenableFuture<Boolean> deleteContainerIfEmpty(final String container) {
+      return executor.submit(new Callable<Boolean>() {
+         public Boolean call() {
+            return delegate().deleteContainerIfEmpty(container);
+         }
+      });
+   }
+
+   @Override
    public ListenableFuture<Boolean> directoryExists(final String container, final String directory) {
       return executor.submit(new Callable<Boolean>() {
          public Boolean call() {
