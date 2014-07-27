@@ -58,7 +58,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    public void locationsMatch() {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
       for (String regionId : ctx.getConfiguredRegions()) {
-         Set<? extends Location> locations = ctx.getBlobStoreForRegion(regionId).listAssignableLocations();
+         Set<? extends Location> locations = ctx.getBlobStore(regionId).listAssignableLocations();
          assertEquals(locations.size(), 1, "expected one region " + regionId + " " + locations);
          Location location = locations.iterator().next();
          assertEquals(location.getId(), regionId, "region id " + regionId + " didn't match getId(): " + location);
@@ -69,7 +69,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    public void tryList() throws InterruptedException, ExecutionException {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
       for (String regionId : ctx.getConfiguredRegions()) {
-         assertEquals(ctx.getAsyncBlobStoreForRegion(regionId).list().get(), ctx.getBlobStoreForRegion(regionId).list());
+         assertEquals(ctx.getAsyncBlobStore(regionId).list().get(), ctx.getBlobStore(regionId).list());
       }
    }
 
@@ -77,7 +77,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    public void trySign() throws InterruptedException, ExecutionException {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
       for (String regionId : ctx.getConfiguredRegions()) {
-         BlobStore region = ctx.getBlobStoreForRegion(regionId);
+         BlobStore region = ctx.getBlobStore(regionId);
          PageSet<? extends StorageMetadata> containers = region.list();
          if (containers.isEmpty()) {
             continue;
@@ -88,7 +88,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
             continue;
          }
          String blobName = Iterables.getLast(blobs).getName();
-         HttpRequest request = ctx.getSignerForRegion(regionId).signGetBlob(containerName, blobName);
+         HttpRequest request = ctx.getSigner(regionId).signGetBlob(containerName, blobName);
          assertNotNull(request, "regionId=" + regionId + ", container=" + containerName + ", blob=" + blobName);
       }
    }

@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jclouds.Context;
+import org.jclouds.blobstore.AsyncBlobStore;
 import org.jclouds.blobstore.BlobRequestSigner;
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
@@ -33,6 +34,7 @@ import org.jclouds.blobstore.attr.ConsistencyModel;
 import org.jclouds.internal.BaseView;
 import org.jclouds.location.Provider;
 import org.jclouds.location.Region;
+import org.jclouds.openstack.swift.v1.blobstore.internal.SubmissionAsyncBlobStore;
 import org.jclouds.rest.Utils;
 
 import com.google.common.base.Function;
@@ -49,11 +51,11 @@ import com.google.common.util.concurrent.ListeningExecutorService;
  * <pre>
  * ctx = contextBuilder.buildView(RegionScopedBlobStoreContext.class);
  *
- * Set&lt;String&gt; regionIds = ctx.configuredRegions();
+ * Set&lt;String&gt; regionIds = ctx.getConfiguredRegions();
  *
  * // isolated to a specific region
- * BlobStore texasBlobStore = ctx.blobStoreInRegion(&quot;US-TX&quot;);
- * BlobStore virginiaBlobStore = ctx.blobStoreInRegion(&quot;US-VA&quot;);
+ * BlobStore texasBlobStore = ctx.getBlobStore(&quot;US-TX&quot;);
+ * BlobStore virginiaBlobStore = ctx.getBlobStore(&quot;US-VA&quot;);
  * </pre>
  */
 public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreContext {
@@ -61,8 +63,7 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
    /**
     * @return regions supported in this context.
     *
-    * @deprecated Please use {{@link #getConfiguredRegions()} as this method will be
-    *             removed in jclouds 2.0.
+    * @deprecated Please use {{@link #getConfiguredRegions()} as this method will be removed in jclouds 2.0.
     */
    @Deprecated
    public Set<String> configuredRegions() {
@@ -78,16 +79,15 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
 
    /**
     * @param regionId
-    *           valid region id from {@link #configuredRegions()}
+    *           valid region id from {@link #getConfiguredRegions()}
     * @throws IllegalArgumentException
     *            if {@code regionId} was invalid.
     *
-    * @deprecated Please use {{@link #getConfiguredRegions()} as this method will be
-    *             removed in jclouds 2.0.
+    * @deprecated Please use {{@link #getBlobStore(String)} as this method will be removed in jclouds 2.0.
     */
    @Deprecated
    public BlobStore blobStoreInRegion(String regionId) {
-      return getBlobStoreForRegion(regionId);
+      return getBlobStore(regionId);
    }
 
    /**
@@ -96,23 +96,22 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
     * @throws IllegalArgumentException
     *            if {@code regionId} was invalid.
     */
-   public BlobStore getBlobStoreForRegion(String regionId) {
+   public BlobStore getBlobStore(String regionId) {
       checkRegionId(regionId);
       return blobStore.apply(regionId);
    }
 
    /**
     * @param regionId
-    *           valid region id from {@link #configuredRegions()}
+    *           valid region id from {@link #getConfiguredRegions()}
     * @throws IllegalArgumentException
     *            if {@code regionId} was invalid.
     *
-    * @deprecated Please use {{@link #getSignerInRegion(String)} as this method will be
-    *             removed in jclouds 2.0.
+    * @deprecated Please use {{@link #getSigner(String)} as this method will be removed in jclouds 2.0.
     */
    @Deprecated
    public BlobRequestSigner signerInRegion(String regionId) {
-      return getSignerForRegion(regionId);
+      return getSigner(regionId);
    }
 
    /**
@@ -121,34 +120,38 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
     * @throws IllegalArgumentException
     *            if {@code regionId} was invalid.
     */
-   public BlobRequestSigner getSignerForRegion(String regionId) {
+   public BlobRequestSigner getSigner(String regionId) {
       checkRegionId(regionId);
       return blobRequestSigner.apply(regionId);
    }
 
    /**
     * @param regionId
-    *           valid region id from {@link #configuredRegions()}
+    *           valid region id from {@link #getConfiguredRegions()}
     * @throws IllegalArgumentException
-    *            if {@code regionId} was invalid. longer supported. Please use
-    *            {@link org.jclouds.blobstore.BlobStore}
+    *            if {@code regionId} was invalid.
+    *
+    * @deprecated {@link AsyncBlobStore} is no longer supported. Please use {@link BlobStore} as
+    *             this method will be removed in jclouds 2.0.
     */
    @Deprecated
-   public org.jclouds.blobstore.AsyncBlobStore getAsyncBlobStoreForRegion(String regionId) {
-      checkRegionId(regionId);
-      return new org.jclouds.openstack.swift.v1.blobstore.internal.SubmissionAsyncBlobStore(
-            blobStoreInRegion(regionId), executor);
+   public AsyncBlobStore asyncBlobStoreInRegion(String regionId) {
+      return getAsyncBlobStore(regionId);
    }
+
    /**
     * @param regionId
-    *           valid region id from {@link #configuredRegions()}
+    *           valid region id from {@link #getConfiguredRegions()}
     * @throws IllegalArgumentException
-    *            if {@code regionId} was invalid. longer supported. Please use
-    *            {@link org.jclouds.blobstore.BlobStore}
+    *            if {@code regionId} was invalid. longer supported. Please use {@link BlobStore}.
+    *
+    * @deprecated {@link AsyncBlobStore} is no longer supported. Please use {@link BlobStore} as
+    *             this method will be removed in jclouds 2.0.
     */
    @Deprecated
-   public org.jclouds.blobstore.AsyncBlobStore asyncBlobStoreInRegion(String regionId) {
-      return getAsyncBlobStoreForRegion(regionId);
+   public AsyncBlobStore getAsyncBlobStore(String regionId) {
+      checkRegionId(regionId);
+      return new SubmissionAsyncBlobStore(blobStoreInRegion(regionId), executor);
    }
 
    protected void checkRegionId(String regionId) {
@@ -186,18 +189,22 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
 
    @Override
    public BlobStore getBlobStore() {
-      return getBlobStoreForRegion(implicitRegionId.get());
+      return getBlobStore(implicitRegionId.get());
    }
 
    @Override
    public BlobRequestSigner getSigner() {
-      return getSignerForRegion(implicitRegionId.get());
+      return getSigner(implicitRegionId.get());
    }
 
+   /**
+    * @deprecated {@link AsyncBlobStore} is no longer supported. Please use {@link BlobStore} as
+    *             this method will be removed in jclouds 2.0.
+    */
    @Override
    @Deprecated
-   public org.jclouds.blobstore.AsyncBlobStore getAsyncBlobStore() {
-      return getAsyncBlobStoreForRegion(implicitRegionId.get());
+   public AsyncBlobStore getAsyncBlobStore() {
+      return getAsyncBlobStore(implicitRegionId.get());
    }
 
    @Override
