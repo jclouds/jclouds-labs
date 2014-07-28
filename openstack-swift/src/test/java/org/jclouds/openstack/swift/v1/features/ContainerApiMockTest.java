@@ -322,7 +322,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertFalse(api.getContainerApiForRegion("DFW").deleteIfEmpty("myContainer"));
+         assertTrue(api.getContainerApiForRegion("DFW").deleteIfEmpty("myContainer"));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

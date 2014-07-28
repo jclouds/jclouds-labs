@@ -33,6 +33,7 @@ import javax.ws.rs.PathParam;
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.TrueOnNotFoundOr404;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindContainerMetadataToHeaders;
@@ -206,13 +207,13 @@ public interface ContainerApi {
     * @param containerName
     *           corresponds to {@link Container#getName()}.
     * 
-    * @return {@code false} if the container was not present.
+    * @return {@code true} if the container was deleted or not present.
     * 
     * @throws IllegalStateException if the container was not empty.
     */
    @Named("container:deleteIfEmpty")
    @DELETE
-   @Fallback(FalseOnNotFoundOr404.class)
+   @Fallback(TrueOnNotFoundOr404.class)
    @Path("/{containerName}")
    boolean deleteIfEmpty(@PathParam("containerName") String containerName) throws IllegalStateException;
 
