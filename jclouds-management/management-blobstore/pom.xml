@@ -21,7 +21,7 @@
   <parent>
     <artifactId>jclouds-management</artifactId>
     <groupId>org.apache.jclouds.labs</groupId>
-    <version>1.8.0</version>
+    <version>1.8.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -43,7 +43,7 @@
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-blobstore</artifactId>
-      <version>1.8.0</version>
+      <version>1.8.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
