@@ -17,13 +17,12 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.jclouds.labs</groupId>
     <artifactId>jclouds-labs</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.8.0</version>
   </parent>
 
   <!-- TODO: when out of labs, switch to org.apache.jclouds.provider -->
@@ -35,7 +34,7 @@
 
   <properties>
     <test.digitalocean.endpoint>https://api.digitalocean.com/</test.digitalocean.endpoint>
-    <test.digitalocean.api-version></test.digitalocean.api-version>
+    <test.digitalocean.api-version />
     <test.digitalocean.identity>FIXME</test.digitalocean.identity>
     <test.digitalocean.credential>FIXME</test.digitalocean.credential>
     <!-- CentOS 6.5 x64 -->
@@ -53,25 +52,25 @@
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>${jclouds.version}</version>
+      <version>1.8.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-sshj</artifactId>
-      <version>${jclouds.version}</version>
+      <version>1.8.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>${jclouds.version}</version>
+      <version>1.8.0</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>${jclouds.version}</version>
+      <version>1.8.0</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
