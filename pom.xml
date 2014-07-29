@@ -38,7 +38,7 @@
   </scm>
 
   <properties>
-    <jclouds.version>1.8.0-SNAPSHOT</jclouds.version>
+    <jclouds.version>1.8.0</jclouds.version>
   </properties>
 
   <repositories>
