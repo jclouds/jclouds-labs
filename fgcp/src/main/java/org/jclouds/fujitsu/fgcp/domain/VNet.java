@@ -18,6 +18,7 @@ package org.jclouds.fujitsu.fgcp.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -51,7 +52,7 @@ public class VNet {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("networkId", networkId)
+      return MoreObjects.toStringHelper(this).add("networkId", networkId)
             .toString();
    }
 }

@@ -29,6 +29,7 @@ import org.jclouds.dmtf.ovf.internal.BaseVirtualSystem;
 import org.jclouds.vcloud.director.v1_5.domain.section.OperatingSystemSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.VirtualHardwareSection;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -137,7 +138,7 @@ public class VirtualSystem extends BaseVirtualSystem {
    }
 
    @Override
-   protected Objects.ToStringHelper string() {
+   protected MoreObjects.ToStringHelper string() {
       return super.string()
             .add("operatingSystem", operatingSystem)
             .add("virtualHardwareSections", virtualHardwareSections);

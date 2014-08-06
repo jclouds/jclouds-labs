@@ -18,6 +18,7 @@ package org.jclouds.fujitsu.fgcp.domain;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -72,7 +73,7 @@ public class VSystem {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("id", id)
             .add("name", name).add("creator", creator)
             .add("template", template).add("description", description)
             .toString();

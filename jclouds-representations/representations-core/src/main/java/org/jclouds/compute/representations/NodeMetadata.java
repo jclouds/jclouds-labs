@@ -16,6 +16,7 @@
  */
 package org.jclouds.compute.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -213,7 +214,7 @@ public class NodeMetadata implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("id", id).add("name", name).add("description", description).add("status", status)
+      return MoreObjects.toStringHelper(this).add("id", id).add("name", name).add("description", description).add("status", status)
               .add("locationId", locationId).add("imageId", imageId).add("hostname", hostname)
               .add("group", group).add("loginPort", loginPort).add("tags", tags).add("metadata", metadata)
               .add("defaultCredentials", defaultCredentials).toString();

@@ -22,6 +22,7 @@ import static org.jclouds.opsource.servers.OpSourceNameSpaces.SERVER;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -100,7 +101,7 @@ public class OperatingSystem {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("osType", osType).add("displayName", displayName).toString();
+      return MoreObjects.toStringHelper("").add("osType", osType).add("displayName", displayName).toString();
    }
 
 }

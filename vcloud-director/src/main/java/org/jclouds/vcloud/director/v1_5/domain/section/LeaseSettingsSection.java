@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.jclouds.dmtf.ovf.SectionType;
 import org.jclouds.vcloud.director.v1_5.domain.Link;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -269,7 +270,7 @@ public class LeaseSettingsSection extends SectionType {
    }
 
    @Override
-   public Objects.ToStringHelper string() {
+   public MoreObjects.ToStringHelper string() {
       return super.string()
             .add("links", links)
             .add("deploymentLeaseInSeconds", deploymentLeaseInSeconds)

@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
@@ -293,7 +294,7 @@ public class Property {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("key", key).add("values", values).add("label", label).add("description", description)
             .add("type", type).add("qualifiers", qualifiers).add("userConfigurable", userConfigurable).add("defaultValue", defaultValue)
             .toString();

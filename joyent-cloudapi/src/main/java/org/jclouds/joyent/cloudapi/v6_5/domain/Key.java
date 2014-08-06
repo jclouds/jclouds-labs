@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.beans.ConstructorProperties;
 import java.util.Date;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ComparisonChain;
 
@@ -131,7 +132,7 @@ public class Key implements Comparable<Key> {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").omitNullValues()
+      return MoreObjects.toStringHelper("").omitNullValues()
                     .add("name", name)
                     .add("key", key)
                     .add("created", created).toString();

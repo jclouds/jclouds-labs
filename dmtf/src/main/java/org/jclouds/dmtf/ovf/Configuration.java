@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlType(name = "Configuration", namespace = OVF_NS, propOrder = {
@@ -124,8 +125,8 @@ public class Configuration {
       return string().toString();
    }
 
-   protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper("").add("id", id).add("default", isDefault).add("label", label).add("description", description);
+   protected MoreObjects.ToStringHelper string() {
+      return MoreObjects.toStringHelper("").add("id", id).add("default", isDefault).add("label", label).add("description", description);
    }
 
    public String getId() {

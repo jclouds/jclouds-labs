@@ -20,8 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 
 /**
@@ -139,7 +140,7 @@ public class Disk {
        */
       @Override
       public String toString() {
-         return Objects.toStringHelper(this).omitNullValues().add("deployment", hostedService).add("role", role)
+         return MoreObjects.toStringHelper(this).omitNullValues().add("deployment", hostedService).add("role", role)
                   .toString();
       }
 
@@ -451,7 +452,7 @@ public class Disk {
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this).omitNullValues().add("os", os).add("name", name)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("os", os).add("name", name)
                .add("attachedTo", attachedTo.orNull()).add("logicalSizeInGB", logicalSizeInGB.orNull())
                .add("description", description).add("location", location.orNull())
                .add("affinityGroup", affinityGroup.orNull()).add("mediaLink", mediaLink.orNull())

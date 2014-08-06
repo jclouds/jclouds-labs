@@ -21,8 +21,8 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 
 /**
  * Represents the NAT rule for port forwarding between internal
@@ -220,7 +220,7 @@ public class NatPortForwardingRule {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("externalIpAddress", externalIpAddress)
             .add("externalPort", externalPort)
             .add("internalIpAddress", internalIpAddress)

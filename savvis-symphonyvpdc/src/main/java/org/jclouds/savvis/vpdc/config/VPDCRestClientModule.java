@@ -63,6 +63,7 @@ import org.jclouds.savvis.vpdc.predicates.TaskSuccess;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
@@ -167,7 +168,7 @@ public class VPDCRestClientModule extends RestClientModule<VPDCApi, VPDCAsyncApi
                   }
                   @Override
                   public String toString() {
-                     return Objects.toStringHelper(login).add("method", "login").toString();
+                     return MoreObjects.toStringHelper(login).add("method", "login").toString();
                   }
                }, seconds, TimeUnit.SECONDS);
    }

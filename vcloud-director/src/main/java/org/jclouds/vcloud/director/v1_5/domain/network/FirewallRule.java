@@ -21,8 +21,8 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 
 /**
  * Represents a firewall rule.
@@ -371,7 +371,7 @@ public class FirewallRule {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("isEnabled", isEnabled)
             .add("description", description)
             .add("policy", policy)

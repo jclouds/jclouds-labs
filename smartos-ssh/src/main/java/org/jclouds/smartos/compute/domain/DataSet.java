@@ -18,6 +18,7 @@ package org.jclouds.smartos.compute.domain;
 
 import java.util.UUID;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -141,7 +142,7 @@ public class DataSet {
     */
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("uuid", uuid).add("os", os).add("published", published)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("uuid", uuid).add("os", os).add("published", published)
                .add("urn", urn).toString();
    }
 

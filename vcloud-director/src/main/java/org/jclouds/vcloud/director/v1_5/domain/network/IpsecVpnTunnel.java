@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 
 /**
  * Represents details of an IPSec-VPN tunnel.
@@ -381,7 +381,7 @@ public class IpsecVpnTunnel {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("name", name)
             .add("description", description)
             .add("peerIpAddress", peerIpAddress)

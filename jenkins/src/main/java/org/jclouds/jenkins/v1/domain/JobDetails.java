@@ -16,7 +16,7 @@
  */
 package org.jclouds.jenkins.v1.domain;
 
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 public class JobDetails extends Job {
 

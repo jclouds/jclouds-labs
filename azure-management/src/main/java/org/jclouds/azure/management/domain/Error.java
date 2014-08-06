@@ -19,6 +19,7 @@ package org.jclouds.azure.management.domain;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -243,7 +244,7 @@ public class Error {
     */
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("code", rawCode).add("message", message).toString();
+      return MoreObjects.toStringHelper(this).omitNullValues().add("code", rawCode).add("message", message).toString();
    }
 
 }

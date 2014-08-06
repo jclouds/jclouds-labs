@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.jclouds.compute.options.TemplateOptions;
 
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 
 /**

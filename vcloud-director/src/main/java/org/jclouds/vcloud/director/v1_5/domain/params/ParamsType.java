@@ -22,8 +22,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * A basic type used to specify parameters for operations.
@@ -132,6 +133,6 @@ public class ParamsType {
    }
 
    public ToStringHelper string() {
-      return Objects.toStringHelper("").add("description", description).add("name", name);
+      return MoreObjects.toStringHelper("").add("description", description).add("name", name);
    }
 }

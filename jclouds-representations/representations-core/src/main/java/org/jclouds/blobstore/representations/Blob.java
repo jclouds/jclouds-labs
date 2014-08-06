@@ -16,6 +16,7 @@
  */
 package org.jclouds.blobstore.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -78,7 +79,7 @@ public class Blob implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("blobMetadata", blobMetadata).add("allHeaders", allHeaders)
+      return MoreObjects.toStringHelper(this).add("blobMetadata", blobMetadata).add("allHeaders", allHeaders)
               .toString();
    }
 }

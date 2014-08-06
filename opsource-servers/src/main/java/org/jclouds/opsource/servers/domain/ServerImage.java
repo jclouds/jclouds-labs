@@ -22,6 +22,7 @@ import static org.jclouds.opsource.servers.OpSourceNameSpaces.SERVER;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(namespace = SERVER, name = "ServerImage")
@@ -206,7 +207,7 @@ public class ServerImage {
 
 	@Override
    	public String toString() {
-		return Objects.toStringHelper("").add("id", id).add("resourcePath", resourcePath).add("name", name).
+		return MoreObjects.toStringHelper("").add("id", id).add("resourcePath", resourcePath).add("name", name).
 			add("description", description).add("operatingSystem", operatingSystem).add("location", location).
 			add("cpuCount", cpuCount).add("memory", memory).add("osStorage", osStorage).
 			add("additionalLocalStorage", additionalLocalStorage).toString();

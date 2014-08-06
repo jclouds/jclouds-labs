@@ -21,6 +21,7 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -111,7 +112,7 @@ public class SyslogServerSettings {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("syslogServerIp1", syslogServerIp1)
+      return MoreObjects.toStringHelper("").add("syslogServerIp1", syslogServerIp1)
             .add("syslogServerIp1", syslogServerIp2).toString();
    }
 }

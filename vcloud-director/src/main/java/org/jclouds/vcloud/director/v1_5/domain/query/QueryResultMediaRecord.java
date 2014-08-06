@@ -23,7 +23,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
  * Represents the results from a Media vCloud query as a record.

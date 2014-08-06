@@ -20,6 +20,7 @@ import java.beans.ConstructorProperties;
 
 import javax.inject.Named;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -128,7 +129,7 @@ public class VmNIC {
     */
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("tag", tag).add("ip", ip).add("netmask", netmask)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("tag", tag).add("ip", ip).add("netmask", netmask)
                .add("gateway", gateway).toString();
    }
 }

@@ -16,7 +16,7 @@
  */
 package org.jclouds.digitalocean.internal;
 
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.jclouds.digitalocean.http.filters.AuthenticationFilter.CREDENTIAL_PARAM;
 import static org.jclouds.digitalocean.http.filters.AuthenticationFilter.IDENTITY_PARAM;
 import static org.jclouds.http.utils.Queries.encodeQueryLine;
@@ -48,8 +48,8 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
  * Base class for all DigitalOcean mock tests.
  */
 public class BaseDigitalOceanMockTest {
-   private final Set<Module> modules = ImmutableSet.<Module> of(new ExecutorServiceModule(sameThreadExecutor(),
-         sameThreadExecutor()));
+   private final Set<Module> modules = ImmutableSet.<Module> of(new ExecutorServiceModule(newDirectExecutorService(),
+         newDirectExecutorService()));
 
    protected String provider;
 

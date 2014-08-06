@@ -16,6 +16,7 @@
  */
 package org.jclouds.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -90,6 +91,6 @@ public class Context implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("name", name).add("providerId", providerId).add("identity", identity).toString();
+      return MoreObjects.toStringHelper(this).add("name", name).add("providerId", providerId).add("identity", identity).toString();
    }
 }

@@ -21,8 +21,8 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 
 /**
  * Represents a NAT rule.
@@ -228,7 +228,7 @@ public class NatRule {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("description", description)
             .add("oneToOneBasicRule", oneToOneBasicRule)
             .add("oneToOneVmRule", oneToOneVmRule)

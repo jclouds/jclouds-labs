@@ -25,6 +25,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -103,6 +104,6 @@ public class IpAddresses {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("ipAddresses", ipAddresses).toString();
+      return MoreObjects.toStringHelper("").add("ipAddresses", ipAddresses).toString();
    }
 }

@@ -17,7 +17,7 @@
 package org.jclouds.virtualbox;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.jclouds.virtualbox.config.VirtualBoxConstants.VIRTUALBOX_IMAGE_PREFIX;
 
 import java.io.File;
@@ -119,7 +119,7 @@ public class BaseVirtualBoxClientLiveTest extends BaseComputeServiceContextLiveT
    @Override
    protected Iterable<Module> setupModules() {
       return ImmutableSet.<Module> of(getLoggingModule(), credentialStoreModule, getSshModule(),  new ExecutorServiceModule(
-            sameThreadExecutor(), sameThreadExecutor()));
+            newDirectExecutorService(), newDirectExecutorService()));
    }
    
    @Override

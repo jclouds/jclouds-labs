@@ -21,6 +21,7 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -93,7 +94,7 @@ public abstract class NetworkServiceType<T extends NetworkServiceType<T>> {
       return string().toString();
    }
 
-   protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper("").add("isEnabled", isEnabled);
+   protected MoreObjects.ToStringHelper string() {
+      return MoreObjects.toStringHelper("").add("isEnabled", isEnabled);
    }
 }

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.jclouds.logging.Logger;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -247,7 +248,7 @@ public class Error {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("message", message).add("majorErrorCode", majorErrorCode).add("minorErrorCode", minorErrorCode)
             .add("vendorSpecificErrorCode", vendorSpecificErrorCode).add("stackTrace", stackTrace)
             .toString();

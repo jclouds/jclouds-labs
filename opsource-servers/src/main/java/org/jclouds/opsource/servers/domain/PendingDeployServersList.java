@@ -25,6 +25,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -94,7 +95,7 @@ public class PendingDeployServersList {
 
 	@Override
    	public String toString() {
-		return Objects.toStringHelper("").add("pendingDeployServers", pendingDeployServers).toString();
+		return MoreObjects.toStringHelper("").add("pendingDeployServers", pendingDeployServers).toString();
 	}
 
 }

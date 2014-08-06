@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.vcloud.director.v1_5.domain.Reference;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -102,6 +103,6 @@ public class MediaInsertOrEjectParams {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("media", media).toString();
+      return MoreObjects.toStringHelper("").add("media", media).toString();
    }
 }

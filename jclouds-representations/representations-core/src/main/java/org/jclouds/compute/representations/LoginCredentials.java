@@ -16,6 +16,7 @@
  */
 package org.jclouds.compute.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -119,7 +120,7 @@ public class LoginCredentials implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this)
+      return MoreObjects.toStringHelper(this)
               .add("username", username)
               .add("hasPassword", password != null || credentialUrl != null)
               .add("hasPrivateKey", privateKey != null)

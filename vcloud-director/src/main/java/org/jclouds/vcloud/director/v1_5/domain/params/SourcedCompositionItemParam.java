@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.jclouds.vcloud.director.v1_5.domain.Reference;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkAssignment;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -232,7 +233,7 @@ public class SourcedCompositionItemParam {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("source", source)
             .add("vAppScopedLocalId", vAppScopedLocalId)
             .add("instantiationParams", instantiationParams)

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -98,6 +99,6 @@ public class ScreenTicket {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("value", value).toString();
+      return MoreObjects.toStringHelper("").add("value", value).toString();
    }
 }

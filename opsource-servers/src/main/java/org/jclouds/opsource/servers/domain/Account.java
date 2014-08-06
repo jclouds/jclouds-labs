@@ -22,6 +22,7 @@ import static org.jclouds.opsource.servers.OpSourceNameSpaces.DIRECTORY;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(name = "Account", namespace = DIRECTORY)
@@ -93,7 +94,7 @@ public class Account {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("orgId", orgId).toString();
+      return MoreObjects.toStringHelper("").add("orgId", orgId).toString();
    }
 
 }

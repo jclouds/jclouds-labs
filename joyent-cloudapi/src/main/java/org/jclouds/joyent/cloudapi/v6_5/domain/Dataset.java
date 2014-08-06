@@ -30,6 +30,7 @@ import org.jclouds.joyent.cloudapi.v6_5.domain.Machine.Type;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableMap;
@@ -313,7 +314,7 @@ public class Dataset implements Comparable<Dataset> {
    
    @Override
    public String toString() {
-      return Objects.toStringHelper("").omitNullValues()
+      return MoreObjects.toStringHelper("").omitNullValues()
                     .add("id", id)
                     .add("urn", urn)
                     .add("name", name)

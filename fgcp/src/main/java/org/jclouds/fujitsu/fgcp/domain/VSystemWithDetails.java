@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
@@ -67,7 +67,7 @@ public class VSystemWithDetails extends VSystem {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("id", id)
             .add("name", name).add("creator", creator)
             .add("template", template).add("description", description)
             .add("disks", disks).add("networks", networks)

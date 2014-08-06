@@ -25,8 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.vcloud.director.v1_5.domain.Reference;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents vApp creation parameters.
@@ -199,7 +200,7 @@ public class VAppCreationParams extends ParamsType {
 
    @Override
    public ToStringHelper string() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("vAppParent", vAppParent)
             .add("instantiationParams", instantiationParams)
             .add("deploy", deploy)

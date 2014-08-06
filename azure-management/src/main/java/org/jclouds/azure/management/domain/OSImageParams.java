@@ -20,8 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * The Add OS Image operation adds an OS image that is currently stored in a storage account in your
@@ -169,7 +170,7 @@ public class OSImageParams {
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this).add("label", label).add("mediaLink", mediaLink).add("name", name)
+      return MoreObjects.toStringHelper(this).add("label", label).add("mediaLink", mediaLink).add("name", name)
                .add("os", os);
    }
 

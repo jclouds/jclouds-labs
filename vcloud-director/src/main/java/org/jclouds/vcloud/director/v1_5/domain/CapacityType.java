@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 
 /**
  * Represents a capacity of a given resource.
@@ -174,7 +174,7 @@ public class CapacityType<T extends CapacityType<T>> {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("units", units)
             .add("allocated", allocated)
             .add("limit", limit).toString();

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 
 import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -166,7 +167,7 @@ public class UndeployVAppParams {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("undeployPowerAction", undeployPowerAction).toString();
+      return MoreObjects.toStringHelper("").add("undeployPowerAction", undeployPowerAction).toString();
    }
 
 }

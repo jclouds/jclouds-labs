@@ -18,6 +18,7 @@ package org.jclouds.fujitsu.fgcp.domain;
 
 import java.util.Set;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -101,7 +102,7 @@ public class Direction {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("from", from)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("from", from)
             .add("to", to).add("prefix", prefix).add("policies", policies)
             .add("maxPolicyNum", maxPolicyNum)
             .add("acceptable", acceptable).toString();

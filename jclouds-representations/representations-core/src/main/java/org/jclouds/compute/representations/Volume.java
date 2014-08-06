@@ -16,6 +16,7 @@
  */
 package org.jclouds.compute.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -127,7 +128,7 @@ public class Volume implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("id", id).add("type", type).add("size", size)
+      return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("size", size)
               .add("device", device).add("isDurable", durable).add("bootDevice", bootDevice).toString();
    }
 }

@@ -43,6 +43,7 @@ import org.jclouds.vcloud.director.v1_5.domain.section.OperatingSystemSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.RuntimeInfoSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.VirtualHardwareSection;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -283,7 +284,7 @@ public class VAppTemplate extends ResourceEntity {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(super.toString())
+      return MoreObjects.toStringHelper(super.toString())
             .add("owner", owner)
             .add("children", children)
             .add("sections", sections)

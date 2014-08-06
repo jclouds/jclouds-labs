@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -121,6 +122,6 @@ public class AccessSetting {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("subject", subject).add("accessLevel", accessLevel).toString();
+      return MoreObjects.toStringHelper("").add("subject", subject).add("accessLevel", accessLevel).toString();
    }
 }

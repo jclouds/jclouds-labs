@@ -16,6 +16,7 @@
  */
 package org.jclouds.blobstore.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -145,7 +146,7 @@ public class ContentMetadata implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("length", language).add("disposition", disposition).add("encoding", encoding)
+      return MoreObjects.toStringHelper(this).add("length", language).add("disposition", disposition).add("encoding", encoding)
               .add("type", type).add("md5", md5).add("language", language)
               .add("expires", expires).toString();
    }

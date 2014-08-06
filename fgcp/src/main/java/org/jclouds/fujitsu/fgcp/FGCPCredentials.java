@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import org.jclouds.domain.Credentials;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -100,7 +101,7 @@ public class FGCPCredentials extends Credentials {
    }
 
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("identity", identity)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("identity", identity)
             .add("credential", credential == null ? null : ((Object) (Integer.valueOf(credential.hashCode()))))
             .add("privateKey", privateKey.hashCode()).add("certificates", certificates.hashCode()).toString();
    }

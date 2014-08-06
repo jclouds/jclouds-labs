@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -125,7 +126,7 @@ public class ServerType implements Comparable<ServerType> {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("id", id)
             .add("name", name).add("label", label).add("comment", comment)
             .add("productId", productId).add("productName", productName)
             .add("price", price).add("chargeType", chargeType)

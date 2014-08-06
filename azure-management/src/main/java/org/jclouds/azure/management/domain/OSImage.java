@@ -20,8 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 
 /**
@@ -295,7 +296,7 @@ public class OSImage {
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this).omitNullValues().add("os", os).add("name", name)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("os", os).add("name", name)
                .add("logicalSizeInGB", logicalSizeInGB.orNull()).add("description", description)
                .add("category", category.orNull()).add("location", location.orNull())
                .add("affinityGroup", affinityGroup.orNull()).add("mediaLink", mediaLink.orNull())

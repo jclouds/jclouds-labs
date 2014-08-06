@@ -16,6 +16,7 @@
  */
 package org.jclouds.compute.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -126,7 +127,7 @@ public class OperatingSystem implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("family", family).add("name", name).add("arch", arch)
+      return MoreObjects.toStringHelper(this).add("family", family).add("name", name).add("arch", arch)
               .add("version", version).add("description", description).add("is64bit", is64Bit).toString();
    }
 }

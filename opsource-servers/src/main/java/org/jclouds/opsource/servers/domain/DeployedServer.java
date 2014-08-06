@@ -21,6 +21,7 @@ import static org.jclouds.opsource.servers.OpSourceNameSpaces.SERVER;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(namespace = SERVER, name = "DeployedServer")
@@ -212,7 +213,7 @@ public class DeployedServer extends BaseServer{
 
 	@Override
    	public String toString() {
-		return Objects.toStringHelper("").add("id", id).add("name", name).add("description", description).
+		return MoreObjects.toStringHelper("").add("id", id).add("name", name).add("description", description).
 			add("machineSpecification", machineSpecification).add("sourceImageId", sourceImageId).add("networkId", networkId).
 			add("privateIpAddress", privateIpAddress).add("publicIpAddress", publicIpAddress).add("machineName", machineName).
 			add("isStarted", isStarted).add("deployedTime", deployedTime).add("status", status).toString();

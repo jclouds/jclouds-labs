@@ -21,8 +21,8 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 
 /**
  * <p>Java class for anonymous complex type.
@@ -177,7 +177,7 @@ public class FirewallRuleProtocols {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("tcp", tcp)
             .add("udp", udp)
             .add("icmp", icmp)

@@ -25,8 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.vcloud.director.v1_5.domain.Resource;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Represents a VApp network configuration.
@@ -174,7 +175,7 @@ public class VAppNetworkConfiguration extends Resource {
 
    @Override
    public ToStringHelper string() {
-      return Objects.toStringHelper("")
+      return MoreObjects.toStringHelper("")
             .add("description", description)
             .add("configuration", configuration)
             .add("deployed", deployed)

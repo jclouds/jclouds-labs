@@ -19,6 +19,7 @@ package org.jclouds.fujitsu.fgcp.domain;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -66,7 +67,7 @@ public class CPU {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues()
+      return MoreObjects.toStringHelper(this).omitNullValues()
             .add("cores", cores).add("speedPerCore", speedPerCore)
             .add("arch", arch).toString();
    }

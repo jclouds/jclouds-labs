@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(name = "VMWareTools")
@@ -94,6 +95,6 @@ public class VMWareTools {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("version", version).toString();
+      return MoreObjects.toStringHelper("").add("version", version).toString();
    }
 }

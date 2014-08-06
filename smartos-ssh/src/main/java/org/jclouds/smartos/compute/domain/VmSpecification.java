@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.inject.Named;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
@@ -226,7 +227,7 @@ public class VmSpecification {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("alias", alias).add("brand", brand)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("alias", alias).add("brand", brand)
                .add("dataset_uuid", dataset != null ? dataset.getUuid() : null).add("dns_domain", dnsDomain)
                .add("quota", quota).add("max_physical_memory", maxPhysicalMemory)
                .add("max_locked_memory", maxLockedMemory).add("max_swap", maxSwap).add("tmpfs", tmpFs)

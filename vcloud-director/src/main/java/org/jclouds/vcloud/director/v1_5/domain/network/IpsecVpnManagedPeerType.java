@@ -21,6 +21,7 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlSeeAlso(
@@ -102,7 +103,7 @@ public abstract class IpsecVpnManagedPeerType<T extends IpsecVpnManagedPeerType<
       return string().toString();
    }
 
-   protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper("").add("id", id).add("name", name);
+   protected MoreObjects.ToStringHelper string() {
+      return MoreObjects.toStringHelper("").add("id", id).add("name", name);
    }
 }

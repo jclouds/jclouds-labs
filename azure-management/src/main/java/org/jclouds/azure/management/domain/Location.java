@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Set;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
@@ -153,7 +154,7 @@ public class Location {
     */
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("name", name).add("displayName", displayName)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("name", name).add("displayName", displayName)
                .add("availableServices", availableServices).toString();
    }
 

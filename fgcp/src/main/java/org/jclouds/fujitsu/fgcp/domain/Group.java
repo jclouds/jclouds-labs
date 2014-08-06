@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlEnumValue;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -208,7 +209,7 @@ public class Group {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("id", id)
             .add("protocol", protocol).add("port1", port1)
             .add("port2", port2).add("balanceType", balanceType)
             .add("uniqueType", uniqueType).add("monitorType", monitorType)

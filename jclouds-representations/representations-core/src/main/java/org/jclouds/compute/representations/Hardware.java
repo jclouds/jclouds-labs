@@ -16,6 +16,7 @@
  */
 package org.jclouds.compute.representations;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -143,7 +144,7 @@ public class Hardware implements Serializable {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).add("id", id).add("name", name)
+      return MoreObjects.toStringHelper(this).add("id", id).add("name", name)
               .add("processors", processors).add("ram", ram).add("volums", volumes).add("hypervisor", hypervisor)
               .toString();
    }

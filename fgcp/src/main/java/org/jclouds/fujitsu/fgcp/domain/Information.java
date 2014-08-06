@@ -16,6 +16,7 @@
  */
 package org.jclouds.fujitsu.fgcp.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -93,7 +94,7 @@ public class Information {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues()
+      return MoreObjects.toStringHelper(this).omitNullValues()
             .add("seqno", seqno).add("entryDate", entryDate)
             .add("title", title).add("message", message)
             .add("startDate", startDate).add("expiry", expiry).toString();

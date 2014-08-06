@@ -19,6 +19,7 @@ package org.jclouds.azure.management.domain;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 
@@ -202,7 +203,7 @@ public class Operation {
     */
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id).add("status", rawStatus)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("id", id).add("status", rawStatus)
                .add("httpStatusCode", httpStatusCode).add("error", error.orNull()).toString();
    }
 

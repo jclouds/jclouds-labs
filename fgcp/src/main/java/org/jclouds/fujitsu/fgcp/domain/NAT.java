@@ -18,6 +18,7 @@ package org.jclouds.fujitsu.fgcp.domain;
 
 import java.util.Set;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -55,7 +56,7 @@ public class NAT {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues()
+      return MoreObjects.toStringHelper(this).omitNullValues()
             .add("rules", rules).toString();
    }
 }

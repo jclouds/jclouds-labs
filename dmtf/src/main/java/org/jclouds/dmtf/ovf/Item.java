@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
@@ -179,7 +180,7 @@ public class Item {
 
     @Override
     public String toString() {
-       return Objects.toStringHelper("")
+       return MoreObjects.toStringHelper("")
              .add("id", id)
              .add("order", order)
              .add("startDelay", startDelay)

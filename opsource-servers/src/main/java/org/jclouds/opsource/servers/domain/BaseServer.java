@@ -18,6 +18,7 @@ package org.jclouds.opsource.servers.domain;
 
 import static com.google.common.base.Objects.equal;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public abstract class BaseServer {
@@ -65,7 +66,7 @@ public abstract class BaseServer {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").toString();
+      return MoreObjects.toStringHelper("").toString();
    }
 
 }

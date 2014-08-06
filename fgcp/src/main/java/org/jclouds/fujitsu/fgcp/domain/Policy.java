@@ -18,6 +18,7 @@ package org.jclouds.fujitsu.fgcp.domain;
 
 import javax.xml.bind.annotation.XmlEnumValue;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -170,7 +171,7 @@ public class Policy implements Comparable<Policy> {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues()
+      return MoreObjects.toStringHelper(this).omitNullValues()
             .add("id", id)
             .add("src", src)
             .add("srcType", srcType)

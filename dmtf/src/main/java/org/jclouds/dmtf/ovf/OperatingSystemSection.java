@@ -22,6 +22,7 @@ import static org.jclouds.dmtf.DMTFConstants.OVF_NS;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -146,7 +147,7 @@ public class OperatingSystemSection extends SectionType {
    }
 
    @Override
-   protected Objects.ToStringHelper string() {
+   protected MoreObjects.ToStringHelper string() {
       return super.string()
             .add("id", id)
             .add("version", version)

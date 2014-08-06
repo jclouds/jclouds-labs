@@ -29,7 +29,7 @@ import org.jclouds.dmtf.ovf.SectionType;
 import org.jclouds.vcloud.director.v1_5.domain.VMWareTools;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Lists;
 
 /**

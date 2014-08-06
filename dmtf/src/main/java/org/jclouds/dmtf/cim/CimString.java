@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.namespace.QName;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
@@ -88,7 +89,7 @@ public class CimString {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper("").add("value", value).toString();
+      return MoreObjects.toStringHelper("").add("value", value).toString();
    }
 
 }

@@ -22,6 +22,7 @@ import static org.jclouds.opsource.servers.OpSourceNameSpaces.SERVER;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(namespace = SERVER, name = "status")
@@ -164,7 +165,7 @@ public class Status {
 
 	@Override
    	public String toString() {
-		return Objects.toStringHelper("").add("action", action).add("requestTime", requestTime).add("userName", userName).
+		return MoreObjects.toStringHelper("").add("action", action).add("requestTime", requestTime).add("userName", userName).
 			add("numberOfSteps", numberOfSteps).add("updateTime", updateTime).add("step", step).add("failureReason", failureReason).toString();
 	}
 

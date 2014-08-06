@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -84,7 +85,7 @@ public class PublicIP {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues()
+      return MoreObjects.toStringHelper(this).omitNullValues()
             .add("address", address).add("version", version).toString();
    }
 }

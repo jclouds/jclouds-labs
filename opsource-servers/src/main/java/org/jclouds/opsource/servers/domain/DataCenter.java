@@ -22,6 +22,7 @@ import static org.jclouds.opsource.servers.OpSourceNameSpaces.DATACENTER;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(namespace = DATACENTER, name = "datacenterWithLimits")
@@ -209,7 +210,7 @@ public class DataCenter {
 
 	@Override
    	public String toString() {
-		return Objects.toStringHelper("").add("location", location).add("displayName", displayName).add("city", city).
+		return MoreObjects.toStringHelper("").add("location", location).add("displayName", displayName).add("city", city).
 			add("state", state).add("country", country).add("vpnUrl", vpnUrl).add("isDefault", isDefault).
 			add("maxCpu", maxCpu).add("maxRamMb", maxRamMb).toString();
 	}

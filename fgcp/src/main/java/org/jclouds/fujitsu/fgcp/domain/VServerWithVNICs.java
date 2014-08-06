@@ -21,7 +21,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
@@ -38,7 +38,7 @@ public class VServerWithVNICs extends VServer {
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this).omitNullValues().add("id", id)
+      return MoreObjects.toStringHelper(this).omitNullValues().add("id", id)
             .add("name", name).add("type", type).add("creator", creator)
             .add("diskimageId", diskimageId).add("vnics", vnics).toString();
    }
