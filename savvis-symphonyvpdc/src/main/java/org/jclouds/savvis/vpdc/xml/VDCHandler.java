@@ -69,7 +69,7 @@ public class VDCHandler extends ParseSax.HandlerWithResult<VDC> {
       } else if (equalsOrSuffix(qName, "OfferingTag")) {
          builder.status(Status.fromValue(currentOrNull(currentText)));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    public void characters(char ch[], int start, int length) {

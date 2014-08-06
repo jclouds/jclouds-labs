@@ -54,7 +54,7 @@ public class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithResult<
       } else if (qName.equals("Message")) {
          builder.message(SaxUtils.currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    /**

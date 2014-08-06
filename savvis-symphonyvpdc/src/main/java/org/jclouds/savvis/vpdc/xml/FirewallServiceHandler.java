@@ -74,7 +74,7 @@ public class FirewallServiceHandler extends ParseSax.HandlerWithResult<FirewallS
       if (inFirewallRule) {
          firewallRuleHandler.endElement(uri, localName, qName);
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    @Override

@@ -111,7 +111,7 @@ public class DeploymentHandler extends
 			builder.publicIpAddress(currentOrNull(currentText));
 		}
 
-		currentText = new StringBuilder();
+		currentText.setLength(0);
 		elements.remove(elements.size()-1);
 	}
 

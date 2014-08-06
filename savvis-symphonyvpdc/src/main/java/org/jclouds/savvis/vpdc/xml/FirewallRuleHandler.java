@@ -69,7 +69,7 @@ public class FirewallRuleHandler extends ParseSax.HandlerWithResult<FirewallRule
             builder.protocol("Icmp-ping");
          }
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    @Override

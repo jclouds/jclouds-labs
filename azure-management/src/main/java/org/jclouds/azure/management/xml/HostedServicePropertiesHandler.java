@@ -60,7 +60,7 @@ public class HostedServicePropertiesHandler extends
       } else if (equalsOrSuffix(qName, "Label")) {
          builder.label(new String(base64().decode(currentOrNull(currentText)), UTF_8));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    /**

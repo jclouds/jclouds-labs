@@ -91,7 +91,7 @@ public class HostedServiceHandler extends ParseSax.HandlerForGeneratedRequestWit
       } else if (equalsOrSuffix(qName, "ServiceName")) {
          builder.name(currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    /**

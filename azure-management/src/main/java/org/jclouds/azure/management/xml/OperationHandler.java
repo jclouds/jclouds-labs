@@ -93,7 +93,7 @@ public class OperationHandler extends ParseSax.HandlerForGeneratedRequestWithRes
       } else if (equalsOrSuffix(qName, "HttpStatusCode")) {
          builder.httpStatusCode(Integer.parseInt(currentOrNull(currentText)));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    /**

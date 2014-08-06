@@ -66,7 +66,7 @@ public class NetworkHandler extends ParseSax.HandlerWithResult<Network> {
       } else if (equalsOrSuffix(qName, "Netmask")) {
          builder.netmask(currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    public void characters(char ch[], int start, int length) {

@@ -75,7 +75,7 @@ public class DetailedHostedServicePropertiesHandler extends HostedServicePropert
       } else {
          super.endElement(uri, name, qName);
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
 }

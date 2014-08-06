@@ -69,7 +69,7 @@ public class OrgHandler extends ParseSax.HandlerWithResult<Org> {
       if (equalsOrSuffix(qName, "Description")) {
          builder.description(currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    public void characters(char ch[], int start, int length) {

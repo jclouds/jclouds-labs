@@ -53,7 +53,7 @@ public class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResu
       } else if (qName.equals("AvailableService")) {
          builder.addAvailableService(SaxUtils.currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    /**

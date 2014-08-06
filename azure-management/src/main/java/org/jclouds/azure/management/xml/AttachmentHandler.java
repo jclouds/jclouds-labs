@@ -53,7 +53,7 @@ public class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithRe
       } else if (qName.equals("RoleName")) {
          builder.role(SaxUtils.currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
    /**
