@@ -22,8 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -157,7 +158,7 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this)
+      return MoreObjects.toStringHelper(this)
             .add("loadBalancers", loadBalancers)
             .add("type", type)
             .add("networks", networks)

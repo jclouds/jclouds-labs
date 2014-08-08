@@ -21,8 +21,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.beans.ConstructorProperties;
 import java.net.URI;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Cloud Big Data CreateCluster.
@@ -107,7 +108,7 @@ public class CreateCluster implements Comparable<CreateCluster> {
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this)
+      return MoreObjects.toStringHelper(this)
             .add("name", name)
             .add("clusterType", clusterType)
             .add("flavorId", flavorId)

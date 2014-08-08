@@ -17,6 +17,7 @@
 
 package org.jclouds.openstack.marconi.v1.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import org.jclouds.javax.annotation.Nullable;
@@ -83,8 +84,8 @@ public class Claim {
       return Objects.equal(this.id, that.id);
    }
 
-   protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper(this)
+   protected MoreObjects.ToStringHelper string() {
+      return MoreObjects.toStringHelper(this)
          .add("id", id).add("ttl", ttl).add("age", age).add("messages", messages);
    }
 

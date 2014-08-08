@@ -23,8 +23,9 @@ import java.beans.ConstructorProperties;
 import java.util.Map;
 
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -116,7 +117,7 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this)
+      return MoreObjects.toStringHelper(this)
             .add("name", name)
             .add("cooldown", cooldown)
             .add("minEntities", minEntities)
