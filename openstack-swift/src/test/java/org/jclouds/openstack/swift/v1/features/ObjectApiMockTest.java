@@ -105,14 +105,14 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ObjectList objects = api.getObjectApiForRegionAndContainer("DFW", "myContainer").list();
+         ObjectList objects = api.getObjectApi("DFW", "myContainer").list();
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
          assertEquals(objects.getContainer().getName(), "myContainer");
          assertTrue(objects.getContainer().getAnybodyRead().get());
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/?format=json");
+         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer");
       } finally {
          server.shutdown();
       }
@@ -127,14 +127,14 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ObjectList objects = api.getObjectApiForRegionAndContainer("DFW", "myContainer").list(new ListContainerOptions());
+         ObjectList objects = api.getObjectApi("DFW", "myContainer").list(new ListContainerOptions());
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
          assertEquals(objects.getContainer().getName(), "myContainer");
          assertTrue(objects.getContainer().getAnybodyRead().get());
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/?format=json");
+         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer");
       } finally {
          server.shutdown();
       }
@@ -147,12 +147,12 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         ObjectList objects = api.getObjectApiForRegionAndContainer("DFW", "myContainer").list(marker("test"));
+         ObjectList objects = api.getObjectApi("DFW", "myContainer").list(marker("test"));
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/?format=json&marker=test");
+         assertRequest(server.takeRequest(), "GET", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer?marker=test");
       } finally {
          server.shutdown();
       }
@@ -169,7 +169,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertEquals(
-               api.getObjectApiForRegionAndContainer("DFW", "myContainer").put("myObject", PAYLOAD,
+               api.getObjectApi("DFW", "myContainer").put("myObject", PAYLOAD,
                      metadata(metadata)), "d9f5eb4bba4e2f2f046e54611bc8196b");
 
          assertEquals(server.getRequestCount(), 2);
@@ -197,7 +197,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertEquals(
-               api.getObjectApiForRegionAndContainer("DFW", containerName).put(objectName, PAYLOAD,
+               api.getObjectApi("DFW", containerName).put(objectName, PAYLOAD,
                      metadata(metadata)), "d9f5eb4bba4e2f2f046e54611bc8196b");
 
          assertEquals(server.getRequestCount(), 2);
@@ -229,7 +229,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
          assertEquals(
-               api.getObjectApiForRegionAndContainer("DFW", "myContainer").put("myObject", PAYLOAD,
+               api.getObjectApi("DFW", "myContainer").put("myObject", PAYLOAD,
                      metadata(metadata)), "d9f5eb4bba4e2f2f046e54611bc8196b");
 
          assertEquals(server.getRequestCount(), 5);
@@ -258,7 +258,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         SwiftObject object = api.getObjectApiForRegionAndContainer("DFW", "myContainer").getWithoutBody("myObject");
+         SwiftObject object = api.getObjectApi("DFW", "myContainer").getWithoutBody("myObject");
          assertEquals(object.getName(), "myObject");
          assertEquals(object.getETag(), "8a964ee2a5e88be344f36c22562a6486");
          assertEquals(object.getLastModified(), dates.rfc822DateParse("Fri, 12 Jun 2010 13:40:18 GMT"));
@@ -286,7 +286,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         SwiftObject object = api.getObjectApiForRegionAndContainer("DFW", "myContainer").get("myObject", tail(1));
+         SwiftObject object = api.getObjectApi("DFW", "myContainer").get("myObject", tail(1));
          assertEquals(object.getName(), "myObject");
          assertEquals(object.getETag(), "8a964ee2a5e88be344f36c22562a6486");
          assertEquals(object.getLastModified(), dates.rfc822DateParse("Fri, 12 Jun 2010 13:40:18 GMT"));
@@ -326,7 +326,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
          final SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift", overrides);
 
-         api.getObjectApiForRegionAndContainer("DFW", "myContainer").put("myObject", new ByteSourcePayload(ByteSource.wrap("swifty".getBytes())), metadata(metadata));
+         api.getObjectApi("DFW", "myContainer").put("myObject", new ByteSourcePayload(ByteSource.wrap("swifty".getBytes())), metadata(metadata));
 
          fail("testReplaceTimeout test should have failed with an HttpResponseException.");
       } finally {
@@ -343,7 +343,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getObjectApiForRegionAndContainer("DFW", "myContainer").updateMetadata("myObject", metadata));
+         assertTrue(api.getObjectApi("DFW", "myContainer").updateMetadata("myObject", metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -367,7 +367,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getObjectApiForRegionAndContainer("DFW", "myContainer").updateMetadata("myObject", metadata));
+         assertTrue(api.getObjectApi("DFW", "myContainer").updateMetadata("myObject", metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -392,7 +392,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getObjectApiForRegionAndContainer("DFW", "myContainer").deleteMetadata("myObject", metadata));
+         assertTrue(api.getObjectApi("DFW", "myContainer").deleteMetadata("myObject", metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -414,7 +414,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.getObjectApiForRegionAndContainer("DFW", "myContainer").delete("myObject");
+         api.getObjectApi("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -433,7 +433,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.getObjectApiForRegionAndContainer("DFW", "myContainer").delete("myObject");
+         api.getObjectApi("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -452,7 +452,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
             .addHeader(SwiftHeaders.OBJECT_COPY_FROM, "/bar/foo.txt")));
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getObjectApiForRegionAndContainer("DFW", "foo")
+         assertTrue(api.getObjectApi("DFW", "foo")
             .copy("bar.txt", "bar", "foo.txt"));
 
          assertEquals(server.getRequestCount(), 2);
@@ -476,7 +476,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          // the following line will throw the CopyObjectException
-         api.getObjectApiForRegionAndContainer("DFW", "foo").copy("bar.txt", "bogus", "foo.txt");
+         api.getObjectApi("DFW", "foo").copy("bar.txt", "bogus", "foo.txt");
       } finally {
          server.shutdown();
       }

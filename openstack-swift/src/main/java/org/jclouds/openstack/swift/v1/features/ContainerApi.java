@@ -46,7 +46,6 @@ import org.jclouds.openstack.swift.v1.options.ListContainerOptions;
 import org.jclouds.openstack.swift.v1.options.UpdateContainerOptions;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
@@ -67,39 +66,35 @@ public interface ContainerApi {
 
    /**
     * Lists up to 10,000 containers.
-    * 
+    *
     * <h3>NOTE</h3>
     * This method returns a list of {@link Container} objects <b>without</b> metadata. To retrieve
     * the {@link Container} metadata, use the {@link #get(String)} method.
     * <p/>
-    * 
+    *
     * @return a list of {@link Container containers} ordered by name.
     */
    @Named("container:list")
    @GET
-   @QueryParams(keys = "format", values = "json")
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
-   @Path("/")
    FluentIterable<Container> list();
 
    /**
     * Lists containers with the supplied {@link ListContainerOptions}.
-    * 
+    *
     * <h3>NOTE</h3>
     * This method returns a list of {@link Container} objects <b>without</b> metadata. To retrieve
     * the {@link Container} metadata, use the {@link #get(String)} method.
     * <p/>
-    * 
+    *
     * @param options
     *          the options to control the output list.
-    * 
+    *
     * @return a list of {@link Container containers} ordered by name.
     */
    @Named("container:list")
    @GET
-   @QueryParams(keys = "format", values = "json")
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
-   @Path("/")
    FluentIterable<Container> list(ListContainerOptions options);
 
    /**
@@ -112,8 +107,8 @@ public interface ContainerApi {
     */
    @Named("container:create")
    @PUT
-   @ResponseParser(FalseOnAccepted.class)
    @Path("/{containerName}")
+   @ResponseParser(FalseOnAccepted.class)
    boolean create(@PathParam("containerName") String containerName);
 
    /**
@@ -128,23 +123,23 @@ public interface ContainerApi {
     */
    @Named("container:create")
    @PUT
-   @ResponseParser(FalseOnAccepted.class)
    @Path("/{containerName}")
+   @ResponseParser(FalseOnAccepted.class)
    boolean create(@PathParam("containerName") String containerName, CreateContainerOptions options);
 
    /**
     * Gets the {@link Container}.
-    * 
+    *
     * @param containerName
     *           corresponds to {@link Container#getName()}.
-    * 
+    *
     * @return the {@link Container}, or {@code null} if not found.
     */
    @Named("container:get")
    @HEAD
+   @Path("/{containerName}")
    @ResponseParser(ParseContainerFromHeaders.class)
    @Fallback(NullOnNotFoundOr404.class)
-   @Path("/{containerName}")
    @Nullable
    Container get(@PathParam("containerName") String containerName);
 
@@ -161,8 +156,8 @@ public interface ContainerApi {
     */
    @Named("container:update")
    @POST
-   @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{containerName}")
+   @Fallback(FalseOnNotFoundOr404.class)
    boolean update(@PathParam("containerName") String containerName, UpdateContainerOptions options);
 
    /**
@@ -178,82 +173,43 @@ public interface ContainerApi {
     */
    @Named("container:updateMetadata")
    @POST
-   @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{containerName}")
+   @Fallback(FalseOnNotFoundOr404.class)
    boolean updateMetadata(@PathParam("containerName") String containerName,
          @BinderParam(BindContainerMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
     * Deletes {@link Container} metadata.
-    * 
+    *
     * @param containerName
     *           corresponds to {@link Container#getName()}.
     * @param metadata
     *           the container metadata to delete.
-    * 
-    * @return {@code true} if the container metadata was successfully deleted, 
+    *
+    * @return {@code true} if the container metadata was successfully deleted,
     *         {@code false} if not.
     */
    @Named("container:deleteMetadata")
    @POST
-   @Fallback(FalseOnNotFoundOr404.class)
    @Path("/{containerName}")
+   @Fallback(FalseOnNotFoundOr404.class)
    boolean deleteMetadata(@PathParam("containerName") String containerName,
          @BinderParam(BindRemoveContainerMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
     * Deletes a {@link Container}, if empty.
-    * 
+    *
     * @param containerName
     *           corresponds to {@link Container#getName()}.
-    * 
+    *
     * @return {@code true} if the container was deleted or not present.
-    * 
+    *
     * @throws IllegalStateException if the container was not empty.
     */
    @Named("container:deleteIfEmpty")
    @DELETE
-   @Fallback(TrueOnNotFoundOr404.class)
    @Path("/{containerName}")
+   @Fallback(TrueOnNotFoundOr404.class)
    boolean deleteIfEmpty(@PathParam("containerName") String containerName) throws IllegalStateException;
 
-   /**
-    * Creates a container, if not already present.
-    *
-    * @param containerName
-    *           corresponds to {@link Container#getName()}.
-    * @param options
-    *           the options to use when creating the container.
-    *
-    * @return {@code true} if the container was created, {@code false} if the container already existed.
-    *
-    * @deprecated Please use either {@link #create(String)} or {@link #create(String, CreateContainerOptions)}
-    *             as this method will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Named("container:createIfAbsent")
-   @PUT
-   @ResponseParser(FalseOnAccepted.class)
-   @Path("/{containerName}")
-   boolean createIfAbsent(@PathParam("containerName") String containerName, CreateContainerOptions options);
-
-   /**
-    * Gets the {@link Container} metadata, including the number of objects in the container and 
-    * the total bytes for all objects stored in the container.
-    *
-    * @param containerName
-    *           corresponds to {@link Container#getName()}.
-    *
-    * @return the {@link Container}, or {@code null} if not found.
-    *
-    * @deprecated Please use {@link #get(String)} as this method will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   @Named("container:get")
-   @HEAD
-   @ResponseParser(ParseContainerFromHeaders.class)
-   @Fallback(NullOnNotFoundOr404.class)
-   @Path("/{containerName}")
-   @Nullable
-   Container head(@PathParam("containerName") String containerName);
 }

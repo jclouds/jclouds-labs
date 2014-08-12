@@ -42,7 +42,7 @@ import com.google.inject.Module;
  * Implementation of {@link ApiMetadata} for the Swift API.
  */
 public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
-   
+
    @Override
    public Builder toBuilder() {
       return new Builder().fromApiMetadata(this);
@@ -67,7 +67,7 @@ public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
 
       protected Builder() {
           id("openstack-swift")
-         .name("OpenStack Swift Grizzly+ API")
+         .name("OpenStack Swift API")
          .identityName("${tenantName}:${userName} or ${userName}, if your keystone supports a default tenant")
          .credentialName("${password}")
          .documentation(URI.create("http://docs.openstack.org/api/openstack-object-storage/1.0/content/ch_object-storage-dev-overview.html"))
@@ -85,7 +85,7 @@ public class SwiftApiMetadata extends BaseHttpApiMetadata<SwiftApi> {
                                      .add(SwiftBlobStoreContextModule.class)
                                      .add(SignUsingTemporaryUrls.class).build());
       }
-      
+
       @Override
       public SwiftApiMetadata build() {
          return new SwiftApiMetadata(this);

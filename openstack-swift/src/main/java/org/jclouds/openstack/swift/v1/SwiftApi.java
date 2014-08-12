@@ -40,7 +40,7 @@ import com.google.inject.Provides;
  * <p/>
  * OpenStack Object Storage is an object-based storage system that stores content and metadata
  * as objects. You create, modify, and get objects and metadata using this API.
- * <p/>8
+ * <p/>
  */
 @Beta
 public interface SwiftApi extends Closeable {
@@ -60,47 +60,53 @@ public interface SwiftApi extends Closeable {
 
    @Delegate
    @Path("/{containerName}")
-   ObjectApi getObjectApiForContainer(@EndpointParam(parser = RegionToEndpoint.class) String region,
+   ObjectApi getObjectApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 
    @Delegate
    @Path("/{containerName}")
-   StaticLargeObjectApi getStaticLargeObjectApiForContainer(
-         @EndpointParam(parser = RegionToEndpoint.class) String region,
+   StaticLargeObjectApi getStaticLargeObjectApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 
    /**
-    * @deprecated Please use {@link #getAccountApi(String)} as this method will be removed in jclouds 2.0.
+    * @deprecated Please use {@link #getAccountApi(String)} as this method will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
    AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
-    * @deprecated Please use {@link #getBulkApi(String)} as this method will be removed in jclouds 2.0.
+    * @deprecated Please use {@link #getBulkApi(String)} as this method will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
    BulkApi getBulkApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
-    * @deprecated Please use {@link #getContainerApi(String)} as this method will be removed in jclouds 2.0.
+    * @deprecated Please use {@link #getContainerApi(String)} as this method will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
    ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
-    * @deprecated Please use {@link #getObjectApiForContainer(String)} as this method will be removed in jclouds 2.0.
+    * @deprecated Please use {@link #getObjectApi(String, String)} as this method will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
    @Path("/{containerName}")
    ObjectApi getObjectApiForRegionAndContainer(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 
    /**
-    * @deprecated Please use {@link #getStaticLargeObjectApiForContainer(String)} as this method will be removed in jclouds 2.0.
+    * @deprecated Please use {@link #getStaticLargeObjectApi(String, String)} as this method
+    *             will be removed in jclouds 3.0.
     */
+   @Deprecated
    @Delegate
    @Path("/{containerName}")
    StaticLargeObjectApi getStaticLargeObjectApiForRegionAndContainer(
          @EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
+
 }

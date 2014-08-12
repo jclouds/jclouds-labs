@@ -66,16 +66,16 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       final String objectName = "object # ! special";
 
       for (String regionId : regions) {
-         assertNotNull(api.getContainerApiForRegion(regionId).create(containerName));
-         assertNotNull(api.getObjectApiForRegionAndContainer(regionId, containerName).put(objectName, PAYLOAD));
+         assertNotNull(api.getContainerApi(regionId).create(containerName));
+         assertNotNull(api.getObjectApi(regionId, containerName).put(objectName, PAYLOAD));
 
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(objectName);
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(objectName);
          assertEquals(object.getName(), objectName);
          checkObject(object);
          assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
 
-         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(objectName);
-         api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
+         api.getObjectApi(regionId, containerName).delete(objectName);
+         api.getContainerApi(regionId).deleteIfEmpty(containerName);
       }
    }
 
@@ -113,15 +113,15 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
          String destinationObject = "copy.txt";
          String destinationPath = "/" + destinationContainer + "/" + destinationObject;
 
-         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
+         ContainerApi containerApi = api.getContainerApi(regionId);
 
          // create source and destination dirs
          containerApi.create(sourceContainer);
          containerApi.create(destinationContainer);
 
          // get the api for this region and container
-         ObjectApi srcApi = api.getObjectApiForRegionAndContainer(regionId, sourceContainer);
-         ObjectApi destApi = api.getObjectApiForRegionAndContainer(regionId, destinationContainer);
+         ObjectApi srcApi = api.getObjectApi(regionId, sourceContainer);
+         ObjectApi destApi = api.getObjectApi(regionId, destinationContainer);
 
          // Create source object
          assertNotNull(srcApi.put(sourceObjectName, PAYLOAD));
@@ -160,9 +160,9 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testList() throws Exception {
       for (String regionId : regions) {
-         ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
+         ObjectApi objectApi = api.getObjectApi(regionId, containerName);
          ObjectList response = objectApi.list();
-         assertEquals(response.getContainer(), api.getContainerApiForRegion(regionId).get(containerName));
+         assertEquals(response.getContainer(), api.getContainerApi(regionId).get(containerName));
          for (SwiftObject object : response) {
             checkObject(object);
          }
@@ -171,9 +171,9 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testListWithOptions() throws Exception {
       for (String regionId : regions) {
-         ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
+         ObjectApi objectApi = api.getObjectApi(regionId, containerName);
          ObjectList response = objectApi.list(ListContainerOptions.NONE);
-         assertEquals(response.getContainer(), api.getContainerApiForRegion(regionId).get(containerName));
+         assertEquals(response.getContainer(), api.getContainerApi(regionId).get(containerName));
          for (SwiftObject object : response) {
             checkObject(object);
          }
@@ -182,7 +182,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testMetadata() throws Exception {
       for (String regionId : regions) {
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(name);
          assertEquals(object.getName(), name);
          checkObject(object);
          assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
@@ -191,7 +191,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testUpdateMetadata() throws Exception {
       for (String regionId : regions) {
-         ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
+         ObjectApi objectApi = api.getObjectApi(regionId, containerName);
 
          Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
          assertTrue(objectApi.updateMetadata(name, meta));
@@ -207,7 +207,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testGet() throws Exception {
       for (String regionId : regions) {
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name, GetOptions.NONE);
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(name, GetOptions.NONE);
          assertEquals(object.getName(), name);
          checkObject(object);
          assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
@@ -216,7 +216,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testPrivateByDefault() throws Exception {
       for (String regionId : regions) {
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(name);
          try {
             object.getUri().toURL().openStream();
             fail("shouldn't be able to access " + object);
@@ -227,7 +227,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testGetOptions() throws Exception {
       for (String regionId : regions) {
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name, tail(1));
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(name, tail(1));
          assertEquals(object.getName(), name);
          checkObject(object);
          assertEquals(toStringAndClose(object.getPayload().openStream()), "y");
@@ -237,7 +237,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void testListOptions() throws Exception {
       String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
       for (String regionId : regions) {
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName)
+         SwiftObject object = api.getObjectApi(regionId, containerName)
                .list(marker(lexicographicallyBeforeName)).get(0);
          assertEquals(object.getName(), name);
          checkObject(object);
@@ -246,7 +246,7 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void testDeleteMetadata() throws Exception {
       for (String regionId : regions) {
-         ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
+         ObjectApi objectApi = api.getObjectApi(regionId, containerName);
 
          Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
 
@@ -263,8 +263,8 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void setup() {
       super.setup();
       for (String regionId : regions) {
-         api.getContainerApiForRegion(regionId).create(containerName);
-         api.getObjectApiForRegionAndContainer(regionId, containerName).put(name, PAYLOAD);
+         api.getContainerApi(regionId).create(containerName);
+         api.getObjectApi(regionId, containerName).put(name, PAYLOAD);
       }
    }
 
@@ -273,8 +273,8 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void tearDown() {
       for (String regionId : regions) {
          deleteAllObjectsInContainer(regionId, containerName);
-         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(name);
-         api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
+         api.getObjectApi(regionId, containerName).delete(name);
+         api.getContainerApi(regionId).deleteIfEmpty(containerName);
       }
 
       super.tearDown();

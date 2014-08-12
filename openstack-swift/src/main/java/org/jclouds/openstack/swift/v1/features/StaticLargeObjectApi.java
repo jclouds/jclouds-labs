@@ -52,25 +52,25 @@ import com.google.common.annotations.Beta;
 @Beta
 @RequestFilters(AuthenticateRequest.class)
 @Consumes(APPLICATION_JSON)
+@Path("/{objectName}")
 public interface StaticLargeObjectApi {
 
    /**
     * Creates or updates a static large object's manifest.
-    * 
+    *
     * @param objectName
     *           corresponds to {@link SwiftObject#getName()}.
     * @param segments
     *           ordered parts which will be concatenated upon download.
     * @param metadata
     *           corresponds to {@link SwiftObject#getMetadata()}.
-    * 
+    *
     * @return {@link SwiftObject#getEtag()} of the object, which is the MD5
     *         checksum of the concatenated ETag values of the {@code segments}.
     */
    @Named("staticLargeObject:replaceManifest")
    @PUT
    @ResponseParser(ETagHeader.class)
-   @Path("/{objectName}")
    @QueryParams(keys = "multipart-manifest", values = "put")
    String replaceManifest(@PathParam("objectName") String objectName,
          @BinderParam(BindToJsonPayload.class) List<Segment> segments,
@@ -78,14 +78,13 @@ public interface StaticLargeObjectApi {
 
    /**
     * Deletes a static large object, if present, including all of its segments.
-    * 
+    *
     * @param objectName
     *           corresponds to {@link SwiftObject#getName()}.
     */
    @Named("staticLargeObject:delete")
    @DELETE
    @Fallback(VoidOnNotFoundOr404.class)
-   @Path("/{objectName}")
    @QueryParams(keys = "multipart-manifest", values = "delete")
    void delete(@PathParam("objectName") String objectName);
 }

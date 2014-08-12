@@ -53,7 +53,7 @@ public class RegionScopedTemporaryUrlBlobSigner implements BlobRequestSigner {
          @Assisted String regionId) {
       checkNotNull(regionId, "regionId");
       this.timestamp = timestamp;
-      this.signer = TemporaryUrlSigner.checkApiEvery(api.getAccountApiForRegion(regionId), seconds);
+      this.signer = TemporaryUrlSigner.checkApiEvery(api.getAccountApi(regionId), seconds);
       this.storageUrl = regionToUris.get().get(regionId).get();
    }
 

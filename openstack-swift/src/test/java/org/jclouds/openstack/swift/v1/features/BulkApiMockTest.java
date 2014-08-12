@@ -55,7 +55,7 @@ public class BulkApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          Payload payload = Payloads.newByteSourcePayload(ByteSource.wrap(tarGz));
-         ExtractArchiveResponse response = api.getBulkApiForRegion("DFW").extractArchive("myContainer", payload, "tar.gz");
+         ExtractArchiveResponse response = api.getBulkApi("DFW").extractArchive("myContainer", payload, "tar.gz");
 
          assertEquals(response.getCreated(), 10);
          assertTrue(response.getErrors().isEmpty());

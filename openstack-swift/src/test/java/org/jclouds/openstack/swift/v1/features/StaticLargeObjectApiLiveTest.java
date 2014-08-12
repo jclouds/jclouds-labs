@@ -47,13 +47,13 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi>
 
    public void testNotPresentWhenDeleting() throws Exception {
       for (String regionId : regions) {
-         api.getStaticLargeObjectApiForRegionAndContainer(regionId, containerName).delete(UUID.randomUUID().toString());
+         api.getStaticLargeObjectApi(regionId, containerName).delete(UUID.randomUUID().toString());
       }
    }
 
    public void testReplaceManifest() throws Exception {
       for (String regionId : regions) {
-         ObjectApi objectApi = api.getObjectApiForRegionAndContainer(regionId, containerName);
+         ObjectApi objectApi = api.getObjectApi(regionId, containerName);
 
          String etag1s = objectApi.put(name + "/1", newByteSourcePayload(ByteSource.wrap(megOf1s)));
          assertMegabyteAndETagMatches(regionId, name + "/1", etag1s);
@@ -70,31 +70,31 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi>
                      .build())
                      .build();
 
-         String etagOfEtags = api.getStaticLargeObjectApiForRegionAndContainer(regionId, containerName).replaceManifest(
+         String etagOfEtags = api.getStaticLargeObjectApi(regionId, containerName).replaceManifest(
                name, segments, ImmutableMap.of("myfoo", "Bar"));
 
          assertNotNull(etagOfEtags);
 
-         SwiftObject bigObject = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
+         SwiftObject bigObject = api.getObjectApi(regionId, containerName).get(name);
          assertEquals(bigObject.getETag(), etagOfEtags);
          assertEquals(bigObject.getPayload().getContentMetadata().getContentLength(), new Long(2 * 1024 * 1024));
          assertEquals(bigObject.getMetadata(), ImmutableMap.of("myfoo", "Bar"));
 
          // segments are visible
-         assertEquals(api.getContainerApiForRegion(regionId).get(containerName).getObjectCount(), 3);
+         assertEquals(api.getContainerApi(regionId).get(containerName).getObjectCount(), 3);
       }
    }
 
    @Test(dependsOnMethods = "testReplaceManifest")
    public void testDelete() throws Exception {
       for (String regionId : regions) {
-         api.getStaticLargeObjectApiForRegionAndContainer(regionId, containerName).delete(name);
-         assertEquals(api.getContainerApiForRegion(regionId).get(containerName).getObjectCount(), 0);
+         api.getStaticLargeObjectApi(regionId, containerName).delete(name);
+         assertEquals(api.getContainerApi(regionId).get(containerName).getObjectCount(), 0);
       }
    }
 
    protected void assertMegabyteAndETagMatches(String regionId, String name, String etag1s) {
-      SwiftObject object1s = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
+      SwiftObject object1s = api.getObjectApi(regionId, containerName).get(name);
       assertEquals(object1s.getETag(), etag1s);
       assertEquals(object1s.getPayload().getContentMetadata().getContentLength(), new Long(1024 * 1024));
    }
@@ -104,7 +104,7 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi>
    public void setup() {
       super.setup();
       for (String regionId : regions) {
-         boolean created = api.getContainerApiForRegion(regionId).create(containerName);
+         boolean created = api.getContainerApi(regionId).create(containerName);
          if (!created) {
             deleteAllObjectsInContainer(regionId, containerName);
          }
@@ -122,7 +122,7 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi>
    public void tearDown() {
       for (String regionId : regions) {
          deleteAllObjectsInContainer(regionId, containerName);
-         api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
+         api.getContainerApi(regionId).deleteIfEmpty(containerName);
       }
       super.tearDown();
    }

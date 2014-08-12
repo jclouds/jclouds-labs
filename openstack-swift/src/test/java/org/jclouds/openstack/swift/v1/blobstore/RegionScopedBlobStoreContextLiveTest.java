@@ -50,12 +50,12 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    }
 
    @Test
-   public void regionsAreNotEmpty() {
+   public void testRegionsAreNotEmpty() {
       assertFalse(RegionScopedBlobStoreContext.class.cast(view).getConfiguredRegions().isEmpty());
    }
 
    @Test
-   public void locationsMatch() {
+   public void testLocationsMatch() {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
       for (String regionId : ctx.getConfiguredRegions()) {
          Set<? extends Location> locations = ctx.getBlobStore(regionId).listAssignableLocations();
@@ -66,7 +66,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    }
 
    @Test
-   public void tryList() throws InterruptedException, ExecutionException {
+   public void testListBlobs() throws InterruptedException, ExecutionException {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
       for (String regionId : ctx.getConfiguredRegions()) {
          assertEquals(ctx.getAsyncBlobStore(regionId).list().get(), ctx.getBlobStore(regionId).list());
@@ -74,7 +74,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
    }
 
    @Test
-   public void trySign() throws InterruptedException, ExecutionException {
+   public void testSignBlob() throws InterruptedException, ExecutionException {
       RegionScopedBlobStoreContext ctx = RegionScopedBlobStoreContext.class.cast(view);
       for (String regionId : ctx.getConfiguredRegions()) {
          BlobStore region = ctx.getBlobStore(regionId);

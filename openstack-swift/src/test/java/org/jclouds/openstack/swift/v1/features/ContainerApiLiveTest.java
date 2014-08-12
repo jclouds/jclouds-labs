@@ -54,16 +54,16 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
                                     SwiftHeaders.STATIC_WEB_ERROR, "__error.html");
          CreateContainerOptions opts = new CreateContainerOptions().headers(headers);
 
-         assertNotNull(api.getContainerApiForRegion(regionId).create(name, opts));
+         assertNotNull(api.getContainerApi(regionId).create(name, opts));
 
-         Container container = api.getContainerApiForRegion(regionId).get(name);
+         Container container = api.getContainerApi(regionId).get(name);
          assertNotNull(container);
          assertEquals(container.getName(), name);
          assertEquals(container.getMetadata().size(), 2);
          assertEquals(container.getMetadata().get("web-index"), "__index.html");
          assertEquals(container.getMetadata().get("web-error"), "__error.html");
 
-         assertTrue(api.getContainerApiForRegion(regionId).deleteIfEmpty(name));
+         assertTrue(api.getContainerApi(regionId).deleteIfEmpty(name));
       }
    }
 
@@ -71,18 +71,18 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       final String nameWithSpaces = "container # ! special";
 
       for (String regionId : regions) {
-         assertTrue(api.getContainerApiForRegion(regionId).create(nameWithSpaces));
-         Container container = api.getContainerApiForRegion(regionId).get(nameWithSpaces);
+         assertTrue(api.getContainerApi(regionId).create(nameWithSpaces));
+         Container container = api.getContainerApi(regionId).get(nameWithSpaces);
          assertNotNull(container);
          assertEquals(container.getName(), nameWithSpaces);
 
-         assertTrue(api.getContainerApiForRegion(regionId).deleteIfEmpty(nameWithSpaces));
+         assertTrue(api.getContainerApi(regionId).deleteIfEmpty(nameWithSpaces));
       }
    }
 
    public void testList() throws Exception {
       for (String regionId : regions) {
-         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
+         ContainerApi containerApi = api.getContainerApi(regionId);
          FluentIterable<Container> response = containerApi.list();
          assertNotNull(response);
          for (Container container : response) {
@@ -97,7 +97,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       String lexicographicallyBeforeName = name.substring(0, name.length() - 1);
       for (String regionId : regions) {
          ListContainerOptions options = ListContainerOptions.Builder.marker(lexicographicallyBeforeName);
-         Container container = api.getContainerApiForRegion(regionId).list(options).get(0);
+         Container container = api.getContainerApi(regionId).list(options).get(0);
          assertEquals(container.getName(), name);
          assertTrue(container.getObjectCount() == 0);
          assertTrue(container.getBytesUsed() == 0);
@@ -111,29 +111,29 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
                                     SwiftHeaders.STATIC_WEB_ERROR, "__error.html");
          UpdateContainerOptions opts = new UpdateContainerOptions().headers(headers);
 
-         assertNotNull(api.getContainerApiForRegion(regionId).create(name));
+         assertNotNull(api.getContainerApi(regionId).create(name));
 
-         Container container = api.getContainerApiForRegion(regionId).get(name);
+         Container container = api.getContainerApi(regionId).get(name);
          assertNotNull(container);
          assertEquals(container.getName(), name);
          assertTrue(container.getMetadata().isEmpty());
 
-         assertNotNull(api.getContainerApiForRegion(regionId).update(name, opts));
+         assertNotNull(api.getContainerApi(regionId).update(name, opts));
 
-         Container updatedContainer = api.getContainerApiForRegion(regionId).get(name);
+         Container updatedContainer = api.getContainerApi(regionId).get(name);
          assertNotNull(updatedContainer);
          assertEquals(updatedContainer.getName(), name);
          assertEquals(updatedContainer.getMetadata().size(), 2);
          assertEquals(updatedContainer.getMetadata().get("web-index"), "__index.html");
          assertEquals(updatedContainer.getMetadata().get("web-error"), "__error.html");
 
-         assertTrue(api.getContainerApiForRegion(regionId).deleteIfEmpty(name));
+         assertTrue(api.getContainerApi(regionId).deleteIfEmpty(name));
       }
    }
 
    public void testGet() throws Exception {
       for (String regionId : regions) {
-         Container container = api.getContainerApiForRegion(regionId).get(name);
+         Container container = api.getContainerApi(regionId).get(name);
          assertEquals(container.getName(), name);
          assertTrue(container.getObjectCount() == 0);
          assertTrue(container.getBytesUsed() == 0);
@@ -144,7 +144,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       Map<String, String> meta = ImmutableMap.of("MyAdd1", "foo", "MyAdd2", "bar");
 
       for (String regionId : regions) {
-         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
+         ContainerApi containerApi = api.getContainerApi(regionId);
          assertTrue(containerApi.updateMetadata(name, meta));
          containerHasMetadata(containerApi, name, meta);
       }
@@ -154,7 +154,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       Map<String, String> meta = ImmutableMap.of("MyDelete1", "foo", "MyDelete2", "bar");
 
       for (String regionId : regions) {
-         ContainerApi containerApi = api.getContainerApiForRegion(regionId);
+         ContainerApi containerApi = api.getContainerApi(regionId);
          // update
          assertTrue(containerApi.updateMetadata(name, meta));
          containerHasMetadata(containerApi, name, meta);
@@ -182,7 +182,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    public void setup() {
       super.setup();
       for (String regionId : regions) {
-         api.getContainerApiForRegion(regionId).create(name);
+         api.getContainerApi(regionId).create(name);
       }
    }
 
@@ -190,7 +190,7 @@ public class ContainerApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    @AfterClass(groups = "live")
    public void tearDown() {
       for (String regionId : regions) {
-         api.getContainerApiForRegion(regionId).deleteIfEmpty(name);
+         api.getContainerApi(regionId).deleteIfEmpty(name);
       }
       super.tearDown();
    }

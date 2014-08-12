@@ -52,7 +52,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         Account account = api.getAccountApiForRegion("DFW").get();
+         Account account = api.getAccountApi("DFW").get();
          assertEquals(account.getContainerCount(), 3l);
          assertEquals(account.getObjectCount(), 42l);
          assertEquals(account.getBytesUsed(), 323479l);
@@ -62,7 +62,7 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         assertRequest(server.takeRequest(), "HEAD", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/");
+         assertRequest(server.takeRequest(), "HEAD", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9");
       } finally {
          server.shutdown();
       }
@@ -77,13 +77,13 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getAccountApiForRegion("DFW").updateMetadata(metadata));
+         assertTrue(api.getAccountApi("DFW").updateMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         
+
          RecordedRequest replaceRequest = server.takeRequest();
-         assertRequest(replaceRequest, "POST", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/");
+         assertRequest(replaceRequest, "POST", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9");
          for (Entry<String, String> entry : metadata.entrySet()) {
             assertEquals(replaceRequest.getHeader(ACCOUNT_METADATA_PREFIX + entry.getKey().toLowerCase()), entry.getValue());
          }
@@ -99,13 +99,13 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getAccountApiForRegion("DFW").updateTemporaryUrlKey("foobar"));
+         assertTrue(api.getAccountApi("DFW").updateTemporaryUrlKey("foobar"));
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         
+
          RecordedRequest replaceRequest = server.takeRequest();
-         assertRequest(replaceRequest, "POST", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/");
+         assertRequest(replaceRequest, "POST", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9");
          assertEquals(replaceRequest.getHeader(ACCOUNT_TEMPORARY_URL_KEY), "foobar");
       } finally {
          server.shutdown();
@@ -119,13 +119,13 @@ public class AccountApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         assertTrue(api.getAccountApiForRegion("DFW").deleteMetadata(metadata));
+         assertTrue(api.getAccountApi("DFW").deleteMetadata(metadata));
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
          RecordedRequest deleteRequest = server.takeRequest();
          assertEquals(deleteRequest.getRequestLine(),
-               "POST /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/ HTTP/1.1");
+               "POST /v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9 HTTP/1.1");
          for (String key : metadata.keySet()) {
             assertEquals(deleteRequest.getHeader(ACCOUNT_REMOVE_METADATA_PREFIX + key.toLowerCase()), "ignored");
          }

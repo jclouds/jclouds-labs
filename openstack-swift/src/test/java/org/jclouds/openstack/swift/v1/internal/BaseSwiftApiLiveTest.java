@@ -71,7 +71,7 @@ public abstract class BaseSwiftApiLiveTest<A extends SwiftApi> extends BaseApiLi
    protected void deleteAllObjectsInContainer(String regionId, final String containerName) {
       Uninterruptibles.sleepUninterruptibly(10, TimeUnit.SECONDS);
 
-      ObjectList objects = api.getObjectApiForContainer(regionId, containerName).list(new ListContainerOptions());
+      ObjectList objects = api.getObjectApi(regionId, containerName).list(new ListContainerOptions());
       if (objects == null) {
          return;
       }

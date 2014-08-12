@@ -26,7 +26,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
@@ -43,7 +42,7 @@ import com.google.common.annotations.Beta;
 
 /**
  * Provides access to the OpenStack Object Storage (Swift) Account API features.
- * 
+ *
  * <p/>
  * Account metadata prefixed with {@code X-Account-Meta-} will be converted
  * appropriately using a binder/parser.
@@ -51,8 +50,8 @@ import com.google.common.annotations.Beta;
  * This API is new to jclouds and hence is in Beta. That means we need people to use it and give us feedback. Based
  * on that feedback, minor changes to the interfaces may happen. This code will replace
  * org.jclouds.openstack.swift.SwiftClient in jclouds 2.0 and it is recommended you adopt it sooner than later.
- * 
- * 
+ *
+ *
  * @see {@link Account}
  */
 @Beta
@@ -62,27 +61,25 @@ public interface AccountApi {
 
    /**
     * Gets the {@link Account}.
-    * 
+    *
     * @return The {@link Account} object.
     */
    @Named("account:get")
    @HEAD
    @ResponseParser(ParseAccountFromHeaders.class)
-   @Path("/")
    Account get();
 
    /**
     * Creates or updates the {@link Account} metadata.
-    * 
+    *
     * @param metadata  the metadata to create or update.
-    * 
+    *
     * @return {@code true} if the metadata was successfully created or updated,
     *         {@code false} if not.
     */
    @Named("account:updateMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
-   @Path("/")
    boolean updateMetadata(@BinderParam(BindAccountMetadataToHeaders.class) Map<String, String> metadata);
 
    /**
@@ -96,20 +93,19 @@ public interface AccountApi {
    @Named("account:updateTemporaryUrlKey")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
-   @Path("/")
    boolean updateTemporaryUrlKey(@HeaderParam(ACCOUNT_TEMPORARY_URL_KEY) String temporaryUrlKey);
 
    /**
     * Deletes metadata from the {@link Account}.
-    * 
+    *
     * @param metadata  the metadata to delete.
-    * 
+    *
     * @return {@code true} if the metadata was successfully deleted,
     *         {@code false} if not.
     */
    @Named("account:deleteMetadata")
    @POST
    @Fallback(FalseOnNotFoundOr404.class)
-   @Path("/")
    boolean deleteMetadata(@BinderParam(BindRemoveAccountMetadataToHeaders.class) Map<String, String> metadata);
+
 }

@@ -31,8 +31,8 @@ public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest<SwiftApi
 
    public void testAnybodyReadUpdatesMetadata() throws Exception {
       for (String regionId : api.getConfiguredRegions()) {
-         api.getContainerApiForRegion(regionId).create(name, anybodyRead());
-         assertTrue(api.getContainerApiForRegion(regionId).get(name).getAnybodyRead().get());
+         api.getContainerApi(regionId).create(name, anybodyRead());
+         assertTrue(api.getContainerApi(regionId).get(name).getAnybodyRead().get());
       }
    }
 
@@ -40,7 +40,7 @@ public class CreatePublicContainerLiveTest extends BaseSwiftApiLiveTest<SwiftApi
    @AfterClass(groups = "live")
    public void tearDown() {
       for (String regionId : api.getConfiguredRegions()) {
-         api.getContainerApiForRegion(regionId).deleteIfEmpty(name);
+         api.getContainerApi(regionId).deleteIfEmpty(name);
       }
       super.tearDown();
    }

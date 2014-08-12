@@ -42,7 +42,7 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
          assertEquals(
-               api.getStaticLargeObjectApiForRegionAndContainer("DFW", "myContainer").replaceManifest(
+               api.getStaticLargeObjectApi("DFW", "myContainer").replaceManifest(
                      "myObject",
                      ImmutableList
                            .<Segment> builder()
@@ -77,12 +77,12 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.getStaticLargeObjectApiForRegionAndContainer("DFW", "myContainer").delete("myObject");
+         api.getStaticLargeObjectApi("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
          assertRequest(server.takeRequest(), "DELETE", "/v1/MossoCloudFS_5bcf396e-39dd-45ff-93a1-712b9aba90a9/myContainer/myObject?multipart-manifest=delete");
-      
+
       } finally {
          server.shutdown();
       }
@@ -95,7 +95,7 @@ public class StaticLargeObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.getStaticLargeObjectApiForRegionAndContainer("DFW", "myContainer").delete("myObject");
+         api.getStaticLargeObjectApi("DFW", "myContainer").delete("myObject");
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);

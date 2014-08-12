@@ -20,10 +20,11 @@ import org.jclouds.rest.ResourceNotFoundException;
 
 /**
  * Thrown when an object cannot be copied.
- *  
- * 
+ *
+ *
  * @see {@link SwiftErrorHandler#handleError(HttpCommand, HttpResponse)}
  */
+@SuppressWarnings("serial")
 public class CopyObjectException extends ResourceNotFoundException {
 
    private String sourcePath;

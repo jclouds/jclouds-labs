@@ -44,10 +44,10 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
 
    public void signForPublicAccess() throws Exception {
       for (String regionId : api.getConfiguredRegions()) {
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(name);
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(name);
 
          long expires = System.currentTimeMillis() / 1000 + 5;
-         String signature = TemporaryUrlSigner.checkApiEvery(api.getAccountApiForRegion(regionId), 5)
+         String signature = TemporaryUrlSigner.checkApiEvery(api.getAccountApi(regionId), 5)
                .sign("GET", object.getUri().getPath(), expires);
 
          URI signed = URI.create(format("%s?temp_url_sig=%s&temp_url_expires=%s", object.getUri(), signature, expires));
@@ -71,9 +71,9 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       super.setup();
       String key = UUID.randomUUID().toString();
       for (String regionId : api.getConfiguredRegions()) {
-         api.getAccountApiForRegion(regionId).updateTemporaryUrlKey(key);
-         api.getContainerApiForRegion(regionId).create(containerName);
-         api.getObjectApiForRegionAndContainer(regionId, containerName)
+         api.getAccountApi(regionId).updateTemporaryUrlKey(key);
+         api.getContainerApi(regionId).create(containerName);
+         api.getObjectApi(regionId, containerName)
                .put(name, newByteSourcePayload(ByteSource.wrap("swifty".getBytes())));
       }
    }
@@ -82,8 +82,8 @@ public class TemporaryUrlSignerLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
    @AfterClass(groups = "live")
    public void tearDown() {
       for (String regionId : api.getConfiguredRegions()) {
-         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(name);
-         api.getContainerApiForRegion(regionId).deleteIfEmpty(containerName);
+         api.getObjectApi(regionId, containerName).delete(name);
+         api.getContainerApi(regionId).deleteIfEmpty(containerName);
       }
       super.tearDown();
    }

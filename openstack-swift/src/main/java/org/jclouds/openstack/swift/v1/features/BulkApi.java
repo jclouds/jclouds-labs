@@ -58,14 +58,14 @@ public interface BulkApi {
 
    /**
     * Extracts a tar archive at the path specified as {@code path}.
-    * 
+    *
     * @param path
     *           the path to extract under.
     * @param payload
     *           the {@link Payload payload} archive.
     * @param format
     *           one of {@code tar}, {@code tar.gz}, or {@code tar.bz2}
-    * 
+    *
     * @return {@link BulkDeleteResponse#getErrors()} are empty on success.
     */
    @Named("bulk:extractArchive")
@@ -76,16 +76,15 @@ public interface BulkApi {
 
    /**
     * Deletes multiple objects or containers, if present.
-    * 
+    *
     * @param paths
     *           format of {@code container}, for an empty container, or
     *           {@code container/object} for an object.
-    * 
+    *
     * @return {@link BulkDeleteResponse#getErrors()} are empty on success.
     */
    @Named("bulk:delete")
    @DELETE
-   @Path("/")
    @QueryParams(keys = "bulk-delete")
    BulkDeleteResponse bulkDelete(@BinderParam(UrlEncodeAndJoinOnNewline.class) Iterable<String> paths);
 
