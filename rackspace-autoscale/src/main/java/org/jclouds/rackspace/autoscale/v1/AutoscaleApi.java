@@ -22,7 +22,6 @@ import java.util.Set;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.keystone.v2_0.domain.Tenant;
@@ -53,7 +52,7 @@ public interface AutoscaleApi extends Closeable {
     * Provides access to all scaling Group features.
     */
    @Delegate
-   GroupApi getGroupApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   GroupApi getGroupApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
 
    /**
@@ -61,7 +60,7 @@ public interface AutoscaleApi extends Closeable {
     */
    @Delegate
    @Path("/groups/{groupId}")
-   PolicyApi getPolicyApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   PolicyApi getPolicyApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("groupId") String groupId);
 
    /**
@@ -69,7 +68,7 @@ public interface AutoscaleApi extends Closeable {
     */
    @Delegate
    @Path("/groups/{groupId}/policies/{policyId}")
-   WebhookApi getWebhookApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   WebhookApi getWebhookApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("groupId") String groupId,
          @PathParam("policyId") String policyId);
 
@@ -96,7 +95,7 @@ public interface AutoscaleApi extends Closeable {
    @Deprecated
    @Delegate
    @Path("/groups/{groupId}")
-   PolicyApi getPolicyApiForGroup(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   PolicyApi getPolicyApiForGroup(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("groupId") String groupId);
 
    /**
@@ -107,7 +106,7 @@ public interface AutoscaleApi extends Closeable {
    @Deprecated
    @Delegate
    @Path("/groups/{groupId}/policies/{policyId}")
-   WebhookApi getWebhookApiForGroupAndPolicy(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   WebhookApi getWebhookApiForGroupAndPolicy(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("groupId") String groupId,
          @PathParam("policyId") String policyId);
 

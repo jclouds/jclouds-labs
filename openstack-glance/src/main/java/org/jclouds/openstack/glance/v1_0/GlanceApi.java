@@ -19,7 +19,6 @@ package org.jclouds.openstack.glance.v1_0;
 import java.io.Closeable;
 import java.util.Set;
 
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.openstack.glance.functions.RegionToEndpointNegotiateVersion;
 import org.jclouds.openstack.glance.v1_0.features.ImageApi;
@@ -47,6 +46,6 @@ public interface GlanceApi extends Closeable {
     * Provides access to Image features.
     */
    @Delegate
-   ImageApi getImageApi(@EndpointParam(parser = RegionToEndpointNegotiateVersion.class) @Nullable String region);
+   ImageApi getImageApi(@EndpointParam(parser = RegionToEndpointNegotiateVersion.class) String region);
 
 }

@@ -24,7 +24,6 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.marconi.v1.features.ClaimApi;
@@ -57,7 +56,7 @@ public interface MarconiApi extends Closeable {
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     */
    @Delegate
-   QueueApi getQueueApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   QueueApi getQueueApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @HeaderParam("Client-ID") UUID clientId);
 
    /**
@@ -73,9 +72,8 @@ public interface MarconiApi extends Closeable {
     */
    @Delegate
    @Path("/queues/{name}")
-   MessageApi getMessageApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
-         @HeaderParam("Client-ID") UUID clientId,
-         @PathParam("name") String name);
+   MessageApi getMessageApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
+         @HeaderParam("Client-ID") UUID clientId, @PathParam("name") String name);
 
    /**
     * Provides access to Claim features.
@@ -90,9 +88,8 @@ public interface MarconiApi extends Closeable {
     */
    @Delegate
    @Path("/queues/{name}")
-   ClaimApi getClaimApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
-         @HeaderParam("Client-ID") UUID clientId,
-         @PathParam("name") String name);
+   ClaimApi getClaimApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
+         @HeaderParam("Client-ID") UUID clientId, @PathParam("name") String name);
 
    /**
     * @return the Zone codes configured
@@ -117,8 +114,7 @@ public interface MarconiApi extends Closeable {
     */
    @Deprecated
    @Delegate
-   QueueApi getQueueApiForZoneAndClient(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone,
+   QueueApi getQueueApiForZoneAndClient(@EndpointParam(parser = RegionToEndpoint.class) String zone,
          @HeaderParam("Client-ID") UUID clientId);
 
    /**
@@ -137,10 +133,8 @@ public interface MarconiApi extends Closeable {
    @Deprecated
    @Delegate
    @Path("/queues/{name}")
-   MessageApi getMessageApiForZoneAndClientAndQueue(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone,
-         @HeaderParam("Client-ID") UUID clientId,
-         @PathParam("name") String name);
+   MessageApi getMessageApiForZoneAndClientAndQueue(@EndpointParam(parser = RegionToEndpoint.class) String zone,
+         @HeaderParam("Client-ID") UUID clientId, @PathParam("name") String name);
 
    /**
     * Provides access to Claim features.
@@ -158,8 +152,6 @@ public interface MarconiApi extends Closeable {
    @Deprecated
    @Delegate
    @Path("/queues/{name}")
-   ClaimApi getClaimApiForZoneAndClientAndQueue(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone,
-         @HeaderParam("Client-ID") UUID clientId,
-         @PathParam("name") String name);
+   ClaimApi getClaimApiForZoneAndClientAndQueue(@EndpointParam(parser = RegionToEndpoint.class) String zone,
+         @HeaderParam("Client-ID") UUID clientId, @PathParam("name") String name);
 }

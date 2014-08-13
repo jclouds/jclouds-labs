@@ -22,7 +22,6 @@ import java.util.Set;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.swift.v1.features.AccountApi;
@@ -51,49 +50,49 @@ public interface SwiftApi extends Closeable {
    Set<String> getConfiguredRegions();
 
    @Delegate
-   AccountApi getAccountApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   AccountApi getAccountApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    @Delegate
-   BulkApi getBulkApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   BulkApi getBulkApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    @Delegate
-   ContainerApi getContainerApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ContainerApi getContainerApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    @Delegate
    @Path("/{containerName}")
-   ObjectApi getObjectApiForContainer(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   ObjectApi getObjectApiForContainer(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 
    @Delegate
    @Path("/{containerName}")
    StaticLargeObjectApi getStaticLargeObjectApiForContainer(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 
    /**
     * @deprecated Please use {@link #getAccountApi(String)} as this method will be removed in jclouds 2.0.
     */
    @Delegate
-   AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
     * @deprecated Please use {@link #getBulkApi(String)} as this method will be removed in jclouds 2.0.
     */
    @Delegate
-   BulkApi getBulkApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   BulkApi getBulkApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
     * @deprecated Please use {@link #getContainerApi(String)} as this method will be removed in jclouds 2.0.
     */
    @Delegate
-   ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
     * @deprecated Please use {@link #getObjectApiForContainer(String)} as this method will be removed in jclouds 2.0.
     */
    @Delegate
    @Path("/{containerName}")
-   ObjectApi getObjectApiForRegionAndContainer(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+   ObjectApi getObjectApiForRegionAndContainer(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 
    /**
@@ -102,6 +101,6 @@ public interface SwiftApi extends Closeable {
    @Delegate
    @Path("/{containerName}")
    StaticLargeObjectApi getStaticLargeObjectApiForRegionAndContainer(
-         @EndpointParam(parser = RegionToEndpoint.class) @Nullable String region,
+         @EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
 }

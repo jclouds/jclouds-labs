@@ -19,7 +19,6 @@ package org.jclouds.rackspace.cloudbigdata.v1;
 import java.io.Closeable;
 import java.util.Set;
 
-import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.rackspace.cloudbigdata.v1.features.ClusterApi;
@@ -51,7 +50,7 @@ public interface CloudBigDataApi extends Closeable {
     * @return A profile API context.
     */
    @Delegate
-   ProfileApi getProfileApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ProfileApi getProfileApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
     * Provides access to all Cluster features.
@@ -59,7 +58,7 @@ public interface CloudBigDataApi extends Closeable {
     * @return A cluster API context.
     */
    @Delegate
-   ClusterApi getClusterApi(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String region);
+   ClusterApi getClusterApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 
    /**
     * @return the Zone codes configured
@@ -78,7 +77,7 @@ public interface CloudBigDataApi extends Closeable {
     */
    @Deprecated
    @Delegate
-   ProfileApi getProfileApiForZone(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone);
+   ProfileApi getProfileApiForZone(@EndpointParam(parser = RegionToEndpoint.class) String zone);
 
    /**
     * Provides access to all Cluster features.
@@ -88,6 +87,6 @@ public interface CloudBigDataApi extends Closeable {
     */
    @Deprecated
    @Delegate
-   ClusterApi getClusterApiForZone(@EndpointParam(parser = RegionToEndpoint.class) @Nullable String zone);
+   ClusterApi getClusterApiForZone(@EndpointParam(parser = RegionToEndpoint.class) String zone);
 
 }
