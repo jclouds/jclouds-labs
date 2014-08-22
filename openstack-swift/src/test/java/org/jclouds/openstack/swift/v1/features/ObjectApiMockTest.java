@@ -18,8 +18,6 @@ package org.jclouds.openstack.swift.v1.features;
 
 import static com.google.common.base.Charsets.US_ASCII;
 import static com.google.common.net.HttpHeaders.EXPIRES;
-import static com.google.common.net.HttpHeaders.RANGE;
-import static com.google.common.net.HttpHeaders.LAST_MODIFIED;
 import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
 import static org.jclouds.Constants.PROPERTY_RETRY_DELAY_START;
 import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
