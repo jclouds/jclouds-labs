@@ -78,7 +78,7 @@ public class InstallGuestAdditions implements Statement {
          URI download = URI.create("http://download.virtualbox.org/virtualbox/" + vboxVersion + "/"
                   + vboxGuestAdditionsIso);
          statements.add(call("setupPublicCurl"));
-         statements.add(saveHttpResponseTo(download, "{tmp}{fs}", vboxGuestAdditionsIso));//
+         statements.add(saveHttpResponseTo(download, "{tmp}{fs}", vboxGuestAdditionsIso));
          statements.add(exec(String.format("mount -o loop {tmp}{fs}%s %s", vboxGuestAdditionsIso, mountPoint)));
       }
       statements.add(exec(String.format("%s%s", mountPoint, "/VBoxLinuxAdditions.run --nox11")));

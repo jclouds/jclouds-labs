@@ -50,7 +50,7 @@ public class DatasetToOperatingSystem implements Function<Dataset, OperatingSyst
       Builder builder = OperatingSystem.builder();
       builder.name(from.getName());
       builder.description(from.getUrn());
-      builder.is64Bit(true);// TODO: verify
+      builder.is64Bit(true);  // TODO: verify
       String os = from.getOs();
       OsFamily family = UNRECOGNIZED;
       String version = "";
