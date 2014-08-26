@@ -127,7 +127,7 @@ public class IMachineToNodeMetadata implements Function<IMachine, NodeMetadata> 
    private NodeMetadataBuilder getIpAddresses(IMachine vm, NodeMetadataBuilder nodeMetadataBuilder) {
       List<String> publicIpAddresses = Lists.newArrayList();
       List<String> privateIpAddresses = Lists.newArrayList();
-      for (long slot = 0; slot < 4; slot ++) {
+      for (long slot = 0; slot < 4; slot++) {
          INetworkAdapter adapter = vm.getNetworkAdapter(slot);
          if (adapter != null) {
             if (adapter.getAttachmentType() == NetworkAttachmentType.NAT) {

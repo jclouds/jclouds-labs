@@ -50,7 +50,7 @@ public class ParseCreatedMachineTest extends BaseItemParserTest<Machine> {
             .type(Type.VIRTUALMACHINE)
             .state(Machine.State.STOPPED)
             .dataset("sdc:sdc:centos-5.7:1.2.1")
-            .ips(ImmutableSet. <String>builder().add("37.153.96.62").add("10.224.0.63").build())
+            .ips(ImmutableSet.<String>builder().add("37.153.96.62").add("10.224.0.63").build())
             .memorySizeMb(1024)
             .diskSizeGb(61440)
             .metadata(
