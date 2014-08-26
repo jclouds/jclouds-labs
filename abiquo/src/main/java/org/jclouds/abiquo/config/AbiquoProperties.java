@@ -19,7 +19,7 @@ package org.jclouds.abiquo.config;
 /**
  * Configuration properties and constants used in Abiquo connections.
  */
-public interface AbiquoProperties {
+public final class AbiquoProperties {
    /**
     * Credential type to be used to authenticate against the Abiquo Api.
     * <p>
@@ -40,4 +40,8 @@ public interface AbiquoProperties {
     * The name of the Abiquo logger.
     */
    public static final String ABIQUO_LOGGER = "jclouds.abiquo";
+
+   private AbiquoProperties() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }

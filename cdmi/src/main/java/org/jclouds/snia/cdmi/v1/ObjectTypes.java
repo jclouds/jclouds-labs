@@ -19,8 +19,12 @@ package org.jclouds.snia.cdmi.v1;
 /**
  * Object Types used in CDMI.
  */
-public interface ObjectTypes {
+public final class ObjectTypes {
 
    public static final String CONTAINER = "application/cdmi-container";
    public static final String DATAOBJECT = "application/cdmi-object";
+
+   private ObjectTypes() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }

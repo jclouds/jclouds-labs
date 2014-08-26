@@ -19,7 +19,7 @@ package org.jclouds.fujitsu.fgcp.reference;
 /**
  * Configuration parameters and constants used in HTTP requests.
  */
-public interface RequestParameters {
+public final class RequestParameters {
 
    /**
     * Indicates the action to perform. Example: ListVSYS
@@ -74,4 +74,8 @@ public interface RequestParameters {
     * 
     */
    public static final String SIGNATURE_VERSION = "SignatureVersion";
+
+   private RequestParameters() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }
