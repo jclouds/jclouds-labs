@@ -53,12 +53,12 @@ public interface AbiquoApi extends Closeable {
    /**
     * The version of the supported Abiquo API.
     */
-   public static final String API_VERSION = SingleResourceTransportDto.API_VERSION;
+   String API_VERSION = SingleResourceTransportDto.API_VERSION;
 
    /**
     * The supported build version of the Abiquo Api.
     */
-   public static final String BUILD_VERSION = "7bbfe95-158721b";
+   String BUILD_VERSION = "7bbfe95-158721b";
 
    /**
     * Provides synchronous access to Admin features.
