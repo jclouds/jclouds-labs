@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.glance.v1_0.options;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.openstack.glance.v1_0.options.ImageField.CONTAINER_FORMAT;
 import static org.jclouds.openstack.glance.v1_0.options.ImageField.DISK_FORMAT;
 import static org.jclouds.openstack.glance.v1_0.options.ImageField.IS_PUBLIC;
@@ -45,11 +46,29 @@ import org.jclouds.openstack.v2_0.options.PaginationOptions;
  * // this will list the first 10 images with the name "name", minimum required disk of 5GB.
  * list = api.list(name("newName"), limit(10), minDisk(5));
  * <code>
- * 
- * @see <a href="http://glance.openstack.org/glanceapi.html"/>
+ *
  */
 public class ListImageOptions extends PaginationOptions {
    public static final ListImageOptions NONE = new ListImageOptions();
+
+   /**
+    * Return only those images having a matching name attribute
+    */
+   public ListImageOptions changesSince(Date ifModifiedSince) {
+      queryParameters.put("changes-since",
+            checkNotNull(ifModifiedSince, "modification date should not be null").getTime() / 1000 + "");
+      return this;
+   }
+
+   @Override
+   public ListImageOptions marker(String marker) {
+      return ListImageOptions.class.cast(super.marker(marker));
+   }
+
+   @Override
+   public ListImageOptions limit(int limit) {
+      return ListImageOptions.class.cast(super.limit(limit));
+   }
 
    /**
     * Return only those images having a matching name attribute
@@ -250,18 +269,4 @@ public class ListImageOptions extends PaginationOptions {
       }
    }
 
-   @Override
-   public ListImageOptions changesSince(Date ifModifiedSince) {
-      return ListImageOptions.class.cast(super.changesSince(ifModifiedSince));
-   }
-
-   @Override
-   public ListImageOptions marker(String marker) {
-      return ListImageOptions.class.cast(super.marker(marker));
-   }
-
-   @Override
-   public ListImageOptions limit(int limit) {
-      return ListImageOptions.class.cast(super.limit(limit));
-   }
 }
