@@ -249,7 +249,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          payloadIn = new InputStreamPayload(is);
          payloadIn.setContentMetadata(BaseMutableContentMetadata.fromContentMetadata(payloadIn.getContentMetadata()
                   .toBuilder().contentType(MediaType.PLAIN_TEXT_UTF_8.toString())
-                  .contentLength(new Long(value.length())).build()));
+                  .contentLength(Long.valueOf(value.length())).build()));
          dataNonCDMIContentTypeApi.create(dataObjectNameIn, payloadIn);
          System.out.println(containerApi.get(containerName));
          dataObject = dataApi.get(dataObjectNameIn);
@@ -276,7 +276,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          FileInputStream fileInputStream = new FileInputStream(inFile);
          payloadIn = new InputStreamPayload(fileInputStream);
          payloadIn.setContentMetadata(BaseMutableContentMetadata.fromContentMetadata(payloadIn.getContentMetadata()
-                  .toBuilder().contentType(MediaType.JPEG.toString()).contentLength(new Long(inFile.length())).build()));
+                  .toBuilder().contentType(MediaType.JPEG.toString()).contentLength(Long.valueOf(inFile.length())).build()));
          dataNonCDMIContentTypeApi.create(inFile.getName(), payloadIn);
          System.out.println(containerApi.get(containerName));
          payloadOut = dataNonCDMIContentTypeApi.getValue(inFile.getName());
@@ -305,12 +305,12 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          payloadOut = dataNonCDMIContentTypeApi.getValue(dataObjectNameIn, "bytes=0-10");
          assertNotNull(payloadOut);
          assertEquals(Strings2.toStringAndClose(payloadOut.openStream()), value.substring(0, 11));
-         assertEquals(payloadOut.getContentMetadata().getContentLength(), new Long(11));
+         assertEquals(payloadOut.getContentMetadata().getContentLength(), Long.valueOf(11));
 
          payloadOut = dataNonCDMIContentTypeApi.getValue(dataObjectNameIn, "bytes=11-20");
          assertNotNull(payloadOut);
          assertEquals(Strings2.toStringAndClose(payloadOut.openStream()), value.substring(11, 21));
-         assertEquals(payloadOut.getContentMetadata().getContentLength(), new Long(10));
+         assertEquals(payloadOut.getContentMetadata().getContentLength(), Long.valueOf(10));
 
          dataNonCDMIContentTypeApi.delete(dataObjectNameIn);
          assertEquals(containerApi.get(containerName).getChildren().contains(dataObjectNameIn), false);

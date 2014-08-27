@@ -121,9 +121,9 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
       Pattern p = Pattern.compile("\\d+");
       Matcher m = p.matcher(editUri);
       m.find();
-      Integer idEnt = new Integer(m.group());
+      Integer idEnt = Integer.valueOf(m.group());
       m.find();
-      Integer idDcRepo = new Integer(m.group());
+      Integer idDcRepo = Integer.valueOf(m.group());
 
       AcceptedRequestDto<String> response = context.getApi().getVirtualMachineTemplateApi()
             .createPersistentVirtualMachineTemplate(idEnt, idDcRepo, persistentData);
