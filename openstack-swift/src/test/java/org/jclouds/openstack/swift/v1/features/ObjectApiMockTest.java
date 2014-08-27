@@ -293,7 +293,7 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          }
 
          Payload payload = object.getPayload();
-         assertEquals(payload.getContentMetadata().getContentLength(), new Long(4));
+         assertEquals(payload.getContentMetadata().getContentLength(), Long.valueOf(4));
          assertEquals(payload.getContentMetadata().getContentType(), "text/plain; charset=UTF-8");
          assertEquals(payload.getContentMetadata().getExpires(), dates.rfc822DateParse("Wed, 23 Jul 2014 14:00:00 GMT"));
 

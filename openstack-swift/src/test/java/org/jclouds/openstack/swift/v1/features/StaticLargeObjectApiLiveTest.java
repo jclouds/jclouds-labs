@@ -77,7 +77,7 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi>
 
          SwiftObject bigObject = api.getObjectApi(regionId, containerName).get(name);
          assertEquals(bigObject.getETag(), etagOfEtags);
-         assertEquals(bigObject.getPayload().getContentMetadata().getContentLength(), new Long(2 * 1024 * 1024));
+         assertEquals(bigObject.getPayload().getContentMetadata().getContentLength(), Long.valueOf(2 * 1024 * 1024));
          assertEquals(bigObject.getMetadata(), ImmutableMap.of("myfoo", "Bar"));
 
          // segments are visible
@@ -96,7 +96,7 @@ public class StaticLargeObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi>
    protected void assertMegabyteAndETagMatches(String regionId, String name, String etag1s) {
       SwiftObject object1s = api.getObjectApi(regionId, containerName).get(name);
       assertEquals(object1s.getETag(), etag1s);
-      assertEquals(object1s.getPayload().getContentMetadata().getContentLength(), new Long(1024 * 1024));
+      assertEquals(object1s.getPayload().getContentMetadata().getContentLength(), Long.valueOf(1024 * 1024));
    }
 
    @Override
