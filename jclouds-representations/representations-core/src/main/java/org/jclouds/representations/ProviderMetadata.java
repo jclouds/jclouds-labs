@@ -245,10 +245,27 @@ public class ProviderMetadata implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof ProviderMetadata)) {
+         return false;
+      }
+      ProviderMetadata that = (ProviderMetadata) obj;
+      return Objects.equal(this.id, that.id) &&
+            Objects.equal(this.name, that.name) &&
+            Objects.equal(this.documentation, that.documentation) &&
+            Objects.equal(this.endpointName, that.endpointName) &&
+            Objects.equal(this.identityName, that.identityName) &&
+            Objects.equal(this.credentialName, that.credentialName) &&
+            Objects.equal(this.defaultModules, that.defaultModules) &&
+            Objects.equal(this.views, that.views) &&
+            Objects.equal(this.endpoint, that.endpoint) &&
+            Objects.equal(this.defaultProperties, that.defaultProperties) &&
+            Objects.equal(this.console, that.console) &&
+            Objects.equal(this.homePage, that.homePage) &&
+            Objects.equal(this.linkedServices, that.linkedServices) &&
+            Objects.equal(this.iso3166Codes, that.iso3166Codes);
    }
 
    @Override

@@ -83,10 +83,16 @@ public class Context implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof Context)) {
+         return false;
+      }
+      Context that = (Context) obj;
+      return Objects.equal(this.name, that.name) &&
+            Objects.equal(this.providerId, that.providerId) &&
+            Objects.equal(this.identity, that.identity);
    }
 
    @Override

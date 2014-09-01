@@ -145,10 +145,21 @@ public class Image implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof Image)) {
+         return false;
+      }
+      Image that = (Image) obj;
+      return Objects.equal(this.id, that.id) &&
+            Objects.equal(this.name, that.name) &&
+            Objects.equal(this.version, that.version) &&
+            Objects.equal(this.description, that.description) &&
+            Objects.equal(this.status, that.status) &&
+            Objects.equal(this.operatingSystem, that.operatingSystem) &&
+            Objects.equal(this.defaultCredentials, that.defaultCredentials) &&
+            Objects.equal(this.tags, that.tags);
    }
 
    @Override

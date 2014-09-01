@@ -19,6 +19,8 @@ package org.jclouds.cloudsigma2.domain;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.base.Joiner;
+
 public class ServerAvailabilityGroup {
 
    private final List<String> uuids;
@@ -50,18 +52,6 @@ public class ServerAvailabilityGroup {
 
    @Override
    public String toString() {
-      String returnString = "";
-
-      Iterator<String> iterator = uuids.iterator();
-
-      while (iterator.hasNext()) {
-         returnString += iterator.next();
-
-         if (iterator.hasNext()) {
-            returnString += ",";
-         }
-      }
-
-      return returnString;
+      return Joiner.on(',').join(uuids);
    }
 }

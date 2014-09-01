@@ -119,10 +119,19 @@ public class OperatingSystem implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof OperatingSystem)) {
+         return false;
+      }
+      OperatingSystem that = (OperatingSystem) obj;
+      return Objects.equal(this.family, that.family) &&
+            Objects.equal(this.name, that.name) &&
+            Objects.equal(this.arch, that.arch) &&
+            Objects.equal(this.version, that.version) &&
+            Objects.equal(this.description, that.description) &&
+            this.is64Bit == that.is64Bit;
    }
 
    @Override

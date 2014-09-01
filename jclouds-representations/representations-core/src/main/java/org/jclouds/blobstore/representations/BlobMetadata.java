@@ -200,10 +200,23 @@ public class BlobMetadata implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof BlobMetadata)) {
+         return false;
+      }
+      BlobMetadata that = (BlobMetadata) obj;
+      return Objects.equal(this.type, that.type) &&
+            Objects.equal(this.providerId, that.providerId) &&
+            Objects.equal(this.name, that.name) &&
+            Objects.equal(this.uri, that.uri) &&
+            Objects.equal(this.userMetadata, that.userMetadata) &&
+            Objects.equal(this.eTag, that.eTag) &&
+            Objects.equal(this.creationDate, that.creationDate) &&
+            Objects.equal(this.lastModifiedDate, that.lastModifiedDate) &&
+            Objects.equal(this.publicUri, that.publicUri) &&
+            Objects.equal(this.contentMetadata, that.contentMetadata);
    }
 
    @Override

@@ -82,10 +82,16 @@ public class ExecResponse implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof ExecResponse)) {
+         return false;
+      }
+      ExecResponse that = (ExecResponse) obj;
+      return Objects.equal(this.output, that.output) &&
+            Objects.equal(this.error, that.error) &&
+            Objects.equal(this.exitStatus, that.exitStatus);
    }
 
    @Override

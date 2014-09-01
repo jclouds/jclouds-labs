@@ -74,7 +74,7 @@ public class DigitalOceanImageExtension implements ImageExtension {
 
    @Override
    public ImageTemplate buildImageTemplateFromNode(String name, String id) {
-      Droplet droplet = api.getDropletApi().get(Integer.valueOf(id));
+      Droplet droplet = api.getDropletApi().get(Integer.parseInt(id));
 
       if (droplet == null) {
          throw new NoSuchElementException("Cannot find droplet with id: " + id);

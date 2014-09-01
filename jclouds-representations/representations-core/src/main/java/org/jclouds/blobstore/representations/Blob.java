@@ -71,10 +71,15 @@ public class Blob implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof Blob)) {
+         return false;
+      }
+      Blob that = (Blob) obj;
+      return Objects.equal(this.allHeaders, that.allHeaders) &&
+            Objects.equal(this.blobMetadata, that.blobMetadata);
    }
 
    @Override

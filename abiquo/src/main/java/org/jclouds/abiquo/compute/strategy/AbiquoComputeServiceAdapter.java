@@ -189,7 +189,7 @@ public class AbiquoComputeServiceAdapter
       return find(listImages(), new Predicate<VirtualMachineTemplate>() {
          @Override
          public boolean apply(VirtualMachineTemplate input) {
-            return input.getId().equals(id);
+            return input.getId().toString().equals(id);
          }
       }, null);
    }
@@ -285,7 +285,7 @@ public class AbiquoComputeServiceAdapter
                network = find(externalNetworks, new Predicate<Network<?>>() {
                   @Override
                   public boolean apply(final Network<?> input) {
-                     return Integer.valueOf(id).equals(input.getId());
+                     return id.equals(input.getId());
                   }
                }, null);
             }

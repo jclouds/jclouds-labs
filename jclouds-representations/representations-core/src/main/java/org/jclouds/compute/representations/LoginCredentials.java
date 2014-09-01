@@ -112,10 +112,18 @@ public class LoginCredentials implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof LoginCredentials)) {
+         return false;
+      }
+      LoginCredentials that = (LoginCredentials) obj;
+      return Objects.equal(this.username, that.username) &&
+            Objects.equal(this.password, that.password) &&
+            Objects.equal(this.privateKey, that.privateKey) &&
+            Objects.equal(this.credentialUrl, that.credentialUrl) &&
+            Objects.equal(this.authenticateSudo, that.authenticateSudo);
    }
 
    @Override

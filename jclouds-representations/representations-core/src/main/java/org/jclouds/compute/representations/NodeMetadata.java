@@ -206,10 +206,25 @@ public class NodeMetadata implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof NodeMetadata)) {
+         return false;
+      }
+      NodeMetadata that = (NodeMetadata) obj;
+      return Objects.equal(this.id, that.id) &&
+            Objects.equal(this.name, that.name) &&
+            Objects.equal(this.description, that.description) &&
+            Objects.equal(this.status, that.status) &&
+            Objects.equal(this.hostname, that.hostname) &&
+            Objects.equal(this.locationId, that.locationId) &&
+            Objects.equal(this.imageId, that.imageId) &&
+            Objects.equal(this.loginPort, that.loginPort) &&
+            Objects.equal(this.group, that.group) &&
+            Objects.equal(this.tags, that.tags) &&
+            Objects.equal(this.metadata, that.metadata) &&
+            Objects.equal(this.defaultCredentials, that.defaultCredentials);
    }
 
    @Override

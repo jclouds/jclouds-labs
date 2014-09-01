@@ -120,10 +120,19 @@ public class Volume implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof Volume)) {
+         return false;
+      }
+      Volume that = (Volume) obj;
+      return Objects.equal(this.id, that.id) &&
+            Objects.equal(this.type, that.type) &&
+            Objects.equal(this.size, that.size) &&
+            Objects.equal(this.device, that.device) &&
+            this.durable == that.durable &&
+            this.bootDevice == that.bootDevice;
    }
 
    @Override

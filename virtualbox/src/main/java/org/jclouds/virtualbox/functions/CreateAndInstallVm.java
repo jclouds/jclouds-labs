@@ -122,6 +122,9 @@ public class CreateAndInstallVm implements Function<MasterSpec, IMachine> {
       logger.debug(">> awaiting installation of guest additions on vm: %s", masterName);
       ListenableFuture<ExecResponse> execInstallGA = machineUtils.runScriptOnNode(nodeMetadata,
                new InstallGuestAdditions(vmSpec, version), RunScriptOptions.NONE);
+      ExecResponse execInstallGAResponse = Futures.getUnchecked(execInstallGA);
+      checkState(execInstallGAResponse.getExitStatus() == 0, "exec installation of guest additions on vm(%s) " +
+              "failed", masterName);
 
       logger.debug(">> check installation of guest additions on vm: %s", masterName);
       ListenableFuture<ExecResponse> checkGAinstallation = machineUtils.runScriptOnNode(nodeMetadata,

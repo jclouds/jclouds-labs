@@ -169,17 +169,17 @@ public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<
 
    @Override
    public Droplet getNode(String id) {
-      return api.getDropletApi().get(Integer.valueOf(id));
+      return api.getDropletApi().get(Integer.parseInt(id));
    }
 
    @Override
    public void destroyNode(String id) {
-      Droplet droplet = api.getDropletApi().get(Integer.valueOf(id));
+      Droplet droplet = api.getDropletApi().get(Integer.parseInt(id));
       final String nodeName = droplet.getName();
 
       // We have to wait here, as the api does not properly populate the state
       // but fails if there is a pending event
-      int event = api.getDropletApi().destroy(Integer.valueOf(id), true);
+      int event = api.getDropletApi().destroy(Integer.parseInt(id), true);
       nodeTerminatedPredicate.apply(event);
 
       // Destroy the keypairs created for the node
@@ -204,7 +204,7 @@ public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<
    public void rebootNode(String id) {
       // We have to wait here, as the api does not properly populate the state
       // but fails if there is a pending event
-      int event = api.getDropletApi().reboot(Integer.valueOf(id));
+      int event = api.getDropletApi().reboot(Integer.parseInt(id));
       nodeRunningPredicate.apply(event);
    }
 
@@ -212,7 +212,7 @@ public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<
    public void resumeNode(String id) {
       // We have to wait here, as the api does not properly populate the state
       // but fails if there is a pending event
-      int event = api.getDropletApi().powerOn(Integer.valueOf(id));
+      int event = api.getDropletApi().powerOn(Integer.parseInt(id));
       nodeRunningPredicate.apply(event);
    }
 
@@ -220,7 +220,7 @@ public class DigitalOceanComputeServiceAdapter implements ComputeServiceAdapter<
    public void suspendNode(String id) {
       // We have to wait here, as the api does not properly populate the state
       // but fails if there is a pending event
-      int event = api.getDropletApi().powerOff(Integer.valueOf(id));
+      int event = api.getDropletApi().powerOff(Integer.parseInt(id));
       nodeStoppedPredicate.apply(event);
    }
 

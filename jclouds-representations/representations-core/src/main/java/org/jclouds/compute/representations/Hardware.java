@@ -136,10 +136,20 @@ public class Hardware implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof Hardware)) {
+         return false;
+      }
+      Hardware that = (Hardware) obj;
+      return Objects.equal(this.id, that.id) &&
+            Objects.equal(this.name, that.name) &&
+            Objects.equal(this.tags, that.tags) &&
+            Objects.equal(this.processors, that.processors) &&
+            Objects.equal(this.ram, that.ram) &&
+            Objects.equal(this.volumes, that.volumes) &&
+            Objects.equal(this.hypervisor, that.hypervisor);
    }
 
    @Override

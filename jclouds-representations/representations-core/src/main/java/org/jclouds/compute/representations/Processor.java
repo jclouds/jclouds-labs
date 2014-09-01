@@ -71,10 +71,15 @@ public class Processor implements Serializable {
    }
 
    @Override
-   public boolean equals(Object that) {
-      if (that == null)
+   public boolean equals(Object obj) {
+      if (obj == null)
          return false;
-      return Objects.equal(this.toString(), that.toString());
+      if (!(obj instanceof Processor)) {
+         return false;
+      }
+      Processor that = (Processor) obj;
+      return this.cores == that.cores &&
+            this.speed == that.speed;
    }
 
    @Override
