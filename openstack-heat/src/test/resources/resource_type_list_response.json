@@ -1,0 +1,24 @@
+{
+    "resource_types": [
+        "AWS::EC2::Instance",
+        "OS::Cinder::Volume",
+        "Rackspace::Cloud::DNS",
+        "Rackspace::AutoScale::ScalingPolicy",
+        "OS::Nova::Server",
+        "Rackspace::AutoScale::WebHook",
+        "OS::Cinder::VolumeAttachment",
+        "Rackspace::AutoScale::Group",
+        "Rackspace::Cloud::ChefSolo",
+        "OS::Heat::RandomString",
+        "OS::Heat::ResourceGroup",
+        "OS::Swift::Container",
+        "Rackspace::Cloud::Server",
+        "OS::Heat::ChefSolo",
+        "Rackspace::Cloud::LoadBalancer",
+        "Rackspace::Cloud::WinServer",
+        "OS::Nova::KeyPair",
+        "Rackspace::Cloud::Network",
+        "AWS::ElasticLoadBalancing::LoadBalancer",
+        "OS::Trove::Instance"
+    ]
+}
