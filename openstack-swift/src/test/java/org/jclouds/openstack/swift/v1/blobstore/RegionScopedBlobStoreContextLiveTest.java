@@ -20,11 +20,9 @@ import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CRED
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -48,7 +46,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteSource;
-import com.google.common.io.ByteStreams;
 import com.google.common.hash.Hashing;
 import com.google.common.net.MediaType;
 import com.google.common.net.HttpHeaders;
@@ -152,12 +149,8 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
                      + response.getStatusCode());
             }
             Payload payload = response.getPayload();
-            if (!Arrays.equals(ByteStreams2.toByteArrayAndClose(
-                    payload.openStream()), input.read())) {
-               fail("Data with signed GET not identical to what was put: "
-                     + "Input: " + new String(input.read()) + ", Output :"
-                     + ByteStreams2.asByteSource(payload));
-            }
+            assertEquals(ByteStreams2.toByteArrayAndClose(payload.openStream()), input.read(),
+                  "Data with signed GET not identical to what was put");
          } catch (Exception e) {
             fail("Failed signed GET test: " + e);
          }
