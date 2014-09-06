@@ -16,8 +16,6 @@
  */
 package org.jclouds.cloudsigma2.domain;
 
-import java.util.Iterator;
-
 import com.google.common.base.Joiner;
 
 public class DrivesListRequestFieldsGroup {

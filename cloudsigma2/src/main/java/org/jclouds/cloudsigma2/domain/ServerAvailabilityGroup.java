@@ -16,7 +16,6 @@
  */
 package org.jclouds.cloudsigma2.domain;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Joiner;
