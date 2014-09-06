@@ -19,76 +19,80 @@ package org.jclouds.openstack.swift.v1.reference;
 /**
  * Common headers in Swift.
  */
-public interface SwiftHeaders {
+public final class SwiftHeaders {
 
    // Common Metadata Prefixes
-   String ACCOUNT_METADATA_PREFIX = "X-Account-Meta-";
-   String CONTAINER_METADATA_PREFIX = "X-Container-Meta-";
-   String OBJECT_METADATA_PREFIX = "X-Object-Meta-";
-   String USER_METADATA_PREFIX = OBJECT_METADATA_PREFIX;
+   public static final String ACCOUNT_METADATA_PREFIX = "X-Account-Meta-";
+   public static final String CONTAINER_METADATA_PREFIX = "X-Container-Meta-";
+   public static final String OBJECT_METADATA_PREFIX = "X-Object-Meta-";
+   public static final String USER_METADATA_PREFIX = OBJECT_METADATA_PREFIX;
    
    // Metadata Removal Prefixes
-   String ACCOUNT_REMOVE_METADATA_PREFIX = "X-Remove-Account-Meta-";
-   String CONTAINER_REMOVE_METADATA_PREFIX = "X-Remove-Container-Meta-";
-   String OBJECT_REMOVE_METADATA_PREFIX = "X-Remove-Object-Meta-";
+   public static final String ACCOUNT_REMOVE_METADATA_PREFIX = "X-Remove-Account-Meta-";
+   public static final String CONTAINER_REMOVE_METADATA_PREFIX = "X-Remove-Container-Meta-";
+   public static final String OBJECT_REMOVE_METADATA_PREFIX = "X-Remove-Object-Meta-";
    
    // TempURL
-   String ACCOUNT_TEMPORARY_URL_KEY = ACCOUNT_METADATA_PREFIX + "Temp-Url-Key";
-   String ACCOUNT_TEMPORARY_URL_KEY_2 = ACCOUNT_TEMPORARY_URL_KEY + "-2";
+   public static final String ACCOUNT_TEMPORARY_URL_KEY = ACCOUNT_METADATA_PREFIX + "Temp-Url-Key";
+   public static final String ACCOUNT_TEMPORARY_URL_KEY_2 = ACCOUNT_TEMPORARY_URL_KEY + "-2";
 
    // Account Headers
-   String ACCOUNT_BYTES_USED = "X-Account-Bytes-Used";
-   String ACCOUNT_CONTAINER_COUNT = "X-Account-Container-Count";
-   String ACCOUNT_OBJECT_COUNT = "X-Account-Object-Count";
+   public static final String ACCOUNT_BYTES_USED = "X-Account-Bytes-Used";
+   public static final String ACCOUNT_CONTAINER_COUNT = "X-Account-Container-Count";
+   public static final String ACCOUNT_OBJECT_COUNT = "X-Account-Object-Count";
 
    // Container Headers
-   String CONTAINER_BYTES_USED = "X-Container-Bytes-Used";
-   String CONTAINER_OBJECT_COUNT = "X-Container-Object-Count";
+   public static final String CONTAINER_BYTES_USED = "X-Container-Bytes-Used";
+   public static final String CONTAINER_OBJECT_COUNT = "X-Container-Object-Count";
 
    // Public access - not supported in all Swift Impls
-   String CONTAINER_READ = "X-Container-Read";
-   String CONTAINER_WRITE = "X-Container-Write";
-   String CONTAINER_ACL_ANYBODY_READ = ".r:*,.rlistings";
+   public static final String CONTAINER_READ = "X-Container-Read";
+   public static final String CONTAINER_WRITE = "X-Container-Write";
+   public static final String CONTAINER_ACL_ANYBODY_READ = ".r:*,.rlistings";
    
    // CORS
-   String CONTAINER_ACCESS_CONTROL_ALLOW_ORIGIN = CONTAINER_METADATA_PREFIX + "Access-Control-Allow-Origin";
-   String CONTAINER_ACCESS_CONTROL_MAX_AGE = CONTAINER_METADATA_PREFIX + "Access-Control-Max-Age";
-   String CONTAINER_ACCESS_CONTROL_EXPOSE_HEADERS = CONTAINER_METADATA_PREFIX + "Access-Control-Expose-Headers";
+   public static final String CONTAINER_ACCESS_CONTROL_ALLOW_ORIGIN = CONTAINER_METADATA_PREFIX + "Access-Control-Allow-Origin";
+   public static final String CONTAINER_ACCESS_CONTROL_MAX_AGE = CONTAINER_METADATA_PREFIX + "Access-Control-Max-Age";
+   public static final String CONTAINER_ACCESS_CONTROL_EXPOSE_HEADERS = CONTAINER_METADATA_PREFIX + "Access-Control-Expose-Headers";
 
    // Container Quota
-   String CONTAINER_QUOTA_BYTES = CONTAINER_METADATA_PREFIX + "Quota-Bytes";
-   String CONTAINER_QUOTA_COUNT = CONTAINER_METADATA_PREFIX + "Quota-Count";
+   public static final String CONTAINER_QUOTA_BYTES = CONTAINER_METADATA_PREFIX + "Quota-Bytes";
+   public static final String CONTAINER_QUOTA_COUNT = CONTAINER_METADATA_PREFIX + "Quota-Count";
 
    // Container Sync
-   String CONTAINER_SYNC_KEY = "X-Container-Sync-Key";
-   String CONTAINER_SYNC_TO = "X-Container-Sync-To";
+   public static final String CONTAINER_SYNC_KEY = "X-Container-Sync-Key";
+   public static final String CONTAINER_SYNC_TO = "X-Container-Sync-To";
 
    // Versioning
-   String VERSIONS_LOCATION = "X-Versions-Location";
+   public static final String VERSIONS_LOCATION = "X-Versions-Location";
 
    /**
     * @deprecated Please use {@link #VERSIONS_LOCATION}. This field will be removed in jclouds 1.8.
     */
    @Deprecated
-   String CONTAINER_VERSIONS_LOCATION = "X-Versions-Location";
+   public static final String CONTAINER_VERSIONS_LOCATION = "X-Versions-Location";
 
    // Misc functionality
-   String CONTAINER_WEB_MODE = "X-Web-Mode";
+   public static final String CONTAINER_WEB_MODE = "X-Web-Mode";
 
-   String OBJECT_COPY_FROM = "X-Copy-From";
-   String OBJECT_DELETE_AFTER = "X-Delete-After";
-   String OBJECT_DELETE_AT = "X-Delete-At";
-   String OBJECT_MANIFEST = "X-Object-Manifest";  
+   public static final String OBJECT_COPY_FROM = "X-Copy-From";
+   public static final String OBJECT_DELETE_AFTER = "X-Delete-After";
+   public static final String OBJECT_DELETE_AT = "X-Delete-At";
+   public static final String OBJECT_MANIFEST = "X-Object-Manifest";
    /** Get the newest version of the object for GET and HEAD requests */
-   String OBJECT_NEWEST = "X-Newest";
+   public static final String OBJECT_NEWEST = "X-Newest";
 
    // Static Large Object
-   String STATIC_LARGE_OBJECT = "X-Static-Large-Object";
+   public static final String STATIC_LARGE_OBJECT = "X-Static-Large-Object";
 
    // Static Web
-   String STATIC_WEB_INDEX = CONTAINER_METADATA_PREFIX + "Web-Index";
-   String STATIC_WEB_DIRECTORY_TYPE = CONTAINER_METADATA_PREFIX + "Web-Directory-Type";
-   String STATIC_WEB_ERROR = CONTAINER_METADATA_PREFIX + "Web-Error";
-   String STATIC_WEB_LISTINGS = CONTAINER_METADATA_PREFIX + "Web-Listings";
-   String STATIC_WEB_LISTINGS_CSS = CONTAINER_METADATA_PREFIX + "Web-Listings-CSS";
+   public static final String STATIC_WEB_INDEX = CONTAINER_METADATA_PREFIX + "Web-Index";
+   public static final String STATIC_WEB_DIRECTORY_TYPE = CONTAINER_METADATA_PREFIX + "Web-Directory-Type";
+   public static final String STATIC_WEB_ERROR = CONTAINER_METADATA_PREFIX + "Web-Error";
+   public static final String STATIC_WEB_LISTINGS = CONTAINER_METADATA_PREFIX + "Web-Listings";
+   public static final String STATIC_WEB_LISTINGS_CSS = CONTAINER_METADATA_PREFIX + "Web-Listings-CSS";
+
+   private SwiftHeaders() {
+      throw new AssertionError("intentionally unimplemented");
+   }
 }
