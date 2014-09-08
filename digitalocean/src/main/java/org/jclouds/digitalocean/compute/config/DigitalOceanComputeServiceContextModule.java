@@ -35,6 +35,7 @@ import org.jclouds.compute.functions.TemplateOptionsToStatement;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.reference.ComputeServiceConstants.PollPeriod;
 import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
+import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.digitalocean.DigitalOceanApi;
 import org.jclouds.digitalocean.compute.extensions.DigitalOceanImageExtension;
 import org.jclouds.digitalocean.compute.functions.DropletStatusToStatus;
@@ -44,6 +45,7 @@ import org.jclouds.digitalocean.compute.functions.RegionToLocation;
 import org.jclouds.digitalocean.compute.functions.SizeToHardware;
 import org.jclouds.digitalocean.compute.functions.TemplateOptionsToStatementWithoutPublicKey;
 import org.jclouds.digitalocean.compute.options.DigitalOceanTemplateOptions;
+import org.jclouds.digitalocean.compute.strategy.CreateKeyPairsThenCreateNodes;
 import org.jclouds.digitalocean.compute.strategy.DigitalOceanComputeServiceAdapter;
 import org.jclouds.digitalocean.domain.Droplet;
 import org.jclouds.digitalocean.domain.Event;
@@ -88,6 +90,7 @@ public class DigitalOceanComputeServiceContextModule extends
       install(new LocationsFromComputeServiceAdapterModule<Droplet, Size, Image, Region>() {
       });
 
+      bind(CreateNodesInGroupThenAddToSet.class).to(CreateKeyPairsThenCreateNodes.class);
       bind(TemplateOptions.class).to(DigitalOceanTemplateOptions.class);
       bind(TemplateOptionsToStatement.class).to(TemplateOptionsToStatementWithoutPublicKey.class);
 

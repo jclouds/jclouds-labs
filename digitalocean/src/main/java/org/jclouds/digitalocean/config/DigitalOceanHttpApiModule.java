@@ -19,6 +19,7 @@ package org.jclouds.digitalocean.config;
 import org.jclouds.digitalocean.DigitalOceanApi;
 import org.jclouds.digitalocean.handlers.DigitalOceanErrorHandler;
 import org.jclouds.digitalocean.http.ResponseStatusFromPayloadHttpCommandExecutorService;
+import org.jclouds.digitalocean.strategy.ListSshKeys;
 import org.jclouds.http.HttpCommandExecutorService;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
@@ -31,12 +32,19 @@ import org.jclouds.rest.config.HttpApiModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 /**
  * Configures the DigitalOcean connection.
  */
 @ConfiguresHttpApi
 public class DigitalOceanHttpApiModule extends HttpApiModule<DigitalOceanApi> {
+
+   @Override
+   protected void configure() {
+      super.configure();
+      install(new FactoryModuleBuilder().build(ListSshKeys.Factory.class));
+   }
 
    @Override
    protected void bindErrorHandlers() {

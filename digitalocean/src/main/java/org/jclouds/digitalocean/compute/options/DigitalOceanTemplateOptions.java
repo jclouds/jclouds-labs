@@ -16,6 +16,7 @@
  */
 package org.jclouds.digitalocean.compute.options;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Set;
@@ -23,6 +24,7 @@ import java.util.Set;
 import org.jclouds.compute.options.TemplateOptions;
 
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -33,6 +35,7 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
    private Set<Integer> sshKeyIds = ImmutableSet.of();
    private Boolean privateNetworking;
    private Boolean backupsEnabled;
+   private boolean autoCreateKeyPair = true;
 
    /**
     * Enables a private network interface if the region supports private networking.
@@ -58,6 +61,14 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
       return this;
    }
 
+   /**
+    * Sets whether an SSH key pair should be created automatically.
+    */
+   public DigitalOceanTemplateOptions autoCreateKeyPair(boolean autoCreateKeyPair) {
+      this.autoCreateKeyPair = autoCreateKeyPair;
+      return this;
+   }
+
    public Set<Integer> getSshKeyIds() {
       return sshKeyIds;
    }
@@ -68,6 +79,10 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
 
    public Boolean getBackupsEnabled() {
       return backupsEnabled;
+   }
+
+   public boolean getAutoCreateKeyPair() {
+      return autoCreateKeyPair;
    }
 
    @Override
@@ -88,18 +103,14 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
          if (backupsEnabled != null) {
             eTo.backupsEnabled(backupsEnabled);
          }
+         eTo.autoCreateKeyPair(autoCreateKeyPair);
          eTo.sshKeyIds(sshKeyIds);
       }
    }
 
    @Override
    public int hashCode() {
-      final int prime = 31;
-      int result = super.hashCode();
-      result = prime * result + (backupsEnabled == null ? 0 : backupsEnabled.hashCode());
-      result = prime * result + (privateNetworking == null ? 0 : privateNetworking.hashCode());
-      result = prime * result + (sshKeyIds == null ? 0 : sshKeyIds.hashCode());
-      return result;
+      return Objects.hashCode(super.hashCode(), backupsEnabled, privateNetworking, autoCreateKeyPair, sshKeyIds);
    }
 
    @Override
@@ -114,28 +125,9 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
          return false;
       }
       DigitalOceanTemplateOptions other = (DigitalOceanTemplateOptions) obj;
-      if (backupsEnabled == null) {
-         if (other.backupsEnabled != null) {
-            return false;
-         }
-      } else if (!backupsEnabled.equals(other.backupsEnabled)) {
-         return false;
-      }
-      if (privateNetworking == null) {
-         if (other.privateNetworking != null) {
-            return false;
-         }
-      } else if (!privateNetworking.equals(other.privateNetworking)) {
-         return false;
-      }
-      if (sshKeyIds == null) {
-         if (other.sshKeyIds != null) {
-            return false;
-         }
-      } else if (!sshKeyIds.equals(other.sshKeyIds)) {
-         return false;
-      }
-      return true;
+      return super.equals(other) && equal(this.backupsEnabled, other.backupsEnabled)
+            && equal(this.privateNetworking, other.privateNetworking)
+            && equal(this.autoCreateKeyPair, other.autoCreateKeyPair) && equal(this.sshKeyIds, other.sshKeyIds);
    }
 
    @Override
@@ -146,6 +138,7 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
       if (!sshKeyIds.isEmpty()) {
          toString.add("sshKeyIds", sshKeyIds);
       }
+      toString.add("shouldAutoCreateKeyPair", autoCreateKeyPair);
       return toString;
    }
 
@@ -173,6 +166,14 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
       public static DigitalOceanTemplateOptions sshKeyIds(Iterable<Integer> sshKeyIds) {
          DigitalOceanTemplateOptions options = new DigitalOceanTemplateOptions();
          return options.sshKeyIds(sshKeyIds);
+      }
+
+      /**
+       * @see DigitalOceanTemplateOptions#autoCreateKeyPair
+       */
+      public static DigitalOceanTemplateOptions shouldAutoCreateKeyPair(boolean shouldAutoCreateKeyPair) {
+         DigitalOceanTemplateOptions options = new DigitalOceanTemplateOptions();
+         return options.autoCreateKeyPair(shouldAutoCreateKeyPair);
       }
    }
 }
