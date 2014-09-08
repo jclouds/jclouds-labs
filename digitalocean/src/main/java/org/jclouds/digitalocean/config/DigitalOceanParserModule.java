@@ -17,6 +17,7 @@
 package org.jclouds.digitalocean.config;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Iterables.size;
@@ -34,6 +35,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.digitalocean.ssh.DSAKeys;
@@ -41,6 +43,7 @@ import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.ssh.SshKeys;
 
+import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.TypeAdapter;
@@ -62,40 +65,71 @@ public class DigitalOceanParserModule extends AbstractModule {
    @Singleton
    public static class SshPublicKeyAdapter extends TypeAdapter<PublicKey> {
 
+      private final Function<PublicKey, String> publicKeyToSshKey;
+      private final Function<String, PublicKey> sshKeyToPublicKey;
+
+      @Inject
+      public SshPublicKeyAdapter(Function<PublicKey, String> publicKeyToSshKey,
+            Function<String, PublicKey> sshKeyToPublicKey) {
+         this.publicKeyToSshKey = checkNotNull(publicKeyToSshKey, "publicKeyToSshKey cannot be null");
+         this.sshKeyToPublicKey = checkNotNull(sshKeyToPublicKey, "sshKeyToPublicKey cannot be null");
+      }
+
       @Override
       public void write(JsonWriter out, PublicKey value) throws IOException {
-         if (value instanceof RSAPublicKey) {
-            out.value(SshKeys.encodeAsOpenSSH((RSAPublicKey) value));
-         } else if (value instanceof DSAPublicKey) {
-            out.value(DSAKeys.encodeAsOpenSSH((DSAPublicKey) value));
-         } else {
-            throw new IllegalArgumentException("Only RSA and DSA keys are supported");
-         }
+         out.value(publicKeyToSshKey.apply(value));
       }
 
       @Override
       public PublicKey read(JsonReader in) throws IOException {
-         String input = in.nextString().trim();
-         Iterable<String> parts = Splitter.on(' ').split(input);
-         checkArgument(size(parts) >= 2, "bad format, should be: [ssh-rsa|ssh-dss] AAAAB3...");
-         String type = get(parts, 0);
-
-         try {
-            if ("ssh-rsa".equals(type)) {
-               RSAPublicKeySpec spec = SshKeys.publicKeySpecFromOpenSSH(input);
-               return KeyFactory.getInstance("RSA").generatePublic(spec);
-            } else if ("ssh-dss".equals(type)) {
-               DSAPublicKeySpec spec = DSAKeys.publicKeySpecFromOpenSSH(input);
-               return KeyFactory.getInstance("DSA").generatePublic(spec);
-            } else {
-               throw new IllegalArgumentException("bad format, should be: [ssh-rsa|ssh-dss] AAAAB3...");
-            }
-         } catch (InvalidKeySpecException ex) {
-            throw propagate(ex);
-         } catch (NoSuchAlgorithmException ex) {
-            throw propagate(ex);
-         }
+         return sshKeyToPublicKey.apply(in.nextString().trim());
       }
+   }
+
+   @Provides
+   @Singleton
+   public Function<PublicKey, String> publicKeyToSshKey() {
+      return new Function<PublicKey, String>() {
+         @Override
+         public String apply(PublicKey input) {
+            if (input instanceof RSAPublicKey) {
+               return SshKeys.encodeAsOpenSSH((RSAPublicKey) input);
+            } else if (input instanceof DSAPublicKey) {
+               return DSAKeys.encodeAsOpenSSH((DSAPublicKey) input);
+            } else {
+               throw new IllegalArgumentException("Only RSA and DSA keys are supported");
+            }
+         }
+      };
+   }
+
+   @Provides
+   @Singleton
+   public Function<String, PublicKey> sshKeyToPublicKey() {
+      return new Function<String, PublicKey>() {
+         @Override
+         public PublicKey apply(String input) {
+            Iterable<String> parts = Splitter.on(' ').split(input);
+            checkArgument(size(parts) >= 2, "bad format, should be: [ssh-rsa|ssh-dss] AAAAB3...");
+            String type = get(parts, 0);
+
+            try {
+               if ("ssh-rsa".equals(type)) {
+                  RSAPublicKeySpec spec = SshKeys.publicKeySpecFromOpenSSH(input);
+                  return KeyFactory.getInstance("RSA").generatePublic(spec);
+               } else if ("ssh-dss".equals(type)) {
+                  DSAPublicKeySpec spec = DSAKeys.publicKeySpecFromOpenSSH(input);
+                  return KeyFactory.getInstance("DSA").generatePublic(spec);
+               } else {
+                  throw new IllegalArgumentException("bad format, should be: [ssh-rsa|ssh-dss] AAAAB3...");
+               }
+            } catch (InvalidKeySpecException ex) {
+               throw propagate(ex);
+            } catch (NoSuchAlgorithmException ex) {
+               throw propagate(ex);
+            }
+         }
+      };
    }
 
    @Provides
