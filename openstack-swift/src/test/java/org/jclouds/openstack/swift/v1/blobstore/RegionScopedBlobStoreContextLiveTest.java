@@ -123,7 +123,7 @@ public class RegionScopedBlobStoreContextLiveTest extends BaseBlobStoreIntegrati
                   String.valueOf(input.size()));
             putRequestBuilder.payload(input);
             putRequest = putRequestBuilder.build();
-            Payload payload = Payloads.newByteArrayPayload(input.read());
+            Payload payload = Payloads.newPayload(input.read());
             putRequest.setPayload(payload);
             assertNotNull(putRequest, "regionId=" + regionId + ", container="
                   + containerName + ", blob=" + blobName);
