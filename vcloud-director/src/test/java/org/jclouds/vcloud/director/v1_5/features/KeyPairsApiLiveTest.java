@@ -148,7 +148,7 @@ public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 		byte[] iso = new byte[] {};
 		context.getApi()
 				.getUploadApi()
-				.upload(uploadLink.getHref(), Payloads.newByteArrayPayload(iso));
+				.upload(uploadLink.getHref(), Payloads.newPayload(iso));
 
 		Checks.checkMediaFor(VCloudDirectorMediaType.MEDIA, keyPairsContainer);
 		setKeyPairOnkeyPairsContainer(keyPairsContainer, keyPairName, generateKeyPair(keyPairName));

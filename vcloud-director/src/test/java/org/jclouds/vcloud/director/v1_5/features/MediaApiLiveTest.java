@@ -154,7 +154,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                String.format(OBJ_FIELD_REQ, MEDIA, "uploadFile.links.first"));
 
       Link uploadLink = Iterables.find(links, LinkPredicates.relEquals(Link.Rel.UPLOAD_DEFAULT));
-      context.getApi().getUploadApi().upload(uploadLink.getHref(), Payloads.newByteArrayPayload(iso));
+      context.getApi().getUploadApi().upload(uploadLink.getHref(), Payloads.newPayload(iso));
 
       media = mediaApi.get(media.getId());
       if (media.getTasks().size() == 1) {

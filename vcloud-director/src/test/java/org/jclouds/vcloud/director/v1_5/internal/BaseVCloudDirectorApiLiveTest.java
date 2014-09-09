@@ -533,7 +533,7 @@ public abstract class BaseVCloudDirectorApiLiveTest extends BaseContextLiveTest<
             media = context.getApi().getMediaApi().add(addMedia.getHref(), sourceMedia);
 
             Link uploadLink = getFirst(getFirst(media.getFiles(), null).getLinks(), null);
-            context.getApi().getUploadApi().upload(uploadLink.getHref(), Payloads.newByteArrayPayload(iso));
+            context.getApi().getUploadApi().upload(uploadLink.getHref(), Payloads.newPayload(iso));
 
             media = context.getApi().getMediaApi().get(media.getId());
 
