@@ -125,8 +125,6 @@
                     <test.openstack-marconi.identity>${test.openstack-marconi.identity}</test.openstack-marconi.identity>
                     <test.openstack-marconi.credential>${test.openstack-marconi.credential}</test.openstack-marconi.credential>
                     <test.jclouds.keystone.credential-type>${test.jclouds.keystone.credential-type}</test.jclouds.keystone.credential-type>
-                    <jclouds.blobstore.httpstream.url>${jclouds.blobstore.httpstream.url}</jclouds.blobstore.httpstream.url>
-                    <jclouds.blobstore.httpstream.md5>${jclouds.blobstore.httpstream.md5}</jclouds.blobstore.httpstream.md5>
                   </systemPropertyVariables>
                 </configuration>
               </execution>
