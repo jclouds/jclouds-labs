@@ -19,7 +19,6 @@ package org.jclouds.fujitsu.fgcp.handlers;
 import static org.jclouds.http.HttpUtils.closeClientButKeepContentStream;
 import static org.jclouds.http.HttpUtils.releasePayload;
 
-import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +30,8 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
+
+import com.google.common.base.Charsets;
 
 /**
  * This will parse the XML payload and set an appropriate exception on the
@@ -53,7 +54,7 @@ public class ResponseNotSuccessHandler implements HttpErrorHandler {
       Exception exception = null;
       try {
          byte[] data = closeClientButKeepContentStream(response);
-         String message = data != null ? new String(data, "UTF-8") : null;
+         String message = data != null ? new String(data, Charsets.UTF_8) : null;
          if (message != null) {
             Matcher ms = ERROR_STATUS_PATTERN.matcher(message);
             Matcher mm = ERROR_MESSAGE_PATTERN.matcher(message);
@@ -66,8 +67,6 @@ public class ResponseNotSuccessHandler implements HttpErrorHandler {
                exception = refineException(new HttpResponseException(command, response, status + ": " + errorMessage));
             }
          }
-      } catch (UnsupportedEncodingException e) {
-         // should never happen as UTF-8 is always supported
       } finally {
          if (exception == null) {
             exception = new HttpResponseException(command, response);
