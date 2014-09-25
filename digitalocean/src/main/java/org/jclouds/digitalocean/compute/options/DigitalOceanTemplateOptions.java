@@ -138,7 +138,7 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
       if (!sshKeyIds.isEmpty()) {
          toString.add("sshKeyIds", sshKeyIds);
       }
-      toString.add("shouldAutoCreateKeyPair", autoCreateKeyPair);
+      toString.add("autoCreateKeyPair", autoCreateKeyPair);
       return toString;
    }
 
@@ -171,9 +171,9 @@ public class DigitalOceanTemplateOptions extends TemplateOptions implements Clon
       /**
        * @see DigitalOceanTemplateOptions#autoCreateKeyPair
        */
-      public static DigitalOceanTemplateOptions shouldAutoCreateKeyPair(boolean shouldAutoCreateKeyPair) {
+      public static DigitalOceanTemplateOptions autoCreateKeyPair(boolean autoCreateKeyPair) {
          DigitalOceanTemplateOptions options = new DigitalOceanTemplateOptions();
-         return options.autoCreateKeyPair(shouldAutoCreateKeyPair);
+         return options.autoCreateKeyPair(autoCreateKeyPair);
       }
    }
 }
