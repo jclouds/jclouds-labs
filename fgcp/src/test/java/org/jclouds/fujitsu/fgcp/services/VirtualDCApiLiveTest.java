@@ -36,7 +36,7 @@ public class VirtualDCApiLiveTest extends BaseFGCPApiLiveTest {
 
       Set<VSystem> vsysSet = api.getVirtualDCApi().listVirtualSystems();
       assertNotNull(vsysSet, "vsysSet");
-      assertTrue(vsysSet.size() > 0, "vsysSet.size() should be greater than 0");
+      assertTrue(!vsysSet.isEmpty(), "vsysSet.size() should be greater than 0");
       for (VSystem vsys : vsysSet) {
          System.out.println(vsys);
       }

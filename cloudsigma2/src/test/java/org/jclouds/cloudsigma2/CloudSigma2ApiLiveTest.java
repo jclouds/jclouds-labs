@@ -157,7 +157,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       }
       ImmutableList<String> uuids = stringListBuilder.build();
       api.deleteDrives(uuids);
-      
+
       // Verify all deleted drives no longer exist
       FluentIterable<Drive> drives = api.listDrives().concat();
       assertFalse(any(transform(drives, extractUuid()), in(uuids)));
@@ -257,7 +257,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       }
       ImmutableList<String> uuids = stringListBuilder.build();
       api.deleteServers(uuids);
-      
+
       // Verify all deleted servers no longer exist
       FluentIterable<Server> servers = api.listServers().concat();
       assertFalse(any(transform(servers, extractUuid()), in(uuids)));
@@ -429,7 +429,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .meta(meta)
             .build();
 
-      if (api.listVLANs().size() > 0) {
+      if (!api.listVLANs().isEmpty()) {
          checkVlAN(vlanInfo, api.editVLAN(api.listVLANs().concat().get(0).getUuid(), vlanInfo));
       }
    }
@@ -460,7 +460,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
             .meta(meta)
             .build();
 
-      if (api.listIPs().size() > 0) {
+      if (!api.listIPs().isEmpty()) {
          checkIP(ip, api.editIP(api.listIPs().concat().get(0).getUuid(), ip));
       }
    }
@@ -707,7 +707,7 @@ public class CloudSigma2ApiLiveTest extends BaseApiLiveTest<CloudSigma2Api> {
       assertEquals(newProfileInfo.getLastName(), createdProfileInfo.getLastName());
       assertEquals(newProfileInfo.getTown(), createdProfileInfo.getTown());
    }
-   
+
    private static Function<Item, String> extractUuid() {
       return new Function<Item, String>() {
          @Override
