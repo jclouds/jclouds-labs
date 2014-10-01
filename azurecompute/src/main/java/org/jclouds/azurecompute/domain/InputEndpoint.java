@@ -1,0 +1,137 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.jclouds.azurecompute.domain;
+
+public class InputEndpoint {
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		private Integer localPort;
+		private Integer externalPort;
+		private String name;
+		private Protocol protocol;
+
+		public Builder localPort(Integer localPort) {
+			this.localPort = localPort;
+			return this;
+		}
+
+		public Builder externalPort(Integer externalPort) {
+			this.externalPort = externalPort;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder protocol(Protocol protocol) {
+			this.protocol = protocol;
+			return this;
+		}
+
+		public InputEndpoint build(){
+			return new InputEndpoint(localPort, externalPort, name, protocol);
+		}
+
+	}
+
+	private final Integer localPort;
+	private final Integer externalPort;
+	private final String name;
+	private final Protocol protocol;
+
+	public InputEndpoint(Integer localPort, Integer externalPort, String name,
+			Protocol protocol) {
+		super();
+		this.localPort = localPort;
+		this.externalPort = externalPort;
+		this.name = name;
+		this.protocol = protocol;
+	}
+
+	public Integer getLocalPort() {
+		return localPort;
+	}
+
+	public Integer getExternalPort() {
+		return externalPort;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Protocol getProtocol() {
+		return protocol;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((externalPort == null) ? 0 : externalPort.hashCode());
+		result = prime * result
+				+ ((localPort == null) ? 0 : localPort.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((protocol == null) ? 0 : protocol.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InputEndpoint other = (InputEndpoint) obj;
+		if (externalPort == null) {
+			if (other.externalPort != null)
+				return false;
+		} else if (!externalPort.equals(other.externalPort))
+			return false;
+		if (localPort == null) {
+			if (other.localPort != null)
+				return false;
+		} else if (!localPort.equals(other.localPort))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (protocol != other.protocol)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "InputEndPoint [localPort=" + localPort + ", externalPort="
+				+ externalPort + ", name=" + name + ", protocol=" + protocol
+				+ "]";
+	}
+
+}
