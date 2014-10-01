@@ -1,0 +1,208 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.jclouds.azurecompute.domain;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+import java.util.List;
+
+/**
+ * To create a new deployment/role
+ *
+ * Warning : the OSType must be the one of the source image used to create the VM
+ */
+public class DeploymentParams {
+
+   public static Builder builder() {
+      return new Builder();
+   }
+
+   public Builder toBuilder() {
+      return builder().fromDeploymentParams(this);
+   }
+
+   public static class Builder {
+
+      private String name;
+      private String sourceImageName;
+      private String username;
+      private String password;
+      private String storageAccount;
+      private OSType osType;
+      private RoleSize size = RoleSize.SMALL;
+      private List<InputEndpoint> endpoints = Lists.newArrayList();
+
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
+
+      public Builder sourceImageName(String sourceImageName) {
+         this.sourceImageName = sourceImageName;
+         return this;
+      }
+
+      public Builder username(String username) {
+         this.username = username;
+         return this;
+      }
+
+      public Builder password(String password) {
+         this.password = password;
+         return this;
+      }
+
+      public Builder storageAccount(String storageAccount) {
+         this.storageAccount = storageAccount;
+         return this;
+      }
+
+      public Builder size(RoleSize size) {
+         this.size = size;
+         return this;
+      }
+
+      public Builder osType(OSType osType) {
+         this.osType = osType;
+         return this;
+      }
+
+      public Builder endpoint(InputEndpoint endpoint) {
+         endpoints.add(endpoint);
+         return this;
+      }
+
+      public DeploymentParams build() {
+         return new DeploymentParams(name, sourceImageName, username, password, storageAccount, size, osType,
+               endpoints);
+      }
+
+      public Builder fromDeploymentParams(DeploymentParams in) {
+         // TODO Since the roleName should be unique, is it a good idea to copy it ?
+         return this.name(in.getName()).sourceImageName(in.getSourceImageName()).username(in.getUsername())
+               .password(in.getPassword()).size(in.getSize());
+      }
+   }
+
+   private final String name;
+   private final String sourceImageName;
+   private final String username;
+   private final String password;
+   private final String storageAccount;
+   private final RoleSize size;
+   private final OSType osType;
+   private final List<InputEndpoint> endpoints;
+
+   public DeploymentParams(String name, String sourceImageName, String username, String password, String storageAccount,
+         RoleSize size, OSType osType, final List<InputEndpoint> endpoints) {
+      this.name = name;
+      this.sourceImageName = sourceImageName;
+      this.username = username;
+      this.password = password;
+      this.storageAccount = storageAccount;
+      this.size = size;
+      this.osType = osType;
+      this.endpoints = endpoints;
+   }
+
+   /**
+    * Specifies the name for the deployment and its virtual machine. The name must be unique
+    * within Windows Azure.
+    */
+   public String getName() {
+      return name;
+   }
+
+   /**
+    * Specifies the name of an operating system image in the image repository.
+    */
+   public String getSourceImageName() {
+      return sourceImageName;
+   }
+
+   /**
+    * Specifies the name of a user to be created in the sudoer group of the
+    * virtual machine. User names are ASCII character strings 1 to 32
+    * characters in length.
+    */
+   public String getUsername() {
+      return username;
+   }
+
+   /**
+    * Specifies the associated password for the user name.
+    * PasswoazureManagement are ASCII character strings 6 to 72 characters in
+    * length.
+    */
+   public String getPassword() {
+      return password;
+   }
+
+   public String getStorageAccount() {
+      return storageAccount;
+   }
+
+   /**
+    * The size of the virtual machine to allocate. The default value is Small.
+    */
+   public RoleSize getSize() {
+      return size;
+   }
+
+   /**
+    * Os type of the given sourceImage
+    */
+   public OSType getOsType() {
+      return osType;
+   }
+
+   public List<InputEndpoint> getEndpoints() {
+      return endpoints;
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(name);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      DeploymentParams other = (DeploymentParams) obj;
+      return Objects.equal(this.name, other.name);
+   }
+
+   @Override
+   public String toString() {
+      return string().toString();
+   }
+
+   private ToStringHelper string() {
+      return MoreObjects.toStringHelper(this).add("name", name).add("sourceImageName", sourceImageName)
+            .add("size", size);
+   }
+}
