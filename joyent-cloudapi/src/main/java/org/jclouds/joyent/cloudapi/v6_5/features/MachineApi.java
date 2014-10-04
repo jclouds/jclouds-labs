@@ -16,17 +16,37 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+
 import java.util.Set;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
+import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Machine;
 import org.jclouds.joyent.cloudapi.v6_5.options.CreateMachineOptions;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.Payload;
+import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.RequestFilters;
 
-/**
- * Provides synchronous access to Machine.
- * <p/>
- * 
- * @see MachineAsyncApi
- * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#machines">api doc</a>
- */
+@Headers(keys = "X-Api-Version", values = "{jclouds.api-version}")
+@RequestFilters(BasicAuthentication.class)
+@Consumes(APPLICATION_JSON)
+@Path("/my/machines")
 public interface MachineApi {
 
    /**
@@ -34,16 +54,16 @@ public interface MachineApi {
     * 
     * @return an account's associated machine objects.
     */
+   @Named("ListMachines")
+   @GET
+   @Fallback(EmptySetOnNotFoundOr404.class)
    Set<Machine> list();
 
-   /**
-    * Gets the details for an individual machine.
-    * 
-    * @param id
-    *           the id of the machine
-    * @return
-    */
-   Machine get(String id);
+   @Named("GetMachine")
+   @GET
+   @Path("/{id}")
+   @Fallback(NullOnNotFoundOr404.class)
+   Machine get(@PathParam("id") String id);
 
    /**
     * Allows you to provision a machine. Note that if you do not specify a
@@ -77,13 +97,17 @@ public interface MachineApi {
     * 
     * @return the newly created machine
     */
-   Machine createWithDataset(String datasetURN, CreateMachineOptions options);
+   @Named("CreateMachine")
+   @POST
+   Machine createWithDataset(@QueryParam("dataset") String datasetURN, CreateMachineOptions options);
    
    /**
     * 
-    * @see #createWithDataset(CreateMachineOptions)
+    * @see #createWithDataset(String, CreateMachineOptions)
     */
-   Machine createWithDataset(String datasetURN);
+   @Named("CreateMachine")
+   @POST
+   Machine createWithDataset(@QueryParam("dataset") String datasetURN);
 
    /**
     * Allows you to shut down a machine.
@@ -91,7 +115,12 @@ public interface MachineApi {
     * @param id
     *           the id of the machine to stop
     */
-   void stop(String id);
+   @Named("StopMachine")
+   @POST
+   @Produces(APPLICATION_FORM_URLENCODED)
+   @Path("/{id}")
+   @Payload("action=stop")
+   void stop(@PathParam("id") String id);
 
    /**
     * Allows you to boot up a machine.
@@ -99,7 +128,12 @@ public interface MachineApi {
     * @param id
     *           the id of the machine to start
     */
-   void start(String id);
+   @Named("StartMachine")
+   @POST
+   @Produces(APPLICATION_FORM_URLENCODED)
+   @Path("/{id}")
+   @Payload("action=start")
+   void start(@PathParam("id") String id);
 
    /**
     * Allows you to reboot a machine.
@@ -107,7 +141,12 @@ public interface MachineApi {
     * @param id
     *           the id of the machine to reboot
     */
-   void reboot(String id);
+   @Named("RestartMachine")
+   @POST
+   @Produces(APPLICATION_FORM_URLENCODED)
+   @Path("/{id}")
+   @Payload("action=reboot")
+   void reboot(@PathParam("id") String id);
 
    /**
     * Allows you to resize a machine. (Works only for smart machines)
@@ -117,7 +156,12 @@ public interface MachineApi {
     * @param packageJoyentCloud
     *           the package to use for the machine
     */
-   void resize(String id, String packageJoyentCloud);
+   @Named("ResizeMachine")
+   @POST
+   @Produces(APPLICATION_FORM_URLENCODED)
+   @Path("/{id}")
+   @Payload("action=resize&package={package}")
+   void resize(@PathParam("id") String id, @PayloadParam("package") String packageJoyentCloud);
 
    /**
     * Allows you to delete a machine (the machine must be stopped before it can
@@ -126,6 +170,9 @@ public interface MachineApi {
     * @param id
     *           the id of the machine to delete
     */
-   void delete(String id);
-
+   @Named("DeleteMachine")
+   @DELETE
+   @Path("/{id}")
+   @Fallback(VoidOnNotFoundOr404.class)
+   void delete(@PathParam("id") String id);
 }

@@ -16,6 +16,7 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5;
 
+import java.io.Closeable;
 import java.util.Set;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.joyent.cloudapi.v6_5.features.DatacenterApi;
@@ -30,14 +31,8 @@ import org.jclouds.rest.annotations.EndpointParam;
 
 import com.google.inject.Provides;
 
-/**
- * Provides synchronous access to JoyentCloud.
- * <p/>
- * 
- * @see JoyentCloudAsyncApi
- * @see <a href="http://cloudApi.joyent.org/cloudApiapi.html">api doc</a>
- */
-public interface JoyentCloudApi {
+/** Provides synchronous access to JoyentCloud. */
+public interface JoyentCloudApi extends Closeable {
 
    /**
     * 
@@ -63,20 +58,17 @@ public interface JoyentCloudApi {
     * Provides synchronous access to Machine features.
     */
    @Delegate
-   MachineApi getMachineApiForDatacenter(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String datacenter);
+   MachineApi getMachineApiForDatacenter(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String datacenter);
 
    /**
     * Provides synchronous access to Dataset features.
     */
    @Delegate
-   DatasetApi getDatasetApiForDatacenter(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String datacenter);
+   DatasetApi getDatasetApiForDatacenter(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String datacenter);
 
    /**
     * Provides synchronous access to Package features.
     */
    @Delegate
-   PackageApi getPackageApiForDatacenter(
-         @EndpointParam(parser = ZoneToEndpoint.class) @Nullable String datacenter);
+   PackageApi getPackageApiForDatacenter(@EndpointParam(parser = ZoneToEndpoint.class) @Nullable String datacenter);
 }

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.jclouds.joyent.cloudapi.v6_5;
+
 import static org.jclouds.reflect.Reflection2.typeToken;
 
 import java.net.URI;
@@ -23,23 +24,14 @@ import java.util.Properties;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.joyent.cloudapi.v6_5.compute.config.JoyentCloudComputeServiceContextModule;
 import org.jclouds.joyent.cloudapi.v6_5.config.DatacentersAreZonesModule;
+import org.jclouds.joyent.cloudapi.v6_5.config.JoyentCloudHttpApiModule;
 import org.jclouds.joyent.cloudapi.v6_5.config.JoyentCloudProperties;
-import org.jclouds.joyent.cloudapi.v6_5.config.JoyentCloudRestClientModule;
-import org.jclouds.rest.RestContext;
-import org.jclouds.rest.internal.BaseRestApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
 
-/**
- * Implementation of {@link ApiMetadata} for JoyentCloud ~6.5 API
- */
-public class JoyentCloudApiMetadata extends BaseRestApiMetadata {
-
-   public static final TypeToken<RestContext<JoyentCloudApi, JoyentCloudAsyncApi>> CONTEXT_TOKEN = new TypeToken<RestContext<JoyentCloudApi, JoyentCloudAsyncApi>>() {
-      private static final long serialVersionUID = 1L;
-   };
+public class JoyentCloudApiMetadata extends BaseHttpApiMetadata {
 
    @Override
    public Builder toBuilder() {
@@ -55,7 +47,7 @@ public class JoyentCloudApiMetadata extends BaseRestApiMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseRestApiMetadata.defaultProperties();
+      Properties properties = BaseHttpApiMetadata.defaultProperties();
       // auth fail sometimes happens, as the rc.local script that injects the
       // authorized key executes after ssh has started.  
       properties.setProperty("jclouds.ssh.max-retries", "7");
@@ -64,10 +56,10 @@ public class JoyentCloudApiMetadata extends BaseRestApiMetadata {
       return properties;
    }
 
-   public static class Builder extends BaseRestApiMetadata.Builder<Builder> {
+   public static class Builder extends BaseHttpApiMetadata.Builder<JoyentCloudApi, Builder> {
 
       protected Builder() {
-         super(JoyentCloudApi.class, JoyentCloudAsyncApi.class);
+         super(JoyentCloudApi.class);
          id("joyent-cloudapi")
          .name("Joyent Cloud API")
          .identityName("username")
@@ -77,7 +69,10 @@ public class JoyentCloudApiMetadata extends BaseRestApiMetadata {
          .defaultEndpoint("https://api.joyentcloud.com")
          .defaultProperties(JoyentCloudApiMetadata.defaultProperties())
          .view(typeToken(ComputeServiceContext.class))
-         .defaultModules(ImmutableSet.<Class<? extends Module>> of(DatacentersAreZonesModule.class, JoyentCloudRestClientModule.class, JoyentCloudComputeServiceContextModule.class));
+         .defaultModules(ImmutableSet.<Class<? extends Module>> builder()
+                                     .add(DatacentersAreZonesModule.class)
+                                     .add(JoyentCloudHttpApiModule.class)
+                                     .add(JoyentCloudComputeServiceContextModule.class).build());
       }
 
       @Override
