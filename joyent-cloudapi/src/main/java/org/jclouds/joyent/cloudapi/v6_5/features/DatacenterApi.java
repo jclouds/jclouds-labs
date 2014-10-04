@@ -16,14 +16,26 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.Fallbacks.EmptyMapOnNotFoundOr404;
+
 import java.net.URI;
 import java.util.Map;
-/**
- * Datacenter Services
- * 
- * @see DatacenterAsyncApi
- * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#datacenters">api doc</a>
- */
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.RequestFilters;
+
+@Headers(keys = "X-Api-Version", values = "{jclouds.api-version}")
+@RequestFilters(BasicAuthentication.class)
+@Path("/my/datacenters")
+@Consumes(APPLICATION_JSON)
 public interface DatacenterApi {
 
    /**
@@ -31,5 +43,8 @@ public interface DatacenterApi {
     * 
     * @return keys are the datacenter name, and the value is the URL.
     */
+   @Named("ListDataCenters")
+   @GET
+   @Fallback(EmptyMapOnNotFoundOr404.class)
    Map<String, URI> getDatacenters();
 }

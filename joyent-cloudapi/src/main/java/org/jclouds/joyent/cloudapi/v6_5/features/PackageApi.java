@@ -16,29 +16,41 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
 import java.util.Set;
-/**
- * Provides synchronous access to Packages.
- * <p/>
- * 
- * @see PackageAsyncApi
- * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#packages">api doc</a>
- */
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.joyent.cloudapi.v6_5.domain.Package;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.RequestFilters;
+
+@Headers(keys = "X-Api-Version", values = "{jclouds.api-version}")
+@RequestFilters(BasicAuthentication.class)
+@Path("/my/packages")
+@Consumes(APPLICATION_JSON)
 public interface PackageApi {
 
    /**
     * Provides a list of packages available in this datacenter.
-    * 
-    * @return
     */
-   Set<org.jclouds.joyent.cloudapi.v6_5.domain.Package> list();
+   @Named("ListPackages")
+   @GET
+   @Fallback(EmptySetOnNotFoundOr404.class)
+   Set<Package> list();
 
-   /**
-    * Gets an individual package by id.
-    * 
-    * @param name
-    *           the name of the package
-    * @return
-    */
-   org.jclouds.joyent.cloudapi.v6_5.domain.Package get(String name);
+   @Named("GetPackage")
+   @GET
+   @Path("/{name}")
+   @Fallback(NullOnNotFoundOr404.class)
+   Package get(@PathParam("name") String name);
 }

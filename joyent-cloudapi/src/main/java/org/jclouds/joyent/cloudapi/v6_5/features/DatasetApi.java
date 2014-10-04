@@ -16,31 +16,39 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5.features;
 
-import java.util.Set;
-import org.jclouds.joyent.cloudapi.v6_5.domain.Dataset;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
-/**
- * Provides synchronous access to Datasets.
- * <p/>
- * 
- * @see DatasetAsyncApi
- * @see <a href="http://apidocs.joyent.com/sdcapidoc/cloudapi/index.html#datasets">api doc</a>
- */
+import java.util.Set;
+
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.joyent.cloudapi.v6_5.domain.Dataset;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.RequestFilters;
+
+@Headers(keys = "X-Api-Version", values = "{jclouds.api-version}")
+@RequestFilters(BasicAuthentication.class)
+@Consumes(APPLICATION_JSON)
+@Path("/my/datasets")
 public interface DatasetApi {
 
-   /**
-    * Provides a list of datasets available in this datacenter.
-    * 
-    * @return
-    */
+   @Named("ListDatasets")
+   @GET
+   @Fallback(EmptySetOnNotFoundOr404.class)
    Set<Dataset> list();
 
-   /**
-    * Gets an individual dataset by id.
-    * 
-    * @param id
-    *           the id of the dataset
-    * @return
-    */
-   Dataset get(String id);
+   @Named("GetDataset")
+   @GET
+   @Path("/{id}")
+   @Consumes(APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   Dataset get(@PathParam("id") String id);
 }

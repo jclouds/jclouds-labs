@@ -18,8 +18,7 @@ package org.jclouds.joyent.cloudapi.v6_5.internal;
 
 import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudApi;
-import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudAsyncApi;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
@@ -36,7 +35,7 @@ public class BaseJoyentCloudApiLiveTest extends BaseComputeServiceContextLiveTes
       provider = "joyent-cloudapi";
    }
 
-   protected RestContext<JoyentCloudApi, JoyentCloudAsyncApi> cloudApiContext;
+   protected ApiContext<JoyentCloudApi> cloudApiContext;
 
    @BeforeGroups(groups = { "integration", "live" })
    @Override

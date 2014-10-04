@@ -16,47 +16,19 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5.config;
 
-import java.util.Map;
-
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
-import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudAsyncApi;
 import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.DatacenterAsyncApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.DatacenterApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.DatasetAsyncApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.DatasetApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.KeyAsyncApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.KeyApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.MachineAsyncApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.MachineApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.PackageAsyncApi;
-import org.jclouds.joyent.cloudapi.v6_5.features.PackageApi;
 import org.jclouds.joyent.cloudapi.v6_5.handlers.JoyentCloudErrorHandler;
 import org.jclouds.json.config.GsonModule.DateAdapter;
 import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
-import org.jclouds.rest.ConfiguresRestClient;
-import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
 
-import com.google.common.collect.ImmutableMap;
-
-/**
- * Configures the JoyentCloud connection.
- */
-@ConfiguresRestClient
-public class JoyentCloudRestClientModule extends RestClientModule<JoyentCloudApi, JoyentCloudAsyncApi> {
-   public static final Map<Class<?>, Class<?>> DELEGATE_MAP = ImmutableMap.<Class<?>, Class<?>> builder()
-         .put(DatacenterApi.class, DatacenterAsyncApi.class)
-         .put(KeyApi.class, KeyAsyncApi.class)
-         .put(MachineApi.class, MachineAsyncApi.class)
-         .put(DatasetApi.class, DatasetAsyncApi.class)
-         .put(PackageApi.class, PackageAsyncApi.class).build();
-
-   public JoyentCloudRestClientModule() {
-      super(DELEGATE_MAP);
-   }
+@ConfiguresHttpApi
+public class JoyentCloudHttpApiModule extends HttpApiModule<JoyentCloudApi> {
 
    @Override
    protected void configure() {
