@@ -67,8 +67,8 @@ public class DataApiLiveTest extends BaseCDMIApiLiveTest {
       pDataObjectMetaDataIn.put("dataObjectkey3", "value3");
 
       CreateContainerOptions pCreateContainerOptions = CreateContainerOptions.Builder.metadata(pContainerMetaDataIn);
-      ContainerApi containerApi = cdmiContext.getApi().getApi();
-      DataApi dataApi = cdmiContext.getApi().getDataApiForContainer(containerName);
+      ContainerApi containerApi = api.getContainerApi();
+      DataApi dataApi = api.getDataApiForContainer(containerName);
       Logger.getAnonymousLogger().info("create: " + containerName);
       Container container = containerApi.create(containerName, pCreateContainerOptions);
       try {
@@ -481,8 +481,8 @@ public class DataApiLiveTest extends BaseCDMIApiLiveTest {
       pDataObjectMetaDataIn.put("dataObjectkey3", "value3");
 
       CreateContainerOptions pCreateContainerOptions = CreateContainerOptions.Builder.metadata(pContainerMetaDataIn);
-      ContainerApi containerApi = cdmiContext.getApi().getApi();
-      DataApi dataApi = cdmiContext.getApi().getDataApiForContainer(containerName);
+      ContainerApi containerApi = this.api.getContainerApi();
+      DataApi dataApi = api.getDataApiForContainer(containerName);
       Logger.getAnonymousLogger().info("create: " + containerName);
       Container container = containerApi.create(containerName, pCreateContainerOptions);
       try {

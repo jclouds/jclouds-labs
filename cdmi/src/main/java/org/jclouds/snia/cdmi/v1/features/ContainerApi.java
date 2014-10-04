@@ -16,17 +16,35 @@
  */
 package org.jclouds.snia.cdmi.v1.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.snia.cdmi.v1.ObjectTypes.CONTAINER;
+
+import java.io.Closeable;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.snia.cdmi.v1.binders.BindQueryParmsToSuffix;
 import org.jclouds.snia.cdmi.v1.domain.Container;
+import org.jclouds.snia.cdmi.v1.filters.BasicAuthenticationAndTenantId;
+import org.jclouds.snia.cdmi.v1.filters.StripExtraAcceptHeader;
 import org.jclouds.snia.cdmi.v1.options.CreateContainerOptions;
 import org.jclouds.snia.cdmi.v1.queryparams.ContainerQueryParams;
 
-/**
- * CDMI Container Object Resource Operations
- * 
- * @see ContainerAsyncApi
- * @see <a href="http://www.snia.org/cdmi">api doc</a>
- */
-public interface ContainerApi {
+/** CDMI Container Object Resource Operations */
+@RequestFilters({ BasicAuthenticationAndTenantId.class, StripExtraAcceptHeader.class })
+@Headers(keys = "X-CDMI-Specification-Version", values = "{jclouds.api-version}")
+public interface ContainerApi extends Closeable {
 
    /**
     * get CDMI Container
@@ -44,7 +62,11 @@ public interface ContainerApi {
     * 
     *         <pre>
     */
-   Container get(String containerName);
+   @GET
+   @Consumes({ CONTAINER, APPLICATION_JSON })
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   Container get(@PathParam("containerName") String containerName);
 
    /**
     * get CDMI Container
@@ -63,7 +85,12 @@ public interface ContainerApi {
     * </pre>
     * @see ContainerQueryParams
     */
-   Container get(String containerName, ContainerQueryParams queryParams);
+   @GET
+   @Consumes({ CONTAINER, APPLICATION_JSON })
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   Container get(@PathParam("containerName") String containerName,
+         @BinderParam(BindQueryParmsToSuffix.class) ContainerQueryParams queryParams);
 
    /**
     * Create CDMI Container
@@ -80,7 +107,12 @@ public interface ContainerApi {
     *  }
     * </pre>
     */
-   Container create(String containerName);
+   @PUT
+   @Consumes({ CONTAINER, APPLICATION_JSON })
+   @Produces(CONTAINER)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   Container create(@PathParam("containerName") String containerName);
 
    /**
     * Create CDMI Container
@@ -98,13 +130,21 @@ public interface ContainerApi {
     * </pre>
     * @see CreateContainerOptions
     */
-   Container create(String containerName, CreateContainerOptions... options);
+   @PUT
+   @Consumes({ CONTAINER, APPLICATION_JSON })
+   @Produces(CONTAINER)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   Container create(@PathParam("containerName") String containerName, CreateContainerOptions... options);
 
    /**
     * Delete CDMI Container
     * 
     * @param containerName
     */
-   void delete(String containerName);
-
+   @DELETE
+   @Consumes(APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{containerName}")
+   void delete(@PathParam("containerName") String containerName);
 }

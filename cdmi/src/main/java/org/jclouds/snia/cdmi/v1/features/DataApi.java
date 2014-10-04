@@ -16,16 +16,34 @@
  */
 package org.jclouds.snia.cdmi.v1.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+import static org.jclouds.snia.cdmi.v1.ObjectTypes.DATAOBJECT;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.snia.cdmi.v1.binders.BindQueryParmsToSuffix;
 import org.jclouds.snia.cdmi.v1.domain.DataObject;
+import org.jclouds.snia.cdmi.v1.filters.BasicAuthenticationAndTenantId;
+import org.jclouds.snia.cdmi.v1.filters.StripExtraAcceptHeader;
 import org.jclouds.snia.cdmi.v1.options.CreateDataObjectOptions;
 import org.jclouds.snia.cdmi.v1.queryparams.DataObjectQueryParams;
 
-/**
- * Data Object Resource Operations
- * 
- * @see DataAsyncApi
- * @see <a href="http://www.snia.org/cdmi">api doc</a>
- */
+/** Data Object Resource Operations */
+@RequestFilters({ BasicAuthenticationAndTenantId.class, StripExtraAcceptHeader.class })
+@Headers(keys = "X-CDMI-Specification-Version", values = "{jclouds.api-version}")
 public interface DataApi {
    /**
     * get CDMI Data object
@@ -44,7 +62,11 @@ public interface DataApi {
     * 
     *         <pre>
     */
-   DataObject get(String dataObjectName);
+   @GET
+   @Consumes({ DATAOBJECT, APPLICATION_JSON })
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   DataObject get(@PathParam("dataObjectName") String dataObjectName);
 
    /**
     * get CDMI Data object
@@ -65,7 +87,12 @@ public interface DataApi {
     * 
     *         <pre>
     */
-   DataObject get(String dataObjectName, DataObjectQueryParams queryParams);
+   @GET
+   @Consumes({ DATAOBJECT, APPLICATION_JSON })
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   DataObject get(@PathParam("dataObjectName") String dataObjectName,
+         @BinderParam(BindQueryParmsToSuffix.class) DataObjectQueryParams queryParams);
 
    /**
     * create CDMI Data object
@@ -90,7 +117,13 @@ public interface DataApi {
     * 
     *         <pre>
     */
-   DataObject create(String dataObjectName, CreateDataObjectOptions... options);
+   @PUT
+   @Consumes({ DATAOBJECT, APPLICATION_JSON })
+   @Produces({ DATAOBJECT })
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   DataObject create(@PathParam("dataObjectName") String dataObjectName,
+         CreateDataObjectOptions... options);
 
    /**
     * delete CDMI Data object
@@ -107,6 +140,11 @@ public interface DataApi {
     * 
     *           <pre>
     */
-   void delete(String dataObjectName);
-
+   @DELETE
+   @Consumes(TEXT_PLAIN)
+   // note: MediaType.APPLICATION_JSON work also, however without consumes
+   // jclouds throws null exception
+   @Fallback(VoidOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   void delete(@PathParam("dataObjectName") String dataObjectName);
 }
