@@ -31,10 +31,10 @@ import org.jclouds.blobstore.BlobRequestSigner;
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.attr.ConsistencyModel;
+import org.jclouds.blobstore.internal.SubmissionAsyncBlobStore;
 import org.jclouds.internal.BaseView;
 import org.jclouds.location.Provider;
 import org.jclouds.location.Region;
-import org.jclouds.openstack.swift.v1.blobstore.internal.SubmissionAsyncBlobStore;
 import org.jclouds.rest.Utils;
 
 import com.google.common.base.Function;
