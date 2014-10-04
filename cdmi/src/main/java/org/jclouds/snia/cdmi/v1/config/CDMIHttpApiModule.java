@@ -16,9 +16,22 @@
  */
 package org.jclouds.snia.cdmi.v1.config;
 
-/**
- * Configuration properties and constants used in SNIA CDMI connections.
- */
-public class CDMIProperties {
+import org.jclouds.http.HttpErrorHandler;
+import org.jclouds.http.annotation.ClientError;
+import org.jclouds.http.annotation.Redirection;
+import org.jclouds.http.annotation.ServerError;
+import org.jclouds.rest.ConfiguresHttpApi;
+import org.jclouds.rest.config.HttpApiModule;
+import org.jclouds.snia.cdmi.v1.CDMIApi;
+import org.jclouds.snia.cdmi.v1.handlers.CDMIErrorHandler;
 
+@ConfiguresHttpApi
+public class CDMIHttpApiModule extends HttpApiModule<CDMIApi> {
+
+   @Override
+   protected void bindErrorHandlers() {
+      bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(CDMIErrorHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(CDMIErrorHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(CDMIErrorHandler.class);
+   }
 }

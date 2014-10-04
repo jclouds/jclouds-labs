@@ -48,7 +48,7 @@ public class ContainerApiExpectTest extends BaseCDMIApiExpectTest {
 
       CDMIApi apiWhenContainersExist = requestSendsResponse(get, getResponse);
 
-      assertEquals(apiWhenContainersExist.getApi().get("MyContainer/"), new ParseContainerTest().expected());
+      assertEquals(apiWhenContainersExist.getContainerApi().get("MyContainer/"), new ParseContainerTest().expected());
    }
 
 }

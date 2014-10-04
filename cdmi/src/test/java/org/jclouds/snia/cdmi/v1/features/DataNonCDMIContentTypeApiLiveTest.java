@@ -72,10 +72,9 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
       Payload payloadOut;
 
       CreateContainerOptions pCreateContainerOptions = CreateContainerOptions.Builder.metadata(pContainerMetaDataIn);
-      ContainerApi containerApi = cdmiContext.getApi().getApi();
-      DataApi dataApi = cdmiContext.getApi().getDataApiForContainer(containerName);
-      DataNonCDMIContentTypeApi dataNonCDMIContentTypeApi = cdmiContext.getApi()
-               .getDataNonCDMIContentTypeApiForContainer(containerName);
+      ContainerApi containerApi = api.getContainerApi();
+      DataApi dataApi = api.getDataApiForContainer(containerName);
+      DataNonCDMIContentTypeApi dataNonCDMIContentTypeApi = api.getDataNonCDMIContentTypeApiForContainer(containerName);
       Logger.getAnonymousLogger().info("create: " + containerName);
       Container container = containerApi.create(containerName, pCreateContainerOptions);
       try {

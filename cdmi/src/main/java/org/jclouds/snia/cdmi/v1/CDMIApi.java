@@ -16,6 +16,8 @@
  */
 package org.jclouds.snia.cdmi.v1;
 
+import java.io.Closeable;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -23,28 +25,14 @@ import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.snia.cdmi.v1.features.ContainerApi;
 import org.jclouds.snia.cdmi.v1.features.DataApi;
 import org.jclouds.snia.cdmi.v1.features.DataNonCDMIContentTypeApi;
-import org.jclouds.snia.cdmi.v1.features.DomainApi;
 
-/**
- * Provides synchronous access to CDMI.
- * <p/>
- * 
- * @see CDMIAsyncApi
- * @see <a href="http://www.snia.org/cdmi">api doc</a>
- */
-public interface CDMIApi {
-
-   /**
-    * Provides synchronous access to Domain Object Resource Operations.
-    */
-   @Delegate
-   DomainApi getDomainApi();
+public interface CDMIApi extends Closeable {
 
    /**
     * Provides synchronous access to Container Object Resource Operations.
     */
    @Delegate
-   ContainerApi getApi();
+   ContainerApi getContainerApi();
 
    /**
     * Provides synchronous access to Data Object Resource Operations.
@@ -59,5 +47,4 @@ public interface CDMIApi {
    @Delegate
    @Path("/{containerName}")
    DataNonCDMIContentTypeApi getDataNonCDMIContentTypeApiForContainer(@PathParam("containerName") String containerName);
-
 }

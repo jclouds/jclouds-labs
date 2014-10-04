@@ -16,38 +16,13 @@
  */
 package org.jclouds.snia.cdmi.v1.internal;
 
-import org.jclouds.apis.BaseContextLiveTest;
-import org.jclouds.rest.RestContext;
+import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.snia.cdmi.v1.CDMIApi;
-import org.jclouds.snia.cdmi.v1.CDMIApiMetadata;
-import org.jclouds.snia.cdmi.v1.CDMIAsyncApi;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
-import com.google.common.reflect.TypeToken;
-
-/**
- * Tests behavior of {@code CDMIApi}
- */
 @Test(groups = "live")
-public class BaseCDMIApiLiveTest extends BaseContextLiveTest<RestContext<CDMIApi, CDMIAsyncApi>> {
-
+public class BaseCDMIApiLiveTest extends BaseApiLiveTest<CDMIApi> {
    public BaseCDMIApiLiveTest() {
       provider = "cdmi";
    }
-
-   protected RestContext<CDMIApi, CDMIAsyncApi> cdmiContext;
-
-   @BeforeGroups(groups = { "integration", "live" })
-   @Override
-   public void setupContext() {
-      super.setupContext();
-      cdmiContext = context;
-   }
-   
-   @Override
-   protected TypeToken<RestContext<CDMIApi, CDMIAsyncApi>> contextType() {
-      return CDMIApiMetadata.CONTEXT_TOKEN;
-   }
-
 }

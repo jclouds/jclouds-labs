@@ -16,22 +16,40 @@
  */
 package org.jclouds.snia.cdmi.v1.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.Fallbacks.VoidOnNotFoundOr404;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
 import org.jclouds.io.Payload;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.snia.cdmi.v1.binders.BindQueryParmsToSuffix;
 import org.jclouds.snia.cdmi.v1.domain.DataObject;
+import org.jclouds.snia.cdmi.v1.filters.BasicAuthenticationAndTenantId;
+import org.jclouds.snia.cdmi.v1.filters.StripExtraAcceptHeader;
+import org.jclouds.snia.cdmi.v1.functions.ParseObjectFromHeadersAndHttpContent;
 import org.jclouds.snia.cdmi.v1.queryparams.DataObjectQueryParams;
 
-/**
- * Data Object Resource Operations
- * 
- * @see DataNonCDMIContentTypeAsyncApi
- * @see <a href="http://www.snia.org/cdmi">api doc</a>
- */
+/** Data Object Resource Operations */
+@RequestFilters({ BasicAuthenticationAndTenantId.class, StripExtraAcceptHeader.class })
 public interface DataNonCDMIContentTypeApi {
    /**
     * get CDMI Data object
     * 
-    * @param containerName
-    *           containerName must end with a forward slash, /.
     * @param dataObjectName
     *           dataObjectName must not end with a forward slash, /.
     * @return DataObjectNonCDMIContentType
@@ -44,15 +62,17 @@ public interface DataNonCDMIContentTypeApi {
     * }
     * 
     * <pre>
-    * @see DataNonCDMIContentTypeAsyncApi#getValue(String dataObjectName)
     */
-   Payload getValue(String dataObjectName);
+   @GET
+   @Consumes
+   @ResponseParser(ParseObjectFromHeadersAndHttpContent.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   Payload getValue(@PathParam("dataObjectName") String dataObjectName);
 
    /**
     * get CDMI Data object
     * 
-    * @param containerName
-    *           containerName must end with a forward slash, /.
     * @param dataObjectName
     *           dataObjectName must not end with a forward slash, /.
     * @param range
@@ -67,13 +87,16 @@ public interface DataNonCDMIContentTypeApi {
     * 
     *         <pre>
     */
-   Payload getValue(String dataObjectName, String range);
+   @GET
+   @Consumes
+   @ResponseParser(ParseObjectFromHeadersAndHttpContent.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   Payload getValue(@PathParam("dataObjectName") String dataObjectName, @HeaderParam("Range") String range);
 
    /**
     * get CDMI Data object
     * 
-    * @param containerName
-    *           containerName must end with a forward slash, /.
     * @param dataObjectName
     *           dataObjectName must not end with a forward slash, /.
     * @param queryParams
@@ -89,13 +112,16 @@ public interface DataNonCDMIContentTypeApi {
     * 
     *         <pre>
     */
-   DataObject get(String dataObjectName, DataObjectQueryParams queryParams);
+   @GET
+   @Consumes(APPLICATION_JSON)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   DataObject get(@PathParam("dataObjectName") String dataObjectName,
+         @BinderParam(BindQueryParmsToSuffix.class) DataObjectQueryParams queryParams);
 
    /**
     * create CDMI Data object Non CDMI Content Type
     * 
-    * @param containerName
-    *           containerName must end with a forward slash, /.
     * @param dataObjectName
     *           dataObjectName must not end with a forward slash, /.
     * @param payload
@@ -122,7 +148,11 @@ public interface DataNonCDMIContentTypeApi {
     * 
     *           <pre>
     */
-   void create(String dataObjectName, Payload payload);
+   @PUT
+   @Consumes
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   void create(@PathParam("dataObjectName") String dataObjectName, Payload payload);
 
    /**
     * create CDMI Data object partial Non CDMI Content Type Only part of the object is contained in
@@ -146,16 +176,19 @@ public interface DataNonCDMIContentTypeApi {
     * 
     *           <pre>
     */
-   void createPartial(String dataObjectName, Payload payload);
+   @PUT
+   @Consumes
+   @Fallback(NullOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   @Headers(keys = "X-CDMI-Partial", values = "true")
+   void createPartial(@PathParam("dataObjectName") String dataObjectName, Payload payload);
 
    /**
     * create CDMI Data object Non CDMI Content Type
     * 
-    * @param containerName
-    *           containerName must end with a forward slash, /.
     * @param dataObjectName
     *           dataObjectName must not end with a forward slash, /.
-    * @param inputString
+    * @param input
     *           simple string input
     * 
     *           <pre>
@@ -166,13 +199,17 @@ public interface DataNonCDMIContentTypeApi {
     * 
     *           <pre>
     */
-   void create(String dataObjectName, String inputString);
+   @PUT
+   @Consumes
+   @Produces(TEXT_PLAIN)
+   @Fallback(VoidOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   @org.jclouds.rest.annotations.Payload("{input}")
+   void create(@PathParam("dataObjectName") String dataObjectName, @PayloadParam("input") String input);
 
    /**
     * delete CDMI Data object
     * 
-    * @param containerName
-    *           containerName must end with a forward slash, /.
     * @param dataObjectName
     *           dataObjectName must not end with a forward slash, /.
     * 
@@ -184,6 +221,9 @@ public interface DataNonCDMIContentTypeApi {
     * 
     *           <pre>
     */
-   void delete(String dataObjectName);
-
+   @DELETE
+   @Consumes
+   @Fallback(VoidOnNotFoundOr404.class)
+   @Path("/{dataObjectName}")
+   void delete(@PathParam("dataObjectName") String dataObjectName);
 }
