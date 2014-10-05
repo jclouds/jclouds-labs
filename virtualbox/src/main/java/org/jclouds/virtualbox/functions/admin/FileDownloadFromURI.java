@@ -33,7 +33,7 @@ import javax.inject.Named;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.logging.Logger;
-import org.jclouds.rest.HttpAsyncClient;
+import org.jclouds.rest.HttpClient;
 
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
@@ -45,11 +45,11 @@ public class FileDownloadFromURI implements Function<URI, File> {
    @Named(ComputeServiceConstants.COMPUTE_LOGGER)
    protected Logger logger = Logger.NULL;
 
-   private final HttpAsyncClient client;
+   private final HttpClient client;
    private final String isosDir;
 
    @Inject
-   public FileDownloadFromURI(HttpAsyncClient client, @Named(VIRTUALBOX_WORKINGDIR) String workingDir) {
+   public FileDownloadFromURI(HttpClient client, @Named(VIRTUALBOX_WORKINGDIR) String workingDir) {
       this.client = client;
       this.isosDir = workingDir + File.separator + "isos";
    }
@@ -59,7 +59,7 @@ public class FileDownloadFromURI implements Function<URI, File> {
       final File file = new File(isosDir, new File(input.getPath()).getName());
       try {
          if (!file.exists()) {
-            final InputStream inputStream = client.get(input).get();
+            final InputStream inputStream = client.get(input);
             checkNotNull(inputStream, "%s not found", input);
             try {
                Files.asByteSink(file).writeFrom(inputStream);
