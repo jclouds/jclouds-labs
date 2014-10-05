@@ -17,29 +17,42 @@
 package org.jclouds.vcloud.director.v1_5.login;
 
 import java.net.URI;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+
+import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.MapBinder;
+import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.vcloud.director.v1_5.binders.BindUserOrgAndPasswordAsBasicAuthorizationHeader;
 import org.jclouds.vcloud.director.v1_5.domain.Session;
 import org.jclouds.vcloud.director.v1_5.domain.SessionWithToken;
+import org.jclouds.vcloud.director.v1_5.parsers.SessionWithTokenFromXMLAndHeader;
 
-/**
- * Provides synchronous access to Session.
- * <p/>
- * 
- * @see SessionAsyncApi
- */
 public interface SessionApi {
 
-   /**
-    * TODO
-    */
-   SessionWithToken loginUserInOrgWithPassword(URI loginUrl, String user, String org, String password);
+   @POST
+   @Consumes
+   @ResponseParser(SessionWithTokenFromXMLAndHeader.class)
+   @MapBinder(BindUserOrgAndPasswordAsBasicAuthorizationHeader.class)
+   SessionWithToken loginUserInOrgWithPassword(@EndpointParam URI loginUrl,
+         @PayloadParam("user") String user, @PayloadParam("org") String org,
+         @PayloadParam("password") String password);
 
-   /**
-    * TODO
-    */
-   Session getSessionWithToken(URI session, String authenticationToken);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   Session getSessionWithToken(@EndpointParam URI session,
+         @HeaderParam("x-vcloud-authorization") String authenticationToken);
 
-   /**
-    * TODO
-    */
-   void logoutSessionWithToken(URI session, String authenticationToken);
+   @DELETE
+   @Consumes
+   @JAXBResponseParser
+   void logoutSessionWithToken(@EndpointParam URI session,
+         @HeaderParam("x-vcloud-authorization") String authenticationToken);
 }

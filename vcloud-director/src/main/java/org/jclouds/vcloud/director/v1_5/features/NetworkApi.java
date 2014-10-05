@@ -16,15 +16,22 @@
  */
 package org.jclouds.vcloud.director.v1_5.features;
 
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
 import java.net.URI;
 
-import org.jclouds.vcloud.director.v1_5.domain.network.Network;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 
-/**
- * Provides synchronous access to {@link Network}.
- * 
- * @see NetworkAsyncApi
- */
+import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.vcloud.director.v1_5.domain.network.Network;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
+import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
+
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface NetworkApi {
 
    /**
@@ -32,7 +39,15 @@ public interface NetworkApi {
     * 
     * @return the network or null if not found
     */
-   Network get(String networkUrn);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Network get(@EndpointParam(parser = URNToHref.class) String networkUrn);
 
-   Network get(URI networkHref);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Network get(@EndpointParam URI networkHref);
 }

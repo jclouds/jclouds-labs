@@ -17,7 +17,7 @@
 package org.jclouds.vcloud.director.v1_5;
 
 import org.jclouds.View;
-import org.jclouds.rest.internal.BaseRestApiMetadataTest;
+import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
@@ -25,7 +25,7 @@ import com.google.common.reflect.TypeToken;
 
 @Test(groups = "unit", testName = "VCloudDirectorApiMetadataTest")
 //TODO: BaseComputeServiceApiMetadataTest
-public class VCloudDirectorApiMetadataTest extends BaseRestApiMetadataTest {
+public class VCloudDirectorApiMetadataTest extends BaseApiMetadataTest {
 
    public VCloudDirectorApiMetadataTest() {
       super(new VCloudDirectorApiMetadata(), ImmutableSet.<TypeToken<? extends View>>of());

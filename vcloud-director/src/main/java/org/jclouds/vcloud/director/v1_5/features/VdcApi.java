@@ -16,8 +16,31 @@
  */
 package org.jclouds.vcloud.director.v1_5.features;
 
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.CAPTURE_VAPP_PARAMS;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.CLONE_MEDIA_PARAMS;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.CLONE_VAPP_PARAMS;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.INSTANTIATE_VAPP_TEMPLATE_PARAMS;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.MEDIA;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.UPLOAD_VAPP_TEMPLATE_PARAMS;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.VAPP;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.VAPP_TEMPLATE;
+
 import java.net.URI;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
+import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 import org.jclouds.vcloud.director.v1_5.domain.Media;
 import org.jclouds.vcloud.director.v1_5.domain.VApp;
 import org.jclouds.vcloud.director.v1_5.domain.VAppTemplate;
@@ -29,12 +52,10 @@ import org.jclouds.vcloud.director.v1_5.domain.params.CloneVAppTemplateParams;
 import org.jclouds.vcloud.director.v1_5.domain.params.ComposeVAppParams;
 import org.jclouds.vcloud.director.v1_5.domain.params.InstantiateVAppParams;
 import org.jclouds.vcloud.director.v1_5.domain.params.UploadVAppTemplateParams;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
+import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
-/**
- * Provides synchronous access to a vDC.
- * 
- * @see VdcAsyncApi
- */
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface VdcApi {
 
    /**
@@ -42,9 +63,17 @@ public interface VdcApi {
     * 
     * @return the vdc or null if not found
     */
-   Vdc get(String vdcUrn);
-   
-   Vdc get(URI vdcHref);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Vdc get(@EndpointParam(parser = URNToHref.class) String vdcUrn);
+
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Vdc get(@EndpointParam URI vdcHref);
    
    /**
     * Captures a vApp into vApp template.
@@ -56,9 +85,20 @@ public interface VdcApi {
     * @return a VApp resource which will contain a task. The user should should wait for this task to finish to be able
     *         to use the vApp.
     */
-   VAppTemplate captureVApp(String vdcUrn, CaptureVAppParams params);
-   
-   VAppTemplate captureVApp(URI vdcHref, CaptureVAppParams params);
+   @POST
+   @Path("/action/captureVApp")
+   @Consumes(VAPP_TEMPLATE)
+   @Produces(CAPTURE_VAPP_PARAMS)
+   @JAXBResponseParser
+   VAppTemplate captureVApp(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) CaptureVAppParams params);
+
+   @POST
+   @Path("/action/captureVApp")
+   @Consumes(VAPP_TEMPLATE)
+   @Produces(CAPTURE_VAPP_PARAMS)
+   @JAXBResponseParser
+   VAppTemplate captureVApp(@EndpointParam URI vdcHref, @BinderParam(BindToXMLPayload.class) CaptureVAppParams params);
 
    /**
     * Clones a media into new one.
@@ -70,9 +110,20 @@ public interface VdcApi {
     * @return a Media resource which will contain a task. The user should monitor the contained task status in order to
     *         check when it is completed.
     */
-   Media cloneMedia(String vdcUrn, CloneMediaParams params);
-   
-   Media cloneMedia(URI vdcHref, CloneMediaParams params);
+   @POST
+   @Path("/action/cloneMedia")
+   @Consumes(MEDIA)
+   @Produces(CLONE_MEDIA_PARAMS)
+   @JAXBResponseParser
+   Media cloneMedia(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) CloneMediaParams params);
+
+   @POST
+   @Path("/action/cloneMedia")
+   @Consumes(MEDIA)
+   @Produces(CLONE_MEDIA_PARAMS)
+   @JAXBResponseParser
+   Media cloneMedia(@EndpointParam URI vdcHref, @BinderParam(BindToXMLPayload.class) CloneMediaParams params);
 
    /**
     * Clones a vApp into new one.
@@ -83,9 +134,22 @@ public interface VdcApi {
     * @return a VApp resource which will contain a task. The user should should wait for this task to finish to be able
     *         to use the vApp.
     */
-   VApp cloneVApp(String vdcUrn, CloneVAppParams params);
-   
-   VApp cloneVApp(URI vdcHref, CloneVAppParams params);
+   @POST
+   @Path("/action/cloneVApp")
+   @Consumes(VAPP)
+   @Produces(CLONE_VAPP_PARAMS)
+   // TODO fix these etc.
+   @JAXBResponseParser
+   VApp cloneVApp(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) CloneVAppParams params);
+
+   @POST
+   @Path("/action/cloneVApp")
+   @Consumes(VAPP)
+   @Produces(CLONE_VAPP_PARAMS)
+   // TODO fix these etc.
+   @JAXBResponseParser
+   VApp cloneVApp(@EndpointParam URI vdcHref, @BinderParam(BindToXMLPayload.class) CloneVAppParams params);
 
    /**
     * Clones a vApp template into new one.
@@ -97,9 +161,21 @@ public interface VdcApi {
     * @return a VAppTemplate resource which will contain a task. The user should should wait for this task to finish to
     *         be able to use the VAppTemplate.
     */
-   VAppTemplate cloneVAppTemplate(String vdcUrn, CloneVAppTemplateParams params);
-   
-   VAppTemplate cloneVAppTemplate(URI vdcHref, CloneVAppTemplateParams params);
+   @POST
+   @Path("/action/cloneVAppTemplate")
+   @Consumes(VAPP_TEMPLATE)
+   @Produces(VCloudDirectorMediaType.CLONE_VAPP_TEMPLATE_PARAMS)
+   @JAXBResponseParser
+   VAppTemplate cloneVAppTemplate(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) CloneVAppTemplateParams params);
+
+   @POST
+   @Path("/action/cloneVAppTemplate")
+   @Consumes(VAPP_TEMPLATE)
+   @Produces(VCloudDirectorMediaType.CLONE_VAPP_TEMPLATE_PARAMS)
+   @JAXBResponseParser
+   VAppTemplate cloneVAppTemplate(@EndpointParam URI vdcHref,
+         @BinderParam(BindToXMLPayload.class) CloneVAppTemplateParams params);
 
    /**
     * Composes a new vApp using VMs from other vApps or vApp templates.
@@ -131,9 +207,21 @@ public interface VdcApi {
     * @return a VApp resource which will contain a task. The user should should wait for this task to finish to be able
     *         to use the vApp.
     */
-   VApp composeVApp(String vdcUrn, ComposeVAppParams params);
-   
-   VApp composeVApp(URI vdcHref, ComposeVAppParams params);
+   @POST
+   @Path("/action/composeVApp")
+   @Consumes(VAPP)
+   @Produces(VCloudDirectorMediaType.COMPOSE_VAPP_PARAMS)
+   @JAXBResponseParser
+   VApp composeVApp(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) ComposeVAppParams params);
+
+   @POST
+   @Path("/action/composeVApp")
+   @Consumes(VAPP)
+   @Produces(VCloudDirectorMediaType.COMPOSE_VAPP_PARAMS)
+   @JAXBResponseParser
+   VApp composeVApp(@EndpointParam URI vdcHref,
+         @BinderParam(BindToXMLPayload.class) ComposeVAppParams params);
 
    /**
     * Instantiate a vApp template into a new vApp.
@@ -148,9 +236,21 @@ public interface VdcApi {
     * @return a VApp resource which will contain a task. The user should should wait for this task to finish to be able
     *         to use the vApp.
     */
-   VApp instantiateVApp(String vdcUrn, InstantiateVAppParams params);
-   
-   VApp instantiateVApp(URI vdcHref, InstantiateVAppParams params);
+   @POST
+   @Path("/action/instantiateVAppTemplate")
+   @Consumes(VAPP)
+   @Produces(INSTANTIATE_VAPP_TEMPLATE_PARAMS)
+   @JAXBResponseParser
+   VApp instantiateVApp(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) InstantiateVAppParams params);
+
+   @POST
+   @Path("/action/instantiateVAppTemplate")
+   @Consumes(VAPP)
+   @Produces(INSTANTIATE_VAPP_TEMPLATE_PARAMS)
+   @JAXBResponseParser
+   VApp instantiateVApp(@EndpointParam URI vdcHref,
+         @BinderParam(BindToXMLPayload.class) InstantiateVAppParams params);
 
    /**
     * Uploading vApp template to a vDC.
@@ -171,16 +271,39 @@ public interface VdcApi {
     * @return a VAppTemplate resource which will contain a task. The user should should wait for this task to finish to
     *         be able to use the VAppTemplate.
     */
-   VAppTemplate uploadVAppTemplate(String vdcUrn, UploadVAppTemplateParams params);
-   
-   VAppTemplate uploadVAppTemplate(URI vdcHref, UploadVAppTemplateParams params);
+   @POST
+   @Path("/action/uploadVAppTemplate")
+   @Consumes(VAPP_TEMPLATE)
+   @Produces(UPLOAD_VAPP_TEMPLATE_PARAMS)
+   @JAXBResponseParser
+   VAppTemplate uploadVAppTemplate(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) UploadVAppTemplateParams params);
+
+   @POST
+   @Path("/action/uploadVAppTemplate")
+   @Consumes(VAPP_TEMPLATE)
+   @Produces(UPLOAD_VAPP_TEMPLATE_PARAMS)
+   @JAXBResponseParser
+   VAppTemplate uploadVAppTemplate(@EndpointParam URI vdcHref,
+         @BinderParam(BindToXMLPayload.class) UploadVAppTemplateParams params);
 
    /**
     * Creates a media (and present upload link for the floppy/iso file).
     * 
     * @return The response will return a link to transfer site to be able to continue with uploading the media.
     */
-   Media addMedia(String vdcUrn, Media media);
-   
-   Media addMedia(URI vdcHref, Media media);
+   @POST
+   @Path("/media")
+   @Consumes(MEDIA)
+   @Produces(MEDIA)
+   @JAXBResponseParser
+   Media addMedia(@EndpointParam(parser = URNToHref.class) String vdcUrn,
+         @BinderParam(BindToXMLPayload.class) Media media);
+
+   @POST
+   @Path("/media")
+   @Consumes(MEDIA)
+   @Produces(MEDIA)
+   @JAXBResponseParser
+   Media addMedia(@EndpointParam URI vdcHref, @BinderParam(BindToXMLPayload.class) Media media);
 }

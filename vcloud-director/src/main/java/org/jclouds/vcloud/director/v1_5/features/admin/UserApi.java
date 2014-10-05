@@ -16,14 +16,31 @@
  */
 package org.jclouds.vcloud.director.v1_5.features.admin;
 
-import java.net.URI;
-import org.jclouds.vcloud.director.v1_5.domain.User;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.USER;
 
-/**
- * Provides synchronous access to {@link User} objects.
- * 
- * @see UserAsyncApi
- */
+import java.net.URI;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
+import org.jclouds.vcloud.director.v1_5.domain.User;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
+import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
+import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
+
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface UserApi {
 
    /**
@@ -37,9 +54,19 @@ public interface UserApi {
     *           the urn for the org
     * @return the addd user
     */
-   User addUserToOrg(User user, String orgUrn);
+   @POST
+   @Path("/users")
+   @Consumes(USER)
+   @Produces(USER)
+   @JAXBResponseParser User addUserToOrg(@BinderParam(BindToXMLPayload.class) User user,
+         @EndpointParam(parser = URNToAdminHref.class) String orgUrn);
 
-   User addUserToOrg(User user, URI orgAdminHref);
+   @POST
+   @Path("/users")
+   @Consumes(USER)
+   @Produces(USER)
+   @JAXBResponseParser
+   User addUserToOrg(@BinderParam(BindToXMLPayload.class) User user, @EndpointParam URI orgAdminHref);
 
    /**
     * Retrieves a user. This entity could be enabled or disabled.
@@ -52,9 +79,17 @@ public interface UserApi {
     *           the reference for the user
     * @return a user
     */
-   User get(String userUrn);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   User get(@EndpointParam(parser = URNToHref.class) String userUrn);
 
-   User get(URI userHref);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   User get(@EndpointParam URI userHref);
 
    /**
     * Modifies a user. The user object could be enabled or disabled. Note: the lock status cannot be
@@ -68,9 +103,17 @@ public interface UserApi {
     *           the reference for the user
     * @return the modified user
     */
-   User edit(String userUrn, User user);
-   
-   User edit(URI userHref, User user);
+   @PUT
+   @Consumes(USER)
+   @Produces(USER)
+   @JAXBResponseParser
+   User edit(@EndpointParam(parser = URNToHref.class) String userUrn, @BinderParam(BindToXMLPayload.class) User user);
+
+   @PUT
+   @Consumes(USER)
+   @Produces(USER)
+   @JAXBResponseParser
+   User edit(@EndpointParam URI userHref, @BinderParam(BindToXMLPayload.class) User user);
 
    /**
     * Deletes a user. Enabled and disabled users could be removed.
@@ -79,9 +122,15 @@ public interface UserApi {
     * DELETE /admin/catalog/{id}
     * </pre>
     */
-   void remove(String userUrn);
-   
-   void remove(URI userHref);
+   @DELETE
+   @Consumes
+   @JAXBResponseParser
+   void remove(@EndpointParam(parser = URNToHref.class) String userUrn);
+
+   @DELETE
+   @Consumes
+   @JAXBResponseParser
+   void remove(@EndpointParam URI userHref);
 
    /**
     * Unlocks a user.
@@ -90,7 +139,15 @@ public interface UserApi {
     * POST /admin/user/{id}/action/unlock
     * </pre>
     */
-   void unlock(String userUrn);
+   @POST
+   @Path("/action/unlock")
+   @Consumes
+   @JAXBResponseParser
+   void unlock(@EndpointParam(parser = URNToHref.class) String userUrn);
 
-   void unlock(URI userHref);
+   @POST
+   @Path("/action/unlock")
+   @Consumes
+   @JAXBResponseParser
+   void unlock(@EndpointParam URI userHref);
 }

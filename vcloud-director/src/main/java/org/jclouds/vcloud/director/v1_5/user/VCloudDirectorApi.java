@@ -16,10 +16,21 @@
  */
 package org.jclouds.vcloud.director.v1_5.user;
 
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
+import java.io.Closeable;
 import java.net.URI;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.vcloud.director.v1_5.domain.Entity;
 import org.jclouds.vcloud.director.v1_5.domain.Session;
 import org.jclouds.vcloud.director.v1_5.features.CatalogApi;
@@ -34,16 +45,13 @@ import org.jclouds.vcloud.director.v1_5.features.VAppApi;
 import org.jclouds.vcloud.director.v1_5.features.VAppTemplateApi;
 import org.jclouds.vcloud.director.v1_5.features.VdcApi;
 import org.jclouds.vcloud.director.v1_5.features.VmApi;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
 import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 import com.google.inject.Provides;
 
-/**
- * Provides synchronous access to VCloudDirector.
- * 
- * @see VCloudDirectorAsyncApi
- */
-public interface VCloudDirectorApi {
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
+public interface VCloudDirectorApi extends Closeable {
 
    /**
     * Redirects to the URL of an entity with the given VCD ID.
@@ -52,7 +60,12 @@ public interface VCloudDirectorApi {
     * GET /entity/{id}
     * </pre>
     */
-   Entity resolveEntity(String urn);
+   @GET
+   @Path("/entity/{id}")
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Entity resolveEntity(@PathParam("id") String id);
    
    /**
     * @return the current login session
@@ -61,7 +74,7 @@ public interface VCloudDirectorApi {
    Session getCurrentSession();
 
    /**
-    * @return asynchronous access to query features
+    * @return synchronous access to query features
     */
    @Delegate
    QueryApi getQueryApi();
