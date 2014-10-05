@@ -26,12 +26,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jclouds.Context;
-import org.jclouds.blobstore.AsyncBlobStore;
 import org.jclouds.blobstore.BlobRequestSigner;
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.attr.ConsistencyModel;
-import org.jclouds.blobstore.internal.SubmissionAsyncBlobStore;
 import org.jclouds.internal.BaseView;
 import org.jclouds.location.Provider;
 import org.jclouds.location.Region;
@@ -89,21 +87,6 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
       return blobRequestSigner.apply(regionId);
    }
 
-   /**
-    * @param regionId
-    *           valid region id from {@link #getConfiguredRegions()}
-    * @throws IllegalArgumentException
-    *            if {@code regionId} was invalid. longer supported. Please use {@link BlobStore}.
-    *
-    * @deprecated {@link AsyncBlobStore} is no longer supported. Please use {@link BlobStore} as
-    *             this method will be removed in jclouds 2.0.
-    */
-   @Deprecated
-   public AsyncBlobStore getAsyncBlobStore(String regionId) {
-      checkRegionId(regionId);
-      return new SubmissionAsyncBlobStore(getBlobStore(regionId), executor);
-   }
-
    protected void checkRegionId(String regionId) {
       checkArgument(getConfiguredRegions().contains(checkNotNull(regionId, "regionId was null")), "region %s not in %s",
             regionId, getConfiguredRegions());
@@ -145,16 +128,6 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
    @Override
    public BlobRequestSigner getSigner() {
       return getSigner(implicitRegionId.get());
-   }
-
-   /**
-    * @deprecated {@link AsyncBlobStore} is no longer supported. Please use {@link BlobStore} as
-    *             this method will be removed in jclouds 2.0.
-    */
-   @Override
-   @Deprecated
-   public AsyncBlobStore getAsyncBlobStore() {
-      return getAsyncBlobStore(implicitRegionId.get());
    }
 
    @Override
