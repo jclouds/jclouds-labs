@@ -24,35 +24,31 @@ import org.jclouds.domain.Credentials;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;
 import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.jclouds.rest.Utils;
-import org.jclouds.rest.internal.RestContextImpl;
+import org.jclouds.rest.internal.ApiContextImpl;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorContext;
 import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminApi;
-import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminAsyncApi;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
-import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorAsyncApi;
 
 import com.google.common.base.Supplier;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 
 @Singleton
-public class VCloudDirectorContextImpl extends RestContextImpl<VCloudDirectorApi, VCloudDirectorAsyncApi> implements
-      VCloudDirectorContext {
-   private final RestContext<VCloudDirectorAdminApi, VCloudDirectorAdminAsyncApi> adminContext;
+public class VCloudDirectorContextImpl extends ApiContextImpl<VCloudDirectorApi> implements VCloudDirectorContext {
+   private final ApiContext<VCloudDirectorAdminApi> adminContext;
 
    @Inject
    VCloudDirectorContextImpl(@Name String name, ProviderMetadata providerMetadata,
          @Provider Supplier<Credentials> creds, Utils utils, Closer closer, Injector injector,
-         RestContext<VCloudDirectorAdminApi, VCloudDirectorAdminAsyncApi> adminContext) {
-      super(name, providerMetadata, creds, utils, closer, injector, TypeLiteral.get(VCloudDirectorApi.class),
-            TypeLiteral.get(VCloudDirectorAsyncApi.class));
+         ApiContext<VCloudDirectorAdminApi> adminContext) {
+      super(name, providerMetadata, creds, utils, closer, injector, TypeLiteral.get(VCloudDirectorApi.class));
       this.adminContext = adminContext;
    }
    
    @Override
-   public RestContext<VCloudDirectorAdminApi, VCloudDirectorAdminAsyncApi> getAdminContext() {
+   public ApiContext<VCloudDirectorAdminApi> getAdminContext() {
       return adminContext;
    }
 }

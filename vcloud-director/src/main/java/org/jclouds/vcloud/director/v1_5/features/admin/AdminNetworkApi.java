@@ -16,18 +16,33 @@
  */
 package org.jclouds.vcloud.director.v1_5.features.admin;
 
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_ORG_NETWORK;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.TASK;
+
 import java.net.URI;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.domain.network.Network;
 import org.jclouds.vcloud.director.v1_5.domain.org.OrgNetwork;
 import org.jclouds.vcloud.director.v1_5.features.NetworkApi;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
+import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
 
-/**
- * Provides synchronous access to admin {@link Network} objects.
- * 
- * @see AdminNetworkAsyncApi
- */
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface AdminNetworkApi extends NetworkApi {
 
    /**
@@ -43,10 +58,18 @@ public interface AdminNetworkApi extends NetworkApi {
     * @return the network
     */
    @Override
-   Network get(String networkUrn);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Network get(@EndpointParam(parser = URNToAdminHref.class) String networkUrn);
 
    @Override
-   Network get(URI networkAdminHref);
+   @GET
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
+   Network get(@EndpointParam URI networkAdminHref);
 
    /**
     * Modifies an org network
@@ -62,9 +85,19 @@ public interface AdminNetworkApi extends NetworkApi {
     * @return a task. This operation is asynchronous and the user should monitor the returned task
     *         status in order to check when it is completed.
     */
-   Task edit(String networkUrn, OrgNetwork network);
+   @PUT
+   @Consumes(TASK)
+   @Produces(ADMIN_ORG_NETWORK)
+   @JAXBResponseParser
+   Task edit(@EndpointParam(parser = URNToAdminHref.class) String networkUrn,
+         @BinderParam(BindToXMLPayload.class) OrgNetwork network);
 
-   Task edit(URI networkAdminHref, OrgNetwork network);
+   @PUT
+   @Consumes(TASK)
+   @Produces(ADMIN_ORG_NETWORK)
+   @JAXBResponseParser
+   Task edit(@EndpointParam URI networkAdminHref,
+         @BinderParam(BindToXMLPayload.class) OrgNetwork network);
 
    /**
     * Reset(undeploy & redeploy) networking services on a logical network. The reset operation can
@@ -80,7 +113,15 @@ public interface AdminNetworkApi extends NetworkApi {
     * @return a task. This operation is asynchronous and the user should monitor the returned task
     *         status in order to check when it is completed.
     */
-   Task reset(String networkUrn);
-   
-   Task reset(URI networkAdminHref);
+   @POST
+   @Path("/action/reset")
+   @Consumes
+   @JAXBResponseParser
+   Task reset(@EndpointParam(parser = URNToAdminHref.class) String networkUrn);
+
+   @POST
+   @Path("/action/reset")
+   @Consumes
+   @JAXBResponseParser
+   Task reset(@EndpointParam URI networkAdminHref);
 }

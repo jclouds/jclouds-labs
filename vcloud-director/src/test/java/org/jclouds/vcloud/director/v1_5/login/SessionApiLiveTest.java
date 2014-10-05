@@ -26,9 +26,8 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.apis.BaseContextLiveTest;
 import org.jclouds.providers.AnonymousProviderMetadata;
 import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.jclouds.vcloud.director.testng.FormatApiResultsListener;
-import org.jclouds.vcloud.director.v1_5.VCloudDirectorConstants;
 import org.jclouds.vcloud.director.v1_5.domain.SessionWithToken;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
@@ -42,7 +41,7 @@ import com.google.common.reflect.TypeToken;
  */
 @Listeners(FormatApiResultsListener.class)
 @Test(groups = { "live", "user" }, testName = "SessionApiLiveTest")
-public class SessionApiLiveTest extends BaseContextLiveTest<RestContext<SessionApi, SessionAsyncApi>> {
+public class SessionApiLiveTest extends BaseContextLiveTest<ApiContext<SessionApi>> {
 
    public SessionApiLiveTest() {
       provider = "vcloud-director";
@@ -84,13 +83,14 @@ public class SessionApiLiveTest extends BaseContextLiveTest<RestContext<SessionA
    }
 
    @Override
-   protected TypeToken<RestContext<SessionApi, SessionAsyncApi>> contextType() {
-      return VCloudDirectorConstants.SESSION_CONTEXT_TYPE;
+   protected TypeToken<ApiContext<SessionApi>> contextType() {
+      return new TypeToken<ApiContext<SessionApi>>() {
+      };
    }
 
    @Override
    protected ProviderMetadata createProviderMetadata() {
-      return AnonymousProviderMetadata.forClientMappedToAsyncClientOnEndpoint(SessionApi.class, SessionAsyncApi.class, endpoint);
+      return AnonymousProviderMetadata.forApiOnEndpoint(SessionApi.class, endpoint);
    }
 
    @Override

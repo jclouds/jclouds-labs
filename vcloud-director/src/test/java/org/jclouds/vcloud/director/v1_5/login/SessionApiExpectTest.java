@@ -20,10 +20,10 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import org.jclouds.apis.ApiMetadata;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
-import org.jclouds.rest.AnonymousRestApiMetadata;
+import org.jclouds.providers.AnonymousProviderMetadata;
+import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.rest.internal.BaseRestApiExpectTest;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 import org.jclouds.vcloud.director.v1_5.domain.Link;
@@ -119,8 +119,7 @@ public class SessionApiExpectTest extends BaseRestApiExpectTest<SessionApi> {
    }
    
    @Override
-   protected ApiMetadata createApiMetadata() {
-      return AnonymousRestApiMetadata.forClientMappedToAsyncClient(SessionApi.class, SessionAsyncApi.class)
-            .toBuilder().defaultEndpoint("https://vcloudbeta.bluelock.com/api").build();
+   protected ProviderMetadata createProviderMetadata() {
+      return AnonymousProviderMetadata.forApiOnEndpoint(SessionApi.class, "https://vcloudbeta.bluelock.com/api");
    }
 }

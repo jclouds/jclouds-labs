@@ -16,21 +16,46 @@
  */
 package org.jclouds.vcloud.director.v1_5.features;
 
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA_VALUE;
+import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.TASK;
+
 import java.util.Map;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.vcloud.director.v1_5.binders.BindMapAsMetadata;
+import org.jclouds.vcloud.director.v1_5.binders.BindStringAsMetadataValue;
 import org.jclouds.vcloud.director.v1_5.domain.Metadata;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
+import org.jclouds.vcloud.director.v1_5.functions.RegexValueParser;
 
-/**
- * Provides synchronous access to {@link Metadata}.
- * 
- * @see MetadataAsyncApi
- */
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface MetadataApi {
    /**
     * Retrieves an list of metadata
     * 
     * @return a list of metadata
     */
+   @GET
+   @Path("/metadata")
+   @Consumes
+   @JAXBResponseParser
+   @Fallback(NullOnNotFoundOr404.class)
    Metadata get();
 
    /**
@@ -38,7 +63,12 @@ public interface MetadataApi {
     * 
     * @return the metadata value, or null if not found
     */
-   String get(String key);
+   @GET
+   @Path("/metadata/{key}")
+   @Consumes
+   @ResponseParser(RegexValueParser.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   String get(@PathParam("key") String key);
 
    /**
     * Merges the metadata for a media with the information provided.
@@ -46,7 +76,12 @@ public interface MetadataApi {
     * @return a task. This operation is asynchronous and the user should monitor the returned task status in order to
     *         check when it is completed.
     */
-   Task putAll(Map<String, String> metadata);
+   @POST
+   @Path("/metadata")
+   @Consumes(TASK)
+   @Produces(METADATA)
+   @JAXBResponseParser
+   Task putAll(@BinderParam(BindMapAsMetadata.class) Map<String, String> metadata);
 
    /**
     * Sets the metadata for the particular key for the media to the value provided. Note: this will replace any existing
@@ -55,7 +90,12 @@ public interface MetadataApi {
     * @return a task. This operation is asynchronous and the user should monitor the returned task status in order to
     *         check when it is completed.
     */
-   Task put(String key, String value);
+   @PUT
+   @Path("/metadata/{key}")
+   @Consumes(TASK)
+   @Produces(METADATA_VALUE)
+   @JAXBResponseParser
+   Task put(@PathParam("key") String key, @BinderParam(BindStringAsMetadataValue.class) String metadataValue);
 
    /**
     * Deletes a metadata entry.
@@ -63,6 +103,9 @@ public interface MetadataApi {
     * @return a task. This operation is asynchronous and the user should monitor the returned task status in order to
     *         check when it is completed.
     */
-   Task remove(String key);
-
+   @DELETE
+   @Path("/metadata/{key}")
+   @Consumes(TASK)
+   @JAXBResponseParser
+   Task remove(@PathParam("key") String key);
 }

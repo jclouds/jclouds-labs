@@ -20,6 +20,7 @@ import java.net.URI;
 
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.vcloud.director.v1_5.features.MetadataApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.AdminCatalogApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.AdminNetworkApi;
@@ -28,14 +29,11 @@ import org.jclouds.vcloud.director.v1_5.features.admin.AdminQueryApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.AdminVdcApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.GroupApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.UserApi;
+import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
 import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 
-/**
- * Provides synchronous access to VCloudDirector Admin.
- * 
- * @see VCloudDirectorAsyncApi
- */
+@RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface VCloudDirectorAdminApi extends VCloudDirectorApi {
    /**
     * @return asynchronous access to admin query features

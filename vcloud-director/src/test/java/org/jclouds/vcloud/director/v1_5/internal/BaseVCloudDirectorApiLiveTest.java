@@ -55,13 +55,11 @@ import org.jclouds.apis.BaseContextLiveTest;
 import org.jclouds.date.DateService;
 import org.jclouds.io.Payloads;
 import org.jclouds.logging.Logger;
-import org.jclouds.rest.RestContext;
+import org.jclouds.rest.ApiContext;
 import org.jclouds.vcloud.director.testng.FormatApiResultsListener;
-import org.jclouds.vcloud.director.v1_5.VCloudDirectorApiMetadata;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorContext;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminApi;
-import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminAsyncApi;
 import org.jclouds.vcloud.director.v1_5.domain.Catalog;
 import org.jclouds.vcloud.director.v1_5.domain.Checks;
 import org.jclouds.vcloud.director.v1_5.domain.Link;
@@ -130,7 +128,7 @@ public abstract class BaseVCloudDirectorApiLiveTest extends BaseContextLiveTest<
    public Predicate<Task> retryTaskSuccess;
    public Predicate<Task> retryTaskSuccessLong;
 
-   protected RestContext<VCloudDirectorAdminApi, VCloudDirectorAdminAsyncApi> adminContext;
+   protected ApiContext<VCloudDirectorAdminApi> adminContext;
 
    protected Session adminSession;
    protected Session session;
@@ -207,8 +205,7 @@ public abstract class BaseVCloudDirectorApiLiveTest extends BaseContextLiveTest<
       return getRoleReferenceFor(name, adminContext);
    }
 
-   public static Reference getRoleReferenceFor(String name,
-            RestContext<VCloudDirectorAdminApi, VCloudDirectorAdminAsyncApi> adminContext) {
+   public static Reference getRoleReferenceFor(String name, ApiContext<VCloudDirectorAdminApi> adminContext) {
       RoleReferences roles = adminContext.getApi().getQueryApi().roleReferencesQueryAll();
       // backend in a builder to strip out unwanted xml cruft that the api chokes on
       return Reference.builder().fromReference(find(roles.getReferences(), ReferencePredicates.nameEquals(name)))
@@ -739,7 +736,7 @@ public abstract class BaseVCloudDirectorApiLiveTest extends BaseContextLiveTest<
 
    @Override
    protected TypeToken<VCloudDirectorContext> contextType() {
-      return VCloudDirectorApiMetadata.CONTEXT_TOKEN;
+      return TypeToken.of(VCloudDirectorContext.class);
    }
 
 }
