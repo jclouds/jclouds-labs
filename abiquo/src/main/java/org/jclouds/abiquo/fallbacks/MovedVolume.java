@@ -19,7 +19,6 @@ package org.jclouds.abiquo.fallbacks;
 import static com.google.common.base.Throwables.getCausalChain;
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.collect.Iterables.find;
-import static com.google.common.util.concurrent.Futures.immediateFuture;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,7 +34,6 @@ import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -59,11 +57,6 @@ public class MovedVolume implements Fallback<VolumeManagementDto> {
    @Inject
    public MovedVolume(final ReturnMoveVolumeReference parser) {
       this.parser = parser;
-   }
-
-   @Override
-   public ListenableFuture<VolumeManagementDto> create(Throwable from) throws Exception {
-      return immediateFuture(createOrPropagate(from));
    }
 
    @Override
