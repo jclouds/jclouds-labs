@@ -49,7 +49,7 @@ public class MovedVolumeTest {
       RuntimeException exception = new RuntimeException();
 
       try {
-         function.create(exception);
+         function.createOrPropagate(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
@@ -85,7 +85,7 @@ public class MovedVolumeTest {
       replay(response);
       replay(exception);
 
-      function.create(exception);
+      function.createOrPropagate(exception);
 
       verify(response);
       verify(exception);

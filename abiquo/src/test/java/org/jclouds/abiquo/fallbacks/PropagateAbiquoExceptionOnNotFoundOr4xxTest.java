@@ -37,7 +37,7 @@ public class PropagateAbiquoExceptionOnNotFoundOr4xxTest {
       RuntimeException exception = new RuntimeException();
 
       try {
-         function.create(exception);
+         function.createOrPropagate(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
@@ -48,7 +48,7 @@ public class PropagateAbiquoExceptionOnNotFoundOr4xxTest {
       ResourceNotFoundException exception = new ResourceNotFoundException();
 
       try {
-         function.create(exception);
+         function.createOrPropagate(exception);
       } catch (Exception ex) {
          assertEquals(ex, exception);
       }
@@ -60,7 +60,7 @@ public class PropagateAbiquoExceptionOnNotFoundOr4xxTest {
       ResourceNotFoundException exception = new ResourceNotFoundException(abiquoException);
 
       try {
-         function.create(exception);
+         function.createOrPropagate(exception);
       } catch (Exception ex) {
          assertEquals(ex, abiquoException);
       }

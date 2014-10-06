@@ -19,7 +19,6 @@ package org.jclouds.abiquo;
 import static com.google.common.base.Throwables.getCausalChain;
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.collect.Iterables.find;
-import static com.google.common.util.concurrent.Futures.immediateFuture;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -30,7 +29,6 @@ import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.ResourceNotFoundException;
 
 import com.google.common.base.Predicate;
-import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * fallbacks common to abiquo
@@ -44,11 +42,6 @@ public final class AbiquoFallbacks {
     */
    public static final class PropagateAbiquoExceptionOnNotFoundOr4xx implements Fallback<Object> {
       @Override
-      public ListenableFuture<Object> create(Throwable from) throws Exception {
-         return immediateFuture(createOrPropagate(from));
-      }
-
-      @Override
       public Object createOrPropagate(Throwable from) throws Exception {
          Throwable exception = find(getCausalChain(from), isNotFoundAndHasAbiquoException(from), null);
          throw propagate(exception == null ? from : exception.getCause());
@@ -59,11 +52,6 @@ public final class AbiquoFallbacks {
     * Return <code>null</code> on 303 response codes when requesting a task.
     */
    public static final class NullOn303 implements Fallback<Object> {
-      @Override
-      public ListenableFuture<Object> create(Throwable from) throws Exception {
-         return immediateFuture(createOrPropagate(from));
-      }
-
       @Override
       public Object createOrPropagate(Throwable from) throws Exception {
          Throwable exception = find(getCausalChain(from), hasResponse(from), null);
@@ -87,11 +75,6 @@ public final class AbiquoFallbacks {
     */
    public static final class FalseOn5xx implements Fallback<Boolean> {
       @Override
-      public ListenableFuture<Boolean> create(Throwable from) throws Exception {
-         return immediateFuture(createOrPropagate(from));
-      }
-
-      @Override
       public Boolean createOrPropagate(Throwable from) throws Exception {
          Throwable exception = find(getCausalChain(from), hasResponse(from), null);
 
@@ -113,11 +96,6 @@ public final class AbiquoFallbacks {
     * Return false on service error exceptions.
     */
    public static final class FalseIfNotAvailable implements Fallback<Boolean> {
-      @Override
-      public ListenableFuture<Boolean> create(Throwable from) throws Exception {
-         return immediateFuture(createOrPropagate(from));
-      }
-
       @Override
       public Boolean createOrPropagate(Throwable from) throws Exception {
          Throwable exception = find(getCausalChain(from), isNotAvailableException(from), null);
