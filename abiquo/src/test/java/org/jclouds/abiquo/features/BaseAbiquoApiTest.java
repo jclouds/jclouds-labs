@@ -29,7 +29,7 @@ import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.providers.AnonymousProviderMetadata;
 import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.rest.internal.BaseAsyncClientTest;
+import org.jclouds.rest.internal.BaseRestAnnotationProcessingTest;
 import org.jclouds.xml.XMLParser;
 import org.testng.annotations.BeforeClass;
 
@@ -39,7 +39,7 @@ import com.google.inject.Module;
 /**
  * Base class for Abiquo api tests.
  */
-public abstract class BaseAbiquoApiTest<T> extends BaseAsyncClientTest<T> {
+public abstract class BaseAbiquoApiTest<T> extends BaseRestAnnotationProcessingTest<T> {
    private XMLParser xml;
 
    @BeforeClass
