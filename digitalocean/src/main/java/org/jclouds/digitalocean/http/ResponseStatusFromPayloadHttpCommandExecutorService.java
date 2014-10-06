@@ -33,7 +33,6 @@ import javax.inject.Singleton;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 
-import org.jclouds.Constants;
 import org.jclouds.digitalocean.domain.BaseResponse;
 import org.jclouds.digitalocean.domain.BaseResponse.Status;
 import org.jclouds.http.HttpResponse;
@@ -50,7 +49,6 @@ import org.jclouds.io.Payload;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.io.ByteStreams;
-import com.google.common.util.concurrent.ListeningExecutorService;
 
 /**
  * Custom implementation of the HTTP driver to read the response body in order to get the real response status.
@@ -70,12 +68,11 @@ public class ResponseStatusFromPayloadHttpCommandExecutorService extends JavaUrl
 
    @Inject
    ResponseStatusFromPayloadHttpCommandExecutorService(HttpUtils utils, ContentMetadataCodec contentMetadataCodec,
-         @Named(Constants.PROPERTY_IO_WORKER_THREADS) ListeningExecutorService ioExecutor,
          DelegatingRetryHandler retryHandler, IOExceptionRetryHandler ioRetryHandler,
          DelegatingErrorHandler errorHandler, HttpWire wire, @Named("untrusted") HostnameVerifier verifier,
          @Named("untrusted") Supplier<SSLContext> untrustedSSLContextProvider, Function<URI, Proxy> proxyForURI,
          ParseJson<BaseResponse> errorParser) throws SecurityException, NoSuchFieldException {
-      super(utils, contentMetadataCodec, ioExecutor, retryHandler, ioRetryHandler, errorHandler, wire, verifier,
+      super(utils, contentMetadataCodec, retryHandler, ioRetryHandler, errorHandler, wire, verifier,
             untrustedSSLContextProvider, proxyForURI);
       this.errorParser = checkNotNull(errorParser, "errorParser cannot be null");
    }
