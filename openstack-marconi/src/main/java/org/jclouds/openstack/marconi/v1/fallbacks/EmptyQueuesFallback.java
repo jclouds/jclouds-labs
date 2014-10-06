@@ -17,23 +17,16 @@
 
 package org.jclouds.openstack.marconi.v1.fallbacks;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Throwables.propagate;
+import static org.jclouds.http.HttpUtils.contains404;
+import static org.jclouds.util.Throwables2.getFirstThrowableOfType;
+
 import org.jclouds.Fallback;
 import org.jclouds.openstack.marconi.v1.domain.Queues;
 import org.jclouds.rest.ResourceNotFoundException;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Throwables.propagate;
-import static com.google.common.util.concurrent.Futures.immediateFuture;
-import static org.jclouds.http.HttpUtils.contains404;
-import static org.jclouds.util.Throwables2.getFirstThrowableOfType;
-
 public class EmptyQueuesFallback implements Fallback<Queues> {
-
-   public ListenableFuture<Queues> create(Throwable t) throws Exception {
-      return immediateFuture(createOrPropagate(t));
-   }
-
    @Override
    public Queues createOrPropagate(Throwable t) throws Exception {
       if ((getFirstThrowableOfType(checkNotNull(t, "throwable"), ResourceNotFoundException.class) != null)
