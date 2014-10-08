@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
+import org.jclouds.blobstore.attr.ConsistencyModel;
 import org.jclouds.openstack.swift.v1.blobstore.RegionScopedBlobStoreContext;
 import org.jclouds.openstack.swift.v1.blobstore.RegionScopedSwiftBlobStore;
 
@@ -33,6 +34,7 @@ public class SwiftBlobStoreContextModule extends AbstractModule {
 
    @Override
    protected void configure() {
+      bind(ConsistencyModel.class).toInstance(ConsistencyModel.EVENTUAL);
       bind(BlobStoreContext.class).to(RegionScopedBlobStoreContext.class);
       install(new FactoryModuleBuilder().build(Factory.class));
    }

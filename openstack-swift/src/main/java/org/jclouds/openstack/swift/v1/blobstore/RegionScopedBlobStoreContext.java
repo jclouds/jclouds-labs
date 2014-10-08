@@ -18,12 +18,10 @@ package org.jclouds.openstack.swift.v1.blobstore;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.Constants.PROPERTY_USER_THREADS;
 
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.jclouds.Context;
 import org.jclouds.blobstore.BlobRequestSigner;
@@ -38,7 +36,6 @@ import org.jclouds.rest.Utils;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.reflect.TypeToken;
-import com.google.common.util.concurrent.ListeningExecutorService;
 
 /**
  * Implementation of {@link BlobStoreContext} which allows you to employ
@@ -99,25 +96,25 @@ public class RegionScopedBlobStoreContext extends BaseView implements BlobStoreC
    private final Function<String, BlobStore> blobStore;
    private final Function<String, BlobRequestSigner> blobRequestSigner;
    private final Utils utils;
-   private final ListeningExecutorService executor;
+   private final ConsistencyModel consistencyModel;
 
    @Inject
    public RegionScopedBlobStoreContext(@Provider Context backend, @Provider TypeToken<? extends Context> backendType,
          @Region Supplier<Set<String>> regionIds, @Region Supplier<String> implicitRegionId,
          Function<String, BlobStore> blobStore, Function<String, BlobRequestSigner> blobRequestSigner, Utils utils,
-         @Named(PROPERTY_USER_THREADS) ListeningExecutorService executor) {
+         ConsistencyModel consistencyModel) {
       super(backend, backendType);
       this.regionIds = checkNotNull(regionIds, "regionIds");
       this.implicitRegionId = checkNotNull(implicitRegionId, "implicitRegionId");
       this.blobStore = checkNotNull(blobStore, "blobStore");
       this.blobRequestSigner = checkNotNull(blobRequestSigner, "blobRequestSigner");
       this.utils = checkNotNull(utils, "utils");
-      this.executor = checkNotNull(executor, "executor");
+      this.consistencyModel = checkNotNull(consistencyModel, "consistencyModel");
    }
 
    @Override
    public ConsistencyModel getConsistencyModel() {
-      return ConsistencyModel.EVENTUAL;
+      return consistencyModel;
    }
 
    @Override
