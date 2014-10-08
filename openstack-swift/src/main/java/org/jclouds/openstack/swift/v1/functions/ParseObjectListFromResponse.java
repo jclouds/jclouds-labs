@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
+import static com.google.common.io.BaseEncoding.base16;
 import static org.jclouds.http.Uris.uriBuilder;
 
 import java.util.Date;
@@ -36,6 +37,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.hash.HashCode;
 import com.google.common.io.ByteSource;
 
 public class ParseObjectListFromResponse implements Function<HttpResponse, ObjectList>,
@@ -81,7 +83,7 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
                .uri(uriBuilder(containerUri).clearQuery().appendPath(input.name).build())
                .name(input.name)
                .etag(input.hash)
-               .payload(payload(input.bytes, input.content_type, input.expires))
+               .payload(payload(input.bytes, input.hash, input.content_type, input.expires))
                .lastModified(input.last_modified).build();
       }
    }
@@ -98,11 +100,14 @@ public class ParseObjectListFromResponse implements Function<HttpResponse, Objec
       return this;
    }
 
-   private static Payload payload(long bytes, String contentType, Date expires) {
+   private static Payload payload(long bytes, String hash, String contentType, Date expires) {
       Payload payload = Payloads.newByteSourcePayload(ByteSource.empty());
       payload.getContentMetadata().setContentLength(bytes);
       payload.getContentMetadata().setContentType(contentType);
       payload.getContentMetadata().setExpires(expires);
+      if (hash != null) {
+         payload.getContentMetadata().setContentMD5(HashCode.fromBytes(base16().lowerCase().decode(hash)));
+      }
       return payload;
    }
 }

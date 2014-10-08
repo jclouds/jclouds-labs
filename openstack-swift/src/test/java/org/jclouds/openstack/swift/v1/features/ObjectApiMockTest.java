@@ -17,6 +17,7 @@
 package org.jclouds.openstack.swift.v1.features;
 
 import static com.google.common.base.Charsets.US_ASCII;
+import static com.google.common.io.BaseEncoding.base16;
 import static com.google.common.net.HttpHeaders.EXPIRES;
 import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
 import static org.jclouds.Constants.PROPERTY_RETRY_DELAY_START;
@@ -107,6 +108,11 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          assertEquals(objects, parsedObjectsForUrl(server.getUrl("/").toString()));
          assertEquals(objects.getContainer().getName(), "myContainer");
          assertTrue(objects.getContainer().getAnybodyRead().get());
+
+         // Check MD5 is parsed from the ETag header.
+         SwiftObject object1 = objects.get(1);
+         assertEquals(base16().lowerCase().decode(object1.getETag()),
+               object1.getPayload().getContentMetadata().getContentMD5AsHashCode().asBytes());
 
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
@@ -259,6 +265,11 @@ public class ObjectApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
          SwiftObject object = api.getObjectApi("DFW", "myContainer").getWithoutBody("myObject");
          assertEquals(object.getName(), "myObject");
          assertEquals(object.getETag(), "8a964ee2a5e88be344f36c22562a6486");
+
+         // Check MD5 is parsed from the ETag header.
+         assertEquals(base16().lowerCase().decode(object.getETag()),
+               object.getPayload().getContentMetadata().getContentMD5AsHashCode().asBytes());
+
          assertEquals(object.getLastModified(), dates.rfc822DateParse("Fri, 12 Jun 2010 13:40:18 GMT"));
          for (Entry<String, String> entry : object.getMetadata().entrySet()) {
             assertEquals(object.getMetadata().get(entry.getKey().toLowerCase()), entry.getValue());

@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.v1.functions;
 
+import static com.google.common.io.BaseEncoding.base16;
 import static com.google.common.net.HttpHeaders.ETAG;
 import static com.google.common.net.HttpHeaders.LAST_MODIFIED;
 import static org.jclouds.openstack.swift.v1.reference.SwiftHeaders.OBJECT_DELETE_AT;
@@ -35,6 +36,7 @@ import org.jclouds.rest.InvocationContext;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.google.common.base.Function;
+import com.google.common.hash.HashCode;
 
 public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObject>,
       InvocationContext<ParseObjectFromResponse> {
@@ -61,10 +63,15 @@ public class ParseObjectFromResponse implements Function<HttpResponse, SwiftObje
          payload.setContentMetadata(contentMeta);
       }
 
+      String etag = from.getFirstHeaderOrNull(ETAG);
+      if (etag != null) {
+         payload.getContentMetadata().setContentMD5(HashCode.fromBytes(base16().lowerCase().decode(etag)));
+      }
+
       return SwiftObject.builder()
             .uri(URI.create(uri))
             .name(name)
-            .etag(from.getFirstHeaderOrNull(ETAG))
+            .etag(etag)
             .payload(payload)
             .lastModified(dates.rfc822DateParse(from.getFirstHeaderOrNull(LAST_MODIFIED)))
             .headers(from.getHeaders())
