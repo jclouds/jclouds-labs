@@ -52,15 +52,6 @@ public class Segment {
 
    /**
     * @return The ETag of the content of the segment object.
-    * @deprecated Please use {@link #getETag()} as this method will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   public String getEtag() {
-      return etag;
-   }
-
-   /**
-    * @return The ETag of the content of the segment object.
     */
    public String getETag() {
       return etag;

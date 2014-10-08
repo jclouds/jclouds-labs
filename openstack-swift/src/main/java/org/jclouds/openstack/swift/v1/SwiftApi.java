@@ -67,46 +67,4 @@ public interface SwiftApi extends Closeable {
    @Path("/{containerName}")
    StaticLargeObjectApi getStaticLargeObjectApi(@EndpointParam(parser = RegionToEndpoint.class) String region,
          @PathParam("containerName") String containerName);
-
-   /**
-    * @deprecated Please use {@link #getAccountApi(String)} as this method will be removed in jclouds 3.0.
-    */
-   @Deprecated
-   @Delegate
-   AccountApi getAccountApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
-
-   /**
-    * @deprecated Please use {@link #getBulkApi(String)} as this method will be removed in jclouds 3.0.
-    */
-   @Deprecated
-   @Delegate
-   BulkApi getBulkApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
-
-   /**
-    * @deprecated Please use {@link #getContainerApi(String)} as this method will be removed in jclouds 3.0.
-    */
-   @Deprecated
-   @Delegate
-   ContainerApi getContainerApiForRegion(@EndpointParam(parser = RegionToEndpoint.class) String region);
-
-   /**
-    * @deprecated Please use {@link #getObjectApi(String, String)} as this method will be removed in jclouds 3.0.
-    */
-   @Deprecated
-   @Delegate
-   @Path("/{containerName}")
-   ObjectApi getObjectApiForRegionAndContainer(@EndpointParam(parser = RegionToEndpoint.class) String region,
-         @PathParam("containerName") String containerName);
-
-   /**
-    * @deprecated Please use {@link #getStaticLargeObjectApi(String, String)} as this method
-    *             will be removed in jclouds 3.0.
-    */
-   @Deprecated
-   @Delegate
-   @Path("/{containerName}")
-   StaticLargeObjectApi getStaticLargeObjectApiForRegionAndContainer(
-         @EndpointParam(parser = RegionToEndpoint.class) String region,
-         @PathParam("containerName") String containerName);
-
 }

@@ -66,12 +66,6 @@ public final class SwiftHeaders {
    // Versioning
    public static final String VERSIONS_LOCATION = "X-Versions-Location";
 
-   /**
-    * @deprecated Please use {@link #VERSIONS_LOCATION}. This field will be removed in jclouds 1.8.
-    */
-   @Deprecated
-   public static final String CONTAINER_VERSIONS_LOCATION = "X-Versions-Location";
-
    // Misc functionality
    public static final String CONTAINER_WEB_MODE = "X-Web-Mode";
 

@@ -85,16 +85,15 @@ public class ObjectApiLiveTest extends BaseSwiftApiLiveTest<SwiftApi> {
       payload.getContentMetadata().setExpires(expireAt);
 
       for (String regionId : regions) {
-         String etag = api.getObjectApiForRegionAndContainer(regionId, containerName)
-               .put(objectName, payload);
+         String etag = api.getObjectApi(regionId, containerName).put(objectName, payload);
          assertNotNull(etag);
 
-         SwiftObject object = api.getObjectApiForRegionAndContainer(regionId, containerName).get(objectName);
+         SwiftObject object = api.getObjectApi(regionId, containerName).get(objectName);
          assertEquals(object.getName(), objectName);
          checkObject(object);
          assertEquals(toStringAndClose(object.getPayload().openStream()), "swifty");
 
-         api.getObjectApiForRegionAndContainer(regionId, containerName).delete(objectName);
+         api.getObjectApi(regionId, containerName).delete(objectName);
       }
    }
    public void testCopyObject() throws Exception {
