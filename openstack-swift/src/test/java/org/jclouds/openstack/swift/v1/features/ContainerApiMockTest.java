@@ -334,7 +334,6 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
       }
    }
 
-   @Test(expectedExceptions = IllegalStateException.class)
    public void testDeleteWhenNotEmpty() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -342,7 +341,7 @@ public class ContainerApiMockTest extends BaseOpenStackMockTest<SwiftApi> {
 
       try {
          SwiftApi api = api(server.getUrl("/").toString(), "openstack-swift");
-         api.getContainerApi("DFW").deleteIfEmpty("myContainer");
+         assertFalse(api.getContainerApi("DFW").deleteIfEmpty("myContainer"));
 
       } finally {
          assertEquals(server.getRequestCount(), 2);

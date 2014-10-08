@@ -17,6 +17,7 @@
 package org.jclouds.openstack.swift.v1.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.jclouds.openstack.swift.v1.SwiftFallbacks.TrueOn404FalseOn409;
 
 import java.util.Map;
 
@@ -33,7 +34,6 @@ import javax.ws.rs.PathParam;
 import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
-import org.jclouds.Fallbacks.TrueOnNotFoundOr404;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.swift.v1.binders.BindMetadataToHeaders.BindContainerMetadataToHeaders;
@@ -209,7 +209,7 @@ public interface ContainerApi {
    @Named("container:deleteIfEmpty")
    @DELETE
    @Path("/{containerName}")
-   @Fallback(TrueOnNotFoundOr404.class)
+   @Fallback(TrueOn404FalseOn409.class)
    boolean deleteIfEmpty(@PathParam("containerName") String containerName) throws IllegalStateException;
 
 }
