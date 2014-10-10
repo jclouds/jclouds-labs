@@ -22,14 +22,14 @@
   <parent>
     <groupId>org.apache.jclouds</groupId>
     <artifactId>jclouds-project</artifactId>
-    <version>1.8.1</version>
+    <version>1.8.2-SNAPSHOT</version>
     <relativePath />
   </parent>
 
   <!-- TODO: when out of labs, switch to org.jclouds.provider -->
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>azurecompute</artifactId>
-  <version>1.8.1</version>
+  <version>1.8.2-SNAPSHOT</version>
   <name>Apache jclouds :: Azure :: Compute API</name>
   <description>jclouds components to access an implementation of Azure's Compute Service</description>
   <packaging>bundle</packaging>
@@ -82,32 +82,32 @@
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-compute</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.2-SNAPSHOT</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
       <artifactId>jclouds-core</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.2-SNAPSHOT</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-slf4j</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-sshj</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -161,9 +161,4 @@
       </build>
     </profile>
   </profiles>
-
-
-  <scm>
-    <tag>jclouds-labs-1.8.1-rc1</tag>
-  </scm>
 </project>
