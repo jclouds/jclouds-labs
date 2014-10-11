@@ -34,6 +34,7 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+import java.net.URI;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,7 @@ import org.jclouds.vcloud.director.v1_5.domain.section.CustomizationSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.LeaseSettingsSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.NetworkConfigSection;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -64,21 +66,25 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 /**
- * Tests the request/response behavior of {@link VAppTemplateApi}
- * 
  * NOTE The environment MUST have at least one template configured
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VAppTemplateApiLiveTest")
 public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
 
+   private URI vAppTemplateHref;
    private String key;
    private String val;
+
+   @BeforeClass
+   void setUp() {
+      vAppTemplateHref = context.resolveIdToHref(vAppTemplateId);
+   }
 
    @AfterClass(alwaysRun = true, dependsOnMethods = { "cleanUpEnvironment" })
    protected void tidyUp() {
       if (key != null) {
          try {
-            Task remove = context.getApi().getMetadataApi(vAppTemplateUrn).remove(key);
+            Task remove = context.getApi().getMetadataApi(vAppTemplateHref).remove(key);
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting metadata entry '%s'", key);
@@ -90,7 +96,8 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
       CloneVAppTemplateParams cloneVAppTemplateParams = CloneVAppTemplateParams.builder()
                .source(Reference.builder().href(lazyGetVAppTemplate().getHref()).build()).isSourceDelete(false)
                .name("clone").build();
-      VAppTemplate clonedVappTemplate = vdcApi.cloneVAppTemplate(vdcUrn, cloneVAppTemplateParams);
+      VAppTemplate clonedVappTemplate = vdcApi
+            .cloneVAppTemplate(context.resolveIdToHref(vdcId), cloneVAppTemplateParams);
 
       if (waitForTask) {
          Task cloneTask = Iterables.getFirst(clonedVappTemplate.getTasks(), null);
@@ -102,44 +109,44 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
 
    @Test(description = "GET /vAppTemplate/{id}")
    public void testGetVAppTemplate() {
-      vAppTemplate = vAppTemplateApi.get(vAppTemplateUrn);
+      vAppTemplate = vAppTemplateApi.get(vAppTemplateHref);
 
       checkVAppTemplate(vAppTemplate);
-      assertEquals(vAppTemplate.getId(), vAppTemplateUrn);
+      assertEquals(vAppTemplate.getId(), vAppTemplateId);
    }
 
    @Test(description = "GET /vAppTemplate/{id}/owner")
    public void testGetVAppTemplateOwner() {
-      Owner owner = vAppTemplateApi.getOwner(vAppTemplateUrn);
+      Owner owner = vAppTemplateApi.getOwner(vAppTemplateHref);
 
       checkOwner(owner);
-      assertEquals(owner.getUser(), vAppTemplateApi.get(vAppTemplateUrn).getOwner().getUser());
+      assertEquals(owner.getUser(), vAppTemplateApi.get(vAppTemplateHref).getOwner().getUser());
    }
 
    @Test(description = "GET /vAppTemplate/{id}/customizationSection")
    public void testGetCustomizationSection() {
-      CustomizationSection customizationSection = vAppTemplateApi.getCustomizationSection(vAppTemplateUrn);
+      CustomizationSection customizationSection = vAppTemplateApi.getCustomizationSection(vAppTemplateHref);
 
       checkCustomizationSection(customizationSection);
    }
 
    @Test(description = "GET /vAppTemplate/{id}/productSections")
    public void testGetProductSections() {
-      ProductSectionList productSectionList = vAppTemplateApi.getProductSections(vAppTemplateUrn);
+      ProductSectionList productSectionList = vAppTemplateApi.getProductSections(vAppTemplateHref);
 
       checkProductSectionList(productSectionList);
    }
    
    @Test(description = "GET /vAppTemplate/{id}/leaseSettingsSection")
    public void testGetLeaseSettingsSection() {
-      LeaseSettingsSection leaseSettingsSection = vAppTemplateApi.getLeaseSettingsSection(vAppTemplateUrn);
+      LeaseSettingsSection leaseSettingsSection = vAppTemplateApi.getLeaseSettingsSection(vAppTemplateHref);
 
       checkLeaseSettingsSection(leaseSettingsSection);
    }
 
    @Test(description = "GET /vAppTemplate/{id}/metadata", dependsOnMethods = { "testEditMetadataValue" })
    public void testGetVAppTemplateMetadata() {
-      Metadata metadata = context.getApi().getMetadataApi(vAppTemplateUrn).get();
+      Metadata metadata = context.getApi().getMetadataApi(vAppTemplateHref).get();
 
       checkMetadata(metadata);
    }
@@ -148,31 +155,31 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
    // otherwise no entry may exist
    @Test(description = "GET /vAppTemplate/{id}/metadata/{key}", dependsOnMethods = { "testGetVAppTemplateMetadata" })
    public void testGetMetadataValue() {
-      Metadata metadata = context.getApi().getMetadataApi(vAppTemplateUrn).get();
+      Metadata metadata = context.getApi().getMetadataApi(vAppTemplateHref).get();
       MetadataEntry entry = Iterables.get(metadata.getMetadataEntries(), 0);
 
-      String val = context.getApi().getMetadataApi(vAppTemplateUrn).get(entry.getKey());
+      String val = context.getApi().getMetadataApi(vAppTemplateHref).get(entry.getKey());
 
       assertEquals(val, entry.getValue());
    }
 
    @Test(description = "GET /vAppTemplate/{id}/networkConfigSection")
    public void testGetVAppTemplateNetworkConfigSection() {
-      NetworkConfigSection networkConfigSection = vAppTemplateApi.getNetworkConfigSection(vAppTemplateUrn);
+      NetworkConfigSection networkConfigSection = vAppTemplateApi.getNetworkConfigSection(vAppTemplateHref);
 
       checkNetworkConfigSection(networkConfigSection);
    }
 
    @Test(description = "GET /vAppTemplate/{id}/networkSection")
    public void testGetVAppTemplateNetworkSection() {
-      NetworkSection networkSection = vAppTemplateApi.getNetworkSection(vAppTemplateUrn);
+      NetworkSection networkSection = vAppTemplateApi.getNetworkSection(vAppTemplateHref);
 
       checkOvfNetworkSection(networkSection);
    }
 
    @Test(description = "GET /vAppTemplate/{id}/ovf")
    public void testGetVAppTemplateOvf() {
-      Envelope envelope = vAppTemplateApi.getOvf(vAppTemplateUrn);
+      Envelope envelope = vAppTemplateApi.getOvf(vAppTemplateHref);
 
       checkOvfEnvelope(envelope);
    }
@@ -183,26 +190,26 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
       String description = name("Description ");
       VAppTemplate template = VAppTemplate.builder().name(name).description(description).build();
 
-      final Task task = vAppTemplateApi.edit(vAppTemplateUrn, template);
+      final Task task = vAppTemplateApi.edit(vAppTemplateHref, template);
       assertTaskSucceeds(task);
 
-      VAppTemplate newTemplate = vAppTemplateApi.get(vAppTemplateUrn);
+      VAppTemplate newTemplate = vAppTemplateApi.get(vAppTemplateHref);
       assertEquals(newTemplate.getName(), name);
       assertEquals(newTemplate.getDescription(), description);
    }
 
    @Test(description = "POST /vAppTemplate/{id}/metadata", dependsOnMethods = { "testGetVAppTemplate" })
    public void testEditMetadata() {
-      Metadata oldMetadata = context.getApi().getMetadataApi(vAppTemplateUrn).get();
+      Metadata oldMetadata = context.getApi().getMetadataApi(vAppTemplateHref).get();
       Map<String, String> oldMetadataMap = metadataToMap(oldMetadata);
 
       key = name("key-");
       val = name("value-");
 
-      final Task task = context.getApi().getMetadataApi(vAppTemplateUrn).putAll(ImmutableMap.of(key, val));
+      final Task task = context.getApi().getMetadataApi(vAppTemplateHref).putAll(ImmutableMap.of(key, val));
       assertTaskSucceeds(task);
 
-      Metadata newMetadata = context.getApi().getMetadataApi(vAppTemplateUrn).get();
+      Metadata newMetadata = context.getApi().getMetadataApi(vAppTemplateHref).get();
       Map<String, String> expectedMetadataMap = ImmutableMap.<String, String> builder().putAll(oldMetadataMap)
                .put(key, val).build();
       checkMetadataFor("vAppTemplate", newMetadata, expectedMetadataMap);
@@ -212,19 +219,19 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
    public void testEditMetadataValue() {
       val = "new" + val;
 
-      final Task task = context.getApi().getMetadataApi(vAppTemplateUrn).put(key, val);
+      final Task task = context.getApi().getMetadataApi(vAppTemplateHref).put(key, val);
       retryTaskSuccess.apply(task);
 
-      String newMetadataValue = context.getApi().getMetadataApi(vAppTemplateUrn).get(key);
+      String newMetadataValue = context.getApi().getMetadataApi(vAppTemplateHref).get(key);
       assertEquals(newMetadataValue, val);
    }
 
    @Test(description = "DELETE /vAppTemplate/{id}/metadata/{key}", dependsOnMethods = { "testGetMetadataValue" })
    public void testRemoveVAppTemplateMetadataValue() {
-      final Task deletionTask = context.getApi().getMetadataApi(vAppTemplateUrn).remove(key);
+      final Task deletionTask = context.getApi().getMetadataApi(vAppTemplateHref).remove(key);
       assertTaskSucceeds(deletionTask);
 
-      Metadata newMetadata = context.getApi().getMetadataApi(vAppTemplateUrn).get();
+      Metadata newMetadata = context.getApi().getMetadataApi(vAppTemplateHref).get();
       checkMetadataKeyAbsentFor("vAppTemplate", newMetadata, key);
       key = null;
    }
@@ -238,10 +245,10 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
       LeaseSettingsSection leaseSettingSection = LeaseSettingsSection.builder().info("my info")
                .storageLeaseInSeconds(storageLeaseInSeconds).build();
 
-      final Task task = vAppTemplateApi.editLeaseSettingsSection(vAppTemplateUrn, leaseSettingSection);
+      final Task task = vAppTemplateApi.editLeaseSettingsSection(vAppTemplateHref, leaseSettingSection);
       assertTaskSucceeds(task);
 
-      LeaseSettingsSection newLeaseSettingsSection = vAppTemplateApi.getLeaseSettingsSection(vAppTemplateUrn);
+      LeaseSettingsSection newLeaseSettingsSection = vAppTemplateApi.getLeaseSettingsSection(vAppTemplateHref);
       assertEquals(newLeaseSettingsSection.getStorageLeaseInSeconds(), (Integer) storageLeaseInSeconds);
    }
 
@@ -264,12 +271,12 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
 
    @Test(description = "POST /vAppTemplate/{id}/action/disableDownload")
    public void testDisableVAppTemplateDownload() throws Exception {
-      vAppTemplateApi.disableDownload(vAppTemplateUrn);
+      vAppTemplateApi.disableDownload(vAppTemplateHref);
 
       // TODO Check that it really is disabled. The only thing I can see for determining this
       // is the undocumented "download" link in the VAppTemplate. But that is brittle and we
       // don't know what timing guarantees there are for adding/removing the link.
-      VAppTemplate vAppTemplate = vAppTemplateApi.get(vAppTemplateUrn);
+      VAppTemplate vAppTemplate = vAppTemplateApi.get(vAppTemplateHref);
       Set<Link> links = vAppTemplate.getLinks();
       assertTrue(Iterables.all(Iterables.transform(links, rel),
                Predicates.not(Predicates.in(EnumSet.of(Link.Rel.DOWNLOAD_DEFAULT, Link.Rel.DOWNLOAD_ALTERNATE)))),
@@ -279,14 +286,14 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
    @Test(description = "POST /vAppTemplate/{id}/action/enableDownload")
    public void testEnableVAppTemplateDownload() throws Exception {
       // First disable so that enable really has some work to do...
-      vAppTemplateApi.disableDownload(vAppTemplateUrn);
-      final Task task = vAppTemplateApi.enableDownload(vAppTemplateUrn);
+      vAppTemplateApi.disableDownload(vAppTemplateHref);
+      final Task task = vAppTemplateApi.enableDownload(vAppTemplateHref);
       assertTaskSucceedsLong(task);
 
       // TODO Check that it really is enabled. The only thing I can see for determining this
       // is the undocumented "download" link in the VAppTemplate. But that is brittle and we
       // don't know what timing guarantees there are for adding/removing the link.
-      VAppTemplate vAppTemplate = vAppTemplateApi.get(vAppTemplateUrn);
+      VAppTemplate vAppTemplate = vAppTemplateApi.get(vAppTemplateHref);
       Set<Link> links = vAppTemplate.getLinks();
       assertTrue(
                Iterables.any(Iterables.transform(links, rel),
@@ -306,12 +313,12 @@ public class VAppTemplateApiLiveTest extends AbstractVAppApiLiveTest {
    @Test(description = "test completed task not included in vAppTemplate")
    public void testCompletedTaskNotIncludedInVAppTemplate() throws Exception {
       // Kick off a task, and wait for it to complete
-      vAppTemplateApi.disableDownload(vAppTemplateUrn);
-      final Task task = vAppTemplateApi.enableDownload(vAppTemplateUrn);
+      vAppTemplateApi.disableDownload(vAppTemplateHref);
+      final Task task = vAppTemplateApi.enableDownload(vAppTemplateHref);
       assertTaskDoneEventually(task);
 
       // Ask the VAppTemplate for its tasks, and the status of the matching task if it exists
-      VAppTemplate vAppTemplate = vAppTemplateApi.get(vAppTemplateUrn);
+      VAppTemplate vAppTemplate = vAppTemplateApi.get(vAppTemplateHref);
       List<Task> tasks = vAppTemplate.getTasks();
       for (Task contender : tasks) {
          if (task.getId().equals(contender.getId())) {

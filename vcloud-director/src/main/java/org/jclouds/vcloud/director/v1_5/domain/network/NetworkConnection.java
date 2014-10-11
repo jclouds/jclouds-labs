@@ -35,29 +35,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
-/**
- * Represents a network connection.
- *
- * <pre>
- * &lt;complexType name="NetworkConnection">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="NetworkConnectionIndex" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="IpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType" minOccurs="0"/>
- *         &lt;element name="ExternalIpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType" minOccurs="0"/>
- *         &lt;element name="IsConnected" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="MACAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="IpAddressAllocationMode" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *       &lt;attribute name="network" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="needsCustomization" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlType(name = "NetworkConnection", propOrder = {
       "networkConnectionIndex",
       "ipAddress",

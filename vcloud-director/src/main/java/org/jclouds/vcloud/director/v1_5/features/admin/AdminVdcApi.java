@@ -37,27 +37,11 @@ import org.jclouds.vcloud.director.v1_5.domain.AdminVdc;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.features.VdcApi;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface AdminVdcApi extends VdcApi {
 
-   /**
-    * Retrieves an admin view of virtual data center. The redwood admin can disable an 
-    * organization vDC. This will prevent any further allocation to be used by the organization. 
-    * Changing the state will not affect allocations already used. For example, if an organization 
-    * vDC is disabled, an organization user cannot deploy or add a new virtual machine in the 
-    * vDC (deploy uses memory and cpu allocations, and add uses storage allocation).
-    * 
-    * @return the admin vDC or null if not found
-    */
-   @Override
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
-   AdminVdc get(@EndpointParam(parser = URNToAdminHref.class) String vdcUrn);
-
+   /** Returns an admin view of the virtual datacenter or null if not found. */
    @Override
    @GET
    @Consumes
@@ -74,12 +58,6 @@ public interface AdminVdcApi extends VdcApi {
    @Consumes
    @Produces(VCloudDirectorMediaType.ADMIN_VDC)
    @JAXBResponseParser
-   Task edit(@EndpointParam(parser = URNToAdminHref.class) String vdcUrn, AdminVdc vdc);
-
-   @PUT
-   @Consumes
-   @Produces(VCloudDirectorMediaType.ADMIN_VDC)
-   @JAXBResponseParser
    Task edit(@EndpointParam URI vdcAdminHref, AdminVdc vdc);
 
    /**
@@ -87,11 +65,6 @@ public interface AdminVdcApi extends VdcApi {
     * Otherwise error code 400 Bad Request is returned.
     */
    // TODO Saw what exception, instead of 400 
-   @DELETE
-   @Consumes
-   @JAXBResponseParser
-   Task remove(@EndpointParam(parser = URNToAdminHref.class) String vdcUrn);
-
    @DELETE
    @Consumes
    @JAXBResponseParser
@@ -105,24 +78,12 @@ public interface AdminVdcApi extends VdcApi {
    @Consumes
    @Path("/action/enable")
    @JAXBResponseParser
-   void enable(@EndpointParam(parser = URNToAdminHref.class) String vdcUrn);
-
-   @POST
-   @Consumes
-   @Path("/action/enable")
-   @JAXBResponseParser
    void enable(@EndpointParam URI vdcAdminHref);
 
    /**
     * Disables a Virtual Data Center. If the Virtual Data Center is disabled this operation does not 
     * have an effect.
     */
-   @POST
-   @Consumes
-   @Path("/action/disable")
-   @JAXBResponseParser
-   void disable(@EndpointParam(parser = URNToAdminHref.class) String vdcUrn);
-
    @POST
    @Consumes
    @Path("/action/disable")

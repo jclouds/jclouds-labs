@@ -24,9 +24,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Represents a network service
- */
 @XmlSeeAlso({
    DhcpService.class,
    IpsecVpnService.class,
@@ -35,32 +32,32 @@ import com.google.common.base.Objects;
    StaticRoutingService.class,
    NatService.class
 })
-public abstract class NetworkServiceType<T extends NetworkServiceType<T>> {
+public abstract class NetworkService<T extends NetworkService<T>> {
    public abstract Builder<T> toBuilder();
 
-   public abstract static class Builder<T extends NetworkServiceType<T>> {
+   public abstract static class Builder<T extends NetworkService<T>> {
       protected boolean isEnabled;
 
       /**
-       * @see NetworkServiceType#isEnabled()
+       * @see NetworkService#isEnabled()
        */
       public Builder<T> enabled(boolean isEnabled) {
          this.isEnabled = isEnabled;
          return this;
       }
 
-      public abstract NetworkServiceType<T> build();
+      public abstract NetworkService<T> build();
 
-      public Builder<T> fromNetworkServiceType(NetworkServiceType<T> in) {
+      public Builder<T> fromNetworkServiceType(NetworkService<T> in) {
          return enabled(in.isEnabled());
       }
    }
 
-   protected NetworkServiceType(boolean enabled) {
+   protected NetworkService(boolean enabled) {
       isEnabled = enabled;
    }
 
-   protected NetworkServiceType() {
+   protected NetworkService() {
       // for JAXB
    }
 
@@ -80,7 +77,7 @@ public abstract class NetworkServiceType<T extends NetworkServiceType<T>> {
          return true;
       if (o == null || getClass() != o.getClass())
          return false;
-      NetworkServiceType<?> that = NetworkServiceType.class.cast(o);
+      NetworkService<?> that = NetworkService.class.cast(o);
       return equal(isEnabled, that.isEnabled);
    }
 

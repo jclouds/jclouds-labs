@@ -35,15 +35,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
-/**
- * Used to control access to resources.
- *
- * <pre>
- * &lt;complexType name="ControlAccessParams" /&gt;
- * </pre>
- *
- * @since 0.9
- */
 @XmlRootElement(name = "ControlAccessParams")
 @XmlType(name = "ControlAccessParamsType")
 public class ControlAccessParams {

@@ -16,12 +16,9 @@
  */
 package org.jclouds.vcloud.director.v1_5.features;
 
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_NETWORK;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ENTITY;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ERROR;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA_VALUE;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.NETWORK;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ORG;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
@@ -53,14 +50,10 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link NetworkApi} via its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "NetworkApiExpectTest")
 public class NetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
    static String network = "55a677cf-ab3f-48ae-b880-fab90421980c";
-   static String networkUrn = "urn:vcloud:network:" + network;
    static URI networkHref = URI.create(endpoint + "/network/" + network);
    
    HttpRequest get = HttpRequest.builder()
@@ -131,35 +124,6 @@ public class NetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       
       assertNull(api.getNetworkApi().get(URI.create(endpoint + "/network/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")));
    }
-   
-   HttpRequest resolveNetwork = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + networkUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String networkEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", networkUrn)
-                                                             .a("id", networkUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + networkUrn)
-                                  .e("Link").a("rel", "alternate").a("type", NETWORK).a("href", networkHref.toString()).up()
-                                  // TODO: remove this when VCloudDirectorApiExpectTest no longer inherits from VCloudDirectorAdminApiExpectTest
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_NETWORK).a("href", networkHref.toString()).up());
-   
-   HttpResponse resolveNetworkResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(networkEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testGetNetworkUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveNetwork, resolveNetworkResponse, get, getResponse);
-      assertEquals(api.getNetworkApi().get(networkUrn), network());
-   }
-   
 
    HttpRequest getMetadata = HttpRequest.builder()
             .method("GET")

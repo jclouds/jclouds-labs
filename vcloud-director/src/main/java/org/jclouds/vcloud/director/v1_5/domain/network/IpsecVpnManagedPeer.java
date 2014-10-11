@@ -27,9 +27,9 @@ import com.google.common.base.Objects;
 @XmlSeeAlso(
       IpsecVpnLocalPeer.class
 )
-public abstract class IpsecVpnManagedPeerType<T extends IpsecVpnManagedPeerType<T>> extends IpsecVpnPeerType<T> {
+public abstract class IpsecVpnManagedPeer<T extends IpsecVpnManagedPeer<T>> extends IpsecVpnPeer<T> {
 
-   public abstract static class Builder<T extends IpsecVpnManagedPeerType<T>> {
+   public abstract static class Builder<T extends IpsecVpnManagedPeer<T>> {
       protected String id;
       protected String name;
 
@@ -49,7 +49,7 @@ public abstract class IpsecVpnManagedPeerType<T extends IpsecVpnManagedPeerType<
          return this;
       }
 
-      public Builder<T> fromIpsecVpnManagedPeerType(IpsecVpnManagedPeerType<T> in) {
+      public Builder<T> fromIpsecVpnManagedPeerType(IpsecVpnManagedPeer<T> in) {
          return id(in.getId())
                .name(in.getName());
       }
@@ -60,12 +60,12 @@ public abstract class IpsecVpnManagedPeerType<T extends IpsecVpnManagedPeerType<
    @XmlElement(name = "Name", required = true)
    protected String name;
 
-   protected IpsecVpnManagedPeerType(String id, String name) {
+   protected IpsecVpnManagedPeer(String id, String name) {
       this.id = id;
       this.name = name;
    }
 
-   protected IpsecVpnManagedPeerType() {
+   protected IpsecVpnManagedPeer() {
       // for JAXB
    }
 
@@ -94,7 +94,7 @@ public abstract class IpsecVpnManagedPeerType<T extends IpsecVpnManagedPeerType<
          return true;
       if (o == null || getClass() != o.getClass())
          return false;
-      IpsecVpnManagedPeerType<?> that = IpsecVpnManagedPeerType.class.cast(o);
+      IpsecVpnManagedPeer<?> that = IpsecVpnManagedPeer.class.cast(o);
       return equal(id, that.id) && equal(name, that.name);
    }
 

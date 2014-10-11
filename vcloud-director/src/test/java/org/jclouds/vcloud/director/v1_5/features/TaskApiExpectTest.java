@@ -34,9 +34,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link TaskApi} by observing its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "TaskApiExpectTest")
 public class TaskApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    static String tasksList = "6f312e42-cd2b-488d-a2bb-97519cd57ed0";
@@ -93,7 +90,7 @@ public class TaskApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, get, getResponse);
       assertEquals(api.getTaskApi().get(taskHref), task());
    }
-   
+
    HttpRequest resolveTask = HttpRequest.builder()
             .method("GET")
             .endpoint(endpoint + "/entity/" + taskUrn)
@@ -113,12 +110,6 @@ public class TaskApiExpectTest extends VCloudDirectorAdminApiExpectTest {
            .statusCode(200)
            .payload(payloadFromStringWithContentType(taskEntity, ENTITY + ";version=1.5"))
            .build();
-   
-   @Test
-   public void testGetTaskUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveTask, resolveTaskResponse, get, getResponse);
-      assertEquals(api.getTaskApi().get(taskUrn), task());
-   }
 
    public static Task task() {
       return Task.builder()

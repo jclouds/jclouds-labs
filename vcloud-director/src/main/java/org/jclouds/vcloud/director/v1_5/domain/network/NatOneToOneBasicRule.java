@@ -27,26 +27,6 @@ import com.google.common.base.Objects;
 /**
  * Represents the NAT basic rule for one to one mapping of internal
  * and external IP addresses from a network.
- * <p/>
- * <p/>
- * <p>Java class for NatOneToOneBasicRule complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="NatOneToOneBasicRule">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="MappingMode" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="ExternalIpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType"/>
- *         &lt;element name="InternalIpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "NatOneToOneBasicRule", propOrder = {
       "mappingMode",

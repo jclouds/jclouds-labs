@@ -51,9 +51,6 @@ import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Allows us to test a api via its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "VdcApiExpectTest")
 public class VdcApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    
@@ -428,7 +425,7 @@ public class VdcApiExpectTest extends VCloudDirectorAdminApiExpectTest {
             .build())
          .description("Pay As You go resources for organization cloudsoft ")
          .allocationModel("AllocationVApp")
-         .storageCapacity(CapacityWithUsage.builder()
+         .storageCapacity(new CapacityWithUsage.Builder()
             .units("MB")
             .allocated(0l)
             .limit(0l)
@@ -436,14 +433,14 @@ public class VdcApiExpectTest extends VCloudDirectorAdminApiExpectTest {
             .overhead(0l)
             .build())
          .computeCapacity(ComputeCapacity.builder()
-            .cpu(CapacityWithUsage.builder()
+            .cpu(new CapacityWithUsage.Builder()
                .units("MHz")
                .allocated(0l)
                .limit(0l)
                .used(0l)
                .overhead(0l)
                .build())
-            .memory(CapacityWithUsage.builder()
+            .memory(new CapacityWithUsage.Builder()
                .units("MB")
                .allocated(0l)
                .limit(0l)

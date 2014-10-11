@@ -31,36 +31,13 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a NAT network service.
- * <p/>
- * <p/>
- * <p>Java class for NatService complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="NatService">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}NetworkServiceType">
- *       &lt;sequence>
- *         &lt;element name="NatType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Policy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="NatRule" type="{http://www.vmware.com/vcloud/v1.5}NatRuleType" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "NatService")
 @XmlType(propOrder = {
       "natType",
       "policy",
       "natRules"
 })
-public class NatService extends NetworkServiceType<NatService> {
+public class NatService extends NetworkService<NatService> {
 
    public static Builder builder() {
       return new Builder();
@@ -71,7 +48,7 @@ public class NatService extends NetworkServiceType<NatService> {
       return new Builder().fromNatService(this);
    }
 
-   public static class Builder extends NetworkServiceType.Builder<NatService> {
+   public static class Builder extends NetworkService.Builder<NatService> {
       private String natType;
       private String policy;
       private Set<NatRule> natRules = Sets.newLinkedHashSet();
@@ -110,7 +87,7 @@ public class NatService extends NetworkServiceType<NatService> {
                .natRules(in.getNatRules());
       }
 
-      public Builder fromNetworkService(NetworkServiceType<NatService> in) {
+      public Builder fromNetworkService(NetworkService<NatService> in) {
          return Builder.class.cast(super.fromNetworkServiceType(in));
       }
 

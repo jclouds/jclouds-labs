@@ -31,33 +31,11 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-
-/**
- * Represents Static Routing network service.
- * <p/>
- * <p/>
- * <p>Java class for StaticRoutingService complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="StaticRoutingService">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}NetworkServiceType">
- *       &lt;sequence>
- *         &lt;element name="StaticRoute" type="{http://www.vmware.com/vcloud/v1.5}StaticRouteType" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "StaticRoutingService")
 @XmlType(propOrder = {
       "staticRoutes"
 })
-public class StaticRoutingService extends NetworkServiceType<StaticRoutingService> {
+public class StaticRoutingService extends NetworkService<StaticRoutingService> {
 
    public static Builder builder() {
       return new Builder();
@@ -68,7 +46,7 @@ public class StaticRoutingService extends NetworkServiceType<StaticRoutingServic
       return new Builder().fromStaticRoutingService(this);
    }
 
-   public static class Builder extends NetworkServiceType.Builder<StaticRoutingService> {
+   public static class Builder extends NetworkService.Builder<StaticRoutingService> {
 
       private List<StaticRoute> staticRoutes = ImmutableList.of();
 
@@ -88,7 +66,7 @@ public class StaticRoutingService extends NetworkServiceType<StaticRoutingServic
 
 
       @Override
-      public Builder fromNetworkServiceType(NetworkServiceType<StaticRoutingService> in) {
+      public Builder fromNetworkServiceType(NetworkService<StaticRoutingService> in) {
          return Builder.class.cast(super.fromNetworkServiceType(in));
       }
 

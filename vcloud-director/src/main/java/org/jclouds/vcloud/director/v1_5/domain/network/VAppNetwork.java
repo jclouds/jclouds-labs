@@ -24,13 +24,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Represents a vApp network.
- *
- * <pre>
- * &lt;complexType name="VAppNetwork" /&gt;
- * </pre>
- */
 @XmlType(name = "VAppNetwork")
 public class VAppNetwork extends Network {
 

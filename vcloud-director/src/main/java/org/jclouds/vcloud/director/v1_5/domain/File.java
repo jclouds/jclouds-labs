@@ -30,24 +30,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
  * Represents a file to be transferred (uploaded or downloaded).
- * <p/>
- * <p/>
- * <p>Java class for File complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="File">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}EntityType">
- *       &lt;attribute name="size" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="bytesTransferred" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="checksum" type="{http://www.w3.org/2001/XMLSchema}normalizedString" />
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "File")
 public class File extends Entity {

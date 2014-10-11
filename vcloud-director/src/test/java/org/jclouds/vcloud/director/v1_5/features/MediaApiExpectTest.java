@@ -41,9 +41,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * Test the {@link MediaApi} via its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "MediaApiExpectTest")
 public class MediaApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    

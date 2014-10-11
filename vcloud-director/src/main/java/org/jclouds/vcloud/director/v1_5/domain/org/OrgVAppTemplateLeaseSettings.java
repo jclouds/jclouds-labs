@@ -28,21 +28,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
- * Defines default lease policies for vAppTemplate on organization level.
- *
- * <pre>
- * &lt;complexType name="OrgVAppTemplateLeaseSettings">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ResourceType">
- *       &lt;sequence>
- *         &lt;element name="DeleteOnStorageLeaseExpiration" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="StorageLeaseSeconds" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
+ * Expiration and storage policy for vApp templates in an organization.
  */
 @XmlRootElement(name = "OrgVAppTemplateLeaseSettings")
 @XmlType(propOrder = {

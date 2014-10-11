@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.vcloud.director.v1_5.domain;
+package org.jclouds.vcloud.director.v1_5.domain.network;
 
-/**
- * Represents a metadata entry
- * <p/>
- * <pre>
- * &lt;xs:complexType name="MetadataType"&gt;
- * </pre>
- */
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+@XmlSeeAlso(
+      IpsecVpnThirdPartyPeer.class
+)
+public abstract class IpsecVpnUnmanagedPeer<T extends IpsecVpnUnmanagedPeer<T>> extends IpsecVpnPeer<T> {
+}

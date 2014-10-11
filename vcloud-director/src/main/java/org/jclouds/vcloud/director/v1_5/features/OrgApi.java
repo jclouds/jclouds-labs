@@ -24,6 +24,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.EndpointParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.JAXBResponseParser;
@@ -31,44 +32,21 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.vcloud.director.v1_5.domain.org.Org;
 import org.jclouds.vcloud.director.v1_5.domain.org.OrgList;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface OrgApi {
 
-   /**
-    * Retrieves a list of organizations.
-    * 
-    * <pre>
-    * GET / org
-    * </pre>
-    * 
-    * @return a list of organizations
-    */
    @GET
    @Path("/org/")
    @Consumes
    @JAXBResponseParser
    OrgList list();
 
-   /**
-    * Retrieves an organization.
-    * 
-    * <pre>
-    * GET /org/{id}
-    * </pre>
-    * 
-    * @return the org or null if not found
-    */
+   /** Returns the org or null if not found. */
    @GET
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
-   Org get(@EndpointParam(parser = URNToHref.class) String orgUrn);
-
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Org get(@EndpointParam URI orgHref);
 }

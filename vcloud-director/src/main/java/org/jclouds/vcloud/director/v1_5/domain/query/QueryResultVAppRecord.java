@@ -28,16 +28,9 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Represents the results from a VApp vCloud query as a record.
- * 
- * <pre>
- * &lt;complexType name="QueryResultVAppRecordType" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "VAppRecord")
 @XmlType(name = "QueryResultVAppRecordType")
-public class QueryResultVAppRecord extends QueryResultRecordType {
+public class QueryResultVAppRecord extends QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -51,7 +44,7 @@ public class QueryResultVAppRecord extends QueryResultRecordType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
 
-   public static class Builder<B extends Builder<B>> extends QueryResultRecordType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends QueryResultRecord.Builder<B> {
 
       private String name;
       private String vdc;

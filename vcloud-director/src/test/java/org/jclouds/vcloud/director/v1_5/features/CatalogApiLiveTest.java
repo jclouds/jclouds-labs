@@ -48,9 +48,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * Tests live behavior of {@link CatalogApi}.
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "CatalogApiLiveTest")
 public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -73,12 +70,12 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       catalogApi = context.getApi().getCatalogApi();
       adminCatalogApi = adminContext.getApi().getCatalogApi();
      
-      if (catalogUrn == null) {
+      if (catalogId == null) {
          AdminCatalog newCatalog = AdminCatalog.builder().name(name("Test Catalog "))
                   .description("created by CatalogApiLiveTest").build();
 
-         adminCatalog = adminCatalogApi.addCatalogToOrg(newCatalog, org.getId());
-         catalogUrn = catalogApi.get(
+         adminCatalog = adminCatalogApi.addCatalogToOrg(newCatalog, org.getHref());
+         catalogId = catalogApi.get(
                   find(adminCatalog.getLinks(),
                            and(relEquals("alternate"), typeEquals(VCloudDirectorMediaType.CATALOG))).getHref()).getId();
 
@@ -91,7 +88,7 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    protected void tearDownContext() {
       if (media != null) {
          try {
-            Task remove = context.getApi().getMediaApi().remove(media.getId());
+            Task remove = context.getApi().getMediaApi().remove(media.getHref());
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting media '%s'", media.getName());
@@ -100,14 +97,14 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       if (createdByTest) {
          if (catalogItem != null) {
             try {
-               catalogApi.removeItem(catalogItem.getId());
+               catalogApi.removeItem(catalogItem.getHref());
             } catch (Exception e) {
                logger.warn(e, "Error when deleting catalog item '%s'", catalogItem.getName());
             }
          }
          if (adminContext != null && adminCatalog != null) {
             try {
-               adminContext.getApi().getCatalogApi().remove(adminCatalog.getId());
+               adminContext.getApi().getCatalogApi().remove(adminCatalog.getHref());
             } catch (Exception e) {
                logger.warn(e, "Error when deleting catalog '%s'", adminCatalog.getName());
             }
@@ -121,12 +118,12 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       Catalog catalog = lazyGetCatalog();
       assertNotNull(catalog);
       // Double check it's pointing at the correct catalog
-      assertEquals(catalog.getId(), catalogUrn);
+      assertEquals(catalog.getHref(), catalogId);
    }
 
    @Test(description = "GET /catalogItem/{id}", dependsOnMethods = "testAddCatalogItem")
    public void testGetCatalogItem() {
-      CatalogItem catalogItem = catalogApi.getItem(this.catalogItem.getId());
+      CatalogItem catalogItem = catalogApi.getItem(this.catalogItem.getHref());
       checkCatalogItem(catalogItem);
       assertEquals(catalogItem.getEntity().getHref(), this.catalogItem.getEntity().getHref());
    }
@@ -146,7 +143,7 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       CatalogItem editedCatalogItem = CatalogItem.builder().name("newitem").description("New Item")
                .type(VCloudDirectorMediaType.CATALOG_ITEM).entity(Reference.builder().href(media.getHref()).build())
                .build();
-      catalogItem = catalogApi.addItem(catalogUrn, editedCatalogItem);
+      catalogItem = catalogApi.addItem(context.resolveIdToHref(catalogId), editedCatalogItem);
       checkCatalogItem(catalogItem);
       assertEquals(catalogItem.getName(), "newitem");
       assertEquals(catalogItem.getDescription(), "New Item");
@@ -155,7 +152,7 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "PUT /catalogItem/{id}", dependsOnMethods = "testAddCatalogItem")
    public void testEditCatalogItem() {
       CatalogItem editedCatalogItem = CatalogItem.builder().fromCatalogItem(catalogItem).name("UPDATEDNAME").build();
-      catalogItem = catalogApi.editItem(catalogItem.getId(), editedCatalogItem);
+      catalogItem = catalogApi.editItem(catalogItem.getHref(), editedCatalogItem);
       checkCatalogItem(catalogItem);
       assertEquals(catalogItem.getName(), "UPDATEDNAME");
    }
@@ -164,85 +161,85 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "DELETE /catalogItem/{id}", dependsOnMethods = "testRemoveCatalogItemMetadataValue")
    public void testRemoveCatalogItem() {
       removeMediaAttachedToCatalogItem(catalogItem);
-      catalogApi.removeItem(catalogItem.getId());
-      catalogItem = catalogApi.getItem(catalogItem.getId());
+      catalogApi.removeItem(catalogItem.getHref());
+      catalogItem = catalogApi.getItem(catalogItem.getHref());
       assertNull(catalogItem);
    }
 
    @Test(description = "GET /catalog/{id}/metadata")
    public void testGetCatalogMetadata() {
-      Metadata catalogMetadata = context.getApi().getMetadataApi(catalogUrn).get();
+      Metadata catalogMetadata = context.getApi().getMetadataApi(context.resolveIdToHref(catalogId)).get();
       checkMetadata(catalogMetadata);
    }
 
    @Test(description = "GET /catalog/{id}/metadata/{key}")
    public void testGetCatalogMetadataValue() {
 
-      Task mergeCatalogMetadata = context.getApi().getMetadataApi(catalogUrn)
+      Task mergeCatalogMetadata = context.getApi().getMetadataApi(context.resolveIdToHref(catalogId))
             .putAll(ImmutableMap.of("KEY", "MARMALADE"));
       assertTaskSucceedsLong(mergeCatalogMetadata);
 
-      Metadata catalogMetadata = context.getApi().getMetadataApi(catalogUrn).get();
+      Metadata catalogMetadata = context.getApi().getMetadataApi(context.resolveIdToHref(catalogId)).get();
 
-      String metadataValue = context.getApi().getMetadataApi(catalogUrn).get("KEY");
+      String metadataValue = context.getApi().getMetadataApi(context.resolveIdToHref(catalogId)).get("KEY");
       assertEquals(metadataValue, catalogMetadata.get("KEY"), String.format(CORRECT_VALUE_OBJECT_FMT, "Value",
             "MetadataValue", catalogMetadata.get("KEY"), metadataValue));
    }
 
    @Test(description = "GET /catalogItem/{id}/metadata", dependsOnMethods = "testAddCatalogItem")
    public void testGetCatalogItemMetadata() {
-      Metadata catalogItemMetadata = context.getApi().getMetadataApi(catalogItem.getId()).get();
+      Metadata catalogItemMetadata = context.getApi().getMetadataApi(catalogItem.getHref()).get();
       checkMetadata(catalogItemMetadata);
    }
 
    @Test(description = "POST /catalogItem/{id}/metadata", dependsOnMethods = "testAddCatalogItem")
    public void testMergeCatalogItemMetadata() {
-      Metadata before = context.getApi().getMetadataApi(catalogItem.getId()).get();
+      Metadata before = context.getApi().getMetadataApi(catalogItem.getHref()).get();
 
-      Task mergeCatalogItemMetadata = context.getApi().getMetadataApi(catalogItem.getId()).putAll(
+      Task mergeCatalogItemMetadata = context.getApi().getMetadataApi(catalogItem.getHref()).putAll(
             ImmutableMap.of("KEY", "MARMALADE", "VEGIMITE", "VALUE"));
       checkTask(mergeCatalogItemMetadata);
       assertTrue(retryTaskSuccess.apply(mergeCatalogItemMetadata),
             String.format(TASK_COMPLETE_TIMELY, "mergeCatalogItemMetadata"));
-      Metadata mergedCatalogItemMetadata = context.getApi().getMetadataApi(catalogItem.getId()).get();
+      Metadata mergedCatalogItemMetadata = context.getApi().getMetadataApi(catalogItem.getHref()).get();
 
       assertTrue(mergedCatalogItemMetadata.getMetadataEntries().size() > before.getMetadataEntries().size(),
             "Should have added at least one other MetadataEntry to the CatalogItem");
 
-      String keyMetadataValue = context.getApi().getMetadataApi(catalogItem.getId()).get("KEY");
+      String keyMetadataValue = context.getApi().getMetadataApi(catalogItem.getHref()).get("KEY");
       assertEquals(keyMetadataValue, "MARMALADE", "The Value of the MetadataValue for KEY should have changed");
 
-      String newKeyMetadataValue = context.getApi().getMetadataApi(catalogItem.getId()).get("VEGIMITE");
+      String newKeyMetadataValue = context.getApi().getMetadataApi(catalogItem.getHref()).get("VEGIMITE");
 
       assertEquals(newKeyMetadataValue, "VALUE", "The Value of the MetadataValue for NEW_KEY should have been set");
    }
 
    @Test(description = "GET /catalogItem/{id}/metadata/{key}", dependsOnMethods = "testSetCatalogItemMetadataValue")
    public void testGetCatalogItemMetadataValue() {
-      String metadataValue = context.getApi().getMetadataApi(catalogItem.getId()).get("KEY");
+      String metadataValue = context.getApi().getMetadataApi(catalogItem.getHref()).get("KEY");
       assertNotNull(metadataValue);
    }
 
    @Test(description = "PUT /catalogItem/{id}/metadata/{key}", dependsOnMethods = "testMergeCatalogItemMetadata")
    public void testSetCatalogItemMetadataValue() {
 
-      Task setCatalogItemMetadataValue = context.getApi().getMetadataApi(catalogItem.getId()).put("KEY", "NEW");
+      Task setCatalogItemMetadataValue = context.getApi().getMetadataApi(catalogItem.getHref()).put("KEY", "NEW");
       checkTask(setCatalogItemMetadataValue);
       assertTrue(retryTaskSuccess.apply(setCatalogItemMetadataValue),
             String.format(TASK_COMPLETE_TIMELY, "setCatalogItemMetadataValue"));
 
-      String editedMetadataValue = context.getApi().getMetadataApi(catalogItem.getId()).get("KEY");
+      String editedMetadataValue = context.getApi().getMetadataApi(catalogItem.getHref()).get("KEY");
       assertEquals(editedMetadataValue, "NEW",
             String.format(CORRECT_VALUE_OBJECT_FMT, "Value", "MetadataValue", "NEW", editedMetadataValue));
    }
 
    @Test(description = "DELETE /catalogItem/{id}/metadata/{key}", dependsOnMethods = "testGetCatalogItemMetadataValue")
    public void testRemoveCatalogItemMetadataValue() {
-      Task removeCatalogItemMetadataValue = context.getApi().getMetadataApi(catalogItem.getId()).remove("KEY");
+      Task removeCatalogItemMetadataValue = context.getApi().getMetadataApi(catalogItem.getHref()).remove("KEY");
       checkTask(removeCatalogItemMetadataValue);
       assertTrue(retryTaskSuccess.apply(removeCatalogItemMetadataValue),
             String.format(TASK_COMPLETE_TIMELY, "removeCatalogItemMetadataValue"));
-      String removed = context.getApi().getMetadataApi(catalogItem.getId()).get("KEY");
+      String removed = context.getApi().getMetadataApi(catalogItem.getHref()).get("KEY");
       assertNull(removed);
    }
    
@@ -250,7 +247,7 @@ public class CatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       if (media != null) {
          if (catalogItem.getEntity().getHref().equals(media.getHref())) {
             try {
-               Task remove = context.getApi().getMediaApi().remove(media.getId());
+               Task remove = context.getApi().getMediaApi().remove(media.getHref());
                taskDoneEventually(remove);
                media = null;
             } catch (Exception e) {

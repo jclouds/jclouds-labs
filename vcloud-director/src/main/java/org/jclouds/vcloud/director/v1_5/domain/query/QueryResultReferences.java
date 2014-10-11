@@ -31,14 +31,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents the results from a vCloud query as references.
- *
- * <pre>
- * &lt;complexType name="QueryResultReferences" /&gt;
- * </pre>
- */
-public class QueryResultReferences extends ContainerType {
+public class QueryResultReferences extends Container {
 
    public static final String MEDIA_TYPE = VCloudDirectorMediaType.QUERY_RESULT_REFERENCES;
 
@@ -54,7 +47,7 @@ public class QueryResultReferences extends ContainerType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
    
-   public static class Builder<B extends Builder<B>> extends ContainerType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends Container.Builder<B> {
 
       private Set<Reference> references = Sets.newLinkedHashSet();
 

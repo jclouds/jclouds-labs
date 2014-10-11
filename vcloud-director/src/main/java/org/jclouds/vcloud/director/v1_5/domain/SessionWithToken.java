@@ -21,9 +21,6 @@ import static com.google.common.base.Objects.equal;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Session and its corresponding token
- */
 public class SessionWithToken {
 
    public static Builder builder() {

@@ -16,9 +16,6 @@
  */
 package org.jclouds.vcloud.director.v1_5.features.admin;
 
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_NETWORK;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ENTITY;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.NETWORK;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ORG;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ORG_NETWORK;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.TASK;
@@ -47,15 +44,10 @@ import org.testng.annotations.Test;
 
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link AdminNetworkApi} by observing its side effects.
- */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminNetworkApiExpectTest")
 public class AdminNetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
    static String network = "55a677cf-ab3f-48ae-b880-fab90421980c";
-   static String networkUrn = "urn:vcloud:network:" + network;
-   static URI networkHref = URI.create(endpoint + "/network/" + network);
    static URI networkAdminHref = URI.create(endpoint + "/admin/network/" + network);
    
    HttpRequest get = HttpRequest.builder()
@@ -76,34 +68,7 @@ public class AdminNetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, get, getResponse);
       assertEquals(api.getNetworkApi().get(networkAdminHref), network());
    }
-   
-   HttpRequest resolveNetwork = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + networkUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String networkEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", networkUrn)
-                                                             .a("id", networkUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + networkUrn)
-                                  .e("Link").a("rel", "alternate").a("type", NETWORK).a("href", networkHref.toString()).up()
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_NETWORK).a("href", networkAdminHref.toString()).up());
-   
-   HttpResponse resolveNetworkResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(networkEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testGetNetworkUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveNetwork, resolveNetworkResponse, get, getResponse);
-      assertEquals(api.getNetworkApi().get(networkUrn), network());
-   }
-   
+
    HttpRequest edit = HttpRequest.builder()
             .method("PUT")
             .endpoint(networkAdminHref )
@@ -123,13 +88,7 @@ public class AdminNetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, edit, editResponse);
       assertEquals(api.getNetworkApi().edit(networkAdminHref, editNetwork()), editNetworkTask());
    }
-   
-   @Test
-   public void testEditNetworkUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveNetwork, resolveNetworkResponse, edit, editResponse);
-      assertEquals(api.getNetworkApi().edit(networkUrn, editNetwork()), editNetworkTask());
-   }
-   
+
    HttpRequest reset = HttpRequest.builder()
             .method("POST")
             .endpoint(networkAdminHref + "/action/reset")
@@ -147,12 +106,6 @@ public class AdminNetworkApiExpectTest extends VCloudDirectorAdminApiExpectTest 
    public void testResetNetworkHref() {
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, reset, resetResponse);
       assertEquals(api.getNetworkApi().reset(networkAdminHref), resetNetworkTask());
-   }
-   
-   @Test
-   public void testResetNetworkUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveNetwork, resolveNetworkResponse, reset, resetResponse);
-      assertEquals(api.getNetworkApi().reset(networkUrn), resetNetworkTask());
    }
    
    public static OrgNetwork network() {

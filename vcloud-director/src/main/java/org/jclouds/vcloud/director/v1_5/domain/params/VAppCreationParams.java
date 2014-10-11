@@ -29,13 +29,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
 
-/**
- * Represents vApp creation parameters.
- *
- * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/VAppCreationParamsType.html">
- *    vCloud REST API - VAppCreationParamsType</a>
- * @since 0.9
- */
 @XmlRootElement(name = "VAppCreationParams")
 @XmlType(name = "VAppCreationParamsType")
 public class VAppCreationParams extends ParamsType {

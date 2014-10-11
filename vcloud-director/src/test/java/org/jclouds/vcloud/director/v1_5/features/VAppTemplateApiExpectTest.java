@@ -48,9 +48,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-/**
- * Tests the request/response behavior of {@link org.jclouds.vcloud.director.v1_5.features.VAppTemplateApi}
- */
 @Test(groups = { "unit", "user" }, testName = "VAppTemplateApiExpectTest")
 public class VAppTemplateApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
@@ -171,6 +168,7 @@ public class VAppTemplateApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       api.enableDownload(uri);
    }
 
+   @Test(expectedExceptions = ResourceNotFoundException.class)
    public void testErrorGetCustomizationSection() {
       final String templateId = "/vAppTemplate/vappTemplate-ef4415e6-d413-4cbb-9262-f9bbec5f2ea9";
       URI uri = URI.create(endpoint + templateId);
@@ -181,7 +179,7 @@ public class VAppTemplateApiExpectTest extends VCloudDirectorAdminApiExpectTest 
 
       assertNull(api.getCustomizationSection(uri));
    }
-   
+
    public void testLeaseSettingsSection() throws ParseException {
       final String templateId = "/vAppTemplate/vappTemplate-ef4415e6-d413-4cbb-9262-f9bbec5f2ea9";
       URI uri = URI.create(endpoint + templateId);
@@ -202,6 +200,7 @@ public class VAppTemplateApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       assertNotNull(task);
    }
 
+   @Test(expectedExceptions = ResourceNotFoundException.class)
    public void testErrorGetLeaseSettingsSection() {
       final String templateId = "/vAppTemplate/vappTemplate-ef4415e6-d413-4cbb-9262-f9bbec5f2ea9";
       URI uri = URI.create(endpoint + templateId);

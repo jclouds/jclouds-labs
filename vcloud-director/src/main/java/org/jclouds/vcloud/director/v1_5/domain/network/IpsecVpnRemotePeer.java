@@ -25,36 +25,13 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Gives more details of remote peer end point.
- * <p/>
- * <p/>
- * <p>Java class for IpsecVpnRemotePeer complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="IpsecVpnRemotePeer">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}IpsecVpnManagedPeerType">
- *       &lt;sequence>
- *         &lt;element name="VcdUrl" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="VcdOrganization" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="VcdUsername" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "IpsecVpnRemotePeer")
 @XmlType(propOrder = {
       "vcdUrl",
       "vcdOrganization",
       "vcdUsername"
 })
-public class IpsecVpnRemotePeer extends IpsecVpnManagedPeerType<IpsecVpnRemotePeer> {
+public class IpsecVpnRemotePeer extends IpsecVpnManagedPeer<IpsecVpnRemotePeer> {
 
    public static Builder builder() {
       return new Builder();
@@ -64,7 +41,7 @@ public class IpsecVpnRemotePeer extends IpsecVpnManagedPeerType<IpsecVpnRemotePe
       return new Builder().fromIpsecVpnRemotePeer(this);
    }
 
-   public static class Builder extends IpsecVpnManagedPeerType.Builder<IpsecVpnRemotePeer> {
+   public static class Builder extends IpsecVpnManagedPeer.Builder<IpsecVpnRemotePeer> {
       private String vcdUrl;
       private String vcdOrganization;
       private String vcdUsername;
@@ -98,7 +75,7 @@ public class IpsecVpnRemotePeer extends IpsecVpnManagedPeerType<IpsecVpnRemotePe
       }
 
       @Override
-      public Builder fromIpsecVpnManagedPeerType(IpsecVpnManagedPeerType<IpsecVpnRemotePeer> in) {
+      public Builder fromIpsecVpnManagedPeerType(IpsecVpnManagedPeer<IpsecVpnRemotePeer> in) {
          return Builder.class.cast(super.fromIpsecVpnManagedPeerType(in));
       }
 

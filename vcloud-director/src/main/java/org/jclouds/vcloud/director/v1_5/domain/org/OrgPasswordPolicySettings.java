@@ -27,13 +27,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Resource;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Java class for OrgPasswordPolicySettings complex type.
- * 
- * <pre>
- * &lt;complexType name="OrgPasswordPolicySettings" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "OrgPasswordPolicySettings")
 @XmlType(propOrder = {
     "accountLockoutEnabled",

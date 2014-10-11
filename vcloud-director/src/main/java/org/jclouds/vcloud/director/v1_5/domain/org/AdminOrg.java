@@ -37,24 +37,8 @@ import com.google.common.collect.Sets;
  * The AdminOrg represents an administrative view of an organization.
  * It includes all members of the Org element, and adds several
  * elements that can be viewed and modified only by system administrators.
- *            
- * <pre>
- * &lt;complexType name="AdminOrg">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}OrgType">
- *       &lt;sequence>
- *         &lt;element name="Settings" type="{http://www.vmware.com/vcloud/v1.5}OrgSettingsType"/>
- *         &lt;element name="Users" type="{http://www.vmware.com/vcloud/v1.5}UsersListType" minOccurs="0"/>
- *         &lt;element name="Groups" type="{http://www.vmware.com/vcloud/v1.5}GroupsListType" minOccurs="0"/>
- *         &lt;element name="Catalogs" type="{http://www.vmware.com/vcloud/v1.5}CatalogsListType" minOccurs="0"/>
- *         &lt;element name="Vdcs" type="{http://www.vmware.com/vcloud/v1.5}VdcsType" minOccurs="0"/>
- *         &lt;element name="Networks" type="{http://www.vmware.com/vcloud/v1.5}NetworksType" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
+ * <p/> The organization might be enabled or disabled. If
+ * enabled, the organization allows login and all other operations.
  */
 @XmlRootElement(name = "AdminOrg")
 @XmlType(propOrder = {

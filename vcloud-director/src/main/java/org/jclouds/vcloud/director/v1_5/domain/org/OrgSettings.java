@@ -31,24 +31,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
  * This type establishes quotas and policies for the organization.
  * It also contains elements that specify the details of
  * how the organization connects to LDAP and email services.
- *
- * <pre>
- * &lt;complexType name="OrgSettings">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ResourceType">
- *       &lt;sequence>
- *         &lt;element name="OrgGeneralSettings" type="{http://www.vmware.com/vcloud/v1.5}OrgGeneralSettingsType" minOccurs="0"/>
- *         &lt;element name="VAppLeaseSettings" type="{http://www.vmware.com/vcloud/v1.5}OrgLeaseSettingsType" minOccurs="0"/>
- *         &lt;element name="VAppTemplateLeaseSettings" type="{http://www.vmware.com/vcloud/v1.5}OrgVAppTemplateLeaseSettingsType" minOccurs="0"/>
- *         &lt;element name="OrgLdapSettings" type="{http://www.vmware.com/vcloud/v1.5}OrgLdapSettingsType" minOccurs="0"/>
- *         &lt;element name="OrgEmailSettings" type="{http://www.vmware.com/vcloud/v1.5}OrgEmailSettingsType" minOccurs="0"/>
- *         &lt;element name="OrgPasswordPolicySettings" type="{http://www.vmware.com/vcloud/v1.5}OrgPasswordPolicySettingsType" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlRootElement(name = "OrgSettings")
 @XmlType(propOrder = {

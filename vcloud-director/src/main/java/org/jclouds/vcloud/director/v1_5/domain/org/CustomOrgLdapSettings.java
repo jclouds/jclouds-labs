@@ -38,32 +38,6 @@ import com.google.common.collect.Maps;
 /**
  * Used when OrgLdapMode=CUSTOM to define connection details for
  * the organization's LDAP service.
- *             
- * <pre>
- * &lt;complexType name="CustomOrgLdapSettings">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="HostName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Port" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="IsSsl" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="IsSslAcceptAll" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="Realm" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="SearchBase" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="UserName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="AuthenticationMechanism" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="GroupSearchBase" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="IsGroupSearchBaseEnabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="ConnectorType" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="UserAttributes" type="{http://www.vmware.com/vcloud/v1.5}OrgLdapUserAttributesType"/>
- *         &lt;element name="GroupAttributes" type="{http://www.vmware.com/vcloud/v1.5}OrgLdapGroupAttributesType"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "CustomOrgLdapSettings", propOrder = {
     "hostName",

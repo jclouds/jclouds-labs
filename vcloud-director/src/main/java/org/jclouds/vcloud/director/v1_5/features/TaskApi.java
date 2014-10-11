@@ -25,6 +25,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.EndpointParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.JAXBResponseParser;
@@ -32,48 +33,30 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.domain.TasksList;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface TaskApi {
 
    /**
-    * Retrieves a list of tasks.
-    * 
-    * <pre>
-    * GET /tasksList/{id}
-    * </pre>
-    * 
-    * @param tasksListUrn
+    * Returns the task list or null if not found.
+    *
+    * @param tasksListHref
     *           from {@link Org#getLinks()} where {@link Link#getType} is
     *           {@link VCloudDirectorMediaType#TASKS_LIST}
-    * @return a list of tasks
     */
    @GET
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    TasksList getTasksList(@EndpointParam URI tasksListHref);
 
-   /**
-    * Retrieves a task.
-    * 
-    * <pre>
-    * GET /task/{id}
-    * </pre>
-    * 
-    * @return the task or null if not found
-    */
+   /** Returns the task or null if not found. */
    @GET
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
-   Task get(@EndpointParam(parser = URNToHref.class) String taskUrn);
-
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Task get(@EndpointParam URI taskURI);
 
    @POST

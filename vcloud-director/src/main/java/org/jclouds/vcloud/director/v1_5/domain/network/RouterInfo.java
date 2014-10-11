@@ -24,9 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Specifies router information.
- */
 @XmlRootElement(name = "RouterInfo")
 public class RouterInfo {
    public static Builder builder() {

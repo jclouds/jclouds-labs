@@ -23,5 +23,5 @@ import javax.xml.bind.annotation.XmlSeeAlso;
       IpsecVpnRemotePeer.class,
       IpsecVpnThirdPartyPeer.class
 })
-public abstract class IpsecVpnPeerType<T extends IpsecVpnPeerType<T>> {
+public abstract class IpsecVpnPeer<T extends IpsecVpnPeer<T>> {
 }

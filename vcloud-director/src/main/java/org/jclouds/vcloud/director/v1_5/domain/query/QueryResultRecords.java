@@ -32,15 +32,8 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents the results from a vCloud query as records.
- *
- * <pre>
- * &lt;complexType name="QueryResultRecords" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "QueryResultRecords")
-public class QueryResultRecords extends ContainerType {
+public class QueryResultRecords extends Container {
 
    public static final String MEDIA_TYPE = VCloudDirectorMediaType.QUERY_RESULT_RECORDS;
 
@@ -56,14 +49,14 @@ public class QueryResultRecords extends ContainerType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
    
-   public static class Builder<B extends Builder<B>> extends ContainerType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends Container.Builder<B> {
 
-      private Set<QueryResultRecordType> records = Sets.newLinkedHashSet();
+      private Set<QueryResultRecord> records = Sets.newLinkedHashSet();
 
       /**
        * @see QueryResultRecords#getRecords()
        */
-      public B records(Set<QueryResultRecordType> records) {
+      public B records(Set<QueryResultRecord> records) {
          this.records = Sets.newLinkedHashSet(checkNotNull(records, "records"));
          return self();
       }
@@ -71,7 +64,7 @@ public class QueryResultRecords extends ContainerType {
       /**
        * @see QueryResultRecords#getRecords()
        */
-      public B record(QueryResultRecordType record) {
+      public B record(QueryResultRecord record) {
          this.records.add(checkNotNull(record, "record"));
          return self();
       }
@@ -96,12 +89,12 @@ public class QueryResultRecords extends ContainerType {
    }
 
    @XmlElementRef
-   private Set<QueryResultRecordType> records = Sets.newLinkedHashSet();
+   private Set<QueryResultRecord> records = Sets.newLinkedHashSet();
 
    /**
     * Set of records representing query results.
     */
-   public Set<QueryResultRecordType> getRecords() {
+   public Set<QueryResultRecord> getRecords() {
       return Collections.unmodifiableSet(records);
    }
 

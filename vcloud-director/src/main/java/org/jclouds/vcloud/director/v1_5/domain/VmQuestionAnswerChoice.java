@@ -26,19 +26,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a pair of ID and text of an answer choice of a VM question.
- *
- * <pre>
- * &lt;complexType name="VmQuestionAnswerChoice">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="Text" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "VmQuestionAnswerChoice", propOrder = {
     "id",

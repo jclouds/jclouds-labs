@@ -29,10 +29,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 /**
  * Represents a question which vSphere issued for a VM in a stuck state(WAITING_FOR_INPUT). It has a question element, a question ID
  * element, and a list of choices with at least one element.
- *
- * <pre>
- * &lt;complexType name="VmPendingQuestion" /&gt;
- * </pre>
  */
 @XmlType(name = "VmPendingQuestion")
 public class VmPendingQuestion extends Resource {

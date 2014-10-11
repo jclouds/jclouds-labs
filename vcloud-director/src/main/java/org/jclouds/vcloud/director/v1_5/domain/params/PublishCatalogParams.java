@@ -25,27 +25,11 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Parameters used when publishing catalogs.
- *
- * <pre>
- * &lt;complexType name="PublishCatalogParams">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="IsPublished" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "PublishCatalogParams")
 @XmlType(propOrder = {
     "isPublished"
 })
-//TODO: this is ridiculous
+//TODO: this is ridiculously complex boolean wrapper.
 public class PublishCatalogParams {
    
    public static Builder builder() {

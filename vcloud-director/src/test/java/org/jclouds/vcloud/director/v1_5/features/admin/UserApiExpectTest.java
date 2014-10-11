@@ -16,8 +16,6 @@
  */
 package org.jclouds.vcloud.director.v1_5.features.admin;
 
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_ORG;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ENTITY;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ERROR;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ORG;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.USER;
@@ -39,19 +37,13 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link UserApi} by observing its side effects.
- */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "UserApiExpectTest")
 public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    
    private static String user = "7212e451-76e1-4631-b2de-ba1dfd8080e4";
-   private static String userUrn = "urn:vcloud:user:" + user;
    private static URI userHref = URI.create(endpoint + "/user/" + user);
    
    private static String org = "7212e451-76e1-4631-b2de-asdasdasd";
-   private static String orgUrn = "urn:vcloud:org:" + org;
-   private static URI orgHref = URI.create(endpoint + "/org/" + org);
    private static URI orgAdminHref = URI.create(endpoint + "/admin/org/" + org);
    
    private HttpRequest add = HttpRequest.builder()
@@ -74,33 +66,6 @@ public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       assertEquals(api.getUserApi().addUserToOrg(addUserSource(), orgAdminHref), addUser());
    }
 
-   private HttpRequest resolveOrg = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + orgUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   private String orgEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", orgUrn)
-                                                             .a("id", orgUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + userUrn)
-                                  .e("Link").a("rel", "alternate").a("type", ORG).a("href", orgHref.toString()).up()
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_ORG).a("href", orgAdminHref.toString()).up());
-   
-   private HttpResponse resolveOrgResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(orgEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testAddUserUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveOrg, resolveOrgResponse, add, addResponse);
-      assertEquals(api.getUserApi().addUserToOrg(addUserSource(), orgUrn), addUser());
-   }
-   
    HttpRequest get = HttpRequest.builder()
             .method("GET")
             .endpoint(userHref)
@@ -119,33 +84,7 @@ public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, get, getResponse);
       assertEquals(api.getUserApi().get(userHref), user());
    }
-   
-   HttpRequest resolveUser = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + userUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String userEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", userUrn)
-                                                             .a("id", userUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + userUrn)
-                                  .e("Link").a("rel", "alternate").a("type", USER).a("href", userHref.toString()).up());
-   
-   HttpResponse resolveUserResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(userEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testGetUserUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveUser, resolveUserResponse, get, getResponse);
-      assertEquals(api.getUserApi().get(userUrn), user());
-   }
-   
+
    HttpRequest edit = HttpRequest.builder()
             .method("PUT")
             .endpoint(userHref)
@@ -165,13 +104,7 @@ public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, edit, editResponse);
       assertEquals(api.getUserApi().edit(userHref, editUserSource()), editUser());
    }
-   
-   @Test
-   public void testEditUserUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveUser, resolveUserResponse, edit, editResponse);
-      assertEquals(api.getUserApi().edit(userUrn, editUserSource()), editUser());
-   }
-   
+
    HttpRequest unlock = HttpRequest.builder()
             .method("POST")
             .endpoint(userHref + "/action/unlock")
@@ -198,13 +131,7 @@ public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {
                .build());
       api.getUserApi().unlock(userHref);
    }
-   
-   @Test
-   public void testUnlockUserUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveUser, resolveUserResponse, unlock, unlockResponse);
-      api.getUserApi().unlock(userUrn);
-   }
-   
+
    HttpRequest remove = HttpRequest.builder()
             .method("DELETE")
             .endpoint(userHref)
@@ -222,12 +149,6 @@ public class UserApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       api.getUserApi().remove(userHref);
    }
 
-   @Test
-   public void testRemoveUserUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveUser, resolveUserResponse, remove, removeResponse);
-      api.getUserApi().remove(userUrn);
-   }
-   
    public static final User addUserSource() {
       return User.builder()
             .name("test")

@@ -39,10 +39,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents a list of network cards existing in a VM.
- * 
- * <pre>
- * &lt;complexType name="NetworkConnectionSectionType" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "NetworkConnectionSection")
 @XmlType(name = "NetworkConnectionSectionType")

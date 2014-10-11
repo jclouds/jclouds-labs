@@ -38,9 +38,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * An OperatingSystemSection specifies the operating system installed on a virtual machine.
- */
 @XmlRootElement(name = "OperatingSystemSection", namespace = OVF_NS)
 @XmlType(name = "OperatingSystemSection_Type")
 @XmlSeeAlso({ org.jclouds.dmtf.ovf.OperatingSystemSection.class })

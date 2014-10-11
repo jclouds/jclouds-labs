@@ -39,14 +39,7 @@ import com.google.common.collect.Sets;
 /**
  * The base type for all objects in the vCloud model.
  *
- * Has an optional list of links and href and type attributes.
- *
- * <pre>
- * &lt;xs:complexType name="ResourceType" /&gt;
- * </pre>
- *
- *
- * @since 0.9
+ * <p/> Has an optional list of links and href and type attributes.
  */
 @XmlRootElement(name = "Resource")
 @XmlType(name = "ResourceType")

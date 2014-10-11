@@ -26,33 +26,13 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a capacity and usage of a given resource.
- * <p/>
- * <p/>
- * <p>Java class for CapacityWithUsage complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="CapacityWithUsage">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}CapacityType">
- *       &lt;sequence>
- *         &lt;element name="Used" type="{http://www.w3.org/2001/XMLSchema}Long" minOccurs="0"/>
- *         &lt;element name="Overhead" type="{http://www.w3.org/2001/XMLSchema}Long" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "CapacityWithUsage", propOrder = {
       "used",
       "overhead"
 })
-public class CapacityWithUsage extends CapacityType<CapacityWithUsage>
+public class CapacityWithUsage extends Capacity<CapacityWithUsage> {
 
-{
    @SuppressWarnings("unchecked")
    public static Builder builder() {
       return new Builder();
@@ -63,7 +43,7 @@ public class CapacityWithUsage extends CapacityType<CapacityWithUsage>
       return new Builder().fromCapacityWithUsage(this);
    }
 
-   public static class Builder extends CapacityType.Builder<CapacityWithUsage> {
+   public static class Builder extends Capacity.Builder<CapacityWithUsage> {
 
       private Long used;
       private Long overhead;
@@ -91,7 +71,7 @@ public class CapacityWithUsage extends CapacityType<CapacityWithUsage>
       }
 
       /**
-       * @see CapacityType#getUnits()
+       * @see Capacity#getUnits()
        */
       @Override
       public Builder units(String units) {
@@ -100,7 +80,7 @@ public class CapacityWithUsage extends CapacityType<CapacityWithUsage>
       }
 
       /**
-       * @see CapacityType#getAllocated()
+       * @see Capacity#getAllocated()
        */
       @Override
       public Builder allocated(Long allocated) {
@@ -109,7 +89,7 @@ public class CapacityWithUsage extends CapacityType<CapacityWithUsage>
       }
 
       /**
-       * @see CapacityType#getLimit()
+       * @see Capacity#getLimit()
        */
       @Override
       public Builder limit(Long limit) {
@@ -119,7 +99,7 @@ public class CapacityWithUsage extends CapacityType<CapacityWithUsage>
 
 
       @Override
-      public Builder fromCapacityType(CapacityType<CapacityWithUsage> in) {
+      public Builder fromCapacityType(Capacity<CapacityWithUsage> in) {
          return Builder.class.cast(super.fromCapacityType(in));
       }
 

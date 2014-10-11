@@ -18,29 +18,9 @@ package org.jclouds.vcloud.director.v1_5.domain.network;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-/**
- * 
- * Gives more details of local peer end point.
- *             
- * 
- * <p>Java class for IpsecVpnLocalPeer complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="IpsecVpnLocalPeer">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}IpsecVpnManagedPeerType">
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "IpsecVpnLocalPeer")
 public class IpsecVpnLocalPeer
-    extends IpsecVpnManagedPeerType<IpsecVpnLocalPeer>
+    extends IpsecVpnManagedPeer<IpsecVpnLocalPeer>
 
 {
    public static Builder builder() {
@@ -51,16 +31,16 @@ public class IpsecVpnLocalPeer
       return new Builder().fromIpsecVpnLocalPeer(this);
    }
 
-   public static class Builder extends IpsecVpnManagedPeerType.Builder<IpsecVpnLocalPeer> {
+   public static class Builder extends IpsecVpnManagedPeer.Builder<IpsecVpnLocalPeer> {
       public IpsecVpnLocalPeer build() {
          return new IpsecVpnLocalPeer(id, name);
       }
 
       @Override
-      public Builder fromIpsecVpnManagedPeerType(IpsecVpnManagedPeerType<IpsecVpnLocalPeer> in) {
+      public Builder fromIpsecVpnManagedPeerType(IpsecVpnManagedPeer<IpsecVpnLocalPeer> in) {
           return Builder.class.cast(super.fromIpsecVpnManagedPeerType(in));
       }
-      
+
       public Builder fromIpsecVpnLocalPeer(IpsecVpnLocalPeer in) {
          return fromIpsecVpnManagedPeerType(in);
       }

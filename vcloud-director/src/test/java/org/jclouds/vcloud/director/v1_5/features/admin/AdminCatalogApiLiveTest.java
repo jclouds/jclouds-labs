@@ -44,9 +44,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
-/**
- * Tests live behavior of {@link AdminCatalogApi}.
- */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "CatalogApiLiveTest")
 public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -77,7 +74,7 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    protected void tidyUp() {
       if (catalog != null) {
          try {
-            catalogApi.remove(catalog.getId());
+            catalogApi.remove(catalog.getHref());
          } catch (Exception e) {
             logger.warn(e, "Error deleting admin catalog '%s'", catalog.getName());
          }
@@ -88,7 +85,7 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testAddCatalog() {
       AdminCatalog newCatalog = AdminCatalog.builder().name(name("Test Catalog "))
                .description("created by testAddCatalog()").build();
-      catalog = catalogApi.addCatalogToOrg(newCatalog, org.getId());
+      catalog = catalogApi.addCatalogToOrg(newCatalog, org.getHref());
 
       Checks.checkAdminCatalog(catalog);
 
@@ -97,21 +94,21 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "GET /admin/catalog/{id}", dependsOnMethods = { "testAddCatalog" })
    public void testGetCatalog() {
-      catalog = catalogApi.get(catalog.getId());
+      catalog = catalogApi.get(catalog.getHref());
 
       Checks.checkAdminCatalog(catalog);
    }
 
    @Test(description = "GET /admin/catalog/{id}/owner", dependsOnMethods = { "testGetCatalog" })
    public void testGetCatalogOwner() {
-      owner = catalogApi.getOwner(catalog.getId());
+      owner = catalogApi.getOwner(catalog.getHref());
       Checks.checkOwner(owner);
    }
 
    @Test(description = "PUT /admin/catalog/{id}/owner", dependsOnMethods = { "testGetCatalog" })
    public void editCatalogOwner() {
       User newOwnerUser = randomTestUser("testEditCatalogOwner");
-      newOwnerUser = adminContext.getApi().getUserApi().addUserToOrg(newOwnerUser, org.getId());
+      newOwnerUser = adminContext.getApi().getUserApi().addUserToOrg(newOwnerUser, org.getHref());
       assertNotNull(newOwnerUser, "failed to add temp user to test editCatalogOwner");
 
       Owner oldOwner = owner;
@@ -119,16 +116,16 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                .user(Reference.builder().fromEntity(newOwnerUser).build()).build();
 
       try {
-         catalogApi.setOwner(catalog.getId(), newOwner);
-         owner = catalogApi.getOwner(catalog.getId());
+         catalogApi.setOwner(catalog.getHref(), newOwner);
+         owner = catalogApi.getOwner(catalog.getHref());
          Checks.checkOwner(owner);
          assertTrue(
                   equal(owner.toBuilder().links(ImmutableSet.<Link> of()).build(),
                            newOwner.toBuilder().user(newOwner.getUser()).build()),
                   String.format(OBJ_FIELD_UPDATABLE, CATALOG, "owner"));
       } finally {
-         catalogApi.setOwner(catalog.getId(), oldOwner);
-         owner = catalogApi.getOwner(catalog.getId());
+         catalogApi.setOwner(catalog.getHref(), oldOwner);
+         owner = catalogApi.getOwner(catalog.getHref());
          adminContext.getApi().getUserApi().remove(newOwnerUser.getHref());
       }
    }
@@ -149,7 +146,7 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          // .catalogItems(newCatalogItems)
                   .build();
 
-         catalog = catalogApi.edit(catalog.getId(), catalog);
+         catalog = catalogApi.edit(catalog.getHref(), catalog);
 
          assertTrue(equal(catalog.getName(), newName), String.format(OBJ_FIELD_UPDATABLE, CATALOG, "name"));
          assertTrue(equal(catalog.getDescription(), newDescription),
@@ -165,7 +162,7 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          // .catalogItems(oldCatalogItems)
                   .build();
 
-         catalog = catalogApi.edit(catalog.getId(), catalog);
+         catalog = catalogApi.edit(catalog.getHref(), catalog);
       }
    }
 
@@ -178,8 +175,8 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
       PublishCatalogParams params = PublishCatalogParams.builder().isPublished(true).build();
 
-      catalogApi.publish(catalog.getId(), params);
-      catalog = catalogApi.get(catalog.getId());
+      catalogApi.publish(catalog.getHref(), params);
+      catalog = catalogApi.get(catalog.getHref());
 
       assertTrue(catalog.isPublished(),
                String.format(OBJ_FIELD_EQ, CATALOG, "isPublished", true, catalog.isPublished()));
@@ -188,7 +185,7 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "GET /org/{id}/catalog/{catalogId}/controlAccess", dependsOnMethods = { "testAddCatalog" })
    public void testGetControlAccessControl() {
       // Call the method being tested
-      ControlAccessParams params = catalogApi.getAccessControl(catalog.getId());
+      ControlAccessParams params = catalogApi.getAccessControl(catalog.getHref());
 
       // Check params are well formed
       checkControlAccessParams(params);
@@ -197,10 +194,10 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "POST /org/{id}/catalog/{catalogId}/action/controlAccess", dependsOnMethods = { "testAddCatalog" })
    public void testEditAccessControl() {
       // Setup params
-      ControlAccessParams params = catalogApi.getAccessControl(catalog.getId());
+      ControlAccessParams params = catalogApi.getAccessControl(catalog.getHref());
 
       // Call the method being tested
-      ControlAccessParams modified = catalogApi.editAccessControl(catalog.getId(), params);
+      ControlAccessParams modified = catalogApi.editAccessControl(catalog.getHref(), params);
 
       // Check params are well formed
       checkControlAccessParams(modified);
@@ -213,10 +210,10 @@ public class AdminCatalogApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // catalog.getCatalogItems().getCatalogItems().toString()));
       AdminCatalog removeCatalog = AdminCatalog.builder().name(name("Test Catalog "))
                .description("created by testAddCatalog()").build();
-      removeCatalog = catalogApi.addCatalogToOrg(removeCatalog, org.getId());
-      catalogApi.remove(removeCatalog.getId());
+      removeCatalog = catalogApi.addCatalogToOrg(removeCatalog, org.getHref());
+      catalogApi.remove(removeCatalog.getHref());
 
-      removeCatalog = catalogApi.get(removeCatalog.getId());
+      removeCatalog = catalogApi.get(removeCatalog.getHref());
       assertNull(removeCatalog, String.format(OBJ_DEL, CATALOG, removeCatalog != null ? removeCatalog.toString() : ""));
    }
    

@@ -27,12 +27,8 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
  * Container for query result sets.
- *
- * <pre>
- * &lt;complexType name="Container" /&gt;
- * </pre>
  */
-public class ContainerType extends Resource {
+public class Container extends Resource {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -51,7 +47,7 @@ public class ContainerType extends Resource {
       private Long total;
 
       /**
-       * @see ContainerType#getName()
+       * @see Container#getName()
        */
       public B name(String name) {
          this.name = name;
@@ -59,7 +55,7 @@ public class ContainerType extends Resource {
       }
 
       /**
-       * @see ContainerType#getPage()
+       * @see Container#getPage()
        */
       public B page(Integer page) {
          this.page = page;
@@ -67,7 +63,7 @@ public class ContainerType extends Resource {
       }
 
       /**
-       * @see ContainerType#getPageSize()
+       * @see Container#getPageSize()
        */
       public B pageSize(Integer pageSize) {
          this.pageSize = pageSize;
@@ -75,7 +71,7 @@ public class ContainerType extends Resource {
       }
 
       /**
-       * @see ContainerType#getTotal()
+       * @see Container#getTotal()
        */
       public B total(Long total) {
          this.total = total;
@@ -83,11 +79,11 @@ public class ContainerType extends Resource {
       }
 
       @Override
-      public ContainerType build() {
-         return new ContainerType(this);
+      public Container build() {
+         return new Container(this);
       }
 
-      public B fromContainerType(ContainerType in) {
+      public B fromContainerType(Container in) {
          return fromResource(in).name(in.getName()).page(in.getPage()).pageSize(in.getPageSize()).total(in.getTotal());
       }
    }
@@ -104,7 +100,7 @@ public class ContainerType extends Resource {
    @XmlAttribute
    private Long total;
 
-   protected ContainerType(Builder<?> builder) {
+   protected Container(Builder<?> builder) {
       super(builder);
       this.name = builder.name;
       this.page = builder.page;
@@ -112,7 +108,7 @@ public class ContainerType extends Resource {
       this.total = builder.total;
    }
 
-   protected ContainerType() {
+   protected Container() {
       // for JAXB
    }
 
@@ -150,7 +146,7 @@ public class ContainerType extends Resource {
          return true;
       if (o == null || getClass() != o.getClass())
          return false;
-      ContainerType that = ContainerType.class.cast(o);
+      Container that = Container.class.cast(o);
       return super.equals(that) &&
             equal(this.name, that.name) && equal(this.page, that.page) &&
             equal(this.pageSize, that.pageSize) && equal(this.total, that.total);

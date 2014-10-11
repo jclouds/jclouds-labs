@@ -38,9 +38,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * The virtual hardware required by a virtual machine is specified in VirtualHardwareSection.
- */
 @XmlRootElement(name = "VirtualHardwareSection", namespace = OVF_NS)
 @XmlType(name = "VirtualHardwareSection_Type")
 @XmlSeeAlso({ org.jclouds.dmtf.ovf.VirtualHardwareSection.class })

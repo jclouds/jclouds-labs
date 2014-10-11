@@ -33,13 +33,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
-/**
- * Base type for query result Records. Subtypes define more specific elements.
- *
- * <pre>
- * &lt;complexType name="QueryResultRecordType" /&gt;
- * </pre>
- */
 @XmlSeeAlso({
       QueryResultVAppTemplateRecord.class,
       QueryResultVAppRecord.class,
@@ -54,7 +47,7 @@ import com.google.common.collect.Sets;
       QueryResultStrandedUserRecord.class,
       QueryResultMediaRecord.class}
 )
-public class QueryResultRecordType {
+public class QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -80,7 +73,7 @@ public class QueryResultRecordType {
       }
 
       /**
-       * @see QueryResultRecordType#getHref()
+       * @see QueryResultRecord#getHref()
        */
       public B href(URI href) {
          this.href = href;
@@ -88,7 +81,7 @@ public class QueryResultRecordType {
       }
 
       /**
-       * @see QueryResultRecordType#getId()
+       * @see QueryResultRecord#getId()
        */
       public B id(String id) {
          this.id = id;
@@ -96,7 +89,7 @@ public class QueryResultRecordType {
       }
 
       /**
-       * @see QueryResultRecordType#getType()
+       * @see QueryResultRecord#getType()
        */
       public B type(String type) {
          this.type = type;
@@ -104,7 +97,7 @@ public class QueryResultRecordType {
       }
 
       /**
-       * @see QueryResultRecordType#getLinks()
+       * @see QueryResultRecord#getLinks()
        */
       public B links(Set<Link> links) {
          this.links = Sets.newLinkedHashSet(checkNotNull(links, "links"));
@@ -112,18 +105,18 @@ public class QueryResultRecordType {
       }
 
       /**
-       * @see QueryResultRecordType#getLinks()
+       * @see QueryResultRecord#getLinks()
        */
       public B link(Link link) {
          this.links.add(checkNotNull(link, "link"));
          return self();
       }
 
-      public QueryResultRecordType build() {
-         return new QueryResultRecordType(this);
+      public QueryResultRecord build() {
+         return new QueryResultRecord(this);
       }
 
-      public B fromQueryResultRecordType(QueryResultRecordType in) {
+      public B fromQueryResultRecordType(QueryResultRecord in) {
          return href(in.getHref()).id(in.getId()).type(in.getType());
       }
    }
@@ -137,25 +130,25 @@ public class QueryResultRecordType {
    @XmlAttribute
    private String type;
 
-   protected QueryResultRecordType(Builder<?> builder) {
+   protected QueryResultRecord(Builder<?> builder) {
       this.links = builder.links;
       this.href = builder.href;
       this.id = builder.id;
       this.type = builder.type;
    }
 
-   public QueryResultRecordType(Set<Link> links, URI href, String id, String type) {
+   public QueryResultRecord(Set<Link> links, URI href, String id, String type) {
       this.links = links;
       this.href = href;
       this.id = id;
       this.type = type;
    }
 
-   public QueryResultRecordType(URI href) {
+   public QueryResultRecord(URI href) {
       this.href = href;
    }
 
-   protected QueryResultRecordType() {
+   protected QueryResultRecord() {
       // For JAXB
    }
 
@@ -203,7 +196,7 @@ public class QueryResultRecordType {
          return true;
       if (o == null || getClass() != o.getClass())
          return false;
-      QueryResultRecordType that = QueryResultRecordType.class.cast(o);
+      QueryResultRecord that = QueryResultRecord.class.cast(o);
       return equal(this.href, that.href) && equal(this.id, that.id) &&
             equal(this.type, that.type) && equal(this.links, that.links);
    }

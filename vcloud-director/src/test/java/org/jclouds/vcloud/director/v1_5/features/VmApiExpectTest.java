@@ -20,7 +20,6 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import com.google.common.net.HttpHeaders;
 import org.jclouds.dmtf.ovf.NetworkSection;
 import org.jclouds.dmtf.ovf.StartupSection;
 import org.jclouds.http.HttpRequest;
@@ -58,10 +57,8 @@ import org.testng.internal.annotations.Sets;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimaps;
+import com.google.common.net.HttpHeaders;
 
-/**
- * Allows us to test the {@link VmApi} via its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "VmApiExpectTest")
 public class VmApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
@@ -286,19 +283,6 @@ public class VmApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    @Test(enabled = true)
    public void testReboot() {
 
-      HttpRequest vmEntityRequest = HttpRequest.builder()
-            .method("GET")
-            .endpoint(URI.create(endpoint + "/entity/" + vmUrn))
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-
-      HttpResponse vmEntityResponse = HttpResponse.builder()
-            .payload(payloadFromResourceWithContentType("/vm/vmEntity.xml", VCloudDirectorMediaType.ENTITY))
-            .statusCode(200)
-            .build();
-
       URI vmRebootUri = URI.create(endpoint + "/vApp/" + vmId + "/power/action/reboot");
       HttpRequest vmRebootRequest = HttpRequest.builder()
             .method("POST")
@@ -315,11 +299,10 @@ public class VmApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
       VCloudDirectorApi vCloudDirectorApi = requestsSendResponses(
             loginRequest, sessionResponse,
-            vmEntityRequest, vmEntityResponse,
             vmRebootRequest, vmRebootResponse
       );
 
-      Task actual = vCloudDirectorApi.getVmApi().reboot(vmUrn);
+      Task actual = vCloudDirectorApi.getVmApi().reboot(URI.create(endpoint + "/vApp/" + vmId));
 
       Task expected = rebootTask();
 

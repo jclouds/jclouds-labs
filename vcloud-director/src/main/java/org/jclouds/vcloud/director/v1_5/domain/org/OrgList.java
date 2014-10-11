@@ -31,9 +31,6 @@ import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * A list of organizations.
- */
 @XmlRootElement(name = "OrgList")
 public class OrgList extends ForwardingSet<Reference> {
 

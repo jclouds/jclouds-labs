@@ -35,12 +35,7 @@ import com.google.common.base.Objects;
 /**
  * A reference to a resource.
  * 
- * Contains an href attribute and optional name and type attributes.
- * <p>
- * 
- * <pre>
- * &lt;xs:complexType name="ReferenceType"&gt;
- * </pre>
+ * <p/> Contains an href attribute and optional name and type attributes.
  */
 @XmlSeeAlso({ VAppReference.class, CatalogReference.class, RoleReference.class })
 @XmlRootElement(name = "Reference")

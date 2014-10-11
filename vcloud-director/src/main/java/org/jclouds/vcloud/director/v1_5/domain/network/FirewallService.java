@@ -31,36 +31,13 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a network firewall service.
- * <p/>
- * <p/>
- * <p>Java class for FirewallService complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="FirewallService">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}NetworkServiceType">
- *       &lt;sequence>
- *         &lt;element name="DefaultAction" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="LogDefaultAction" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="FirewallRule" type="{http://www.vmware.com/vcloud/v1.5}FirewallRuleType" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "FirewallService")
 @XmlType(propOrder = {
       "defaultAction",
       "logDefaultAction",
       "firewallRules"
 })
-public class FirewallService extends NetworkServiceType<FirewallService> {
+public class FirewallService extends NetworkService<FirewallService> {
 
    public static Builder builder() {
       return new Builder();
@@ -71,7 +48,7 @@ public class FirewallService extends NetworkServiceType<FirewallService> {
       return new Builder().fromFirewallService(this);
    }
 
-   public static class Builder extends NetworkServiceType.Builder<FirewallService> {
+   public static class Builder extends NetworkService.Builder<FirewallService> {
       private String defaultAction;
       private Boolean logDefaultAction;
       private Set<FirewallRule> firewallRules = Sets.newLinkedHashSet();
@@ -107,7 +84,7 @@ public class FirewallService extends NetworkServiceType<FirewallService> {
       }
 
       @Override
-      public Builder fromNetworkServiceType(NetworkServiceType<FirewallService> in) {
+      public Builder fromNetworkServiceType(NetworkService<FirewallService> in) {
          return Builder.class.cast(super.fromNetworkServiceType(in));
       }
 

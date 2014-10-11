@@ -24,33 +24,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Represents a NAT rule.
- * <p/>
- * <p/>
- * <p>Java class for NatRule complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="NatRule">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="Description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;choice>
- *           &lt;element name="OneToOneBasicRule" type="{http://www.vmware.com/vcloud/v1.5}NatOneToOneBasicRuleType"/>
- *           &lt;element name="OneToOneVmRule" type="{http://www.vmware.com/vcloud/v1.5}NatOneToOneVmRuleType"/>
- *           &lt;element name="PortForwardingRule" type="{http://www.vmware.com/vcloud/v1.5}NatPortForwardingRuleType"/>
- *           &lt;element name="VmRule" type="{http://www.vmware.com/vcloud/v1.5}NatVmRuleType"/>
- *         &lt;/choice>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlType(name = "NatRule", propOrder = {
       "description",
       "oneToOneBasicRule",

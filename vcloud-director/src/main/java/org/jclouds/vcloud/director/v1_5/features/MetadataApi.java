@@ -32,6 +32,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.JAXBResponseParser;
@@ -46,36 +47,26 @@ import org.jclouds.vcloud.director.v1_5.functions.RegexValueParser;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface MetadataApi {
-   /**
-    * Retrieves an list of metadata
-    * 
-    * @return a list of metadata
-    */
+
+   /** Returns the metadata or null if the associated resource was not found. */
    @GET
    @Path("/metadata")
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Metadata get();
 
-   /**
-    * Retrieves a metadata value
-    * 
-    * @return the metadata value, or null if not found
-    */
+   /** Returns the metadata value or null if the {@code key} was not found. */
    @GET
    @Path("/metadata/{key}")
    @Consumes
    @ResponseParser(RegexValueParser.class)
    @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    String get(@PathParam("key") String key);
 
-   /**
-    * Merges the metadata for a media with the information provided.
-    * 
-    * @return a task. This operation is asynchronous and the user should monitor the returned task status in order to
-    *         check when it is completed.
-    */
+   /** Merges the metadata for a media with the information provided. */
    @POST
    @Path("/metadata")
    @Consumes(TASK)
@@ -83,13 +74,7 @@ public interface MetadataApi {
    @JAXBResponseParser
    Task putAll(@BinderParam(BindMapAsMetadata.class) Map<String, String> metadata);
 
-   /**
-    * Sets the metadata for the particular key for the media to the value provided. Note: this will replace any existing
-    * metadata information
-    * 
-    * @return a task. This operation is asynchronous and the user should monitor the returned task status in order to
-    *         check when it is completed.
-    */
+   /** Replace the metadata value for the specified {@code key}. */
    @PUT
    @Path("/metadata/{key}")
    @Consumes(TASK)
@@ -97,12 +82,6 @@ public interface MetadataApi {
    @JAXBResponseParser
    Task put(@PathParam("key") String key, @BinderParam(BindStringAsMetadataValue.class) String metadataValue);
 
-   /**
-    * Deletes a metadata entry.
-    * 
-    * @return a task. This operation is asynchronous and the user should monitor the returned task status in order to
-    *         check when it is completed.
-    */
    @DELETE
    @Path("/metadata/{key}")
    @Consumes(TASK)

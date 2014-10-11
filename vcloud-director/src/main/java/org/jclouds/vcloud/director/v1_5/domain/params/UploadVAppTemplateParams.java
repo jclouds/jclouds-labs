@@ -25,15 +25,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Represents vApp Template upload parameters.
- *
- * <pre>
- * &lt;complexType name="UploadVAppTemplateParamsType" /&gt;
- * </pre>
- *
- * @since 0.9
- */
 @XmlRootElement(name = "UploadVAppTemplateParams")
 @XmlType(name = "UploadVAppTemplateParamsType")
 public class UploadVAppTemplateParams extends ParamsType {

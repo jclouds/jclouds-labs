@@ -30,24 +30,11 @@ import com.google.common.base.MoreObjects.ToStringHelper;
  * of the Vdc element, and adds several elements that can be
  * viewed and modified only by administrators.
  *
- * <pre>
- * &lt;complexType name="AdminVdc">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VdcType">
- *       &lt;sequence>
- *         &lt;element name="ResourceGuaranteedMemory" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *         &lt;element name="ResourceGuaranteedCpu" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *         &lt;element name="VCpuInMhz" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
- *         &lt;element name="IsThinProvision" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="NetworkPoolReference" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType" minOccurs="0"/>
- *         &lt;element name="ProviderVdcReference" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType" minOccurs="0"/>
- *         &lt;element name="UsesFastProvisioning" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
+ * <p/> The redwood admin can disable an
+ * organization vDC. This will prevent any further allocation to be used by the organization.
+ * Changing the state will not affect allocations already used. For example, if an organization
+ * vDC is disabled, an organization user cannot deploy or add a new virtual machine in the
+ * vDC (deploy uses memory and cpu allocations, and add uses storage allocation).
  */
 @XmlRootElement(name = "AdminVdc")
 @XmlType(name = "AdminVdcType", propOrder = {

@@ -46,13 +46,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a list of {@code ovf:Section} to configure for instantiating a VApp.
- *
- * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/InstantiationParamsType.html">
- *    vCloud REST API - InstantiationParamsType</a>
- * @since 0.9
- */
 @XmlRootElement(name = "InstantiationParams")
 @XmlType(name = "InstantiationParamsType")
 public class InstantiationParams {

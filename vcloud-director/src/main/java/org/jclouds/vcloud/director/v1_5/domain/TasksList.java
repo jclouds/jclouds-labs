@@ -33,9 +33,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Task List
- */
 @XmlRootElement(name = "TasksList")
 public class TasksList extends Resource implements Set<Task> {
    public static Builder<?> builder() {

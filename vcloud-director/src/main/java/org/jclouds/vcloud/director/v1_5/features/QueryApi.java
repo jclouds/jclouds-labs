@@ -34,7 +34,7 @@ public interface QueryApi {
    // TODO Add a typed object for filter syntax, or at least a fluent builder
 
    /**
-    * Retrieves a list of entities by using REST API general QueryHandler.
+    * Retrieves a list of entities.
     *
     * If filter is provided it will be applied to the corresponding result set.
     * Format determines the elements representation - references or records.
@@ -64,11 +64,7 @@ public interface QueryApi {
          @QueryParam("format") String format, @QueryParam("type") String type, @QueryParam("filter") String filter);
 
    /**
-    * Retrieves a list of {@link Catalog}s by using REST API general QueryHandler.
-    *
-    * <pre>
-    * GET /catalogs/query
-    * </pre>
+    * Retrieves a list of {@link Catalog}s.
     *
     * @see #queryAll(String)
     */
@@ -79,11 +75,7 @@ public interface QueryApi {
    QueryResultRecords catalogsQueryAll();
 
    /**
-    * Retrieves a list of {@link CatalogReference}s by using REST API general QueryHandler.
-    *
-    * <pre>
-    * GET /catalogs/query?format=references
-    * </pre>
+    * Retrieves a list of {@link CatalogReference}s.
     *
     * @see #queryAll(String)
     */
@@ -95,11 +87,7 @@ public interface QueryApi {
    CatalogReferences catalogReferencesQueryAll();
 
    /**
-    * Retrieves a list of {@link VAppTemplate}s by using REST API general QueryHandler.
-    *
-    * <pre>
-    * GET /vAppTemplates/query
-    * </pre>
+    * Retrieves a list of {@link VAppTemplate}s.
     *
     * @see #queryAll(String)
     */
@@ -116,11 +104,7 @@ public interface QueryApi {
    QueryResultRecords vAppTemplatesQuery(@QueryParam("filter") String filter);
 
    /**
-    * Retrieves a list of {@link VApp}s by using REST API general QueryHandler.
-    *
-    * <pre>
-    * GET /vApps/query
-    * </pre>
+    * Retrieves a list of {@link VApp}s.
     *
     * @see #queryAll(String)
     */
@@ -137,11 +121,7 @@ public interface QueryApi {
    QueryResultRecords vAppsQuery(@QueryParam("filter") String filter);
 
    /**
-    * Retrieves a list of {@link Vm}s by using REST API general QueryHandler.
-    *
-    * <pre>
-    * GET /vms/query
-    * </pre>
+    * Retrieves a list of {@link Vm}s.
     *
     * @see #queryAll(String)
     */
@@ -158,11 +138,7 @@ public interface QueryApi {
    QueryResultRecords vmsQuery(@QueryParam("filter") String filter);
 
    /**
-    * Retrieves a list of {@link Media}s by using REST API general QueryHandler.
-    *
-    * <pre>
-    * GET /mediaList/query
-    * </pre>
+    * Retrieves a list of {@link Media}s.
     *
     * @see #queryAll(String)
     */

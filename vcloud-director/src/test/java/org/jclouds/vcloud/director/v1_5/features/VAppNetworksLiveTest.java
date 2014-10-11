@@ -20,6 +20,7 @@ import static org.jclouds.vcloud.director.v1_5.VCloudDirectorLiveTestConstants.T
 import static org.jclouds.vcloud.director.v1_5.domain.Checks.checkNetworkConfigSection;
 import static org.testng.Assert.assertTrue;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +42,7 @@ import org.jclouds.vcloud.director.v1_5.domain.network.NetworkConfiguration;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkConnection;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkConnection.IpAddressAllocationMode;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkFeatures;
-import org.jclouds.vcloud.director.v1_5.domain.network.NetworkServiceType;
+import org.jclouds.vcloud.director.v1_5.domain.network.NetworkService;
 import org.jclouds.vcloud.director.v1_5.domain.network.VAppNetworkConfiguration;
 import org.jclouds.vcloud.director.v1_5.domain.section.NetworkConfigSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.NetworkConnectionSection;
@@ -57,8 +58,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * Tests the request/response behavior of {@link VAppTemplateApi}
- * 
  * NOTE The environment MUST have at least one template configured
  */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VAppNetworksLiveTest")
@@ -69,12 +68,13 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
    private String key;
    private Map<String, NetworkConfiguration> securityGroupToNetworkConfig;
    private Network network;
+   private URI vAppHref;
 
    @AfterClass(alwaysRun = true, dependsOnMethods = { "cleanUpEnvironment" })
    protected void tidyUp() {
       if (key != null) {
          try {
-	         Task remove = context.getApi().getMetadataApi(vAppTemplateUrn).remove(key);
+	         Task remove = context.getApi().getMetadataApi(context.resolveIdToHref(vAppTemplateId)).remove(key);
 	         taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting metadata entry '%s'", key);
@@ -86,6 +86,7 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
    void setUp() {
       network = lazyGetNetwork();
       securityGroupToNetworkConfig = addSecurityGroupToNetworkConfiguration(Reference.builder().fromEntity(network).build());
+      vAppHref = context.resolveIdToHref(vAppId);
    }
    
    @AfterMethod
@@ -96,10 +97,10 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
    @Test(description = "Create a vApp Network based on an org network with `default` firewall rules applied")
    public void testAddVAppNetworkWithDefaultSecurityGroup() {
       ImmutableList<String> securityGroups = ImmutableList.of(DEFAULT_SECURITY_GROUP);
-      addVAppNetworkWithSecurityGroupOnVApp(securityGroups, vAppUrn);
+      addVAppNetworkWithSecurityGroupOnVApp(securityGroups, vAppHref);
 
       // Retrieve the modified section
-      NetworkConfigSection modified = vAppApi.getNetworkConfigSection(vAppUrn);
+      NetworkConfigSection modified = vAppApi.getNetworkConfigSection(vAppHref);
 
       // Check the retrieved object is well formed
       checkNetworkConfigSection(modified);
@@ -115,10 +116,10 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
    @Test(description = "Create a vApp Network based on an org network with `http` firewall rules applied")
    public void testAddVAppNetworkWithHttpSecurityGroup() {
       ImmutableList<String> securityGroups = ImmutableList.of(HTTP_SECURITY_GROUP);
-      addVAppNetworkWithSecurityGroupOnVApp(securityGroups, vAppUrn);
+      addVAppNetworkWithSecurityGroupOnVApp(securityGroups, vAppHref);
 
       // Retrieve the modified section
-      NetworkConfigSection modified = vAppApi.getNetworkConfigSection(vAppUrn);
+      NetworkConfigSection modified = vAppApi.getNetworkConfigSection(vAppHref);
 
       // Check the retrieved object is well formed
       checkNetworkConfigSection(modified);
@@ -134,10 +135,10 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
    @Test(description = "Create a vApp Network based on an org network with both `defautl` and `http` firewall rules applied")
    public void testAddVAppNetworkWithDefaultAndHttpSecurityGroup() {
       ImmutableList<String> securityGroups = ImmutableList.of(DEFAULT_SECURITY_GROUP, HTTP_SECURITY_GROUP);
-      addVAppNetworkWithSecurityGroupOnVApp(securityGroups, vAppUrn);
+      addVAppNetworkWithSecurityGroupOnVApp(securityGroups, vAppHref);
 
       // Retrieve the modified section
-      NetworkConfigSection modified = vAppApi.getNetworkConfigSection(vAppUrn);
+      NetworkConfigSection modified = vAppApi.getNetworkConfigSection(vAppHref);
 
       // Check the retrieved object is well formed
       checkNetworkConfigSection(modified);
@@ -150,11 +151,11 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
        */
    }
    
-   private void addVAppNetworkWithSecurityGroupOnVApp(ImmutableList<String> securityGroups, String vAppUrn) {
+   private void addVAppNetworkWithSecurityGroupOnVApp(ImmutableList<String> securityGroups, URI vAppHref) {
       String newVAppNetworkName = generateVAppNetworkName(network.getName(), securityGroups);
       // Create a vAppNetwork with firewall rules
       NetworkConfigSection newSection = generateNetworkConfigSection(securityGroups, newVAppNetworkName);
-      Task editNetworkConfigSection = vAppApi.editNetworkConfigSection(vAppUrn, newSection);
+      Task editNetworkConfigSection = vAppApi.editNetworkConfigSection(vAppHref, newSection);
       assertTrue(retryTaskSuccess.apply(editNetworkConfigSection), String.format(TASK_COMPLETE_TIMELY, "editNetworkConfigSection"));
       attachVmToVAppNetwork(vm, newVAppNetworkName);
    }
@@ -207,15 +208,15 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
 
    private Set<FirewallRule> retrieveAllFirewallRules(NetworkFeatures networkFeatures) {
       Set<FirewallRule> firewallRules = Sets.newLinkedHashSet();
-      for (NetworkServiceType<?> networkServiceType : networkFeatures.getNetworkServices()) {
-         if (networkServiceType instanceof FirewallService) {
-            firewallRules.addAll(((FirewallService) networkServiceType).getFirewallRules());
+      for (NetworkService<?> networkService : networkFeatures.getNetworkServices()) {
+         if (networkService instanceof FirewallService) {
+            firewallRules.addAll(((FirewallService) networkService).getFirewallRules());
          }
       }
       return firewallRules;
    }
 
-   private NetworkFeatures toNetworkFeatures(Set<? extends NetworkServiceType<?>> networkServices) {
+   private NetworkFeatures toNetworkFeatures(Set<? extends NetworkService<?>> networkServices) {
       NetworkFeatures networkFeatures = NetworkFeatures.builder()
                .services(networkServices)
                .build();
@@ -305,7 +306,7 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
 
    private void disconnectVmFromVAppNetwork(Vm vm) {
       
-      Set<NetworkConnection> networkConnections = vmApi.getNetworkConnectionSection(vm.getId())
+      Set<NetworkConnection> networkConnections = vmApi.getNetworkConnectionSection(vm.getHref())
                .getNetworkConnections();
 
       NetworkConnectionSection section = NetworkConnectionSection.builder()
@@ -322,7 +323,7 @@ public class VAppNetworksLiveTest extends AbstractVAppApiLiveTest {
                            .build())
                   .build();
       } 
-      Task cleanUpNetworks = vmApi.editNetworkConnectionSection(vm.getId(), section);
+      Task cleanUpNetworks = vmApi.editNetworkConnectionSection(vm.getHref(), section);
       assertTaskSucceedsLong(cleanUpNetworks);
    }
 

@@ -30,9 +30,6 @@ import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Tests live behavior of {@link AdminGroupApi}.
- */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "GroupApiLiveTest")
 public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    
@@ -57,7 +54,7 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       Reference orgRef = null;
       
       // TODO: requisite LDAP settings
-//      oldLdapSettings = adminContext.getApi().getAdminOrgApi().getLdapSettings(orgRef.getId());
+//      oldLdapSettings = adminContext.getApi().getAdminOrgApi().getLdapSettings(orgRef.getHref());
 //      OrgLdapSettings newLdapSettings = oldLdapSettings.toBuilder()
 //         .ldapMode(OrgLdapSettings.LdapMode.SYSTEM)  
 //         .build();
@@ -75,7 +72,7 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    
    @Test(description = "GET /admin/group/{id}", dependsOnMethods = { "testAddGroup" })
    public void testGetGroup() {
-      group = groupApi.get(group.getId());
+      group = groupApi.get(group.getHref());
       
       Checks.checkGroup(group);
    }
@@ -94,7 +91,7 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                .description(newDescription)
                .build();
          
-         group = groupApi.edit(group.getId(), group);
+         group = groupApi.edit(group.getHref(), group);
          
          assertTrue(equal(group.getName(), newName), String.format(OBJ_FIELD_UPDATABLE, GROUP, "name"));
          assertTrue(equal(group.getDescription(), newDescription),
@@ -109,13 +106,13 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                .description(oldDescription)
                .build();
          
-         group = groupApi.edit(group.getId(), group);
+         group = groupApi.edit(group.getHref(), group);
       }
    }
    
    @Test(description = "DELETE /admin/group/{id}", dependsOnMethods = { "testEditGroup" } )
    public void testRemoveGroup() {
-      groupApi.remove(group.getId());
+      groupApi.remove(group.getHref());
       
       // TODO stronger assertion of error expected
 //      Error expected = Error.builder()
@@ -125,7 +122,7 @@ public class GroupApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 //            .build();
       
       try {
-         group = groupApi.get(group.getId());
+         group = groupApi.get(group.getHref());
          fail("Should give HTTP 403 error");
       } catch (VCloudDirectorException vde) {
          // success

@@ -34,10 +34,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Container for references to {@link VAppTemplate} and {@link Media} objects.
- *
- * <pre>
- * &lt;complexType name="CatalogType" /&gt;
- * </pre>
  */
 @XmlSeeAlso({ AdminCatalog.class })
 @XmlRootElement(name = "Catalog")

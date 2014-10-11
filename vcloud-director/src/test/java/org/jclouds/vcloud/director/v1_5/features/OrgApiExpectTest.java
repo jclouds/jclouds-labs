@@ -16,8 +16,6 @@
  */
 package org.jclouds.vcloud.director.v1_5.features;
 
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_ORG;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ENTITY;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA_VALUE;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ORG;
@@ -41,9 +39,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.HttpHeaders;
 
-/**
- * Allows us to test the {@link OrgApi} via its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "OrgApiExpectTest")
 public class OrgApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
@@ -77,7 +72,6 @@ public class OrgApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    }
    
    static String org = "6f312e42-cd2b-488d-a2bb-97519cd57ed0";
-   static String orgUrn = "urn:vcloud:org:" + org;
    static URI orgHref = URI.create(endpoint + "/org/" + org);
    
    HttpRequest get = HttpRequest.builder()
@@ -98,35 +92,6 @@ public class OrgApiExpectTest extends VCloudDirectorAdminApiExpectTest {
       VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, get, getResponse);
       assertEquals(api.getOrgApi().get(orgHref), org());
    }
-   
-   HttpRequest resolveOrg = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + orgUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String orgEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", orgUrn)
-                                                             .a("id", orgUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + orgUrn)
-                                  .e("Link").a("rel", "alternate").a("type", ORG).a("href", orgHref.toString()).up()
-                                  // TODO: remove this when VCloudDirectorApiExpectTest no longer inherits from VCloudDirectorAdminApiExpectTest
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_ORG).a("href", orgHref.toString()).up());
-   
-   HttpResponse resolveOrgResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(orgEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testGetOrgUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveOrg, resolveOrgResponse, get, getResponse);
-      assertEquals(api.getOrgApi().get(orgUrn), org());
-   }
-   
 
    HttpRequest getMetadata = HttpRequest.builder()
             .method("GET")

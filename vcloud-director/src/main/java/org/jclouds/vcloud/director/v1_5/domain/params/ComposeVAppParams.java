@@ -26,17 +26,33 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
- * Represents vApp composition parameters.
- * 
- * <pre>
- * &lt;complexType name="ComposeVAppParams" /&gt;
- * </pre>
+ * The vCloud API supports composing a vApp from any combination of vApp templates, vApps,
+ * or virtual machines. When you compose a vApp, all children of each composition source
+ * become peers in the Children collection of the composed vApp. To compose a vApp, a api
+ * makes a compose vApp request whose body is a ComposeVAppParams element, includes the
+ * following information:
+ * <ul>
+ * <li>An InstantiationParams element that applies to the composed vApp itself and any vApp templates referenced in
+ *    Item elements.
+ * <li>A SourcedItem element for each virtual machine, vApp, or vAppTemplate to include in the composition. Each
+ *    SourcedItem can contain the following elements:
+ *    <ul>
+ *    <li>A required Source element whose href attribute value is a reference to a vApp template, vApp, or VM to include
+ *       in the composition. If the Source element references a VM, the Item must also include an InstantiationParams
+ *       element specific to that VM.
+ *    <li>An optional NetworkAssignment element that specifies how the network connections of child VM elements are
+ *       mapped to vApp networks in the parent.
+ *    </ul>
+ * </ul>
+ * If any of the composition items is subject to a EULA, the ComposeVAppParams element must include an
+ * AllEULAsAccepted element that has a value of true, indicating that you accept the EULA. Otherwise, composition
+ * fails.
  */
 @XmlRootElement(name = "ComposeVAppParams")
 @XmlType(name = "ComposeVAppParamsType")

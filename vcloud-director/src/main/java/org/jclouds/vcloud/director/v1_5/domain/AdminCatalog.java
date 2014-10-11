@@ -23,16 +23,6 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Admin representation of the container for meta data (key-value pair) associated to different
  * entities in the system.
- *             
- * <pre>
- * &lt;complexType name="AdminCatalog">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}CatalogType">
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlRootElement(name = "AdminCatalog")
 @XmlType(name = "AdminCatalogType")

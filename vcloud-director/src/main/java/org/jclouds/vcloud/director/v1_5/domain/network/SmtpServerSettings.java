@@ -29,22 +29,6 @@ import com.google.common.base.Objects;
  * Specifies connection details for the organization s SMTP server.
  * If IsDefaultSmtpServer (in OrgEmailSettings) is false, the SmtpServerSettings
  * element is taken into account.
- *            
- * <pre>
- * &lt;complexType name="SmtpServerSettings">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="IsUseAuthentication" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="Host" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Username" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "SmtpServerSettings", propOrder = {
     "useAuthentication",

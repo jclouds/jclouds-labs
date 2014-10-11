@@ -40,30 +40,16 @@ import org.jclouds.vcloud.director.v1_5.domain.network.Network;
 import org.jclouds.vcloud.director.v1_5.domain.org.OrgNetwork;
 import org.jclouds.vcloud.director.v1_5.features.NetworkApi;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface AdminNetworkApi extends NetworkApi {
 
    /**
-    * Gets admin representation of network. This operation could return admin representation of
+    * Gets admin representation of the network or null if not found.
+    *
+    * <p />This operation could return admin representation of
     * organization network or external network. vApp networks do not have admin representation.
-    * 
-    * <pre>
-    * GET /admin/network/{id}
-    * </pre>
-    * 
-    * @param networkUrn
-    *           the reference for the network
-    * @return the network
     */
-   @Override
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
-   Network get(@EndpointParam(parser = URNToAdminHref.class) String networkUrn);
-
    @Override
    @GET
    @Consumes
@@ -71,54 +57,17 @@ public interface AdminNetworkApi extends NetworkApi {
    @Fallback(NullOnNotFoundOr404.class)
    Network get(@EndpointParam URI networkAdminHref);
 
-   /**
-    * Modifies an org network
-    * 
-    * <pre>
-    * PUT /admin/network/{id}
-    * </pre>
-    * 
-    * @param networkUrn
-    *           the reference for the network
-    * @param network
-    *           the edited network
-    * @return a task. This operation is asynchronous and the user should monitor the returned task
-    *         status in order to check when it is completed.
-    */
    @PUT
    @Consumes(TASK)
    @Produces(ADMIN_ORG_NETWORK)
    @JAXBResponseParser
-   Task edit(@EndpointParam(parser = URNToAdminHref.class) String networkUrn,
-         @BinderParam(BindToXMLPayload.class) OrgNetwork network);
-
-   @PUT
-   @Consumes(TASK)
-   @Produces(ADMIN_ORG_NETWORK)
-   @JAXBResponseParser
-   Task edit(@EndpointParam URI networkAdminHref,
-         @BinderParam(BindToXMLPayload.class) OrgNetwork network);
+   Task edit(@EndpointParam URI networkAdminHref, @BinderParam(BindToXMLPayload.class) OrgNetwork network);
 
    /**
     * Reset(undeploy & redeploy) networking services on a logical network. The reset operation can
     * be performed on: - external networks - organization networks - vApp networks The reset
     * operation can be performed only on deployed networks.
-    * 
-    * <pre>
-    * POST /admin/network/{id}/action/reset
-    * </pre>
-    * 
-    * @param networkUrn
-    *           the reference for the network
-    * @return a task. This operation is asynchronous and the user should monitor the returned task
-    *         status in order to check when it is completed.
     */
-   @POST
-   @Path("/action/reset")
-   @Consumes
-   @JAXBResponseParser
-   Task reset(@EndpointParam(parser = URNToAdminHref.class) String networkUrn);
-
    @POST
    @Path("/action/reset")
    @Consumes

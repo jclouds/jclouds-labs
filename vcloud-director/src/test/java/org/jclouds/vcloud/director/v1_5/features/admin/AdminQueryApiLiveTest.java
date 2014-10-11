@@ -23,7 +23,7 @@ import org.jclouds.vcloud.director.v1_5.domain.Reference;
 import org.jclouds.vcloud.director.v1_5.domain.RoleReferences;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultAdminUserRecord;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultAdminVdcRecord;
-import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecordType;
+import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecord;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecords;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRightRecord;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRoleRecord;
@@ -32,10 +32,6 @@ import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
-* Tests live behavior of {@link AdminQueryApi}.
-* 
-*/
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "AdminQueryApiLiveTest")
 public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -56,7 +52,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.groupsQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
       }
    }
@@ -66,7 +62,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.orgsQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
       }
    }
@@ -76,7 +72,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.rightsQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
          assertEquals(record.getClass(), QueryResultRightRecord.class, "incorrect record type admin query");
       }
@@ -87,7 +83,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.rolesQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
          assertEquals(record.getClass(), QueryResultRoleRecord.class, "incorrect record type admin query");
       }
@@ -104,7 +100,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.strandedUsersQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
          assertEquals(record.getClass(), QueryResultStrandedUserRecord.class, "incorrect record type admin query");
       }
@@ -115,7 +111,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.usersQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
          assertEquals(record.getClass(), QueryResultAdminUserRecord.class, "incorrect record type admin query");
       }
@@ -126,7 +122,7 @@ public class AdminQueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // TODO Ensure there will be at least one record, for asserting result
       QueryResultRecords resultRecords = queryApi.vdcsQueryAll();
       
-      for (QueryResultRecordType record : resultRecords.getRecords()) {
+      for (QueryResultRecord record : resultRecords.getRecords()) {
          Checks.checkQueryResultRecord(record);
          assertEquals(record.getClass(), QueryResultAdminVdcRecord.class, "incorrect record type admin query");
       }

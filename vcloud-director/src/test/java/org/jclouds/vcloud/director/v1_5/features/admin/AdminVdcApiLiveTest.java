@@ -34,9 +34,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * Tests behavior of {@link VdcApi}
- */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "AdminVdcApiLiveTest")
 public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -55,7 +52,7 @@ public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @BeforeClass(alwaysRun = true)
    public void setupRequiredApis() {
       vdcApi = adminContext.getApi().getVdcApi();
-      metadataApi = context.getApi().getMetadataApi(vdcUrn);
+      metadataApi = context.getApi().getMetadataApi(context.resolveIdToHref(vdcId));
    }
 
    @AfterClass(alwaysRun = true)
@@ -72,7 +69,7 @@ public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "GET /admin/vdc/{id}")
    public void testGetVdc() {
-      AdminVdc vdc = vdcApi.get(vdcUrn);
+      AdminVdc vdc = vdcApi.get(context.resolveIdToAdminHref(vdcId));
       assertNotNull(vdc, String.format(OBJ_REQ_LIVE, VDC));
 
       // parent type
@@ -89,10 +86,10 @@ public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       AdminVdc vdc = AdminVdc.builder().name(newName).build();
 
       try {
-         Task task = vdcApi.edit(vdcUrn, vdc);
+         Task task = vdcApi.edit(vdc.getHref(), vdc);
          assertTaskSucceeds(task);
 
-         AdminVdc modified = vdcApi.get(vdcUrn);
+         AdminVdc modified = vdcApi.get(vdc.getHref());
          assertEquals(modified.getName(), newName);
 
          // parent type
@@ -102,7 +99,7 @@ public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       } finally {
          try {
             AdminVdc restorableVdc = AdminVdc.builder().name(origName).build();
-            Task task = vdcApi.edit(vdcUrn, restorableVdc);
+            Task task = vdcApi.edit(vdc.getHref(), restorableVdc);
             assertTaskSucceeds(task);
          } catch (Exception e) {
             if (exception != null) {
@@ -119,11 +116,11 @@ public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "DELETE /admin/vdc/{id}", enabled = false)
    public void testRemoveVdc() throws Exception {
       // TODO Need to have a VDC that we're happy to remove!
-      Task task = vdcApi.remove(vdcUrn);
+      Task task = vdcApi.remove(context.resolveIdToAdminHref(vdcId));
       assertTaskSucceeds(task);
 
       try {
-         vdcApi.get(vdcUrn);
+         vdcApi.get(context.resolveIdToAdminHref(vdcId));
       } catch (VCloudDirectorException e) {
          // success; unreachable because it has been removed
          // TODO: ^^ wrong. this should return null
@@ -137,12 +134,12 @@ public class AdminVdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       Exception exception = null;
 
       try {
-         vdcApi.disable(vdcUrn);
+         vdcApi.disable(context.resolveIdToAdminHref(vdcId));
       } catch (Exception e) {
          exception = e;
       } finally {
          try {
-            vdcApi.enable(vdcUrn);
+            vdcApi.enable(context.resolveIdToAdminHref(vdcId));
          } catch (Exception e) {
             if (exception != null) {
                logger.warn(e, "Error resetting adminVdc.name; rethrowing original test exception...");

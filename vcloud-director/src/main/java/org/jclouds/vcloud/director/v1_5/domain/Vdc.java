@@ -35,10 +35,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents a virtual data center (vDC).
- *
- * <pre>
- * &lt;complexType name="Vdc" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "Vdc")
 @XmlType(name = "VdcType")

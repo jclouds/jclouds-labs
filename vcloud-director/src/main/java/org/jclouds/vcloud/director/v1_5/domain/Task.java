@@ -33,21 +33,20 @@ import javax.xml.bind.annotation.XmlType;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 /**
  * Represents an asynchronous or long-running task in the vCloud environment.
- * <p/>
- * <pre>
- * &lt;xs:complexType name="TaskType"&gt;
- * </pre>
  *
- *  TODO: this object and the hierarchy is wrong.  it is literally a Task with a Task container.  please review class diagram
+ * <p/>When a return value, the operation is asynchronous and the user should
+ * {@link org.jclouds.vcloud.director.v1_5.features.TaskApi#get monitor the returned task status}
+ * in order to check when it is completed.
  */
+// TODO: this object and the hierarchy is wrong.  it is literally a Task with a Task container.  please review class diagram
 @XmlRootElement(name = "Task")
 public class Task extends Entity {
 

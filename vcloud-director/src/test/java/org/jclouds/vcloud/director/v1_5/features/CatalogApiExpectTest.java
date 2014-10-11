@@ -16,10 +16,8 @@
  */
 package org.jclouds.vcloud.director.v1_5.features;
 
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_CATALOG;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.CATALOG;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.CATALOG_ITEM;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ENTITY;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.METADATA_VALUE;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.TASK;
@@ -44,9 +42,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link CatalogApi} by observing its side effects.
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "CatalogApiExpectTest")
 public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
    static String catalog = "7212e451-76e1-4631-b2de-ba1dfd8080e4";
@@ -71,35 +66,7 @@ public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
       VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, get, getResponse);
       assertEquals(api.getCatalogApi().get(catalogHref), catalog());
    }
-   
-   HttpRequest resolveCatalog = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + catalogUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String catalogEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", catalogUrn)
-                                                             .a("id", catalogUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + catalogUrn)
-                                  .e("Link").a("rel", "alternate").a("type", CATALOG).a("href", catalogHref.toString()).up()
-                                  // TODO: remove this when VCloudDirectorApiExpectTest no longer inherits from VCloudDirectorAdminApiExpectTest
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_CATALOG).a("href", catalogHref.toString()).up());
-   
-   HttpResponse resolveCatalogResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(catalogEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testGetCatalogUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog, resolveCatalogResponse, get, getResponse);
-      assertEquals(api.getCatalogApi().get(catalogUrn), catalog());
-   }
-   
+
    HttpRequest add = HttpRequest.builder()
             .method("POST")
             .endpoint(catalogHref + "/catalogItems")
@@ -125,13 +92,7 @@ public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
       VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, add, addResponse);
       assertEquals(api.getCatalogApi().addItem(catalogHref, newItem), adddCatalogItem());
    }
-   
-   @Test
-   public void testAddCatalogItemUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog, resolveCatalogResponse, add, addResponse);
-      assertEquals(api.getCatalogApi().addItem(catalogUrn, newItem), adddCatalogItem());
-   }
-   
+
    HttpRequest getMetadata = HttpRequest.builder()
             .method("GET")
             .endpoint(catalogHref + "/metadata")
@@ -183,28 +144,7 @@ public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
 
    static String item = "a36fdac9-b8c2-43e2-9a4c-2ffaf3ee13df";
    static URI itemHref = URI.create(endpoint + "/catalogItem/" + item);
-   static String itemUrn = "urn:vcloud:catalogitem:" + item;
 
-   HttpRequest resolveItem = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + itemUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String itemEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", itemUrn)
-                                                             .a("id", itemUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + itemUrn)
-                               .e("Link").a("rel", "alternate").a("type", CATALOG_ITEM).a("href", itemHref.toString()).up());
-
-   HttpResponse resolveItemResponse = HttpResponse.builder()
-            .statusCode(200)
-            .payload(payloadFromStringWithContentType(itemEntity, ENTITY + ";version=1.5"))
-            .build();
-   
    HttpRequest getItem = HttpRequest.builder()
             .method("GET")
             .endpoint(endpoint + "/catalogItem/" + item)
@@ -222,13 +162,7 @@ public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
       VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, getItem, getItemResponse);
       assertEquals(api.getCatalogApi().getItem(itemHref), catalogItem());
    }
-   
-   @Test
-   public void testGetCatalogItemUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveItem, resolveItemResponse, getItem, getItemResponse);
-      assertEquals(api.getCatalogApi().getItem(itemUrn), catalogItem());
-   }
-   
+
    HttpRequest editItem = HttpRequest.builder()
             .method("PUT")
             .endpoint(endpoint + "/catalogItem/" + item)
@@ -248,13 +182,7 @@ public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
       VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, editItem, editItemResponse);
       assertEquals(api.getCatalogApi().editItem(itemHref, catalogItem()), catalogItem());
    }
-   
-   @Test
-   public void testEditCatalogItemUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveItem, resolveItemResponse, editItem, editItemResponse);
-      assertEquals(api.getCatalogApi().editItem(itemUrn, catalogItem()), catalogItem());
-   }
-   
+
    HttpRequest removeItem = HttpRequest.builder()
             .method("DELETE")
             .endpoint(endpoint + "/catalogItem/" + item)
@@ -272,12 +200,6 @@ public class CatalogApiExpectTest extends VCloudDirectorApiExpectTest {
       api.getCatalogApi().removeItem(itemHref);
    }
 
-   @Test
-   public void testRemoveCatalogItemUrn() {
-      VCloudDirectorApi api = requestsSendResponses(loginRequest, sessionResponse, resolveItem, resolveItemResponse, removeItem, removeItemResponse);
-      api.getCatalogApi().removeItem(itemUrn);
-   }
-   
    HttpRequest getItemMetadata = HttpRequest.builder()
             .method("GET")
             .endpoint(endpoint + "/catalogItem/" + item + "/metadata")

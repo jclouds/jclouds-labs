@@ -26,13 +26,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
- * Represents the owner of this entity.
- *
- * <pre>
- * &lt;complexType name="Owner" /&;
- * </pre>
- *
- * @since 1.5
+ * Represents the owner of an entity.
  */
 @XmlRootElement(name = "Owner")
 @XmlType(name = "OwnerType")

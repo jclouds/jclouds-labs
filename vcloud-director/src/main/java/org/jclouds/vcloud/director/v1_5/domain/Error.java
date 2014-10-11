@@ -39,10 +39,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * The standard error message type used in the vCloud REST API.
- *
- * <pre>
- * &lt;xs:complexType name="ErrorType" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "Error")
 public class Error {

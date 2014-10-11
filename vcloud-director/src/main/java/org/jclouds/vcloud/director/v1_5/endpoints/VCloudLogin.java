@@ -23,11 +23,6 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-/**
- * Represents a component related to vCloud.
- * 
- * @see <a href="https://community.vcloudexpress.terremark.com/en-us/discussion_forums/f/60.aspx" />
- */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @Qualifier

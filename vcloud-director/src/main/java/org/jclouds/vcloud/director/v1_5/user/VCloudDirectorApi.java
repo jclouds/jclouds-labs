@@ -46,7 +46,6 @@ import org.jclouds.vcloud.director.v1_5.features.VAppTemplateApi;
 import org.jclouds.vcloud.director.v1_5.features.VdcApi;
 import org.jclouds.vcloud.director.v1_5.features.VmApi;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 import com.google.inject.Provides;
 
@@ -138,12 +137,6 @@ public interface VCloudDirectorApi extends Closeable {
     */
    @Delegate
    VmApi getVmApi();
-   
-   /**
-    * @return synchronous access to {@link Metadata} features
-    */
-   @Delegate
-   MetadataApi getMetadataApi(@EndpointParam(parser = URNToHref.class) String urn);
 
    @Delegate
    MetadataApi getMetadataApi(@EndpointParam URI href);

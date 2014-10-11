@@ -20,7 +20,6 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import com.google.common.net.HttpHeaders;
 import org.jclouds.dmtf.ovf.NetworkSection;
 import org.jclouds.dmtf.ovf.StartupSection;
 import org.jclouds.http.HttpRequest;
@@ -55,9 +54,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.internal.annotations.Sets;
 
-/**
- * Allows us to test the {@link VAppApi} via its side effects.
- */
+import com.google.common.net.HttpHeaders;
+
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "VAppApiExpectTest")
 public class VAppApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
@@ -286,19 +284,6 @@ public class VAppApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
       URI vAppRebootUri = URI.create(endpoint + "/vApp/" + vAppId + "/power/action/reboot");
 
-      HttpRequest vAppEntityRequest = HttpRequest.builder()
-            .method("GET")
-            .endpoint(URI.create(endpoint + "/entity/" + vAppUrn))
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-
-      HttpResponse vAppEntityResponse = HttpResponse.builder()
-            .payload(payloadFromResourceWithContentType("/vapp/vAppEntity.xml", VCloudDirectorMediaType.ENTITY))
-            .statusCode(200)
-            .build();
-
       HttpRequest vAppRebootRequest = HttpRequest.builder()
             .method("POST")
             .endpoint(vAppRebootUri)
@@ -314,11 +299,10 @@ public class VAppApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 
       VCloudDirectorApi vCloudDirectorApi = requestsSendResponses(
             loginRequest, sessionResponse,
-            vAppEntityRequest, vAppEntityResponse,
             vAppRebootRequest, vAppRebootResponse
       );
 
-      Task actual = vCloudDirectorApi.getVAppApi().reboot(vAppUrn);
+      Task actual = vCloudDirectorApi.getVAppApi().reboot(URI.create(endpoint + "/vApp/" + vAppId));
       Task expected = rebootTask();
 
       assertEquals(actual, expected);

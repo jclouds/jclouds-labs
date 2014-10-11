@@ -23,31 +23,22 @@ import java.net.URI;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.EndpointParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.vcloud.director.v1_5.domain.network.Network;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface NetworkApi {
 
-   /**
-    * Retrieves a network.
-    * 
-    * @return the network or null if not found
-    */
+   /** Returns the network or null if not found. */
    @GET
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
-   Network get(@EndpointParam(parser = URNToHref.class) String networkUrn);
-
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Network get(@EndpointParam URI networkHref);
 }

@@ -30,9 +30,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Allows us to test the {@link VAppApi} allowed to system administrators
- */
 @Test(singleThreaded = true, testName = "SystemAdminVAppApiLiveTest")
 public class SystemAdminVAppApiLiveTest extends AbstractVAppApiLiveTest {
 
@@ -42,16 +39,16 @@ public class SystemAdminVAppApiLiveTest extends AbstractVAppApiLiveTest {
    protected void setupRequiredEntities() {
 
       if (adminContext != null) {
-         userUrn = adminContext.getApi().getUserApi().addUserToOrg(randomTestUser("VAppAccessTest"), org.getId())
+         userId = adminContext.getApi().getUserApi().addUserToOrg(randomTestUser("VAppAccessTest"), org.getHref())
                   .getId();
       }
    }
 
    @AfterClass(alwaysRun = true, dependsOnMethods = { "cleanUpEnvironment" })
    public void cleanUp() {
-      if (adminContext != null && testUserCreated && userUrn != null) {
+      if (adminContext != null && testUserCreated && userId != null) {
          try {
-            adminContext.getApi().getUserApi().remove(userUrn);
+            adminContext.getApi().getUserApi().remove(context.resolveIdToHref(userId));
          } catch (Exception e) {
             logger.warn(e, "Error when deleting user");
          }
@@ -66,19 +63,19 @@ public class SystemAdminVAppApiLiveTest extends AbstractVAppApiLiveTest {
       DeployVAppParams params = DeployVAppParams.builder()
                .deploymentLeaseSeconds((int) TimeUnit.SECONDS.convert(1L, TimeUnit.HOURS)).notForceCustomization()
                .notPowerOn().build();
-      Task deployVApp = vAppApi.deploy(temp.getId(), params);
+      Task deployVApp = vAppApi.deploy(temp.getHref(), params);
       assertTaskSucceedsLong(deployVApp);
 
       try {
          // Method under test
-         vAppApi.enterMaintenanceMode(temp.getId());
+         vAppApi.enterMaintenanceMode(temp.getHref());
 
-         temp = vAppApi.get(temp.getId());
+         temp = vAppApi.get(temp.getHref());
          assertTrue(temp.isInMaintenanceMode(),
                   String.format(CONDITION_FMT, "InMaintenanceMode", "TRUE", temp.isInMaintenanceMode()));
 
          // Exit maintenance mode
-         vAppApi.exitMaintenanceMode(temp.getId());
+         vAppApi.exitMaintenanceMode(temp.getHref());
       } finally {
          cleanUpVApp(temp);
       }
@@ -91,17 +88,17 @@ public class SystemAdminVAppApiLiveTest extends AbstractVAppApiLiveTest {
       DeployVAppParams params = DeployVAppParams.builder()
                .deploymentLeaseSeconds((int) TimeUnit.SECONDS.convert(1L, TimeUnit.HOURS)).notForceCustomization()
                .notPowerOn().build();
-      Task deployVApp = vAppApi.deploy(temp.getId(), params);
+      Task deployVApp = vAppApi.deploy(temp.getHref(), params);
       assertTaskSucceedsLong(deployVApp);
 
       try {
          // Enter maintenance mode
-         vAppApi.enterMaintenanceMode(temp.getId());
+         vAppApi.enterMaintenanceMode(temp.getHref());
 
          // Method under test
-         vAppApi.exitMaintenanceMode(temp.getId());
+         vAppApi.exitMaintenanceMode(temp.getHref());
 
-         temp = vAppApi.get(temp.getId());
+         temp = vAppApi.get(temp.getHref());
          assertFalse(temp.isInMaintenanceMode(),
                   String.format(CONDITION_FMT, "InMaintenanceMode", "FALSE", temp.isInMaintenanceMode()));
       } finally {

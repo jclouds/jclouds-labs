@@ -24,22 +24,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
-/**
- * Admin representation of external network.
- * 
- * <pre>
- * &lt;complexType name="ExternalNetwork">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}NetworkType">
- *       &lt;sequence>
- *         &lt;element name="ProviderInfo" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
+
 @XmlRootElement(name = "ExternalNetwork")
 @XmlType(propOrder = {
     "providerInfo"

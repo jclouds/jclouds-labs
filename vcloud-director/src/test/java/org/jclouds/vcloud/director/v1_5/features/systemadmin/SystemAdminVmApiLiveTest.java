@@ -30,7 +30,7 @@ import org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.domain.params.DeployVAppParams;
 import org.jclouds.vcloud.director.v1_5.domain.params.RelocateParams;
-import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecordType;
+import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecord;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecords;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -38,9 +38,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 
-/**
- * Tests behavior of the {@link VmApi}.
- */
 @Test(groups = { "live", "systemAdmin" }, singleThreaded = true, testName = "SystemAdminVmApiLiveTest")
 public class SystemAdminVmApiLiveTest extends AbstractVAppApiLiveTest {
 
@@ -50,29 +47,26 @@ public class SystemAdminVmApiLiveTest extends AbstractVAppApiLiveTest {
    protected void setupRequiredEntities() {
 
       if (adminContext != null) {
-         userUrn = adminContext.getApi().getUserApi().addUserToOrg(randomTestUser("VAppAccessTest"), org.getId())
+         userId = adminContext.getApi().getUserApi().addUserToOrg(randomTestUser("VAppAccessTest"), org.getHref())
                   .getId();
       }
    }
 
    @AfterClass(alwaysRun = true, dependsOnMethods = { "cleanUpEnvironment" })
    public void cleanUp() {
-      if (adminContext != null && testUserCreated && userUrn != null) {
+      if (adminContext != null && testUserCreated && userId != null) {
          try {
-            adminContext.getApi().getUserApi().remove(userUrn);
+            adminContext.getApi().getUserApi().remove(context.resolveIdToHref(userId));
          } catch (Exception e) {
             logger.warn("Error when deleting user: %s", e.getMessage());
          }
       }
    }
 
-   /**
-    * @see VmApi#get(String)
-    */
    @Test(description = "GET /vApp/{id}")
    public void testGetVm() {
       // The method under test
-      vm = vmApi.get(vmUrn);
+      vm = vmApi.get(context.resolveIdToHref(vmId));
 
       // Check the retrieved object is well formed
       checkVm(vm);
@@ -82,7 +76,7 @@ public class SystemAdminVmApiLiveTest extends AbstractVAppApiLiveTest {
                String.format(OBJ_FIELD_EQ, VM, "deployed", "FALSE", vm.isDeployed().toString()));
 
       // Check status
-      assertVmStatus(vmUrn, Status.POWERED_OFF);
+      assertVmStatus(vm.getHref(), Status.POWERED_OFF);
    }
    
    // NOTE This test is disabled, as it is not possible to look up datastores using the User API
@@ -90,12 +84,12 @@ public class SystemAdminVmApiLiveTest extends AbstractVAppApiLiveTest {
    public void testRelocate() {
       // Relocate to the last of the available datastores
       QueryResultRecords records = adminContext.getApi().getQueryApi().queryAll("datastore");
-      QueryResultRecordType datastore = Iterables.getLast(records.getRecords());
+      QueryResultRecord datastore = Iterables.getLast(records.getRecords());
       RelocateParams params = RelocateParams.builder().datastore(Reference.builder().href(datastore.getHref()).build())
                .build();
 
       // The method under test
-      Task relocate = vmApi.relocate(vmUrn, params);
+      Task relocate = vmApi.relocate(vm.getHref(), params);
       assertTrue(retryTaskSuccess.apply(relocate), String.format(TASK_COMPLETE_TIMELY, "relocate"));
    }
    
@@ -106,26 +100,26 @@ public class SystemAdminVmApiLiveTest extends AbstractVAppApiLiveTest {
                .notPowerOn().build();
 
       // The method under test
-      Task deployVm = vmApi.deploy(vmUrn, params);
+      Task deployVm = vmApi.deploy(vm.getHref(), params);
       assertTrue(retryTaskSuccessLong.apply(deployVm), String.format(TASK_COMPLETE_TIMELY, "deployVm"));
 
       // Get the edited Vm
-      vm = vmApi.get(vmUrn);
+      vm = vmApi.get(vm.getHref());
 
       // Check the required fields are set
       assertTrue(vm.isDeployed(), String.format(OBJ_FIELD_EQ, VM, "deployed", "TRUE", vm.isDeployed().toString()));
 
       // Check status
-      assertVmStatus(vmUrn, Status.POWERED_OFF);
+      assertVmStatus(vm.getHref(), Status.POWERED_OFF);
    }   
    
    @Test(description = "POST /vApp/{id}/action/consolidate", dependsOnMethods = { "testDeployVm" })
    public void testConsolidateVm() {
       // Power on Vm
-      vm = powerOnVm(vmUrn);
+      vm = powerOnVm(vm.getHref());
 
       // The method under test
-      Task consolidateVm = vmApi.consolidate(vmUrn);
+      Task consolidateVm = vmApi.consolidate(vm.getHref());
       assertTrue(retryTaskSuccess.apply(consolidateVm), String.format(TASK_COMPLETE_TIMELY, "consolidateVm"));
    }
 }

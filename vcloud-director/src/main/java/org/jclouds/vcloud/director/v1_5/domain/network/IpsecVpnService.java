@@ -31,37 +31,13 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-
-/**
- * Represents an IPSec-VPN network service.
- * <p/>
- * <p/>
- * <p>Java class for IpsecVpnService complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="IpsecVpnService">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}NetworkServiceType">
- *       &lt;sequence>
- *         &lt;element name="ExternalIpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType" minOccurs="0"/>
- *         &lt;element name="PublicIpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType" minOccurs="0"/>
- *         &lt;element name="IpsecVpnTunnel" type="{http://www.vmware.com/vcloud/v1.5}IpsecVpnTunnelType" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "IpsecVpnService")
 @XmlType(propOrder = {
       "externalIpAddress",
       "publicIpAddress",
       "ipsecVpnTunnels"
 })
-public class IpsecVpnService extends NetworkServiceType<IpsecVpnService> {
+public class IpsecVpnService extends NetworkService<IpsecVpnService> {
 
    public static Builder builder() {
       return new Builder();
@@ -72,7 +48,7 @@ public class IpsecVpnService extends NetworkServiceType<IpsecVpnService> {
       return new Builder().fromIpsecVpnService(this);
    }
 
-   public static class Builder extends NetworkServiceType.Builder<IpsecVpnService> {
+   public static class Builder extends NetworkService.Builder<IpsecVpnService> {
 
       private String externalIpAddress;
       private String publicIpAddress;
@@ -108,7 +84,7 @@ public class IpsecVpnService extends NetworkServiceType<IpsecVpnService> {
       }
 
       @Override
-      public Builder fromNetworkServiceType(NetworkServiceType<IpsecVpnService> in) {
+      public Builder fromNetworkServiceType(NetworkService<IpsecVpnService> in) {
          return Builder.class.cast(super.fromNetworkServiceType(in));
       }
 

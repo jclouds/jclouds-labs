@@ -37,13 +37,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
-/**
- * Represents vApp/VM undeployment parameters.
- * 
- * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/UndeployVAppParamsType.html">
- *    vCloud REST API - UndeployVAppParamsType</a>
- * @since 0.9
- */
 @XmlRootElement(name = "UndeployVAppParams")
 @XmlType(name = "UndeployVAppParamsType")
 public class UndeployVAppParams {

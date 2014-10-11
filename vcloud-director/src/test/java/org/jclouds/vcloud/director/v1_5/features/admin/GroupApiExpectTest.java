@@ -27,9 +27,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Reference;
 import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorAdminApiExpectTest;
 import org.testng.annotations.Test;
 
-/**
- * Test the {@link GroupApi} by observing its side effects.
- */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "GroupApiExpectTest")
 public class GroupApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    

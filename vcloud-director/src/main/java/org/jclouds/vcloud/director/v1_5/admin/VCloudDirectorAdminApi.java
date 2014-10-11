@@ -30,7 +30,6 @@ import org.jclouds.vcloud.director.v1_5.features.admin.AdminVdcApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.GroupApi;
 import org.jclouds.vcloud.director.v1_5.features.admin.UserApi;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
@@ -81,13 +80,6 @@ public interface VCloudDirectorAdminApi extends VCloudDirectorApi {
    @Override
    @Delegate
    AdminNetworkApi getNetworkApi();
-   
-   /**
-    * @return synchronous access to {@link Metadata} features
-    */
-   @Override
-   @Delegate
-   MetadataApi getMetadataApi(@EndpointParam(parser = URNToAdminHref.class) String urn);
 
    @Override
    @Delegate

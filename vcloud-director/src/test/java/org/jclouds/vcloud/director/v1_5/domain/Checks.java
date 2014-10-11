@@ -68,7 +68,7 @@ import org.jclouds.vcloud.director.v1_5.domain.network.Network;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkConfiguration;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkConnection;
 import org.jclouds.vcloud.director.v1_5.domain.network.NetworkFeatures;
-import org.jclouds.vcloud.director.v1_5.domain.network.NetworkServiceType;
+import org.jclouds.vcloud.director.v1_5.domain.network.NetworkService;
 import org.jclouds.vcloud.director.v1_5.domain.network.RouterInfo;
 import org.jclouds.vcloud.director.v1_5.domain.network.SyslogServerSettings;
 import org.jclouds.vcloud.director.v1_5.domain.network.VAppNetworkConfiguration;
@@ -89,8 +89,8 @@ import org.jclouds.vcloud.director.v1_5.domain.org.OrgPasswordPolicySettings;
 import org.jclouds.vcloud.director.v1_5.domain.org.OrgSettings;
 import org.jclouds.vcloud.director.v1_5.domain.org.OrgVAppTemplateLeaseSettings;
 import org.jclouds.vcloud.director.v1_5.domain.params.ControlAccessParams;
-import org.jclouds.vcloud.director.v1_5.domain.query.ContainerType;
-import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecordType;
+import org.jclouds.vcloud.director.v1_5.domain.query.Container;
+import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecord;
 import org.jclouds.vcloud.director.v1_5.domain.section.CustomizationSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.GuestCustomizationSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.LeaseSettingsSection;
@@ -448,7 +448,7 @@ public class Checks {
    public static void checkNetworkFeatures(NetworkFeatures features) {
       // Check optional fields
       if (features.getNetworkServices() != null) {
-         for (NetworkServiceType<?> service : features.getNetworkServices()) {
+         for (NetworkService<?> service : features.getNetworkServices()) {
             checkNetworkService(service);
          }
       }
@@ -471,7 +471,7 @@ public class Checks {
       checkIpAddress(routerInfo.getExternalIp());
    }
    
-   public static void checkNetworkService(NetworkServiceType service) {
+   public static void checkNetworkService(NetworkService service) {
       // NOTE isEnabled cannot be checked
    }
    
@@ -531,7 +531,7 @@ public class Checks {
       checkCapacityType(capacityWithUsage);
    }
 
-   public static void checkCapacityType(CapacityType<?> capacity) {
+   public static void checkCapacityType(Capacity<?> capacity) {
       // Check required fields
       assertNotNull(capacity.getUnits(), "The unit attribute of a CapacityWithUsage must be set");
       
@@ -632,17 +632,17 @@ public class Checks {
       }
    }
 
-   public static void checkAbstractVAppType(AbstractVAppType abstractVAppType) {
+   public static void checkAbstractVAppType(AbstractVApp abstractVApp) {
       // Check optional fields
-      Reference vAppParent = abstractVAppType.getVAppParent();
+      Reference vAppParent = abstractVApp.getVAppParent();
       if (vAppParent != null) checkReferenceType(vAppParent);
       // NOTE deployed cannot be checked
-      for (SectionType section : abstractVAppType.getSections()) {
+      for (SectionType section : abstractVApp.getSections()) {
          checkSectionType(section);
       }
       
       // Check parent type
-      checkResourceEntityType(abstractVAppType);
+      checkResourceEntityType(abstractVApp);
    }
    
    public static void checkVAppTemplate(VAppTemplate template) {
@@ -1452,7 +1452,7 @@ public class Checks {
       checkEntityType(vdc);
    }
 
-   public static void checkQueryResultRecord(QueryResultRecordType record) {
+   public static void checkQueryResultRecord(QueryResultRecord record) {
       checkHref(record.getHref());
       if (record.getLinks() != null) {
          for (Link link : record.getLinks()) {
@@ -1474,7 +1474,7 @@ public class Checks {
       checkContainerType(references);
    }
 
-   public static void checkContainerType(ContainerType container) {
+   public static void checkContainerType(Container container) {
       // optional
       // NOTE name can't be checked
       if (container.getPage() != null) {

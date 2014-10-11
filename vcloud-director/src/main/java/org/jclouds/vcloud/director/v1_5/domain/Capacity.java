@@ -27,26 +27,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a capacity of a given resource.
- * <p/>
- * <p/>
- * <p>Java class for Capacity complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="Capacity">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="Units" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Allocated" type="{http://www.w3.org/2001/XMLSchema}Long" minOccurs="0"/>
- *         &lt;element name="Limit" type="{http://www.w3.org/2001/XMLSchema}Long"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "Capacity", propOrder = {
       "units",
@@ -56,9 +36,9 @@ import com.google.common.base.Objects;
 @XmlSeeAlso({
       CapacityWithUsage.class
 })
-public class CapacityType<T extends CapacityType<T>> {
+public class Capacity<T extends Capacity<T>> {
 
-   public static <T extends CapacityType<T>> Builder<T> builder() {
+   public static <T extends Capacity<T>> Builder<T> builder() {
       return new Builder<T>();
    }
 
@@ -66,14 +46,14 @@ public class CapacityType<T extends CapacityType<T>> {
       return new Builder<T>().fromCapacityType(this);
    }
 
-   public static class Builder<T extends CapacityType<T>> {
+   public static class Builder<T extends Capacity<T>> {
 
       protected String units;
       protected Long allocated;
       protected Long limit;
 
       /**
-       * @see CapacityType#getUnits()
+       * @see Capacity#getUnits()
        */
       public Builder<T> units(String units) {
          this.units = units;
@@ -81,7 +61,7 @@ public class CapacityType<T extends CapacityType<T>> {
       }
 
       /**
-       * @see CapacityType#getAllocated()
+       * @see Capacity#getAllocated()
        */
       public Builder<T> allocated(Long allocated) {
          this.allocated = allocated;
@@ -89,7 +69,7 @@ public class CapacityType<T extends CapacityType<T>> {
       }
 
       /**
-       * @see CapacityType#getLimit()
+       * @see Capacity#getLimit()
        */
       public Builder<T> limit(Long limit) {
          this.limit = limit;
@@ -97,25 +77,25 @@ public class CapacityType<T extends CapacityType<T>> {
       }
 
 
-      public CapacityType<T> build() {
-         return new CapacityType<T>(units, allocated, limit);
+      public Capacity<T> build() {
+         return new Capacity<T>(units, allocated, limit);
       }
 
 
-      public Builder<T> fromCapacityType(CapacityType<T> in) {
+      public Builder<T> fromCapacityType(Capacity<T> in) {
          return units(in.getUnits())
                .allocated(in.getAllocated())
                .limit(in.getLimit());
       }
    }
 
-   protected CapacityType(String units, Long allocated, Long limit) {
+   protected Capacity(String units, Long allocated, Long limit) {
       this.units = units;
       this.allocated = allocated;
       this.limit = limit;
    }
 
-   protected CapacityType() {
+   protected Capacity() {
       // for JAXB
    }
 
@@ -159,7 +139,7 @@ public class CapacityType<T extends CapacityType<T>> {
          return true;
       if (o == null || getClass() != o.getClass())
          return false;
-      CapacityType<?> that = CapacityType.class.cast(o);
+      Capacity<?> that = Capacity.class.cast(o);
       return equal(units, that.units) &&
             equal(allocated, that.allocated) &&
             equal(limit, that.limit);

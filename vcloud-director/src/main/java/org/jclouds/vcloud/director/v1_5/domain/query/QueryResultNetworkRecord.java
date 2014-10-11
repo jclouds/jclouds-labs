@@ -26,16 +26,9 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
 
-/**
- * Represents the results from a Network vCloud query as a record.
- *
- * <pre>
- * &lt;complexType name="QueryResultNetworkRecordType" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "OrgNetworkRecord")
 @XmlType(name = "QueryResultNetworkRecordType")
-public class QueryResultNetworkRecord extends QueryResultRecordType {
+public class QueryResultNetworkRecord extends QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -49,7 +42,7 @@ public class QueryResultNetworkRecord extends QueryResultRecordType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
    
-   public static class Builder<B extends Builder<B>> extends QueryResultRecordType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends QueryResultRecord.Builder<B> {
 
       private String name;
       private String ipScopeId;

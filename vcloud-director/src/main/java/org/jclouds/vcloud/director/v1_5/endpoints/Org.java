@@ -23,9 +23,6 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-/**
- * Related to a VCloud express Org.
- */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @Qualifier

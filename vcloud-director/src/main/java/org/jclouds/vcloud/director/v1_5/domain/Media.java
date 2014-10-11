@@ -38,10 +38,6 @@ import com.google.common.collect.Maps;
 
 /**
  * Represents removable media, such as a CD-ROM, DVD or Floppy disk.
- *
- * <pre>
- * &lt;complexType name="Media" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "Media")
 public class Media extends ResourceEntity {

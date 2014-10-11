@@ -36,10 +36,6 @@ import org.jclouds.vcloud.director.v1_5.domain.org.OrgVAppTemplateLeaseSettings;
 import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorAdminApiExpectTest;
 import org.testng.annotations.Test;
 
-/**
- * Test the {@link AdminOrgApi} by observing its side effects. TODO: this needs to be rewritten to
- * test both URN and href access
- */
 @Test(groups = { "unit", "user" }, singleThreaded = true, testName = "AdminOrgApiExpectTest")
 public class AdminOrgApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 

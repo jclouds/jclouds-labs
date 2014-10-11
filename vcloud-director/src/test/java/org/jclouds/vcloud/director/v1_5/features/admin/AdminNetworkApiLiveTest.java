@@ -24,8 +24,6 @@ import static org.jclouds.vcloud.director.v1_5.VCloudDirectorLiveTestConstants.U
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
-import com.google.common.collect.ImmutableSet;
-
 import org.jclouds.vcloud.director.v1_5.domain.Checks;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.domain.network.ExternalNetwork;
@@ -40,9 +38,8 @@ import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Tests live behavior of {@link AdminNetworkApi}.
- */
+import com.google.common.collect.ImmutableSet;
+
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "AdminNetworkLiveTest")
 public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    
@@ -91,10 +88,10 @@ public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       OrgNetwork editNetwork = getMutatedOrgNetwork(oldNetwork);
       
       try {
-         Task editNetworkTask = networkApi.edit(networkUrn, editNetwork);
+         Task editNetworkTask = networkApi.edit(network.getHref(), editNetwork);
          Checks.checkTask(editNetworkTask);
          assertTrue(retryTaskSuccess.apply(editNetworkTask), String.format(TASK_COMPLETE_TIMELY, "editNetworkTask"));
-         network = networkApi.get(networkUrn);
+         network = networkApi.get(network.getHref());
          
          Checks.checkOrgNetwork(Network.<OrgNetwork>toSubType(network));
          
@@ -128,20 +125,20 @@ public class AdminNetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 //            editNetwork.getAllowedExternalIpAddresses()), 
 //            String.format(OBJ_FIELD_UPDATABLE, NETWORK, "allowedExternalIpAddresses"));
       } finally {
-         Task editNetworkTask = networkApi.edit(networkUrn, oldNetwork);
+         Task editNetworkTask = networkApi.edit(network.getHref(), oldNetwork);
          Checks.checkTask(editNetworkTask);
          assertTrue(retryTaskSuccess.apply(editNetworkTask), String.format(TASK_COMPLETE_TIMELY, "editNetworkTask"));
-         network = networkApi.get(networkUrn);
+         network = networkApi.get(network.getHref());
       }
    }
    
    @Test(description = "POST /admin/network/{id}/action/reset")
    public void testResetNetwork() { 
       // TODO assert that network is deployed somehow
-      Task resetNetworkTask = networkApi.reset(networkUrn);
+      Task resetNetworkTask = networkApi.reset(network.getHref());
       Checks.checkTask(resetNetworkTask);
       assertTrue(retryTaskSuccess.apply(resetNetworkTask), String.format(TASK_COMPLETE_TIMELY, "resetNetworkTask"));
-      network = networkApi.get(networkUrn);
+      network = networkApi.get(network.getHref());
       
       Checks.checkOrgNetwork(Network.<OrgNetwork>toSubType(network));
       // TODO: other assertions about the reset? that network is deployed when task is complete, for example

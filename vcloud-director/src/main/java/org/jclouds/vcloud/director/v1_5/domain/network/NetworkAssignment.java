@@ -26,23 +26,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents mapping between a VM and vApp network.
- * <p/>
- * <p/>
- * <p>Java class for NetworkAssignment complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="NetworkAssignment">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;attribute name="innerNetwork" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="containerNetwork" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "NetworkAssignment")
 public class NetworkAssignment

@@ -32,9 +32,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link AdminQueryApi} by observing its side effects.
- */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminQueryApiExpectTest")
 public class AdminQueryApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 

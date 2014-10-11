@@ -24,10 +24,6 @@ import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 
 /**
  * Contains key/value pair as property.
- * <p/>
- * <pre>
- * &lt;complexType name="PropertyType" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "Property")
 public class Property {

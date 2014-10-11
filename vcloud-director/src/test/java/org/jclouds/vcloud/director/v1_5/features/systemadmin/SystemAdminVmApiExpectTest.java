@@ -48,11 +48,9 @@ import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorAdminApiExpectTes
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.testng.internal.annotations.Sets;
 
-/**
- * Allows us to test the {@link VmApi} allowed to system administrators
- */
+import com.google.common.collect.Sets;
+
 @Test(groups = { "unit", "systemAdmin" }, singleThreaded = true, testName = "SystemAdminVmApiExpectTest")
 public class SystemAdminVmApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    

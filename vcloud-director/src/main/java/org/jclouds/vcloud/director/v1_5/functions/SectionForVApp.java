@@ -17,11 +17,11 @@
 package org.jclouds.vcloud.director.v1_5.functions;
 
 import org.jclouds.dmtf.ovf.SectionType;
-import org.jclouds.vcloud.director.v1_5.domain.AbstractVAppType;
+import org.jclouds.vcloud.director.v1_5.domain.AbstractVApp;
 
 import com.google.common.base.Function;
 
-public class SectionForVApp<S extends SectionType> implements Function<AbstractVAppType, S> {
+public class SectionForVApp<S extends SectionType> implements Function<AbstractVApp, S> {
    
    private final Class<? extends SectionType> sectionType;
 
@@ -31,7 +31,7 @@ public class SectionForVApp<S extends SectionType> implements Function<AbstractV
 
    @SuppressWarnings("unchecked")
    @Override
-   public S apply(AbstractVAppType from) {
+   public S apply(AbstractVApp from) {
       for (SectionType section : from.getSections()) {
          if (sectionType.isAssignableFrom(section.getClass())) {
             return (S)section;

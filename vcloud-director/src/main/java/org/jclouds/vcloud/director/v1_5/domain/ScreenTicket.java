@@ -28,9 +28,12 @@ import com.google.common.base.Objects;
 /**
  * The ticket for accessing the console of a VM.
  *
- * <pre>
- * &lt;complexType name="ScreenTicket" /&gt;
- * </pre>
+ * <p />  A screen ticket is a string that includes the virtual machine's IP address, its managed object
+ * reference, and a string that has been encoded as described in RFC 2396. Each VM element in a
+ * vApp includes a link where rel="screen:acquireTicket". You can use that link to request a
+ * screen ticket that you can use with the vmware-vmrc utility to open a VMware Remote Console
+ * for the virtual machine represented by that VM element. The vApp should be running to get a
+ * valid screen ticket.
  */
 @XmlRootElement(name = "ScreenTicket")
 @XmlType(name = "ScreenTicketType")

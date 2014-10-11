@@ -67,9 +67,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
-/**
- * Tests behavior of {@code MediaApi}
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "MediaApiLiveTest")
 public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -103,7 +100,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    protected void tidyUp() {
       if (media != null) {
          try {
-            Task remove = mediaApi.remove(media.getId());
+            Task remove = mediaApi.remove(media.getHref());
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting media '%s': %s", media.getName());
@@ -111,7 +108,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       }
       if (oldMedia != null) {
          try {
-            Task remove = mediaApi.remove(oldMedia.getId());
+            Task remove = mediaApi.remove(oldMedia.getHref());
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting media '%s': %s", oldMedia.getName());
@@ -156,19 +153,19 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       Link uploadLink = Iterables.find(links, LinkPredicates.relEquals(Link.Rel.UPLOAD_DEFAULT));
       context.getApi().getUploadApi().upload(uploadLink.getHref(), Payloads.newPayload(iso));
 
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
       if (media.getTasks().size() == 1) {
          Task uploadTask = Iterables.getOnlyElement(media.getTasks());
          Checks.checkTask(uploadTask);
          assertEquals(uploadTask.getStatus(), Task.Status.RUNNING);
          assertTrue(retryTaskSuccess.apply(uploadTask), String.format(TASK_COMPLETE_TIMELY, "uploadTask"));
-         media = mediaApi.get(media.getId());
+         media = mediaApi.get(media.getHref());
       }
    }
 
    @Test(description = "GET /media/{id}", dependsOnMethods = { "testAddMedia" })
    public void testGetMedia() {
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
       assertNotNull(media, String.format(OBJ_REQ_LIVE, MEDIA));
 
       owner = media.getOwner();
@@ -180,7 +177,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "GET /media/{id}/owner", dependsOnMethods = { "testGetMedia" })
    public void testGetMediaOwner() {
-      Owner directOwner = mediaApi.getOwner(media.getId());
+      Owner directOwner = mediaApi.getOwner(media.getHref());
       assertEquals(owner.toBuilder().user(owner.getUser()).build(),
                directOwner.toBuilder().links(ImmutableSet.<Link> of()).build(), String.format(
                         GETTER_RETURNS_SAME_OBJ, "getOwner()", "owner", "media.getOwner()", owner.toString(),
@@ -197,8 +194,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "POST /vdc/{id}/action/cloneMedia", dependsOnMethods = { "testGetMediaOwner" })
    public void testCloneMedia() {
       oldMedia = media;
-      media = vdcApi.cloneMedia(
-               vdcUrn,
+      media = vdcApi.cloneMedia(context.resolveIdToHref(vdcId),
                CloneMediaParams.builder().source(Reference.builder().fromEntity(media).build())
                         .name("copied " + media.getName()).description("copied by testCloneMedia()").build());
 
@@ -209,7 +205,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          if (copyTask != null) {
             Checks.checkTask(copyTask);
             assertTrue(retryTaskSuccess.apply(copyTask), String.format(TASK_COMPLETE_TIMELY, "copyTask"));
-            media = mediaApi.get(media.getId());
+            media = mediaApi.get(media.getHref());
          }
       }
 
@@ -217,11 +213,11 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       assertTrue(media.clone(oldMedia),
                String.format(OBJ_FIELD_CLONE, MEDIA, "copied media", media.toString(), oldMedia.toString()));
 
-      context.getApi().getMetadataApi(media.getId()).put("key", "value");
+      context.getApi().getMetadataApi(media.getHref()).put("key", "value");
 
-      media = vdcApi
-               .cloneMedia(vdcUrn, CloneMediaParams.builder().source(Reference.builder().fromEntity(media).build())
-                        .name("moved test media").description("moved by testCloneMedia()").isSourceDelete(true).build());
+      media = vdcApi.cloneMedia(context.resolveIdToHref(vdcId),
+            CloneMediaParams.builder().source(Reference.builder().fromEntity(media).build()).name("moved test media")
+                  .description("moved by testCloneMedia()").isSourceDelete(true).build());
 
       Checks.checkMediaFor(VDC, media);
 
@@ -230,7 +226,7 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          if (copyTask != null) {
             Checks.checkTask(copyTask);
             assertTrue(retryTaskSuccess.apply(copyTask), String.format(TASK_COMPLETE_TIMELY, "copyTask"));
-            media = mediaApi.get(media.getId());
+            media = mediaApi.get(media.getHref());
          }
       }
 
@@ -247,10 +243,10 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       String newDescription = "new " + oldDescription;
       media = media.toBuilder().name(newName).description(newDescription).build();
 
-      Task editMedia = mediaApi.edit(media.getId(), media);
+      Task editMedia = mediaApi.edit(media.getHref(), media);
       Checks.checkTask(editMedia);
       assertTrue(retryTaskSuccess.apply(editMedia), String.format(TASK_COMPLETE_TIMELY, "editMedia"));
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
 
       assertTrue(equal(media.getName(), newName), String.format(OBJ_FIELD_UPDATABLE, MEDIA, "name"));
       assertTrue(equal(media.getDescription(), newDescription),
@@ -262,15 +258,15 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
       media = media.toBuilder().name(oldName).description(oldDescription).build();
 
-      editMedia = mediaApi.edit(media.getId(), media);
+      editMedia = mediaApi.edit(media.getHref(), media);
       Checks.checkTask(editMedia);
       assertTrue(retryTaskSuccess.apply(editMedia), String.format(TASK_COMPLETE_TIMELY, "editMedia"));
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
    }
 
    @Test(description = "GET /media/{id}/metadata", dependsOnMethods = { "testSetMetadataValue" })
    public void testGetMetadata() {
-      metadata = context.getApi().getMetadataApi(media.getId()).get();
+      metadata = context.getApi().getMetadataApi(media.getHref()).get();
       // required for testing
       assertFalse(isEmpty(metadata.getMetadataEntries()), String.format(OBJ_FIELD_REQ_LIVE, MEDIA, "metadata.entries"));
 
@@ -280,31 +276,31 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "POST /media/{id}/metadata", dependsOnMethods = { "testGetMedia" })
    public void testMergeMetadata() {
       // test new
-      Task mergeMetadata = context.getApi().getMetadataApi(media.getId()).putAll(ImmutableMap.of("testKey", "testValue"));
+      Task mergeMetadata = context.getApi().getMetadataApi(media.getHref()).putAll(ImmutableMap.of("testKey", "testValue"));
       Checks.checkTask(mergeMetadata);
       assertTrue(retryTaskSuccess.apply(mergeMetadata), String.format(TASK_COMPLETE_TIMELY, "mergeMetadata(new)"));
-      metadata = context.getApi().getMetadataApi(media.getId()).get();
+      metadata = context.getApi().getMetadataApi(media.getHref()).get();
       Checks.checkMetadataFor(MEDIA, metadata);
       assertEquals(metadata.get("testKey"), "testValue");
 
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
       Checks.checkMediaFor(MEDIA, media);
 
       // test edit
-      mergeMetadata = context.getApi().getMetadataApi(media.getId()).put("testKey", "new testValue");
+      mergeMetadata = context.getApi().getMetadataApi(media.getHref()).put("testKey", "new testValue");
       Checks.checkTask(mergeMetadata);
       assertTrue(retryTaskSuccess.apply(mergeMetadata), String.format(TASK_COMPLETE_TIMELY, "mergeMetadata(edit)"));
-      metadata = context.getApi().getMetadataApi(media.getId()).get();
+      metadata = context.getApi().getMetadataApi(media.getHref()).get();
       Checks.checkMetadataFor(MEDIA, metadata);
       assertEquals(metadata.get("testKey"), "new testValue");
 
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
       Checks.checkMediaFor(MEDIA, media);
    }
 
    @Test(description = "GET /media/{id}/metadata/{key}", dependsOnMethods = { "testSetMetadataValue" })
    public void testGetMetadataValue() {
-      metadataValue = context.getApi().getMetadataApi(media.getId()).get("key");
+      metadataValue = context.getApi().getMetadataApi(media.getHref()).get("key");
       assertNotNull(metadataValue);
    }
 
@@ -312,42 +308,42 @@ public class MediaApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testSetMetadataValue() {
       metadataEntryValue = "value";
       
-      Task setMetadataEntry = context.getApi().getMetadataApi(media.getId()).put("key", metadataEntryValue);
+      Task setMetadataEntry = context.getApi().getMetadataApi(media.getHref()).put("key", metadataEntryValue);
       Checks.checkTask(setMetadataEntry);
       assertTrue(retryTaskSuccess.apply(setMetadataEntry), String.format(TASK_COMPLETE_TIMELY, "setMetadataEntry"));
-      metadataValue = context.getApi().getMetadataApi(media.getId()).get("key");
+      metadataValue = context.getApi().getMetadataApi(media.getHref()).get("key");
       assertNotNull(metadataValue);
    }
 
    @Test(description = "DELETE /media/{id}/metadata/{key}", dependsOnMethods = { "testGetMetadata",
             "testGetMetadataValue" })
    public void testRemoveMetadata() {
-      Task remove = context.getApi().getMetadataApi(media.getId()).remove("testKey");
+      Task remove = context.getApi().getMetadataApi(media.getHref()).remove("testKey");
       Checks.checkTask(remove);
       assertTrue(retryTaskSuccess.apply(remove), String.format(TASK_COMPLETE_TIMELY, "remove"));
 
-      metadataValue = context.getApi().getMetadataApi(media.getId()).get("testKey");
+      metadataValue = context.getApi().getMetadataApi(media.getHref()).get("testKey");
       assertNull(metadataValue, String.format(OBJ_FIELD_ATTRB_DEL, MEDIA, "Metadata",
                metadataValue != null ? metadataValue.toString() : "", "MetadataEntry",
                metadataValue != null ? metadataValue.toString() : ""));
 
-      metadataValue = context.getApi().getMetadataApi(media.getId()).get("key");
+      metadataValue = context.getApi().getMetadataApi(media.getHref()).get("key");
       assertNotNull(metadataValue);
 
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
       Checks.checkMediaFor(MEDIA, media);
    }
 
    @Test(description = "DELETE /media/{id}", dependsOnMethods = { "testRemoveMetadata" })
    public void testRemoveMedia() {
-      Task removeMedia = mediaApi.remove(media.getId());
+      Task removeMedia = mediaApi.remove(media.getHref());
       Checks.checkTask(removeMedia);
       assertTrue(retryTaskSuccess.apply(removeMedia), String.format(TASK_COMPLETE_TIMELY, "removeMedia"));
 
-      media = mediaApi.get(media.getId());
+      media = mediaApi.get(media.getHref());
       assertNull(media, String.format(OBJ_DEL, MEDIA, media != null ? media.toString() : ""));
 
-      removeMedia = mediaApi.remove(oldMedia.getId());
+      removeMedia = mediaApi.remove(oldMedia.getHref());
       Checks.checkTask(removeMedia);
       assertTrue(retryTaskSuccess.apply(removeMedia), String.format(TASK_COMPLETE_TIMELY, "removeMedia"));
       oldMedia = null;

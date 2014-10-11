@@ -31,11 +31,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 /**
  * Represents an organization.
  *
- * Unit of multi-tenancy and a top-level container. Contain vDCs, TasksList, Catalogs and Shared Network entities.
- *
- * <pre>
- * &lt;xs:complexType name="OrgType"&gt;
- * </pre>
+ * <p/>Unit of multi-tenancy and a top-level container. Contain vDCs, TasksList, Catalogs and Shared Network entities.
  */
 @XmlRootElement(name = "Org")
 @XmlSeeAlso({ AdminOrg.class })

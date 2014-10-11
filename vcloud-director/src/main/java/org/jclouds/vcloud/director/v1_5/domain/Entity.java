@@ -36,10 +36,6 @@ import com.google.common.collect.Lists;
  * Basic entity type in the vCloud object model.
  *
  * Includes the entity name and an optional id, description, and set of running {@link Task}s.
- *
- * <pre>
- * &lt;xs:complexType name="EntityType" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "Entity")
 @XmlType(name = "EntityType")

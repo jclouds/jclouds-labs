@@ -33,13 +33,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a list of RASD items.
- *
- * <pre>
- * &lt;complexType name="RasdItemsList" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "RasdItemsList")
 @XmlType(name = "RasdItemsList")
 public class RasdItemsList extends Resource implements Set<RasdItem> {

@@ -28,13 +28,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-/**
- * Represents vApp children.
- *
- * <pre>
- * &lt;complexType name="VAppChildren" /&gt;
- * </pre>
- */
 @XmlType(name = "VAppChildren")
 public class VAppChildren {
 

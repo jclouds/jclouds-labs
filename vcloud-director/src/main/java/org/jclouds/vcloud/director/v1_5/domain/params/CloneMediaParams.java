@@ -30,25 +30,6 @@ import com.google.common.base.Objects;
 /**
  * Represents parameters for copying a media resource and optionally
  * deleting the source.
- * <p/>
- * <p/>
- * <p>Java class for CloneMediaParams complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="CloneMediaParams">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ParamsType">
- *       &lt;sequence>
- *         &lt;element name="Source" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType"/>
- *         &lt;element name="IsSourceDelete" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlRootElement(name = "CloneMediaParams")
 @XmlType(propOrder = {

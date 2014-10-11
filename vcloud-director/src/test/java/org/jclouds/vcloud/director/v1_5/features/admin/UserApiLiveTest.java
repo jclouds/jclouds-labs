@@ -38,9 +38,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Tests live behavior of {@link UserApi}.
- */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "UserApiLiveTest")
 public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    
@@ -76,7 +73,7 @@ public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "POST /admin/org/{id}/users")
    public void testAddUser() {
       User newUser = randomTestUser("testAddUser");
-      user = userApi.addUserToOrg(newUser, org.getId());
+      user = userApi.addUserToOrg(newUser, org.getHref());
       checkUser(newUser);
    }
    
@@ -153,14 +150,14 @@ public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // session api isn't typically exposed to the user, as it is implicit
       SessionApi sessionApi = context.utils().injector().getInstance(SessionApi.class);
       
-      OrgPasswordPolicySettings settings = adminOrgApi.getSettings(org.getId()).getPasswordPolicy();
+      OrgPasswordPolicySettings settings = adminOrgApi.getSettings(org.getHref()).getPasswordPolicy();
       assertNotNull(settings);
 
       // Adjust account settings so we can lock the account - be careful to not set invalidLoginsBeforeLockout too low!
       if (!settings.isAccountLockoutEnabled()) {
          settingsToRevertTo = settings;
          settings = settings.toBuilder().accountLockoutEnabled(true).invalidLoginsBeforeLockout(5).build();
-         settings = adminOrgApi.editPasswordPolicy(org.getId(), settings);
+         settings = adminOrgApi.editPasswordPolicy(org.getHref(), settings);
       }
 
       assertTrue(settings.isAccountLockoutEnabled());
@@ -198,7 +195,7 @@ public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       
       // Return account settings to the previous values, if necessary
       if (settingsToRevertTo != null) {
-         adminOrgApi.editPasswordPolicy(org.getId(), settingsToRevertTo);
+         adminOrgApi.editPasswordPolicy(org.getHref(), settingsToRevertTo);
       }
    }
  
@@ -206,7 +203,7 @@ public class UserApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testRemoveUser() {
       // Create a user to be removed (so we remove dependencies on test ordering)
       User newUser = randomTestUser("testRemoveUser" + getTestDateTimeStamp());
-      User userToBeDeleted = userApi.addUserToOrg(newUser, org.getId());
+      User userToBeDeleted = userApi.addUserToOrg(newUser, org.getHref());
 
       // Delete the user
       userApi.remove(userToBeDeleted.getHref());

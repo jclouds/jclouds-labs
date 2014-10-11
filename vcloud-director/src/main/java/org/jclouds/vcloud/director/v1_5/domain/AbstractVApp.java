@@ -42,20 +42,13 @@ import org.jclouds.vcloud.director.v1_5.domain.section.OperatingSystemSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.RuntimeInfoSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.VirtualHardwareSection;
 
-import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a base type for VAppType and VmType.
- *
- * <pre>
- * &lt;complexType name="AbstractVAppType" &gt;
- * </pre>
- */
 @XmlType(name = "AbstractVAppType")
-public abstract class AbstractVAppType extends ResourceEntity {
+public abstract class AbstractVApp extends ResourceEntity {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -76,7 +69,7 @@ public abstract class AbstractVAppType extends ResourceEntity {
       private Set<SectionType> sections = Sets.newLinkedHashSet();
 
       /**
-       * @see AbstractVAppType#isDeployed()
+       * @see AbstractVApp#isDeployed()
        */
       public B isDeployed(Boolean deployed) {
          this.deployed = deployed;
@@ -84,7 +77,7 @@ public abstract class AbstractVAppType extends ResourceEntity {
       }
 
       /**
-       * @see AbstractVAppType#isDeployed()
+       * @see AbstractVApp#isDeployed()
        */
       public B deployed() {
          this.deployed = Boolean.TRUE;
@@ -92,7 +85,7 @@ public abstract class AbstractVAppType extends ResourceEntity {
       }
 
       /**
-       * @see AbstractVAppType#isDeployed()
+       * @see AbstractVApp#isDeployed()
        */
       public B notDeployed() {
          this.deployed = Boolean.FALSE;
@@ -100,7 +93,7 @@ public abstract class AbstractVAppType extends ResourceEntity {
       }
 
       /**
-       * @see AbstractVAppType#getVAppParent()
+       * @see AbstractVApp#getVAppParent()
        */
       public B parent(Reference vAppParent) {
          this.vAppParent = vAppParent;
@@ -108,7 +101,7 @@ public abstract class AbstractVAppType extends ResourceEntity {
       }
 
       /**
-       * @see AbstractVAppType#getSections()
+       * @see AbstractVApp#getSections()
        */
       public B sections(Iterable<? extends SectionType> sections) {
          this.sections = Sets.newLinkedHashSet(checkNotNull(sections, "sections"));
@@ -116,14 +109,14 @@ public abstract class AbstractVAppType extends ResourceEntity {
       }
 
       /**
-       * @see AbstractVAppType#getSections()
+       * @see AbstractVApp#getSections()
        */
       public B section(SectionType section) {
          this.sections.add(checkNotNull(section, "section"));
          return self();
       }
 
-      public B fromAbstractVAppType(AbstractVAppType in) {
+      public B fromAbstractVAppType(AbstractVApp in) {
          return fromResourceEntityType(in).parent(vAppParent).sections(sections).isDeployed(deployed);
       }
    }
@@ -153,11 +146,11 @@ public abstract class AbstractVAppType extends ResourceEntity {
    @XmlAttribute
    private Boolean deployed;
 
-   protected AbstractVAppType() {
+   protected AbstractVApp() {
       // for JAXB and Builders
    }
 
-   protected AbstractVAppType(Builder<?> builder) {
+   protected AbstractVApp(Builder<?> builder) {
       super(builder);
       this.vAppParent = builder.vAppParent;
       this.sections = builder.sections.isEmpty() ? null : ImmutableSet.copyOf(builder.sections);
@@ -212,7 +205,7 @@ public abstract class AbstractVAppType extends ResourceEntity {
          return true;
       if (o == null || getClass() != o.getClass())
          return false;
-      AbstractVAppType that = AbstractVAppType.class.cast(o);
+      AbstractVApp that = AbstractVApp.class.cast(o);
       return super.equals(that)
             && equal(this.vAppParent, that.vAppParent)
             && equal(this.sections, that.sections)

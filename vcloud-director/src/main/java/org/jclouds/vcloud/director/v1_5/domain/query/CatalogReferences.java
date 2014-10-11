@@ -18,13 +18,6 @@ package org.jclouds.vcloud.director.v1_5.domain.query;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Represents the results from a vCloud query as references.
- *
- * <pre>
- * &lt;complexType name="QueryResultReferences" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "CatalogReferences")
 public class CatalogReferences extends QueryResultReferences {
 

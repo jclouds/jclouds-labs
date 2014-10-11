@@ -27,12 +27,6 @@ import com.google.common.base.Objects;
 
 /**
  * Represents vApp/VM deployment parameters.
- * 
- * <pre>
- * &lt;complexType name="DeployVAppParams" /&gt;
- * </pre>
- *
- * @since 0.9
  */
 @XmlRootElement(name = "DeployVAppParams")
 @XmlType(name = "DeployVAppParamsType")

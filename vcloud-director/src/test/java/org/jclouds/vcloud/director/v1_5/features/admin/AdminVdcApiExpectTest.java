@@ -28,9 +28,6 @@ import org.jclouds.vcloud.director.v1_5.features.VdcApiExpectTest;
 import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorAdminApiExpectTest;
 import org.testng.annotations.Test;
 
-/**
- * Test the {@link AdminVdcApi} by observing its side effects.
- */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminVdcApiExpectTest")
 public class AdminVdcApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    

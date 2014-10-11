@@ -51,20 +51,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Represents the parameters for capturing a vApp to a vApp template.
- *
- * <pre>
- * &lt;complexType name="CaptureVAppParams">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ParamsType">
- *       &lt;sequence>
- *         &lt;element name="Source" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType"/>
- *         &lt;element ref="{http://schemas.dmtf.org/ovf/envelope/1}Section" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "CaptureVAppParams", propOrder = {
       "source",

@@ -29,6 +29,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.EndpointParam;
 import org.jclouds.rest.annotations.Fallback;
@@ -37,29 +38,16 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.vcloud.director.v1_5.domain.Group;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToAdminHref;
-import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface GroupApi {
-   
-   /**
-    * Imports a group in an organization.
-    *
-    * <pre>
-    * POST /admin/org/{id}/groups
-    * </pre>
-    *
-    * @param adminUrn the admin org to add the group in
-    * @return the added group
-    */
-   @POST
-   @Path("/groups")
-   @Consumes(GROUP)
-   @Produces(GROUP)
+   /** Returns the group or null if not found. */
+   @GET
+   @Consumes
    @JAXBResponseParser
-   Group addGroupToOrg(@BinderParam(BindToXMLPayload.class) Group group,
-         @EndpointParam(parser = URNToAdminHref.class) String adminUrn);
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
+   Group get(@EndpointParam URI groupUri);
 
    @POST
    @Path("/groups")
@@ -68,61 +56,11 @@ public interface GroupApi {
    @JAXBResponseParser
    Group addGroupToOrg(@BinderParam(BindToXMLPayload.class) Group group, @EndpointParam URI adminUrn);
 
-   /**
-    * Retrieves a group.
-    *
-    * <pre>
-    * GET /admin/group/{id}
-    * </pre>
-    *
-    * @param groupUrn the reference for the group
-    * @return a group
-    */
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
-   Group get(@EndpointParam(parser = URNToHref.class) String groupUrn);
-
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
-   Group get(@EndpointParam URI groupUri);
-
-   /**
-    * Modifies a group.
-    * 
-    * <pre>
-    * PUT /admin/group/{id}
-    * </pre>
-    * 
-    * @return the edited group
-    */
-   @PUT
-   @Consumes(GROUP)
-   @Produces(GROUP)
-   @JAXBResponseParser
-   Group edit(@EndpointParam(parser = URNToHref.class) String groupUrn,
-         @BinderParam(BindToXMLPayload.class) Group group);
-
    @PUT
    @Consumes(GROUP)
    @Produces(GROUP)
    @JAXBResponseParser
    Group edit(@EndpointParam URI groupUrn, @BinderParam(BindToXMLPayload.class) Group group);
-
-   /**
-    * Deletes a group.
-    * 
-    * <pre>
-    * DELETE /admin/group/{id}
-    * </pre>
-    */
-   @DELETE
-   @Consumes
-   @JAXBResponseParser
-   void remove(@EndpointParam(parser = URNToHref.class) String groupUrn);
 
    @DELETE
    @Consumes

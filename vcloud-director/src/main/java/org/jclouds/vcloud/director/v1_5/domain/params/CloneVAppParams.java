@@ -21,10 +21,6 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * Represents parameters for copying a vApp and optionally deleting the source.
- * 
- * <pre>
- * &lt;complexType name="CloneVAppParams" /&gt;
- * </pre>
  */
 @XmlType(name = "CloneVAppParams")
 @XmlRootElement(name = "CloneVAppParams")

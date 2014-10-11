@@ -33,20 +33,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 /**
  * Represents parameters for copying a vApp template and optionally
  * deleting the source.
- *
- * <pre>
- * &lt;complexType name="CloneVAppTemplateParams">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ParamsType">
- *       &lt;sequence>
- *         &lt;element name="Source" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType"/>
- *         &lt;element name="IsSourceDelete" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "CloneVAppTemplateParams", propOrder = {
       "source",

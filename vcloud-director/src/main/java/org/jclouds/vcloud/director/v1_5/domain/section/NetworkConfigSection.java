@@ -38,13 +38,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents the network config section of a vApp.
- *
- * <pre>
- * &lt;complexType name="NetworkConfigSection" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "NetworkConfigSection")
 @XmlType(name = "NetworkConfigSectionType")
 public class NetworkConfigSection extends SectionType {

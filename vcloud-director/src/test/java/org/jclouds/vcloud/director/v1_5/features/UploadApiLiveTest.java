@@ -20,9 +20,6 @@ import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Tests behavior of {@link NetworkApi}
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "UploadApiLiveTest")
 public class UploadApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    

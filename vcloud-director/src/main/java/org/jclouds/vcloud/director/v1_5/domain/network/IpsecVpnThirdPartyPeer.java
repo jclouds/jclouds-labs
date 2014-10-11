@@ -18,27 +18,8 @@ package org.jclouds.vcloud.director.v1_5.domain.network;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * 
- *                 Gives more details of third party peer end point.
- *             
- * 
- * <p>Java class for IpsecVpnThirdPartyPeer complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="IpsecVpnThirdPartyPeer">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}IpsecVpnUnmanagedPeerType">
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "IpsecVpnThirdPartyPeer")
-public class IpsecVpnThirdPartyPeer extends IpsecVpnUnmanagedPeerType<IpsecVpnThirdPartyPeer> {
+public class IpsecVpnThirdPartyPeer extends IpsecVpnUnmanagedPeer<IpsecVpnThirdPartyPeer> {
    public static Builder builder() {
       return new Builder();
    }

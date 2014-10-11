@@ -37,9 +37,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorAdminApiExpectTest;
 import org.testng.annotations.Test;
 
-/**
- * Tests the request/response behavior of {@link org.jclouds.vcloud.director.v1_5.features.MetadataApi}
- */
 @Test(groups = { "unit", "user" }, testName = "MetadataApiExpectTest")
 public class MetadataApiExpectTest extends VCloudDirectorAdminApiExpectTest {
 

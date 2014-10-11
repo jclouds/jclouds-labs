@@ -27,28 +27,6 @@ import com.google.common.base.Objects;
 
 /**
  * Defines how LDAP attributes are used when importing a user.
- *
- * <pre>
- * &lt;complexType name="OrgLdapUserAttributes">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="ObjectClass" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="ObjectIdentifier" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="UserName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Email" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="FullName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="GivenName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Surname" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Telephone" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="GroupMembershipIdentifier" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="GroupBackLinkIdentifier" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
  */
 @XmlType(name = "OrgLdapUserAttributes", propOrder = {
     "objectClass",

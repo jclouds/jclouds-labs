@@ -35,7 +35,7 @@ import org.jclouds.vcloud.director.v1_5.domain.VAppTemplate;
 import org.jclouds.vcloud.director.v1_5.domain.Vm;
 import org.jclouds.vcloud.director.v1_5.domain.query.CatalogReferences;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultMediaRecord;
-import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecordType;
+import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecord;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultRecords;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultVAppRecord;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultVAppTemplateRecord;
@@ -49,9 +49,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
-/**
- * Tests live behavior of {@link QueryApi}.
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "QueryApiLiveTest")
 public class QueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -165,10 +162,10 @@ public class QueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       }
 
       // Start the vApp so that it has VMs
-      Task task = vAppApi.powerOn(vApp.getId());
+      Task task = vAppApi.powerOn(vApp.getHref());
       assertTaskSucceedsLong(task);
 
-      vApp = vAppApi.get(vApp.getId()); // reload, so it has the VMs
+      vApp = vAppApi.get(vApp.getHref()); // reload, so it has the VMs
       List<Vm> vms = vApp.getChildren().getVms();
       Set<URI> vmHrefs = toHrefs(vms);
 
@@ -217,7 +214,7 @@ public class QueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    private static void assertRecordTypes(QueryResultRecords queryResult, Collection<String> validTypes,
             Class<?> validClazz) {
-      for (QueryResultRecordType record : queryResult.getRecords()) {
+      for (QueryResultRecord record : queryResult.getRecords()) {
          assertTrue(validTypes.contains(record.getType()), "invalid type for query result record, " + record.getType()
                   + "; valid types are " + validTypes);
          assertEquals(record.getClass(), validClazz, "invalid type for query result record, " + record.getClass()
@@ -227,7 +224,7 @@ public class QueryApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    private Set<URI> toHrefs(QueryResultRecords queryResult) {
       Set<URI> hrefs = Sets.newLinkedHashSet();
-      for (QueryResultRecordType record : queryResult.getRecords()) {
+      for (QueryResultRecord record : queryResult.getRecords()) {
          hrefs.add(record.getHref());
       }
       return hrefs;

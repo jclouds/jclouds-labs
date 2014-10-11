@@ -31,13 +31,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a metadata entry
- * <p/>
- * <pre>
- * &lt;xs:complexType name="MetadataType"&gt;
- * </pre>
- */
 //TODO: this is a ridiculously complicated way of representing Map<String, String>
 @XmlRootElement(name = "MetadataEntry")
 public class MetadataEntry extends Resource {

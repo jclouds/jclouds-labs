@@ -23,10 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Represents the results from a Right vCloud query as a record.
- */
-public class QueryResultRightRecord extends QueryResultRecordType {
+public class QueryResultRightRecord extends QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -40,7 +37,7 @@ public class QueryResultRightRecord extends QueryResultRecordType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
 
-   public static class Builder<B extends Builder<B>> extends QueryResultRecordType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends QueryResultRecord.Builder<B> {
 
       private String name;
       private String category;

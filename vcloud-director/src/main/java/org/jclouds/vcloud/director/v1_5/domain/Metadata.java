@@ -34,14 +34,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-/**
- * Represents a set of metadata
- * <p/>
- * 
- * <pre>
- * &lt;xs:complexType name="Metadata"&gt;
- * </pre>
- */
 @XmlRootElement(name = "Metadata")
 public class Metadata extends Resource implements Map<String, String> {
    

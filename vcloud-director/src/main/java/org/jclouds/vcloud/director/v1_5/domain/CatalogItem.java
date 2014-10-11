@@ -31,10 +31,6 @@ import com.google.common.collect.Sets;
 
 /**
  * Contains a reference to a VappTemplate or Media object and related metadata.
- * <p/>
- * <pre>
- * &lt;complexType name="CatalogItemType" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "CatalogItem")
 public class CatalogItem extends Entity {

@@ -29,13 +29,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
 
-/**
- * Represents a VApp network configuration.
- *
- * <pre>
- * &lt;complexType name="VAppNetworkConfiguration" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "NetworkConfiguration")
 @XmlType(name = "VAppNetworkConfiguration")
 public class VAppNetworkConfiguration extends Resource {

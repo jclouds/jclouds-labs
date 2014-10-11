@@ -29,10 +29,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
-/**
- * Represents features of a network.
- */
 @XmlRootElement(name = "Features")
 public class NetworkFeatures {
 
@@ -46,12 +42,12 @@ public class NetworkFeatures {
 
    public static class Builder {
 
-      private Set<NetworkServiceType<?>> services = Sets.newLinkedHashSet();
+      private Set<NetworkService<?>> services = Sets.newLinkedHashSet();
 
       /**
        * @see NetworkFeatures#getNetworkServices()
        */
-      public Builder services(Set<? extends NetworkServiceType<?>> services) {
+      public Builder services(Set<? extends NetworkService<?>> services) {
          this.services = Sets.newLinkedHashSet(checkNotNull(services, "services"));
          return this;
       }
@@ -59,7 +55,7 @@ public class NetworkFeatures {
       /**
        * @see NetworkFeatures#getNetworkServices()
        */
-      public Builder service(NetworkServiceType<?> service) {
+      public Builder service(NetworkService<?> service) {
          services.add(checkNotNull(service, "service"));
          return this;
       }
@@ -77,18 +73,18 @@ public class NetworkFeatures {
       // for JAXB
    }
 
-   public NetworkFeatures(Set<? extends NetworkServiceType<?>> services) {
+   public NetworkFeatures(Set<? extends NetworkService<?>> services) {
       this.services = ImmutableSet.copyOf(services);
    }
 
    @XmlElementRef
-   private Set<? extends NetworkServiceType<?>> services = Sets.newLinkedHashSet();
+   private Set<? extends NetworkService<?>> services = Sets.newLinkedHashSet();
 
    /**
     * @return a Network service. May be any of DhcpService, NatService, IpsecVpnService,
     *         DhcpService, or StaticRoutingService.
     */
-   public Set<? extends NetworkServiceType<?>> getNetworkServices() {
+   public Set<? extends NetworkService<?>> getNetworkServices() {
       return Collections.unmodifiableSet(services);
    }
 

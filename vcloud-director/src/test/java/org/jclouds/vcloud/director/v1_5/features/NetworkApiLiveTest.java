@@ -42,9 +42,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 
-/**
- * Tests behavior of {@link NetworkApi}
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "NetworkApiLiveTest")
 public class NetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -67,7 +64,7 @@ public class NetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void cleanUp() {
       if (metadataSet) {
          try {
-            Task remove = adminContext.getApi().getMetadataApi(networkUrn).remove("key");
+            Task remove = adminContext.getApi().getMetadataApi(context.resolveIdToAdminHref(networkId)).remove("key");
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting metadata");
@@ -78,9 +75,9 @@ public class NetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "GET /network/{id}")
    public void testGetNetwork() {
       // required for testing
-      assertNotNull(networkUrn, String.format(URN_REQ_LIVE, NETWORK));
+      assertNotNull(networkId, String.format(URN_REQ_LIVE, NETWORK));
 
-      Network abstractNetwork = networkApi.get(networkUrn);
+      Network abstractNetwork = networkApi.get(context.resolveIdToHref(networkId));
       assertTrue(abstractNetwork instanceof OrgNetwork,
                String.format(REQUIRED_VALUE_OBJECT_FMT, ".class", NETWORK, abstractNetwork.getClass(), "OrgNetwork"));
       OrgNetwork network = Network.toSubType(abstractNetwork);
@@ -92,7 +89,7 @@ public class NetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    private void setupMetadata() {
       //TODO: block until complete
-      adminContext.getApi().getMetadataApi(networkUrn).put("key", "value");
+      adminContext.getApi().getMetadataApi(context.resolveIdToHref(networkId)).put("key", "value");
       metadataSet = true;
    }
 
@@ -102,7 +99,7 @@ public class NetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          setupMetadata();
       }
 
-      Metadata metadata = context.getApi().getMetadataApi(networkUrn).get();
+      Metadata metadata = context.getApi().getMetadataApi(context.resolveIdToHref(networkId)).get();
       // required for testing
       assertFalse(Iterables.isEmpty(metadata.getMetadataEntries()),
                String.format(OBJ_FIELD_REQ_LIVE, NETWORK, "metadata.entries"));
@@ -124,7 +121,7 @@ public class NetworkApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "GET /network/{id}/metadata/{key}", dependsOnMethods = { "testGetMetadata" })
    public void testGetMetadataValue() {
-      String metadataValue = context.getApi().getMetadataApi(networkUrn).get("key");
+      String metadataValue = context.getApi().getMetadataApi(context.resolveIdToHref(networkId)).get("key");
 
       assertEquals(metadataValue, "value", String.format(OBJ_FIELD_EQ, NETWORK, "metadataEntry.value", "value", metadataValue));
    }

@@ -26,26 +26,7 @@ import com.google.common.base.Objects;
 
 
 /**
- * Represents a compute capacity with units.
- * <p/>
- * <p/>
- * <p>Java class for ComputeCapacity complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="ComputeCapacity">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="Cpu" type="{http://www.vmware.com/vcloud/v1.5}CapacityWithUsageType"/>
- *         &lt;element name="Memory" type="{http://www.vmware.com/vcloud/v1.5}CapacityWithUsageType"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
+ * Represents a compute capacity with usage.
  */
 @XmlType(name = "ComputeCapacity", propOrder = {
       "cpu",

@@ -16,6 +16,8 @@
  */
 package org.jclouds.vcloud.director.v1_5;
 
+import java.net.URI;
+
 import org.jclouds.rest.ApiContext;
 import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminApi;
 import org.jclouds.vcloud.director.v1_5.internal.VCloudDirectorContextImpl;
@@ -27,4 +29,18 @@ import com.google.inject.ImplementedBy;
 public interface VCloudDirectorContext extends ApiContext<VCloudDirectorApi> {
 
    ApiContext<VCloudDirectorAdminApi> getAdminContext();
+
+   /**
+    * Resolves the {@link org.jclouds.vcloud.director.v1_5.domain.Entity#getId id} to an href used for
+    * {@linkplain VCloudDirectorApi} calls. This caches values to avoid duplicate network
+    * requests.
+    */
+   URI resolveIdToHref(String id);
+
+   /**
+    * Resolves the {@link org.jclouds.vcloud.director.v1_5.domain.Entity#getId id} to an href used for
+    * {@linkplain VCloudDirectorAdminApi} calls. This caches values to avoid duplicate network
+    * requests.
+    */
+   URI resolveIdToAdminHref(String id);
 }

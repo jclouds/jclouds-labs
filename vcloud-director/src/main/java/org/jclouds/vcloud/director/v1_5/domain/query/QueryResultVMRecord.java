@@ -25,16 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Represents the results from a VM vCloud query as a record.
- * 
- * <pre>
- * &lt;complexType name="QueryResultVMRecordType" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "VMRecord")
 @XmlType(name = "QueryResultVMRecordType")
-public class QueryResultVMRecord extends QueryResultRecordType {
+public class QueryResultVMRecord extends QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -48,7 +41,7 @@ public class QueryResultVMRecord extends QueryResultRecordType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
 
-   public static class Builder<B extends Builder<B>> extends QueryResultRecordType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends QueryResultRecord.Builder<B> {
 
       private String name;
       private String containerName;

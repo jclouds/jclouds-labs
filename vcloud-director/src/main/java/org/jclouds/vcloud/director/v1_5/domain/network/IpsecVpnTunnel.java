@@ -25,38 +25,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Represents details of an IPSec-VPN tunnel.
- * <p/>
- * <p/>
- * <p>Java class for IpsecVpnTunnel complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="IpsecVpnTunnel">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element ref="{http://www.vmware.com/vcloud/v1.5}IpsecVpnPeer"/>
- *         &lt;element name="PeerIpAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType"/>
- *         &lt;element name="PeerNetworkAddress" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType"/>
- *         &lt;element name="PeerNetworkMask" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType"/>
- *         &lt;element name="SharedSecret" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="EncryptionProtocol" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Mtu" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="IsEnabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="IsOperational" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="ErrorDetails" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlType(name = "IpsecVpnTunnel", propOrder = {
       "name",
       "description",
@@ -85,7 +53,7 @@ public class IpsecVpnTunnel {
 
       private String name;
       private String description;
-      private IpsecVpnPeerType<?> ipsecVpnPeer;
+      private IpsecVpnPeer<?> ipsecVpnPeer;
       private String peerIpAddress;
       private String peerNetworkAddress;
       private String peerNetworkMask;
@@ -115,7 +83,7 @@ public class IpsecVpnTunnel {
       /**
        * @see IpsecVpnTunnel#getIpsecVpnPeer()
        */
-      public Builder ipsecVpnPeer(IpsecVpnPeerType<?> ipsecVpnPeer) {
+      public Builder ipsecVpnPeer(IpsecVpnPeer<?> ipsecVpnPeer) {
          this.ipsecVpnPeer = ipsecVpnPeer;
          return this;
       }
@@ -215,7 +183,7 @@ public class IpsecVpnTunnel {
       }
    }
 
-   private IpsecVpnTunnel(String name, String description, IpsecVpnPeerType<?> ipsecVpnPeer, String peerIpAddress,
+   private IpsecVpnTunnel(String name, String description, IpsecVpnPeer<?> ipsecVpnPeer, String peerIpAddress,
                           String peerNetworkAddress, String peerNetworkMask, String sharedSecret, String encryptionProtocol, int mtu, boolean enabled, Boolean operational, String errorDetails) {
       this.name = name;
       this.description = description;
@@ -240,7 +208,7 @@ public class IpsecVpnTunnel {
    @XmlElement(name = "Description")
    protected String description;
    @XmlElementRef
-   protected IpsecVpnPeerType<?> ipsecVpnPeer;
+   protected IpsecVpnPeer<?> ipsecVpnPeer;
    @XmlElement(name = "PeerIpAddress", required = true)
    protected String peerIpAddress;
    @XmlElement(name = "PeerNetworkAddress", required = true)
@@ -277,7 +245,7 @@ public class IpsecVpnTunnel {
    /**
     * Details about the peer network.
     */
-   public IpsecVpnPeerType<?> getIpsecVpnPeer() {
+   public IpsecVpnPeer<?> getIpsecVpnPeer() {
       return ipsecVpnPeer;
    }
 

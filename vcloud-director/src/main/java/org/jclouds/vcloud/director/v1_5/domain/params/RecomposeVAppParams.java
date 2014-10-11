@@ -31,23 +31,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Lists;
 
-/**
- * Represents vApp re-composition parameters.
- * 
- * <pre>
- * &lt;complexType name="RecomposeVAppParams">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ComposeVAppParamsType">
- *       &lt;sequence>
- *         &lt;element name="CreateItem" type="{http://www.vmware.com/vcloud/v1.5}VmType" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="DeleteItem" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "RecomposeVAppParams")
 @XmlType(name = "RecomposeVAppParamsType")
 public class RecomposeVAppParams extends ComposeVAppParams {

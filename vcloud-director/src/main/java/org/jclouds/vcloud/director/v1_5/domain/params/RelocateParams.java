@@ -28,27 +28,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Reference;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-
-/**
- * Parameters to be used for vm relocation.
- * <p/>
- * <p/>
- * <p>Java class for RelocateParams complex type.
- * <p/>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
- * <pre>
- * &lt;complexType name="RelocateParams">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Datastore" type="{http://www.vmware.com/vcloud/v1.5}ReferenceType"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "RelocateParams")
 @XmlType(propOrder = {
       "datastore"

@@ -26,13 +26,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
- * Specifies who can access the resource.
- *
- * <pre>
- * &lt;complexType name="AccessSetting" /&gt;
- * </pre>
- *
- * @since 0.9
+ * Specifies who can access a resource.
  */
 @XmlRootElement(name = "AccessSetting")
 @XmlType(name = "AccessSettingType")

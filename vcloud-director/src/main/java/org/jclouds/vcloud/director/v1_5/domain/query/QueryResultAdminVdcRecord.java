@@ -25,12 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Represents the results from a AdminVdc vCloud query as a record.
- */
 @XmlRootElement(name = "VdcRecord")
 @XmlType(name = "QueryResultAdminVdcRecordType")
-public class QueryResultAdminVdcRecord extends QueryResultRecordType {
+public class QueryResultAdminVdcRecord extends QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -44,7 +41,7 @@ public class QueryResultAdminVdcRecord extends QueryResultRecordType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
 
-   public static class Builder<B extends Builder<B>> extends QueryResultRecordType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends QueryResultRecord.Builder<B> {
 
       private String name;
       private Boolean isEnabled;

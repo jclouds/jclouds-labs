@@ -29,6 +29,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.EndpointParam;
 import org.jclouds.rest.annotations.Fallback;
@@ -38,54 +39,17 @@ import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.vcloud.director.v1_5.domain.Catalog;
 import org.jclouds.vcloud.director.v1_5.domain.CatalogItem;
 import org.jclouds.vcloud.director.v1_5.filters.AddVCloudAuthorizationAndCookieToRequest;
-import org.jclouds.vcloud.director.v1_5.functions.URNToHref;
 
 @RequestFilters(AddVCloudAuthorizationAndCookieToRequest.class)
 public interface CatalogApi {
 
-   /**
-    * Retrieves a catalog.
-    * 
-    * <pre>
-    * GET /catalog/{id}
-    * </pre>
-    * 
-    * @param catalogUrn
-    *           the reference for the catalog
-    * @return a catalog
-    */
+   /** Returns the catalog or null if not found. */
    @GET
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
-   Catalog get(@EndpointParam(parser = URNToHref.class) String catalogUrn);
-
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable
    Catalog get(@EndpointParam URI catalogHref);
-
-   /**
-    * Creates a catalog item in a catalog.
-    * 
-    * <pre>
-    * POST /catalog/{id}/catalogItems
-    * </pre>
-    * 
-    * @param catalogUrn
-    *           the URI of the catalog
-    * @param catalogItem
-    *           the catalog item to add
-    * @return the added catalog item
-    */
-   @POST
-   @Path("/catalogItems")
-   @Consumes(CATALOG_ITEM)
-   @Produces(CATALOG_ITEM)
-   @JAXBResponseParser
-   CatalogItem addItem(@EndpointParam(parser = URNToHref.class) String catalogUrn,
-         @BinderParam(BindToXMLPayload.class) CatalogItem catalogItem);
 
    @POST
    @Path("/catalogItems")
@@ -94,48 +58,12 @@ public interface CatalogApi {
    @JAXBResponseParser
    CatalogItem addItem(@EndpointParam URI catalogHref, @BinderParam(BindToXMLPayload.class) CatalogItem catalogItem);
 
-   /**
-    * Retrieves a catalog item.
-    * 
-    * <pre>
-    * GET /catalogItem/{id}
-    * </pre>
-    * 
-    * @param catalogItemUrn
-    *           the reference for the catalog item
-    * @return the catalog item
-    */
-   @GET
-   @Consumes
-   @JAXBResponseParser
-   @Fallback(NullOnNotFoundOr404.class)
-   CatalogItem getItem(@EndpointParam(parser = URNToHref.class) String catalogItemUrn);
-
+   /** Returns the item or null if not found. */
    @GET
    @Consumes
    @JAXBResponseParser
    @Fallback(NullOnNotFoundOr404.class)
    CatalogItem getItem(@EndpointParam URI catalogItemHref);
-
-   /**
-    * Modifies a catalog item.
-    * 
-    * <pre>
-    * PUT /catalogItem/{id}
-    * </pre>
-    * 
-    * @param catalogItemUrn
-    *           the reference for the catalog item
-    * @param catalogItem
-    *           the catalog item
-    * @return the edited catalog item
-    */
-   @PUT
-   @Consumes(CATALOG_ITEM)
-   @Produces(CATALOG_ITEM)
-   @JAXBResponseParser
-   CatalogItem editItem(@EndpointParam(parser = URNToHref.class) String catalogItemUrn,
-         @BinderParam(BindToXMLPayload.class) CatalogItem catalogItem);
 
    @PUT
    @Consumes(CATALOG_ITEM)
@@ -143,21 +71,6 @@ public interface CatalogApi {
    @JAXBResponseParser
    CatalogItem editItem(@EndpointParam URI catalogItemHref,
          @BinderParam(BindToXMLPayload.class) CatalogItem catalogItem);
-
-   /**
-    * Deletes a catalog item.
-    * 
-    * <pre>
-    * DELETE /catalogItem/{id}
-    * </pre>
-    * 
-    * @param catalogItemUrn
-    *           the reference for the catalog item
-    */
-   @DELETE
-   @Consumes
-   @JAXBResponseParser
-   void removeItem(@EndpointParam(parser = URNToHref.class) String catalogItemUrn);
 
    @DELETE
    @Consumes

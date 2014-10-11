@@ -32,13 +32,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Lists;
 
-/**
- * Runtime information for a specific vm
- *
- * <pre>
- * &lt;complexType name="RuntimeInfoSectionType" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "RuntimeInfoSection")
 @XmlType(name = "RuntimeInfoSectionType")
 public class RuntimeInfoSection extends SectionType {

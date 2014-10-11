@@ -23,13 +23,9 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 /**
  * Container for the list of typed queries available to the
  * requesting user.
- *
- * <pre>
- * &lt;complexType name="QueryList" /&gt;
- * </pre>
  */
 @XmlType(name = "QueryList")
-public class QueryList extends ContainerType {
+public class QueryList extends Container {
 
    // FIXME Should this class have fields?!
    
@@ -42,7 +38,7 @@ public class QueryList extends ContainerType {
       return builder().fromQueryList(this);
    }
 
-   public static class Builder<B extends Builder<B>> extends ContainerType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends Container.Builder<B> {
 
       @Override
       public QueryList build() {

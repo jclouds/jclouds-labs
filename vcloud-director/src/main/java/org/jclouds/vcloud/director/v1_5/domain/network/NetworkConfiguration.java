@@ -29,9 +29,6 @@ import org.jclouds.vcloud.director.v1_5.domain.network.Network.FenceMode;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Returns a network configuration
- */
 @XmlType(name = "NetworkConfiguration")
 @XmlRootElement(name = "NetworkConfiguration")
 public class NetworkConfiguration {

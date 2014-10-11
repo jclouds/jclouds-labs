@@ -34,9 +34,6 @@ import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Tests live behavior of {@link AdminOrgApi}.
- */
 @Test(groups = { "live", "admin" }, singleThreaded = true, testName = "AdminOrgApiLiveTest")
 public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -67,14 +64,14 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "GET /admin/org/{id}")
    public void testGetAdminOrg() {
-      AdminOrg adminOrg = orgApi.get(org.getId());
+      AdminOrg adminOrg = orgApi.get(org.getHref());
 
       Checks.checkAdminOrg(adminOrg);
    }
 
    @Test(description = "GET /admin/org/{id}/settings/email")
    public void testGetEmailSettings() {
-      emailSettings = orgApi.getEmailSettings(org.getId());
+      emailSettings = orgApi.getEmailSettings(org.getHref());
 
       Checks.checkEmailSettings(emailSettings);
    }
@@ -100,7 +97,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .defaultSubjectPrefix(newDefaultSubjectPrefix).isAlertEmailToAllAdmins(!isAlertEmailToAllAdmins)
                   .smtpServerSettings(newSmtpServerSettings).build();
 
-         emailSettings = orgApi.editEmailSettings(org.getId(), newEmailSettings);
+         emailSettings = orgApi.editEmailSettings(org.getHref(), newEmailSettings);
 
          assertTrue(equal(emailSettings.isDefaultSmtpServer(), !isDefaultSmtpServer),
                   String.format(OBJ_FIELD_UPDATABLE, "emailSettings", "isDefaultSmtpServer"));
@@ -124,13 +121,13 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .defaultSubjectPrefix(oldDefaultSubjectPrefix).isAlertEmailToAllAdmins(isAlertEmailToAllAdmins)
                   .smtpServerSettings(oldSmtpServerSettings).build();
 
-         emailSettings = orgApi.editEmailSettings(org.getId(), emailSettings);
+         emailSettings = orgApi.editEmailSettings(org.getHref(), emailSettings);
       }
    }
 
    @Test(description = "GET /admin/org/{id}/settings/general")
    public void testGetGeneralSettings() {
-      generalSettings = orgApi.getGeneralSettings(org.getId());
+      generalSettings = orgApi.getGeneralSettings(org.getHref());
 
       Checks.checkGeneralSettings(generalSettings);
    }
@@ -152,7 +149,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .useServerBootSequence(!useServerBootSequence).delayAfterPowerOnSeconds(delayAfterPowerOnSeconds + 1)
                   .build();
 
-         generalSettings = orgApi.editGeneralSettings(org.getId(), newGeneralSettings);
+         generalSettings = orgApi.editGeneralSettings(org.getHref(), newGeneralSettings);
 
          // assertTrue(equal(generalSettings.canPublishCatalogs(), !canPublishCatalogs),
          // String.format(OBJ_FIELD_UPDATABLE,
@@ -177,20 +174,20 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .useServerBootSequence(useServerBootSequence).delayAfterPowerOnSeconds(delayAfterPowerOnSeconds)
                   .build();
 
-         generalSettings = orgApi.editGeneralSettings(org.getId(), generalSettings);
+         generalSettings = orgApi.editGeneralSettings(org.getHref(), generalSettings);
       }
    }
 
    @Test(description = "GET /admin/org/{id}/settings/ldap")
    public void testGetLdapSettings() {
-      ldapSettings = orgApi.getLdapSettings(org.getId());
+      ldapSettings = orgApi.getLdapSettings(org.getHref());
 
       Checks.checkLdapSettings(ldapSettings);
    }
 
    @Test(description = "GET /admin/org/{id}/settings/passwordPolicy")
    public void testGetPasswordPolicy() {
-      passwordPolicy = orgApi.getPasswordPolicy(org.getId());
+      passwordPolicy = orgApi.getPasswordPolicy(org.getHref());
 
       Checks.checkPasswordPolicySettings(passwordPolicy);
    }
@@ -207,7 +204,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .invalidLoginsBeforeLockout(invalidLoginsBeforeLockout + 1)
                   .accountLockoutIntervalMinutes(accountLockoutIntervalMinutes + 1).build();
 
-         passwordPolicy = orgApi.editPasswordPolicy(org.getId(), newPasswordPolicy);
+         passwordPolicy = orgApi.editPasswordPolicy(org.getHref(), newPasswordPolicy);
 
          assertTrue(equal(passwordPolicy.isAccountLockoutEnabled(), !accountLockoutEnabled),
                   String.format(OBJ_FIELD_UPDATABLE, "PasswordPolicySettings", "deleteOnStorageLeaseExpiration"));
@@ -224,13 +221,13 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .invalidLoginsBeforeLockout(invalidLoginsBeforeLockout)
                   .accountLockoutIntervalMinutes(accountLockoutIntervalMinutes).build();
 
-         passwordPolicy = orgApi.editPasswordPolicy(org.getId(), passwordPolicy);
+         passwordPolicy = orgApi.editPasswordPolicy(org.getHref(), passwordPolicy);
       }
    }
 
    @Test(description = "GET /admin/org/{id}/settings/vAppLeaseSettings")
    public void testGetVAppLeaseSettings() {
-      vAppLeaseSettings = orgApi.getVAppLeaseSettings(org.getId());
+      vAppLeaseSettings = orgApi.getVAppLeaseSettings(org.getHref());
 
       Checks.checkVAppLeaseSettings(vAppLeaseSettings);
    }
@@ -248,7 +245,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .storageLeaseSeconds(storageLeaseSeconds + 1).deploymentLeaseSeconds(deploymentLeaseSeconds + 1)
                   .build();
 
-         vAppLeaseSettings = orgApi.editVAppLeaseSettings(org.getId(), newVAppLeaseSettings);
+         vAppLeaseSettings = orgApi.editVAppLeaseSettings(org.getHref(), newVAppLeaseSettings);
 
          assertTrue(equal(vAppLeaseSettings.deleteOnStorageLeaseExpiration(), !deleteOnStorageLeaseExpiration),
                   String.format(OBJ_FIELD_UPDATABLE, "vAppLeaseSettings", "deleteOnStorageLeaseExpiration"));
@@ -265,13 +262,13 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .deleteOnStorageLeaseExpiration(deleteOnStorageLeaseExpiration)
                   .storageLeaseSeconds(storageLeaseSeconds).deploymentLeaseSeconds(deploymentLeaseSeconds).build();
 
-         vAppLeaseSettings = orgApi.editVAppLeaseSettings(org.getId(), vAppLeaseSettings);
+         vAppLeaseSettings = orgApi.editVAppLeaseSettings(org.getHref(), vAppLeaseSettings);
       }
    }
 
    @Test(description = "GET /admin/org/{id}/settings/vAppTemplateLeaseSettings")
    public void testGetVAppTemplateLeaseSettings() {
-      vAppTemplateLeaseSettings = orgApi.getVAppTemplateLeaseSettings(org.getId());
+      vAppTemplateLeaseSettings = orgApi.getVAppTemplateLeaseSettings(org.getHref());
 
       Checks.checkVAppTemplateLeaseSettings(vAppTemplateLeaseSettings);
    }
@@ -287,7 +284,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .deleteOnStorageLeaseExpiration(!deleteOnStorageLeaseExpiration)
                   .storageLeaseSeconds(storageLeaseSeconds + 1).build();
 
-         vAppTemplateLeaseSettings = orgApi.editVAppTemplateLeaseSettings(org.getId(), newVAppTemplateLeaseSettings);
+         vAppTemplateLeaseSettings = orgApi.editVAppTemplateLeaseSettings(org.getHref(), newVAppTemplateLeaseSettings);
 
          assertTrue(equal(vAppTemplateLeaseSettings.deleteOnStorageLeaseExpiration(), !deleteOnStorageLeaseExpiration),
                   String.format(OBJ_FIELD_UPDATABLE, "vAppTemplateLeaseSettings", "deleteOnStorageLeaseExpiration"));
@@ -302,13 +299,13 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                   .deleteOnStorageLeaseExpiration(deleteOnStorageLeaseExpiration)
                   .storageLeaseSeconds(storageLeaseSeconds).build();
 
-         vAppTemplateLeaseSettings = orgApi.editVAppTemplateLeaseSettings(org.getId(), vAppTemplateLeaseSettings);
+         vAppTemplateLeaseSettings = orgApi.editVAppTemplateLeaseSettings(org.getHref(), vAppTemplateLeaseSettings);
       }
    }
 
    @Test(description = "GET /admin/org/{id}/settings")
    public void testGetSettings() {
-      settings = orgApi.getSettings(org.getId());
+      settings = orgApi.getSettings(org.getHref());
 
       Checks.checkOrgSettings(settings);
    }
@@ -322,7 +319,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          OrgSettings newSettings = OrgSettings.builder()
                   .emailSettings(emailSettings.toBuilder().fromEmailAddress(newFromEmailAddress).build()).build();
 
-         OrgSettings modified = orgApi.editSettings(org.getId(), newSettings);
+         OrgSettings modified = orgApi.editSettings(org.getHref(), newSettings);
 
          Checks.checkOrgSettings(settings);
          assertTrue(equal(modified.getEmailSettings().getFromEmailAddress(), newFromEmailAddress),
@@ -334,7 +331,7 @@ public class AdminOrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
          try {
             OrgSettings restorableSettings = OrgSettings.builder().emailSettings(emailSettings).build();
 
-            settings = orgApi.editSettings(org.getId(), restorableSettings);
+            settings = orgApi.editSettings(org.getHref(), restorableSettings);
          } catch (Exception e) {
             if (exception != null) {
                logger.warn(e, "Error resetting settings; rethrowing original test exception...");

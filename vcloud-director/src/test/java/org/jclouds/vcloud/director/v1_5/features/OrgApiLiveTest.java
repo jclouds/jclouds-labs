@@ -26,6 +26,8 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 
+import java.net.URI;
+
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 import org.jclouds.vcloud.director.v1_5.domain.AdminCatalog;
 import org.jclouds.vcloud.director.v1_5.domain.Metadata;
@@ -39,9 +41,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 
-/**
- * Tests live behavior of {@link OrgApi}.
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "OrgApiLiveTest")
 public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -50,26 +49,28 @@ public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
     */
 
    private OrgApi orgApi;
+   private URI orgHref;
 
    @Override
    @BeforeClass(alwaysRun = true)
    public void setupRequiredApis() {
       orgApi = context.getApi().getOrgApi();
+      orgHref = context.resolveIdToHref(orgId);
    }
 
    @AfterClass(alwaysRun = true)
    public void cleanUp() throws Exception {
       if (adminMembersSet) {
          try {
-            Task remove = adminContext.getApi().getMetadataApi(orgUrn).remove("KEY");
+            Task remove = adminContext.getApi().getMetadataApi(context.resolveIdToAdminHref(orgId)).remove("KEY");
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error when deleting metadata entry");
          }
          try {
-            adminContext.getApi().getCatalogApi().remove(catalogUrn);
+            adminContext.getApi().getCatalogApi().remove(context.resolveIdToAdminHref(catalogId));
          } catch (Exception e) {
-            logger.warn(e, "Error when deleting catalog'%s': %s", catalogUrn);
+            logger.warn(e, "Error when deleting catalog'%s': %s", catalogId);
          }
       }
    }
@@ -104,9 +105,9 @@ public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       assertNotNull(orgRef);
 
       // Call the method being tested
-      org = orgApi.get(orgUrn);
+      org = orgApi.get(orgHref);
 
-      assertEquals(orgApi.get(orgUrn), org);
+      assertEquals(orgApi.get(org.getHref()), org);
 
       checkOrg(org);
 
@@ -120,14 +121,16 @@ public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
     * the need for configuration
     */
    private void setupAdminMembers() {
+      URI orgAdminHref = context.resolveIdToAdminHref(orgId);
+
       //TODO: block until complete
-      adminContext.getApi().getMetadataApi(orgUrn).put("KEY", "VALUE");
+      adminContext.getApi().getMetadataApi(orgAdminHref).put("KEY", "VALUE");
 
       AdminCatalog newCatalog = AdminCatalog.builder().name("Test Catalog " + getTestDateTimeStamp())
                .description("created by testOrg()").build();
-      newCatalog = adminContext.getApi().getCatalogApi().addCatalogToOrg(newCatalog, orgUrn);
+      newCatalog = adminContext.getApi().getCatalogApi().addCatalogToOrg(newCatalog, orgAdminHref);
 
-      catalogUrn = newCatalog.getId();
+      catalogId = newCatalog.getId();
 
       adminMembersSet = true;
    }
@@ -136,7 +139,7 @@ public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testGetOrgMetadata() {
 
       // Call the method being tested
-      Metadata metadata = context.getApi().getMetadataApi(orgUrn).get();
+      Metadata metadata = context.getApi().getMetadataApi(orgHref).get();
 
       // NOTE The environment MUST have at one metadata entry for the first organisation configured
 
@@ -150,7 +153,7 @@ public class OrgApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    @Test(description = "GET /org/{id}/metadata/{key}", dependsOnMethods = { "testGetOrgMetadata" })
    public void testGetOrgMetadataValue() {
       // Call the method being tested
-      String value = context.getApi().getMetadataApi(orgUrn).get("KEY");
+      String value = context.getApi().getMetadataApi(orgHref).get("KEY");
 
       // NOTE The environment MUST have configured the metadata entry as '{ key="KEY", value="VALUE"
       // )'

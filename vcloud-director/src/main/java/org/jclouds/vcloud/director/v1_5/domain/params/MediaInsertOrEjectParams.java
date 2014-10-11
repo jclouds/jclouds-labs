@@ -27,13 +27,6 @@ import org.jclouds.vcloud.director.v1_5.domain.Reference;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Represents parameters for inserting/ejecting media to VM.
- *
- * <pre>
- * &lt;complexType name="MediaInsertOrEjectParams" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "MediaInsertOrEjectParams")
 @XmlType(name = "MediaInsertOrEjectParamsType")
 public class MediaInsertOrEjectParams {

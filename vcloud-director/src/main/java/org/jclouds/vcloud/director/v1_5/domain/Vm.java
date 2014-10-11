@@ -30,14 +30,10 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
  * Represents a virtual machine.
- *
- * <pre>
- * &lt;complexType name="VmType" /&gt;
- * </pre>
  */
 @XmlRootElement(name = "Vm")
 @XmlType(name = "VmType")
-public class Vm extends AbstractVAppType {
+public class Vm extends AbstractVApp {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -51,7 +47,7 @@ public class Vm extends AbstractVAppType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
    
-   public abstract static class Builder<B extends Builder<B>> extends AbstractVAppType.Builder<B> {
+   public abstract static class Builder<B extends Builder<B>> extends AbstractVApp.Builder<B> {
 
       private String vAppScopedLocalId;
       private EnvironmentType environment;

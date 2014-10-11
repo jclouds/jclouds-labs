@@ -32,28 +32,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 
-/**
- * Defines the email settings for an organization.
- *
- * <pre>
- * &lt;complexType name="OrgEmailSettings">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ResourceType">
- *       &lt;sequence>
- *         &lt;element name="IsDefaultSmtpServer" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="IsDefaultOrgEmail" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="FromEmailAddress" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="DefaultSubjectPrefix" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="IsAlertEmailToAllAdmins" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="AlertEmailTo" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="SmtpServerSettings" type="{http://www.vmware.com/vcloud/v1.5}SmtpServerSettingsType" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "OrgEmailSettings")
 @XmlType(propOrder = {
     "isDefaultSmtpServer",

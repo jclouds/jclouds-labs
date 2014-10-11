@@ -26,6 +26,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,9 +60,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
-/**
- * Tests behavior of {@link VdcApi}
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "VdcApiLiveTest")
 public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -73,6 +71,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    protected VdcApi vdcApi;
    protected VAppTemplateApi vappTemplateApi;
    protected VAppApi vappApi;
+   private URI vdcHref;
 
    private VApp instantiatedVApp;
    private VApp clonedVApp;
@@ -90,8 +89,9 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       vappTemplateApi = context.getApi().getVAppTemplateApi();
       vappApi = context.getApi().getVAppApi();
 
-      assertNotNull(vdcUrn, String.format(URN_REQ_LIVE, VDC));
+      assertNotNull(vdcId, String.format(URN_REQ_LIVE, VDC));
       network = lazyGetNetwork();
+      vdcHref = context.resolveIdToHref(vdcId);
    }
 
    @AfterClass(alwaysRun = true)
@@ -117,7 +117,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
       if (metadataSet) {
          try {
-            Task remove = adminContext.getApi().getMetadataApi(vdcUrn).remove("key");
+            Task remove = adminContext.getApi().getMetadataApi(vdcHref).remove("key");
             taskDoneEventually(remove);
          } catch (Exception e) {
             logger.warn(e, "Error deleting metadata entry");
@@ -135,7 +135,6 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "POST /vdc/{id}/action/captureVApp", dependsOnMethods = { "testInstantiateVAppTemplate" })
    public void testCaptureVApp() {
-	  VAppTemplate vAppTemplate = vappTemplateApi.get(vAppTemplateUrn);
       String name = name("captured-");
 
       CaptureVAppParams captureVappParams = CaptureVAppParams.builder()
@@ -146,7 +145,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // .sections(sections) // TODO: ovf sections
                .build();
 
-      capturedVAppTemplate = vdcApi.captureVApp(vdcUrn, captureVappParams);
+      capturedVAppTemplate = vdcApi.captureVApp(vdcHref, captureVappParams);
 
       Task task = Iterables.getFirst(capturedVAppTemplate.getTasks(), null);
       assertTaskSucceedsLong(task);
@@ -176,7 +175,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                // .linkedClone(true)
                .build();
 
-      clonedVApp = vdcApi.cloneVApp(vdcUrn, cloneVappParams);
+      clonedVApp = vdcApi.cloneVApp(vdcHref, cloneVappParams);
 
       Task task = Iterables.getFirst(clonedVApp.getTasks(), null);
       assertNotNull(task, "vdcApi.cloneVApp returned VApp that did not contain any tasks");
@@ -187,7 +186,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "POST /vdc/{id}/action/cloneVAppTemplate")
    public void testCloneVAppTemplate() {
-      clonedVAppTemplate = vdcApi.cloneVAppTemplate(vdcUrn,
+      clonedVAppTemplate = vdcApi.cloneVAppTemplate(vdcHref,
                CloneVAppTemplateParams.builder()
                	  .name(name("vappTemplateClone-"))
                   .source(lazyGetVAppTemplate().getHref())
@@ -204,7 +203,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testComposeVApp() {
       String name = name("composed-");
 
-      composedVApp = vdcApi.composeVApp(vdcUrn, ComposeVAppParams.builder().name(name)
+      composedVApp = vdcApi.composeVApp(vdcHref, ComposeVAppParams.builder().name(name)
       // TODO: test optional params
       // .sourcedItem(SourcedCompositionItemParam.builder()
       // .sourcedItem(vAppTemplateURI)
@@ -233,7 +232,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    // TODO Duplicates code in VAppApiLiveTest
    @Test(description = "POST /vdc/{id}/action/instantiateVAppTemplate")
    public void testInstantiateVAppTemplate() {
-      Vdc vdc = vdcApi.get(vdcUrn);
+      Vdc vdc = vdcApi.get(vdcHref);
 
       Set<Reference> networks = vdc.getAvailableNetworks();
       Optional<Reference> parentNetwork = Iterables.tryFind(networks, new Predicate<Reference>() {
@@ -264,7 +263,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
                .notDeploy().notPowerOn().description("Test VApp").instantiationParams(instantiationParams)
                .source(lazyGetVAppTemplate().getHref()).build();
 
-      instantiatedVApp = vdcApi.instantiateVApp(vdcUrn, instantiate);
+      instantiatedVApp = vdcApi.instantiateVApp(vdcHref, instantiate);
       Task instantiationTask = Iterables.getFirst(instantiatedVApp.getTasks(), null);
       assertTaskSucceedsLong(instantiationTask);
 
@@ -288,7 +287,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
       // .manifestRequired(true)
                .build();
 
-      uploadedVAppTemplate = vdcApi.uploadVAppTemplate(vdcUrn, uploadVAppTemplateParams);
+      uploadedVAppTemplate = vdcApi.uploadVAppTemplate(vdcHref, uploadVAppTemplateParams);
 
       Checks.checkVAppTemplateWhenNotReady(uploadedVAppTemplate);
 
@@ -304,7 +303,7 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
    @Test(description = "GET /vdc/{id}/metadata", dependsOnMethods = { "testGetVdc" })
    public void testGetMetadata() {
-      Metadata metadata = context.getApi().getMetadataApi(vdcUrn).get();
+      Metadata metadata = context.getApi().getMetadataApi(vdcHref).get();
 
       // required for testing
       assertTrue(Iterables.isEmpty(metadata.getMetadataEntries()),
@@ -317,12 +316,12 @@ public class VdcApiLiveTest extends BaseVCloudDirectorApiLiveTest {
    public void testGetMetadataValue() {
       // setupMetadata();
       // First find a key
-      Metadata metadata = context.getApi().getMetadataApi(vdcUrn).get();
+      Metadata metadata = context.getApi().getMetadataApi(vdcHref).get();
       Map<String, String> metadataMap = Checks.metadataToMap(metadata);
       String key = Iterables.getFirst(metadataMap.keySet(), "MadeUpKey!");
       String value = metadataMap.get(key);
 
-      String metadataValue = context.getApi().getMetadataApi(vdcUrn).get(key);
+      String metadataValue = context.getApi().getMetadataApi(vdcHref).get(key);
 
       assertEquals(metadataValue, value);
    }

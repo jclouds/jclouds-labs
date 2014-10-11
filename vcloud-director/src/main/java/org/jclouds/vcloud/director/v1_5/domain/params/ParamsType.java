@@ -28,10 +28,6 @@ import com.google.common.base.Objects;
 
 /**
  * A basic type used to specify parameters for operations.
- *
- * @see <a href="http://www.vmware.com/support/vcd/doc/rest-api-doc-1.5-html/types/ParamsType.html">
- *    vCloud REST API - ParamsType</a>
- * @since 0.9
  */
 @XmlType(name = "ParamsType")
 public class ParamsType {

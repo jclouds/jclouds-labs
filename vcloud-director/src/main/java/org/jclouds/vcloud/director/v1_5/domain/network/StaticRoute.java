@@ -25,25 +25,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-/**
- * Java class for StaticRoute complex type.
- *
- * <pre>
- * &lt;complexType name="StaticRoute">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}VCloudExtensibleType">
- *       &lt;sequence>
- *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Network" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="NextHopIp" type="{http://www.vmware.com/vcloud/v1.5}IpAddressType"/>
- *         &lt;element name="Interface" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlType(name = "StaticRoute", propOrder = {
       "name",
       "network",

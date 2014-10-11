@@ -29,16 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-/**
- * Represents the results from a Catalog vCloud query as a record.
- *
- * <pre>
- * &lt;complexType name="QueryResultCatalogRecordType" /&gt;
- * </pre>
- */
 @XmlRootElement(name = "CatalogRecord")
 @XmlType(name = "QueryResultCatalogRecordType")
-public class QueryResultCatalogRecord extends QueryResultRecordType {
+public class QueryResultCatalogRecord extends QueryResultRecord {
 
    public static Builder<?> builder() {
       return new ConcreteBuilder();
@@ -52,7 +45,7 @@ public class QueryResultCatalogRecord extends QueryResultRecordType {
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
    
-   public static class Builder<B extends Builder<B>> extends QueryResultRecordType.Builder<B> {
+   public static class Builder<B extends Builder<B>> extends QueryResultRecord.Builder<B> {
 
       private String name;
       private Boolean isPublished;

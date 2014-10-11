@@ -36,10 +36,6 @@ import com.google.common.collect.Iterables;
 
 /**
  * Base type that represents a resource entity such as a vApp template or virtual media.
- *
- * <pre>
- * &lt;complexType name="ResourceEntity" /&gt;
- * </pre>
  */
 @XmlType(name = "ResourceEntityType")
 public abstract class ResourceEntity extends Entity {
@@ -49,6 +45,7 @@ public abstract class ResourceEntity extends Entity {
    public static enum Status {
       
       @XmlEnumValue("-1") FAILED_CREATION(-1, "The object could not be created.", true, true, true),
+      /** The unresolved status typically means a task is in process. */
       @XmlEnumValue("0") UNRESOLVED(0, "The object is unresolved or not ready.", true, true, true),
       @XmlEnumValue("1") RESOLVED(1, "The object is resolved.", true, true, true),
       @XmlEnumValue("2") DEPLOYED(2, "The object is deployed.", false, false, false),

@@ -58,9 +58,6 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
-/**
- * Tests behavior of {@code Key Pairs}
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "KeyPairsApiLiveTest")
 public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
@@ -89,7 +86,7 @@ public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 		Media keyPairsContainer = findOrCreateKeyPairContainerInVDCNamed(currentVDC,
 				keyPairContainer, keyPairName);
 		String keypairValue = context.getApi().getMetadataApi(
-				keyPairsContainer.getId()).get(keyPairName);
+				keyPairsContainer.getHref()).get(keyPairName);
 		assertEquals(keypairValue, generateKeyPair(keyPairName));
 	}
 
@@ -99,12 +96,12 @@ public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 		Vdc currentVDC = lazyGetVdc();
 		Media keyPairsContainer = findOrCreateKeyPairContainerInVDCNamed(currentVDC,
 				keyPairContainer, keyPairName);
-		Task removeMedia = mediaApi.remove(keyPairsContainer.getId());
+		Task removeMedia = mediaApi.remove(keyPairsContainer.getHref());
 		Checks.checkTask(removeMedia);
 		assertTrue(retryTaskSuccess.apply(removeMedia),
 				String.format(TASK_COMPLETE_TIMELY, "removeMedia"));
 
-		keyPairsContainer = mediaApi.get(keyPairsContainer.getId());
+		keyPairsContainer = mediaApi.get(keyPairsContainer.getHref());
 		assertNull(keyPairsContainer, String.format(OBJ_DEL, MEDIA,
 				keyPairsContainer != null ? keyPairsContainer.toString() : ""));
 	}
@@ -118,7 +115,7 @@ public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
 					@Override
 					public boolean apply(Media input) {
-						return context.getApi().getMetadataApi(input.getId()).get(
+						return context.getApi().getMetadataApi(input.getHref()).get(
 								keyPairName) != null;
 					}
 				});
@@ -204,7 +201,7 @@ public class KeyPairsApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 
 	private void setKeyPairOnkeyPairsContainer(Media media, String keyPairName,
 			String keyPair) {
-		Task setKeyPair = context.getApi().getMetadataApi(media.getId()).put(
+		Task setKeyPair = context.getApi().getMetadataApi(media.getHref()).put(
 				keyPairName, keyPair);
 		Checks.checkTask(setKeyPair);
 		assertTrue(retryTaskSuccess.apply(setKeyPair),

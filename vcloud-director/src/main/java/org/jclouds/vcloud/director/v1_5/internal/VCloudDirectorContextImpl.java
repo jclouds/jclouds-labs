@@ -16,6 +16,8 @@
  */
 package org.jclouds.vcloud.director.v1_5.internal;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -29,8 +31,11 @@ import org.jclouds.rest.Utils;
 import org.jclouds.rest.internal.ApiContextImpl;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorContext;
 import org.jclouds.vcloud.director.v1_5.admin.VCloudDirectorAdminApi;
+import org.jclouds.vcloud.director.v1_5.functions.IdToAdminHref;
+import org.jclouds.vcloud.director.v1_5.functions.IdToHref;
 import org.jclouds.vcloud.director.v1_5.user.VCloudDirectorApi;
 
+import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
@@ -38,17 +43,29 @@ import com.google.inject.TypeLiteral;
 @Singleton
 public class VCloudDirectorContextImpl extends ApiContextImpl<VCloudDirectorApi> implements VCloudDirectorContext {
    private final ApiContext<VCloudDirectorAdminApi> adminContext;
+   private final Function<String, URI> idToHref;
+   private final Function<String, URI> idToAdminHref;
 
-   @Inject
-   VCloudDirectorContextImpl(@Name String name, ProviderMetadata providerMetadata,
+   @Inject VCloudDirectorContextImpl(@Name String name, ProviderMetadata providerMetadata,
          @Provider Supplier<Credentials> creds, Utils utils, Closer closer, Injector injector,
-         ApiContext<VCloudDirectorAdminApi> adminContext) {
+         ApiContext<VCloudDirectorAdminApi> adminContext, IdToHref idToHref, IdToAdminHref idToAdminHref) {
       super(name, providerMetadata, creds, utils, closer, injector, TypeLiteral.get(VCloudDirectorApi.class));
       this.adminContext = adminContext;
+      this.idToHref = idToHref;
+      this.idToAdminHref = idToAdminHref;
+
    }
-   
+
    @Override
    public ApiContext<VCloudDirectorAdminApi> getAdminContext() {
       return adminContext;
+   }
+
+   @Override public URI resolveIdToHref(String id) {
+      return idToHref.apply(id);
+   }
+
+   @Override public URI resolveIdToAdminHref(String adminId) {
+      return idToAdminHref.apply(adminId);
    }
 }

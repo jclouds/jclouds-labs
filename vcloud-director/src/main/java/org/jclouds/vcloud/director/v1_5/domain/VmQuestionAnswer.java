@@ -26,20 +26,7 @@ import com.google.common.base.Objects;
 
 /**
  * Represents a VM answer to a question when the VM is in a stuck
- * {@link ResourceEntityType.Status#WAITING_FOR_INPUT} state.
- *
- * <pre>
- * &lt;complexType name="VmQuestionAnswer">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="ChoiceId" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="QuestionId" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
+ * {@link ResourceEntity.Status#WAITING_FOR_INPUT} state.
  */
 @XmlType(name = "VmQuestionAnswer", propOrder = {
     "choiceId",

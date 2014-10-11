@@ -24,33 +24,17 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.jclouds.vcloud.director.v1_5.domain.query.ContainerType;
+import org.jclouds.vcloud.director.v1_5.domain.query.Container;
 
 import com.google.common.base.Objects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Sets;
 
-/**
- * This is the container for returned elements in referenceView
- *
- * <pre>
- * &lt;complexType name="References">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.vmware.com/vcloud/v1.5}ContainerType">
- *       &lt;sequence>
- *         &lt;element ref="{http://www.vmware.com/vcloud/v1.5}Reference" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;anyAttribute processContents='lax' namespace='##other'/>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- */
 @XmlRootElement(name = "References")
 @XmlType(propOrder = {
     "references"
 })
-public class References extends ContainerType {
+public class References extends Container {
    public static Builder<?> builder() {
       return new ConcreteBuilder();
    }
@@ -67,7 +51,7 @@ public class References extends ContainerType {
       }
    }
 
-   public abstract static class Builder<T extends Builder<T>> extends ContainerType.Builder<T> {
+   public abstract static class Builder<T extends Builder<T>> extends Container.Builder<T> {
       private Set<Reference> references;
 
       /**

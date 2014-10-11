@@ -17,10 +17,6 @@
 package org.jclouds.vcloud.director.v1_5.features.admin;
 
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_CATALOG;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ADMIN_ORG;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.CATALOG;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ENTITY;
-import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.ORG;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.OWNER;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.PUBLISH_CATALOG_PARAMS;
 import static org.testng.Assert.assertEquals;
@@ -43,17 +39,12 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.HttpHeaders;
 
-/**
- * Test the {@link AdminCatalogApi} by observing its side effects.
- */
 @Test(groups = { "unit", "admin" }, singleThreaded = true, testName = "AdminCatalogApiExpectTest")
 public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest {
    
    static String catalog = "7212e451-76e1-4631-b2de-ba1dfd8080e4";
-   static String catalogUrn = "urn:vcloud:catalog:" + catalog;
    static URI catalogAdminHref = URI.create(endpoint + "/admin/catalog/" + catalog);
-   static URI catalogHref = URI.create(endpoint + "/catalog/" + catalog);
-   
+
    HttpRequest get = HttpRequest.builder()
             .method("GET")
             .endpoint(catalogAdminHref)
@@ -72,37 +63,8 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, get, getResponse);
       assertEquals(api.getCatalogApi().get(catalogAdminHref), catalog());
    }
-   
-   HttpRequest resolveCatalog = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + catalogUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String catalogEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", catalogUrn)
-                                                             .a("id", catalogUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + catalogUrn)
-                                  .e("Link").a("rel", "alternate").a("type", CATALOG).a("href", catalogHref.toString()).up()
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_CATALOG).a("href", catalogAdminHref.toString()).up());
-   
-   HttpResponse resolveCatalogResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(catalogEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testGetCatalogUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog, resolveCatalogResponse, get, getResponse);
-      assertEquals(api.getCatalogApi().get(catalogUrn), catalog());
-   }
-   
+
    static String org = "7212e451-76e1-4631-b2de-asdasdasd";
-   static String orgUrn = "urn:vcloud:org:" + org;
-   static URI orgHref = URI.create(endpoint + "/org/" + org);
    static URI orgAdminHref = URI.create(endpoint + "/admin/org/" + org);
    
    HttpRequest add = HttpRequest.builder()
@@ -125,33 +87,6 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       assertEquals(api.getCatalogApi().addCatalogToOrg(addCatalogToOrgSource(), orgAdminHref), addCatalogToOrg());
    }
    
-   HttpRequest resolveOrg = HttpRequest.builder()
-            .method("GET")
-            .endpoint(endpoint + "/entity/" + orgUrn)
-            .addHeader("Accept", "*/*")
-            .addHeader("x-vcloud-authorization", token)
-            .addHeader(HttpHeaders.COOKIE, "vcloud-token=" + token)
-            .build();
-   
-   String orgEntity = asString(createXMLBuilder("Entity").a("xmlns", "http://www.vmware.com/vcloud/v1.5")
-                                                             .a("name", orgUrn)
-                                                             .a("id", orgUrn)
-                                                             .a("type", ENTITY)
-                                                             .a("href", endpoint + "/entity/" + catalogUrn)
-                                  .e("Link").a("rel", "alternate").a("type", ORG).a("href", orgHref.toString()).up()
-                                  .e("Link").a("rel", "alternate").a("type", ADMIN_ORG).a("href", orgAdminHref.toString()).up());
-   
-   HttpResponse resolveOrgResponse = HttpResponse.builder()
-           .statusCode(200)
-           .payload(payloadFromStringWithContentType(orgEntity, ENTITY + ";version=1.5"))
-           .build();
-   
-   @Test
-   public void testAddCatalogUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveOrg, resolveOrgResponse, add, addResponse);
-      assertEquals(api.getCatalogApi().addCatalogToOrg(addCatalogToOrgSource(), orgUrn), addCatalogToOrg());
-   }
-   
    HttpRequest edit = HttpRequest.builder()
             .method("PUT")
             .endpoint(catalogAdminHref)
@@ -170,12 +105,6 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
    public void testEditCatalogHref() {
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, edit, editResponse);
       assertEquals(api.getCatalogApi().edit(catalogAdminHref, editCatalog()), editCatalog());
-   }
-  
-   @Test
-   public void testEditCatalogUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog, resolveCatalogResponse, edit, editResponse);
-      assertEquals(api.getCatalogApi().edit(catalogUrn, editCatalog()), editCatalog());
    }
    
    HttpRequest getOwner = HttpRequest.builder()
@@ -210,12 +139,6 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       assertEquals(api.getCatalogApi().getOwner(catalogAdminHref), expectedGetOwner);
    }
    
-   @Test
-   public void testGetCatalogOwnerUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog, resolveCatalogResponse, getOwner, getOwnerResponse);
-      assertEquals(api.getCatalogApi().getOwner(catalogUrn), expectedGetOwner);
-   }
-   
    HttpRequest setOwner = HttpRequest.builder()
             .method("PUT")
             .endpoint(catalogAdminHref + "/owner")
@@ -243,13 +166,7 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, setOwner, setOwnerResponse);
       api.getCatalogApi().setOwner(catalogAdminHref, ownerToSet);
    }
-   
-   @Test
-   public void testSetCatalogOwnerUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog, resolveCatalogResponse, setOwner, setOwnerResponse);
-      api.getCatalogApi().setOwner(catalogUrn, ownerToSet);
-   }
-   
+
    HttpRequest publishCatalog = HttpRequest.builder()
             .method("POST")
             .endpoint(catalogAdminHref + "/action/publish")
@@ -269,14 +186,6 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
                publishCatalogResponse);
       api.getCatalogApi().publish(catalogAdminHref, PublishCatalogParams.builder().isPublished(true).build());
    }
-
-   @Test
-   public void testPublishCatalogUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog,
-               resolveCatalogResponse, publishCatalog, publishCatalogResponse);
-      api.getCatalogApi().publish(catalogUrn, PublishCatalogParams.builder().isPublished(true).build());
-   }
-
    
    HttpRequest removeCatalog = HttpRequest.builder()
             .method("DELETE")
@@ -295,13 +204,6 @@ public class AdminCatalogApiExpectTest extends VCloudDirectorAdminApiExpectTest 
       VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, removeCatalog,
                removeCatalogResponse);
       api.getCatalogApi().remove(catalogAdminHref);
-   }
-
-   @Test
-   public void testRemoveCatalogUrn() {
-      VCloudDirectorAdminApi api = requestsSendResponses(loginRequest, sessionResponse, resolveCatalog,
-               resolveCatalogResponse, removeCatalog, removeCatalogResponse);
-      api.getCatalogApi().remove(catalogUrn);
    }
 
    //TODO: tests for access control!

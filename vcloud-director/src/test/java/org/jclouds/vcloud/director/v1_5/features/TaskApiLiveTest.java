@@ -39,9 +39,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
-/**
- * Tests live behavior of {@link TaskApi}.
- */
 @Test(groups = { "live", "user" }, singleThreaded = true, testName = "TaskApiLiveTest")
 public class TaskApiLiveTest extends BaseVCloudDirectorApiLiveTest {
 

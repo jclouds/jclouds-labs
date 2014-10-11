@@ -49,11 +49,26 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 /**
- * Represents a vApp template.
- *
- * <pre>
- * &lt;complexType name="VAppTemplate" /&gt;
- * </pre>
+ * A vApp Template can be in one of these statues:
+ * <ul>
+ * <li>{@link org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status#FAILED_CREATION
+ * FAILED_CREATION(-1)} - Transient entity state, e.g., model object is addd but the
+ * corresponding VC backing does not exist yet. This is further sub-categorized in the respective
+ * entities.
+ * <li>{@link org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status#UNRESOLVED
+ * UNRESOLVED(0)} - Entity is whole, e.g., VM creation is complete and all the required model
+ * objects and VC backings are addd.
+ * <li>{@link org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status#RESOLVED
+ * RESOLVED(1)} - Entity is resolved.
+ * <li>{@link org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status#UNKNOWN
+ * UNKNOWN(6)} - Entity state could not be retrieved from the inventory, e.g., VM power state is
+ * null.
+ * <li>{@link org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status#POWERED_OFF
+ * POWERED_OFF(8)} - All VMs of the vApp template are powered off.
+ * <li>{@link org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status#MIXED MIXED(10)}
+ * - vApp template status is set to {@code MIXED} when the VMs in the vApp are in different power
+ * states.
+ * </ul>
  */
 @XmlRootElement(name = "VAppTemplate")
 public class VAppTemplate extends ResourceEntity {
@@ -69,7 +84,7 @@ public class VAppTemplate extends ResourceEntity {
 
    private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
    }
-   
+
    public abstract static class Builder<B extends Builder<B>> extends ResourceEntity.Builder<B> {
       private Owner owner;
       private Set<Vm> children = Sets.newLinkedHashSet();
