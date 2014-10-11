@@ -69,7 +69,6 @@
     <module>docker</module>
     <module>virtualbox</module>
     <module>vcloud-director</module>
-    <module>dmtf</module>
     <module>cdmi</module>
     <module>cloudsigma2</module>
     <module>cloudsigma2-lvs</module>
