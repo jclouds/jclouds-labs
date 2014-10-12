@@ -37,6 +37,8 @@ import org.jclouds.openstack.glance.v1_0.domain.StoreType;
  */
 public class CreateImageOptions extends UpdateImageOptions {
 
+   public static final String COPY_FROM = "x-glance-api-copy-from";
+
    /**
     * When present, Glance will use the supplied identifier for the image instead of generating one. If the identifier
     * already exists in that Glance node, then a 409 Conflict will be returned by Glance. The value of the header must
@@ -44,6 +46,14 @@ public class CreateImageOptions extends UpdateImageOptions {
     */
    public CreateImageOptions id(String id) {
       headers.put(ImageField.ID.asHeader(), id);
+      return this;
+   }
+
+   /**
+    * @param url the url of the image to be copied
+    */
+   public UpdateImageOptions copyFrom(String url) {
+      headers.put(COPY_FROM, url);
       return this;
    }
 
@@ -131,5 +141,13 @@ public class CreateImageOptions extends UpdateImageOptions {
       public static CreateImageOptions property(String key, String value) {
          return CreateImageOptions.class.cast(new CreateImageOptions().property(key, value));
       }
+
+      /**
+       * @see org.jclouds.openstack.glance.v1_0.options.CreateImageOptions#copyFrom(String)
+       */
+      public static CreateImageOptions copyFrom(String url) {
+         return CreateImageOptions.class.cast(new CreateImageOptions().copyFrom(url));
+      }
+
    }
 }
