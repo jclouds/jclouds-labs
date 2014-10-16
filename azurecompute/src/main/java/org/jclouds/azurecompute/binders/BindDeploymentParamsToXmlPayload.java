@@ -16,14 +16,19 @@
  */
 package org.jclouds.azurecompute.binders;
 
-import com.google.common.base.Throwables;
-import com.jamesmurty.utils.XMLBuilder;
+import static com.google.common.base.CaseFormat.UPPER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+
 import javax.inject.Singleton;
+
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.InputEndpoint;
 import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
+
+import com.google.common.base.Throwables;
+import com.jamesmurty.utils.XMLBuilder;
 
 @Singleton
 public class BindDeploymentParamsToXmlPayload implements Binder {
@@ -95,7 +100,7 @@ public class BindDeploymentParamsToXmlPayload implements Binder {
             .e("SourceImageName").t(params.getSourceImageName()).up()
             .e("OS").t("Linux").up()
             .up() //OSVirtualHardDisk
-            .e("RoleSize").t(params.getSize().value()).up()
+            .e("RoleSize").t(UPPER_UNDERSCORE.to(UPPER_CAMEL, params.getSize().name())).up()
             .up() //Role
             .up(); //RoleList
 
