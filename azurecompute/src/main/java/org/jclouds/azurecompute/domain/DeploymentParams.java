@@ -94,7 +94,7 @@ public class DeploymentParams {
       }
 
       public Builder fromDeploymentParams(DeploymentParams in) {
-         // TODO Since the roleName should be unique, is it a good idea to copy it ?
+         // TODO Since the virtualMachineName should be unique, is it a good idea to copy it ?
          return this.name(in.getName()).sourceImageName(in.getSourceImageName()).username(in.getUsername())
                .password(in.getPassword()).size(in.getSize());
       }

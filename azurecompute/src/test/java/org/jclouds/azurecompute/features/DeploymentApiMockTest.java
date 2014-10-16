@@ -16,16 +16,18 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.parse.GetDeploymentTest;
+import org.jclouds.azurecompute.xml.DeploymentHandlerTest;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "DeploymentApiMockTest")
 public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
@@ -42,7 +44,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
                .sourceImageName("OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd")
                .storageAccount("portalvhds0g7xhnq2x7t21").build();
 
-         assertThat(api.create(params)).isEqualTo("request-1");
+         assertEquals(api.create(params), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices/myservice/deployments", "/deploymentparams.xml");
       } finally {
@@ -57,7 +59,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         assertThat(api.get("mydeployment")).isEqualTo(GetDeploymentTest.expected());
+         assertEquals(api.get("mydeployment"), DeploymentHandlerTest.expected());
 
          assertSent(server, "GET", "/services/hostedservices/myservice/deployments/mydeployment");
       } finally {
@@ -72,7 +74,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         assertThat(api.get("mydeployment")).isNull();
+         assertNull(api.get("mydeployment"));
 
          assertSent(server, "GET", "/services/hostedservices/myservice/deployments/mydeployment");
       } finally {
@@ -87,7 +89,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         assertThat(api.delete("mydeployment")).isEqualTo("request-1");
+         assertEquals(api.delete("mydeployment"), "request-1");
 
          assertSent(server, "DELETE", "/services/hostedservices/myservice/deployments/mydeployment");
       } finally {
@@ -102,7 +104,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         assertThat(api.delete("mydeployment")).isNull();
+         assertNull(api.delete("mydeployment"));
 
          assertSent(server, "DELETE", "/services/hostedservices/myservice/deployments/mydeployment");
       } finally {
