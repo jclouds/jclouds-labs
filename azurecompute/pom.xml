@@ -42,7 +42,7 @@
     <test.azurecompute.build-version />
     <test.azurecompute.identity>/path/to/cert.p12</test.azurecompute.identity>
     <test.azurecompute.credential>password to cert</test.azurecompute.credential>
-    <jclouds.osgi.export>org.jclouds.azure.management*;version="${project.version}"</jclouds.osgi.export>
+    <jclouds.osgi.export>org.jclouds.azurecompute*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>org.jclouds*;version="${project.version}",*</jclouds.osgi.import>
   </properties>
 
