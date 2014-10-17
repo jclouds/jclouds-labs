@@ -16,42 +16,35 @@
  */
 package org.jclouds.azurecompute.xml;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.jclouds.azurecompute.domain.HostedService;
+import org.jclouds.http.functions.ParseSax;
+import org.xml.sax.Attributes;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
-import com.google.inject.Inject;
-import java.util.List;
-import org.jclouds.azurecompute.domain.HostedServiceWithDetailedProperties;
-import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
 /**
- * @see <a href="http://msdn.microsoft.com/en-us/library/ee460781">doc</a>
+ * @see <a href="http://msdn.microsoft.com/en-us/library/ee460781">Response body description</a>
  */
-public class ListHostedServicesHandler extends
-         ParseSax.HandlerForGeneratedRequestWithResult<List<HostedServiceWithDetailedProperties>> {
-
-   private final HostedServiceWithDetailedPropertiesHandler hostedServiceHandler;
-
-   private Builder<HostedServiceWithDetailedProperties> hostedServices = ImmutableList
-            .<HostedServiceWithDetailedProperties> builder();
-
+public final class ListHostedServicesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<HostedService>> {
    private boolean inHostedService;
+   private final HostedServiceHandler hostedServiceHandler;
+   private final Builder<HostedService> hostedServices = ImmutableList.builder();
 
-   @Inject
-   public ListHostedServicesHandler(HostedServiceWithDetailedPropertiesHandler hostedServiceHandler) {
+   @Inject ListHostedServicesHandler(HostedServiceHandler hostedServiceHandler) {
       this.hostedServiceHandler = hostedServiceHandler;
    }
 
-   @Override
-   public List<HostedServiceWithDetailedProperties> getResult() {
+   @Override public List<HostedService> getResult() {
       return hostedServices.build();
    }
 
-   @Override
-   public void startElement(String url, String name, String qName, Attributes attributes) throws SAXException {
-      if (SaxUtils.equalsOrSuffix(qName, "HostedService")) {
+   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+      if (qName.equals("HostedService")) {
          inHostedService = true;
       }
       if (inHostedService) {
@@ -59,8 +52,7 @@ public class ListHostedServicesHandler extends
       }
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   @Override public void endElement(String uri, String name, String qName) {
       if (qName.equals("HostedService")) {
          inHostedService = false;
          hostedServices.add(hostedServiceHandler.getResult());
@@ -69,8 +61,7 @@ public class ListHostedServicesHandler extends
       }
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       if (inHostedService) {
          hostedServiceHandler.characters(ch, start, length);
       }

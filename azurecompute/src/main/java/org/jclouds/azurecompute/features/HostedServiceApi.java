@@ -16,7 +16,12 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,15 +30,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+
 import org.jclouds.azurecompute.binders.BindCreateHostedServiceToXmlPayload;
 import org.jclouds.azurecompute.domain.HostedService;
-import org.jclouds.azurecompute.domain.HostedServiceWithDetailedProperties;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.options.CreateHostedServiceOptions;
 import org.jclouds.azurecompute.xml.HostedServiceHandler;
-import org.jclouds.azurecompute.xml.HostedServiceWithDetailedPropertiesHandler;
 import org.jclouds.azurecompute.xml.ListHostedServicesHandler;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.MapBinder;
@@ -41,9 +45,6 @@ import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
-
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
 /**
  * The Service Management API includes operations for managing the hosted services beneath your
@@ -53,7 +54,7 @@ import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
  */
 @Path("/services/hostedservices")
 @Headers(keys = "x-ms-version", values = "{jclouds.api-version}")
-@Consumes(MediaType.APPLICATION_XML)
+@Consumes(APPLICATION_XML)
 public interface HostedServiceApi {
 
    /**
@@ -64,9 +65,10 @@ public interface HostedServiceApi {
     */
    @Named("ListHostedServices")
    @GET
+   @QueryParams(keys = "embed-detail", values = "true")
    @XMLResponseParser(ListHostedServicesHandler.class)
    @Fallback(EmptyListOnNotFoundOr404.class)
-   List<HostedServiceWithDetailedProperties> list();
+   List<HostedService> list();
 
    /**
     * The Create Hosted Service operation creates a new hosted service in Windows Azure.
@@ -88,7 +90,7 @@ public interface HostedServiceApi {
    @Named("CreateHostedService")
    @POST
    @MapBinder(BindCreateHostedServiceToXmlPayload.class)
-   @Produces(MediaType.APPLICATION_XML)
+   @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String createServiceWithLabelInLocation(@PayloadParam("name") String name,
          @PayloadParam("label") String label, @PayloadParam("location") String location);
@@ -103,7 +105,7 @@ public interface HostedServiceApi {
    @Named("CreateHostedService")
    @POST
    @MapBinder(BindCreateHostedServiceToXmlPayload.class)
-   @Produces(MediaType.APPLICATION_XML)
+   @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String createServiceWithLabelInLocation(@PayloadParam("name") String name,
          @PayloadParam("label") String label, @PayloadParam("location") String location,
@@ -121,24 +123,10 @@ public interface HostedServiceApi {
    @Named("GetHostedServiceProperties")
    @GET
    @Path("/{name}")
+   @QueryParams(keys = "embed-detail", values = "true")
    @XMLResponseParser(HostedServiceHandler.class)
    @Fallback(NullOnNotFoundOr404.class)
-   HostedService get(@PathParam("name") String name);
-
-   /**
-    * like {@link #get(String)}, except additional data such as status and deployment information is
-    * returned.
-    *
-    * @param name
-    *           the unique DNS Prefix value in the Windows Azure Management Portal
-    */
-   @Named("GetHostedServiceProperties")
-   @GET
-   @Path("/{name}")
-   @QueryParams(keys = "embed-detail", values = "true")
-   @XMLResponseParser(HostedServiceWithDetailedPropertiesHandler.class)
-   @Fallback(NullOnNotFoundOr404.class)
-   HostedServiceWithDetailedProperties getDetails(@PathParam("name") String name);
+   @Nullable HostedService get(@PathParam("name") String name);
 
    /**
     * The Delete Hosted Service operation deletes the specified hosted service from Windows Azure.

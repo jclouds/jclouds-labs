@@ -16,17 +16,19 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static org.jclouds.azurecompute.options.CreateHostedServiceOptions.Builder.description;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
+import org.jclouds.azurecompute.xml.HostedServiceHandlerTest;
+import org.jclouds.azurecompute.xml.ListHostedServicesHandlerTest;
+import org.testng.annotations.Test;
+
 import com.google.common.collect.ImmutableMap;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.parse.GetHostedServiceDetailsTest;
-import org.jclouds.azurecompute.parse.GetHostedServiceTest;
-import org.jclouds.azurecompute.parse.ListHostedServicesTest;
-import org.testng.annotations.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.jclouds.azurecompute.options.CreateHostedServiceOptions.Builder.description;
 
 @Test(groups = "unit", testName = "HostedServiceApiMockTest")
 public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
@@ -38,9 +40,9 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.list()).containsExactlyElementsOf(ListHostedServicesTest.expected());
+         assertEquals(api.list(), ListHostedServicesHandlerTest.expected());
 
-         assertSent(server, "GET", "/services/hostedservices");
+         assertSent(server, "GET", "/services/hostedservices?embed-detail=true");
       } finally {
          server.shutdown();
       }
@@ -53,9 +55,9 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.list()).isEmpty();
+         assertTrue(api.list().isEmpty());
 
-         assertSent(server, "GET", "/services/hostedservices");
+         assertSent(server, "GET", "/services/hostedservices?embed-detail=true");
       } finally {
          server.shutdown();
       }
@@ -68,9 +70,9 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.get("myservice")).isEqualTo(GetHostedServiceTest.expected());
+         assertEquals(api.get("myservice"), HostedServiceHandlerTest.expected());
 
-         assertSent(server, "GET", "/services/hostedservices/myservice");
+         assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
       } finally {
          server.shutdown();
       }
@@ -83,37 +85,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.get("myservice")).isNull();
-
-         assertSent(server, "GET", "/services/hostedservices/myservice");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void getDetailsWhenFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(xmlResponse("/hostedservice_details.xml"));
-
-      try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
-
-         assertThat(api.getDetails("myservice")).isEqualTo(GetHostedServiceDetailsTest.expected());
-
-         assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void getDetailsWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
-
-         assertThat(api.getDetails("myservice")).isNull();
+         assertNull(api.get("myservice"));
 
          assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
       } finally {
@@ -128,8 +100,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.createServiceWithLabelInLocation("myservice", "service mine", "West US"))
-               .isEqualTo("request-1");
+         assertEquals(api.createServiceWithLabelInLocation("myservice", "service mine", "West US"), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices", "/create_hostedservice_location.xml");
       } finally {
@@ -144,9 +115,8 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.createServiceWithLabelInLocation("myservice", "service mine", "West US",
-               description("my description").extendedProperties(ImmutableMap.of("Role", "Production"))))
-               .isEqualTo("request-1");
+         assertEquals(api.createServiceWithLabelInLocation("myservice", "service mine", "West US",
+               description("my description").extendedProperties(ImmutableMap.of("Role", "Production"))), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices", "/create_hostedservice_location_options.xml");
       } finally {
@@ -161,7 +131,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.delete("myservice")).isEqualTo("request-1");
+         assertEquals(api.delete("myservice"), "request-1");
 
          assertSent(server, "DELETE", "/services/hostedservices/myservice");
       } finally {
@@ -176,7 +146,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertThat(api.delete("myservice")).isNull();
+         assertNull(api.delete("myservice"));
 
          assertSent(server, "DELETE", "/services/hostedservices/myservice");
       } finally {

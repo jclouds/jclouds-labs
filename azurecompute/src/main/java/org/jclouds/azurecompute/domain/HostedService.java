@@ -16,168 +16,163 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
-import java.net.URI;
-
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Date;
+import java.util.Map;
+
+import org.jclouds.javax.annotation.Nullable;
+
+import com.google.common.base.Objects;
+
 /**
- * System properties for the specified hosted service
+ * System properties for the specified hosted service. These properties include the service name and
+ * service type; the name of the affinity group to which the service belongs, or its location if it
+ * is not part of an affinity group.
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
  */
-public class HostedService {
-   public static enum Status {
-
-      CREATING,
-
-      CREATED,
-
-      DELETING,
-
-      DELETED,
-
-      CHANGING,
-
-      RESOLVING_DNS,
-
+public final class HostedService {
+   public enum Status {
+      CREATING, CREATED, DELETING, DELETED, CHANGING, RESOLVING_DNS,
       UNRECOGNIZED;
-
-      public String value() {
-         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
-      }
-
-      @Override
-      public String toString() {
-         return value();
-      }
-
-      public static Status fromValue(String status) {
-         try {
-            return valueOf(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, checkNotNull(status, "status")));
-         } catch (IllegalArgumentException e) {
-            return UNRECOGNIZED;
-         }
-      }
-   }
-
-   public static Builder<?> builder() {
-      return new ConcreteBuilder();
-   }
-
-   public Builder<?> toBuilder() {
-      return new ConcreteBuilder().fromHostedService(this);
-   }
-
-   public abstract static class Builder<T extends Builder<T>> {
-      protected abstract T self();
-
-      protected URI url;
-      protected String name;
-      protected HostedServiceProperties properties;
-
-      /**
-       * @see HostedService#getUrl()
-       */
-      public T url(URI url) {
-         this.url = url;
-         return self();
-      }
-
-      /**
-       * @see HostedService#getName()
-       */
-      public T name(String name) {
-         this.name = name;
-         return self();
-      }
-
-      /**
-       * @see HostedService#getProperties()
-       */
-      public T properties(HostedServiceProperties properties) {
-         this.properties = properties;
-         return self();
-      }
-
-      public HostedService build() {
-         return new HostedService(url, name, properties);
-      }
-
-      public T fromHostedService(HostedService in) {
-         return this.url(in.getUrl()).name(in.getName()).properties(in.getProperties());
-      }
-   }
-
-   private static class ConcreteBuilder extends Builder<ConcreteBuilder> {
-      @Override
-      protected ConcreteBuilder self() {
-         return this;
-      }
-   }
-
-   protected final URI url;
-   protected final String name;
-   protected final HostedServiceProperties properties;
-
-   protected HostedService(URI url, String name, HostedServiceProperties properties) {
-      this.url = checkNotNull(url, "url");
-      this.name = checkNotNull(name, "name");
-      this.properties = checkNotNull(properties, "properties");
-   }
-
-   /**
-    * The Service Management API request URI used to perform Get Hosted Service Properties requests
-    * against the hosted service.
-    */
-   public URI getUrl() {
-      return url;
    }
 
    /**
     * The name of the hosted service. This name is the DNS prefix name and can be used to access the
     * hosted service.
     *
-    * For example, if the service name is MyService you could access the access the service by
+    * <p/>For example, if the service name is MyService you could access the access the service by
     * calling: http://MyService.cloudapp.net
     */
-   public String getName() {
+   public String name() {
       return name;
    }
 
    /**
-    * Provides the url of the database properties to be used for this DB HostedService.
+    * The geo-location of the hosted service in Windows Azure, if the hosted service is not
+    * associated with an affinity group. If a location has been specified, the AffinityGroup element
+    * is not returned.
     */
-   public HostedServiceProperties getProperties() {
-      return properties;
+   @Nullable public String location() {
+      return location;
+   }
+
+   /**
+    * The affinity group with which this hosted service is associated, if any. If the service is
+    * associated with an affinity group, the Location element is not returned.
+    */
+   @Nullable public String affinityGroup() {
+      return affinityGroup;
+   }
+
+   /**
+    * The name can be up to 100 characters in length. The name can be used identify the storage account for your
+    * tracking purposes.
+    */
+   public String label() {
+      return label;
+   }
+
+   @Nullable public String description() {
+      return description;
+   }
+
+   public Status status() {
+      return status;
+   }
+
+   public Date created() {
+      return created;
+   }
+
+   public Date lastModified() {
+      return lastModified;
+   }
+
+   /**
+    * Represents the name of an extended hosted service property. Each extended property must have
+    * both a defined name and value. You can have a maximum of 50 extended property name/value
+    * pairs.
+    *
+    * <p/>The maximum length of the Name element is 64 characters, only alphanumeric characters and
+    * underscores are valid in the Name, and the name must start with a letter. Each extended
+    * property value has a maximum length of 255 characters.
+    */
+   public Map<String, String> extendedProperties() {
+      return extendedProperties;
+   }
+
+   public static HostedService create(String name, String location, String affinityGroup, String label,
+         String description, Status status, Date created, Date lastModified, Map<String, String> extendedProperties) {
+      return new HostedService(name, location, affinityGroup, label, description, status, created, lastModified,
+            extendedProperties);
+   }
+
+   // TODO: Remove from here down with @AutoValue.
+   private HostedService(String name, String location, String affinityGroup, String label, String description,
+         Status status, Date created, Date lastModified, Map<String, String> extendedProperties) {
+      this.name = checkNotNull(name, "name");
+      this.location = location;
+      this.affinityGroup = affinityGroup;
+      this.label = checkNotNull(label, "label");
+      this.description = description;
+      this.status = checkNotNull(status, "status");
+      this.created = checkNotNull(created, "created");
+      this.lastModified = checkNotNull(lastModified, "lastModified");
+      this.extendedProperties = checkNotNull(extendedProperties, "extendedProperties");
+   }
+
+   private final String name;
+   private final String location;
+   private final String affinityGroup;
+   private final String label;
+   private final String description;
+   private final Status status;
+   private final Date created;
+   private final Date lastModified;
+   private final Map<String, String> extendedProperties;
+
+   @Override
+   public boolean equals(Object object) {
+      if (this == object) {
+         return true;
+      }
+      if (object instanceof HostedService) {
+         HostedService that = HostedService.class.cast(object);
+         return equal(name, that.name)
+               && equal(location, that.location)
+               && equal(affinityGroup, that.affinityGroup)
+               && equal(label, that.label)
+               && equal(description, that.description)
+               && equal(status, that.status)
+               && equal(created, that.created)
+               && equal(lastModified, that.lastModified)
+               && equal(extendedProperties, that.extendedProperties);
+      } else {
+         return false;
+      }
    }
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(url);
-   }
-
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj)
-         return true;
-      if (obj == null)
-         return false;
-      if (getClass() != obj.getClass())
-         return false;
-      HostedService other = (HostedService) obj;
-      return Objects.equal(this.url, other.url);
+      return Objects.hashCode(name, location, affinityGroup, label, description, status, created, lastModified,
+            extendedProperties);
    }
 
    @Override
    public String toString() {
-      return string().toString();
-   }
-
-   protected ToStringHelper string() {
-      return Objects.toStringHelper(this).omitNullValues().add("url", url).add("name", name)
-               .add("properties", properties);
+      return toStringHelper(this)
+            .add("name", name)
+            .add("location", location)
+            .add("affinityGroup", affinityGroup)
+            .add("label", label)
+            .add("description", description)
+            .add("status", status)
+            .add("created", created)
+            .add("lastModified", lastModified)
+            .add("extendedProperties", extendedProperties).toString();
    }
 }
