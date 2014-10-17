@@ -16,37 +16,36 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.jclouds.azurecompute.domain.HostedService.Status.UNRECOGNIZED;
+import static org.jclouds.util.Predicates2.retry;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 import java.util.logging.Logger;
-import org.jclouds.azurecompute.domain.DetailedHostedServiceProperties;
+
 import org.jclouds.azurecompute.domain.HostedService;
 import org.jclouds.azurecompute.domain.HostedService.Status;
-import org.jclouds.azurecompute.domain.HostedServiceWithDetailedProperties;
 import org.jclouds.azurecompute.domain.Operation;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.jclouds.util.Predicates2.retry;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 @Test(groups = "live", testName = "HostedServiceApiLiveTest")
 public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    public static final String HOSTED_SERVICE = (System.getProperty("user.name") + "-jclouds-hostedService")
-            .toLowerCase();
+         .toLowerCase();
 
    private Predicate<String> operationSucceeded;
-   private Predicate<HostedServiceWithDetailedProperties> hostedServiceCreated;
+   private Predicate<HostedService> hostedServiceCreated;
    private Predicate<HostedService> hostedServiceGone;
 
    private String location;
@@ -61,19 +60,19 @@ public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
             return api.getOperationApi().get(input).getStatus() == Operation.Status.SUCCEEDED;
          }
       }, 600, 5, 5, SECONDS);
-      hostedServiceCreated = retry(new Predicate<HostedServiceWithDetailedProperties>() {
-         public boolean apply(HostedServiceWithDetailedProperties input) {
-            return api().getDetails(input.getName()).getProperties().getStatus() == Status.CREATED;
+      hostedServiceCreated = retry(new Predicate<HostedService>() {
+         public boolean apply(HostedService input) {
+            return api().get(input.name()).status() == Status.CREATED;
          }
       }, 600, 5, 5, SECONDS);
       hostedServiceGone = retry(new Predicate<HostedService>() {
          public boolean apply(HostedService input) {
-            return api().get(input.getName()) == null;
+            return api().get(input.name()) == null;
          }
       }, 600, 5, 5, SECONDS);
    }
 
-   private HostedServiceWithDetailedProperties hostedService;
+   private HostedService hostedService;
 
    public void testCreateHostedService() {
 
@@ -81,22 +80,22 @@ public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
       assertTrue(operationSucceeded.apply(requestId), requestId);
       Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
 
-      hostedService = api().getDetails(HOSTED_SERVICE);
+      hostedService = api().get(HOSTED_SERVICE);
       Logger.getAnonymousLogger().info("created hostedService: " + hostedService);
 
-      assertEquals(hostedService.getName(), HOSTED_SERVICE);
+      assertEquals(hostedService.name(), HOSTED_SERVICE);
 
       checkHostedService(hostedService);
 
       assertTrue(hostedServiceCreated.apply(hostedService), hostedService.toString());
-      hostedService = api().getDetails(hostedService.getName());
+      hostedService = api().get(hostedService.name());
       Logger.getAnonymousLogger().info("hostedService available: " + hostedService);
 
    }
 
    @Test(dependsOnMethods = "testCreateHostedService")
    public void testDeleteHostedService() {
-      String requestId = api().delete(hostedService.getName());
+      String requestId = api().delete(hostedService.name());
       assertTrue(operationSucceeded.apply(requestId), requestId);
       Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
 
@@ -104,62 +103,40 @@ public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
       Logger.getAnonymousLogger().info("hostedService deleted: " + hostedService);
    }
 
-   @Override
-   @AfterClass(groups = "live")
+   @Override @AfterClass(groups = "live")
    protected void tearDown() {
       String requestId = api().delete(HOSTED_SERVICE);
-      if (requestId != null)
+      if (requestId != null) {
          operationSucceeded.apply(requestId);
+      }
 
       super.tearDown();
    }
 
    @Test
    protected void testList() {
-      List<HostedServiceWithDetailedProperties> response = api().list();
+      List<HostedService> response = api().list();
 
-      for (HostedServiceWithDetailedProperties hostedService : response) {
+      for (HostedService hostedService : api().list()) {
          checkHostedService(hostedService);
       }
 
       if (response.size() > 0) {
          HostedService hostedService = response.iterator().next();
-         Assert.assertEquals(api().getDetails(hostedService.getName()), hostedService);
+         assertEquals(api().get(hostedService.name()), hostedService);
       }
    }
 
-   private void checkHostedService(HostedServiceWithDetailedProperties hostedService) {
-      checkNotNull(hostedService.getUrl(), "Url cannot be null for a HostedService.");
-      checkNotNull(hostedService.getName(), "ServiceName cannot be null for HostedService %s", hostedService.getUrl());
-      checkNotNull(hostedService.getProperties(), "Properties cannot be null for HostedService %s",
-               hostedService.getUrl());
-      checkProperties(hostedService.getProperties());
-   }
-
-   private void checkProperties(DetailedHostedServiceProperties hostedService) {
-      checkNotNull(hostedService.getDescription(),
-               "While Description can be null for DetailedHostedServiceProperties, its Optional wrapper cannot: %s",
-               hostedService);
-      checkNotNull(hostedService.getLocation(),
-               "While Location can be null for DetailedHostedServiceProperties, its Optional wrapper cannot: %s",
-               hostedService);
-      checkNotNull(hostedService.getAffinityGroup(),
-               "While AffinityGroup can be null for DetailedHostedServiceProperties, its Optional wrapper cannot: %s",
-               hostedService);
-      checkState(hostedService.getLocation().isPresent() || hostedService.getAffinityGroup().isPresent(),
-               "Location or AffinityGroup must be present for DetailedHostedServiceProperties: %s", hostedService);
-      checkNotNull(hostedService.getLabel(), "Label cannot be null for HostedService %s", hostedService);
-
-      checkNotNull(hostedService.getStatus(), "Status cannot be null for DetailedHostedServiceProperties: %s",
-               hostedService);
-      assertNotEquals(hostedService.getStatus(), Status.UNRECOGNIZED,
-               "Status cannot be UNRECOGNIZED for DetailedHostedServiceProperties: " + hostedService);
-      checkNotNull(hostedService.getCreated(), "Created cannot be null for DetailedHostedServiceProperties %s",
-               hostedService);
-      checkNotNull(hostedService.getLastModified(),
-               "LastModified cannot be null for DetailedHostedServiceProperties %s", hostedService);
-      checkNotNull(hostedService.getExtendedProperties(),
-               "ExtendedProperties cannot be null for DetailedHostedServiceProperties %s", hostedService);
+   private void checkHostedService(HostedService hostedService) {
+      assertNotNull(hostedService.name(), "ServiceName cannot be null for " + hostedService);
+      assertTrue(hostedService.location() != null || hostedService.affinityGroup() != null,
+            "Location or AffinityGroup must be present for " + hostedService);
+      assertNotNull(hostedService.label(), "Label cannot be null for " + hostedService);
+      assertNotNull(hostedService.status(), "Status cannot be null for " + hostedService);
+      assertNotEquals(hostedService.status(), UNRECOGNIZED, "Status cannot be UNRECOGNIZED for " + hostedService);
+      assertNotNull(hostedService.created(), "Created cannot be null for " + hostedService);
+      assertNotNull(hostedService.lastModified(), "LastModified cannot be null for " + hostedService);
+      assertNotNull(hostedService.extendedProperties(), "ExtendedProperties cannot be null for " + hostedService);
    }
 
    private HostedServiceApi api() {
