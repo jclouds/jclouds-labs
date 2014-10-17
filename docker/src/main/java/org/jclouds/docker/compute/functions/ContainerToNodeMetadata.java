@@ -18,6 +18,7 @@ package org.jclouds.docker.compute.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getOnlyElement;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,14 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class ContainerToNodeMetadata implements Function<Container, NodeMetadata> {
+
+   /**
+    * This value is used when a container does not have an accessible
+    * login port (i.e. the SSH daemon is not running) due to being
+    * started outside jclouds. Client code should check for this value
+    * when accessing NodeMetadata from Docker.
+    */
+   public static final Integer NO_LOGIN_PORT = Integer.valueOf(-1);
 
    private final ProviderMetadata providerMetadata;
    private final Function<State, NodeMetadata.Status> toPortableStatus;
@@ -86,9 +95,12 @@ public class ContainerToNodeMetadata implements Function<Container, NodeMetadata
       builder.publicAddresses(getPublicIpAddresses());
       builder.privateAddresses(getPrivateIpAddresses(container));
       builder.location(Iterables.getOnlyElement(locations.get()));
-      Image image = images.get().get(container.getImage());
-      builder.imageId(image.getId());
-      builder.operatingSystem(image.getOperatingSystem());
+      String imageId = container.getImage();
+      builder.imageId(imageId);
+      if (images.get().containsKey(imageId)) {
+          Image image = images.get().get(imageId);
+          builder.operatingSystem(image.getOperatingSystem());
+      }
 
       return builder.build();
    }
@@ -110,7 +122,7 @@ public class ContainerToNodeMetadata implements Function<Container, NodeMetadata
    protected static int getLoginPort(Container container) {
       if (container.getNetworkSettings() != null) {
           Map<String, List<Map<String, String>>> ports = container.getNetworkSettings().getPorts();
-          if (ports != null) {
+          if (ports != null && ports.containsKey("22/tcp")) {
             return Integer.parseInt(getOnlyElement(ports.get("22/tcp")).get("HostPort"));
           }
       // this is needed in case the container list is coming from listContainers
@@ -121,6 +133,6 @@ public class ContainerToNodeMetadata implements Function<Container, NodeMetadata
             }
          }
       }
-      throw new IllegalStateException("Cannot determine the login port for " + container.getId());
+      return NO_LOGIN_PORT;
    }
 }
