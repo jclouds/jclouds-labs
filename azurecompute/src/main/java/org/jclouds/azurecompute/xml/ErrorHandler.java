@@ -16,43 +16,46 @@
  */
 package org.jclouds.azurecompute.xml;
 
+import static com.google.common.base.CaseFormat.UPPER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+import static org.jclouds.util.SaxUtils.currentOrNull;
+
 import org.jclouds.azurecompute.domain.Error;
 import org.jclouds.azurecompute.domain.Error.Code;
 import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
-import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460801" >api</a>
  */
-public class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Error> {
+public final class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Error> {
+   private Code code;
+   private String message;
 
    private StringBuilder currentText = new StringBuilder();
-   private Error.Builder builder = Error.builder();
 
-   @Override
-   public Error getResult() {
-      try {
-         return builder.build();
-      } finally {
-         builder = Error.builder();
-      }
+   @Override public Error getResult() {
+      return Error.create(code, message);
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Code")) {
-         String rawCode = SaxUtils.currentOrNull(currentText);
-         builder.rawCode(rawCode);
-         builder.code(Code.fromValue(rawCode));
+         String codeText = currentOrNull(currentText);
+         code = parseCode(codeText);
       } else if (qName.equals("Message")) {
-         builder.message(SaxUtils.currentOrNull(currentText));
+         message = currentOrNull(currentText);
       }
       currentText = new StringBuilder();
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
+   }
+
+   private static Code parseCode(String code) {
+      try {
+         return Code.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, code));
+      } catch (IllegalArgumentException e) {
+         return Code.UNRECOGNIZED;
+      }
    }
 }

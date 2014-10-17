@@ -14,37 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.azurecompute.parse;
-
-import java.io.InputStream;
-import org.jclouds.azurecompute.domain.Error;
-import org.jclouds.azurecompute.domain.Error.Code;
-import org.jclouds.azurecompute.xml.ErrorHandler;
-import org.jclouds.http.functions.BaseHandlerTest;
-import org.testng.annotations.Test;
+package org.jclouds.azurecompute.xml;
 
 import static org.testng.Assert.assertEquals;
 
-@Test(groups = "unit", testName = "ErrorTest")
-public class ErrorTest extends BaseHandlerTest {
+import java.io.InputStream;
+
+import org.jclouds.azurecompute.domain.Error;
+import org.jclouds.azurecompute.domain.Error.Code;
+import org.jclouds.http.functions.BaseHandlerTest;
+import org.testng.annotations.Test;
+
+@Test(groups = "unit", testName = "ErrorHandlerTest")
+public class ErrorHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/error.xml");
+      Error result = factory.create(new ErrorHandler()).parse(is);
 
-      Error expected = expected();
-
-      ErrorHandler handler = injector.getInstance(ErrorHandler.class);
-      Error result = factory.create(handler).parse(is);
-
-      assertEquals(result.toString(), expected.toString());
-
+      assertEquals(result, expected());
    }
 
-   public Error expected() {
-      return Error.builder()
-                  .rawCode("MissingOrInvalidRequiredQueryParameter")
-                  .code(Code.MISSING_OR_INVALID_REQUIRED_QUERY_PARAMETER)
-                  .message("A required query parameter was not specified for this request or was specified incorrectly.")
-                  .build();
+   public static Error expected() {
+      return Error.create(Code.MISSING_OR_INVALID_REQUIRED_QUERY_PARAMETER,
+            "A required query parameter was not specified for this request or was specified incorrectly.");
    }
 }
