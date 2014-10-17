@@ -16,20 +16,18 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import com.google.common.base.CaseFormat;
-
+import static com.google.common.base.CaseFormat.UPPER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public enum OSType {
 
    LINUX,
-
    WINDOWS,
-
    UNRECOGNIZED;
 
    public String value() {
-      return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+      return UPPER_UNDERSCORE.to(UPPER_CAMEL, name());
    }
 
    @Override
@@ -39,7 +37,7 @@ public enum OSType {
 
    public static OSType fromValue(String type) {
       try {
-         return valueOf(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, checkNotNull(type, "type")));
+         return valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, checkNotNull(type, "type")));
       } catch (IllegalArgumentException e) {
          return UNRECOGNIZED;
       }

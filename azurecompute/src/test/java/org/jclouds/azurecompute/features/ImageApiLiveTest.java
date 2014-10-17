@@ -16,9 +16,12 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
-import java.util.List;
+import static com.google.common.collect.Iterables.transform;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSType;
@@ -26,11 +29,8 @@ import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.transform;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 
 @Test(groups = "live", testName = "ImageApiLiveTest")
 public class ImageApiLiveTest extends BaseAzureComputeApiLiveTest {
@@ -41,65 +41,41 @@ public class ImageApiLiveTest extends BaseAzureComputeApiLiveTest {
    public void setup() {
       super.setup();
 
-      locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(),
-               new Function<Location, String>() {
-                  @Override
-                  public String apply(Location in) {
-                     return in.getName();
-                  }
-               }));
+      locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(), new Function<Location, String>() {
+         public String apply(Location in) {
+            return in.getName();
+         }
+      }));
    }
 
-   @Test
-   protected void testList() {
-      List<Image> response = api().list();
-
-      for (Image image : response) {
+   public void testList() {
+      for (Image image : api().list()) {
          checkOSImage(image);
       }
    }
 
    private void checkOSImage(Image image) {
-      checkNotNull(image.getLabel(), "Label cannot be null for OSImage %s", image);
-      checkNotNull(image.getName(), "Name cannot be null for OSImage %s", image.getLabel());
-      checkNotNull(image.getOS(), "OS cannot be null for OSImage: %s", image);
-      assertNotEquals(image.getOS(), OSType.UNRECOGNIZED, "Status cannot be UNRECOGNIZED for OSImage: " + image);
+      assertNotNull(image.label(), "Label cannot be null for " + image);
+      assertNotNull(image.name(), "Name cannot be null for " + image);
+      assertNotNull(image.os(), "OS cannot be null for " + image);
+      assertNotEquals(image.os(), OSType.UNRECOGNIZED, "Status cannot be UNRECOGNIZED for " + image);
+      assertTrue(image.logicalSizeInGB() > 0, "LogicalSizeInGB should be positive, if set" + image);
 
-      checkNotNull(image.getCategory(), "While Category can be null for OSImage, its Optional wrapper cannot: %s",
-               image);
-      if (image.getCategory().isPresent())
-         assertNotEquals("", image.getCategory().get().trim(), "Invalid Category: " + image.toString());
+      if (image.category() != null) {
+         assertNotEquals("", image.category().trim(), "Invalid Category for " + image);
+      }
 
-      checkNotNull(image.getLogicalSizeInGB(),
-               "While LogicalSizeInGB can be null for OSImage, its Optional wrapper cannot: %s", image);
-
-      if (image.getLogicalSizeInGB().isPresent())
-         assertTrue(image.getLogicalSizeInGB().get() > 0,
-                  "LogicalSizeInGB should be positive, if set" + image.toString());
-
-      checkNotNull(image.getMediaLink(), "While MediaLink can be null for OSImage, its Optional wrapper cannot: %s",
-               image);
-
-      if (image.getMediaLink().isPresent())
-         assertTrue(ImmutableSet.of("http", "https").contains(image.getMediaLink().get().getScheme()),
-                  "MediaLink should be an http(s) url" + image.toString());
-
-      checkNotNull(image.getDescription(),
-               "While Description can be null for OSImage, its Optional wrapper cannot: %s", image);
-
-      checkNotNull(image.getLocation(), "While Location can be null for OSImage, its Optional wrapper cannot: %s",
-               image);
-      if (image.getLocation().isPresent()) {
-         assertTrue(locations.contains(image.getLocation().get()),
-                  "Location not in " + locations + " :" + image.toString());
+      if (image.mediaLink() != null) {
+         assertTrue(ImmutableSet.of("http", "https").contains(image.mediaLink().getScheme()),
+               "MediaLink should be an http(s) url" + image);
+      }
+      if (image.location() != null) {
+         assertTrue(locations.contains(image.location()), "Location not in " + locations + " :" + image);
       }
 
       // Ex. Dirty data in RightScale eula field comes out as an empty string.
-      assertThat(image.getEula()).isNotNull().doesNotContain("");
-
-      checkNotNull(image.getAffinityGroup(),
-               "While AffinityGroup can be null for OSImage, its Optional wrapper cannot: %s", image);
-      if (image.getAffinityGroup().isPresent()) {
+      assertFalse(image.eula().contains(""));
+      if (image.affinityGroup() != null) {
          // TODO: list getAffinityGroups and check if there
       }
    }

@@ -16,73 +16,91 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
+import static com.google.common.base.Strings.emptyToNull;
+import static org.jclouds.util.SaxUtils.currentOrNull;
+
 import java.net.URI;
+import java.util.List;
+
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.http.functions.ParseSax;
-import org.xml.sax.SAXException;
 
-import static org.jclouds.util.SaxUtils.currentOrNull;
-import static org.jclouds.util.SaxUtils.equalsOrSuffix;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
  */
-public class ImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Image> {
+final class ImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Image> {
+   private String name;
+   private String location;
+   private String affinityGroup;
+   private String label;
+   private String category;
+   private String description;
+   private OSType os;
+   private URI mediaLink;
+   private Integer logicalSizeInGB;
+   private final List<String> eula = Lists.newArrayList();
 
-   private StringBuilder currentText = new StringBuilder();
-   private Image.Builder builder = Image.builder();
+   private final StringBuilder currentText = new StringBuilder();
 
-   @Override
-   public Image getResult() {
-      try {
-         return builder.build();
-      } finally {
-         builder = Image.builder();
-      }
+   @Override public Image getResult() {
+      Image result = Image.create(name, location, affinityGroup, label, description, category, os, mediaLink,
+            logicalSizeInGB, ImmutableList.copyOf(eula));
+      resetState(); // handler is called in a loop.
+      return result;
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
-      if (equalsOrSuffix(qName, "OS")) {
-         builder.os(OSType.fromValue(currentOrNull(currentText)));
-      } else if (equalsOrSuffix(qName, "Name")) {
-         builder.name(currentOrNull(currentText));
-      } else if (equalsOrSuffix(qName, "LogicalSizeInGB")) {
+   private void resetState() {
+      name = location = affinityGroup = label = description = category = null;
+      os = null;
+      mediaLink = null;
+      logicalSizeInGB = null;
+      eula.clear();
+   }
+
+   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+      if (qName.equals("OS")) {
+         os = OSType.fromValue(currentOrNull(currentText));
+      } else if (qName.equals("Name")) {
+         name = currentOrNull(currentText);
+      } else if (qName.equals("LogicalSizeInGB")) {
          String gb = currentOrNull(currentText);
-         if (gb != null)
-            builder.logicalSizeInGB(Integer.parseInt(gb));
-      } else if (equalsOrSuffix(qName, "Description")) {
-         builder.description(currentOrNull(currentText));
-      } else if (equalsOrSuffix(qName, "Category")) {
-         builder.category(currentOrNull(currentText));
-      } else if (equalsOrSuffix(qName, "Location")) {
-         builder.location(currentOrNull(currentText));
-      } else if (equalsOrSuffix(qName, "AffinityGroup")) {
-         builder.affinityGroup(currentOrNull(currentText));
-      } else if (equalsOrSuffix(qName, "MediaLink")) {
+         if (gb != null) {
+            logicalSizeInGB = Integer.parseInt(gb);
+         }
+      } else if (qName.equals("Description")) {
+         description = currentOrNull(currentText);
+      } else if (qName.equals("Category")) {
+         category = currentOrNull(currentText);
+      } else if (qName.equals("Location")) {
+         location = currentOrNull(currentText);
+      } else if (qName.equals("AffinityGroup")) {
+         affinityGroup = currentOrNull(currentText);
+      } else if (qName.equals("MediaLink")) {
          String link = currentOrNull(currentText);
-         if (link != null)
-            builder.mediaLink(URI.create(link));
-      } else if (equalsOrSuffix(qName, "Eula")) {
+         if (link != null) {
+            mediaLink = URI.create(link);
+         }
+      } else if (qName.equals("Eula")) {
          String eulaField = currentOrNull(currentText);
          if (eulaField != null) {
             for (String eula : Splitter.on(';').split(eulaField)) {
-               if ((eula = Strings.emptyToNull(eula.trim())) != null) { // Dirty data in RightScale eula field.
-                  builder.eula(eula);
+               if ((eula = emptyToNull(eula.trim())) != null) { // Dirty data in RightScale eula field.
+                  this.eula.add(eula);
                }
             }
          }
-      } else if (equalsOrSuffix(qName, "Label")) {
-         builder.label(currentOrNull(currentText));
+      } else if (qName.equals("Label")) {
+         label = currentOrNull(currentText);
       }
       currentText.setLength(0);
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

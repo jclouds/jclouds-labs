@@ -16,198 +16,54 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.jclouds.javax.annotation.Nullable;
+
+import com.google.common.base.Objects;
 
 /**
- * OS images from the image repository
+ * OS image from the image repository
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
  */
-public class Image {
-   public static Builder builder() {
-      return new Builder();
-   }
+public final class Image {
 
-   public Builder toBuilder() {
-      return new Builder().fromOSImage(this);
-   }
-
-   public static class Builder {
-      private OSType os;
-      private String name;
-      private Optional<Integer> logicalSizeInGB = Optional.absent();
-      private Optional<String> description = Optional.absent();
-      private Optional<String> category = Optional.absent();
-      private Optional<String> location = Optional.absent();
-      private Optional<String> affinityGroup = Optional.absent();
-      private Optional<URI> mediaLink = Optional.absent();
-      private ImmutableList.Builder<String> eula = ImmutableList.builder();
-      private String label;
-
-      /**
-       * @see Image#getOS()
-       */
-      public Builder os(OSType os) {
-         this.os = os;
-         return this;
-      }
-
-      /**
-       * @see Image#getName()
-       */
-      public Builder name(String name) {
-         this.name = name;
-         return this;
-      }
-
-      /**
-       * @see Image#getDescription()
-       */
-      public Builder description(String description) {
-         this.description = Optional.fromNullable(description);
-         return this;
-      }
-
-      /**
-       * @see Image#getLogicalSizeInGB()
-       */
-      public Builder logicalSizeInGB(Integer logicalSizeInGB) {
-         this.logicalSizeInGB = Optional.fromNullable(logicalSizeInGB);
-         return this;
-      }
-
-      /**
-       * @see Image#getCategory()
-       */
-      public Builder category(String category) {
-         this.category = Optional.fromNullable(category);
-         return this;
-      }
-
-      /**
-       * @see Image#getLocation()
-       */
-      public Builder location(String location) {
-         this.location = Optional.fromNullable(location);
-         return this;
-      }
-
-      /**
-       * @see Image#getAffinityGroup()
-       */
-      public Builder affinityGroup(String affinityGroup) {
-         this.affinityGroup = Optional.fromNullable(affinityGroup);
-         return this;
-      }
-
-      /**
-       * @see Image#getMediaLink()
-       */
-      public Builder mediaLink(URI mediaLink) {
-         this.mediaLink = Optional.fromNullable(mediaLink);
-         return this;
-      }
-
-      /**
-       * @see Image#getEula()
-       */
-      public Builder eula(Iterable<String> eula) {
-         this.eula.addAll(eula);
-         return this;
-      }
-
-      /**
-       * @see Image#getEula()
-       */
-      public Builder eula(String eula) {
-         this.eula.add(eula);
-         return this;
-      }
-
-      /**
-       * @see Image#getLabel()
-       */
-      public Builder label(String label) {
-         this.label = label;
-         return this;
-      }
-
-      public Image build() {
-         return new Image(os, name, logicalSizeInGB, description, category, location, affinityGroup, mediaLink,
-               eula.build(), label);
-      }
-
-      public Builder fromOSImage(Image in) {
-         return this.os(in.getOS()).name(in.getName()).logicalSizeInGB(in.getLogicalSizeInGB().orNull())
-                  .description(in.getDescription().orNull()).category(in.getCategory().orNull())
-                  .location(in.getLocation().orNull()).affinityGroup(in.getAffinityGroup().orNull())
-                  .mediaLink(in.getMediaLink().orNull()).eula(in.getEula()).label(in.getLabel());
-      }
-   }
-
-   private final OSType os;
-   private final String name;
-   private final Optional<Integer> logicalSizeInGB;
-   private final Optional<String> description;
-   private final Optional<String> category;
-   private final Optional<String> location;
-   private final Optional<String> affinityGroup;
-   private final Optional<URI> mediaLink;
-   private final List<String> eula;
-   private final String label;
-
-   private Image(OSType os, String name, Optional<Integer> logicalSizeInGB, Optional<String> description,
-         Optional<String> category, Optional<String> location, Optional<String> affinityGroup, Optional<URI> mediaLink,
-         List<String> eula, String label) {
-      this.name = checkNotNull(name, "name");
-      this.logicalSizeInGB = checkNotNull(logicalSizeInGB, "logicalSizeInGB for %s", name);
-      this.description = checkNotNull(description, "description for %s", name);
-      this.os = checkNotNull(os, "os for %s", name);
-      this.category = checkNotNull(category, "category for %s", name);
-      this.location = checkNotNull(location, "location for %s", name);
-      this.affinityGroup = checkNotNull(affinityGroup, "affinityGroup for %s", name);
-      this.mediaLink = checkNotNull(mediaLink, "mediaLink for %s", name);
-      this.eula = checkNotNull(eula, "eula for %s", name);
-      this.label = checkNotNull(label, "label for %s", name);
-   }
-
-   /**
-    * The operating system type of the OS image.
-    */
-   public OSType getOS() {
-      return os;
-   }
-
-   /**
-    * The name of the hosted service. This name is the DNS prefix name and can be used to access the
-    * hosted service.
-    *
-    * For example, if the service name is MyService you could access the access the service by
-    * calling: http://MyService.cloudapp.net
-    */
-   public String getName() {
+   public String name() {
       return name;
    }
 
    /**
-    * The size, in GB, of the image.
+    * The geo-location of the image in Windows Azure, if the image is not
+    * associated with an affinity group. If a location has been specified, the AffinityGroup element
+    * is not returned.
     */
-   public Optional<Integer> getLogicalSizeInGB() {
-      return logicalSizeInGB;
+   @Nullable public String location() {
+      return location;
    }
 
    /**
-    * The description for the image.
+    * The affinity group with which this image is associated, if any. If the service is
+    * associated with an affinity group, the Location element is not returned.
     */
-   public Optional<String> getDescription() {
+   @Nullable public String affinityGroup() {
+      return affinityGroup;
+   }
+
+   /**
+    * The name can be up to 100 characters in length. The name can be used identify the storage account for your
+    * tracking purposes.
+    */
+   public String label() {
+      return label;
+   }
+
+   @Nullable public String description() {
       return description;
    }
 
@@ -215,26 +71,13 @@ public class Image {
     * The repository classification of image. All user images have the category "User", but
     * categories for other images could be, for example "Canonical"
     */
-   public Optional<String> getCategory() {
+   @Nullable public String category() {
       return category;
    }
 
-   /**
-    * The geo-location in which this media is located. The Location value is derived from storage
-    * account that contains the blob in which the media is located. If the storage account belongs
-    * to an affinity group the value is absent.
-    */
-   public Optional<String> getLocation() {
-      return location;
-   }
-
-   /**
-    * The affinity in which the media is located. The AffinityGroup value is derived from storage
-    * account that contains the blob in which the media is located. If the storage account does not
-    * belong to an affinity group the value is absent.
-    */
-   public Optional<String> getAffinityGroup() {
-      return affinityGroup;
+   /** The operating system type of the OS image. */
+   public OSType os() {
+      return os;
    }
 
    /**
@@ -246,53 +89,92 @@ public class Image {
     *
     * http://example.blob.core.windows.net/disks/myimage.vhd
     */
-   public Optional<URI> getMediaLink() {
+   @Nullable public URI mediaLink() {
       return mediaLink;
    }
 
-   /**
-    * The eulas for the image, if available.
-    */
+   public int logicalSizeInGB() {
+      return logicalSizeInGB;
+   }
+
+   /** The eulas for the image, if available. */
    // Not URI as some providers put non-uri data in, such as riverbed.
-   public List<String> getEula() {
+   public List<String> eula() {
       return eula;
    }
 
-   /**
-    * The description of the image.
-    */
-   public String getLabel() {
-      return label;
+   public static Image create(String name, String location, String affinityGroup, String label, String description,
+         String category, OSType os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
+      return new Image(name, location, affinityGroup, label, description, category, os, mediaLink, logicalSizeInGB,
+            eula);
+   }
+
+   // TODO: Remove from here down with @AutoValue.
+   private Image(String name, String location, String affinityGroup, String label, String description, String category,
+         OSType os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
+      this.name = checkNotNull(name, "name");
+      this.location = location;
+      this.affinityGroup = affinityGroup;
+      this.label = checkNotNull(label, "label");
+      this.description = description;
+      this.category = category;
+      this.os = checkNotNull(os, "os");
+      this.mediaLink = mediaLink;
+      this.logicalSizeInGB = logicalSizeInGB;
+      this.eula = checkNotNull(eula, "eula");
+   }
+
+   private final String name;
+   private final String location;
+   private final String affinityGroup;
+   private final String label;
+   private final String category;
+   private final String description;
+   private final OSType os;
+   private final URI mediaLink;
+   private final int logicalSizeInGB;
+   private final List<String> eula;
+
+   @Override
+   public boolean equals(Object object) {
+      if (this == object) {
+         return true;
+      }
+      if (object instanceof Image) {
+         Image that = Image.class.cast(object);
+         return equal(name, that.name)
+               && equal(location, that.location)
+               && equal(affinityGroup, that.affinityGroup)
+               && equal(label, that.label)
+               && equal(description, that.description)
+               && equal(category, that.category)
+               && equal(os, that.os)
+               && equal(mediaLink, that.mediaLink)
+               && equal(logicalSizeInGB, that.logicalSizeInGB)
+               && equal(eula, that.eula);
+      } else {
+         return false;
+      }
    }
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name);
-   }
-
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj)
-         return true;
-      if (obj == null)
-         return false;
-      if (getClass() != obj.getClass())
-         return false;
-      Image other = (Image) obj;
-      return Objects.equal(this.name, other.name);
+      return Objects.hashCode(name, location, affinityGroup, label, description, category, os, mediaLink,
+            logicalSizeInGB, eula);
    }
 
    @Override
    public String toString() {
-      return string().toString();
+      return toStringHelper(this)
+            .add("name", name)
+            .add("location", location)
+            .add("affinityGroup", affinityGroup)
+            .add("label", label)
+            .add("description", description)
+            .add("category", category)
+            .add("os", os)
+            .add("mediaLink", mediaLink)
+            .add("logicalSizeInGB", logicalSizeInGB)
+            .add("eula", eula).toString();
    }
-
-   private ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).omitNullValues().add("os", os).add("name", name)
-               .add("logicalSizeInGB", logicalSizeInGB.orNull()).add("description", description)
-               .add("category", category.orNull()).add("location", location.orNull())
-               .add("affinityGroup", affinityGroup.orNull()).add("mediaLink", mediaLink.orNull())
-               .add("eula", eula).add("label", label);
-   }
-
 }
