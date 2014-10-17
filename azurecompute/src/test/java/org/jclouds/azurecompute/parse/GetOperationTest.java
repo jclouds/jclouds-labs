@@ -16,16 +16,16 @@
  */
 package org.jclouds.azurecompute.parse;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.InputStream;
-import org.jclouds.azurecompute.domain.Error;
-import org.jclouds.azurecompute.domain.Error.Code;
+
 import org.jclouds.azurecompute.domain.Operation;
 import org.jclouds.azurecompute.domain.Operation.Status;
+import org.jclouds.azurecompute.xml.ErrorHandlerTest;
 import org.jclouds.azurecompute.xml.OperationHandler;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
 
 @Test(groups = "unit", testName = "GetOperationTest")
 public class GetOperationTest extends BaseHandlerTest {
@@ -47,11 +47,7 @@ public class GetOperationTest extends BaseHandlerTest {
                       .rawStatus("Failed")
                       .status(Status.FAILED)
                       .httpStatusCode(400)
-                      .error(Error.builder()
-                                  .rawCode("MissingOrInvalidRequiredQueryParameter")
-                                  .code(Code.MISSING_OR_INVALID_REQUIRED_QUERY_PARAMETER)
-                                  .message("A required query parameter was not specified for this request or was specified incorrectly.")
-                                  .build())
+                      .error(ErrorHandlerTest.expected())
                       .build();
    }
 }
