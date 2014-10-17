@@ -79,7 +79,7 @@ public class BindDeploymentParamsToXmlPayload implements Binder {
             inputBuilder.e("LocalPort").t(endpoint.getLocalPort().toString()).up()
                .e("Name").t(endpoint.getName()).up()
                .e("Port").t(endpoint.getExternalPort().toString()).up()
-               .e("Protocol").t(endpoint.getProtocol().name()).up()
+               .e("Protocol").t(endpoint.getProtocol().name().toLowerCase()).up()
                .up(); //InputEndpoint
          }
 
