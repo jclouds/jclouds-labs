@@ -52,7 +52,7 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
       images = ImmutableSet.copyOf(transform(api.getImageApi().list(), new Function<Image, String>() {
          @Override
          public String apply(Image in) {
-            return in.getName();
+            return in.name();
          }
       }));
    }

@@ -16,58 +16,46 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.inject.Inject;
 import java.util.List;
+
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
-public class ListImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Image>> {
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
-   private final ImageHandler locationHandler;
-
-   private Builder<Image> locations = ImmutableList.<Image> builder();
-
+public final class ListImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Image>> {
    private boolean inOSImage;
-
-   @Inject
-   public ListImagesHandler(ImageHandler locationHandler) {
-      this.locationHandler = locationHandler;
-   }
+   private final ImageHandler imageHandler = new ImageHandler();
+   private final Builder<Image> images = ImmutableList.builder();
 
    @Override
    public List<Image> getResult() {
-      return locations.build();
+      return images.build();
    }
 
    @Override
-   public void startElement(String url, String name, String qName, Attributes attributes) throws SAXException {
-      if (SaxUtils.equalsOrSuffix(qName, "OSImage")) {
+   public void startElement(String url, String name, String qName, Attributes attributes) {
+      if (qName.equals("OSImage")) {
          inOSImage = true;
       }
-      if (inOSImage) {
-         locationHandler.startElement(url, name, qName, attributes);
-      }
    }
 
    @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("OSImage")) {
          inOSImage = false;
-         locations.add(locationHandler.getResult());
+         images.add(imageHandler.getResult());
       } else if (inOSImage) {
-         locationHandler.endElement(uri, name, qName);
+         imageHandler.endElement(uri, name, qName);
       }
    }
 
    @Override
    public void characters(char ch[], int start, int length) {
       if (inOSImage) {
-         locationHandler.characters(ch, start, length);
+         imageHandler.characters(ch, start, length);
       }
    }
 }

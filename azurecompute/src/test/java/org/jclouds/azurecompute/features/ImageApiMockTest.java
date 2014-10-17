@@ -16,16 +16,20 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
 import java.net.URI;
+
 import org.jclouds.azurecompute.domain.ImageParams;
 import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.parse.ListImagesTest;
+import org.jclouds.azurecompute.xml.ListImagesHandlerTest;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "ImageApiMockTest")
 public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
@@ -37,7 +41,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          ImageApi api = api(server.getUrl("/")).getImageApi();
 
-         assertThat(api.list()).containsExactlyElementsOf(ListImagesTest.expected());
+         assertEquals(api.list(), ListImagesHandlerTest.expected());
 
          assertSent(server, "GET", "/services/images");
       } finally {
@@ -52,7 +56,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          ImageApi api = api(server.getUrl("/")).getImageApi();
 
-         assertThat(api.list()).isEmpty();
+         assertTrue(api.list().isEmpty());
 
          assertSent(server, "GET", "/services/images");
       } finally {
@@ -70,7 +74,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
          ImageParams params = ImageParams.builder().name("myimage").label("foo").os(OSType.LINUX)
                .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
 
-         assertThat(api.add(params)).isEqualTo("request-1");
+         assertEquals(api.add(params), "request-1");
 
          assertSent(server, "POST", "/services/images", "/imageparams.xml");
       } finally {
@@ -88,7 +92,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
          ImageParams params = ImageParams.builder().name("myimage").label("foo").os(OSType.LINUX)
                .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
 
-         assertThat(api.update(params)).isEqualTo("request-1");
+         assertEquals(api.update(params), "request-1");
 
          assertSent(server, "PUT", "/services/images/myimage", "/imageparams.xml");
       } finally {
@@ -103,7 +107,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          ImageApi api = api(server.getUrl("/")).getImageApi();
 
-         assertThat(api.delete("myimage")).isEqualTo("request-1");
+         assertEquals(api.delete("myimage"), "request-1");
 
          assertSent(server, "DELETE", "/services/images/myimage");
       } finally {
@@ -118,7 +122,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          ImageApi api = api(server.getUrl("/")).getImageApi();
 
-         assertThat(api.delete("myimage")).isNull();
+         assertNull(api.delete("myimage"));
 
          assertSent(server, "DELETE", "/services/images/myimage");
       } finally {
