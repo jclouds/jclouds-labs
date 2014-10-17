@@ -16,9 +16,7 @@
  */
 package org.jclouds.digitalocean.internal;
 
-import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Lists.newArrayList;
-import static org.testng.Assert.assertFalse;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -43,9 +41,9 @@ public class BaseDigitalOceanLiveTest extends BaseApiLiveTest<DigitalOceanApi> {
 
    protected static final int DEFAULT_TIMEOUT_SECONDS = 600;
    protected static final int DEFAULT_POLL_SECONDS = 1;
+   protected static final String DEFAULT_IMAGE = "ubuntu-14-04-x64";
 
    protected List<Size> sizes;
-   protected List<Image> images;
    protected List<Region> regions;
 
    protected Size defaultSize;
@@ -59,20 +57,15 @@ public class BaseDigitalOceanLiveTest extends BaseApiLiveTest<DigitalOceanApi> {
    protected void initializeImageSizeAndRegion() {
       sizes = sortedSizes().sortedCopy(api.getSizesApi().list());
       regions = api.getRegionApi().list();
-      images = newArrayList(filter(api.getImageApi().list(), new Predicate<Image>() {
-         @Override
-         public boolean apply(Image input) {
-            return input.isPublicImage();
-         }
-      }));
 
       assertTrue(sizes.size() > 1, "There must be at least two sizes");
       assertTrue(regions.size() > 1, "There must be at least two regions");
-      assertFalse(images.isEmpty(), "Image list should not be empty");
+
+      defaultImage = api.getImageApi().get(DEFAULT_IMAGE);
+      checkNotNull(defaultImage, "Image %s not found", DEFAULT_IMAGE);
 
       defaultSize = sizes.get(0);
       defaultRegion = regions.get(0);
-      defaultImage = images.get(0);
    }
 
    protected void waitForEvent(Integer eventId) {
