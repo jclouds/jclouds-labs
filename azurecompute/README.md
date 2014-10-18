@@ -12,7 +12,7 @@ openssl pkcs12 -export -out $HOME/.jclouds/azure.p12 -in $HOME/.jclouds/azure.pe
 # create a cer file which you upload to the management console to authorize this certificate.
 # https://manage.windowsazure.com/@ignasibarreragmail.onmicrosoft.com#Workspaces/AdminTasks/ListManagementCertificates
 # note you need to press command+shift+. to display hidden directories in a open dialog in osx
-openssl x509 -inform pem -in $HOME/.jclouds/azure.p12 -outform der -out $HOME/.jclouds/azure.cer
+openssl x509 -inform pem -in $HOME/.jclouds/azure.pem -outform der -out $HOME/.jclouds/azure.cer
 ```
 
 Once you do this, you will set the following to run the live tests.
