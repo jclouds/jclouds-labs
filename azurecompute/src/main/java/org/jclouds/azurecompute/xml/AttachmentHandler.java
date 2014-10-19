@@ -16,43 +16,39 @@
  */
 package org.jclouds.azurecompute.xml;
 
+import static org.jclouds.util.SaxUtils.currentOrNull;
+
 import org.jclouds.azurecompute.domain.Disk.Attachment;
 import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
-import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
  */
-public class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Attachment> {
+final class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Attachment> {
+   private String hostedService;
+   private String deployment;
+   private String virtualMachine;
 
-   private StringBuilder currentText = new StringBuilder();
-   private Attachment.Builder builder = Attachment.builder();
+   private final StringBuilder currentText = new StringBuilder();
 
-   @Override
-   public Attachment getResult() {
-      try {
-         return builder.build();
-      } finally {
-         builder = Attachment.builder();
-      }
+   @Override public Attachment getResult() {
+      Attachment result = Attachment.create(hostedService, deployment, virtualMachine);
+      hostedService = deployment = virtualMachine = null; // handler could be called in a loop.
+      return result;
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("HostedServiceName")) {
-         builder.hostedService(SaxUtils.currentOrNull(currentText));
+         hostedService = currentOrNull(currentText);
       } else if (qName.equals("DeploymentName")) {
-         builder.deployment(SaxUtils.currentOrNull(currentText));
+         deployment = currentOrNull(currentText);
       } else if (qName.equals("RoleName")) {
-         builder.role(SaxUtils.currentOrNull(currentText));
+         virtualMachine = currentOrNull(currentText);
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
-
 }

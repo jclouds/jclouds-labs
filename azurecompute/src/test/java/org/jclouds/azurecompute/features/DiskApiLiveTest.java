@@ -16,9 +16,11 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
-import java.util.List;
+import static com.google.common.collect.Iterables.transform;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.Location;
@@ -27,10 +29,8 @@ import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.transform;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 
 @Test(groups = "live", testName = "DiskApiLiveTest")
 public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
@@ -44,73 +44,51 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
 
       locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(),
                new Function<Location, String>() {
-                  @Override
                   public String apply(Location in) {
                      return in.getName();
                   }
                }));
       images = ImmutableSet.copyOf(transform(api.getImageApi().list(), new Function<Image, String>() {
-         @Override
          public String apply(Image in) {
             return in.name();
          }
       }));
    }
 
-   @Test
-   protected void testList() {
-      List<Disk> response = api().list();
-
-      for (Disk disk : response) {
+   public void testList() {
+      for (Disk disk : api().list()) {
          checkDisk(disk);
       }
    }
 
    private void checkDisk(Disk disk) {
-      checkNotNull(disk.getName(), "Name cannot be null for Disk %s", disk.getLabel());
-      checkNotNull(disk.getOS(), "OS cannot be null for Disk: %s", disk);
-      assertNotEquals(disk.getOS(), OSType.UNRECOGNIZED, "Status cannot be UNRECOGNIZED for Disk: " + disk);
+      assertNull(disk.name(), "Name cannot be null for: " + disk);
+      assertNull(disk.os(), "OS cannot be null for: " + disk);
+      assertNotEquals(disk.os(), OSType.UNRECOGNIZED, "Status cannot be UNRECOGNIZED for: " + disk);
 
-      checkNotNull(disk.getAttachedTo(), "While AttachedTo can be null for Disk, its Optional wrapper cannot: %s", disk);
-      if (disk.getAttachedTo().isPresent()) {
+      if (disk.attachedTo() != null) {
          // TODO: verify you can lookup the role
       }
 
-      checkNotNull(disk.getLogicalSizeInGB(),
-               "While LogicalSizeInGB can be null for Disk, its Optional wrapper cannot: %s", disk);
-
-      if (disk.getLogicalSizeInGB().isPresent())
-         assertTrue(disk.getLogicalSizeInGB().get() > 0, "LogicalSizeInGB should be positive, if set" + disk.toString());
-
-      checkNotNull(disk.getMediaLink(), "While MediaLink can be null for Disk, its Optional wrapper cannot: %s", disk);
-
-      if (disk.getMediaLink().isPresent())
-         assertTrue(ImmutableSet.of("http", "https").contains(disk.getMediaLink().get().getScheme()),
-                  "MediaLink should be an http(s) url" + disk.toString());
-
-      checkNotNull(disk.getLabel(), "While Label can be null for Disk, its Optional wrapper cannot: %s",
-               disk);
-
-      checkNotNull(disk.getDescription(), "While Description can be null for Disk, its Optional wrapper cannot: %s",
-               disk);
-
-      checkNotNull(disk.getLocation(), "While Location can be null for Disk, its Optional wrapper cannot: %s", disk);
-      if (disk.getLocation().isPresent()) {
-         assertTrue(locations.contains(disk.getLocation().get()),
-                  "Location not in " + locations + " :" + disk.toString());
+      if (disk.logicalSizeInGB() != null) {
+         assertTrue(disk.logicalSizeInGB() > 0, "LogicalSizeInGB should be positive, if set" + disk);
       }
 
-      checkNotNull(disk.getSourceImage(), "While SourceImage can be null for Disk, its Optional wrapper cannot: %s",
-               disk);
-      if (disk.getSourceImage().isPresent()) {
-         assertTrue(images.contains(disk.getSourceImage().get()),
-                  "SourceImage not in " + images + " :" + disk.toString());
+      if (disk.mediaLink() != null) {
+         assertTrue(ImmutableSet.of("http", "https").contains(disk.mediaLink().getScheme()),
+               "MediaLink should be an http(s) url" + disk);
       }
 
-      checkNotNull(disk.getAffinityGroup(),
-               "While AffinityGroup can be null for Disk, its Optional wrapper cannot: %s", disk);
-      if (disk.getAffinityGroup().isPresent()) {
-         // TODO: list getAffinityGroups and check if there
+      if (disk.location() != null) {
+         assertTrue(locations.contains(disk.location()), "Location not in " + locations + " :" + disk);
+      }
+
+      if (disk.sourceImage() != null) {
+         assertTrue(images.contains(disk.sourceImage()), "SourceImage not in " + images + " :" + disk);
+      }
+
+      if (disk.affinityGroup() != null) {
+         // TODO: list affinityGroups and check if there
       }
    }
 
