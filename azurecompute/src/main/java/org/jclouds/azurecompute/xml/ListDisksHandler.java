@@ -16,37 +16,26 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.inject.Inject;
 import java.util.List;
+
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
-public class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Disk>> {
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
-   private final DiskHandler diskHandler;
-
-   private Builder<Disk> disks = ImmutableList.<Disk> builder();
-
+public final class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Disk>> {
    private boolean inDisk;
+   private final DiskHandler diskHandler = new DiskHandler();
+   private final Builder<Disk> disks = ImmutableList.builder();
 
-   @Inject
-   public ListDisksHandler(final DiskHandler diskHandler) {
-      this.diskHandler = diskHandler;
-   }
-
-   @Override
-   public List<Disk> getResult() {
+   @Override public List<Disk> getResult() {
       return disks.build();
    }
 
-   @Override
-   public void startElement(String url, String name, String qName, Attributes attributes) throws SAXException {
-      if (SaxUtils.equalsOrSuffix(qName, "Disk")) {
+   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+      if (qName.equals("Disk")) {
          inDisk = true;
       }
       if (inDisk) {
@@ -54,8 +43,7 @@ public class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithRes
       }
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   @Override public void endElement(String uri, String name, String qName) {
       if (qName.equals("Disk")) {
          inDisk = false;
          disks.add(diskHandler.getResult());
@@ -64,8 +52,7 @@ public class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithRes
       }
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       if (inDisk) {
          diskHandler.characters(ch, start, length);
       }

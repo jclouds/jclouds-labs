@@ -16,92 +16,97 @@
  */
 package org.jclouds.azurecompute.xml;
 
+import static org.jclouds.util.SaxUtils.currentOrNull;
+
 import java.net.URI;
-import javax.inject.Inject;
+
 import org.jclouds.azurecompute.domain.Disk;
+import org.jclouds.azurecompute.domain.Disk.Attachment;
 import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import static org.jclouds.util.SaxUtils.currentOrNull;
-import static org.jclouds.util.SaxUtils.equalsOrSuffix;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
  */
-public class DiskHandler extends
-		ParseSax.HandlerForGeneratedRequestWithResult<Disk> {
+final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Disk> {
+   private String name;
+   private String location;
+   private String affinityGroup;
+   private String description;
+   private OSType os;
+   private URI mediaLink;
+   private Integer logicalSizeInGB;
+   private Attachment attachedTo;
+   private String sourceImage;
 
-	private final AttachmentHandler attachmentHandler;
+   private boolean inAttachment;
+   private final AttachmentHandler attachmentHandler = new AttachmentHandler();
+   private final StringBuilder currentText = new StringBuilder();
 
-	@Inject
-	private DiskHandler(AttachmentHandler attachmentHandler) {
-		this.attachmentHandler = attachmentHandler;
-	}
+   @Override public Disk getResult() {
+      Disk result = Disk.create(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB,
+            attachedTo, sourceImage);
+      resetState(); // handler is called in a loop.
+      return result;
+   }
 
-	private StringBuilder currentText = new StringBuilder();
-	private Disk.Builder builder = Disk.builder();
+   private void resetState() {
+      name = location = affinityGroup = description = sourceImage = null;
+      os = null;
+      mediaLink = null;
+      logicalSizeInGB = null;
+      attachedTo = null;
+   }
 
-	private boolean inAttachment;
+   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+      if (qName.equals("AttachedTo")) {
+         inAttachment = true;
+      }
+   }
 
-	@Override
-	public Disk getResult() {
-		try {
-			return builder.build();
-		} finally {
-			builder = Disk.builder();
-		}
-	}
+   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+      if (qName.equals("AttachedTo")) {
+         attachedTo = attachmentHandler.getResult();
+         inAttachment = false;
+      } else if (inAttachment) {
+         attachmentHandler.endElement(ignoredUri, ignoredName, qName);
+      } else if (qName.equals("OS")) {
+         String osText = currentOrNull(currentText);
+         if (osText != null && osText.toUpperCase().equals("NULL")) {
+            os = null;
+         } else {
+            os = OSType.fromValue(currentOrNull(currentText));
+         }
+      } else if (qName.equals("Name")) {
+         name = currentOrNull(currentText);
+      } else if (qName.equals("LogicalDiskSizeInGB")) {
+         String gb = currentOrNull(currentText);
+         if (gb != null) {
+            logicalSizeInGB = Integer.parseInt(gb);
+         }
+      } else if (qName.equals("Description")) {
+         description = currentOrNull(currentText);
+      } else if (qName.equals("Location")) {
+         location = currentOrNull(currentText);
+      } else if (qName.equals("AffinityGroup")) {
+         affinityGroup = currentOrNull(currentText);
+      } else if (qName.equals("MediaLink")) {
+         String link = currentOrNull(currentText);
+         if (link != null) {
+            mediaLink = URI.create(link);
+         }
+      } else if (qName.equals("SourceImageName")) {
+         sourceImage = currentOrNull(currentText);
+      }
+      currentText.setLength(0);
+   }
 
-	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
-		if (equalsOrSuffix(qName, "AttachedTo")) {
-			inAttachment = true;
-		}
-	}
-
-	@Override
-	public void endElement(String uri, String name, String qName)
-			throws SAXException {
-		if (equalsOrSuffix(qName, "AttachedTo")) {
-			builder.attachedTo(attachmentHandler.getResult());
-			inAttachment = false;
-		} else if (inAttachment) {
-			attachmentHandler.endElement(uri, name, qName);
-		} else if (equalsOrSuffix(qName, "OS")) {
-			builder.os(OSType.fromValue(currentOrNull(currentText)));
-		} else if (equalsOrSuffix(qName, "Name")) {
-			builder.name(currentOrNull(currentText));
-		} else if (equalsOrSuffix(qName, "LogicalDiskSizeInGB")) {
-			String gb = currentOrNull(currentText);
-			if (gb != null)
-				builder.logicalSizeInGB(Integer.parseInt(gb));
-		} else if (equalsOrSuffix(qName, "Description")) {
-			builder.description(currentOrNull(currentText));
-		} else if (equalsOrSuffix(qName, "Location")) {
-			builder.location(currentOrNull(currentText));
-		} else if (equalsOrSuffix(qName, "AffinityGroup")) {
-			builder.affinityGroup(currentOrNull(currentText));
-		} else if (equalsOrSuffix(qName, "MediaLink")) {
-			String link = currentOrNull(currentText);
-			if (link != null)
-				builder.mediaLink(URI.create(link));
-		} else if (equalsOrSuffix(qName, "SourceImageName")) {
-			builder.sourceImage(currentOrNull(currentText));
-		} else if (equalsOrSuffix(qName, "Label")) {
-			builder.label(currentOrNull(currentText));
-		}
-		currentText.setLength(0);
-	}
-
-	@Override
-	public void characters(char ch[], int start, int length) {
-		if (inAttachment) {
-			attachmentHandler.characters(ch, start, length);
-		} else {
-			currentText.append(ch, start, length);
-		}
-	}
+   @Override public void characters(char ch[], int start, int length) {
+      if (inAttachment) {
+         attachmentHandler.characters(ch, start, length);
+      } else {
+         currentText.append(ch, start, length);
+      }
+   }
 }

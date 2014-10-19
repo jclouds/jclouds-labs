@@ -16,13 +16,16 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.parse.ListDisksTest;
+import org.jclouds.azurecompute.xml.ListDisksHandlerTest;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "DiskApiMockTest")
 public class DiskApiMockTest extends BaseAzureComputeApiMockTest {
@@ -34,7 +37,7 @@ public class DiskApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DiskApi api = api(server.getUrl("/")).getDiskApi();
 
-         assertThat(api.list()).containsExactlyElementsOf(ListDisksTest.expected());
+         assertEquals(api.list(), ListDisksHandlerTest.expected());
 
          assertSent(server, "GET", "/services/disks");
       } finally {
@@ -49,7 +52,7 @@ public class DiskApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DiskApi api = api(server.getUrl("/")).getDiskApi();
 
-         assertThat(api.list()).isEmpty();
+         assertTrue(api.list().isEmpty());
 
          assertSent(server, "GET", "/services/disks");
       } finally {
@@ -64,7 +67,7 @@ public class DiskApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DiskApi api = api(server.getUrl("/")).getDiskApi();
 
-         assertThat(api.delete("my-disk")).isEqualTo("request-1");
+         assertEquals(api.delete("my-disk"), "request-1");
 
          assertSent(server, "DELETE", "/services/disks/my-disk");
       } finally {
@@ -79,7 +82,7 @@ public class DiskApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DiskApi api = api(server.getUrl("/")).getDiskApi();
 
-         assertThat(api.delete("my-disk")).isNull();
+         assertNull(api.delete("my-disk"));
 
          assertSent(server, "DELETE", "/services/disks/my-disk");
       } finally {

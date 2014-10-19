@@ -16,103 +16,56 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import java.net.URI;
-
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.URI;
+
+import org.jclouds.javax.annotation.Nullable;
+
+import com.google.common.base.Objects;
+
 /**
- * disk in the image repository
+ * A disk in the image repository.
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
  */
-public class Disk {
-   public static class Attachment {
-
-      public static Builder builder() {
-         return new Builder();
+public final class Disk {
+   public static final class Attachment {
+      /** The deployment in which the disk is being used. */
+      public String deployment() {
+         return deployment;
       }
 
-      public Builder toBuilder() {
-         return builder().fromAttachment(this);
+      /** The hosted service in which the disk is being used. */
+      public String hostedService() {
+         return hostedService;
       }
 
-      public static class Builder {
+      /** The virtual machine that the disk is attached to. */
+      public String virtualMachine() {
+         return virtualMachine;
+      }
 
-         private String hostedService;
-         private String deployment;
-         private String role;
+      public static Attachment create(String hostedService, String deployment, String virtualMachine) {
+         return new Attachment(hostedService, deployment, virtualMachine);
+      }
 
-         /**
-          * @see Attachment#getHostedService()
-          */
-         public Builder hostedService(String hostedService) {
-            this.hostedService = hostedService;
-            return this;
-         }
-
-         /**
-          * @see Attachment#getDeployment()
-          */
-         public Builder deployment(String deployment) {
-            this.deployment = deployment;
-            return this;
-         }
-
-         /**
-          * @see Attachment#getRole()
-          */
-         public Builder role(String role) {
-            this.role = role;
-            return this;
-         }
-
-         public Attachment build() {
-            return new Attachment(hostedService, deployment, role);
-         }
-
-         public Builder fromAttachment(Attachment in) {
-            return this.hostedService(in.hostedService).deployment(in.deployment).role(in.role);
-         }
+      // TODO: Remove from here down with @AutoValue.
+      private Attachment(String hostedService, String deployment, String virtualMachine) {
+         this.hostedService = checkNotNull(hostedService, "hostedService");
+         this.deployment = checkNotNull(deployment, "deployment");
+         this.virtualMachine = checkNotNull(virtualMachine, "virtualMachine");
       }
 
       private final String hostedService;
       private final String deployment;
-      private final String role;
-
-      private Attachment(String hostedService, String deployment, String role) {
-         this.hostedService = checkNotNull(hostedService, "hostedService");
-         this.deployment = checkNotNull(deployment, "deployment");
-         this.role = checkNotNull(role, "role");
-      }
-
-      /**
-       * The deployment in which the disk is being used.
-       */
-      public String getDeployment() {
-         return deployment;
-      }
-
-      /**
-       * The hosted service in which the disk is being used.
-       */
-      public String getHostedService() {
-         return hostedService;
-      }
-
-      /**
-       * The virtual machine that the disk is attached to.
-       */
-      public String getRole() {
-         return role;
-      }
+      private final String virtualMachine;
 
       @Override
       public int hashCode() {
-         return Objects.hashCode(hostedService, deployment, role);
+         return Objects.hashCode(hostedService, deployment, virtualMachine);
       }
 
       @Override
@@ -127,248 +80,78 @@ public class Disk {
             return false;
          }
          Attachment other = (Attachment) obj;
-         return Objects.equal(this.hostedService, other.hostedService) && Objects
-               .equal(this.deployment, other.deployment) && Objects.equal(this.role, other.role);
+         return equal(this.hostedService, other.hostedService) &&
+               equal(this.deployment, other.deployment) &&
+               equal(this.virtualMachine, other.virtualMachine);
       }
 
       @Override
       public String toString() {
-         return MoreObjects.toStringHelper(this).omitNullValues().add("deployment", hostedService).add("role", role)
-               .toString();
+         return Objects.toStringHelper(this)
+               .add("hostedService", hostedService)
+               .add("deployment", deployment)
+               .add("virtualMachine", virtualMachine).toString();
       }
 
-   }
-
-   public static Builder builder() {
-      return new Builder();
-   }
-
-   public Builder toBuilder() {
-      return new Builder().fromHostedService(this);
-   }
-
-   public static class Builder {
-
-      private Optional<Attachment> attachedTo = Optional.absent();
-      private OSType os;
-      private String name;
-      private Optional<Integer> logicalSizeInGB = Optional.absent();
-      private Optional<String> description = Optional.absent();
-      private Optional<String> location = Optional.absent();
-      private Optional<String> affinityGroup = Optional.absent();
-      private Optional<URI> mediaLink = Optional.absent();
-      private Optional<String> sourceImage = Optional.absent();
-      private Optional<String> label = Optional.absent();
-      private boolean hasOperatingSystem;
-      private boolean isCorrupted;
-
-      /**
-       * @see Disk#getAttachedTo()
-       */
-      public Builder attachedTo(Attachment attachedTo) {
-         this.attachedTo = Optional.fromNullable(attachedTo);
-         return this;
-      }
-
-      /**
-       * @see Disk#getOS()
-       */
-      public Builder os(OSType os) {
-         this.os = os;
-         return this;
-      }
-
-      /**
-       * @see Disk#getName()
-       */
-      public Builder name(String name) {
-         this.name = name;
-         return this;
-      }
-
-      /**
-       * @see Disk#getDescription()
-       */
-      public Builder description(String description) {
-         this.description = Optional.fromNullable(description);
-         return this;
-      }
-
-      /**
-       * @see Disk#getLogicalSizeInGB()
-       */
-      public Builder logicalSizeInGB(Integer logicalSizeInGB) {
-         this.logicalSizeInGB = Optional.fromNullable(logicalSizeInGB);
-         return this;
-      }
-
-      /**
-       * @see Disk#getLocation()
-       */
-      public Builder location(String location) {
-         this.location = Optional.fromNullable(location);
-         return this;
-      }
-
-      /**
-       * @see Disk#getAffinityGroup()
-       */
-      public Builder affinityGroup(String affinityGroup) {
-         this.affinityGroup = Optional.fromNullable(affinityGroup);
-         return this;
-      }
-
-      /**
-       * @see Disk#getMediaLink()
-       */
-      public Builder mediaLink(URI mediaLink) {
-         this.mediaLink = Optional.fromNullable(mediaLink);
-         return this;
-      }
-
-      /**
-       * @see Disk#getSourceImage()
-       */
-      public Builder sourceImage(String sourceImage) {
-         this.sourceImage = Optional.fromNullable(sourceImage);
-         return this;
-      }
-
-      /**
-       * @see Disk#getLabel()
-       */
-      public Builder label(String label) {
-         this.label = Optional.fromNullable(label);
-         return this;
-      }
-
-      /**
-       * @see Disk#hasOperatingSystem()
-       */
-      public Builder hasOperatingSystem(boolean hasOperatingSystem) {
-         this.hasOperatingSystem = hasOperatingSystem;
-         return this;
-      }
-
-      /**
-       * @see Disk#isCorrupted()
-       */
-      public Builder isCorrupted(boolean isCorrupted) {
-         this.isCorrupted = isCorrupted;
-         return this;
-      }
-
-      public Disk build() {
-         return new Disk(attachedTo, os, name, logicalSizeInGB, description, location, affinityGroup, mediaLink,
-               sourceImage, label, hasOperatingSystem, isCorrupted);
-      }
-
-      public Builder fromHostedService(Disk in) {
-         return this.attachedTo(in.attachedTo.orNull()).os(in.getOS()).name(in.getName())
-               .logicalSizeInGB(in.getLogicalSizeInGB().orNull()).description(in.getDescription().orNull())
-               .location(in.getLocation().orNull()).affinityGroup(in.getAffinityGroup().orNull())
-               .mediaLink(in.getMediaLink().orNull()).sourceImage(in.getSourceImage().orNull())
-               .label(in.getLabel().orNull()).hasOperatingSystem(in.hasOperatingSystem).isCorrupted(in.isCorrupted);
-      }
-   }
-
-   private final Optional<Attachment> attachedTo;
-   private final OSType os;
-   private final String name;
-   private final Optional<Integer> logicalSizeInGB;
-   private final Optional<String> description;
-   private final Optional<String> location;
-   private final Optional<String> affinityGroup;
-   private final Optional<URI> mediaLink;
-   private final Optional<String> sourceImage;
-   private final Optional<String> label;
-   private final boolean hasOperatingSystem;
-   private final boolean isCorrupted;
-
-   private Disk(Optional<Attachment> attachedTo, OSType os, String name, Optional<Integer> logicalSizeInGB,
-         Optional<String> description, Optional<String> location, Optional<String> affinityGroup,
-         Optional<URI> mediaLink, Optional<String> sourceImage, Optional<String> label, boolean hasOperatingSystem,
-         boolean isCorrupted) {
-      this.name = checkNotNull(name, "name");
-      this.attachedTo = checkNotNull(attachedTo, "attachedTo for %s", name);
-      this.logicalSizeInGB = checkNotNull(logicalSizeInGB, "logicalSizeInGB for %s", name);
-      this.description = checkNotNull(description, "description for %s", name);
-      this.os = checkNotNull(os, "os for %s", name);
-      this.location = checkNotNull(location, "location for %s", name);
-      this.affinityGroup = checkNotNull(affinityGroup, "affinityGroup for %s", name);
-      this.mediaLink = checkNotNull(mediaLink, "mediaLink for %s", name);
-      this.sourceImage = checkNotNull(sourceImage, "sourceImage for %s", name);
-      this.label = checkNotNull(label, "label for %s", name);
-      this.hasOperatingSystem = hasOperatingSystem;
-      this.isCorrupted = isCorrupted;
-   }
-
-   /**
-    * Contains properties that specify a virtual machine that currently using the disk. A disk
-    * cannot be deleted as long as it is attached to a virtual machine.
-    */
-   public Optional<Attachment> getAttachedTo() {
-      return attachedTo;
-   }
-
-   /**
-    * The operating system type of the OS image.
-    */
-   public OSType getOS() {
-      return os;
    }
 
    /**
     * The name of the disk. This is the name that is used when creating one or more virtual machines
     * using the disk.
     */
-   public String getName() {
+   public String name() {
       return name;
    }
 
    /**
-    * The size, in GB, of the image.
+    * The geo-location of the disk in Windows Azure, if the disk is not
+    * associated with an affinity group. If a location has been specified, the AffinityGroup element
+    * is not returned.
     */
-   public Optional<Integer> getLogicalSizeInGB() {
-      return logicalSizeInGB;
-   }
-
-   /**
-    * The description for the image.
-    */
-   public Optional<String> getDescription() {
-      return description;
-   }
-
-   /**
-    * The geo-location in which this media is located. The Location value is derived from storage
-    * account that contains the blob in which the media is located. If the storage account belongs
-    * to an affinity group the value is absent.
-    */
-   public Optional<String> getLocation() {
+   @Nullable public String location() {
       return location;
    }
 
    /**
-    * The affinity in which the media is located. The AffinityGroup value is derived from storage
-    * account that contains the blob in which the media is located. If the storage account does not
-    * belong to an affinity group the value is absent.
+    * The affinity group with which this disk is associated, if any. If the service is
+    * associated with an affinity group, the Location element is not returned.
     */
-   public Optional<String> getAffinityGroup() {
+   @Nullable public String affinityGroup() {
       return affinityGroup;
    }
 
+   @Nullable public String description() {
+      return description;
+   }
+
+   /** The operating system type of the OS image, or null if a data disk. */
+   @Nullable public OSType os() {
+      return os;
+   }
+
    /**
-    * The location of the blob in the blob store in which the media for the disk is located. The
+    * The location of the blob in the blob store in which the media for the image is located. The
     * blob location belongs to a storage account in the subscription specified by the
     * <subscription-id> value in the operation call.
     *
     * Example:
     *
-    * http://example.blob.core.windows.net/disks/mydisk.vhd
+    * http://example.blob.core.windows.net/disks/myimage.vhd
     */
-   public Optional<URI> getMediaLink() {
+   @Nullable public URI mediaLink() {
       return mediaLink;
+   }
+
+   @Nullable public Integer logicalSizeInGB() {
+      return logicalSizeInGB;
+   }
+
+   /**
+    * Contains properties that specify a virtual machine that currently using the disk. A disk
+    * cannot be deleted as long as it is attached to a virtual machine.
+    */
+   @Nullable public Attachment attachedTo() {
+      return attachedTo;
    }
 
    /**
@@ -376,67 +159,78 @@ public class Disk {
     * automatically when a disk is created from an OS image by calling the Add Role, Create
     * Deployment, or Provision Disk operations.
     */
-   public Optional<String> getSourceImage() {
+   @Nullable public String sourceImage() {
       return sourceImage;
    }
 
-   /**
-    * The description of the image.
-    */
-   public Optional<String> getLabel() {
-      return label;
+   public static Disk create(String name, String location, String affinityGroup, String description,
+         OSType os, URI mediaLink, Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
+      return new Disk(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB, attachedTo,
+            sourceImage);
    }
 
-   /**
-    * Returns whether this disk contains operation system. Only disks that have an operating system
-    * installed can be mounted as an OS Drive.
-    */
-   public boolean hasOperatingSystem() {
-      return hasOperatingSystem;
+   // TODO: Remove from here down with @AutoValue.
+   private Disk(String name, String location, String affinityGroup, String description, OSType os, URI mediaLink,
+         Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
+      this.name = checkNotNull(name, "name");
+      this.location = location;
+      this.affinityGroup = affinityGroup;
+      this.description = description;
+      this.os = os;
+      this.mediaLink = mediaLink;
+      this.logicalSizeInGB = checkNotNull(logicalSizeInGB, "logicalSizeInGB of %s", name);
+      this.attachedTo = attachedTo;
+      this.sourceImage = sourceImage;
    }
 
-   /**
-    * Returns whether there is a consistency failure detected with this disk. If a disk fails the
-    * consistency check, you delete any virtual machines using it, delete the disk, and inspect the
-    * blob media to see if the content is intact. You can then reregister the media in the blob as a
-    * disk.
-    */
-   public boolean isCorrupted() {
-      return isCorrupted;
+   private final String name;
+   private final String location;
+   private final String affinityGroup;
+   private final String description;
+   private final OSType os;
+   private final URI mediaLink;
+   private final Integer logicalSizeInGB;
+   private final Attachment attachedTo;
+   private final String sourceImage;
+
+   @Override
+   public boolean equals(Object object) {
+      if (this == object) {
+         return true;
+      }
+      if (object instanceof Disk) {
+         Disk that = Disk.class.cast(object);
+         return equal(name, that.name) &&
+               equal(location, that.location) &&
+               equal(affinityGroup, that.affinityGroup) &&
+               equal(description, that.description) &&
+               equal(os, that.os) &&
+               equal(mediaLink, that.mediaLink) &&
+               equal(logicalSizeInGB, that.logicalSizeInGB) &&
+               equal(attachedTo, that.attachedTo) &&
+               equal(sourceImage, that.sourceImage);
+      } else {
+         return false;
+      }
    }
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name);
-   }
-
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj) {
-         return true;
-      }
-      if (obj == null) {
-         return false;
-      }
-      if (getClass() != obj.getClass()) {
-         return false;
-      }
-      Disk other = (Disk) obj;
-      return Objects.equal(this.name, other.name);
+      return Objects.hashCode(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB,
+            attachedTo, sourceImage);
    }
 
    @Override
    public String toString() {
-      return string().toString();
+      return toStringHelper(this)
+            .add("name", name)
+            .add("location", location)
+            .add("affinityGroup", affinityGroup)
+            .add("description", description)
+            .add("os", os)
+            .add("mediaLink", mediaLink)
+            .add("logicalSizeInGB", logicalSizeInGB)
+            .add("attachedTo", attachedTo)
+            .add("sourceImage", sourceImage).toString();
    }
-
-   private ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).omitNullValues().add("os", os).add("name", name)
-            .add("attachedTo", attachedTo.orNull()).add("logicalSizeInGB", logicalSizeInGB.orNull())
-            .add("description", description).add("location", location.orNull())
-            .add("affinityGroup", affinityGroup.orNull()).add("mediaLink", mediaLink.orNull())
-            .add("sourceImage", sourceImage.orNull()).add("label", label.orNull())
-            .add("hasOperatingSystem", hasOperatingSystem).add("isCorrupted", isCorrupted);
-   }
-
 }
