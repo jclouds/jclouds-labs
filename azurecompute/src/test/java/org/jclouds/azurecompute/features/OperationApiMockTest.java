@@ -16,13 +16,15 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.parse.GetOperationTest;
+import org.jclouds.azurecompute.xml.OperationHandlerTest;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "OperationApiMockTest")
 public class OperationApiMockTest extends BaseAzureComputeApiMockTest {
@@ -34,7 +36,7 @@ public class OperationApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          OperationApi api = api(server.getUrl("/")).getOperationApi();
 
-         assertThat(api.get("request-id")).isEqualTo(GetOperationTest.expected());
+         assertEquals(api.get("request-id"), OperationHandlerTest.expected());
 
          assertSent(server, "GET", "/operations/request-id");
       } finally {
@@ -49,7 +51,7 @@ public class OperationApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          OperationApi api = api(server.getUrl("/")).getOperationApi();
 
-         assertThat(api.get("request-id")).isNull();
+         assertNull(api.get("request-id"));
 
          assertSent(server, "GET", "/operations/request-id");
       } finally {
