@@ -18,74 +18,75 @@ package org.jclouds.azurecompute.binders;
 
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+import static com.google.common.base.Throwables.propagate;
 import static org.jclouds.azurecompute.domain.Image.OSType.LINUX;
 
-import javax.inject.Singleton;
+import java.util.Map;
 
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.Image.OSType;
-import org.jclouds.azurecompute.domain.InputEndpoint;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.Binder;
+import org.jclouds.rest.MapBinder;
 
-import com.google.common.base.Throwables;
 import com.jamesmurty.utils.XMLBuilder;
 
-@Singleton
-public class BindDeploymentParamsToXmlPayload implements Binder {
+public final class CreateDeploymentToXML implements MapBinder {
 
-   @Override
-   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-      DeploymentParams params = DeploymentParams.class.cast(input);
+   @Override public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
+      String name = postParams.get("name").toString();
+      DeploymentParams params = DeploymentParams.class.cast(postParams.get("params"));
+
       try {
-         XMLBuilder builder = XMLBuilder.create("Deployment").a("xmlns", "http://schemas.microsoft.com/windowsazure")
-            .e("Name").t(params.getName()).up()
+         XMLBuilder builder = XMLBuilder.create("Deployment", "http://schemas.microsoft.com/windowsazure")
+            .e("Name").t(name).up()
             .e("DeploymentSlot").t("Production").up()
-            .e("Label").t(params.getName()).up()
+            .e("Label").t(name).up()
             .e("RoleList")
             .e("Role")
-            .e("RoleName").t(params.getName()).up()
+            .e("RoleName").t(name).up()
             .e("RoleType").t("PersistentVMRole").up()
             .e("ConfigurationSets");
 
-         if (params.getOsType() == OSType.WINDOWS) {
+         if (params.os() == OSType.WINDOWS) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Windows
             configBuilder.e("ConfigurationSetType").t("WindowsProvisioningConfiguration").up()
-               .e("ComputerName").t(params.getUsername()).up()
-               .e("AdminPassword").t(params.getPassword()).up()
+               .e("ComputerName").t(name).up()
+               .e("AdminPassword").t(params.password()).up()
                .e("ResetPasswordOnFirstLogon").t("false").up()
                .e("EnableAutomaticUpdate").t("false").up()
                .e("DomainJoin")
                .e("Credentials")
-                  .e("Domain").t(params.getName()).up()
-                  .e("Username").t(params.getUsername()).up()
-                  .e("Password").t(params.getPassword()).up()
+                  .e("Domain").t(name).up()
+                  .e("Username").t(params.username()).up()
+                  .e("Password").t(params.password()).up()
                .up() // Credentials
-               .e("JoinDomain").t(params.getName()).up()
+               .e("JoinDomain").t(name).up()
                .up() // Domain Join
                .e("StoredCertificateSettings").up()
                .up(); // Windows ConfigurationSet
-         } else if (params.getOsType() == OSType.LINUX) {
+         } else if (params.os() == OSType.LINUX) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Linux
             configBuilder.e("ConfigurationSetType").t("LinuxProvisioningConfiguration").up()
-               .e("HostName").t(params.getName()).up()
-               .e("UserName").t(params.getUsername()).up()
-               .e("UserPassword").t(params.getPassword()).up()
+               .e("HostName").t(name).up()
+               .e("UserName").t(params.username()).up()
+               .e("UserPassword").t(params.password()).up()
                .e("DisableSshPasswordAuthentication").t("false").up()
                .e("SSH").up()
                .up(); // Linux ConfigurationSet
+         } else {
+            throw new IllegalArgumentException("Unrecognized os type " + params);
          }
 
          XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Network
          configBuilder.e("ConfigurationSetType").t("NetworkConfiguration").up();
 
          XMLBuilder inputEndpoints = configBuilder.e("InputEndpoints");
-         for (InputEndpoint endpoint : params.getEndpoints()) {
+         for (DeploymentParams.ExternalEndpoint endpoint : params.externalEndpoints()) {
             XMLBuilder inputBuilder = inputEndpoints.e("InputEndpoint");
-            inputBuilder.e("LocalPort").t(endpoint.getLocalPort().toString()).up()
-               .e("Name").t(endpoint.getName()).up()
-               .e("Port").t(endpoint.getExternalPort().toString()).up()
-               .e("Protocol").t(endpoint.getProtocol().name().toLowerCase()).up()
+            inputBuilder.e("LocalPort").t(Integer.toString(endpoint.localPort())).up()
+               .e("Name").t(endpoint.name()).up()
+               .e("Port").t(Integer.toString(endpoint.port())).up()
+               .e("Protocol").t(endpoint.protocol().toLowerCase()).up()
                .up(); //InputEndpoint
          }
 
@@ -97,22 +98,22 @@ public class BindDeploymentParamsToXmlPayload implements Binder {
             .e("DataVirtualHardDisks").up()
             .e("OSVirtualHardDisk")
             .e("HostCaching").t("ReadWrite").up()
-            .e("MediaLink").t(url(params)).up()
-            .e("SourceImageName").t(params.getSourceImageName()).up()
-            .e("OS").t(params.getOsType() == LINUX ? "Linux" : "Windows").up()
+            .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
+            .e("SourceImageName").t(params.sourceImageName()).up()
+            .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
             .up() //OSVirtualHardDisk
-            .e("RoleSize").t(UPPER_UNDERSCORE.to(UPPER_CAMEL, params.getSize().name())).up()
+            .e("RoleSize").t(UPPER_UNDERSCORE.to(UPPER_CAMEL, params.size().name())).up()
             .up() //Role
             .up(); //RoleList
 
+         // TODO: Undeprecate this method as forcing users to wrap a String in guava's ByteSource is not great.
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
-         throw Throwables.propagate(e);
+         throw propagate(e);
       }
    }
 
-   private static String url(DeploymentParams params) {
-      return String.format("http://%s.blob.core.windows.net/disks/%s/%s", params.getStorageAccount(), params.getName(),
-            params.getSourceImageName());
+   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      throw new UnsupportedOperationException("use map form");
    }
 }

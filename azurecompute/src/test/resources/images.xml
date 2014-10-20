@@ -1,5 +1,4 @@
-<Images xmlns="http://schemas.microsoft.com/windowsazure"
-    >
+<Images xmlns="http://schemas.microsoft.com/windowsazure">
     <OSImage>
         <Category>Canonical</Category>
         <Label>Ubuntu Server 12.04 LTS</Label>
@@ -51,6 +50,7 @@
         <Label>OpenLogic CentOS 6.2</Label>
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd</Name>
+        <MediaLink>http://blobs/disks/mydeployment/OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd</MediaLink>
         <OS>Linux</OS>
         <Eula>http://www.openlogic.com/azure/service-agreement/</Eula>
         <Description>This distribution of Linux is based on CentOS.</Description>

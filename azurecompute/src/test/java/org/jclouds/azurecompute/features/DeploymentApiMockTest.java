@@ -16,14 +16,17 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static org.jclouds.azurecompute.domain.DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort;
+import static org.jclouds.azurecompute.domain.DeploymentParams.ExternalEndpoint.inboundUdpToLocalPort;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
 import org.jclouds.azurecompute.domain.DeploymentParams;
-import org.jclouds.azurecompute.domain.Image.OSType;
+import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.DeploymentHandlerTest;
+import org.jclouds.azurecompute.xml.ListImagesHandlerTest;
 import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -32,21 +35,49 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 @Test(groups = "unit", testName = "DeploymentApiMockTest")
 public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
 
-   public void create() throws Exception {
+   public void createLinux() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         DeploymentParams params = DeploymentParams.builder().osType(OSType.LINUX).name("mydeployment")
-               .username("username").password("testpwd").size(RoleSize.MEDIUM)
-               .sourceImageName("OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd")
-               .storageAccount("portalvhds0g7xhnq2x7t21").build();
+         Image image = ListImagesHandlerTest.expected().get(5); // CentOS
 
-         assertEquals(api.create(params), "request-1");
+         DeploymentParams params = DeploymentParams.builder()
+               .size(RoleSize.MEDIUM)
+               .sourceImageName(image.name()).mediaLink(image.mediaLink()).os(image.os())
+               .username("username").password("testpwd")
+               .externalEndpoint(inboundTcpToLocalPort(80, 8080))
+               .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
+
+         assertEquals(api.create("mydeployment", params), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices/myservice/deployments", "/deploymentparams.xml");
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void createWindows() throws Exception {
+      MockWebServer server = mockAzureManagementServer();
+      server.enqueue(requestIdResponse("request-1"));
+
+      try {
+         DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
+
+         Image image = ListImagesHandlerTest.expected().get(1); // Windows
+
+         DeploymentParams params = DeploymentParams.builder()
+               .size(RoleSize.MEDIUM)
+               .sourceImageName(image.name()).mediaLink(image.mediaLink()).os(image.os())
+               .username("username").password("testpwd")
+               .externalEndpoint(inboundTcpToLocalPort(80, 8080))
+               .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
+
+         assertEquals(api.create("mydeployment", params), "request-1");
+
+         assertSent(server, "POST", "/services/hostedservices/myservice/deployments", "/deploymentparams-windows.xml");
       } finally {
          server.shutdown();
       }
