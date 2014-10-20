@@ -17,14 +17,12 @@
 package org.jclouds.azurecompute.features;
 
 import static com.google.common.collect.Iterables.transform;
-import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.Location;
-import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -64,7 +62,6 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
    private void checkDisk(Disk disk) {
       assertNull(disk.name(), "Name cannot be null for: " + disk);
       assertNull(disk.os(), "OS cannot be null for: " + disk);
-      assertNotEquals(disk.os(), OSType.UNRECOGNIZED, "Status cannot be UNRECOGNIZED for: " + disk);
 
       if (disk.attachedTo() != null) {
          // TODO: verify you can lookup the role

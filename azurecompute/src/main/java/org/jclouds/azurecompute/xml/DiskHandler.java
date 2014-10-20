@@ -22,7 +22,7 @@ import java.net.URI;
 
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Disk.Attachment;
-import org.jclouds.azurecompute.domain.OSType;
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
@@ -45,8 +45,8 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
    private final StringBuilder currentText = new StringBuilder();
 
    @Override public Disk getResult() {
-      Disk result = Disk.create(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB,
-            attachedTo, sourceImage);
+      Disk result = Disk.create(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB, attachedTo,
+            sourceImage);
       resetState(); // handler is called in a loop.
       return result;
    }
@@ -73,10 +73,8 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
          attachmentHandler.endElement(ignoredUri, ignoredName, qName);
       } else if (qName.equals("OS")) {
          String osText = currentOrNull(currentText);
-         if (osText != null && osText.toUpperCase().equals("NULL")) {
-            os = null;
-         } else {
-            os = OSType.fromValue(currentOrNull(currentText));
+         if (osText != null) {
+            os = OSType.valueOf(currentOrNull(currentText).toUpperCase());
          }
       } else if (qName.equals("Name")) {
          name = currentOrNull(currentText);

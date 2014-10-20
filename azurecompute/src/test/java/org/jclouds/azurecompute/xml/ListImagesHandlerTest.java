@@ -19,12 +19,13 @@ package org.jclouds.azurecompute.xml;
 import static org.testng.Assert.assertEquals;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.Image;
-import org.jclouds.azurecompute.domain.OSType;
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
@@ -62,7 +63,7 @@ public class ListImagesHandlerTest extends BaseHandlerTest {
                   "Windows Server 2008 R2 is a multi-purpose server.", //description
                   "Microsoft", // category
                   OSType.WINDOWS, // os
-                  null, // mediaLink
+                  URI.create("http://blobs/disks/mydeployment/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd"), // mediaLink
                   30, // logicalSizeInGB
                   Collections.<String>emptyList() // eula
             ),

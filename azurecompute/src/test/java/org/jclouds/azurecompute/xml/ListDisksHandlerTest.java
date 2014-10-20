@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Disk.Attachment;
-import org.jclouds.azurecompute.domain.OSType;
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 

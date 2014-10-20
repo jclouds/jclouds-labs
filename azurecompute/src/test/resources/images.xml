@@ -14,6 +14,7 @@
         <Label>Windows Server 2008 R2 SP1, June 2012</Label>
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd</Name>
+        <MediaLink>http://blobs/disks/mydeployment/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd</MediaLink>
         <OS>Windows</OS>
         <Eula />
         <Description>Windows Server 2008 R2 is a multi-purpose server.</Description>

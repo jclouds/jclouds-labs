@@ -24,7 +24,6 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.Location;
-import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -58,7 +57,6 @@ public class ImageApiLiveTest extends BaseAzureComputeApiLiveTest {
       assertNotNull(image.label(), "Label cannot be null for " + image);
       assertNotNull(image.name(), "Name cannot be null for " + image);
       assertNotNull(image.os(), "OS cannot be null for " + image);
-      assertNotEquals(image.os(), OSType.UNRECOGNIZED, "Status cannot be UNRECOGNIZED for " + image);
       assertTrue(image.logicalSizeInGB() > 0, "LogicalSizeInGB should be positive, if set" + image);
 
       if (image.category() != null) {
