@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.azurecompute.parse;
+package org.jclouds.azurecompute.xml;
 
 import static org.testng.Assert.assertEquals;
 
@@ -22,32 +22,20 @@ import java.io.InputStream;
 
 import org.jclouds.azurecompute.domain.Operation;
 import org.jclouds.azurecompute.domain.Operation.Status;
-import org.jclouds.azurecompute.xml.ErrorHandlerTest;
-import org.jclouds.azurecompute.xml.OperationHandler;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
-@Test(groups = "unit", testName = "GetOperationTest")
-public class GetOperationTest extends BaseHandlerTest {
+@Test(groups = "unit", testName = "OperationHandlerTest")
+public class OperationHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/operation.xml");
+      Operation result = factory.create(new OperationHandler()).parse(is);
 
-      Operation expected = expected();
-
-      OperationHandler handler = injector.getInstance(OperationHandler.class);
-      Operation result = factory.create(handler).parse(is);
-
-      assertEquals(result.toString(), expected.toString());
+      assertEquals(result, expected());
    }
 
    public static Operation expected() {
-      return Operation.builder()
-                      .id("request-id")
-                      .rawStatus("Failed")
-                      .status(Status.FAILED)
-                      .httpStatusCode(400)
-                      .error(ErrorHandlerTest.expected())
-                      .build();
+      return Operation.create("request-id", Status.FAILED, 400, ErrorHandlerTest.expected());
    }
 }

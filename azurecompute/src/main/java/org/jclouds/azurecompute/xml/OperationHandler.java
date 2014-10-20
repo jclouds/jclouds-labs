@@ -16,82 +16,69 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import javax.inject.Inject;
+import static com.google.common.base.CaseFormat.UPPER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+import static org.jclouds.util.SaxUtils.currentOrNull;
+
+import org.jclouds.azurecompute.domain.Error;
 import org.jclouds.azurecompute.domain.Operation;
-import org.jclouds.azurecompute.domain.Operation.Builder;
 import org.jclouds.azurecompute.domain.Operation.Status;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import static org.jclouds.util.SaxUtils.currentOrNull;
-import static org.jclouds.util.SaxUtils.equalsOrSuffix;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460783" >api</a>
  */
-public class OperationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Operation> {
-
-   private final ErrorHandler errorHandler;
-
-   @Inject
-   private OperationHandler(ErrorHandler errorHandler) {
-      this.errorHandler = errorHandler;
-   }
-
-   private StringBuilder currentText = new StringBuilder();
-   private Operation.Builder builder = builder();
-
-   private Builder builder() {
-      return Operation.builder();
-   }
+public final class OperationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Operation> {
+   private String id;
+   private Status status;
+   private Integer httpStatusCode;
+   private Error error;
 
    private boolean inError;
+   private final ErrorHandler errorHandler = new ErrorHandler();
+   private final StringBuilder currentText = new StringBuilder();
 
-   @Override
-   public Operation getResult() {
-      try {
-         return builder.build();
-      } finally {
-         builder = builder();
-      }
+   @Override public Operation getResult() {
+      return Operation.create(id, status, httpStatusCode, error);
    }
 
-   @Override
-   public void startElement(String url, String name, String qName, Attributes attributes) throws SAXException {
-      if (equalsOrSuffix(qName, "Error")) {
+   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+      if (qName.equals("Error")) {
          inError = true;
       }
-      if (inError) {
-         errorHandler.startElement(url, name, qName, attributes);
-      }
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
-      if (equalsOrSuffix(qName, "Error")) {
-         builder.error(errorHandler.getResult());
+   @Override public void endElement(String uri, String name, String qName) {
+      if (qName.equals("Error")) {
+         error = errorHandler.getResult();
          inError = false;
       } else if (inError) {
          errorHandler.endElement(uri, name, qName);
-      } else if (equalsOrSuffix(qName, "ID")) {
-         builder.id(currentOrNull(currentText));
+      } else if (qName.equals("ID")) {
+         id = currentOrNull(currentText);
       } else if (qName.equals("Status")) {
-         String rawStatus = currentOrNull(currentText);
-         builder.rawStatus(rawStatus);
-         builder.status(Status.fromValue(rawStatus));
-      } else if (equalsOrSuffix(qName, "HttpStatusCode")) {
-         builder.httpStatusCode(Integer.parseInt(currentOrNull(currentText)));
+         String statusText = currentOrNull(currentText);
+         status = parseStatus(statusText);
+      } else if (qName.equals("HttpStatusCode")) {
+         httpStatusCode = Integer.parseInt(currentOrNull(currentText));
       }
       currentText.setLength(0);
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       if (inError) {
          errorHandler.characters(ch, start, length);
       } else {
          currentText.append(ch, start, length);
+      }
+   }
+
+   private static Status parseStatus(String status) {
+      try {
+         return Status.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, status));
+      } catch (IllegalArgumentException e) {
+         return Status.UNRECOGNIZED;
       }
    }
 }

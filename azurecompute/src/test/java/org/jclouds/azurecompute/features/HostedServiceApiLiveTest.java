@@ -57,7 +57,7 @@ public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
       location = Iterables.get(api.getLocationApi().list(), 0).name();
       operationSucceeded = retry(new Predicate<String>() {
          public boolean apply(String input) {
-            return api.getOperationApi().get(input).getStatus() == Operation.Status.SUCCEEDED;
+            return api.getOperationApi().get(input).status() == Operation.Status.SUCCEEDED;
          }
       }, 600, 5, 5, SECONDS);
       hostedServiceCreated = retry(new Predicate<HostedService>() {
