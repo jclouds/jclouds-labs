@@ -16,11 +16,14 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import java.util.List;
+
+import org.jclouds.azurecompute.domain.Image.OSType;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import java.util.List;
 
 /**
  * To create a new deployment/role

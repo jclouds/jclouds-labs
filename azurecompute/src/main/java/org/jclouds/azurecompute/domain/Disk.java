@@ -22,6 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.javax.annotation.Nullable;
 
 import com.google.common.base.Objects;

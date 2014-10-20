@@ -33,6 +33,9 @@ import com.google.common.base.Objects;
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
  */
 public final class Image {
+   public enum OSType {
+      LINUX, WINDOWS;
+   }
 
    public String name() {
       return name;

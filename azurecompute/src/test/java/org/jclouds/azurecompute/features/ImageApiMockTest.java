@@ -22,8 +22,8 @@ import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
 
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.azurecompute.domain.ImageParams;
-import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.ListImagesHandlerTest;
 import org.testng.annotations.Test;

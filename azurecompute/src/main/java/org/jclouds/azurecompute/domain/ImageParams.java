@@ -16,12 +16,15 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.net.URI;
+
+import org.jclouds.azurecompute.domain.Image.OSType;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import java.net.URI;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The Add OS Image operation adds an OS image that is currently stored in a storage account in your

@@ -18,12 +18,13 @@ package org.jclouds.azurecompute.binders;
 
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+import static org.jclouds.azurecompute.domain.Image.OSType.LINUX;
 
 import javax.inject.Singleton;
 
 import org.jclouds.azurecompute.domain.DeploymentParams;
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.azurecompute.domain.InputEndpoint;
-import org.jclouds.azurecompute.domain.OSType;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
@@ -98,7 +99,7 @@ public class BindDeploymentParamsToXmlPayload implements Binder {
             .e("HostCaching").t("ReadWrite").up()
             .e("MediaLink").t(url(params)).up()
             .e("SourceImageName").t(params.getSourceImageName()).up()
-            .e("OS").t("Linux").up()
+            .e("OS").t(params.getOsType() == LINUX ? "Linux" : "Windows").up()
             .up() //OSVirtualHardDisk
             .e("RoleSize").t(UPPER_UNDERSCORE.to(UPPER_CAMEL, params.getSize().name())).up()
             .up() //Role

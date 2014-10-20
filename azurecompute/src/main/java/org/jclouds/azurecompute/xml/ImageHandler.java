@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.Image;
-import org.jclouds.azurecompute.domain.OSType;
+import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.http.functions.ParseSax;
 
 import com.google.common.base.Splitter;
@@ -64,7 +64,10 @@ final class ImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<I
 
    @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("OS")) {
-         os = OSType.fromValue(currentOrNull(currentText));
+         String osText = currentOrNull(currentText);
+         if (osText != null) {
+            os = OSType.valueOf(currentOrNull(currentText).toUpperCase());
+         }
       } else if (qName.equals("Name")) {
          name = currentOrNull(currentText);
       } else if (qName.equals("LogicalSizeInGB")) {
