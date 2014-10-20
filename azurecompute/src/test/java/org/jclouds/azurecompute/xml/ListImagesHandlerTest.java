@@ -19,6 +19,7 @@ package org.jclouds.azurecompute.xml;
 import static org.testng.Assert.assertEquals;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -111,7 +112,7 @@ public class ListImagesHandlerTest extends BaseHandlerTest {
                   "This distribution of Linux is based on CentOS.", //description
                   "OpenLogic", // category
                   OSType.LINUX, // os
-                  null, // mediaLink
+                  URI.create("http://blobs/disks/mydeployment/OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd"), // mediaLink
                   30, // logicalSizeInGB
                   Arrays.asList("http://www.openlogic.com/azure/service-agreement/") // eula
             ),

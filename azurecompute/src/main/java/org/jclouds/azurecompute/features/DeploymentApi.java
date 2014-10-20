@@ -25,14 +25,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.jclouds.azurecompute.binders.BindDeploymentParamsToXmlPayload;
+import org.jclouds.azurecompute.binders.CreateDeploymentToXML;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.xml.DeploymentHandler;
-import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.MapBinder;
+import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
 
@@ -57,13 +58,14 @@ public interface DeploymentApi {
    Deployment get(@PathParam("name") String name);
 
    /**
-    * http://msdn.microsoft.com/en-us/library/jj157194
+    * @param name the name for the deployment and its virtual machine. The name must be unique within Windows Azure.
     */
    @Named("CreateVirtualMachineDeployment")
    @POST
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   String create(@BinderParam(BindDeploymentParamsToXmlPayload.class) DeploymentParams deploymentParams);
+   @MapBinder(CreateDeploymentToXML.class)
+   String create(@PayloadParam("name") String name, @PayloadParam("params") DeploymentParams params);
 
    /**
     * The Delete Deployment operation deletes the specified deployment from Windows Azure.
