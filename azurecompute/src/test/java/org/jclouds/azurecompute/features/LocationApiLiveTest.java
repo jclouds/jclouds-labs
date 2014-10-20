@@ -16,42 +16,34 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
+
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.Test;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-
 @Test(groups = "live", testName = "LocationApiLiveTest")
 public class LocationApiLiveTest extends BaseAzureComputeApiLiveTest {
 
-   @Test
-   protected void testList() {
-      List<Location> response = api().list();
+   private static final List<String> KNOWN_SERVICES = Arrays
+         .asList("Compute", "Storage", "PersistentVMRole", "HighMemory");
 
-      for (Location location : response) {
+   @Test public void testList() {
+      for (Location location : api().list()) {
          checkLocation(location);
       }
-
    }
 
-   private Predicate<String> knownServices = Predicates
-         .in(Arrays.asList("Compute", "Storage", "PersistentVMRole", "HighMemory"));
-
    private void checkLocation(Location location) {
-      checkNotNull(location.getName(), "Name cannot be null for a Location.");
-      checkNotNull(location.getDisplayName(), "DisplayName cannot be null for Location %s", location.getName());
-      checkNotNull(location.getAvailableServices(), "AvailableServices cannot be null for Location %s",
-            location.getName());
-      checkState(Iterables.all(location.getAvailableServices(), knownServices),
-            "AvailableServices in Location %s didn't match %s: %s", location.getName(), knownServices,
-            location.getAvailableServices());
+      assertNotNull(location.name(), "Name cannot be null for a Location.");
+      assertNotNull(location.displayName(), "DisplayName cannot be null for: " + location);
+      assertNotNull(location.availableServices(), "AvailableServices cannot be null for: " + location.name());
+      assertTrue(KNOWN_SERVICES.containsAll(location.availableServices()),
+            "AvailableServices in " + location + " didn't match: " + KNOWN_SERVICES);
    }
 
    private LocationApi api() {

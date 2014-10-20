@@ -54,7 +54,7 @@ public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
    public void setup() {
       super.setup();
       // TODO: filter locations on those who have compute
-      location = Iterables.get(api.getLocationApi().list(), 0).getName();
+      location = Iterables.get(api.getLocationApi().list(), 0).name();
       operationSucceeded = retry(new Predicate<String>() {
          public boolean apply(String input) {
             return api.getOperationApi().get(input).getStatus() == Operation.Status.SUCCEEDED;

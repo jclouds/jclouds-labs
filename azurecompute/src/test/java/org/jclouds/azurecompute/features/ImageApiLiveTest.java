@@ -43,7 +43,7 @@ public class ImageApiLiveTest extends BaseAzureComputeApiLiveTest {
 
       locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(), new Function<Location, String>() {
          public String apply(Location in) {
-            return in.getName();
+            return in.name();
          }
       }));
    }

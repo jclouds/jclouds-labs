@@ -16,46 +16,31 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.inject.Inject;
 import java.util.List;
+
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
-public class ListLocationsHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Location>> {
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
-   private final LocationHandler locationHandler;
-
-   private Builder<Location> locations = ImmutableList.<Location> builder();
-
+public final class ListLocationsHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Location>> {
    private boolean inLocation;
+   private final LocationHandler locationHandler = new LocationHandler();
+   private final Builder<Location> locations = ImmutableList.builder();
 
-   @Inject
-   public ListLocationsHandler(LocationHandler locationHandler) {
-      this.locationHandler = locationHandler;
-   }
-
-   @Override
-   public List<Location> getResult() {
+   @Override public List<Location> getResult() {
       return locations.build();
    }
 
-   @Override
-   public void startElement(String url, String name, String qName, Attributes attributes) throws SAXException {
-      if (SaxUtils.equalsOrSuffix(qName, "Location")) {
+   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+      if (qName.equals("Location")) {
          inLocation = true;
-      }
-      if (inLocation) {
-         locationHandler.startElement(url, name, qName, attributes);
       }
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   @Override public void endElement(String uri, String name, String qName) {
       if (qName.equals("Location")) {
          inLocation = false;
          locations.add(locationHandler.getResult());

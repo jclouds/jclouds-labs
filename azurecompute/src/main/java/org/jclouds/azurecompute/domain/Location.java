@@ -16,135 +16,73 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
-import java.util.Set;
-
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- *
- * A geographical region in which a service or storage account will be hosted.
- *
- * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
- */
-public class Location {
-   public static Builder builder() {
-      return new Builder();
+import java.util.List;
+
+import com.google.common.base.Objects;
+
+/** A data center location that is valid for your subscription. */
+public final class Location {
+
+   /** The name of the data center location. Ex. {@code West Europe}. */
+   public String name() {
+      return name;
    }
 
-   public Builder toBuilder() {
-      return builder().fromLocation(this);
+   /** The localized name of the data center location. */
+   public String displayName() {
+      return displayName;
    }
 
-   public static class Builder {
+   /** Indicates the services available at this location. Ex. {@code Compute}. */
+   public List<String> availableServices() {
+      return availableServices;
+   }
 
-      private String name;
-      private String displayName;
-      private ImmutableSet.Builder<String> availableServices = ImmutableSet.<String> builder();
+   public static Location create(String name, String displayName, List<String> availableServices) {
+      return new Location(name, displayName, availableServices);
+   }
 
-      /**
-       * @see Location#getName()
-       */
-      public Builder name(String name) {
-         this.name = name;
-         return this;
-      }
-
-      /**
-       * @see Location#getDisplayName()
-       */
-      public Builder displayName(String displayName) {
-         this.displayName = displayName;
-         return this;
-      }
-
-      /**
-       * @see Location#getAvailableServices()
-       */
-      public Builder addAvailableService(String availableService) {
-         this.availableServices.add(checkNotNull(availableService, "availableService"));
-         return this;
-      }
-
-      /**
-       * @see Location#getAvailableServices()
-       */
-      public Builder availableServices(Iterable<String> availableServices) {
-         this.availableServices = ImmutableSet.<String> builder().addAll(
-                  checkNotNull(availableServices, "availableServices"));
-         return this;
-      }
-
-      public Location build() {
-         return new Location(name, displayName, availableServices.build());
-      }
-
-      public Builder fromLocation(Location in) {
-         return this.name(in.getName()).displayName(in.getDisplayName()).availableServices(in.getAvailableServices());
-      }
+   // TODO: Remove from here down with @AutoValue.
+   private Location(String name, String displayName, List<String> availableServices) {
+      this.name = checkNotNull(name, "name");
+      this.displayName = checkNotNull(displayName, "displayName");
+      this.availableServices = checkNotNull(availableServices, "availableServices");
    }
 
    private final String name;
    private final String displayName;
-   private final Set<String> availableServices;
-
-   protected Location(String name, String displayName, Iterable<String> availableServices) {
-      this.name = checkNotNull(name, "name");
-      this.displayName = checkNotNull(displayName, "displayName for %s", name);
-      this.availableServices = ImmutableSet.copyOf(checkNotNull(availableServices, "availableServices for %s", name));
-   }
-
-   /**
-    *
-    * The name of a data center location that is valid for your subscription. For example:
-    * {@code West Europe}
-    */
-   public String getName() {
-      return name;
-   }
-
-   /**
-    * The localized name of data center location.
-    */
-   public String getDisplayName() {
-      return displayName;
-   }
-
-   /**
-    * Indicates the services available at a location.
-    *
-    * Returned values are none, one, or both of the values listed below.
-    *
-    * Compute
-    *
-    * Storage
-    */
-   public Set<String> getAvailableServices() {
-      return availableServices;
-   }
+   private final List<String> availableServices;
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name);
+      return Objects.hashCode(name, displayName, availableServices);
    }
 
    @Override
    public boolean equals(Object obj) {
-      if (this == obj)
+      if (this == obj) {
          return true;
-      if (obj == null)
+      }
+      if (obj == null) {
          return false;
-      if (getClass() != obj.getClass())
+      }
+      if (getClass() != obj.getClass()) {
          return false;
+      }
       Location other = (Location) obj;
-      return Objects.equal(this.name, other.name);
+      return equal(this.name, other.name) &&
+            equal(this.displayName, other.displayName) &&
+            equal(this.availableServices, other.availableServices);
    }
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper(this).omitNullValues().add("name", name).add("displayName", displayName)
-               .add("availableServices", availableServices).toString();
+      return Objects.toStringHelper(this)
+            .add("name", name)
+            .add("displayName", displayName)
+            .add("availableServices", availableServices).toString();
    }
 }
