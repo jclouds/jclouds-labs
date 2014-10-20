@@ -19,7 +19,7 @@ package org.jclouds.azurecompute.features;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.parse.ListLocationsTest;
+import org.jclouds.azurecompute.xml.ListLocationsHandlerTest;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +34,7 @@ public class LocationApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          LocationApi api = api(server.getUrl("/")).getLocationApi();
 
-         assertThat(api.list()).containsExactlyElementsOf(ListLocationsTest.expected());
+         assertThat(api.list()).containsExactlyElementsOf(ListLocationsHandlerTest.expected());
 
          assertSent(server, "GET", "/locations");
       } finally {

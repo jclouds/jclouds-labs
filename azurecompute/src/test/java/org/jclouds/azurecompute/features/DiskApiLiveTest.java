@@ -45,7 +45,7 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
       locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(),
                new Function<Location, String>() {
                   public String apply(Location in) {
-                     return in.getName();
+                     return in.name();
                   }
                }));
       images = ImmutableSet.copyOf(transform(api.getImageApi().list(), new Function<Image, String>() {

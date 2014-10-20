@@ -16,42 +16,45 @@
  */
 package org.jclouds.azurecompute.xml;
 
+import static org.jclouds.util.SaxUtils.currentOrNull;
+
+import java.util.List;
+
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.http.functions.ParseSax;
-import org.jclouds.util.SaxUtils;
-import org.xml.sax.SAXException;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
  */
-public class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Location> {
+final class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Location> {
+   private String name;
+   private String displayName;
+   private final List<String> availableServices = Lists.newArrayList();
 
-   private StringBuilder currentText = new StringBuilder();
-   private Location.Builder builder = Location.builder();
+   private final StringBuilder currentText = new StringBuilder();
 
-   @Override
-   public Location getResult() {
-      try {
-         return builder.build();
-      } finally {
-         builder = Location.builder();
-      }
+   @Override public Location getResult() {
+      Location result = Location.create(name, displayName, ImmutableList.copyOf(availableServices));
+      name = displayName = null; // handler is called in a loop.
+      availableServices.clear();
+      return result;
    }
 
-   @Override
-   public void endElement(String uri, String name, String qName) throws SAXException {
+   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Name")) {
-         builder.name(SaxUtils.currentOrNull(currentText));
+         name = currentOrNull(currentText);
       } else if (qName.equals("DisplayName")) {
-         builder.displayName(SaxUtils.currentOrNull(currentText));
+         displayName = currentOrNull(currentText);
       } else if (qName.equals("AvailableService")) {
-         builder.addAvailableService(SaxUtils.currentOrNull(currentText));
+         availableServices.add(currentOrNull(currentText));
       }
-      currentText = new StringBuilder();
+      currentText.setLength(0);
    }
 
-   @Override
-   public void characters(char ch[], int start, int length) {
+   @Override public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }
