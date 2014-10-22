@@ -16,19 +16,12 @@
  */
 package org.jclouds.azurecompute.functions;
 
-import com.google.common.base.Function;
-import javax.inject.Singleton;
 import org.jclouds.azurecompute.domain.ImageParams;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Function;
 
-@Singleton
 public class ImageParamsName implements Function<Object, String> {
-   @Override
-   public String apply(Object input) {
-      checkArgument(checkNotNull(input, "input") instanceof ImageParams,
-               "this function is only valid for ImageParams!");
-      return checkNotNull(ImageParams.class.cast(input), "ImageParams").getName();
+   @Override public String apply(Object input) {
+      return ImageParams.class.cast(input).name();
    }
 }
