@@ -31,16 +31,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.jclouds.azurecompute.binders.BindCreateHostedServiceToXmlPayload;
 import org.jclouds.azurecompute.domain.HostedService;
+import org.jclouds.azurecompute.functions.Base64EncodeLabel;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
-import org.jclouds.azurecompute.options.CreateHostedServiceOptions;
 import org.jclouds.azurecompute.xml.HostedServiceHandler;
 import org.jclouds.azurecompute.xml.ListHostedServicesHandler;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
-import org.jclouds.rest.annotations.MapBinder;
+import org.jclouds.rest.annotations.ParamParser;
+import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.ResponseParser;
@@ -89,27 +89,12 @@ public interface HostedServiceApi {
     */
    @Named("CreateHostedService")
    @POST
-   @MapBinder(BindCreateHostedServiceToXmlPayload.class)
    @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   String createServiceWithLabelInLocation(@PayloadParam("name") String name,
-         @PayloadParam("label") String label, @PayloadParam("location") String location);
-
-   /**
-    * same as {@link #createServiceWithLabelInLocation(String, String, String)} , except you can
-    * specify optional parameters such as extended properties or a description.
-    *
-    * @param options
-    *           parameters such as extended properties or a description.
-    */
-   @Named("CreateHostedService")
-   @POST
-   @MapBinder(BindCreateHostedServiceToXmlPayload.class)
-   @Produces(APPLICATION_XML)
-   @ResponseParser(ParseRequestIdHeader.class)
-   String createServiceWithLabelInLocation(@PayloadParam("name") String name,
-         @PayloadParam("label") String label, @PayloadParam("location") String location,
-         @PayloadParam("options") CreateHostedServiceOptions options);
+   @Payload("<CreateHostedService xmlns=\"http://schemas.microsoft.com/windowsazure\"><ServiceName>{name}</ServiceName><Label>{label}</Label><Location>{location}</Location></CreateHostedService>")
+   String createWithLabelInLocation(@PayloadParam("name") String name,
+         @PayloadParam("label") @ParamParser(Base64EncodeLabel.class) String label,
+         @PayloadParam("location") String location);
 
    /**
     * The Get Hosted Service Properties operation retrieves system properties for the specified

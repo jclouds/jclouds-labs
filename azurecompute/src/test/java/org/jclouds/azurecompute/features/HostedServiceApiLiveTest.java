@@ -76,7 +76,7 @@ public class HostedServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    public void testCreateHostedService() {
 
-      String requestId = api().createServiceWithLabelInLocation(HOSTED_SERVICE, HOSTED_SERVICE, location);
+      String requestId = api().createWithLabelInLocation(HOSTED_SERVICE, HOSTED_SERVICE, location);
       assertTrue(operationSucceeded.apply(requestId), requestId);
       Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
 
