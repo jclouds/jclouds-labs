@@ -45,13 +45,14 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
          Image image = ListImagesHandlerTest.expected().get(5); // CentOS
 
          DeploymentParams params = DeploymentParams.builder()
+               .name("mydeployment")
                .size(RoleSize.MEDIUM)
                .sourceImageName(image.name()).mediaLink(image.mediaLink()).os(image.os())
                .username("username").password("testpwd")
                .externalEndpoint(inboundTcpToLocalPort(80, 8080))
                .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
 
-         assertEquals(api.create("mydeployment", params), "request-1");
+         assertEquals(api.create(params), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices/myservice/deployments", "/deploymentparams.xml");
       } finally {
@@ -69,13 +70,14 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
          Image image = ListImagesHandlerTest.expected().get(1); // Windows
 
          DeploymentParams params = DeploymentParams.builder()
+               .name("mydeployment")
                .size(RoleSize.MEDIUM)
                .sourceImageName(image.name()).mediaLink(image.mediaLink()).os(image.os())
                .username("username").password("testpwd")
                .externalEndpoint(inboundTcpToLocalPort(80, 8080))
                .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
 
-         assertEquals(api.create("mydeployment", params), "request-1");
+         assertEquals(api.create(params), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices/myservice/deployments", "/deploymentparams-windows.xml");
       } finally {
