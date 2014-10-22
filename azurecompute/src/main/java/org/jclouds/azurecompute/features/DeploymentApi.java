@@ -16,6 +16,8 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,19 +27,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.jclouds.azurecompute.binders.CreateDeploymentToXML;
+
+import org.jclouds.azurecompute.binders.DeploymentParamsToXML;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.xml.DeploymentHandler;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
-import org.jclouds.rest.annotations.MapBinder;
-import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
-
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
 @Path("/services/hostedservices/{serviceName}/deployments")
 @Headers(keys = "x-ms-version", values = "{jclouds.api-version}")
@@ -57,15 +57,11 @@ public interface DeploymentApi {
    @Fallback(NullOnNotFoundOr404.class)
    Deployment get(@PathParam("name") String name);
 
-   /**
-    * @param name the name for the deployment and its virtual machine. The name must be unique within Windows Azure.
-    */
    @Named("CreateVirtualMachineDeployment")
    @POST
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   @MapBinder(CreateDeploymentToXML.class)
-   String create(@PayloadParam("name") String name, @PayloadParam("params") DeploymentParams params);
+   String create(@BinderParam(DeploymentParamsToXML.class) DeploymentParams params);
 
    /**
     * The Delete Deployment operation deletes the specified deployment from Windows Azure.

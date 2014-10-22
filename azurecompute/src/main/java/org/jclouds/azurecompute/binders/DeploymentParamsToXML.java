@@ -21,53 +21,50 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static com.google.common.base.Throwables.propagate;
 import static org.jclouds.azurecompute.domain.Image.OSType.LINUX;
 
-import java.util.Map;
-
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.MapBinder;
+import org.jclouds.rest.Binder;
 
 import com.jamesmurty.utils.XMLBuilder;
 
-public final class CreateDeploymentToXML implements MapBinder {
+public final class DeploymentParamsToXML implements Binder {
 
-   @Override public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
-      String name = postParams.get("name").toString();
-      DeploymentParams params = DeploymentParams.class.cast(postParams.get("params"));
+   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+      DeploymentParams params = DeploymentParams.class.cast(input);
 
       try {
          XMLBuilder builder = XMLBuilder.create("Deployment", "http://schemas.microsoft.com/windowsazure")
-            .e("Name").t(name).up()
+            .e("Name").t(params.name()).up()
             .e("DeploymentSlot").t("Production").up()
-            .e("Label").t(name).up()
+            .e("Label").t(params.name()).up()
             .e("RoleList")
             .e("Role")
-            .e("RoleName").t(name).up()
+            .e("RoleName").t(params.name()).up()
             .e("RoleType").t("PersistentVMRole").up()
             .e("ConfigurationSets");
 
          if (params.os() == OSType.WINDOWS) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Windows
             configBuilder.e("ConfigurationSetType").t("WindowsProvisioningConfiguration").up()
-               .e("ComputerName").t(name).up()
+               .e("ComputerName").t(params.name()).up()
                .e("AdminPassword").t(params.password()).up()
                .e("ResetPasswordOnFirstLogon").t("false").up()
                .e("EnableAutomaticUpdate").t("false").up()
                .e("DomainJoin")
                .e("Credentials")
-                  .e("Domain").t(name).up()
+                  .e("Domain").t(params.name()).up()
                   .e("Username").t(params.username()).up()
                   .e("Password").t(params.password()).up()
                .up() // Credentials
-               .e("JoinDomain").t(name).up()
+               .e("JoinDomain").t(params.name()).up()
                .up() // Domain Join
                .e("StoredCertificateSettings").up()
                .up(); // Windows ConfigurationSet
          } else if (params.os() == OSType.LINUX) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Linux
             configBuilder.e("ConfigurationSetType").t("LinuxProvisioningConfiguration").up()
-               .e("HostName").t(name).up()
+               .e("HostName").t(params.name()).up()
                .e("UserName").t(params.username()).up()
                .e("UserPassword").t(params.password()).up()
                .e("DisableSshPasswordAuthentication").t("false").up()
@@ -111,9 +108,5 @@ public final class CreateDeploymentToXML implements MapBinder {
       } catch (Exception e) {
          throw propagate(e);
       }
-   }
-
-   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-      throw new UnsupportedOperationException("use map form");
    }
 }

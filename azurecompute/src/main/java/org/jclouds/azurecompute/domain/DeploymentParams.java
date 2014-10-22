@@ -106,6 +106,11 @@ public final class DeploymentParams {
       }
    }
 
+   /** The user-supplied name for this deployment. */
+   public String name() {
+      return name;
+   }
+
    /**
     * Specifies the name of a user to be created in the sudoers group of the
     * virtual machine. User names are ASCII character strings 1 to 32
@@ -157,6 +162,7 @@ public final class DeploymentParams {
    }
 
    public static final class Builder {
+      private String name;
       private RoleSize size = RoleSize.SMALL;
       private String username;
       private String password;
@@ -164,6 +170,11 @@ public final class DeploymentParams {
       private URI mediaLink;
       private OSType os;
       private List<ExternalEndpoint> externalEndpoints = Lists.newArrayList();
+
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
 
       public Builder size(RoleSize size) {
          this.size = size;
@@ -206,12 +217,13 @@ public final class DeploymentParams {
       }
 
       public DeploymentParams build() {
-         return DeploymentParams.create(size, username, password, sourceImageName, mediaLink, os,
+         return DeploymentParams.create(name, size, username, password, sourceImageName, mediaLink, os,
                ImmutableList.copyOf(externalEndpoints));
       }
 
       public Builder fromDeploymentParams(DeploymentParams in) {
-         return size(in.size())
+         return name(in.name())
+               .size(in.size())
                .username(in.username())
                .password(in.password())
                .sourceImageName(in.sourceImageName())
@@ -221,14 +233,15 @@ public final class DeploymentParams {
       }
    }
 
-   private static DeploymentParams create(RoleSize size, String username, String password, String sourceImageName,
+   private static DeploymentParams create(String name, RoleSize size, String username, String password, String sourceImageName,
          URI mediaLink, OSType os, List<ExternalEndpoint> externalEndpoints) {
-      return new DeploymentParams(size, username, password, sourceImageName, mediaLink, os, externalEndpoints);
+      return new DeploymentParams(name, size, username, password, sourceImageName, mediaLink, os, externalEndpoints);
    }
 
    // TODO: Remove from here down with @AutoValue.
-   private DeploymentParams(RoleSize size, String username, String password, String sourceImageName, URI mediaLink,
+   private DeploymentParams(String name, RoleSize size, String username, String password, String sourceImageName, URI mediaLink,
          OSType os, List<ExternalEndpoint> externalEndpoints) {
+      this.name = checkNotNull(name, "name");
       this.size = checkNotNull(size, "size");
       this.username = checkNotNull(username, "username");
       this.password = checkNotNull(password, "password");
@@ -238,6 +251,7 @@ public final class DeploymentParams {
       this.externalEndpoints = checkNotNull(externalEndpoints, "externalEndpoints");
    }
 
+   private final String name;
    private final RoleSize size;
    private final String username;
    private final String password;
@@ -246,19 +260,18 @@ public final class DeploymentParams {
    private final OSType os;
    private final List<ExternalEndpoint> externalEndpoints;
 
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(sourceImageName, username, password, mediaLink, size, os, externalEndpoints);
+   @Override public int hashCode() {
+      return Objects.hashCode(name, sourceImageName, username, password, mediaLink, size, os, externalEndpoints);
    }
 
-   @Override
-   public boolean equals(Object object) {
+   @Override public boolean equals(Object object) {
       if (this == object) {
          return true;
       }
       if (object instanceof DeploymentParams) {
          DeploymentParams that = DeploymentParams.class.cast(object);
-         return equal(size, that.size)
+         return equal(name, that.name)
+               && equal(size, that.size)
                && equal(username, that.username)
                && equal(password, that.password)
                && equal(sourceImageName, that.sourceImageName)
@@ -270,9 +283,9 @@ public final class DeploymentParams {
       }
    }
 
-   @Override
-   public String toString() {
+   @Override public String toString() {
       return toStringHelper(this)
+            .add("name", name)
             .add("size", size)
             .add("username", username)
             .add("password", password)
