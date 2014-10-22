@@ -16,7 +16,6 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static org.jclouds.azurecompute.options.CreateHostedServiceOptions.Builder.description;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
@@ -26,7 +25,6 @@ import org.jclouds.azurecompute.xml.HostedServiceHandlerTest;
 import org.jclouds.azurecompute.xml.ListHostedServicesHandlerTest;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableMap;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
@@ -93,32 +91,16 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void createServiceWithLabelInLocation() throws Exception {
+   public void createWithLabelInLocation() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
       try {
          HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
 
-         assertEquals(api.createServiceWithLabelInLocation("myservice", "service mine", "West US"), "request-1");
+         assertEquals(api.createWithLabelInLocation("myservice", "service mine", "West US"), "request-1");
 
          assertSent(server, "POST", "/services/hostedservices", "/create_hostedservice_location.xml");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void createServiceWithLabelInLocationOptions() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(requestIdResponse("request-1"));
-
-      try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
-
-         assertEquals(api.createServiceWithLabelInLocation("myservice", "service mine", "West US",
-               description("my description").extendedProperties(ImmutableMap.of("Role", "Production"))), "request-1");
-
-         assertSent(server, "POST", "/services/hostedservices", "/create_hostedservice_location_options.xml");
       } finally {
          server.shutdown();
       }
