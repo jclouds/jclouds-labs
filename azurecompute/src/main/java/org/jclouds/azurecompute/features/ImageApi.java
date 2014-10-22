@@ -16,7 +16,12 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -26,8 +31,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import org.jclouds.azurecompute.binders.BindOSImageParamsToXmlPayload;
+
+import org.jclouds.azurecompute.binders.ImageParamsToXML;
 import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.ImageParams;
 import org.jclouds.azurecompute.functions.ImageParamsName;
@@ -40,9 +45,6 @@ import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
 
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-
 /**
  * The Service Management API includes operations for managing the OS images in your subscription.
  *
@@ -50,7 +52,7 @@ import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
  */
 @Path("/services/images")
 @Headers(keys = "x-ms-version", values = "{jclouds.api-version}")
-@Consumes(MediaType.APPLICATION_XML)
+@Consumes(APPLICATION_XML)
 public interface ImageApi {
 
    /**
@@ -69,9 +71,9 @@ public interface ImageApi {
     */
    @Named("AddImage")
    @POST
-   @Produces(MediaType.APPLICATION_XML)
+   @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   String add(@BinderParam(BindOSImageParamsToXmlPayload.class) ImageParams params);
+   String add(@BinderParam(ImageParamsToXML.class) ImageParams params);
 
    /**
     * The Update OS Image operation updates an OS image that in your image repository.
@@ -79,10 +81,10 @@ public interface ImageApi {
    @Named("UpdateImage")
    @PUT
    @Path("/{imageName}")
-   @Produces(MediaType.APPLICATION_XML)
+   @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String update(@PathParam("imageName") @ParamParser(ImageParamsName.class)
-               @BinderParam(BindOSImageParamsToXmlPayload.class) ImageParams params);
+               @BinderParam(ImageParamsToXML.class) ImageParams params);
 
    /**
     * The Delete Hosted Service operation deletes the specified hosted service from Windows Azure.

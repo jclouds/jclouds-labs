@@ -16,6 +16,8 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
@@ -25,143 +27,116 @@ import org.jclouds.azurecompute.domain.Image.OSType;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
-/**
- * The Add OS Image operation adds an OS image that is currently stored in a storage account in your
- * subscription to the image repository.
- *
- * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
- */
-public class ImageParams {
+/** To create a new operating system image. */
+public final class ImageParams {
 
-   public static Builder builder() {
-      return new Builder();
+   /** Specifies a name that is used to identify the image when you create a Virtual Machine. */
+   public String name() {
+      return name;
+   }
+
+   /** Specifies the friendly name of the image. */
+   public String label() {
+      return label;
+   }
+
+   /** Specifies the location of the vhd file for the image. */
+   public URI mediaLink() {
+      return mediaLink;
+   }
+
+   /** {@link Image#os() Os type} of the image. */
+   public OSType os() {
+      return os;
    }
 
    public Builder toBuilder() {
       return builder().fromImageParams(this);
    }
 
-   public static class Builder {
+   public static Builder builder() {
+      return new Builder();
+   }
+
+   public static final class Builder {
+      private String name;
       private String label;
       private URI mediaLink;
       private OSType os;
-      private String name;
 
-      /**
-       * @see ImageParams#getLabel()
-       */
-      public Builder label(String label) {
-         this.label = label;
-         return this;
-      }
-
-      /**
-       * @see ImageParams#getMediaLink()
-       */
-      public Builder mediaLink(URI mediaLink) {
-         this.mediaLink = mediaLink;
-         return this;
-      }
-
-      /**
-       * @see ImageParams#getName()
-       */
       public Builder name(String name) {
          this.name = name;
          return this;
       }
 
-      /**
-       * @see ImageParams#getOS()
-       */
+      public Builder label(String label) {
+         this.label = label;
+         return this;
+      }
+
+      public Builder mediaLink(URI mediaLink) {
+         this.mediaLink = mediaLink;
+         return this;
+      }
+
       public Builder os(OSType os) {
          this.os = os;
          return this;
       }
 
       public ImageParams build() {
-         return new ImageParams(label, mediaLink, name, os);
+         return ImageParams.create(name, label, mediaLink, os);
       }
 
       public Builder fromImageParams(ImageParams in) {
-         return this.label(in.getLabel()).mediaLink(in.getMediaLink()).name(in.getName()).os(in.getOS());
+         return name(in.name())
+               .label(in.label())
+               .mediaLink(in.mediaLink())
+               .os(in.os());
       }
    }
 
+   private static ImageParams create(String name, String label, URI mediaLink, OSType os) {
+      return new ImageParams(name, label, mediaLink, os);
+   }
+
+   // TODO: Remove from here down with @AutoValue.
+   private ImageParams(String name, String label, URI mediaLink, OSType os) {
+      this.name = checkNotNull(name, "name");
+      this.label = checkNotNull(label, "label");
+      this.mediaLink = checkNotNull(mediaLink, "mediaLink");
+      this.os = checkNotNull(os, "os");
+   }
+
+   private final String name;
    private final String label;
    private final URI mediaLink;
-   private final String name;
    private final OSType os;
 
-   private ImageParams(String label, URI mediaLink, String name, OSType os) {
-      this.label = checkNotNull(label, "label");
-      this.name = checkNotNull(name, "name for %s", label);
-      this.mediaLink = checkNotNull(mediaLink, "mediaLink for %s", label);
-      this.os = checkNotNull(os, "os for %s", label);
+   @Override public int hashCode() {
+      return Objects.hashCode(name, label, mediaLink, os);
    }
 
-   /**
-    * The operating system type of the OS image.
-    */
-   public OSType getOS() {
-      return os;
-   }
-
-   /**
-    * The name of the hosted service. This name is the DNS prefix name and can be used to access the
-    * hosted service.
-    *
-    * For example, if the service name is MyService you could access the access the service by
-    * calling: http://MyService.cloudapp.net
-    */
-   public String getName() {
-      return name;
-   }
-
-   /**
-    * The location of the blob in the blob store in which the media for the image is located. The
-    * blob location belongs to a storage account in the subscription specified by the
-    * <subscription-id> value in the operation call.
-    *
-    * Example:
-    *
-    * http://example.blob.core.windows.net/disks/myimage.vhd
-    */
-   public URI getMediaLink() {
-      return mediaLink;
-   }
-
-   /**
-    * The description of the image.
-    */
-   public String getLabel() {
-      return label;
-   }
-
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(name);
-   }
-
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj)
+   @Override public boolean equals(Object object) {
+      if (this == object) {
          return true;
-      if (obj == null)
+      }
+      if (object instanceof ImageParams) {
+         ImageParams that = ImageParams.class.cast(object);
+         return equal(name, that.name)
+               && equal(label, that.label)
+               && equal(mediaLink, that.mediaLink)
+               && equal(os, that.os);
+      } else {
          return false;
-      if (getClass() != obj.getClass())
-         return false;
-      ImageParams other = (ImageParams) obj;
-      return Objects.equal(this.name, other.name);
+      }
    }
 
-   @Override
-   public String toString() {
-      return string().toString();
-   }
-
-   private ToStringHelper string() {
-      return Objects.toStringHelper(this).add("label", label).add("mediaLink", mediaLink).add("name", name)
-               .add("os", os);
+   @Override public String toString() {
+      return toStringHelper(this)
+            .add("name", name)
+            .add("label", label)
+            .add("mediaLink", mediaLink)
+            .add("os", os).toString();
    }
 }

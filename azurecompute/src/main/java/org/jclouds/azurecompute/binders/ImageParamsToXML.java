@@ -19,27 +19,21 @@ package org.jclouds.azurecompute.binders;
 import static com.google.common.base.Throwables.propagate;
 import static org.jclouds.azurecompute.domain.Image.OSType.LINUX;
 
-import javax.inject.Singleton;
-
 import org.jclouds.azurecompute.domain.ImageParams;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import com.jamesmurty.utils.XMLBuilder;
 
-@Singleton
-public class BindOSImageParamsToXmlPayload implements Binder {
-
-
-   @Override
-   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+public final class ImageParamsToXML implements Binder {
+   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       ImageParams params = ImageParams.class.cast(input);
       try {
          String xml = XMLBuilder.create("OSImage", "http://schemas.microsoft.com/windowsazure")
-                                .e("Label").t(params.getLabel()).up()
-                                .e("MediaLink").t(params.getMediaLink().toASCIIString()).up()
-                                .e("Name").t(params.getName()).up()
-                                .e("OS").t(params.getOS() == LINUX ? "Linux" : "Windows").up()
+                                .e("Label").t(params.label()).up()
+                                .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
+                                .e("Name").t(params.name()).up()
+                                .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
                                 .up().asString();
          return (R) request.toBuilder().payload(xml).build();
       } catch (Exception e) {
