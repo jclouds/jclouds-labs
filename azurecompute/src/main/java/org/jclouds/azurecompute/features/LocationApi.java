@@ -32,7 +32,7 @@ import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 
 /**
  * The Service Management API includes operations for listing the available data center locations
- * for a hosted service in your subscription.
+ * for a cloud service in your subscription.
  * <p/>
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299" />

@@ -21,31 +21,31 @@ import static org.testng.Assert.assertEquals;
 import java.io.InputStream;
 import java.util.Collections;
 
-import org.jclouds.azurecompute.domain.HostedService;
-import org.jclouds.azurecompute.domain.HostedService.Status;
+import org.jclouds.azurecompute.domain.CloudService;
+import org.jclouds.azurecompute.domain.CloudService.Status;
 import org.jclouds.date.DateService;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "HostedServiceHandlerTest")
-public class HostedServiceHandlerTest extends BaseHandlerTest {
+public class CloudServiceHandlerTest extends BaseHandlerTest {
    private static final DateService DATE_SERVICE = new SimpleDateFormatDateService();
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/hostedservice.xml");
-      HostedService result = factory.create(new HostedServiceHandler(DATE_SERVICE)).parse(is);
+      CloudService result = factory.create(new CloudServiceHandler(DATE_SERVICE)).parse(is);
 
       assertEquals(result, expected());
    }
 
-   public static HostedService expected() {
-      return HostedService.create( //
+   public static CloudService expected() {
+      return CloudService.create( //
             "neotys", // name
             "West Europe", // location
             null, // affinityGroup
             "neotys", // label
-            "Implicitly created hosted service2012-08-06 14:55", // description
+            "Implicitly created cloud service2012-08-06 14:55", // description
             Status.CREATED, // status
             DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T14:55:17Z"), // created
             DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T15:50:34Z"), // lastModified

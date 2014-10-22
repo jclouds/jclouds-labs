@@ -56,7 +56,7 @@ import org.jclouds.rest.annotations.XMLResponseParser;
 public interface ImageApi {
 
    /**
-    * The List Hosted Services operation lists the hosted services available under the current
+    * The List Cloud Services operation lists the cloud services available under the current
     * subscription.
     */
    @Named("ListImages")
@@ -87,7 +87,7 @@ public interface ImageApi {
                @BinderParam(ImageParamsToXML.class) ImageParams params);
 
    /**
-    * The Delete Hosted Service operation deletes the specified hosted service from Windows Azure.
+    * The Delete Cloud Service operation deletes the specified cloud service from Windows Azure.
     *
     * @param imageName
     *           the unique DNS Prefix value in the Windows Azure Management Portal

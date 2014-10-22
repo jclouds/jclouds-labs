@@ -18,9 +18,10 @@ package org.jclouds.azurecompute;
 
 import java.io.Closeable;
 import javax.ws.rs.PathParam;
+
+import org.jclouds.azurecompute.features.CloudServiceApi;
 import org.jclouds.azurecompute.features.DeploymentApi;
 import org.jclouds.azurecompute.features.DiskApi;
-import org.jclouds.azurecompute.features.HostedServiceApi;
 import org.jclouds.azurecompute.features.ImageApi;
 import org.jclouds.azurecompute.features.LocationApi;
 import org.jclouds.azurecompute.features.OperationApi;
@@ -37,7 +38,7 @@ import org.jclouds.rest.annotations.Delegate;
 public interface AzureComputeApi extends Closeable {
    /**
     * The Service Management API includes operations for listing the available data center locations
-    * for a hosted service in your subscription.
+    * for a cloud service in your subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299">docs</a>
     */
@@ -45,13 +46,13 @@ public interface AzureComputeApi extends Closeable {
    LocationApi getLocationApi();
 
    /**
-    * The Service Management API includes operations for managing the hosted services beneath your
+    * The Service Management API includes operations for managing the cloud services beneath your
     * subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/ee460812">docs</a>
     */
    @Delegate
-   HostedServiceApi getHostedServiceApi();
+   CloudServiceApi getCloudServiceApi();
 
    /**
     * The Service Management API includes operations for managing the virtual machines in your

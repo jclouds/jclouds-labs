@@ -28,21 +28,21 @@ import org.jclouds.javax.annotation.Nullable;
 import com.google.common.base.Objects;
 
 /**
- * System properties for the specified hosted service. These properties include the service name and
+ * System properties for the specified cloud service. These properties include the service name and
  * service type; the name of the affinity group to which the service belongs, or its location if it
  * is not part of an affinity group.
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
  */
-public final class HostedService {
+public final class CloudService {
    public enum Status {
       CREATING, CREATED, DELETING, DELETED, CHANGING, RESOLVING_DNS,
       UNRECOGNIZED;
    }
 
    /**
-    * The name of the hosted service. This name is the DNS prefix name and can be used to access the
-    * hosted service.
+    * The name of the cloud service. This name is the DNS prefix name and can be used to access the
+    * cloud service.
     *
     * <p/>For example, if the service name is MyService you could access the access the service by
     * calling: http://MyService.cloudapp.net
@@ -52,7 +52,7 @@ public final class HostedService {
    }
 
    /**
-    * The geo-location of the hosted service in Windows Azure, if the hosted service is not
+    * The geo-location of the cloud service in Windows Azure, if the cloud service is not
     * associated with an affinity group. If a location has been specified, the AffinityGroup element
     * is not returned.
     */
@@ -61,7 +61,7 @@ public final class HostedService {
    }
 
    /**
-    * The affinity group with which this hosted service is associated, if any. If the service is
+    * The affinity group with which this cloud service is associated, if any. If the service is
     * associated with an affinity group, the Location element is not returned.
     */
    @Nullable public String affinityGroup() {
@@ -93,7 +93,7 @@ public final class HostedService {
    }
 
    /**
-    * Represents the name of an extended hosted service property. Each extended property must have
+    * Represents the name of an extended cloud service property. Each extended property must have
     * both a defined name and value. You can have a maximum of 50 extended property name/value
     * pairs.
     *
@@ -105,14 +105,14 @@ public final class HostedService {
       return extendedProperties;
    }
 
-   public static HostedService create(String name, String location, String affinityGroup, String label,
+   public static CloudService create(String name, String location, String affinityGroup, String label,
          String description, Status status, Date created, Date lastModified, Map<String, String> extendedProperties) {
-      return new HostedService(name, location, affinityGroup, label, description, status, created, lastModified,
+      return new CloudService(name, location, affinityGroup, label, description, status, created, lastModified,
             extendedProperties);
    }
 
    // TODO: Remove from here down with @AutoValue.
-   private HostedService(String name, String location, String affinityGroup, String label, String description,
+   private CloudService(String name, String location, String affinityGroup, String label, String description,
          Status status, Date created, Date lastModified, Map<String, String> extendedProperties) {
       this.name = checkNotNull(name, "name");
       this.location = location;
@@ -140,8 +140,8 @@ public final class HostedService {
       if (this == object) {
          return true;
       }
-      if (object instanceof HostedService) {
-         HostedService that = HostedService.class.cast(object);
+      if (object instanceof CloudService) {
+         CloudService that = CloudService.class.cast(object);
          return equal(name, that.name)
                && equal(location, that.location)
                && equal(affinityGroup, that.affinityGroup)

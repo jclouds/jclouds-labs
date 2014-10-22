@@ -22,8 +22,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import org.jclouds.azurecompute.domain.HostedService;
-import org.jclouds.azurecompute.domain.HostedService.Status;
+import org.jclouds.azurecompute.domain.CloudService;
+import org.jclouds.azurecompute.domain.CloudService.Status;
 import org.jclouds.date.DateService;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.functions.BaseHandlerTest;
@@ -32,31 +32,31 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableList;
 
 @Test(groups = "unit", testName = "ListHostedServicesHandlerTest")
-public class ListHostedServicesHandlerTest extends BaseHandlerTest {
+public class ListCloudServicesHandlerTest extends BaseHandlerTest {
    private static final DateService DATE_SERVICE = new SimpleDateFormatDateService();
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/hostedservices.xml");
-      ListHostedServicesHandler handler = new ListHostedServicesHandler(new HostedServiceHandler(DATE_SERVICE));
-      List<HostedService> result = factory.create(handler).parse(is);
+      ListCloudServicesHandler handler = new ListCloudServicesHandler(new CloudServiceHandler(DATE_SERVICE));
+      List<CloudService> result = factory.create(handler).parse(is);
 
       assertEquals(result, expected());
    }
 
-   public static List<HostedService> expected() {
+   public static List<CloudService> expected() {
       return ImmutableList.of( //
-            HostedService.create( //
+            CloudService.create( //
                   "neotys", // name
                   "West Europe", // location
                   null, // affinityGroup
                   "neotys", // label
-                  "Implicitly created hosted service2012-08-06 14:55", // description
+                  "Implicitly created cloud service2012-08-06 14:55", // description
                   Status.CREATED, // status
                   DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T14:55:17Z"), // created
                   DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T15:50:34Z"), // lastModified
                   Collections.<String, String>emptyMap() // extendedProperties
             ), //
-            HostedService.create( //
+            CloudService.create( //
                   "neotys3", // name
                   "West Europe", // location
                   null, // affinityGroup

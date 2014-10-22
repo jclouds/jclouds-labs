@@ -39,7 +39,7 @@ public final class Disk {
          return deployment;
       }
 
-      /** The hosted service in which the disk is being used. */
+      /** The cloud service in which the disk is being used. */
       public String hostedService() {
          return hostedService;
       }
