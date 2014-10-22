@@ -51,7 +51,7 @@ public final class Deployment {
       return name;
    }
 
-   /** The environment to which the hosted service is deployed. */
+   /** The environment to which the cloud service is deployed. */
    public Slot slot() {
       return slot;
    }

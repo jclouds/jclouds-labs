@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.jclouds.azurecompute.domain.HostedService;
+import org.jclouds.azurecompute.domain.CloudService;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
@@ -30,16 +30,16 @@ import com.google.common.collect.ImmutableList.Builder;
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460781">Response body description</a>
  */
-public final class ListHostedServicesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<HostedService>> {
+public final class ListCloudServicesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<CloudService>> {
    private boolean inHostedService;
-   private final HostedServiceHandler hostedServiceHandler;
-   private final Builder<HostedService> hostedServices = ImmutableList.builder();
+   private final CloudServiceHandler cloudServiceHandler;
+   private final Builder<CloudService> hostedServices = ImmutableList.builder();
 
-   @Inject ListHostedServicesHandler(HostedServiceHandler hostedServiceHandler) {
-      this.hostedServiceHandler = hostedServiceHandler;
+   @Inject ListCloudServicesHandler(CloudServiceHandler cloudServiceHandler) {
+      this.cloudServiceHandler = cloudServiceHandler;
    }
 
-   @Override public List<HostedService> getResult() {
+   @Override public List<CloudService> getResult() {
       return hostedServices.build();
    }
 
@@ -48,22 +48,22 @@ public final class ListHostedServicesHandler extends ParseSax.HandlerForGenerate
          inHostedService = true;
       }
       if (inHostedService) {
-         hostedServiceHandler.startElement(url, name, qName, attributes);
+         cloudServiceHandler.startElement(url, name, qName, attributes);
       }
    }
 
    @Override public void endElement(String uri, String name, String qName) {
       if (qName.equals("HostedService")) {
          inHostedService = false;
-         hostedServices.add(hostedServiceHandler.getResult());
+         hostedServices.add(cloudServiceHandler.getResult());
       } else if (inHostedService) {
-         hostedServiceHandler.endElement(uri, name, qName);
+         cloudServiceHandler.endElement(uri, name, qName);
       }
    }
 
    @Override public void characters(char ch[], int start, int length) {
       if (inHostedService) {
-         hostedServiceHandler.characters(ch, start, length);
+         cloudServiceHandler.characters(ch, start, length);
       }
    }
 }

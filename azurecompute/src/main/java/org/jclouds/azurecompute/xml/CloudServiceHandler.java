@@ -27,7 +27,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.jclouds.azurecompute.domain.HostedService;
+import org.jclouds.azurecompute.domain.CloudService;
 import org.jclouds.date.DateService;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
@@ -38,13 +38,13 @@ import com.google.common.collect.Maps;
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >Response body description</a>
  */
-public final class HostedServiceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<HostedService> {
+public final class CloudServiceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<CloudService> {
    private String name;
    private String location;
    private String affinityGroup;
    private String label;
    private String description;
-   private HostedService.Status status;
+   private CloudService.Status status;
    private Date created;
    private Date lastModified;
    private Map<String, String> extendedProperties = Maps.newLinkedHashMap();
@@ -54,12 +54,12 @@ public final class HostedServiceHandler extends ParseSax.HandlerForGeneratedRequ
    private StringBuilder currentText = new StringBuilder();
    private final DateService dateService;
 
-   @Inject HostedServiceHandler(DateService dateService) {
+   @Inject CloudServiceHandler(DateService dateService) {
       this.dateService = dateService;
    }
 
-   @Override public HostedService getResult() {
-      HostedService result = HostedService.create(name, location, affinityGroup, label, description, status, created, //
+   @Override public CloudService getResult() {
+      CloudService result = CloudService.create(name, location, affinityGroup, label, description, status, created, //
             lastModified, ImmutableMap.copyOf(extendedProperties));
       resetState(); // handler is called in a loop.
       return result;
@@ -117,11 +117,11 @@ public final class HostedServiceHandler extends ParseSax.HandlerForGeneratedRequ
       currentText.append(ch, start, length);
    }
 
-   private static HostedService.Status status(String status) {
+   private static CloudService.Status status(String status) {
       try {
-         return HostedService.Status.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, status));
+         return CloudService.Status.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, status));
       } catch (IllegalArgumentException e) {
-         return HostedService.Status.UNRECOGNIZED;
+         return CloudService.Status.UNRECOGNIZED;
       }
    }
 }

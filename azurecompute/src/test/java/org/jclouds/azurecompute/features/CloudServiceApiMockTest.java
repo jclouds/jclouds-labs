@@ -21,24 +21,24 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.xml.HostedServiceHandlerTest;
-import org.jclouds.azurecompute.xml.ListHostedServicesHandlerTest;
+import org.jclouds.azurecompute.xml.CloudServiceHandlerTest;
+import org.jclouds.azurecompute.xml.ListCloudServicesHandlerTest;
 import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
-@Test(groups = "unit", testName = "HostedServiceApiMockTest")
-public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
+@Test(groups = "unit", testName = "CloudServiceApiMockTest")
+public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
 
    public void listWhenFound() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/hostedservices.xml"));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
-         assertEquals(api.list(), ListHostedServicesHandlerTest.expected());
+         assertEquals(api.list(), ListCloudServicesHandlerTest.expected());
 
          assertSent(server, "GET", "/services/hostedservices?embed-detail=true");
       } finally {
@@ -51,7 +51,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
          assertTrue(api.list().isEmpty());
 
@@ -66,9 +66,9 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(xmlResponse("/hostedservice.xml"));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
-         assertEquals(api.get("myservice"), HostedServiceHandlerTest.expected());
+         assertEquals(api.get("myservice"), CloudServiceHandlerTest.expected());
 
          assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
       } finally {
@@ -81,7 +81,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
          assertNull(api.get("myservice"));
 
@@ -96,7 +96,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(requestIdResponse("request-1"));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
          assertEquals(api.createWithLabelInLocation("myservice", "service mine", "West US"), "request-1");
 
@@ -111,7 +111,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(requestIdResponse("request-1"));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
          assertEquals(api.delete("myservice"), "request-1");
 
@@ -126,7 +126,7 @@ public class HostedServiceApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
-         HostedServiceApi api = api(server.getUrl("/")).getHostedServiceApi();
+         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
 
          assertNull(api.delete("myservice"));
 
