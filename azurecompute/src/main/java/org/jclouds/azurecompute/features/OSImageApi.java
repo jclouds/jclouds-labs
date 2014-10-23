@@ -32,12 +32,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.jclouds.azurecompute.binders.ImageParamsToXML;
-import org.jclouds.azurecompute.domain.Image;
-import org.jclouds.azurecompute.domain.ImageParams;
-import org.jclouds.azurecompute.functions.ImageParamsName;
+import org.jclouds.azurecompute.binders.OSImageParamsToXML;
+import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.azurecompute.domain.OSImageParams;
+import org.jclouds.azurecompute.functions.OSImageParamsName;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
-import org.jclouds.azurecompute.xml.ListImagesHandler;
+import org.jclouds.azurecompute.xml.ListOSImagesHandler;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
@@ -53,7 +53,7 @@ import org.jclouds.rest.annotations.XMLResponseParser;
 @Path("/services/images")
 @Headers(keys = "x-ms-version", values = "{jclouds.api-version}")
 @Consumes(APPLICATION_XML)
-public interface ImageApi {
+public interface OSImageApi {
 
    /**
     * The List Cloud Services operation lists the cloud services available under the current
@@ -61,9 +61,9 @@ public interface ImageApi {
     */
    @Named("ListImages")
    @GET
-   @XMLResponseParser(ListImagesHandler.class)
+   @XMLResponseParser(ListOSImagesHandler.class)
    @Fallback(EmptyListOnNotFoundOr404.class)
-   List<Image> list();
+   List<OSImage> list();
 
    /**
     * The Add OS Image operation adds an OS image that is currently stored in a storage account in your subscription to
@@ -73,7 +73,7 @@ public interface ImageApi {
    @POST
    @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   String add(@BinderParam(ImageParamsToXML.class) ImageParams params);
+   String add(@BinderParam(OSImageParamsToXML.class) OSImageParams params);
 
    /**
     * The Update OS Image operation updates an OS image that in your image repository.
@@ -83,8 +83,8 @@ public interface ImageApi {
    @Path("/{imageName}")
    @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   String update(@PathParam("imageName") @ParamParser(ImageParamsName.class)
-               @BinderParam(ImageParamsToXML.class) ImageParams params);
+   String update(@PathParam("imageName") @ParamParser(OSImageParamsName.class)
+               @BinderParam(OSImageParamsToXML.class) OSImageParams params);
 
    /**
     * The Delete Cloud Service operation deletes the specified cloud service from Windows Azure.

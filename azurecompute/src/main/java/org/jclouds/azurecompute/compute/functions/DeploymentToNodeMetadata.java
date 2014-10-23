@@ -16,9 +16,10 @@
  */
 package org.jclouds.azurecompute.compute.functions;
 
-import com.google.common.base.Function;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.compute.domain.NodeMetadata;
+
+import com.google.common.base.Function;
 
 public class DeploymentToNodeMetadata implements Function<Deployment, NodeMetadata> {
 

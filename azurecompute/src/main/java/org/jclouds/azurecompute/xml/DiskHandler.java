@@ -22,7 +22,7 @@ import java.net.URI;
 
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Disk.Attachment;
-import org.jclouds.azurecompute.domain.Image.OSType;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
@@ -34,7 +34,7 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
    private String location;
    private String affinityGroup;
    private String description;
-   private OSType os;
+   private OSImage.Type os;
    private URI mediaLink;
    private Integer logicalSizeInGB;
    private Attachment attachedTo;
@@ -74,7 +74,7 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
       } else if (qName.equals("OS")) {
          String osText = currentOrNull(currentText);
          if (osText != null) {
-            os = OSType.valueOf(currentOrNull(currentText).toUpperCase());
+            os = OSImage.Type.valueOf(currentOrNull(currentText).toUpperCase());
          }
       } else if (qName.equals("Name")) {
          name = currentOrNull(currentText);

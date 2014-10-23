@@ -17,9 +17,10 @@
 package org.jclouds.azurecompute.compute;
 
 import javax.inject.Singleton;
+
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.domain.Deployment;
-import org.jclouds.azurecompute.domain.Image;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.Template;
@@ -29,7 +30,7 @@ import org.jclouds.compute.domain.Template;
  * jclouds {@link org.jclouds.compute.ComputeService}
  */
 @Singleton
-public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deployment, RoleSize, Image, String> {
+public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deployment, RoleSize, OSImage, String> {
 
    @Override
    public NodeAndInitialCredentials<Deployment> createNodeWithGroupEncodedIntoName(
@@ -45,13 +46,13 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
    }
 
    @Override
-   public Iterable<Image> listImages() {
+   public Iterable<OSImage> listImages() {
       // TODO Auto-generated method stub
       return null;
    }
 
    @Override
-   public Image getImage(String id) {
+   public OSImage getImage(String id) {
       // TODO Auto-generated method stub
       return null;
    }

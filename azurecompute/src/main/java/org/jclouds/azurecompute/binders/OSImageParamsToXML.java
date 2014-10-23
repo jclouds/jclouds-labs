@@ -17,17 +17,17 @@
 package org.jclouds.azurecompute.binders;
 
 import static com.google.common.base.Throwables.propagate;
-import static org.jclouds.azurecompute.domain.Image.OSType.LINUX;
+import static org.jclouds.azurecompute.domain.OSImage.Type.LINUX;
 
-import org.jclouds.azurecompute.domain.ImageParams;
+import org.jclouds.azurecompute.domain.OSImageParams;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 import com.jamesmurty.utils.XMLBuilder;
 
-public final class ImageParamsToXML implements Binder {
+public final class OSImageParamsToXML implements Binder {
    @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-      ImageParams params = ImageParams.class.cast(input);
+      OSImageParams params = OSImageParams.class.cast(input);
       try {
          String xml = XMLBuilder.create("OSImage", "http://schemas.microsoft.com/windowsazure")
                                 .e("Label").t(params.label()).up()

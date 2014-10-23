@@ -32,8 +32,8 @@ import com.google.common.base.Objects;
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
  */
-public final class Image {
-   public enum OSType {
+public final class OSImage {
+   public enum Type {
       LINUX, WINDOWS;
    }
 
@@ -41,19 +41,12 @@ public final class Image {
       return name;
    }
 
-   /**
-    * The geo-location of the image in Windows Azure, if the image is not
-    * associated with an affinity group. If a location has been specified, the AffinityGroup element
-    * is not returned.
-    */
-   @Nullable public String location() {
-      return location;
+   /** The geo-locations of the image, if the image is not associated with an affinity group. */
+   public List<String> locations() {
+      return locations;
    }
 
-   /**
-    * The affinity group with which this image is associated, if any. If the service is
-    * associated with an affinity group, the Location element is not returned.
-    */
+   /** The affinity group with which this image is associated, if any. */
    @Nullable public String affinityGroup() {
       return affinityGroup;
    }
@@ -79,13 +72,13 @@ public final class Image {
    }
 
    /** The operating system type of the OS image. */
-   public OSType os() {
+   public Type os() {
       return os;
    }
 
    /**
-    * The location of the blob in the blob store in which the media for the image is located. The
-    * blob location belongs to a storage account in the subscription specified by the
+    * The locations of the blob in the blob store in which the media for the image is located. The
+    * blob locations belongs to a storage account in the subscription specified by the
     * <subscription-id> value in the operation call.
     *
     * Example:
@@ -106,17 +99,17 @@ public final class Image {
       return eula;
    }
 
-   public static Image create(String name, String location, String affinityGroup, String label, String description,
-         String category, OSType os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
-      return new Image(name, location, affinityGroup, label, description, category, os, mediaLink, logicalSizeInGB,
+   public static OSImage create(String name, List<String> locations, String affinityGroup, String label,
+         String description, String category, Type os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
+      return new OSImage(name, locations, affinityGroup, label, description, category, os, mediaLink, logicalSizeInGB,
             eula);
    }
 
    // TODO: Remove from here down with @AutoValue.
-   private Image(String name, String location, String affinityGroup, String label, String description, String category,
-         OSType os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
+   private OSImage(String name, List<String> locations, String affinityGroup, String label, String description,
+         String category, Type os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
       this.name = checkNotNull(name, "name");
-      this.location = location;
+      this.locations = locations;
       this.affinityGroup = affinityGroup;
       this.label = checkNotNull(label, "label");
       this.description = description;
@@ -128,12 +121,12 @@ public final class Image {
    }
 
    private final String name;
-   private final String location;
+   private final List<String>  locations;
    private final String affinityGroup;
    private final String label;
    private final String category;
    private final String description;
-   private final OSType os;
+   private final Type os;
    private final URI mediaLink;
    private final int logicalSizeInGB;
    private final List<String> eula;
@@ -143,10 +136,10 @@ public final class Image {
       if (this == object) {
          return true;
       }
-      if (object instanceof Image) {
-         Image that = Image.class.cast(object);
+      if (object instanceof OSImage) {
+         OSImage that = OSImage.class.cast(object);
          return equal(name, that.name)
-               && equal(location, that.location)
+               && equal(locations, that.locations)
                && equal(affinityGroup, that.affinityGroup)
                && equal(label, that.label)
                && equal(description, that.description)
@@ -162,7 +155,7 @@ public final class Image {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(name, location, affinityGroup, label, description, category, os, mediaLink,
+      return Objects.hashCode(name, locations, affinityGroup, label, description, category, os, mediaLink,
             logicalSizeInGB, eula);
    }
 
@@ -170,7 +163,7 @@ public final class Image {
    public String toString() {
       return toStringHelper(this)
             .add("name", name)
-            .add("location", location)
+            .add("locations", locations)
             .add("affinityGroup", affinityGroup)
             .add("label", label)
             .add("description", description)

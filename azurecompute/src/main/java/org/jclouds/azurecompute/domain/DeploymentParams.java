@@ -24,8 +24,6 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
-import org.jclouds.azurecompute.domain.Image.OSType;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -134,18 +132,18 @@ public final class DeploymentParams {
       return password;
    }
 
-   /** {@link Image#name() name} of the user or platform image. */
+   /** {@link OSImage#name() name} of the user or platform image. */
    public String sourceImageName() {
       return sourceImageName;
    }
 
-   /** Indicates the {@link Image#mediaLink() location} when {@link #sourceImageName() source} is a platform image. */
+   /** Indicates the {@link OSImage#mediaLink() location} when {@link #sourceImageName() source} is a platform image. */
    public URI mediaLink() {
       return mediaLink;
    }
 
-   /** {@link Image#os() Os type} of the {@link #sourceImageName() source image}. */
-   public OSType os() {
+   /** {@link OSImage#os() Os type} of the {@link #sourceImageName() source image}. */
+   public OSImage.Type os() {
       return os;
    }
 
@@ -168,7 +166,7 @@ public final class DeploymentParams {
       private String password;
       private String sourceImageName;
       private URI mediaLink;
-      private OSType os;
+      private OSImage.Type os;
       private List<ExternalEndpoint> externalEndpoints = Lists.newArrayList();
 
       public Builder name(String name) {
@@ -201,7 +199,7 @@ public final class DeploymentParams {
          return this;
       }
 
-      public Builder os(OSType os) {
+      public Builder os(OSImage.Type os) {
          this.os = os;
          return this;
       }
@@ -234,13 +232,13 @@ public final class DeploymentParams {
    }
 
    private static DeploymentParams create(String name, RoleSize size, String username, String password, String sourceImageName,
-         URI mediaLink, OSType os, List<ExternalEndpoint> externalEndpoints) {
+         URI mediaLink, OSImage.Type os, List<ExternalEndpoint> externalEndpoints) {
       return new DeploymentParams(name, size, username, password, sourceImageName, mediaLink, os, externalEndpoints);
    }
 
    // TODO: Remove from here down with @AutoValue.
    private DeploymentParams(String name, RoleSize size, String username, String password, String sourceImageName, URI mediaLink,
-         OSType os, List<ExternalEndpoint> externalEndpoints) {
+         OSImage.Type os, List<ExternalEndpoint> externalEndpoints) {
       this.name = checkNotNull(name, "name");
       this.size = checkNotNull(size, "size");
       this.username = checkNotNull(username, "username");
@@ -257,7 +255,7 @@ public final class DeploymentParams {
    private final String password;
    private final String sourceImageName;
    private final URI mediaLink;
-   private final OSType os;
+   private final OSImage.Type os;
    private final List<ExternalEndpoint> externalEndpoints;
 
    @Override public int hashCode() {

@@ -22,8 +22,7 @@ import static org.jclouds.util.SaxUtils.currentOrNull;
 import java.net.URI;
 import java.util.List;
 
-import org.jclouds.azurecompute.domain.Image;
-import org.jclouds.azurecompute.domain.Image.OSType;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.http.functions.ParseSax;
 
 import com.google.common.base.Splitter;
@@ -33,40 +32,42 @@ import com.google.common.collect.Lists;
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
  */
-final class ImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Image> {
+final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<OSImage> {
    private String name;
-   private String location;
+   private final List<String> locations = Lists.newArrayList();
    private String affinityGroup;
    private String label;
    private String category;
    private String description;
-   private OSType os;
+   private OSImage.Type os;
    private URI mediaLink;
    private Integer logicalSizeInGB;
-   private final List<String> eula = Lists.newArrayList();
+   private final List<String> eulas = Lists.newArrayList();
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Image getResult() {
-      Image result = Image.create(name, location, affinityGroup, label, description, category, os, mediaLink,
-            logicalSizeInGB, ImmutableList.copyOf(eula));
+   @Override public OSImage getResult() {
+      OSImage result = OSImage
+            .create(name, ImmutableList.copyOf(locations), affinityGroup, label, description, category, os, mediaLink,
+                  logicalSizeInGB, ImmutableList.copyOf(eulas));
       resetState(); // handler is called in a loop.
       return result;
    }
 
    private void resetState() {
-      name = location = affinityGroup = label = description = category = null;
+      name = affinityGroup = label = description = category = null;
       os = null;
       mediaLink = null;
       logicalSizeInGB = null;
-      eula.clear();
+      eulas.clear();
+      locations.clear();
    }
 
    @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("OS")) {
          String osText = currentOrNull(currentText);
          if (osText != null) {
-            os = OSType.valueOf(currentOrNull(currentText).toUpperCase());
+            os = OSImage.Type.valueOf(currentOrNull(currentText).toUpperCase());
          }
       } else if (qName.equals("Name")) {
          name = currentOrNull(currentText);
@@ -80,7 +81,10 @@ final class ImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<I
       } else if (qName.equals("Category")) {
          category = currentOrNull(currentText);
       } else if (qName.equals("Location")) {
-         location = currentOrNull(currentText);
+         String locationField = currentOrNull(currentText);
+         if (locationField != null) {
+            locations.addAll(Splitter.on(';').splitToList(locationField));
+         }
       } else if (qName.equals("AffinityGroup")) {
          affinityGroup = currentOrNull(currentText);
       } else if (qName.equals("MediaLink")) {
@@ -92,8 +96,8 @@ final class ImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<I
          String eulaField = currentOrNull(currentText);
          if (eulaField != null) {
             for (String eula : Splitter.on(';').split(eulaField)) {
-               if ((eula = emptyToNull(eula.trim())) != null) { // Dirty data in RightScale eula field.
-                  this.eula.add(eula);
+               if ((eula = emptyToNull(eula.trim())) != null) { // Dirty data in RightScale eulas field.
+                  eulas.add(eula);
                }
             }
          }

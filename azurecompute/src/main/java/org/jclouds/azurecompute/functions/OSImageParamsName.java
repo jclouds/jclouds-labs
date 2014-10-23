@@ -16,12 +16,12 @@
  */
 package org.jclouds.azurecompute.functions;
 
-import org.jclouds.azurecompute.domain.ImageParams;
+import org.jclouds.azurecompute.domain.OSImageParams;
 
 import com.google.common.base.Function;
 
-public class ImageParamsName implements Function<Object, String> {
+public class OSImageParamsName implements Function<Object, String> {
    @Override public String apply(Object input) {
-      return ImageParams.class.cast(input).name();
+      return OSImageParams.class.cast(input).name();
    }
 }

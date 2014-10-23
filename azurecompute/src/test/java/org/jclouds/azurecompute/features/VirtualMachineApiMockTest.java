@@ -16,13 +16,14 @@
  */
 package org.jclouds.azurecompute.features;
 
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
 
-@Test(groups = "unit", testName = "ApiMockTest")
+@Test(groups = "unit", testName = "VirtualMachineApiMockTest")
 public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
 
    public void start() throws Exception {

@@ -22,7 +22,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 
-import org.jclouds.azurecompute.domain.Image.OSType;
 import org.jclouds.javax.annotation.Nullable;
 
 import com.google.common.base.Objects;
@@ -126,7 +125,7 @@ public final class Disk {
    }
 
    /** The operating system type of the OS image, or null if a data disk. */
-   @Nullable public OSType os() {
+   @Nullable public OSImage.Type os() {
       return os;
    }
 
@@ -165,13 +164,13 @@ public final class Disk {
    }
 
    public static Disk create(String name, String location, String affinityGroup, String description,
-         OSType os, URI mediaLink, Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
+         OSImage.Type os, URI mediaLink, Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
       return new Disk(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB, attachedTo,
             sourceImage);
    }
 
    // TODO: Remove from here down with @AutoValue.
-   private Disk(String name, String location, String affinityGroup, String description, OSType os, URI mediaLink,
+   private Disk(String name, String location, String affinityGroup, String description, OSImage.Type os, URI mediaLink,
          Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
       this.name = checkNotNull(name, "name");
       this.location = location;
@@ -188,7 +187,7 @@ public final class Disk {
    private final String location;
    private final String affinityGroup;
    private final String description;
-   private final OSType os;
+   private final OSImage.Type os;
    private final URI mediaLink;
    private final Integer logicalSizeInGB;
    private final Attachment attachedTo;

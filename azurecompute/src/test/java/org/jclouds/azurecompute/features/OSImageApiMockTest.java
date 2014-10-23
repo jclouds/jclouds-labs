@@ -22,26 +22,26 @@ import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
 
-import org.jclouds.azurecompute.domain.Image.OSType;
-import org.jclouds.azurecompute.domain.ImageParams;
+import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.azurecompute.domain.OSImageParams;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
-import org.jclouds.azurecompute.xml.ListImagesHandlerTest;
+import org.jclouds.azurecompute.xml.ListOSImagesHandlerTest;
 import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
-@Test(groups = "unit", testName = "ImageApiMockTest")
-public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
+@Test(groups = "unit", testName = "OSImageApiMockTest")
+public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
 
    public void listWhenFound() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/images.xml"));
 
       try {
-         ImageApi api = api(server.getUrl("/")).getImageApi();
+         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
-         assertEquals(api.list(), ListImagesHandlerTest.expected());
+         assertEquals(api.list(), ListOSImagesHandlerTest.expected());
 
          assertSent(server, "GET", "/services/images");
       } finally {
@@ -54,7 +54,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
-         ImageApi api = api(server.getUrl("/")).getImageApi();
+         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
          assertTrue(api.list().isEmpty());
 
@@ -69,9 +69,9 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(requestIdResponse("request-1"));
 
       try {
-         ImageApi api = api(server.getUrl("/")).getImageApi();
+         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
-         ImageParams params = ImageParams.builder().name("myimage").label("foo").os(OSType.LINUX)
+         OSImageParams params = OSImageParams.builder().name("myimage").label("foo").os(OSImage.Type.LINUX)
                .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
 
          assertEquals(api.add(params), "request-1");
@@ -87,9 +87,9 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(requestIdResponse("request-1"));
 
       try {
-         ImageApi api = api(server.getUrl("/")).getImageApi();
+         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
-         ImageParams params = ImageParams.builder().name("myimage").label("foo").os(OSType.LINUX)
+         OSImageParams params = OSImageParams.builder().name("myimage").label("foo").os(OSImage.Type.LINUX)
                .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
 
          assertEquals(api.update(params), "request-1");
@@ -105,7 +105,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(requestIdResponse("request-1"));
 
       try {
-         ImageApi api = api(server.getUrl("/")).getImageApi();
+         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
          assertEquals(api.delete("myimage"), "request-1");
 
@@ -120,7 +120,7 @@ public class ImageApiMockTest extends BaseAzureComputeApiMockTest {
       server.enqueue(new MockResponse().setResponseCode(404));
 
       try {
-         ImageApi api = api(server.getUrl("/")).getImageApi();
+         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
          assertNull(api.delete("myimage"));
 

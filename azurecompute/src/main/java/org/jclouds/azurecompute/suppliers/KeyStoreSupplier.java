@@ -16,9 +16,9 @@
  */
 package org.jclouds.azurecompute.suppliers;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Supplier;
-import com.google.common.io.ByteSource;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Throwables.propagate;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,15 +34,18 @@ import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Collection;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import org.jclouds.crypto.Crypto;
 import org.jclouds.crypto.Pems;
 import org.jclouds.domain.Credentials;
 import org.jclouds.location.Provider;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Throwables.propagate;
+import com.google.common.base.Charsets;
+import com.google.common.base.Supplier;
+import com.google.common.io.ByteSource;
 
 /**
  * TODO this code needs to be completely refactored. It needs to stop using KeyStore of at all possible and definitely

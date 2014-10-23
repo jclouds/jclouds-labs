@@ -16,12 +16,13 @@
  */
 package org.jclouds.azurecompute;
 
+import static org.jclouds.azurecompute.config.AzureComputeProperties.SUBSCRIPTION_ID;
+
 import java.net.URI;
 import java.util.Properties;
+
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
-
-import static org.jclouds.azurecompute.config.AzureComputeProperties.SUBSCRIPTION_ID;
 
 /**
  * Implementation of {@link ProviderMetadata} for Microsoft Azure Service Management Service.

@@ -17,13 +17,14 @@
 package org.jclouds.azurecompute;
 
 import java.io.Closeable;
+
 import javax.ws.rs.PathParam;
 
 import org.jclouds.azurecompute.features.CloudServiceApi;
 import org.jclouds.azurecompute.features.DeploymentApi;
 import org.jclouds.azurecompute.features.DiskApi;
-import org.jclouds.azurecompute.features.ImageApi;
 import org.jclouds.azurecompute.features.LocationApi;
+import org.jclouds.azurecompute.features.OSImageApi;
 import org.jclouds.azurecompute.features.OperationApi;
 import org.jclouds.azurecompute.features.VirtualMachineApi;
 import org.jclouds.rest.annotations.Delegate;
@@ -81,7 +82,7 @@ public interface AzureComputeApi extends Closeable {
     * @see <a href="http://msdn.microsoft.com/en-us/library/jj157175">docs</a>
     */
    @Delegate
-   ImageApi getImageApi();
+   OSImageApi getOSImageApi();
 
    /**
     * The Service Management API includes operations for Tracking Asynchronous Service Management

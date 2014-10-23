@@ -16,25 +16,28 @@
  */
 package org.jclouds.azurecompute.suppliers;
 
-import com.google.common.base.Supplier;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Throwables.propagate;
+
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+
 import org.jclouds.domain.Credentials;
 import org.jclouds.http.HttpUtils;
 import org.jclouds.http.config.SSLModule.TrustAllCerts;
 import org.jclouds.location.Provider;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Throwables.propagate;
+import com.google.common.base.Supplier;
 
 /**
  * TODO this code needs to be completely refactored. It needs to stop using KeyStore of at all possible and definitely

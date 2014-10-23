@@ -16,9 +16,10 @@
  */
 package org.jclouds.azurecompute.compute.functions;
 
-import com.google.common.base.Function;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.compute.domain.Hardware;
+
+import com.google.common.base.Function;
 
 public class RoleSizeToHardware implements Function<RoleSize, Hardware> {
 

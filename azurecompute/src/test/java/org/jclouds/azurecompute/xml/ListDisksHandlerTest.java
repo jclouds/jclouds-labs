@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Disk.Attachment;
-import org.jclouds.azurecompute.domain.Image.OSType;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
@@ -47,7 +47,7 @@ public class ListDisksHandlerTest extends BaseHandlerTest {
                   "West Europe", // location
                   null, // affinityGroup
                   null, //description
-                  OSType.LINUX, // os
+                  OSImage.Type.LINUX, // os
                   URI.create("http://blobs/vhds/testimage2-testimage2-2012-08-17.vhd"), // mediaLink
                   30, // logicalSizeInGB
                   null, // attachedTo
@@ -57,7 +57,7 @@ public class ListDisksHandlerTest extends BaseHandlerTest {
                   "West Europe", // location
                   null, // affinityGroup
                   null, //description
-                  OSType.WINDOWS, // os
+                  OSImage.Type.WINDOWS, // os
                   URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"), // mediaLink
                   30, // logicalSizeInGB
                   Attachment.create("neotysss", "neotysss", "neotysss"), // attachedTo

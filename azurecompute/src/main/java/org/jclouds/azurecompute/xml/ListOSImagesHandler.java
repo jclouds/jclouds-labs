@@ -18,20 +18,20 @@ package org.jclouds.azurecompute.xml;
 
 import java.util.List;
 
-import org.jclouds.azurecompute.domain.Image;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 
-public final class ListImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Image>> {
+public final class ListOSImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<OSImage>> {
    private boolean inOSImage;
-   private final ImageHandler imageHandler = new ImageHandler();
-   private final Builder<Image> images = ImmutableList.builder();
+   private final OSImageHandler OSImageHandler = new OSImageHandler();
+   private final Builder<OSImage> images = ImmutableList.builder();
 
    @Override
-   public List<Image> getResult() {
+   public List<OSImage> getResult() {
       return images.build();
    }
 
@@ -46,16 +46,16 @@ public final class ListImagesHandler extends ParseSax.HandlerForGeneratedRequest
    public void endElement(String uri, String name, String qName) {
       if (qName.equals("OSImage")) {
          inOSImage = false;
-         images.add(imageHandler.getResult());
+         images.add(OSImageHandler.getResult());
       } else if (inOSImage) {
-         imageHandler.endElement(uri, name, qName);
+         OSImageHandler.endElement(uri, name, qName);
       }
    }
 
    @Override
    public void characters(char ch[], int start, int length) {
       if (inOSImage) {
-         imageHandler.characters(ch, start, length);
+         OSImageHandler.characters(ch, start, length);
       }
    }
 }

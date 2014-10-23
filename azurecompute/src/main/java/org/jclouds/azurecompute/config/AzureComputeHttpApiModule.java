@@ -16,15 +16,18 @@
  */
 package org.jclouds.azurecompute.config;
 
-import com.google.common.base.Supplier;
-import com.google.inject.TypeLiteral;
 import java.security.KeyStore;
+
 import javax.net.ssl.SSLContext;
+
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.suppliers.KeyStoreSupplier;
 import org.jclouds.azurecompute.suppliers.SSLContextWithKeysSupplier;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
+
+import com.google.common.base.Supplier;
+import com.google.inject.TypeLiteral;
 
 @ConfiguresHttpApi
 public class AzureComputeHttpApiModule extends HttpApiModule<AzureComputeApi> {

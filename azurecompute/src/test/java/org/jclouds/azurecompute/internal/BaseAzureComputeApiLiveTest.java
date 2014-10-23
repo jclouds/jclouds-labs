@@ -16,11 +16,12 @@
  */
 package org.jclouds.azurecompute.internal;
 
+import static org.jclouds.azurecompute.config.AzureComputeProperties.SUBSCRIPTION_ID;
+
 import java.util.Properties;
+
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.azurecompute.AzureComputeApi;
-
-import static org.jclouds.azurecompute.config.AzureComputeProperties.SUBSCRIPTION_ID;
 
 public class BaseAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi> {
 

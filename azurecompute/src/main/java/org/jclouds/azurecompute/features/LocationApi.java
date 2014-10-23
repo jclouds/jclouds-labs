@@ -16,19 +16,21 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.xml.ListLocationsHandler;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.XMLResponseParser;
-
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 
 /**
  * The Service Management API includes operations for listing the available data center locations
