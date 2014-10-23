@@ -55,7 +55,7 @@ public class AzureManagementApiMetadata extends BaseHttpApiMetadata<AzureCompute
       protected Builder() {
          id("azurecompute")
          .name("Microsoft Azure Service Management Service API")
-         .version("2012-03-01")
+         .version("2014-06-01")
          .identityName("Path to Management Certificate .p12 file, or PEM string")
          .credentialName("Password to Management Certificate")
          .defaultEndpoint("https://management.core.windows.net/${" + SUBSCRIPTION_ID + "}")

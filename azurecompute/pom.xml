@@ -35,7 +35,7 @@
     <test.jclouds.azurecompute.subscription-id>FIXME_subscription-id</test.jclouds.azurecompute.subscription-id>
     <!-- note that there's no prefix of "test." in the url.  This is to ensure that jclouds inteprets the value, as opposed to maven -->
     <test.azurecompute.endpoint>https://management.core.windows.net/${jclouds.azurecompute.subscription-id}</test.azurecompute.endpoint>
-    <test.azurecompute.api-version>2012-03-01</test.azurecompute.api-version>
+    <test.azurecompute.api-version>2014-06-01</test.azurecompute.api-version>
     <test.azurecompute.build-version />
     <test.azurecompute.identity>/path/to/cert.p12</test.azurecompute.identity>
     <test.azurecompute.credential>password to cert</test.azurecompute.credential>
