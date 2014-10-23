@@ -22,7 +22,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(name = "UploadVAppTemplateParams")
@@ -129,7 +128,7 @@ public class UploadVAppTemplateParams extends ParamsType {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("transferFormat", transferFormat)
             .add("manifestRequired", manifestRequired).toString();
    }

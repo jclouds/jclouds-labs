@@ -31,9 +31,8 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Function;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -830,7 +829,7 @@ public class ResourceAllocationSettingData {
    }
 
    public ToStringHelper string() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("elementName", elementName)
             .add("instanceID", instanceID)
             .add("caption", caption)

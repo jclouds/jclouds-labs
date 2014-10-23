@@ -21,7 +21,6 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -122,6 +121,6 @@ public class VmQuestionAnswer {
 
     @Override
     public String toString() {
-       return MoreObjects.toStringHelper("").add("choiceId", choiceId).add("questionId", questionId).toString();
+       return Objects.toStringHelper("").add("choiceId", choiceId).add("questionId", questionId).toString();
     }
 }

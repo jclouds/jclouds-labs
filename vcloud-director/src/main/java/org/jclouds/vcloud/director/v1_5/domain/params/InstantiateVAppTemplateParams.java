@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.base.Objects;
-import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects.ToStringHelper;
 
 @XmlRootElement(name = "InstantiateVAppTemplateParams")
 public class InstantiateVAppTemplateParams extends InstantiateVAppParams {

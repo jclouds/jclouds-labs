@@ -21,8 +21,8 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+
 
 /**
  * Represents a capacity and usage of a given resource.
@@ -164,7 +164,7 @@ public class CapacityWithUsage extends Capacity<CapacityWithUsage> {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("used", used)
             .add("overhead", overhead).toString();
    }

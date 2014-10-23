@@ -16,7 +16,6 @@
  */
 package org.jclouds.compute.representations;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -84,6 +83,6 @@ public class Processor implements Serializable {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper(this).add("cores", cores).add("spped", speed).toString();
+      return Objects.toStringHelper(this).add("cores", cores).add("spped", speed).toString();
    }
 }

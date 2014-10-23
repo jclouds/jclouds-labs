@@ -16,7 +16,6 @@
  */
 package org.jclouds.representations;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -270,7 +269,7 @@ public class ProviderMetadata implements Serializable {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper(this).add("id", id).add("name", name).add("endpointName", endpointName)
+      return Objects.toStringHelper(this).add("id", id).add("name", name).add("endpointName", endpointName)
               .add("identityName", identityName).add("credentialName", credentialName).add("defaultModules", defaultModules)
               .add("documentation", documentation).add("views", views)
               .add("endpoint", endpoint).add("defaultProperties", defaultProperties).add("console", console)

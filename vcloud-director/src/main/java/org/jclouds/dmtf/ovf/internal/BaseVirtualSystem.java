@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlElementRef;
 import org.jclouds.dmtf.ovf.ProductSection;
 import org.jclouds.dmtf.ovf.SectionType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -161,7 +160,7 @@ public abstract class BaseVirtualSystem extends SectionType {
    }
 
    @Override
-   protected MoreObjects.ToStringHelper string() {
+   protected Objects.ToStringHelper string() {
       return super.string()
             .add("id", id)
             .add("name", name)

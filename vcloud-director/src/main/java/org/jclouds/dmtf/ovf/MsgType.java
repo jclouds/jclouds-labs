@@ -22,7 +22,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 
@@ -136,7 +135,7 @@ public class MsgType {
 
     @Override
     public String toString() {
-       return MoreObjects.toStringHelper("")
+       return Objects.toStringHelper("")
              .add("value", value).add("msgid", msgid).toString();
     }
 }

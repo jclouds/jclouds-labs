@@ -23,7 +23,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -135,8 +134,8 @@ public abstract class SectionType {
       return string().toString();
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper("").add("info", info).add("required", required);
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper("").add("info", info).add("required", required);
    }
 
 }

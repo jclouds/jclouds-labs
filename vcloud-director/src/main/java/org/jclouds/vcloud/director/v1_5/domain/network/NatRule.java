@@ -21,7 +21,6 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlType(name = "NatRule", propOrder = {
@@ -201,7 +200,7 @@ public class NatRule {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("description", description)
             .add("oneToOneBasicRule", oneToOneBasicRule)
             .add("oneToOneVmRule", oneToOneVmRule)

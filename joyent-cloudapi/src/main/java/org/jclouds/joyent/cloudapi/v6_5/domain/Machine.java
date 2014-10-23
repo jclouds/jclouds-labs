@@ -31,7 +31,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableMap;
@@ -387,7 +386,7 @@ public class Machine implements Comparable<Machine> {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").omitNullValues()
+      return Objects.toStringHelper("").omitNullValues()
                     .add("id", id)
                     .add("name", name)
                     .add("type", type)

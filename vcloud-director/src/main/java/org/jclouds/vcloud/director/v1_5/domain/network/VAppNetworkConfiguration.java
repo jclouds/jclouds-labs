@@ -25,9 +25,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.vcloud.director.v1_5.domain.Resource;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 @XmlRootElement(name = "NetworkConfiguration")
 @XmlType(name = "VAppNetworkConfiguration")
@@ -168,7 +167,7 @@ public class VAppNetworkConfiguration extends Resource {
 
    @Override
    public ToStringHelper string() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("description", description)
             .add("configuration", configuration)
             .add("deployed", deployed)

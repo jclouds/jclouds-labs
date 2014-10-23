@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -105,6 +104,6 @@ public class NetworkFeatures {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").add("services", services).toString();
+      return Objects.toStringHelper("").add("services", services).toString();
    }
 }

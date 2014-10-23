@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.dmtf.cim.CimString;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
@@ -133,7 +132,7 @@ public class PlatformSectionType extends SectionType<PlatformSectionType> {
    }
 
    @Override
-   protected MoreObjects.ToStringHelper string() {
+   protected Objects.ToStringHelper string() {
       return super.string()
             .add("version", version).add("vendor", vendor).add("timezone", timezone)
             .add("locale", locale).add("kind", kind).add("any", any);

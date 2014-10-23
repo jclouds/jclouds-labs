@@ -16,7 +16,6 @@
  */
 package org.jclouds.blobstore.representations;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 
@@ -221,7 +220,7 @@ public class BlobMetadata implements Serializable {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper(this).add("type", type).add("providerId", providerId).add("name", name)
+      return Objects.toStringHelper(this).add("type", type).add("providerId", providerId).add("name", name)
               .add("userMetadata", userMetadata).add("eTag", eTag).add("creationDate", creationDate)
               .add("lastModifiedDate", lastModifiedDate).add("publicUri", publicUri).add("contentMetadata", contentMetadata)
               .toString();

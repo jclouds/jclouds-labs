@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.dmtf.cim.CimString;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -285,7 +284,7 @@ public class ProductSection extends SectionType {
    }
 
    @Override
-   protected MoreObjects.ToStringHelper string() {
+   protected Objects.ToStringHelper string() {
       return super.string()
             .add("product", product)
             .add("vendor", vendor)

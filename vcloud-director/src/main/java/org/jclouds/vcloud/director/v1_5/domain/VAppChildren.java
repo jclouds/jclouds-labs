@@ -24,7 +24,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -133,6 +132,6 @@ public class VAppChildren {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").add("vApps", vApps).add("vms", vms).toString();
+      return Objects.toStringHelper("").add("vApps", vApps).add("vms", vms).toString();
    }
 }

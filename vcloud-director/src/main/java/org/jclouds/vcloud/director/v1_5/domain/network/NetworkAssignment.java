@@ -21,8 +21,8 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+
 
 /**
  * Represents mapping between a VM and vApp network.
@@ -125,7 +125,7 @@ public class NetworkAssignment
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("innerNetwork", innerNetwork)
             .add("containerNetwork", containerNetwork).toString();
    }

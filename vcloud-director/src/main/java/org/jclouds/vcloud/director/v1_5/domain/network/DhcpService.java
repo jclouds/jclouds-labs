@@ -22,7 +22,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlRootElement(name = "DhcpService")
@@ -141,7 +140,7 @@ public class DhcpService extends NetworkService<DhcpService> {
    }
 
    @Override
-   protected MoreObjects.ToStringHelper string() {
+   protected Objects.ToStringHelper string() {
       return super.string().add("defaultLeastTime", defaultLeaseTime).add("maxLeaseTime", maxLeaseTime).add("ipRange", ipRange);
    }
 }

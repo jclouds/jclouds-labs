@@ -41,7 +41,6 @@ import org.jclouds.vcloud.director.v1_5.domain.section.OperatingSystemSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.RuntimeInfoSection;
 import org.jclouds.vcloud.director.v1_5.domain.section.VirtualHardwareSection;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -161,7 +160,7 @@ public class InstantiationParams {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").add("sections", sections).toString();
+      return Objects.toStringHelper("").add("sections", sections).toString();
    }
    
 }

@@ -22,9 +22,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 @XmlRootElement(name = "OrgNetworkRecord")
 @XmlType(name = "QueryResultNetworkRecordType")
@@ -254,7 +253,7 @@ public class QueryResultNetworkRecord extends QueryResultRecord {
 
    @Override
    public ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).add("name", name).add("ipScopeId", ipScopeId).add("gateway", gateway).add("netmask", netmask).add("dns1", dns1).add("dns2", dns2).add("dnsSuffix", dnsSuffix).add("isBusy",
+      return Objects.toStringHelper(this).add("name", name).add("ipScopeId", ipScopeId).add("gateway", gateway).add("netmask", netmask).add("dns1", dns1).add("dns2", dns2).add("dnsSuffix", dnsSuffix).add("isBusy",
             isBusy);
    }
 

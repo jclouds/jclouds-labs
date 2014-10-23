@@ -18,7 +18,7 @@ package org.jclouds.vcloud.director.v1_5.domain.query;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Container for the list of typed queries available to the

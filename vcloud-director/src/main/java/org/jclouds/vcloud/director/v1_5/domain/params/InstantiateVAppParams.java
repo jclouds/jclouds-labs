@@ -29,7 +29,7 @@ import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 import org.jclouds.vcloud.director.v1_5.domain.Reference;
 
 import com.google.common.base.Objects;
-import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects.ToStringHelper;
 
 @XmlRootElement(name = "InstantiateVAppParams")
 @XmlType(name = "InstantiateVAppParamsType")

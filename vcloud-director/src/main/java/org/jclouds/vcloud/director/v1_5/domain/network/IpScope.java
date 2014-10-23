@@ -21,7 +21,6 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -242,7 +241,7 @@ public class IpScope {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").add("isInherited", isInherited)
+      return Objects.toStringHelper("").add("isInherited", isInherited)
             .add("gateway", gateway)
             .add("netmask", netmask)
             .add("dns1", dns1)

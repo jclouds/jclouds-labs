@@ -47,7 +47,7 @@ public class ListSshKeysLiveTest extends BaseDigitalOceanLiveTest {
    @Override
    protected void initialize() {
       super.initialize();
-      strategy = new ListSshKeys(api, MoreExecutors.newDirectExecutorService());
+      strategy = new ListSshKeys(api, MoreExecutors.sameThreadExecutor());
    }
 
    @BeforeClass

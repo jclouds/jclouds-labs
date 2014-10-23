@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -169,7 +168,7 @@ public class Session {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").add("user", user).add("org", org).add("href", href).add("links", links)
+      return Objects.toStringHelper("").add("user", user).add("org", org).add("href", href).add("links", links)
             .toString();
    }
 }

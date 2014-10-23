@@ -24,7 +24,6 @@ import org.jclouds.dmtf.ovf.DiskSection;
 import org.jclouds.dmtf.ovf.NetworkSection;
 import org.jclouds.dmtf.ovf.SectionType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -167,8 +166,8 @@ public abstract class BaseEnvelope<V extends BaseVirtualSystem, E extends BaseEn
       return string().toString();
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper("")
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper("")
             .add("diskSections", diskSections)
             .add("networkSections", networkSections)
             .add("additionalSections", additionalSections)

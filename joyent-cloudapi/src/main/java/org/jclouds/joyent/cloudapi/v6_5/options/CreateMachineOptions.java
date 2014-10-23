@@ -25,9 +25,8 @@ import org.jclouds.http.options.BaseHttpRequestOptions;
 import org.jclouds.util.Maps2;
 
 import com.google.common.base.Function;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -57,7 +56,7 @@ public class CreateMachineOptions extends BaseHttpRequestOptions {
 
    @Override
    public String toString() {
-      ToStringHelper toString = MoreObjects.toStringHelper("").omitNullValues();
+      ToStringHelper toString = Objects.toStringHelper("").omitNullValues();
       toString.add("name", name).add("package", name);
       if (metadata.size() > 0)
          toString.add("metadata", metadata);

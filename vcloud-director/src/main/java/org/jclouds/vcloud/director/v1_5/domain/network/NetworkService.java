@@ -21,7 +21,6 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlSeeAlso({
@@ -91,7 +90,7 @@ public abstract class NetworkService<T extends NetworkService<T>> {
       return string().toString();
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper("").add("isEnabled", isEnabled);
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper("").add("isEnabled", isEnabled);
    }
 }

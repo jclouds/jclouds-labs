@@ -16,7 +16,6 @@
  */
 package org.jclouds.compute.representations;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
@@ -96,6 +95,6 @@ public class ExecResponse implements Serializable {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper(this).add("out", output).add("error", error).add("exitStatus", exitStatus).toString();
+      return Objects.toStringHelper(this).add("out", output).add("error", error).add("exitStatus", exitStatus).toString();
    }
 }

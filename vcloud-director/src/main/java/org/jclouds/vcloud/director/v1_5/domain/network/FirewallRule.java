@@ -21,7 +21,6 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlType(name = "FirewallRule", propOrder = {
@@ -326,7 +325,7 @@ public class FirewallRule {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("isEnabled", isEnabled)
             .add("description", description)
             .add("policy", policy)

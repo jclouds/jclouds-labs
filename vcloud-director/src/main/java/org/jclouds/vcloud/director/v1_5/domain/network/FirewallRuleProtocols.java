@@ -21,7 +21,6 @@ import static com.google.common.base.Objects.equal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @XmlType(propOrder = {
@@ -155,7 +154,7 @@ public class FirewallRuleProtocols {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("")
+      return Objects.toStringHelper("")
             .add("tcp", tcp)
             .add("udp", udp)
             .add("icmp", icmp)

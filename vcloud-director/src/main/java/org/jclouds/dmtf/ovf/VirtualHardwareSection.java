@@ -28,7 +28,6 @@ import org.jclouds.dmtf.cim.ResourceAllocationSettingData;
 import org.jclouds.dmtf.cim.VirtualSystemSettingData;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -190,7 +189,7 @@ public class VirtualHardwareSection extends SectionType {
    }
 
    @Override
-   protected MoreObjects.ToStringHelper string() {
+   protected Objects.ToStringHelper string() {
       return super.string()
             .add("transport", transport)
             .add("virtualSystem", virtualSystem)

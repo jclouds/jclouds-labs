@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jclouds.vcloud.director.v1_5.domain.AccessSetting;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -179,6 +178,6 @@ public class ControlAccessParams {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper("").add("sharedToEveryone", sharedToEveryone).add("everyoneAccessLevel", everyoneAccessLevel).add("accessSettings", accessSettings).toString();
+      return Objects.toStringHelper("").add("sharedToEveryone", sharedToEveryone).add("everyoneAccessLevel", everyoneAccessLevel).add("accessSettings", accessSettings).toString();
    }
 }

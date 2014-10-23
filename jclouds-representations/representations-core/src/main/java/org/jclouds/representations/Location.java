@@ -16,7 +16,6 @@
  */
 package org.jclouds.representations;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
@@ -126,7 +125,7 @@ public class Location implements Serializable {
 
    @Override
    public String toString() {
-      return MoreObjects.toStringHelper(this).add("id", id).add("scope", scope).add("description", description)
+      return Objects.toStringHelper(this).add("id", id).add("scope", scope).add("description", description)
               .add("perentId", parentId).add("iso3166Codes", iso3166Codes).toString();
    }
 }
