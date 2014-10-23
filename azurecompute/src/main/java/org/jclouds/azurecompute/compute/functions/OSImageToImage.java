@@ -16,14 +16,15 @@
  */
 package org.jclouds.azurecompute.compute.functions;
 
-import com.google.common.base.Function;
-import org.jclouds.azurecompute.domain.Image;
+import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.compute.domain.Image;
 
-public class AzureImageToImage implements Function<Image, org.jclouds.compute.domain.Image> {
+import com.google.common.base.Function;
+
+public class OSImageToImage implements Function<OSImage, Image> {
 
    @Override
-   public org.jclouds.compute.domain.Image apply(Image input) {
+   public Image apply(OSImage input) {
       return null;
    }
-
 }

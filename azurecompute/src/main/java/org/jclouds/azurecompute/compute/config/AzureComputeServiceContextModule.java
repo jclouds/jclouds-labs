@@ -16,30 +16,31 @@
  */
 package org.jclouds.azurecompute.compute.config;
 
-import com.google.common.base.Function;
-import com.google.inject.TypeLiteral;
 import org.jclouds.azurecompute.compute.AzureComputeServiceAdapter;
-import org.jclouds.azurecompute.compute.functions.AzureImageToImage;
 import org.jclouds.azurecompute.compute.functions.DeploymentToNodeMetadata;
+import org.jclouds.azurecompute.compute.functions.OSImageToImage;
 import org.jclouds.azurecompute.compute.functions.RoleSizeToHardware;
 import org.jclouds.azurecompute.domain.Deployment;
-import org.jclouds.azurecompute.domain.Image;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.config.ComputeServiceAdapterContextModule;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.NodeMetadata;
 
+import com.google.common.base.Function;
+import com.google.inject.TypeLiteral;
+
 public class AzureComputeServiceContextModule
-      extends ComputeServiceAdapterContextModule<Deployment, RoleSize, Image, String> {
+      extends ComputeServiceAdapterContextModule<Deployment, RoleSize, OSImage, String> {
 
    @Override
    protected void configure() {
       super.configure();
-      bind(new TypeLiteral<ComputeServiceAdapter<Deployment, RoleSize, Image, String>>() {
+      bind(new TypeLiteral<ComputeServiceAdapter<Deployment, RoleSize, OSImage, String>>() {
       }).to(AzureComputeServiceAdapter.class);
-      bind(new TypeLiteral<Function<Image, org.jclouds.compute.domain.Image>>() {
-      }).to(AzureImageToImage.class);
+      bind(new TypeLiteral<Function<OSImage, org.jclouds.compute.domain.Image>>() {
+      }).to(OSImageToImage.class);
       bind(new TypeLiteral<Function<RoleSize, Hardware>>() {
       }).to(RoleSizeToHardware.class);
       bind(new TypeLiteral<Function<Deployment, NodeMetadata>>() {

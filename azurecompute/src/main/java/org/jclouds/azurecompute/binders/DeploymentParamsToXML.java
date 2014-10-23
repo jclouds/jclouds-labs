@@ -19,10 +19,10 @@ package org.jclouds.azurecompute.binders;
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static com.google.common.base.Throwables.propagate;
-import static org.jclouds.azurecompute.domain.Image.OSType.LINUX;
+import static org.jclouds.azurecompute.domain.OSImage.Type.LINUX;
 
 import org.jclouds.azurecompute.domain.DeploymentParams;
-import org.jclouds.azurecompute.domain.Image.OSType;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
@@ -44,7 +44,7 @@ public final class DeploymentParamsToXML implements Binder {
             .e("RoleType").t("PersistentVMRole").up()
             .e("ConfigurationSets");
 
-         if (params.os() == OSType.WINDOWS) {
+         if (params.os() == OSImage.Type.WINDOWS) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Windows
             configBuilder.e("ConfigurationSetType").t("WindowsProvisioningConfiguration").up()
                .e("ComputerName").t(params.name()).up()
@@ -61,7 +61,7 @@ public final class DeploymentParamsToXML implements Binder {
                .up() // Domain Join
                .e("StoredCertificateSettings").up()
                .up(); // Windows ConfigurationSet
-         } else if (params.os() == OSType.LINUX) {
+         } else if (params.os() == OSImage.Type.LINUX) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Linux
             configBuilder.e("ConfigurationSetType").t("LinuxProvisioningConfiguration").up()
                .e("HostName").t(params.name()).up()

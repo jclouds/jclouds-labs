@@ -22,8 +22,8 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.Location;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -31,8 +31,8 @@ import org.testng.annotations.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 
-@Test(groups = "live", testName = "ImageApiLiveTest")
-public class ImageApiLiveTest extends BaseAzureComputeApiLiveTest {
+@Test(groups = "live", testName = "OSImageApiLiveTest")
+public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    private ImmutableSet<String> locations;
 
@@ -48,37 +48,36 @@ public class ImageApiLiveTest extends BaseAzureComputeApiLiveTest {
    }
 
    public void testList() {
-      for (Image image : api().list()) {
-         checkOSImage(image);
+      for (OSImage OSImage : api().list()) {
+         checkOSImage(OSImage);
       }
    }
 
-   private void checkOSImage(Image image) {
-      assertNotNull(image.label(), "Label cannot be null for " + image);
-      assertNotNull(image.name(), "Name cannot be null for " + image);
-      assertNotNull(image.os(), "OS cannot be null for " + image);
-      assertTrue(image.logicalSizeInGB() > 0, "LogicalSizeInGB should be positive, if set" + image);
+   private void checkOSImage(OSImage OSImage) {
+      assertNotNull(OSImage.label(), "Label cannot be null for " + OSImage);
+      assertNotNull(OSImage.name(), "Name cannot be null for " + OSImage);
+      assertNotNull(OSImage.os(), "OS cannot be null for " + OSImage);
+      assertTrue(OSImage.logicalSizeInGB() > 0, "LogicalSizeInGB should be positive, if set" + OSImage);
 
-      if (image.category() != null) {
-         assertNotEquals("", image.category().trim(), "Invalid Category for " + image);
+      if (OSImage.category() != null) {
+         assertNotEquals("", OSImage.category().trim(), "Invalid Category for " + OSImage);
       }
 
-      if (image.mediaLink() != null) {
-         assertTrue(ImmutableSet.of("http", "https").contains(image.mediaLink().getScheme()),
-               "MediaLink should be an http(s) url" + image);
+      if (OSImage.mediaLink() != null) {
+         assertTrue(ImmutableSet.of("http", "https").contains(OSImage.mediaLink().getScheme()),
+               "MediaLink should be an http(s) url" + OSImage);
       }
-      if (image.location() != null) {
-         assertTrue(locations.contains(image.location()), "Location not in " + locations + " :" + image);
-      }
+
+      assertTrue(locations.containsAll(OSImage.locations()), "Locations not in " + locations + " :" + OSImage);
 
       // Ex. Dirty data in RightScale eula field comes out as an empty string.
-      assertFalse(image.eula().contains(""));
-      if (image.affinityGroup() != null) {
+      assertFalse(OSImage.eula().contains(""));
+      if (OSImage.affinityGroup() != null) {
          // TODO: list getAffinityGroups and check if there
       }
    }
 
-   private ImageApi api() {
-      return api.getImageApi();
+   private OSImageApi api() {
+      return api.getOSImageApi();
    }
 }

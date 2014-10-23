@@ -22,11 +22,11 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
 import org.jclouds.azurecompute.domain.DeploymentParams;
-import org.jclouds.azurecompute.domain.Image;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.DeploymentHandlerTest;
-import org.jclouds.azurecompute.xml.ListImagesHandlerTest;
+import org.jclouds.azurecompute.xml.ListOSImagesHandlerTest;
 import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -42,12 +42,12 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         Image image = ListImagesHandlerTest.expected().get(5); // CentOS
+         OSImage OSImage = ListOSImagesHandlerTest.expected().get(5); // CentOS
 
          DeploymentParams params = DeploymentParams.builder()
                .name("mydeployment")
                .size(RoleSize.MEDIUM)
-               .sourceImageName(image.name()).mediaLink(image.mediaLink()).os(image.os())
+               .sourceImageName(OSImage.name()).mediaLink(OSImage.mediaLink()).os(OSImage.os())
                .username("username").password("testpwd")
                .externalEndpoint(inboundTcpToLocalPort(80, 8080))
                .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
@@ -67,12 +67,12 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         Image image = ListImagesHandlerTest.expected().get(1); // Windows
+         OSImage OSImage = ListOSImagesHandlerTest.expected().get(1); // Windows
 
          DeploymentParams params = DeploymentParams.builder()
                .name("mydeployment")
                .size(RoleSize.MEDIUM)
-               .sourceImageName(image.name()).mediaLink(image.mediaLink()).os(image.os())
+               .sourceImageName(OSImage.name()).mediaLink(OSImage.mediaLink()).os(OSImage.os())
                .username("username").password("testpwd")
                .externalEndpoint(inboundTcpToLocalPort(80, 8080))
                .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();

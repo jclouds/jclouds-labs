@@ -21,8 +21,8 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.domain.Disk;
-import org.jclouds.azurecompute.domain.Image;
 import org.jclouds.azurecompute.domain.Location;
+import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -46,8 +46,8 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
                      return in.name();
                   }
                }));
-      images = ImmutableSet.copyOf(transform(api.getImageApi().list(), new Function<Image, String>() {
-         public String apply(Image in) {
+      images = ImmutableSet.copyOf(transform(api.getOSImageApi().list(), new Function<OSImage, String>() {
+         public String apply(OSImage in) {
             return in.name();
          }
       }));

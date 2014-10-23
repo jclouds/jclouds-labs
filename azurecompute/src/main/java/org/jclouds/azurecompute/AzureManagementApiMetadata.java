@@ -16,16 +16,18 @@
  */
 package org.jclouds.azurecompute;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.SUBSCRIPTION_ID;
+
 import java.net.URI;
 import java.util.Properties;
+
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
 import org.jclouds.azurecompute.config.AzureComputeHttpApiModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
-import static org.jclouds.azurecompute.config.AzureComputeProperties.SUBSCRIPTION_ID;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Microsoft Service Management Service API

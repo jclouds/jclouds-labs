@@ -16,11 +16,13 @@
  */
 package org.jclouds.azurecompute.functions;
 
-import com.google.common.base.Function;
+import static org.jclouds.http.HttpUtils.releasePayload;
+
 import javax.inject.Singleton;
+
 import org.jclouds.http.HttpResponse;
 
-import static org.jclouds.http.HttpUtils.releasePayload;
+import com.google.common.base.Function;
 
 /**
  * Parses an x-ms-request-id the header

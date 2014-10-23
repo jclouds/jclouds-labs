@@ -16,7 +16,11 @@
  */
 package org.jclouds.azurecompute.features;
 
+import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
+
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -24,6 +28,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.xml.ListDisksHandler;
@@ -31,9 +36,6 @@ import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
-
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
 /**
  * The Service Management API includes operations for managing the disks in your subscription.

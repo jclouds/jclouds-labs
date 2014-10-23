@@ -16,23 +16,25 @@
  */
 package org.jclouds.azurecompute.internal;
 
+import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Set;
+
+import org.jclouds.ContextBuilder;
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.concurrent.config.ExecutorServiceModule;
+import org.jclouds.util.Strings2;
+
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Set;
-import org.jclouds.ContextBuilder;
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.concurrent.config.ExecutorServiceModule;
-import org.jclouds.util.Strings2;
-
-import static com.google.common.base.Charsets.UTF_8;
-import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseAzureComputeApiMockTest {
    private final Set<Module> modules = ImmutableSet
@@ -81,7 +83,7 @@ public class BaseAzureComputeApiMockTest {
       RecordedRequest request = server.takeRequest();
       assertThat(request.getMethod()).isEqualTo(method);
       assertThat(request.getPath()).isEqualTo(path);
-      assertThat(request.getHeader("x-ms-version")).isEqualTo("2012-03-01");
+      assertThat(request.getHeader("x-ms-version")).isEqualTo("2014-06-01");
       assertThat(request.getHeader("Accept")).isEqualTo("application/xml");
       return request;
    }

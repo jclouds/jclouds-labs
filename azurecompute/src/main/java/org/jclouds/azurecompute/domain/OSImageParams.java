@@ -22,12 +22,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 
-import org.jclouds.azurecompute.domain.Image.OSType;
-
 import com.google.common.base.Objects;
 
 /** To create a new operating system image. */
-public final class ImageParams {
+public final class OSImageParams {
 
    /** Specifies a name that is used to identify the image when you create a Virtual Machine. */
    public String name() {
@@ -44,8 +42,8 @@ public final class ImageParams {
       return mediaLink;
    }
 
-   /** {@link Image#os() Os type} of the image. */
-   public OSType os() {
+   /** {@link OSImage#os() Os type} of the image. */
+   public OSImage.Type os() {
       return os;
    }
 
@@ -61,7 +59,7 @@ public final class ImageParams {
       private String name;
       private String label;
       private URI mediaLink;
-      private OSType os;
+      private OSImage.Type os;
 
       public Builder name(String name) {
          this.name = name;
@@ -78,16 +76,16 @@ public final class ImageParams {
          return this;
       }
 
-      public Builder os(OSType os) {
+      public Builder os(OSImage.Type os) {
          this.os = os;
          return this;
       }
 
-      public ImageParams build() {
-         return ImageParams.create(name, label, mediaLink, os);
+      public OSImageParams build() {
+         return OSImageParams.create(name, label, mediaLink, os);
       }
 
-      public Builder fromImageParams(ImageParams in) {
+      public Builder fromImageParams(OSImageParams in) {
          return name(in.name())
                .label(in.label())
                .mediaLink(in.mediaLink())
@@ -95,12 +93,12 @@ public final class ImageParams {
       }
    }
 
-   private static ImageParams create(String name, String label, URI mediaLink, OSType os) {
-      return new ImageParams(name, label, mediaLink, os);
+   private static OSImageParams create(String name, String label, URI mediaLink, OSImage.Type os) {
+      return new OSImageParams(name, label, mediaLink, os);
    }
 
    // TODO: Remove from here down with @AutoValue.
-   private ImageParams(String name, String label, URI mediaLink, OSType os) {
+   private OSImageParams(String name, String label, URI mediaLink, OSImage.Type os) {
       this.name = checkNotNull(name, "name");
       this.label = checkNotNull(label, "label");
       this.mediaLink = checkNotNull(mediaLink, "mediaLink");
@@ -110,7 +108,7 @@ public final class ImageParams {
    private final String name;
    private final String label;
    private final URI mediaLink;
-   private final OSType os;
+   private final OSImage.Type os;
 
    @Override public int hashCode() {
       return Objects.hashCode(name, label, mediaLink, os);
@@ -120,8 +118,8 @@ public final class ImageParams {
       if (this == object) {
          return true;
       }
-      if (object instanceof ImageParams) {
-         ImageParams that = ImageParams.class.cast(object);
+      if (object instanceof OSImageParams) {
+         OSImageParams that = OSImageParams.class.cast(object);
          return equal(name, that.name)
                && equal(label, that.label)
                && equal(mediaLink, that.mediaLink)
