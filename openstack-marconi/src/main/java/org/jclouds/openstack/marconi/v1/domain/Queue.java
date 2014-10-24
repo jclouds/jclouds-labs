@@ -17,7 +17,6 @@
 
 package org.jclouds.openstack.marconi.v1.domain;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import org.jclouds.javax.annotation.Nullable;
@@ -66,8 +65,8 @@ public class Queue {
       return Objects.equal(this.name, that.name);
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).omitNullValues()
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper(this).omitNullValues()
          .add("name", name).add("metadata", metadata);
    }
 

@@ -22,9 +22,8 @@ import java.beans.ConstructorProperties;
 
 import org.jclouds.openstack.v2_0.domain.Link;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -72,7 +71,7 @@ public class GroupInstance {
    }
 
    protected ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).add("id", id).add("links", links);
+      return Objects.toStringHelper(this).add("id", id).add("links", links);
    }
 
    @Override

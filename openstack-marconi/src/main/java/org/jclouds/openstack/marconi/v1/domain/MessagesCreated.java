@@ -17,7 +17,6 @@
 
 package org.jclouds.openstack.marconi.v1.domain;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import javax.inject.Named;
@@ -61,8 +60,8 @@ public class MessagesCreated {
       return Objects.equal(this.messageIds, that.messageIds);
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).add("messageIds", messageIds);
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper(this).add("messageIds", messageIds);
    }
 
    @Override

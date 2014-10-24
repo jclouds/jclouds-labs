@@ -20,9 +20,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Cloud Big Data ProfileSSHKey.
@@ -69,7 +68,7 @@ public class ProfileSSHKey implements Comparable<ProfileSSHKey> {
    }
 
    protected ToStringHelper string() {
-      return MoreObjects.toStringHelper(this)
+      return Objects.toStringHelper(this)
             .add("name", name)
             .add("publicKey", publicKey);
    }

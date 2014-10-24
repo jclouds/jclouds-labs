@@ -23,13 +23,10 @@ import java.beans.ConstructorProperties;
 import java.util.EnumSet;
 import java.util.Map;
 
-
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
-
 import org.jclouds.rackspace.autoscale.v1.features.GroupApi;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
@@ -160,7 +157,7 @@ public class CreateScalingPolicy implements Comparable<CreateScalingPolicy> {
    }
 
    protected ToStringHelper string() {
-      return MoreObjects.toStringHelper(this)
+      return Objects.toStringHelper(this)
             .add("name", name)
             .add("type", type)
             .add("cooldown", cooldown)

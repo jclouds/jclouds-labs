@@ -17,7 +17,6 @@
 
 package org.jclouds.openstack.marconi.v1.domain;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -53,8 +52,8 @@ public class QueueStats {
       return Objects.equal(this.messages, that.messages);
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper(this)
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper(this)
          .add("messagesStats", messages);
    }
 

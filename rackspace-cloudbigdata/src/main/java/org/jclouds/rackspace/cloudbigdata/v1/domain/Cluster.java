@@ -24,8 +24,8 @@ import java.util.Date;
 
 import org.jclouds.openstack.v2_0.domain.Link;
 
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 
 /**

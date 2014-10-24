@@ -17,7 +17,6 @@
 
 package org.jclouds.openstack.marconi.v1.domain;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import org.jclouds.javax.annotation.Nullable;
@@ -91,8 +90,8 @@ public class Message {
       return Objects.equal(this.id, that.id);
    }
 
-   protected MoreObjects.ToStringHelper string() {
-      return MoreObjects.toStringHelper(this).omitNullValues()
+   protected Objects.ToStringHelper string() {
+      return Objects.toStringHelper(this).omitNullValues()
          .add("id", id).add("ttl", ttl).add("body", body).add("age", age).add("claimId", claimId);
    }
 
