@@ -92,9 +92,6 @@
     <module>digitalocean</module>
     <module>joyent-cloudapi</module>
     <module>joyentcloud</module>
-    <module>fgcp</module>
-    <module>fgcp-au</module>
-    <module>fgcp-de</module>
     <module>abiquo</module>
     <module>jclouds-representations</module>
     <module>jclouds-management</module>
