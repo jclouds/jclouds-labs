@@ -1,6 +1,6 @@
 === Annotation processing
 In order for value object and service loader auto-generation, you will need to enable annotation processing in your IDE.
-
+If you notice any inconsistencies in your IDE after you enable annotation processing, try rerunning "Make Project".
 
 === Setting up test credentials
 

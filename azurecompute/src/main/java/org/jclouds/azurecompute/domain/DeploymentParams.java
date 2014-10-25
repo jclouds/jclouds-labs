@@ -16,15 +16,11 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.base.Objects.toStringHelper;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Objects;
+import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -34,122 +30,64 @@ import com.google.common.collect.Lists;
  * Warning : the OSType must be the one of the source image used to create the VM
  */
 // TODO: check which can be null.
-public final class DeploymentParams {
+@AutoValue
+public abstract class DeploymentParams {
+   @AutoValue
+   public abstract static class ExternalEndpoint {
 
-   public static final class ExternalEndpoint {
-
-      public String name() {
-         return name;
-      }
+      public abstract String name();
 
       /** Either {@code tcp} or {@code udp}. */
-      public String protocol() {
-         return protocol;
-      }
+      public abstract String protocol();
 
-      public int port() {
-         return port;
-      }
+      public abstract int port();
 
-      public int localPort() {
-         return localPort;
-      }
+      public abstract int localPort();
 
       public static ExternalEndpoint inboundTcpToLocalPort(int port, int localPort) {
-         return new ExternalEndpoint(String.format("tcp %s:%s", port, localPort), "tcp", port, localPort);
+         return new AutoValue_DeploymentParams_ExternalEndpoint(String.format("tcp %s:%s", port, localPort), "tcp",
+               port, localPort);
       }
 
       public static ExternalEndpoint inboundUdpToLocalPort(int port, int localPort) {
-         return new ExternalEndpoint(String.format("udp %s:%s", port, localPort), "udp", port, localPort);
+         return new AutoValue_DeploymentParams_ExternalEndpoint(String.format("udp %s:%s", port, localPort), "udp",
+               port, localPort);
       }
 
-      // TODO: Remove from here down with @AutoValue.
-      private ExternalEndpoint(String name, String protocol, int port, int localPort) {
-         this.name = checkNotNull(name, "name");
-         this.protocol = checkNotNull(protocol, "protocol");
-         this.port = port;
-         this.localPort = localPort;
-      }
-
-      private final String name;
-      private final String protocol;
-      private final int port;
-      private final int localPort;
-
-      @Override public int hashCode() {
-         return Objects.hashCode(name, protocol, localPort, port);
-      }
-
-      @Override public boolean equals(Object object) {
-         if (this == object) {
-            return true;
-         }
-         if (object instanceof ExternalEndpoint) {
-            ExternalEndpoint that = ExternalEndpoint.class.cast(object);
-            return equal(name, that.name)
-                  && equal(protocol, that.protocol)
-                  && equal(localPort, that.localPort)
-                  && equal(port, that.port);
-         } else {
-            return false;
-         }
-      }
-
-      @Override public String toString() {
-         return toStringHelper(this)
-               .add("name", name)
-               .add("protocol", protocol)
-               .add("port", port)
-               .add("localPort", localPort).toString();
+      ExternalEndpoint() { // For AutoValue only!
       }
    }
 
    /** The user-supplied name for this deployment. */
-   public String name() {
-      return name;
-   }
+   public abstract String name();
+
+   /** The size of the virtual machine to allocate. The default value is Small. */
+   public abstract RoleSize size();
 
    /**
     * Specifies the name of a user to be created in the sudoers group of the
     * virtual machine. User names are ASCII character strings 1 to 32
     * characters in length.
     */
-   public String username() {
-      return username;
-   }
-
-   /** The size of the virtual machine to allocate. The default value is Small. */
-   public RoleSize size() {
-      return size;
-   }
+   public abstract String username();
 
    /**
     * Specifies the associated password for the user name.
     * Passwords are ASCII character strings 6 to 72 characters in
     * length.
     */
-   public String password() {
-      return password;
-   }
+   public abstract String password();
 
    /** {@link OSImage#name() name} of the user or platform image. */
-   public String sourceImageName() {
-      return sourceImageName;
-   }
+   public abstract String sourceImageName();
 
    /** Indicates the {@link OSImage#mediaLink() location} when {@link #sourceImageName() source} is a platform image. */
-   public URI mediaLink() {
-      return mediaLink;
-   }
+   public abstract URI mediaLink();
 
    /** {@link OSImage#os() Os type} of the {@link #sourceImageName() source image}. */
-   public OSImage.Type os() {
-      return os;
-   }
+   public abstract OSImage.Type os();
 
-   public List<ExternalEndpoint> externalEndpoints() {
-      return externalEndpoints;
-   }
+   public abstract List<ExternalEndpoint> externalEndpoints();
 
    public Builder toBuilder() {
       return builder().fromDeploymentParams(this);
@@ -233,63 +171,6 @@ public final class DeploymentParams {
 
    private static DeploymentParams create(String name, RoleSize size, String username, String password, String sourceImageName,
          URI mediaLink, OSImage.Type os, List<ExternalEndpoint> externalEndpoints) {
-      return new DeploymentParams(name, size, username, password, sourceImageName, mediaLink, os, externalEndpoints);
-   }
-
-   // TODO: Remove from here down with @AutoValue.
-   private DeploymentParams(String name, RoleSize size, String username, String password, String sourceImageName, URI mediaLink,
-         OSImage.Type os, List<ExternalEndpoint> externalEndpoints) {
-      this.name = checkNotNull(name, "name");
-      this.size = checkNotNull(size, "size");
-      this.username = checkNotNull(username, "username");
-      this.password = checkNotNull(password, "password");
-      this.sourceImageName = checkNotNull(sourceImageName, "sourceImageName");
-      this.mediaLink = checkNotNull(mediaLink, "mediaLink");
-      this.os = checkNotNull(os, "os");
-      this.externalEndpoints = checkNotNull(externalEndpoints, "externalEndpoints");
-   }
-
-   private final String name;
-   private final RoleSize size;
-   private final String username;
-   private final String password;
-   private final String sourceImageName;
-   private final URI mediaLink;
-   private final OSImage.Type os;
-   private final List<ExternalEndpoint> externalEndpoints;
-
-   @Override public int hashCode() {
-      return Objects.hashCode(name, sourceImageName, username, password, mediaLink, size, os, externalEndpoints);
-   }
-
-   @Override public boolean equals(Object object) {
-      if (this == object) {
-         return true;
-      }
-      if (object instanceof DeploymentParams) {
-         DeploymentParams that = DeploymentParams.class.cast(object);
-         return equal(name, that.name)
-               && equal(size, that.size)
-               && equal(username, that.username)
-               && equal(password, that.password)
-               && equal(sourceImageName, that.sourceImageName)
-               && equal(mediaLink, that.mediaLink)
-               && equal(os, that.os)
-               && equal(externalEndpoints, that.externalEndpoints);
-      } else {
-         return false;
-      }
-   }
-
-   @Override public String toString() {
-      return toStringHelper(this)
-            .add("name", name)
-            .add("size", size)
-            .add("username", username)
-            .add("password", password)
-            .add("sourceImageName", sourceImageName)
-            .add("mediaLink", mediaLink)
-            .add("os", os)
-            .add("externalEndpoints", externalEndpoints).toString();
+      return new AutoValue_DeploymentParams(name, size, username, password, sourceImageName, mediaLink, os, externalEndpoints);
    }
 }

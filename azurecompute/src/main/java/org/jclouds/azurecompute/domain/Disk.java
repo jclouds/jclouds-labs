@@ -16,118 +16,58 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.base.Objects.toStringHelper;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 
 import org.jclouds.javax.annotation.Nullable;
 
-import com.google.common.base.Objects;
+import com.google.auto.value.AutoValue;
 
 /**
  * A disk in the image repository.
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
  */
-public final class Disk {
-   public static final class Attachment {
+@AutoValue
+public abstract class Disk {
+   @AutoValue
+   public abstract static class Attachment {
       /** The deployment in which the disk is being used. */
-      public String deployment() {
-         return deployment;
-      }
+      public abstract String deployment();
 
       /** The cloud service in which the disk is being used. */
-      public String hostedService() {
-         return hostedService;
-      }
+      public abstract String hostedService();
 
       /** The virtual machine that the disk is attached to. */
-      public String virtualMachine() {
-         return virtualMachine;
-      }
+      public abstract String virtualMachine();
 
       public static Attachment create(String hostedService, String deployment, String virtualMachine) {
-         return new Attachment(hostedService, deployment, virtualMachine);
+         return new AutoValue_Disk_Attachment(hostedService, deployment, virtualMachine);
       }
-
-      // TODO: Remove from here down with @AutoValue.
-      private Attachment(String hostedService, String deployment, String virtualMachine) {
-         this.hostedService = checkNotNull(hostedService, "hostedService");
-         this.deployment = checkNotNull(deployment, "deployment");
-         this.virtualMachine = checkNotNull(virtualMachine, "virtualMachine");
-      }
-
-      private final String hostedService;
-      private final String deployment;
-      private final String virtualMachine;
-
-      @Override
-      public int hashCode() {
-         return Objects.hashCode(hostedService, deployment, virtualMachine);
-      }
-
-      @Override
-      public boolean equals(Object obj) {
-         if (this == obj) {
-            return true;
-         }
-         if (obj == null) {
-            return false;
-         }
-         if (getClass() != obj.getClass()) {
-            return false;
-         }
-         Attachment other = (Attachment) obj;
-         return equal(this.hostedService, other.hostedService) &&
-               equal(this.deployment, other.deployment) &&
-               equal(this.virtualMachine, other.virtualMachine);
-      }
-
-      @Override
-      public String toString() {
-         return Objects.toStringHelper(this)
-               .add("hostedService", hostedService)
-               .add("deployment", deployment)
-               .add("virtualMachine", virtualMachine).toString();
-      }
-
    }
 
    /**
     * The name of the disk. This is the name that is used when creating one or more virtual machines
     * using the disk.
     */
-   public String name() {
-      return name;
-   }
+   public abstract String name();
 
    /**
     * The geo-location of the disk in Windows Azure, if the disk is not
     * associated with an affinity group. If a location has been specified, the AffinityGroup element
     * is not returned.
     */
-   @Nullable public String location() {
-      return location;
-   }
+   @Nullable public abstract String location();
 
    /**
     * The affinity group with which this disk is associated, if any. If the service is
     * associated with an affinity group, the Location element is not returned.
     */
-   @Nullable public String affinityGroup() {
-      return affinityGroup;
-   }
+   @Nullable public abstract String affinityGroup();
 
-   @Nullable public String description() {
-      return description;
-   }
+   @Nullable public abstract String description();
 
    /** The operating system type of the OS image, or null if a data disk. */
-   @Nullable public OSImage.Type os() {
-      return os;
-   }
+   @Nullable public abstract OSImage.Type os();
 
    /**
     * The location of the blob in the blob store in which the media for the image is located. The
@@ -138,99 +78,26 @@ public final class Disk {
     *
     * http://example.blob.core.windows.net/disks/myimage.vhd
     */
-   @Nullable public URI mediaLink() {
-      return mediaLink;
-   }
+   @Nullable public abstract URI mediaLink();
 
-   @Nullable public Integer logicalSizeInGB() {
-      return logicalSizeInGB;
-   }
+   @Nullable public abstract Integer logicalSizeInGB();
 
    /**
     * Contains properties that specify a virtual machine that currently using the disk. A disk
     * cannot be deleted as long as it is attached to a virtual machine.
     */
-   @Nullable public Attachment attachedTo() {
-      return attachedTo;
-   }
+   @Nullable public abstract Attachment attachedTo();
 
    /**
     * The name of the OS Image from which the disk was created. This property is populated
     * automatically when a disk is created from an OS image by calling the Add Role, Create
     * Deployment, or Provision Disk operations.
     */
-   @Nullable public String sourceImage() {
-      return sourceImage;
-   }
+   @Nullable public abstract String sourceImage();
 
-   public static Disk create(String name, String location, String affinityGroup, String description,
-         OSImage.Type os, URI mediaLink, Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
-      return new Disk(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB, attachedTo,
+   public static Disk create(String name, String location, String affinityGroup, String description, OSImage.Type os,
+         URI mediaLink, Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
+      return new AutoValue_Disk(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB, attachedTo,
             sourceImage);
-   }
-
-   // TODO: Remove from here down with @AutoValue.
-   private Disk(String name, String location, String affinityGroup, String description, OSImage.Type os, URI mediaLink,
-         Integer logicalSizeInGB, Attachment attachedTo, String sourceImage) {
-      this.name = checkNotNull(name, "name");
-      this.location = location;
-      this.affinityGroup = affinityGroup;
-      this.description = description;
-      this.os = os;
-      this.mediaLink = mediaLink;
-      this.logicalSizeInGB = checkNotNull(logicalSizeInGB, "logicalSizeInGB of %s", name);
-      this.attachedTo = attachedTo;
-      this.sourceImage = sourceImage;
-   }
-
-   private final String name;
-   private final String location;
-   private final String affinityGroup;
-   private final String description;
-   private final OSImage.Type os;
-   private final URI mediaLink;
-   private final Integer logicalSizeInGB;
-   private final Attachment attachedTo;
-   private final String sourceImage;
-
-   @Override
-   public boolean equals(Object object) {
-      if (this == object) {
-         return true;
-      }
-      if (object instanceof Disk) {
-         Disk that = Disk.class.cast(object);
-         return equal(name, that.name) &&
-               equal(location, that.location) &&
-               equal(affinityGroup, that.affinityGroup) &&
-               equal(description, that.description) &&
-               equal(os, that.os) &&
-               equal(mediaLink, that.mediaLink) &&
-               equal(logicalSizeInGB, that.logicalSizeInGB) &&
-               equal(attachedTo, that.attachedTo) &&
-               equal(sourceImage, that.sourceImage);
-      } else {
-         return false;
-      }
-   }
-
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB,
-            attachedTo, sourceImage);
-   }
-
-   @Override
-   public String toString() {
-      return toStringHelper(this)
-            .add("name", name)
-            .add("location", location)
-            .add("affinityGroup", affinityGroup)
-            .add("description", description)
-            .add("os", os)
-            .add("mediaLink", mediaLink)
-            .add("logicalSizeInGB", logicalSizeInGB)
-            .add("attachedTo", attachedTo)
-            .add("sourceImage", sourceImage).toString();
    }
 }
