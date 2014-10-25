@@ -1,3 +1,6 @@
+=== Annotation processing
+In order for value object and service loader auto-generation, you will need to enable annotation processing in your IDE.
+
 
 === Setting up test credentials
 
