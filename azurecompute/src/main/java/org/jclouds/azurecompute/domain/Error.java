@@ -16,16 +16,13 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.base.Objects.toStringHelper;
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import com.google.common.base.Objects;
+import com.google.auto.value.AutoValue;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460801" >api</a>
  */
-public final class Error {
+@AutoValue
+public abstract class Error {
    public static enum Code {
       MISSING_OR_INCORRECT_VERSION_HEADER,
       INVALID_XML_REQUEST,
@@ -43,50 +40,12 @@ public final class Error {
    }
 
    /** Error code */
-   public Code getCode() {
-      return code;
-   }
+   public abstract Code code();
 
    /** User message */
-   public String message() {
-      return message;
-   }
+   public abstract String message();
 
    public static Error create(Code code, String message) {
-      return new Error(code, message);
-   }
-
-   // TODO: Remove from here down with @AutoValue.
-   private Error(Code code, String message) {
-      this.code = checkNotNull(code, "code");
-      this.message = checkNotNull(message, "message");
-   }
-
-   private final Code code;
-   private final String message;
-
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(code, message);
-   }
-
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj) {
-         return true;
-      }
-      if (obj == null) {
-         return false;
-      }
-      if (getClass() != obj.getClass()) {
-         return false;
-      }
-      Error other = (Error) obj;
-      return equal(this.code, other.code) && equal(this.message, other.message);
-   }
-
-   @Override
-   public String toString() {
-      return toStringHelper(this).add("code", code).add("message", message).toString();
+      return new AutoValue_Error(code, message);
    }
 }

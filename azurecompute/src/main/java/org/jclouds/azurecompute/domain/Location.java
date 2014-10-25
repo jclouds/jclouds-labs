@@ -16,73 +16,24 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.List;
 
-import com.google.common.base.Objects;
+import com.google.auto.value.AutoValue;
 
 /** A data center location that is valid for your subscription. */
-public final class Location {
+@AutoValue
+public abstract class Location {
 
    /** The name of the data center location. Ex. {@code West Europe}. */
-   public String name() {
-      return name;
-   }
+   public abstract String name();
 
    /** The localized name of the data center location. */
-   public String displayName() {
-      return displayName;
-   }
+   public abstract String displayName();
 
    /** Indicates the services available at this location. Ex. {@code Compute}. */
-   public List<String> availableServices() {
-      return availableServices;
-   }
+   public abstract List<String> availableServices();
 
    public static Location create(String name, String displayName, List<String> availableServices) {
-      return new Location(name, displayName, availableServices);
-   }
-
-   // TODO: Remove from here down with @AutoValue.
-   private Location(String name, String displayName, List<String> availableServices) {
-      this.name = checkNotNull(name, "name");
-      this.displayName = checkNotNull(displayName, "displayName");
-      this.availableServices = checkNotNull(availableServices, "availableServices");
-   }
-
-   private final String name;
-   private final String displayName;
-   private final List<String> availableServices;
-
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(name, displayName, availableServices);
-   }
-
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj) {
-         return true;
-      }
-      if (obj == null) {
-         return false;
-      }
-      if (getClass() != obj.getClass()) {
-         return false;
-      }
-      Location other = (Location) obj;
-      return equal(this.name, other.name) &&
-            equal(this.displayName, other.displayName) &&
-            equal(this.availableServices, other.availableServices);
-   }
-
-   @Override
-   public String toString() {
-      return Objects.toStringHelper(this)
-            .add("name", name)
-            .add("displayName", displayName)
-            .add("availableServices", availableServices).toString();
+      return new AutoValue_Location(name, displayName, availableServices);
    }
 }
