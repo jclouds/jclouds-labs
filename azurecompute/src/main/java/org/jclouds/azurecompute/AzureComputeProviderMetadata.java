@@ -24,9 +24,9 @@ import java.util.Properties;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 
-/**
- * Implementation of {@link ProviderMetadata} for Microsoft Azure Service Management Service.
- */
+import com.google.auto.service.AutoService;
+
+@AutoService(ProviderMetadata.class)
 public class AzureComputeProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {
