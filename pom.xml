@@ -57,6 +57,7 @@
     <module>openstack-glance</module>
     <module>openstack-heat</module>
     <module>openstack-neutron</module>
+    <module>openstack-poppy</module>
     <module>openstack-marconi</module>
     <module>rackspace-autoscale</module>
     <module>rackspace-autoscale-uk</module>
