@@ -65,9 +65,17 @@ public class BaseDockerApiLiveTest extends BaseApiLiveTest<DockerApi> {
       String result = null;
       try {
          result = CharStreams.toString(new InputStreamReader(stream, Charsets.UTF_8));
-         Closeables.close(stream, swallowIOException);
       } catch (IOException e) {
          Assert.fail();
+      } finally {
+         // TODO: remove swallowIOException over-optimization and just use Closeables2.closeQuietly
+         try {
+            stream.close();
+         } catch (IOException e) {
+            if (!swallowIOException) {
+               throw new RuntimeException(e);
+            }
+         }
       }
       return result;
    }
