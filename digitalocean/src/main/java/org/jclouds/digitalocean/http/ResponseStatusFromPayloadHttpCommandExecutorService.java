@@ -17,8 +17,8 @@
 package org.jclouds.digitalocean.http;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.io.Closeables.close;
 import static org.jclouds.io.Payloads.newInputStreamPayload;
+import static org.jclouds.util.Closeables2.closeQuietly;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -94,7 +94,7 @@ public class ResponseStatusFromPayloadHttpCommandExecutorService extends JavaUrl
             try {
                in = new ByteArrayInputStream(ByteStreams.toByteArray(originalInputStream));
             } finally {
-               close(originalInputStream, true);
+               closeQuietly(originalInputStream);
             }
          }
 

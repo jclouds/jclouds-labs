@@ -16,6 +16,7 @@
  */
 package org.jclouds.snia.cdmi.v1.features;
 
+import static org.jclouds.util.Closeables2.closeQuietly;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -43,7 +44,6 @@ import org.testng.annotations.Test;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteSource;
-import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import com.google.common.net.MediaType;
 
@@ -179,7 +179,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          try {
             Files.asByteSink(tmpFileOut).writeFrom(is);
          } finally {
-            Closeables.closeQuietly(is);
+            closeQuietly(is);
          }
          assertEquals(Files.equal(tmpFileOut, tmpFileIn), true);
          tmpFileOut.delete();
@@ -232,7 +232,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          try {
             Files.asByteSink(tmpFileOut).writeFrom(is);
          } finally {
-            Closeables.closeQuietly(is);
+            closeQuietly(is);
          }
          assertEquals(Files.equal(tmpFileOut, inFile), true);
          tmpFileOut.delete();
@@ -285,7 +285,7 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
          try {
             Files.asByteSink(tmpFileOut).writeFrom(is);
          } finally {
-            Closeables.closeQuietly(is);
+            closeQuietly(is);
          }
          assertEquals(Files.equal(tmpFileOut, inFile), true);
          tmpFileOut.delete();

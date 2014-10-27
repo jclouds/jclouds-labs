@@ -16,10 +16,8 @@
  */
 package org.jclouds.abiquo.handlers;
 
-import static com.google.common.base.Throwables.propagate;
 import static javax.ws.rs.core.Response.Status.fromStatusCode;
-
-import java.io.IOException;
+import static org.jclouds.util.Closeables2.closeQuietly;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,7 +32,6 @@ import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
 
 import com.abiquo.model.transport.error.ErrorsDto;
-import com.google.common.io.Closeables;
 
 /**
  * Parse Abiquo API errors and set the appropriate exception.
@@ -81,12 +78,8 @@ public class AbiquoErrorHandler implements HttpErrorHandler {
                break;
          }
       } finally {
-         try {
-            Closeables.close(response.getPayload(), true);
-            command.setException(exception);
-         } catch (IOException e) {
-            throw propagate(e);
-         }
+         closeQuietly(response.getPayload());
+         command.setException(exception);
       }
    }
 

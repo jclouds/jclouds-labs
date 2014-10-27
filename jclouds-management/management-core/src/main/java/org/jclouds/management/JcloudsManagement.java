@@ -19,12 +19,12 @@ package org.jclouds.management;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.io.Closeables;
 import org.jclouds.ContextBuilder;
 import org.jclouds.apis.Apis;
 import org.jclouds.codec.ToApiMetadata;
 import org.jclouds.codec.ToContext;
 import org.jclouds.codec.ToProvider;
+import org.jclouds.util.Closeables2;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.management.config.ManagementLifecycle;
 import org.jclouds.management.internal.BaseManagementContext;
@@ -119,7 +119,7 @@ public class JcloudsManagement implements JcloudsManagementMBean, ManagedBean {
             bis = new ByteArrayInputStream(input.getBytes(Charsets.UTF_8));
             properties.load(bis);
          } finally {
-            Closeables.close(bis, true);
+            Closeables2.closeQuietly(bis);
          }
       }
       return properties;
