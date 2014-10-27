@@ -67,7 +67,6 @@
   <modules>
     <module>azurecompute</module>
     <module>docker</module>
-    <module>virtualbox</module>
     <module>vcloud-director</module>
     <module>cdmi</module>
     <module>cloudsigma2</module>
