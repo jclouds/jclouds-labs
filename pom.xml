@@ -81,7 +81,6 @@
   <modules>
     <module>azurecompute</module>
     <module>docker</module>
-    <module>virtualbox</module>
     <module>vcloud-director</module>
     <module>dmtf</module>
     <module>cdmi</module>
