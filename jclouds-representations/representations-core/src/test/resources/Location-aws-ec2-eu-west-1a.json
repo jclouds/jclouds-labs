@@ -1,9 +1,0 @@
-{
-    id: "eu-west-1a",
-    parentId: "eu-west-1",
-    scope: "ZONE",
-    iso3166Codes: [
-        "IE"
-    ],
-    description: "eu-west-1a"
-}
