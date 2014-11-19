@@ -16,7 +16,6 @@
  */
 package org.jclouds.joyent.joyentcloud;
 
-import static com.google.common.base.Predicates.not;
 import static org.jclouds.compute.domain.OsFamily.SMARTOS;
 import static org.jclouds.compute.domain.OsFamily.UBUNTU;
 import static org.testng.Assert.assertEquals;
@@ -24,12 +23,10 @@ import static org.testng.Assert.assertEquals;
 import java.io.IOException;
 import java.util.Set;
 
-import org.jclouds.compute.domain.OsFamilyVersion64Bit;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.internal.BaseTemplateBuilderLiveTest;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 
 @Test(groups = "live", singleThreaded = true, testName = "JoyentCloudTemplateBuilderLiveTest")
@@ -37,29 +34,6 @@ public class JoyentCloudTemplateBuilderLiveTest extends BaseTemplateBuilderLiveT
 
    public JoyentCloudTemplateBuilderLiveTest() {
       provider = "joyentcloud";
-   }
-
-   @Override
-   protected Predicate<OsFamilyVersion64Bit> defineUnsupportedOperatingSystems() {
-      return not(new Predicate<OsFamilyVersion64Bit>() {
-
-         @Override
-         public boolean apply(OsFamilyVersion64Bit input) {
-            switch (input.family) {
-            case UBUNTU:
-               return (input.version.equals("") || input.version.equals("10.04") || input.version.equals("12.04"))
-                     && input.is64Bit;
-            case DEBIAN:
-               return input.is64Bit && !input.version.equals("5.0");
-            case CENTOS:
-               return (input.version.equals("") || input.version.equals("5.7") || input.version.equals("6.0"))
-                     && input.is64Bit;
-            default:
-               return false;
-            }
-         }
-
-      });
    }
 
    @Test
