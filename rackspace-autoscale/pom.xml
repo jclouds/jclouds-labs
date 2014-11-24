@@ -43,14 +43,8 @@
     <test.rackspace-autoscale.identity>FIXME_IDENTITY</test.rackspace-autoscale.identity>
     <test.rackspace-autoscale.credential>FIXME_CREDENTIALS</test.rackspace-autoscale.credential>
     <test.jclouds.keystone.credential-type>passwordCredentials</test.jclouds.keystone.credential-type>
-
     <jclouds.osgi.export>org.jclouds.rackspace.autoscale.v1_0*;version="${project.version}"</jclouds.osgi.export>
-    <jclouds.osgi.import>
-      org.jclouds.rest.internal;version="${project.version}",
-      org.jclouds.labs*;version="${project.version}",
-      org.jclouds*;version="${project.version}",
-      *
-    </jclouds.osgi.import>
+    <jclouds.osgi.import>org.jclouds*;version="${project.version}",*</jclouds.osgi.import>
   </properties>
 
   <repositories>
@@ -103,14 +97,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>org.apache.jclouds.api</groupId>
-    	<artifactId>rackspace-cloudidentity</artifactId>
-    	<version>${project.parent.version}</version>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>rackspace-cloudidentity</artifactId>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp</groupId>
       <artifactId>mockwebserver</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

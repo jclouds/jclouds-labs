@@ -22,6 +22,7 @@ import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERV
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleHttpApiModule;
@@ -31,6 +32,7 @@ import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticati
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
@@ -39,6 +41,7 @@ import com.google.inject.Module;
  *
  * @see AutoscaleApi
  */
+@AutoService(ApiMetadata.class)
 public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
 
    @Override

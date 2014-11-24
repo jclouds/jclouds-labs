@@ -36,12 +36,14 @@ import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticati
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
  * Implementation of {@link ProviderMetadata} for Rackspace US Auto Scale API.
  */
+@AutoService(ProviderMetadata.class)
 public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {

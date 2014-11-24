@@ -30,12 +30,14 @@ import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for the Heat API.
  */
+@AutoService(ApiMetadata.class)
 public class HeatApiMetadata extends BaseHttpApiMetadata<HeatApi> {
 
    @Override
