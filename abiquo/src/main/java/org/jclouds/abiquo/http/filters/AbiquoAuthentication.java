@@ -39,7 +39,7 @@ public class AbiquoAuthentication implements HttpRequestFilter {
    private final Supplier<String> authTokenProvider;
 
    @Inject
-   public AbiquoAuthentication(@Authentication Supplier<String> authTokenProvider) {
+   AbiquoAuthentication(@Authentication Supplier<String> authTokenProvider) {
       this.authTokenProvider = checkNotNull(authTokenProvider, "authTokenProvider must not be null");
    }
 

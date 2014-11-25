@@ -20,7 +20,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.rest.annotations.ApiVersion;
 
@@ -38,23 +37,18 @@ public class AppendApiVersionToAbiquoMimeType implements Function<String, String
    protected String apiVersion;
 
    @Inject
-   public AppendApiVersionToAbiquoMimeType(@ApiVersion final String apiVersion) {
-      super();
+   AppendApiVersionToAbiquoMimeType(@ApiVersion final String apiVersion) {
       this.apiVersion = checkNotNull(apiVersion, "apiVersion");
    }
 
    @Override
    public String apply(final String input) {
-      MediaType mediaType = MediaType.valueOf(checkNotNull(input, "input"));
-      if (isAbiquoMimeType(input) && !mediaType.getParameters().containsKey("version")) {
-         return mediaType.toString() + ";version=" + apiVersion;
+      checkNotNull(input, "input");
+      if (input.startsWith(ABIQUO_MIME_TYPE_PREFIX) && !input.contains("version")) {
+         return input + ";version=" + apiVersion;
       } else {
-         return mediaType.toString();
+         return input;
       }
-   }
-
-   private static boolean isAbiquoMimeType(final String mimeType) {
-      return mimeType.startsWith(ABIQUO_MIME_TYPE_PREFIX);
    }
 
 }

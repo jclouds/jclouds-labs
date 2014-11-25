@@ -28,15 +28,6 @@ public final class AbiquoProperties {
    public static final String CREDENTIAL_TYPE = "abiquo.credential-type";
 
    /**
-    * The delay (in ms) used between requests by the
-    * <code>MonitoringService<code>
-    * when monitoring asynchronous task state.
-    * <p>
-    * Default value: 5000 ms
-    */
-   public static final String ASYNC_TASK_MONITOR_DELAY = "abiquo.monitor-delay";
-
-   /**
     * The name of the Abiquo logger.
     */
    public static final String ABIQUO_LOGGER = "jclouds.abiquo";

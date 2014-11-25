@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-import javax.ws.rs.core.Cookie;
+import java.net.HttpCookie;
 
 import org.easymock.EasyMock;
 import org.jclouds.http.HttpResponse;
@@ -45,7 +45,7 @@ public class GetTokenFromApiTest {
       expect(response.getHeaders()).andReturn(ImmutableMultimap.<String, String> of());
       replay(response);
 
-      Optional<Cookie> token = readAuthenticationToken(response);
+      Optional<HttpCookie> token = readAuthenticationToken(response);
       assertFalse(token.isPresent());
 
       verify(response);
@@ -56,30 +56,30 @@ public class GetTokenFromApiTest {
       expect(response.getHeaders()).andReturn(ImmutableMultimap.<String, String> of("Accept", "application/xml"));
       replay(response);
 
-      Optional<Cookie> token = readAuthenticationToken(response);
+      Optional<HttpCookie> token = readAuthenticationToken(response);
       assertFalse(token.isPresent());
 
       verify(response);
    }
 
-   public void testGetTokenWithOtherCookie() {
+   public void testGetTokenWithOtherHttpCookie() {
       HttpResponse response = EasyMock.createMock(HttpResponse.class);
       expect(response.getHeaders()).andReturn(ImmutableMultimap.<String, String> of(HttpHeaders.SET_COOKIE, "foo=bar"));
       replay(response);
 
-      Optional<Cookie> token = readAuthenticationToken(response);
+      Optional<HttpCookie> token = readAuthenticationToken(response);
       assertFalse(token.isPresent());
 
       verify(response);
    }
 
-   public void testGetTokenWithAuthenticationCookie() {
+   public void testGetTokenWithAuthenticationHttpCookie() {
       HttpResponse response = EasyMock.createMock(HttpResponse.class);
       expect(response.getHeaders()).andReturn(
             ImmutableMultimap.<String, String> of(HttpHeaders.SET_COOKIE, "auth=the-token"));
       replay(response);
 
-      Optional<Cookie> token = readAuthenticationToken(response);
+      Optional<HttpCookie> token = readAuthenticationToken(response);
       assertTrue(token.isPresent());
       assertEquals(token.get().getName(), "auth");
       assertEquals(token.get().getValue(), "the-token");

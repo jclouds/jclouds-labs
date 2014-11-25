@@ -17,20 +17,20 @@
 package org.jclouds.abiquo.functions.auth;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Iterables.tryFind;
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.jclouds.abiquo.config.AbiquoAuthenticationModule.AUTH_TOKEN_NAME;
 import static org.jclouds.http.filters.BasicAuthentication.basic;
 
+import java.net.HttpCookie;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.ws.rs.core.Cookie;
 
 import org.jclouds.abiquo.config.AbiquoProperties;
 import org.jclouds.domain.Credentials;
@@ -64,13 +64,13 @@ public class GetTokenFromApi implements Function<Credentials, String> {
    protected Logger logger = Logger.NULL;
 
    @Inject
-   public GetTokenFromApi(ProviderMetadata provider, HttpClient http) {
+   GetTokenFromApi(final ProviderMetadata provider, final HttpClient http) {
       this.provider = checkNotNull(provider, "provider must not be null");
       this.http = checkNotNull(http, "http must not be null");
    }
 
    @Override
-   public String apply(Credentials input) {
+   public String apply(final Credentials input) {
       logger.info(">> Requesting an authentication token for user: %s...", input.identity);
 
       HttpResponse response = http.invoke(HttpRequest.builder() //
@@ -79,7 +79,7 @@ public class GetTokenFromApi implements Function<Credentials, String> {
             .addHeader(AUTHORIZATION, basic(input.identity, input.credential)) //
             .build());
 
-      Optional<Cookie> token = readAuthenticationToken(response);
+      Optional<HttpCookie> token = readAuthenticationToken(response);
       if (!token.isPresent()) {
          throw new AuthorizationException("Could not obtain a new authentication token");
       }
@@ -88,24 +88,18 @@ public class GetTokenFromApi implements Function<Credentials, String> {
    }
 
    @VisibleForTesting
-   static Optional<Cookie> readAuthenticationToken(final HttpResponse response) {
-      Collection<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
-      return tryFind(transform(cookies, cookie()), new Predicate<Cookie>() {
-         @Override
-         public boolean apply(Cookie input) {
-            return input.getName().equals(AUTH_TOKEN_NAME);
-         }
-      });
+   static Optional<HttpCookie> readAuthenticationToken(final HttpResponse response) {
+      Collection<String> headers = response.getHeaders().get(HttpHeaders.SET_COOKIE);
+      for (String header : headers) {
+         List<HttpCookie> cookies = HttpCookie.parse(header);
+         return tryFind(cookies, new Predicate<HttpCookie>() {
+            @Override
+            public boolean apply(final HttpCookie input) {
+               return input.getName().equals(AUTH_TOKEN_NAME);
+            }
+         });
+      }
 
+      return Optional.absent();
    }
-
-   private static Function<String, Cookie> cookie() {
-      return new Function<String, Cookie>() {
-         @Override
-         public Cookie apply(String input) {
-            return Cookie.valueOf(input);
-         }
-      };
-   }
-
 }

@@ -20,19 +20,25 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import org.jclouds.View;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.Apis;
-import org.jclouds.compute.internal.BaseComputeServiceApiMetadataTest;
+import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.TypeToken;
 
 /**
  * Unit tests for the {@link AbiquoApiMetadata} class.
  */
 @Test(groups = "unit", testName = "AbiquoApiMetadataTest")
-public class AbiquoApiMetadataTest extends BaseComputeServiceApiMetadataTest {
+// TODO: Change inheritance to BaseComputeApiMetadataTest once the
+// ComputeService abstraction is implemented
+public class AbiquoApiMetadataTest extends BaseApiMetadataTest {
 
    public AbiquoApiMetadataTest() {
-      super(new AbiquoApiMetadata());
+      super(new AbiquoApiMetadata(), ImmutableSet.<TypeToken<? extends View>> of());
    }
 
    public void testAbiquoApiRegistered() {

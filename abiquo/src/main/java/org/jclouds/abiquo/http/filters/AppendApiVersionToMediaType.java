@@ -40,8 +40,7 @@ public class AppendApiVersionToMediaType implements HttpRequestFilter {
    private AppendApiVersionToAbiquoMimeType versionAppender;
 
    @Inject
-   public AppendApiVersionToMediaType(final AppendApiVersionToAbiquoMimeType versionAppender) {
-      super();
+   AppendApiVersionToMediaType(final AppendApiVersionToAbiquoMimeType versionAppender) {
       this.versionAppender = versionAppender;
    }
 
