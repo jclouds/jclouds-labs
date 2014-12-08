@@ -22,9 +22,12 @@ import java.util.Properties;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 
+import com.google.auto.service.AutoService;
+
 /**
- * Implementation of {@link org.jclouds.providers.internal.BaseProviderMetadata} for CloudSigma San Jose.
+ * Implementation of {@link ProviderMetadata} for CloudSigma San Jose.
  */
+@AutoService(ProviderMetadata.class)
 public class CloudSigma2SanJoseProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {

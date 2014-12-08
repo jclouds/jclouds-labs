@@ -31,12 +31,14 @@ import org.jclouds.cloudsigma2.config.CloudSigma2ParserModule;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Implementation of {@link BaseHttpApiMetadata} for the Cloud Sigma API
+ * Implementation of {@link ApiMetadata} for the Cloud Sigma API
  */
+@AutoService(ApiMetadata.class)
 public class CloudSigma2ApiMetadata extends BaseHttpApiMetadata<CloudSigma2Api> {
 
    @Override

@@ -21,6 +21,7 @@ import static org.jclouds.reflect.Reflection2.typeToken;
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.joyent.cloudapi.v6_5.compute.config.JoyentCloudComputeServiceContextModule;
 import org.jclouds.joyent.cloudapi.v6_5.config.DatacentersAreZonesModule;
@@ -28,9 +29,11 @@ import org.jclouds.joyent.cloudapi.v6_5.config.JoyentCloudHttpApiModule;
 import org.jclouds.joyent.cloudapi.v6_5.config.JoyentCloudProperties;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
+@AutoService(ApiMetadata.class)
 public class JoyentCloudApiMetadata extends BaseHttpApiMetadata {
 
    @Override
@@ -49,7 +52,7 @@ public class JoyentCloudApiMetadata extends BaseHttpApiMetadata {
    public static Properties defaultProperties() {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
       // auth fail sometimes happens, as the rc.local script that injects the
-      // authorized key executes after ssh has started.  
+      // authorized key executes after ssh has started.
       properties.setProperty("jclouds.ssh.max-retries", "7");
       properties.setProperty("jclouds.ssh.retry-auth", "true");
       properties.setProperty(JoyentCloudProperties.AUTOGENERATE_KEYS, "true");
