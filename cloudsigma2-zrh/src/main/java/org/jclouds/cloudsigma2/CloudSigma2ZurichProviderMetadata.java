@@ -16,15 +16,18 @@
  */
 package org.jclouds.cloudsigma2;
 
-import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.providers.internal.BaseProviderMetadata;
-
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.providers.internal.BaseProviderMetadata;
+
+import com.google.auto.service.AutoService;
+
 /**
- * Implementation of {@link org.jclouds.providers.internal.BaseProviderMetadata} for CloudSigma Zurich.
+ * Implementation of {@link ProviderMetadata} for CloudSigma Zurich.
  */
+@AutoService(ProviderMetadata.class)
 public class CloudSigma2ZurichProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {

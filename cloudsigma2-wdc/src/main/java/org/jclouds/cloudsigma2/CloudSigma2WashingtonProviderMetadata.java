@@ -16,15 +16,18 @@
  */
 package org.jclouds.cloudsigma2;
 
-import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.providers.internal.BaseProviderMetadata;
-
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.providers.internal.BaseProviderMetadata;
+
+import com.google.auto.service.AutoService;
+
 /**
- * Implementation of {@link org.jclouds.providers.internal.BaseProviderMetadata} for CloudSigma Washington DC.
+ * Implementation of {@link ProviderMetadata} for CloudSigma Washington DC.
  */
+@AutoService(ProviderMetadata.class)
 public class CloudSigma2WashingtonProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {

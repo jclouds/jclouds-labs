@@ -27,9 +27,12 @@ import org.jclouds.joyent.cloudapi.v6_5.JoyentCloudApiMetadata;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 
+import com.google.auto.service.AutoService;
+
 /**
- * Implementation of {@link org.jclouds.types.ProviderMetadata} for SDC.
+ * Implementation of {@link ProviderMetadata} for SDC.
  */
+@AutoService(ProviderMetadata.class)
 public class JoyentCloudProviderMetadata extends BaseProviderMetadata {
 
    public static Builder builder() {

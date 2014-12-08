@@ -19,12 +19,15 @@ package org.jclouds.snia.cdmi.v1;
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.apis.ApiMetadata;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 import org.jclouds.snia.cdmi.v1.config.CDMIHttpApiModule;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
+@AutoService(ApiMetadata.class)
 public class CDMIApiMetadata extends BaseHttpApiMetadata {
 
    @Override
