@@ -68,7 +68,7 @@ public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
                "MediaLink should be an http(s) url" + OSImage);
       }
 
-      assertTrue(locations.containsAll(OSImage.locations()), "Locations not in " + locations + " :" + OSImage);
+      assertTrue(locations.contains(OSImage.location()), "Locations not in " + locations + " :" + OSImage);
 
       // Ex. Dirty data in RightScale eula field comes out as an empty string.
       assertFalse(OSImage.eula().contains(""));
