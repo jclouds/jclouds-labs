@@ -21,16 +21,13 @@ package org.jclouds.azurecompute.config;
  * connections.
  */
 public class AzureComputeProperties {
-	/**
-	 * Every call to the Service Management API must include the subscription ID
-	 * for your subscription. The subscription ID is appended to the base URI,
-	 * as follows:
-	 *
-	 * <pre>
-	 * https://management.core.windows.net/${subscriptionId}
-	 * </pre>
-	 *
-	 * @see <a href="http://msdn.microsoft.com/en-us/library/ee460786">docs</a>
-	 */
-	public static final String SUBSCRIPTION_ID = "jclouds.azurecompute.subscription-id";
+
+	public static final String OPERATION_TIMEOUT = "jclouds.azurecompute.operation.timeout";
+
+   public static final String OPERATION_POLL_INITIAL_PERIOD = "jclouds.azurecompute..operation.poll.initial.period";
+
+   public static final String OPERATION_POLL_MAX_PERIOD = "jclouds.azurecompute.operation.poll.max.period";
+
+   public static final String TCP_RULE_FORMAT = "jclouds.azurecompute.tcp.rule.format";
+
 }

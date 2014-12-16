@@ -24,9 +24,13 @@ import org.jclouds.azurecompute.features.CloudServiceApi;
 import org.jclouds.azurecompute.features.DeploymentApi;
 import org.jclouds.azurecompute.features.DiskApi;
 import org.jclouds.azurecompute.features.LocationApi;
+import org.jclouds.azurecompute.features.NetworkSecurityGroupApi;
 import org.jclouds.azurecompute.features.OSImageApi;
 import org.jclouds.azurecompute.features.OperationApi;
+import org.jclouds.azurecompute.features.StorageAccountApi;
+import org.jclouds.azurecompute.features.SubscriptionApi;
 import org.jclouds.azurecompute.features.VirtualMachineApi;
+import org.jclouds.azurecompute.features.VirtualNetworkApi;
 import org.jclouds.rest.annotations.Delegate;
 
 /**
@@ -100,4 +104,36 @@ public interface AzureComputeApi extends Closeable {
     */
    @Delegate
    DiskApi getDiskApi();
+
+   /**
+    * The Service Management API includes operations for retrieving information about a subscription.
+    *
+    * @see <a href="http://msdn.microsoft.com/en-us/library/azure/gg715315.aspx">docs</a>
+    */
+   @Delegate
+   SubscriptionApi getSubscriptionApi();
+
+   /**
+    * The Service Management API includes operations for managing the virtual networks in your subscription.
+    *
+    * @see <a href="http://msdn.microsoft.com/en-us/library/jj157182.aspx">docs</a>
+    */
+   @Delegate
+   VirtualNetworkApi getVirtualNetworkApi();
+
+   /**
+    * The Service Management API includes operations for managing the storage accounts in your subscription.
+    *
+    * @see <a href="http://msdn.microsoft.com/en-us/library/ee460790.aspx">docs</a>
+    */
+   @Delegate
+   StorageAccountApi getStorageAccountApi();
+
+   /**
+    * The Service Management API includes operations for managing the Network Security Groups in your
+    * subscription.
+    *
+    */
+   @Delegate
+   NetworkSecurityGroupApi getNetworkSecurityGroupApi();
 }

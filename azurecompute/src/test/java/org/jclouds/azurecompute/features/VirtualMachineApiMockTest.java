@@ -18,7 +18,9 @@ package org.jclouds.azurecompute.features;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
+import org.jclouds.azurecompute.xml.RoleHandlerTest;
 import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -26,7 +28,7 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 @Test(groups = "unit", testName = "VirtualMachineApiMockTest")
 public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
 
-   public void start() throws Exception {
+   public void testStart() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -43,7 +45,7 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void restart() throws Exception {
+   public void testRestart() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -60,7 +62,7 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void shutdown() throws Exception {
+   public void testShutdown() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -77,7 +79,7 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void capture() throws Exception {
+   public void testCapture() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -89,6 +91,22 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
          assertSent(server, "POST",
                "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
                "/capturerolepayload.xml");
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testUpdate() throws Exception {
+      MockWebServer server = mockAzureManagementServer();
+      server.enqueue(requestIdResponse("request-1"));
+
+      try {
+         VirtualMachineApi api = vmApi(server);
+
+         Role role = RoleHandlerTest.expected();
+         assertThat(api.updateRole("testvnetsg02", role)).isEqualTo("request-1");
+
+         assertSent(server, "PUT", "/services/hostedservices/my-service/deployments/mydeployment/roles/testvnetsg02");
       } finally {
          server.shutdown();
       }

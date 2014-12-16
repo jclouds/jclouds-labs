@@ -59,6 +59,8 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
       }
    }
 
+   // TODO testDeleteDisk, if we will need testCreateDisk
+
    private void checkDisk(Disk disk) {
       assertNotNull(disk.name(), "Name cannot be null for: " + disk);
 

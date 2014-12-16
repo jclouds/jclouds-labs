@@ -17,9 +17,6 @@
 package org.jclouds.azurecompute.features;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-
 import java.net.URI;
 
 import org.jclouds.azurecompute.domain.OSImage;
@@ -28,13 +25,12 @@ import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.ListOSImagesHandlerTest;
 import org.testng.annotations.Test;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "OSImageApiMockTest")
 public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
 
-   public void listWhenFound() throws Exception {
+   public void testList() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/images.xml"));
 
@@ -49,22 +45,7 @@ public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void listWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
-
-         assertTrue(api.list().isEmpty());
-
-         assertSent(server, "GET", "/services/images");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void add() throws Exception {
+   public void testAdd() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -82,7 +63,7 @@ public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void update() throws Exception {
+   public void testUpdate() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -100,7 +81,7 @@ public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void deleteWhenFound() throws Exception {
+   public void testDelete() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -115,18 +96,4 @@ public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void deleteWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         OSImageApi api = api(server.getUrl("/")).getOSImageApi();
-
-         assertNull(api.delete("myimage"));
-
-         assertSent(server, "DELETE", "/services/images/myimage");
-      } finally {
-         server.shutdown();
-      }
-   }
 }

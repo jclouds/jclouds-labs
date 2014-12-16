@@ -76,7 +76,8 @@ public class DeploymentHandlerTest extends BaseHandlerTest {
               new RoleHandler(
                       new ConfigurationSetHandler(new InputEndpointHandler(), new SubnetNameHandler()),
                       new OSVirtualHardDiskHandler(),
-                      new DataVirtualHardDiskHandler())))
+                      new DataVirtualHardDiskHandler(),
+                      new ResourceExtensionReferenceHandler(new ResourceExtensionParameterValueHandler()))))
               .parse(is);
 
       assertEquals(result, expected());
@@ -123,7 +124,8 @@ public class DeploymentHandlerTest extends BaseHandlerTest {
                               ),
                               ImmutableList.of(ConfigurationSet.SubnetName.create("Subnet-1")),
                               null,
-                              ImmutableList.<ConfigurationSet.PublicIP>of())),
+                              ImmutableList.<ConfigurationSet.PublicIP>of(),
+                              null)),
                       ImmutableList.<Role.ResourceExtensionReference>of(),
                       null,
                       ImmutableList.<DataVirtualHardDisk>of(),

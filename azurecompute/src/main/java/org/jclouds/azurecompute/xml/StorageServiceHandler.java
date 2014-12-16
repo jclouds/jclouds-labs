@@ -30,7 +30,7 @@ import com.google.common.base.Throwables;
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460787.aspx" >api</a>
  */
-final class StorageServiceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<StorageService> {
+public class StorageServiceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<StorageService> {
    private URL url;
    private String serviceName;
    private StorageService.StorageServiceProperties storageServiceProperties;

@@ -20,7 +20,7 @@ openssl x509 -inform pem -in $HOME/.jclouds/azure.pem -outform der -out $HOME/.j
 
 Once you do this, you will set the following to run the live tests.
 ```bash
-mvn -Plive -Dtest.jclouds.azurecompute.subscription-id=12345678-abcd-dcba-abdc-ba0987654321
+mvn -Plive -Dtest.azurecompute.endpoint=https://management.core.windows.net/12345678-abcd-dcba-abdc-ba0987654321
 -Dtest.azurecompute.credential=P12_EXPORT_PASSWORD
 -Dtest.azurecompute.identity=$HOME/.jclouds/azure.p12
 ```

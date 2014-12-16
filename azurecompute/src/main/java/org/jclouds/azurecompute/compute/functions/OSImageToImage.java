@@ -16,13 +16,10 @@
  */
 package org.jclouds.azurecompute.compute.functions;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.compute.domain.Image;
-
-import com.google.common.base.Function;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
@@ -31,11 +28,14 @@ import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
 import org.jclouds.location.suppliers.all.JustProvider;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
 
 public class OSImageToImage implements Function<OSImage, Image> {
-   private static final String UNRECOGNIZED = "UNRECOGNIZED";
 
+   private static final String UNRECOGNIZED = "UNRECOGNIZED";
    private static final String UBUNTU = "Ubuntu";
    private static final String WINDOWS = "Windows";
    private static final String OPENLOGIC = "openLogic";
@@ -44,7 +44,7 @@ public class OSImageToImage implements Function<OSImage, Image> {
    private static final String OPENSUSE = "openSUSE";
    private static final String SUSE = "SUSE";
    private static final String SQL_SERVER = "SQL Server";
-   private static final String ORACLE_lINUX = "Orcale Linux";
+   private static final String ORACLE_lINUX = "Oracle Linux";
 
    private final JustProvider provider;
 
@@ -70,13 +70,10 @@ public class OSImageToImage implements Function<OSImage, Image> {
    }
 
    private Location createLocation(String input) {
-      if (input != null) {
-         return new LocationBuilder().id(input).scope(LocationScope.REGION).description(input).parent(
+      if (input == null) return null;
+      return new LocationBuilder().id(input).scope(LocationScope.REGION).description(input).parent(
                Iterables.getOnlyElement(provider.get())).metadata(ImmutableMap.<String, Object>of("name", input))
                .build();
-      } else {
-         return null;
-      }
    }
 
    public static Function<OSImage, OperatingSystem.Builder> osFamily() {

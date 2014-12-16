@@ -75,4 +75,5 @@ public interface DeploymentApi {
    @Fallback(NullOnNotFoundOr404.class)
    @ResponseParser(ParseRequestIdHeader.class)
    String delete(@PathParam("name") String name);
+   
 }

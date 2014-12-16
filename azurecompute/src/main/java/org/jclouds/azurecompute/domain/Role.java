@@ -120,13 +120,16 @@ public abstract class Role {
 
       @Nullable public abstract List<PublicIP> publicIPs();
 
+      @Nullable public abstract String networkSecurityGroup();
+
       ConfigurationSet() { // For AutoValue only!
       }
 
       public static ConfigurationSet create(String configurationSetType, List<InputEndpoint> inputEndpoints,
-                                            List<SubnetName> subnetNames, String staticVirtualNetworkIPAddress, List<PublicIP> publicIPs) {
+                                            List<SubnetName> subnetNames, String staticVirtualNetworkIPAddress,
+                                            List<PublicIP> publicIPs, String networkSecurityGroup) {
          return new AutoValue_Role_ConfigurationSet(configurationSetType, inputEndpoints, subnetNames,
-                 staticVirtualNetworkIPAddress, publicIPs);
+                 staticVirtualNetworkIPAddress, publicIPs, networkSecurityGroup);
       }
    }
 
@@ -158,7 +161,7 @@ public abstract class Role {
 
       public abstract String version();
 
-      public abstract List<ResourceExtensionParameterValue> resourceExtensionParameterValues();
+      @Nullable public abstract List<ResourceExtensionParameterValue> resourceExtensionParameterValues();
 
       public abstract String state();
 

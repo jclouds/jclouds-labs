@@ -44,6 +44,11 @@ public class VirtualNetworkSiteHandler extends ParseSax.HandlerForGeneratedReque
 
    @Override
    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+      if (qName.equalsIgnoreCase("VirtualNetworkSite")){
+         name = attributes.getValue("name");
+         location = attributes.getValue("Location");
+      }
+
       if (qName.equals("AddressSpace")) {
          inAddressSpace = true;
       } else if (qName.equals("Subnet")) {

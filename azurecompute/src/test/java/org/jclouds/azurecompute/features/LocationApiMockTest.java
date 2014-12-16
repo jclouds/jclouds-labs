@@ -22,13 +22,12 @@ import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.ListLocationsHandlerTest;
 import org.testng.annotations.Test;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "LocationApiMockTest")
 public class LocationApiMockTest extends BaseAzureComputeApiMockTest {
 
-   public void listWhenLocationsFound() throws Exception {
+   public void testList() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/locations.xml"));
 
@@ -43,18 +42,4 @@ public class LocationApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void listWhenLocationsNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         LocationApi api = api(server.getUrl("/")).getLocationApi();
-
-         assertThat(api.list()).isEmpty();
-
-         assertSent(server, "GET", "/locations");
-      } finally {
-         server.shutdown();
-      }
-   }
 }

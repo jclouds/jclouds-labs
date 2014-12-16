@@ -35,6 +35,7 @@ public class ConfigurationSetHandler extends ParseSax.HandlerForGeneratedRequest
    private List<SubnetName> subnetNames = Lists.newArrayList();
    private String staticVirtualNetworkIPAddress;
    private List<PublicIP> publicIPs = Lists.newArrayList();
+   private String networkSecurityGroup;
 
    private boolean inInputEndpoint;
    private boolean inSubnetNames;
@@ -50,13 +51,14 @@ public class ConfigurationSetHandler extends ParseSax.HandlerForGeneratedRequest
 
    @Override
    public ConfigurationSet getResult() {
-      ConfigurationSet result = ConfigurationSet.create(configurationSetType, inputEndpoint, subnetNames, staticVirtualNetworkIPAddress, publicIPs);
+      ConfigurationSet result = ConfigurationSet.create(configurationSetType, inputEndpoint, subnetNames,
+              staticVirtualNetworkIPAddress, publicIPs, networkSecurityGroup);
       resetState(); // handler is called in a loop.
       return result;
    }
 
    private void resetState() {
-      configurationSetType = staticVirtualNetworkIPAddress = null;
+      configurationSetType = staticVirtualNetworkIPAddress = networkSecurityGroup = null;
       inputEndpoint = Lists.newArrayList();
       subnetNames = Lists.newArrayList();
       publicIPs = Lists.newArrayList();
@@ -92,6 +94,8 @@ public class ConfigurationSetHandler extends ParseSax.HandlerForGeneratedRequest
          subnetNameHandler.endElement(ignoredUri, ignoredName, qName);
       } else if (qName.equals("ConfigurationSetType")) {
          configurationSetType = currentOrNull(currentText);
+      } else if (qName.equals("NetworkSecurityGroup")) {
+         networkSecurityGroup = currentOrNull(currentText);
       }
       currentText.setLength(0);
    }

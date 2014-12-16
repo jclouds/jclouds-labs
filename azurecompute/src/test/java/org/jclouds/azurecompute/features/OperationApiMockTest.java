@@ -17,19 +17,17 @@
 package org.jclouds.azurecompute.features;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.OperationHandlerTest;
 import org.testng.annotations.Test;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "OperationApiMockTest")
 public class OperationApiMockTest extends BaseAzureComputeApiMockTest {
 
-   public void getWhenFound() throws Exception {
+   public void testGet() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/operation.xml"));
 
@@ -44,18 +42,4 @@ public class OperationApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void getWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         OperationApi api = api(server.getUrl("/")).getOperationApi();
-
-         assertNull(api.get("request-id"));
-
-         assertSent(server, "GET", "/operations/request-id");
-      } finally {
-         server.shutdown();
-      }
-   }
 }

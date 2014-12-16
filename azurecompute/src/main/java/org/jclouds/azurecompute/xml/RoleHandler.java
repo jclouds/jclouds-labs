@@ -48,17 +48,20 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
    private boolean inConfigurationSets;
    private boolean inOSVirtualHardDisk;
    private boolean inDataVirtualHardDisks;
+   private boolean inResourceExtensionReference;
 
    private final ConfigurationSetHandler configurationSetHandler;
    private final OSVirtualHardDiskHandler osVirtualDiskHandler;
    private final DataVirtualHardDiskHandler dataVirtualHardDiskHandler;
+   private final ResourceExtensionReferenceHandler resourceExtensionReferenceHandler;
 
    @Inject
    RoleHandler(ConfigurationSetHandler configurationSetHandler, OSVirtualHardDiskHandler osVirtualDiskHandler,
-                      DataVirtualHardDiskHandler dataVirtualHardDiskHandler) {
+                      DataVirtualHardDiskHandler dataVirtualHardDiskHandler, ResourceExtensionReferenceHandler resourceExtensionReferenceHandler) {
       this.configurationSetHandler = configurationSetHandler;
       this.osVirtualDiskHandler = osVirtualDiskHandler;
       this.dataVirtualHardDiskHandler = dataVirtualHardDiskHandler;
+      this.resourceExtensionReferenceHandler = resourceExtensionReferenceHandler;
    }
 
    private StringBuilder currentText = new StringBuilder();
@@ -79,6 +82,13 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
       if (inDataVirtualHardDisks) {
          dataVirtualHardDiskHandler.startElement(uri, localName, qName, attributes);
       }
+      if (qName.equals("ResourceExtensionReference")) {
+         inResourceExtensionReference = true;
+      }
+      if (inResourceExtensionReference) {
+         resourceExtensionReferenceHandler.startElement(uri, localName, qName, attributes);
+      }
+
    }
 
    private void resetState() {
@@ -138,6 +148,11 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
          if (provisionGuestAgentString != null) {
             provisionGuestAgent = Boolean.valueOf(provisionGuestAgentString);
          }
+      } else if (qName.equals("ResourceExtensionReferences")) {
+         inResourceExtensionReference = false;
+         resourceExtensionReferences.add(resourceExtensionReferenceHandler.getResult());
+      } else if (inResourceExtensionReference) {
+         resourceExtensionReferenceHandler.endElement(ignoredUri, ignoredName, qName);
       }
       currentText.setLength(0);
    }
@@ -147,6 +162,8 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
          configurationSetHandler.characters(ch, start, length);
       } else if (inOSVirtualHardDisk) {
          osVirtualDiskHandler.characters(ch, start, length);
+      } else if (inResourceExtensionReference) {
+         resourceExtensionReferenceHandler.characters(ch, start, length);
       } else {
          currentText.append(ch, start, length);
       }

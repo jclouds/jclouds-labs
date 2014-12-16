@@ -16,6 +16,7 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import static com.google.common.collect.ImmutableList.copyOf;
 import java.util.List;
 
 import org.jclouds.javax.annotation.Nullable;
@@ -74,12 +75,25 @@ public abstract class NetworkConfiguration {
 
    }
 
+   @AutoValue
+   public abstract static class VirtualNetworkConfiguration {
+
+      VirtualNetworkConfiguration() {
+      } // For AutoValue only!
+
+      @Nullable public abstract String dns();
+      @Nullable public abstract List<VirtualNetworkSite> virtualNetworkSites();
+
+      public static VirtualNetworkConfiguration create(String dns, List<VirtualNetworkSite> virtualNetworkSites) {
+         return new AutoValue_NetworkConfiguration_VirtualNetworkConfiguration(dns, copyOf(virtualNetworkSites));
+      }
+   }
+
    public NetworkConfiguration() {} // For AutoValue only!
 
-   @Nullable public abstract String dns();
-   @Nullable public abstract List<VirtualNetworkSite> virtualNetworkSites();
+   public abstract VirtualNetworkConfiguration virtualNetworkConfiguration();
 
-   public static NetworkConfiguration create(String dns, List<VirtualNetworkSite> virtualNetworkSites) {
-      return new AutoValue_NetworkConfiguration(dns, virtualNetworkSites);
+   public static NetworkConfiguration create(VirtualNetworkConfiguration virtualNetworkConfiguration) {
+      return new AutoValue_NetworkConfiguration(virtualNetworkConfiguration);
    }
 }

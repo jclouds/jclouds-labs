@@ -31,6 +31,9 @@ public class SubnetHandler extends ParseSax.HandlerForGeneratedRequestWithResult
    private StringBuilder currentText = new StringBuilder();
 
    @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+      if (qName.equalsIgnoreCase("Subnet")){
+         name = attributes.getValue("name");
+      }
    }
 
    @Override public Subnet getResult() {

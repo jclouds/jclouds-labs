@@ -17,48 +17,36 @@
 package org.jclouds.azurecompute.features;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.azurecompute.domain.CloudService.Status.UNRECOGNIZED;
 import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
-
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.jclouds.azurecompute.domain.CloudService;
 import org.jclouds.azurecompute.domain.CloudService.Status;
-import org.jclouds.azurecompute.domain.Operation;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
-@Test(groups = "live", testName = "CloudServiceApiLiveTest")
+@Test(groups = "live", testName = "CloudServiceApiLiveTest", singleThreaded = true)
 public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
 
-   public static final String CLOUD_SERVICE = (System.getProperty("user.name") + "-jclouds-cloudService").toLowerCase();
+   private static final String CLOUD_SERVICE = (System.getProperty("user.name") + "cloudservice").toLowerCase();
 
-   private Predicate<String> operationSucceeded;
    private Predicate<CloudService> cloudServiceCreated;
    private Predicate<CloudService> cloudServiceGone;
-
-   private String location;
 
    @BeforeClass(groups = { "integration", "live" })
    public void setup() {
       super.setup();
-      // TODO: filter locations on those who have compute
-      location = Iterables.get(api.getLocationApi().list(), 0).name();
-      operationSucceeded = retry(new Predicate<String>() {
-         public boolean apply(String input) {
-            return api.getOperationApi().get(input).status() == Operation.Status.SUCCEEDED;
-         }
-      }, 600, 5, 5, SECONDS);
       cloudServiceCreated = retry(new Predicate<CloudService>() {
          public boolean apply(CloudService input) {
             return api().get(input.name()).status() == Status.CREATED;
@@ -93,6 +81,12 @@ public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
    }
 
    @Test(dependsOnMethods = "testCreate")
+   public void testGet() {
+      CloudService foundCloudService = api().get(cloudService.name());
+      assertThat(foundCloudService).isEqualToComparingFieldByField(cloudService);
+   }
+
+   @Test(dependsOnMethods = "testGet")
    public void testDelete() {
       String requestId = api().delete(cloudService.name());
       assertTrue(operationSucceeded.apply(requestId), requestId);
@@ -102,7 +96,7 @@ public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
       Logger.getAnonymousLogger().info("cloudService deleted: " + cloudService);
    }
 
-   @Override @AfterClass(groups = "live")
+   @Override @AfterClass(groups = "live", alwaysRun = true)
    protected void tearDown() {
       String requestId = api().delete(CLOUD_SERVICE);
       if (requestId != null) {

@@ -16,54 +16,54 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import static org.jclouds.util.SaxUtils.currentOrNull;
-
-import java.util.List;
-
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
+import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
-import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
 public class NetworkConfigurationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<NetworkConfiguration> {
 
-   private String dns;
-   private List<NetworkConfiguration.VirtualNetworkSite> virtualNetworkSites = Lists.newArrayList();
+   private VirtualNetworkConfiguration virtualNetworkConfiguration;
 
-   private boolean inVirtualNetworkSites;
-   private final VirtualNetworkSiteHandler virtualNetworkSiteHandler = new VirtualNetworkSiteHandler();
+   private boolean inVirtualNetworkConfiguration;
+   private final VirtualNetworkConfigurationHandler virtualNetworkConfigurationHandler;
+
+   @Inject
+   NetworkConfigurationHandler(VirtualNetworkConfigurationHandler virtualNetworkConfigurationHandler) {
+      this.virtualNetworkConfigurationHandler = virtualNetworkConfigurationHandler;
+   }
 
    private final StringBuilder currentText = new StringBuilder();
 
    @Override public void startElement(String url, String name, String qName, Attributes attributes) {
-      if (qName.equals("VirtualNetworkSite")) {
-         inVirtualNetworkSites = true;
+      if (qName.equals("VirtualNetworkConfiguration")) {
+         inVirtualNetworkConfiguration = true;
+      }
+      if (inVirtualNetworkConfiguration) {
+         virtualNetworkConfigurationHandler.startElement(url, name, qName, attributes);
       }
    }
 
    @Override
    public NetworkConfiguration getResult() {
-      return NetworkConfiguration.create(dns, virtualNetworkSites);
+      return NetworkConfiguration.create(virtualNetworkConfiguration);
    }
 
    @Override
    public void endElement(String ignoredUri, String ignoredName, String qName) {
-      if (qName.equals("Dns")) {
-         dns = currentOrNull(currentText);
-      } else if (qName.equals("VirtualNetworkSites")) {
-         inVirtualNetworkSites = false;
-      } else if (qName.equals("VirtualNetworkSite")) {
-         virtualNetworkSites.add(virtualNetworkSiteHandler.getResult());
-      } else if (inVirtualNetworkSites) {
-         virtualNetworkSiteHandler.endElement(ignoredUri, ignoredName, qName);
+      if (qName.equals("VirtualNetworkConfiguration")) {
+         virtualNetworkConfiguration = virtualNetworkConfigurationHandler.getResult();
+      } else if (inVirtualNetworkConfiguration) {
+         virtualNetworkConfigurationHandler.endElement(ignoredUri, ignoredName, qName);
       }
       currentText.setLength(0);
    }
 
    @Override public void characters(char ch[], int start, int length) {
-      if (inVirtualNetworkSites) {
-         virtualNetworkSiteHandler.characters(ch, start, length);
+      if (inVirtualNetworkConfiguration) {
+         virtualNetworkConfigurationHandler.characters(ch, start, length);
       } else
          currentText.append(ch, start, length);
       }

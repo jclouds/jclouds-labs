@@ -17,21 +17,18 @@
 package org.jclouds.azurecompute.features;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.CloudServiceHandlerTest;
 import org.jclouds.azurecompute.xml.ListCloudServicesHandlerTest;
 import org.testng.annotations.Test;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "CloudServiceApiMockTest")
 public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
 
-   public void listWhenFound() throws Exception {
+   public void testList() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/hostedservices.xml"));
 
@@ -46,22 +43,7 @@ public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void listWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
-
-         assertTrue(api.list().isEmpty());
-
-         assertSent(server, "GET", "/services/hostedservices?embed-detail=true");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void getWhenFound() throws Exception {
+   public void testGet() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/hostedservice.xml"));
 
@@ -76,22 +58,7 @@ public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void getWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
-
-         assertNull(api.get("myservice"));
-
-         assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void createWithLabelInLocation() throws Exception {
+   public void testCreateWithLabelInLocation() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -106,7 +73,7 @@ public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void deleteWhenFound() throws Exception {
+   public void testDelete() throws Exception {
       MockWebServer server = mockAzureManagementServer();
       server.enqueue(requestIdResponse("request-1"));
 
@@ -121,18 +88,4 @@ public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
       }
    }
 
-   public void deleteWhenNotFound() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
-
-         assertNull(api.delete("myservice"));
-
-         assertSent(server, "DELETE", "/services/hostedservices/myservice");
-      } finally {
-         server.shutdown();
-      }
-   }
 }
