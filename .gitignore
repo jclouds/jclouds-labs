@@ -17,3 +17,5 @@ TAGS
 atlassian-ide-plugin.xml
 .DS_Store
 .java-version
+*nb-configuration.xml
+*nbactions.xml
