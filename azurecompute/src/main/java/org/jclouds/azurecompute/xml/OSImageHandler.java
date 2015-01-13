@@ -34,21 +34,23 @@ import com.google.common.collect.Lists;
  */
 final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<OSImage> {
    private String name;
-   private final List<String> locations = Lists.newArrayList();
+   private String location;
    private String affinityGroup;
    private String label;
    private String category;
    private String description;
    private OSImage.Type os;
+   private String publisherName;
    private URI mediaLink;
    private Integer logicalSizeInGB;
    private final List<String> eulas = Lists.newArrayList();
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public OSImage getResult() {
+   @Override
+   public OSImage getResult() {
       OSImage result = OSImage
-            .create(name, ImmutableList.copyOf(locations), affinityGroup, label, description, category, os, mediaLink,
+            .create(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
                   logicalSizeInGB, ImmutableList.copyOf(eulas));
       resetState(); // handler is called in a loop.
       return result;
@@ -57,10 +59,11 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
    private void resetState() {
       name = affinityGroup = label = description = category = null;
       os = null;
+      publisherName = null;
       mediaLink = null;
       logicalSizeInGB = null;
       eulas.clear();
-      locations.clear();
+      location = null;
    }
 
    @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
@@ -81,12 +84,11 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
       } else if (qName.equals("Category")) {
          category = currentOrNull(currentText);
       } else if (qName.equals("Location")) {
-         String locationField = currentOrNull(currentText);
-         if (locationField != null) {
-            locations.addAll(Splitter.on(';').splitToList(locationField));
-         }
+         location = currentOrNull(currentText);
       } else if (qName.equals("AffinityGroup")) {
          affinityGroup = currentOrNull(currentText);
+      } else if (qName.equals("PublisherName")) {
+         publisherName = currentOrNull(currentText);
       } else if (qName.equals("MediaLink")) {
          String link = currentOrNull(currentText);
          if (link != null) {

@@ -14,35 +14,101 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.azurecompute.xml;
+package org.jclouds.azurecompute.compute.functions;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
-import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.jclouds.azurecompute.domain.OSImage;
-import org.jclouds.http.functions.BaseHandlerTest;
+import org.jclouds.compute.domain.OperatingSystem;
+import org.jclouds.compute.domain.OsFamily;
+import org.jclouds.domain.Location;
+import org.jclouds.location.suppliers.all.JustProvider;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableList;
-
-@Test(groups = "unit", testName = "ListImagesHandlerTest")
-public class ListOSImagesHandlerTest extends BaseHandlerTest {
-
-   public void test() {
-      InputStream is = getClass().getResourceAsStream("/images.xml");
-      List<OSImage> result = factory.create(new ListOSImagesHandler()).parse(is);
-
-      assertEquals(result, expected());
+@Test(groups = "unit", testName = "OSImageToImageTest")
+public class OSImageToImageTest {
+   public void testImageTransform() {
+      OSImageToImage imageToImage = new OSImageToImage(new JustProvider("azurecompute", Suppliers
+            .ofInstance(URI.create("foo")), ImmutableSet.<String>of()));
+      // OSImage OSImage = createOSImage();
+      for (OSImage OSImage : createOSImage()) {
+         org.jclouds.compute.domain.Image transformed = imageToImage.apply(OSImage);
+         OperatingSystem os = OSImageToImage.osFamily().apply(OSImage).build();
+         assertNotNull(OSImage.label());
+         assertNotNull(transformed.getId());
+         assertEquals(transformed.getId(), OSImage.name());
+         assertEquals(transformed.getName(), OSImage.label());
+         assertEquals(transformed.getOperatingSystem().getFamily(), os.getFamily());
+         assertEquals(transformed.getOperatingSystem().getVersion(), os.getVersion());
+         assertEquals(transformed.getProviderId(), OSImage.name());
+         Location location = transformed.getLocation();
+         if (location != null) {
+            assertEquals(location.getId(), OSImage.location());
+         }
+      }
    }
 
-   public static List<OSImage> expected() {
-      return ImmutableList.of( //
-            OSImage.create( //
+   public void testOperatingSystem() {
+      ImmutableList<String> version = ImmutableList.of(
+            "13.1",
+            "12.04 LTS",
+            "Windows Server 2008 R2 SP1, June 2012",
+            "Microsoft SQL Server 2012 Evaluation Edition",
+            "Windows Server 2012 Release Candidate, July 2012",
+            "Windows Server 2008 R2 SP1, July 2012",
+            "OpenLogic CentOS 6.2",
+            "12.1",
+            "Linux Enterprise Server",
+            "RightImage-CentOS-6.4-x64-v13.4"
+      );
+      ImmutableList<OsFamily> osFamily = ImmutableList.of(
+            OsFamily.SUSE,
+            OsFamily.UBUNTU,
+            OsFamily.WINDOWS,
+            OsFamily.WINDOWS,
+            OsFamily.WINDOWS,
+            OsFamily.WINDOWS,
+            OsFamily.CENTOS,
+            OsFamily.SUSE,
+            OsFamily.SUSE,
+            OsFamily.CENTOS
+      );
+
+      List<OSImage> images = createOSImage();
+      for (int i = 0; i < images.size(); i++) {
+         OSImage OSImage = images.get(i);
+         OperatingSystem os = OSImageToImage.osFamily().apply(OSImage).build();
+         assertEquals(os.getFamily(), osFamily.get(i));
+         assertEquals(os.getVersion(), version.get(i));
+      }
+   }
+
+   private static ImmutableList<OSImage> createOSImage() {
+      return ImmutableList.of(
+            OSImage.create(
+                  "SUSE__openSUSE-12-1-20120603-en-us-30GB.vhd", // name
+                  "Central US", // location
+                  null, // affinityGroup
+                  "openSUSE 13.1", // label
+                  "openSUSE 13.1 brings updated desktop environments and software, lot of polishing, a brand new KDE theme, "
+                        + "complete systemd integration and many other features.", // description
+                  "MSDN", // category
+                  OSImage.Type.WINDOWS, // os
+                  "SUSE", // publisherName
+                  URI.create("http://example.blob.core.windows.net/disks/myimage.vhd"), // mediaLink
+                  30, // logicalSizeInGB
+                  Arrays.asList("http://www.ubuntu.com/project/about-ubuntu/licensing")// eula
+            ),
+            OSImage.create(
                   "CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd", // name
                   null, // locations
                   null, // affinityGroup
@@ -50,7 +116,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                   "Ubuntu Server 12.04 LTS amd64 20120528 Cloud Image", //description
                   "Canonical", // category
                   OSImage.Type.LINUX, // os
-                  "Canonical", //publisherName
+                  "Canonical", // publisherName
                   null, // mediaLink
                   30, // logicalSizeInGB
                   Arrays.asList("http://www.ubuntu.com/project/about-ubuntu/licensing") // eula
@@ -58,7 +124,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
             OSImage.create( //
                   "MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd", // name
                   "North Europe", // locations
-                   null, // affinityGroup
+                  null, // affinityGroup
                   "Windows Server 2008 R2 SP1, June 2012", // label
                   "Windows Server 2008 R2 is a multi-purpose server.", //description
                   "Microsoft", // category

@@ -37,7 +37,7 @@ public abstract class OSImage {
    public abstract String name();
 
    /** The geo-locations of the image, if the image is not associated with an affinity group. */
-   public abstract List<String> locations();
+   @Nullable public abstract String location();
 
    /** The affinity group with which this image is associated, if any. */
    @Nullable public abstract String affinityGroup();
@@ -59,6 +59,9 @@ public abstract class OSImage {
    /** The operating system type of the OS image. */
    public abstract Type os();
 
+
+   //The name of the publisher of the image. All user images have a publisher name of User.
+   @Nullable public abstract String publisherName();
    /**
     * The locations of the blob in the blob store in which the media for the image is located. The
     * blob locations belongs to a storage account in the subscription specified by the
@@ -76,9 +79,10 @@ public abstract class OSImage {
    // Not URI as some providers put non-uri data in, such as riverbed.
    public abstract List<String> eula();
 
-   public static OSImage create(String name, List<String> locations, String affinityGroup, String label,
-         String description, String category, Type os, URI mediaLink, int logicalSizeInGB, List<String> eula) {
-      return new AutoValue_OSImage(name, locations, affinityGroup, label, description, category, os, mediaLink,
+
+   public static OSImage create(String name, String location, String affinityGroup, String label,
+         String description, String category, Type os, String publisherName, URI mediaLink, int logicalSizeInGB, List<String> eula) {
+      return new AutoValue_OSImage(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
             logicalSizeInGB, eula);
    }
 }

@@ -17,7 +17,7 @@
 package org.jclouds.azurecompute.features;
 
 import static com.google.common.collect.Iterables.transform;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.domain.Disk;
@@ -60,8 +60,7 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
    }
 
    private void checkDisk(Disk disk) {
-      assertNull(disk.name(), "Name cannot be null for: " + disk);
-      assertNull(disk.os(), "OS cannot be null for: " + disk);
+      assertNotNull(disk.name(), "Name cannot be null for: " + disk);
 
       if (disk.attachedTo() != null) {
          // TODO: verify you can lookup the role

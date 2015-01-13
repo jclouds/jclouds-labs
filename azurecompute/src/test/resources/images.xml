@@ -5,17 +5,19 @@
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd</Name>
         <OS>Linux</OS>
+        <PublisherName>Canonical</PublisherName>
         <Eula>http://www.ubuntu.com/project/about-ubuntu/licensing</Eula>
         <Description>Ubuntu Server 12.04 LTS amd64 20120528 Cloud Image</Description>
     </OSImage>
     <OSImage>
         <Category>Microsoft</Category>
         <Label>Windows Server 2008 R2 SP1, June 2012</Label>
-        <Location>East Asia;Southeast Asia;North Europe</Location>
+        <Location>North Europe</Location>
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd</Name>
         <MediaLink>http://blobs/disks/mydeployment/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd</MediaLink>
         <OS>Windows</OS>
+        <PublisherName>Microsoft</PublisherName>
         <Eula />
         <Description>Windows Server 2008 R2 is a multi-purpose server.</Description>
     </OSImage>
@@ -25,6 +27,7 @@
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>MSFT__Sql-Server-11EVAL-11.0.2215.0-05152012-en-us-30GB.vhd</Name>
         <OS>Windows</OS>
+        <PublisherName>Microsoft</PublisherName>
         <Eula>http://go.microsoft.com/fwlink/?LinkID=251820;http://go.microsoft.com/fwlink/?LinkID=131004</Eula>
         <Description>SQL Server 2012 Evaluation Edition (64-bit).</Description>
     </OSImage>
@@ -34,6 +37,7 @@
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>MSFT__Win2K12RC-Datacenter-201207.02-en.us-30GB.vhd</Name>
         <OS>Windows</OS>
+        <PublisherName>Microsoft</PublisherName>
         <Eula />
         <Description>Windows Server 2012 incorporates Microsoft's experience building.</Description>
     </OSImage>
@@ -43,6 +47,7 @@
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>MSFT__Win2K8R2SP1-Datacenter-201207.01-en.us-30GB.vhd</Name>
         <OS>Windows</OS>
+        <PublisherName>Microsoft</PublisherName>
         <Eula />
         <Description>Windows Server 2008 R2 is a multi-purpose server.</Description>
     </OSImage>
@@ -53,6 +58,7 @@
         <Name>OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd</Name>
         <MediaLink>http://blobs/disks/mydeployment/OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd</MediaLink>
         <OS>Linux</OS>
+        <PublisherName>openLogic</PublisherName>
         <Eula>http://www.openlogic.com/azure/service-agreement/</Eula>
         <Description>This distribution of Linux is based on CentOS.</Description>
     </OSImage>
@@ -62,6 +68,7 @@
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>SUSE__openSUSE-12-1-20120603-en-us-30GB.vhd</Name>
         <OS>Linux</OS>
+        <PublisherName>SUSE</PublisherName>
         <Eula>http://opensuse.org/</Eula>
         <Description>openSUSE is a free and Linux-based operating system!</Description>
     </OSImage>
@@ -71,6 +78,7 @@
         <LogicalSizeInGB>30</LogicalSizeInGB>
         <Name>SUSE__SUSE-Linux-Enterprise-Server-11SP2-20120601-en-us-30GB.vhd</Name>
         <OS>Linux</OS>
+        <PublisherName>SUSE</PublisherName>
         <Eula>http://www.novell.com/licensing/eula/</Eula>
         <Description>SUSE Linux Enterprise Server is a highly reliable value.</Description>
     </OSImage>
@@ -80,6 +88,7 @@
         <LogicalSizeInGB>10</LogicalSizeInGB>
         <Name>0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.4-x64-v13.4</Name>
         <OS>Linux</OS>
+        <PublisherName>RightScale with Linux</PublisherName>
         <Eula>;</Eula>
         <Description/>
     </OSImage>

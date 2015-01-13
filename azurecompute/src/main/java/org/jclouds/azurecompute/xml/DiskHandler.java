@@ -74,7 +74,7 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
       } else if (qName.equals("OS")) {
          String osText = currentOrNull(currentText);
          if (osText != null) {
-            os = OSImage.Type.valueOf(currentOrNull(currentText).toUpperCase());
+            os = OSImage.Type.valueOf(osText.toUpperCase());
          }
       } else if (qName.equals("Name")) {
          name = currentOrNull(currentText);
