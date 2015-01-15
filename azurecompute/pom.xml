@@ -68,9 +68,13 @@
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.auto.value</groupId>
       <artifactId>auto-value</artifactId>
-      <version>1.0-rc2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
