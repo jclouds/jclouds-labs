@@ -42,8 +42,8 @@ import com.google.inject.Module;
 /**
  * Implementation of {@link ProviderMetadata} for Rackspace US Auto Scale API.
  *
- * @deprecated Please use {@link org.jclouds.rackspace.autoscale.us.AutoscaleUSProviderMetadata} as
- *             this method will be removed in jclouds 2.0.
+ * @deprecated Please use {@link org.jclouds.rackspace.autoscale.us.AutoscaleUSProviderMetadata} instead.
+ *             To be removed in jclouds 2.0.
  */
 @Deprecated
 public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {

@@ -109,8 +109,7 @@ public interface MarconiApi extends Closeable {
     *                 persists between restarts of the client so the client should reuse that same Client-ID. All
     *                 message-related operations require the use of Client-ID in the headers to ensure that messages
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
-    * @deprecated Please use {@link #getQueueApi(String, UUID)} as this method will be removed
-    *             in jclouds 3.0.
+    * @deprecated Please use {@link #getQueueApi(String, UUID)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate
@@ -127,8 +126,7 @@ public interface MarconiApi extends Closeable {
     *                 message-related operations require the use of Client-ID in the headers to ensure that messages
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     * @param name     Name of the queue.
-    * @deprecated Please use {@link #getMessageApi(String, UUID, String)} as this method will be removed
-    *             in jclouds 3.0.
+    * @deprecated Please use {@link #getMessageApi(String, UUID, String)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate
@@ -146,8 +144,7 @@ public interface MarconiApi extends Closeable {
     *                 message-related operations require the use of Client-ID in the headers to ensure that messages
     *                 are not echoed back to the client that posted them, unless the client explicitly requests this.
     * @param name     Name of the queue.
-    * @deprecated Please use {@link #getClaimApi(String, UUID, String)} as this method will be removed
-    *             in jclouds 3.0.
+    * @deprecated Please use {@link #getClaimApi(String, UUID, String)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate

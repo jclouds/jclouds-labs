@@ -80,7 +80,7 @@ public interface AutoscaleApi extends Closeable {
 
    /**
     * @return the configured zone codes
-    * @deprecated Please use {@link #getConfiguredRegions()} as this method will be removed in jclouds 3.0.
+    * @deprecated Please use {@link #getConfiguredRegions()} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Provides
@@ -89,8 +89,7 @@ public interface AutoscaleApi extends Closeable {
 
    /**
     * Provides access to all policy features for scaling Groups.
-    * @deprecated Please use {@link #getPolicyApi(String, String)} as this method will be removed
-    *             in jclouds 3.0.
+    * @deprecated Please use {@link #getPolicyApi(String, String)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate
@@ -100,8 +99,7 @@ public interface AutoscaleApi extends Closeable {
 
    /**
     * Provides access to webhook management features.
-    * @deprecated Please use {@link #getWebhookApi(String, String, String)} as this method will be removed
-    *             in jclouds 3.0.
+    * @deprecated Please use {@link #getWebhookApi(String, String, String)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate

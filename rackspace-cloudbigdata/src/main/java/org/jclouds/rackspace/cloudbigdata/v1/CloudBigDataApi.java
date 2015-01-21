@@ -62,7 +62,7 @@ public interface CloudBigDataApi extends Closeable {
 
    /**
     * @return the Zone codes configured
-    * @deprecated Please use {@link #getConfiguredRegions()} as this method will be removed in jclouds 3.0.
+    * @deprecated Please use {@link #getConfiguredRegions()} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Provides
@@ -73,7 +73,7 @@ public interface CloudBigDataApi extends Closeable {
     * Provides access to all Profile features.
     * @param zone The zone (region) for the profile API.
     * @return A profile API context.
-    * @deprecated Please use {@link #getProfileApi(String)} as this method will be removed in jclouds 3.0.
+    * @deprecated Please use {@link #getProfileApi(String)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate
@@ -83,7 +83,7 @@ public interface CloudBigDataApi extends Closeable {
     * Provides access to all Cluster features.
     * @param zone The zone (region) for the profile API.
     * @return A cluster API context.
-    * @deprecated Please use {@link #getClusterApi(String)} as this method will be removed in jclouds 3.0.
+    * @deprecated Please use {@link #getClusterApi(String)} instead. To be removed in jclouds 2.0.
     */
    @Deprecated
    @Delegate
