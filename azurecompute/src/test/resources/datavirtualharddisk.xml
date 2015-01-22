@@ -1,0 +1,18 @@
+<DataVirtualHardDisks xmlns="http://schemas.microsoft.com/windowsazure">
+    <DataVirtualHardDisk>
+        <HostCaching>ReadOnly</HostCaching>
+        <DiskName>testimage1-testimage1-0-20120817095145</DiskName>
+        <Lun>10</Lun>
+        <LogicalDiskSizeInGB>30</LogicalDiskSizeInGB>
+        <MediaLink>http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd</MediaLink>
+        <IOType>Standard</IOType>
+    </DataVirtualHardDisk>
+    <DataVirtualHardDisk>
+        <HostCaching>ReadWrite</HostCaching>
+        <DiskName>testimage2-testimage2-0-20120817095145</DiskName>
+        <Lun>10</Lun>
+        <LogicalDiskSizeInGB>30</LogicalDiskSizeInGB>
+        <MediaLink>http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd</MediaLink>
+        <IOType>Standard</IOType>
+    </DataVirtualHardDisk>
+</DataVirtualHardDisks>
