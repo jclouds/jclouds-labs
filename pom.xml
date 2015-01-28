@@ -71,6 +71,8 @@
     <module>rackspace-cloudfiles-us</module>
     <module>rackspace-cloudnetworks-uk</module>
     <module>rackspace-cloudnetworks-us</module>
+    <module>rackspace-cdn-uk</module>
+    <module>rackspace-cdn-us</module>
   </modules>
 
   <profiles>
