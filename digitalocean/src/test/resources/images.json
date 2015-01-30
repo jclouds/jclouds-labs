@@ -6,21 +6,27 @@
          "name":"CentOS 5.8 x64",
          "slug":"centos-58-x64",
          "distribution":"CentOS",
-         "public":true
+         "public":true,
+         "regions": [1, 2, 3],
+         "region_slugs": ["nyc1", "ams1", "sfo1"]
       },
       {
          "id":1602,
          "name":"CentOS 5.8 x32",
          "slug":"centos-58-x32",
          "distribution":"CentOS",
-         "public":true
+         "public":true,
+         "regions": [1, 2, 3],
+         "region_slugs": ["nyc1", "ams1", "sfo1"]
       },
       {
          "id":12573,
          "name":"Debian 6.0 x64",
          "slug":null,
          "distribution":"Debian",
-         "public":true
+         "public":true,
+         "regions": [1, 2, 3],
+         "region_slugs": ["nyc1", "ams1", "sfo1"]
       }
    ]
 }

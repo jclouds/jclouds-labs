@@ -26,14 +26,13 @@ import java.util.regex.Pattern;
 /**
  * The operating system of an image.
  * <p>
- * This class parses the <code>name</code> string (e.g. "Ubuntu 12.10 x64") of the images and properly sets each field
- * to the right value.
+ * This class parses the <code>name</code> string (e.g. "12.10 x64") of the images and properly sets each field to the
+ * right value.
  */
 public class OperatingSystem {
 
-   // Parse something like "Ubuntu 12.10 x64"
-   private static final Pattern VERSION_PATTERN = compile("\\s(\\d+(?:\\.?\\d+)?)");
-   private static final Pattern ARCH_PATTERN = compile("x\\d{2}");
+   // Parse something like "12.10 x64" or "Ubuntu 12.10.1 x64" and matches the version and architecture
+   private static final Pattern VERSION_PATTERN = compile("(?:[a-zA-Z\\s]*\\s+)?(\\d+(?:\\.?\\d+)*)?(?:\\s*(x\\d{2}))?.*");
    private static final String IS_64_BIT = "x64";
 
    private final Distribution distribution;
@@ -77,13 +76,13 @@ public class OperatingSystem {
       }
 
       public OperatingSystem build() {
-         return new OperatingSystem(distribution, match(VERSION_PATTERN, name, 1), match(ARCH_PATTERN, name, 0));
+         return new OperatingSystem(distribution, match(VERSION_PATTERN, name, 1), match(VERSION_PATTERN, name, 2));
       }
    }
 
    private static String match(final Pattern pattern, final String input, int group) {
       Matcher m = pattern.matcher(input);
-      return m.find() ? nullToEmpty(m.group(group)) : "";
+      return m.matches() ? nullToEmpty(m.group(group)) : "";
    }
 
    @Override

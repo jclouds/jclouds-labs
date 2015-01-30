@@ -25,6 +25,7 @@ import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.digitalocean.domain.Image;
 import org.testng.annotations.Test;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -35,18 +36,23 @@ public class ImageToImageTest {
 
    @Test
    public void testConvertImage() {
-      Image image = new Image(1, "Ubuntu 14.04 x64", "Ubuntu 14.04 x64", true, "ubuntu-1404-x86");
+      Image image = new Image(1, "14.04 x64", "Ubuntu", true, "ubuntu-1404-x86", ImmutableList.<Integer> of(),
+            ImmutableList.<String> of());
       org.jclouds.compute.domain.Image expected = new ImageBuilder()
             .id("ubuntu-1404-x86")
             .providerId("1")
-            .name("Ubuntu 14.04 x64")
+            .name("14.04 x64")
+            .description("Ubuntu 14.04 x64")
             .status(AVAILABLE)
             .operatingSystem(
-                  OperatingSystem.builder().name("Ubuntu 14.04 x64").description("Ubuntu 14.04 x64")
-                        .family(OsFamily.UBUNTU).version("14.04").arch("x64").is64Bit(true).build())
+                  OperatingSystem.builder().name("Ubuntu").description("Ubuntu 14.04 x64").family(OsFamily.UBUNTU)
+                        .version("14.04").arch("x64").is64Bit(true).build())
             .userMetadata(ImmutableMap.of("publicImage", "true")).build();
 
-      ImageToImage function = new ImageToImage();
-      assertEquals(function.apply(image), expected);
+      org.jclouds.compute.domain.Image result = new ImageToImage().apply(image);
+      assertEquals(result, expected);
+      assertEquals(result.getDescription(), expected.getDescription());
+      assertEquals(result.getOperatingSystem(), expected.getOperatingSystem());
+      assertEquals(result.getStatus(), expected.getStatus());
    }
 }

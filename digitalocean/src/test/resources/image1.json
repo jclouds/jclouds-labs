@@ -5,6 +5,8 @@
     "name" : "Arch Linux 2013.05 x32",
     "distribution" : "Arch Linux",
     "public" : true,
-    "slug" : "arch-linux-x32"
+    "slug" : "arch-linux-x32",
+    "regions": [1, 2, 3],
+    "region_slugs": ["nyc1", "ams1", "sfo1"]
   }
 }

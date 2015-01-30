@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 public class OperatingSystemTest {
 
    public void testParseStandard64bit() {
-      OperatingSystem os = OperatingSystem.builder().from("Ubuntu 12.10 x64", "Ubuntu").build();
+      OperatingSystem os = OperatingSystem.builder().from("12.10 x64", "Ubuntu").build();
 
       assertEquals(os.getDistribution(), Distribution.UBUNTU);
       assertEquals(os.getVersion(), "12.10");
@@ -37,22 +37,40 @@ public class OperatingSystemTest {
       assertTrue(os.is64bit());
    }
 
+   public void testLongVersionStandard64bit() {
+      OperatingSystem os = OperatingSystem.builder().from("12.10.1 x64", "Ubuntu").build();
+
+      assertEquals(os.getDistribution(), Distribution.UBUNTU);
+      assertEquals(os.getVersion(), "12.10.1");
+      assertEquals(os.getArch(), "x64");
+      assertTrue(os.is64bit());
+   }
+
+   public void testParseStandard64bitWithPrefix() {
+      OperatingSystem os = OperatingSystem.builder().from("Arch Linux 12.10 x64 Desktop", "Arch Linux").build();
+
+      assertEquals(os.getDistribution(), Distribution.ARCHLINUX);
+      assertEquals(os.getVersion(), "12.10");
+      assertEquals(os.getArch(), "x64");
+      assertTrue(os.is64bit());
+   }
+
    public void testParseStandard() {
-      OperatingSystem os = OperatingSystem.builder().from("Ubuntu 12.10 x32", "Ubuntu").build();
+      OperatingSystem os = OperatingSystem.builder().from("12.10 x32", "Ubuntu").build();
 
       assertEquals(os.getDistribution(), Distribution.UBUNTU);
       assertEquals(os.getVersion(), "12.10");
       assertEquals(os.getArch(), "x32");
       assertFalse(os.is64bit());
 
-      os = OperatingSystem.builder().from("CentOS 6.5 x64", "CentOS").build();
+      os = OperatingSystem.builder().from("6.5 x64", "CentOS").build();
 
       assertEquals(os.getDistribution(), Distribution.CENTOS);
       assertEquals(os.getVersion(), "6.5");
       assertEquals(os.getArch(), "x64");
       assertTrue(os.is64bit());
 
-      os = OperatingSystem.builder().from("CentOS 6.5 x64", "Centos").build();
+      os = OperatingSystem.builder().from("6.5 x64", "Centos").build();
 
       assertEquals(os.getDistribution(), Distribution.CENTOS);
       assertEquals(os.getVersion(), "6.5");
@@ -61,7 +79,7 @@ public class OperatingSystemTest {
    }
 
    public void testParseNoArch() {
-      OperatingSystem os = OperatingSystem.builder().from("Ubuntu 12.10", "Ubuntu").build();
+      OperatingSystem os = OperatingSystem.builder().from("12.10", "Ubuntu").build();
 
       assertEquals(os.getDistribution(), Distribution.UBUNTU);
       assertEquals(os.getVersion(), "12.10");
@@ -70,7 +88,7 @@ public class OperatingSystemTest {
    }
 
    public void testParseNoVersion() {
-      OperatingSystem os = OperatingSystem.builder().from("Ubuntu x64", "Ubuntu").build();
+      OperatingSystem os = OperatingSystem.builder().from("x64", "Ubuntu").build();
 
       assertEquals(os.getDistribution(), Distribution.UBUNTU);
       assertEquals(os.getVersion(), "");
@@ -79,7 +97,7 @@ public class OperatingSystemTest {
    }
 
    public void testParseUnknownDistribution() {
-      OperatingSystem os = OperatingSystem.builder().from("Ubuntu 12.04 x64", "Foo").build();
+      OperatingSystem os = OperatingSystem.builder().from("12.04 x64", "Foo").build();
 
       assertEquals(os.getDistribution(), Distribution.UNRECOGNIZED);
       assertEquals(os.getVersion(), "12.04");

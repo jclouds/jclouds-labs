@@ -5,6 +5,8 @@
     "name" : "Dokku on Ubuntu 13.04 0.2.0rc3",
     "distribution" : "Ubuntu",
     "public" : true,
-    "slug" : null
+    "slug" : null,
+    "regions": [1, 2, 3],
+    "region_slugs": ["nyc1", "ams1", "sfo1"]
   }
 }

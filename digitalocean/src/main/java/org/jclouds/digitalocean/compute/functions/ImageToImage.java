@@ -36,23 +36,24 @@ public class ImageToImage implements Function<Image, org.jclouds.compute.domain.
 
    @Override
    public org.jclouds.compute.domain.Image apply(final Image input) {
+      String description = input.getOs().getDistribution().getValue() + " " + input.getName();
       ImageBuilder builder = new ImageBuilder();
       // Private images don't have a slug
       builder.id(input.getSlug() != null ? input.getSlug() : String.valueOf(input.getId()));
       builder.providerId(String.valueOf(input.getId()));
       builder.name(input.getName());
-      builder.description(input.getName());
+      builder.description(description);
       builder.status(Status.AVAILABLE);
 
       OperatingSystem os = input.getOs();
 
-      builder.operatingSystem(builder() 
-            .name(input.getName()) 
-            .family(os.getDistribution().getOsFamily()) 
-            .description(input.getName()) 
-            .arch(os.getArch()) 
-            .version(os.getVersion()) 
-            .is64Bit(os.is64bit()) 
+      builder.operatingSystem(builder()
+            .name(os.getDistribution().getValue())
+            .family(os.getDistribution().getOsFamily())
+            .description(description)
+            .arch(os.getArch())
+            .version(os.getVersion())
+            .is64Bit(os.is64bit())
             .build());
 
       ImmutableMap.Builder<String, String> metadata = ImmutableMap.builder();

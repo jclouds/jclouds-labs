@@ -19,8 +19,13 @@ package org.jclouds.digitalocean.domain;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.beans.ConstructorProperties;
+import java.util.List;
+
+import javax.inject.Named;
 
 import org.jclouds.javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * An Image.
@@ -31,14 +36,21 @@ public class Image {
    private final OperatingSystem os;
    private final boolean publicImage;
    private final String slug;
+   @Named("regions")
+   private final List<Integer> regionIds;
+   @Named("region_slugs")
+   private final List<String> regionSlugs;
 
-   @ConstructorProperties({ "id", "name", "distribution", "public", "slug" })
-   public Image(int id, String name, String distribution, boolean publicImage, @Nullable String slug) {
+   @ConstructorProperties({ "id", "name", "distribution", "public", "slug", "regions", "region_slugs" })
+   public Image(int id, String name, String distribution, boolean publicImage, @Nullable String slug,
+         List<Integer> regionIds, List<String> regionSlugs) {
       this.id = id;
       this.name = checkNotNull(name, "name");
       this.os = OperatingSystem.builder().from(name, checkNotNull(distribution, "distribution")).build();
       this.publicImage = publicImage;
       this.slug = slug;
+      this.regionIds = ImmutableList.copyOf(checkNotNull(regionIds, "regionIds"));
+      this.regionSlugs = ImmutableList.copyOf(checkNotNull(regionSlugs, "regionSlugs"));
    }
 
    public int getId() {
@@ -61,6 +73,14 @@ public class Image {
       return slug;
    }
 
+   public List<Integer> getRegionIds() {
+      return regionIds;
+   }
+
+   public List<String> getRegionSlugs() {
+      return regionSlugs;
+   }
+
    @Override
    public int hashCode() {
       final int prime = 31;
@@ -70,6 +90,8 @@ public class Image {
       result = prime * result + (os == null ? 0 : os.hashCode());
       result = prime * result + (publicImage ? 1231 : 1237);
       result = prime * result + (slug == null ? 0 : slug.hashCode());
+      result = prime * result + (regionIds == null ? 0 : regionIds.hashCode());
+      result = prime * result + (regionSlugs == null ? 0 : regionSlugs.hashCode());
       return result;
    }
 
@@ -112,13 +134,27 @@ public class Image {
       } else if (!slug.equals(other.slug)) {
          return false;
       }
+      if (regionIds == null) {
+         if (other.regionIds != null) {
+            return false;
+         }
+      } else if (!regionIds.equals(other.regionIds)) {
+         return false;
+      }
+      if (regionSlugs == null) {
+         if (other.regionSlugs != null) {
+            return false;
+         }
+      } else if (!regionSlugs.equals(other.regionSlugs)) {
+         return false;
+      }
       return true;
    }
 
    @Override
    public String toString() {
       return "Image [id=" + id + ", name=" + name + ", os=" + os + ", publicImage=" + publicImage + ", slug=" + slug
-            + "]";
+            + ", regionIds=" + regionIds + ", regionSlugs=" + regionSlugs + "]";
    }
 
 }

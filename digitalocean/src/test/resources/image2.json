@@ -5,6 +5,8 @@
     "name" : "Fedora 17 x64 Desktop",
     "distribution" : "Fedora",
     "public" : true,
-    "slug" : "fedora-17-x64"
+    "slug" : "fedora-17-x64",
+    "regions": [1, 2, 3],
+    "region_slugs": ["nyc1", "ams1", "sfo1"]
   }
 }

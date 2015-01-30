@@ -30,12 +30,8 @@ import com.google.common.base.Predicate;
  * DigitalOcean image distributions.
  */
 public enum Distribution {
-   ARCHLINUX(OsFamily.ARCH, "Arch Linux"), 
-   CENTOS(OsFamily.CENTOS, "CentOS"), 
-   DEBIAN(OsFamily.DEBIAN, "Debian"), 
-   FEDORA(OsFamily.FEDORA, "Fedora"), 
-   UBUNTU(OsFamily.UBUNTU, "Ubuntu"), 
-   UNRECOGNIZED(OsFamily.UNRECOGNIZED, ""); 
+   ARCHLINUX(OsFamily.ARCH, "Arch Linux"), CENTOS(OsFamily.CENTOS, "CentOS"), DEBIAN(OsFamily.DEBIAN, "Debian"), FEDORA(
+         OsFamily.FEDORA, "Fedora"), UBUNTU(OsFamily.UBUNTU, "Ubuntu"), UNRECOGNIZED(OsFamily.UNRECOGNIZED, "");
 
    private static final List<Distribution> values = asList(Distribution.values());
 
@@ -49,6 +45,10 @@ public enum Distribution {
 
    public OsFamily getOsFamily() {
       return this.osFamily;
+   }
+
+   public String getValue() {
+      return value;
    }
 
    public static Distribution fromValue(String value) {
