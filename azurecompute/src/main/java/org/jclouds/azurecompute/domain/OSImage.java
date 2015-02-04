@@ -16,6 +16,7 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import static com.google.common.collect.ImmutableList.copyOf;
 import java.net.URI;
 import java.util.List;
 
@@ -30,9 +31,12 @@ import com.google.auto.value.AutoValue;
  */
 @AutoValue
 public abstract class OSImage {
+
    public enum Type {
       LINUX, WINDOWS;
    }
+
+   OSImage() {} // For AutoValue only!
 
    public abstract String name();
 
@@ -83,6 +87,6 @@ public abstract class OSImage {
    public static OSImage create(String name, String location, String affinityGroup, String label,
          String description, String category, Type os, String publisherName, URI mediaLink, int logicalSizeInGB, List<String> eula) {
       return new AutoValue_OSImage(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
-            logicalSizeInGB, eula);
+            logicalSizeInGB, copyOf(eula));
    }
 }

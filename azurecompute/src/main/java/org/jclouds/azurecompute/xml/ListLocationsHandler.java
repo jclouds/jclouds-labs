@@ -24,11 +24,16 @@ import org.xml.sax.Attributes;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+import com.google.inject.Inject;
 
 public final class ListLocationsHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Location>> {
    private boolean inLocation;
-   private final LocationHandler locationHandler = new LocationHandler();
+   private final LocationHandler locationHandler;
    private final Builder<Location> locations = ImmutableList.builder();
+
+   @Inject ListLocationsHandler(LocationHandler locationHandler) {
+      this.locationHandler = locationHandler;
+   }
 
    @Override public List<Location> getResult() {
       return locations.build();

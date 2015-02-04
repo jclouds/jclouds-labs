@@ -24,11 +24,16 @@ import org.xml.sax.Attributes;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+import com.google.inject.Inject;
 
 public final class ListOSImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<OSImage>> {
    private boolean inOSImage;
-   private final OSImageHandler OSImageHandler = new OSImageHandler();
+   private final OSImageHandler osImageHandler;
    private final Builder<OSImage> images = ImmutableList.builder();
+
+   @Inject ListOSImagesHandler(OSImageHandler osImageHandler) {
+      this.osImageHandler = osImageHandler;
+   }
 
    @Override
    public List<OSImage> getResult() {
@@ -46,16 +51,16 @@ public final class ListOSImagesHandler extends ParseSax.HandlerForGeneratedReque
    public void endElement(String uri, String name, String qName) {
       if (qName.equals("OSImage")) {
          inOSImage = false;
-         images.add(OSImageHandler.getResult());
+         images.add(osImageHandler.getResult());
       } else if (inOSImage) {
-         OSImageHandler.endElement(uri, name, qName);
+         osImageHandler.endElement(uri, name, qName);
       }
    }
 
    @Override
    public void characters(char ch[], int start, int length) {
       if (inOSImage) {
-         OSImageHandler.characters(ch, start, length);
+         osImageHandler.characters(ch, start, length);
       }
    }
 }

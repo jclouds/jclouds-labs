@@ -28,10 +28,13 @@ import com.google.auto.value.AutoValue;
  */
 @AutoValue
 public abstract class Operation {
+
    public enum Status {
       IN_PROGRESS, SUCCEEDED, FAILED,
       UNRECOGNIZED;
    }
+
+   Operation() {} // For AutoValue only!
 
    public abstract String id();
 

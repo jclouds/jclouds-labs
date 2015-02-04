@@ -24,6 +24,8 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class OSImageParams {
 
+   OSImageParams() {} // For AutoValue only!
+
    /** Specifies a name that is used to identify the image when you create a Virtual Machine. */
    public abstract String name();
 

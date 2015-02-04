@@ -35,7 +35,7 @@ public class ListDisksHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/disks.xml");
-      List<Disk> result = factory.create(new ListDisksHandler()).parse(is);
+      List<Disk> result = factory.create(new ListDisksHandler(new DiskHandler())).parse(is);
 
       assertEquals(result, expected());
    }

@@ -91,7 +91,7 @@ public class BaseAzureComputeApiMockTest {
    protected RecordedRequest assertSent(MockWebServer server, String method, String path, String resource)
          throws InterruptedException {
       RecordedRequest request = assertSent(server, method, path);
-      assertThat(new String(request.getBody(), UTF_8)).isEqualTo(stringFromResource(resource));
+      assertThat(new String(request.getBody(), UTF_8)).isEqualTo(stringFromResource(resource).trim());
       return request;
    }
 }

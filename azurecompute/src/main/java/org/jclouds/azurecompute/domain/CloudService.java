@@ -16,6 +16,7 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import static com.google.common.collect.ImmutableMap.copyOf;
 import java.util.Date;
 import java.util.Map;
 
@@ -28,14 +29,17 @@ import com.google.auto.value.AutoValue;
  * service type; the name of the affinity group to which the service belongs, or its location if it
  * is not part of an affinity group.
  *
- * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
+ * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >CloudService</a>
  */
 @AutoValue
 public abstract class CloudService {
+
    public enum Status {
       CREATING, CREATED, DELETING, DELETED, CHANGING, RESOLVING_DNS,
       UNRECOGNIZED;
    }
+
+   CloudService() {} // For AutoValue only!
 
    /**
     * The name of the cloud service. This name is the DNS prefix name and can be used to access the
@@ -87,6 +91,6 @@ public abstract class CloudService {
    public static CloudService create(String name, String location, String affinityGroup, String label,
          String description, Status status, Date created, Date lastModified, Map<String, String> extendedProperties) {
       return new AutoValue_CloudService(name, location, affinityGroup, label, description, status, created,
-            lastModified, extendedProperties);
+            lastModified, copyOf(extendedProperties));
    }
 }

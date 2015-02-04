@@ -46,7 +46,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
 
          DeploymentParams params = DeploymentParams.builder()
                .name("mydeployment")
-               .size(RoleSize.MEDIUM)
+               .size(RoleSize.Type.MEDIUM)
                .sourceImageName(OSImage.name()).mediaLink(OSImage.mediaLink()).os(OSImage.os())
                .username("username").password("testpwd")
                .externalEndpoint(inboundTcpToLocalPort(80, 8080))
@@ -71,7 +71,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
 
          DeploymentParams params = DeploymentParams.builder()
                .name("mydeployment")
-               .size(RoleSize.MEDIUM)
+               .size(RoleSize.Type.MEDIUM)
                .sourceImageName(OSImage.name()).mediaLink(OSImage.mediaLink()).os(OSImage.os())
                .username("username").password("testpwd")
                .externalEndpoint(inboundTcpToLocalPort(80, 8080))

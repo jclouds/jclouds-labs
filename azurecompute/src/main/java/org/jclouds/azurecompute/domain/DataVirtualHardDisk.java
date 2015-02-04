@@ -89,9 +89,7 @@ public abstract class DataVirtualHardDisk {
     */
    @Nullable public abstract String ioType();
 
-   public static DataVirtualHardDisk create(Caching hostCaching, String diskName,
-         Integer lun, Integer logicalDiskSizeInGB, URI mediaLink, String ioType) {
-      return new AutoValue_DataVirtualHardDisk(hostCaching, diskName, lun, logicalDiskSizeInGB,
-            mediaLink, ioType);
+   public static DataVirtualHardDisk create(Caching hostCaching, String diskName, Integer lun, Integer logicalDiskSizeInGB, URI mediaLink, String ioType) {
+      return new AutoValue_DataVirtualHardDisk(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink, ioType);
    }
 }

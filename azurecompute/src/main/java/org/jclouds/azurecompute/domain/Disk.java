@@ -29,8 +29,14 @@ import com.google.auto.value.AutoValue;
  */
 @AutoValue
 public abstract class Disk {
+
+   Disk() {} // For AutoValue only!
+
    @AutoValue
    public abstract static class Attachment {
+
+      Attachment() {} // For AutoValue only!
+
       /** The deployment in which the disk is being used. */
       public abstract String deployment();
 

@@ -22,15 +22,20 @@ import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.BaseEncoding.base64;
 import static org.jclouds.util.SaxUtils.currentOrNull;
 
+import java.util.List;
+
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.Deployment.InstanceStatus;
 import org.jclouds.azurecompute.domain.Deployment.Slot;
 import org.jclouds.azurecompute.domain.Deployment.Status;
+import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460804" >Response body description</a>.
@@ -40,29 +45,67 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
    private Slot slot;
    private Status status;
    private String label;
-   private String virtualMachineName;
-   private String instanceName;
-   private InstanceStatus instanceStatus;
    private String instanceStateDetails;
+   private String virtualNetworkName;
+   private List<Deployment.VirtualIP> virtualIPs = Lists.newArrayList();
+   private List<Deployment.RoleInstance> roleInstanceList = Lists.newArrayList();
+   private List<Role> roleList = Lists.newArrayList();
    private String instanceErrorCode;
-   private RoleSize instanceSize;
-   private String privateIpAddress;
-   private String publicIpAddress;
 
-   private int depth;
+   private boolean inRoleInstanceList;
+   private boolean inRoleList;
+   private boolean inListVirtualIPs;
+   private final VirtualIPHandler virtualIPHandler;
+   private final RoleInstanceHandler roleInstanceHandler;
+   private final RoleHandler roleHandler;
    private final StringBuilder currentText = new StringBuilder();
 
+   @Inject DeploymentHandler(VirtualIPHandler virtualIPHandler, RoleInstanceHandler roleInstanceHandler, RoleHandler roleHandler) {
+      this.virtualIPHandler = virtualIPHandler;
+      this.roleInstanceHandler = roleInstanceHandler;
+      this.roleHandler = roleHandler;
+   }
+
    @Override public Deployment getResult() { // Fields don't need to be reset as this isn't used in a loop.
-      return Deployment.create(name, slot, status, label, virtualMachineName, instanceName, instanceStatus, //
-            instanceStateDetails, instanceErrorCode, instanceSize, privateIpAddress, publicIpAddress);
+      return Deployment.create(name, slot, status, label, //
+            instanceStateDetails, instanceErrorCode, virtualIPs, roleInstanceList, roleList, virtualNetworkName);
    }
 
    @Override public void startElement(String url, String name, String qName, Attributes attributes) {
-      depth++;
+      if (qName.equals("VirtualIPs")) {
+         inListVirtualIPs = true;
+      } else if (qName.equals("RoleInstanceList")) {
+         inRoleInstanceList = true;
+      } else if (qName.equals("RoleList")) {
+         inRoleList = true;
+      }
+      if (inRoleInstanceList) {
+         roleInstanceHandler.startElement(url, name, qName, attributes);
+      }
+      if (inRoleList) {
+         roleHandler.startElement(url, name, qName, attributes);
+      }
    }
 
    @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
-      if (qName.equals("Name") && depth == 2) {
+      if (qName.equals("RoleInstanceList")) {
+         inRoleInstanceList = false;
+      } else if (qName.equals("RoleInstance")) {
+         roleInstanceList.add(roleInstanceHandler.getResult());
+      } else if (inRoleInstanceList) {
+         roleInstanceHandler.endElement(ignoredUri, ignoredName, qName);
+      } else if (qName.equals("RoleList")) {
+         inRoleList = false;
+      } else if (qName.equals("Role")) {
+         roleList.add(roleHandler.getResult());
+      } else if (inRoleList) {
+         roleHandler.endElement(ignoredUri, ignoredName, qName);
+      } else if (qName.equals("VirtualIPs")) {
+         inListVirtualIPs = false;
+         virtualIPs.add(virtualIPHandler.getResult());
+      } else if (inListVirtualIPs) {
+         virtualIPHandler.endElement(ignoredUri, ignoredName, qName);
+      } else if (qName.equals("Name") && name == null) {
          name = currentOrNull(currentText);
       } else if (qName.equals("DeploymentSlot")) {
          String slotText = currentOrNull(currentText);
@@ -71,7 +114,7 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
          }
       } else if (qName.equals("Status")) {
          String statusText = currentOrNull(currentText);
-         if (statusText != null) {
+         if (status == null && statusText != null) {
             status = parseStatus(statusText);
          }
       } else if (qName.equals("Label")) {
@@ -79,35 +122,26 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
          if (labelText != null) {
             label = new String(base64().decode(labelText), UTF_8);
          }
-      } else if (qName.equals("RoleName")) {
-         virtualMachineName = currentOrNull(currentText);
-      } else if (qName.equals("InstanceName")) {
-         instanceName = currentOrNull(currentText);
-      } else if (qName.equals("InstanceStatus")) {
-         String instanceStatusText = currentOrNull(currentText);
-         if (instanceStatusText != null) {
-            instanceStatus = parseInstanceStatus(instanceStatusText);
-         }
       } else if (qName.equals("InstanceStateDetails")) {
          instanceStateDetails = currentOrNull(currentText);
       } else if (qName.equals("InstanceErrorCode")) {
          instanceErrorCode = currentOrNull(currentText);
-      } else if (qName.equals("InstanceSize")) {
-         String instanceSizeText = currentOrNull(currentText);
-         if (instanceSizeText != null) {
-            instanceSize = parseRoleSize(instanceSizeText);
-         }
-      } else if (qName.equals("IpAddress")) {
-         privateIpAddress = currentOrNull(currentText);
-      } else if (qName.equals("Vip")) {
-         publicIpAddress = currentOrNull(currentText);
+      } else if (qName.equals("VirtualNetworkName")) {
+         virtualNetworkName = currentOrNull(currentText);
       }
       currentText.setLength(0);
-      depth--;
    }
 
    @Override public void characters(char ch[], int start, int length) {
-      currentText.append(ch, start, length);
+      if (inListVirtualIPs) {
+         virtualIPHandler.characters(ch, start, length);
+      } else if (inRoleInstanceList) {
+         roleInstanceHandler.characters(ch, start, length);
+      } else if (inRoleList) {
+         roleHandler.characters(ch, start, length);
+      } else if (!inListVirtualIPs && !inRoleInstanceList && !inRoleList) {
+         currentText.append(ch, start, length);
+      }
    }
 
    private static Status parseStatus(String status) {
@@ -135,11 +169,11 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
       }
    }
 
-   private static RoleSize parseRoleSize(String roleSize) {
+   private static RoleSize.Type parseRoleSize(String roleSize) {
       try {
-         return RoleSize.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, roleSize));
+         return RoleSize.Type.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, roleSize));
       } catch (IllegalArgumentException e) {
-         return RoleSize.UNRECOGNIZED;
+         return RoleSize.Type.UNRECOGNIZED;
       }
    }
 }

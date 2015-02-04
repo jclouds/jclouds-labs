@@ -18,16 +18,24 @@ package org.jclouds.azurecompute.xml;
 
 import static org.jclouds.azurecompute.xml.DeploymentHandler.parseInstanceStatus;
 import static org.testng.Assert.assertEquals;
-
 import java.io.InputStream;
+import java.net.URI;
 
+import org.jclouds.azurecompute.domain.DataVirtualHardDisk;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.Deployment.InstanceStatus;
 import org.jclouds.azurecompute.domain.Deployment.Slot;
 import org.jclouds.azurecompute.domain.Deployment.Status;
+import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.azurecompute.domain.Role;
+import org.jclouds.azurecompute.domain.Role.ConfigurationSet;
+import org.jclouds.azurecompute.domain.Role.ConfigurationSet.InputEndpoint;
+import org.jclouds.azurecompute.domain.Role.OSVirtualHardDisk;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
+
+import com.google.common.collect.ImmutableList;
 
 @Test(groups = "unit", testName = "DeploymentHandlerTest")
 public class DeploymentHandlerTest extends BaseHandlerTest {
@@ -62,25 +70,76 @@ public class DeploymentHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/deployment.xml");
-      Deployment result = factory.create(new DeploymentHandler()).parse(is);
+      Deployment result = factory.create(new DeploymentHandler(
+              new VirtualIPHandler(),
+              new RoleInstanceHandler(),
+              new RoleHandler(
+                      new ConfigurationSetHandler(new InputEndpointHandler(), new SubnetNameHandler()),
+                      new OSVirtualHardDiskHandler(),
+                      new DataVirtualHardDiskHandler())))
+              .parse(is);
 
       assertEquals(result, expected());
    }
 
    public static Deployment expected() {
       return Deployment.create( //
-            "deployment_name", // name
-            Slot.PRODUCTION, // slot
-            Status.RUNNING, // status
-            "neotysss", // label
-            "role_name_from_role_list", // virtualMachineName
-            "instance_name", // instanceName
-            InstanceStatus.READY_ROLE, // instanceStatus
-            null, // instanceStateDetails
-            null, // instanceErrorCode
-            RoleSize.MEDIUM, // instanceSize
-            "10.59.244.162", // privateIpAddress
-            "168.63.27.148" // publicIpAddress
+              "node1855162607153993262-b26", // name
+              Slot.PRODUCTION, // slot
+              Status.RUNNING, // status
+              "node1855162607153993262-b26", // label
+              null, // instanceStateDetails
+              null, // instanceErrorCode
+              ImmutableList.of(Deployment.VirtualIP.create("191.233.85.49", true, "node1855162607153993262-b26ContractContract")), //virtualIPs
+              ImmutableList.of(Deployment.RoleInstance.create(
+                      "node1855162607153993262-b26", // roleName
+                      "node1855162607153993262-b26", // instanceName
+                      InstanceStatus.READY_ROLE, //instanceStatus
+                      0,
+                      0,
+                      RoleSize.Type.BASIC_A0,
+                      "10.0.2.6",
+                      "node1855162607153993262-b26", // hostname
+                      ImmutableList.of(
+                              Deployment.InstanceEndpoint.create(
+                              "tcp_22-22", // name
+                              "191.233.85.49", // vip
+                              22, // publicPort
+                              22, // localPort
+                              "tcp" // protocol
+                              )
+                      )
+              )),
+              ImmutableList.of(Role.create(
+                      "node1855162607153993262-b26",
+                      "PersistentVMRole",
+                      null,
+                      null,
+                      ImmutableList.of(ConfigurationSet.create(
+                              "NetworkConfiguration",
+                              ImmutableList.of(
+                                      InputEndpoint.create("tcp_22-22", "tcp", 22, 22, "191.233.85.49", false, null, null, null),
+                                      InputEndpoint.create("tcp_2375-2375", "tcp", 2375, 2375, "191.233.85.49", false, null, null, null)
+                              ),
+                              ImmutableList.of(ConfigurationSet.SubnetName.create("Subnet-1")),
+                              null,
+                              ImmutableList.<ConfigurationSet.PublicIP>of())),
+                      ImmutableList.<Role.ResourceExtensionReference>of(),
+                      null,
+                      ImmutableList.<DataVirtualHardDisk>of(),
+                      OSVirtualHardDisk.create(
+                              "ReadWrite",
+                              "node1855162607153993262-b26-node1855162607153993262-b26-0-201412221704390597",
+                              null,
+                              null,
+                              URI.create("https://test.blob.core.windows.net/clockerblob/container-node1855162607153993262-b26.vhd"),
+                              "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-trusty-14_04_1-LTS-amd64-server-20141212-en-us-30GB",
+                              OSImage.Type.LINUX),
+                      RoleSize.Type.BASIC_A0,
+                      null,
+                      null
+                      )),
+              "jclouds" // virtualNetworkName
       );
    }
 }

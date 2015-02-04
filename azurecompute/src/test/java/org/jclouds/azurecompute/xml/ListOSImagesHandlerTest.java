@@ -35,7 +35,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/images.xml");
-      List<OSImage> result = factory.create(new ListOSImagesHandler()).parse(is);
+      List<OSImage> result = factory.create(new ListOSImagesHandler(new OSImageHandler())).parse(is);
 
       assertEquals(result, expected());
    }

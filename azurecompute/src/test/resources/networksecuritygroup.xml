@@ -1,0 +1,85 @@
+<NetworkSecurityGroup xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>jclouds-NSG</Name>
+  <Label>jclouds-NSG</Label>
+  <Location>West Europe</Location>
+  <Rules>
+    <Rule>
+      <Name>ALLOW VNET INBOUND</Name>
+      <Type>Inbound</Type>
+      <Priority>65000</Priority>
+      <Action>Allow</Action>
+      <SourceAddressPrefix>VIRTUAL_NETWORK</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>VIRTUAL_NETWORK</DestinationAddressPrefix>
+      <DestinationPortRange>*</DestinationPortRange>
+      <Protocol>*</Protocol>
+      <State>Active</State>
+      <IsDefault>true</IsDefault>
+    </Rule>
+    <Rule>
+      <Name>ALLOW VNET OUTBOUND</Name>
+      <Type>Outbound</Type>
+      <Priority>65000</Priority>
+      <Action>Allow</Action>
+      <SourceAddressPrefix>VIRTUAL_NETWORK</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>VIRTUAL_NETWORK</DestinationAddressPrefix>
+      <DestinationPortRange>*</DestinationPortRange>
+      <Protocol>*</Protocol>
+      <State>Active</State>
+      <IsDefault>true</IsDefault>
+    </Rule>
+    <Rule>
+      <Name>ALLOW AZURE LOAD BALANCER INBOUND</Name>
+      <Type>Inbound</Type>
+      <Priority>65001</Priority>
+      <Action>Allow</Action>
+      <SourceAddressPrefix>AZURE_LOADBALANCER</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>*</DestinationAddressPrefix>
+      <DestinationPortRange>*</DestinationPortRange>
+      <Protocol>*</Protocol>
+      <State>Active</State>
+      <IsDefault>true</IsDefault>
+    </Rule>
+    <Rule>
+      <Name>ALLOW INTERNET OUTBOUND</Name>
+      <Type>Outbound</Type>
+      <Priority>65001</Priority>
+      <Action>Allow</Action>
+      <SourceAddressPrefix>*</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>INTERNET</DestinationAddressPrefix>
+      <DestinationPortRange>*</DestinationPortRange>
+      <Protocol>*</Protocol>
+      <State>Active</State>
+      <IsDefault>true</IsDefault>
+    </Rule>
+    <Rule>
+      <Name>DENY ALL OUTBOUND</Name>
+      <Type>Outbound</Type>
+      <Priority>65500</Priority>
+      <Action>Deny</Action>
+      <SourceAddressPrefix>*</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>*</DestinationAddressPrefix>
+      <DestinationPortRange>*</DestinationPortRange>
+      <Protocol>*</Protocol>
+      <State>Active</State>
+      <IsDefault>true</IsDefault>
+    </Rule>
+    <Rule>
+      <Name>DENY ALL INBOUND</Name>
+      <Type>Inbound</Type>
+      <Priority>65500</Priority>
+      <Action>Deny</Action>
+      <SourceAddressPrefix>*</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>*</DestinationAddressPrefix>
+      <DestinationPortRange>*</DestinationPortRange>
+      <Protocol>*</Protocol>
+      <State>Active</State>
+      <IsDefault>true</IsDefault>
+    </Rule>
+  </Rules>
+</NetworkSecurityGroup>

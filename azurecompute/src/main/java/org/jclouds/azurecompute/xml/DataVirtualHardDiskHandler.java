@@ -16,15 +16,14 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import org.jclouds.azurecompute.domain.DataVirtualHardDisk;
-import org.jclouds.http.functions.ParseSax;
-
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
-
+import static org.jclouds.util.SaxUtils.currentOrNull;
 import java.net.URI;
 
-import static org.jclouds.util.SaxUtils.currentOrNull;
+import org.jclouds.azurecompute.domain.DataVirtualHardDisk;
+import org.jclouds.http.functions.ParseSax;
+import org.xml.sax.Attributes;
 
 /**
  * @see <a href="https://msdn.microsoft.com/en-us/library/azure/jj157193.aspx#DataVirtualHardDisks" >api</a>
@@ -39,6 +38,9 @@ final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReque
    private String ioType;
 
    private final StringBuilder currentText = new StringBuilder();
+
+   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   }
 
    @Override
    public DataVirtualHardDisk getResult() {

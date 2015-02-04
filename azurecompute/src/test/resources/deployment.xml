@@ -1,74 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-  <Name>deployment_name</Name>
+  <Name>node1855162607153993262-b26</Name>
   <DeploymentSlot>Production</DeploymentSlot>
-  <PrivateID>05aa8ec5d8ee4215894431c7db401b31</PrivateID>
+  <PrivateID>706868c87c1847f28a47644b68f3babf</PrivateID>
   <Status>Running</Status>
-  <Label>bmVvdHlzc3M=</Label>
-  <Url>http://neotysss.cloudapp.net/</Url>
-  <Configuration>
-    PFNlcnZpY2VDb25maWd1cmF0aW9uIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zPSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL1NlcnZpY2VIb3N0aW5nLzIwMDgvMTAvU2VydmljZUNvbmZpZ3VyYXRpb24iPg0KICA8Um9sZSBuYW1lPSJuZW90eXNzcyI+DQogICAgPEluc3RhbmNlcyBjb3VudD0iMSIgLz4NCiAgPC9Sb2xlPg0KPC9TZXJ2aWNlQ29uZmlndXJhdGlvbj4=
-  </Configuration>
+  <Label>bm9kZTE4NTUxNjI2MDcxNTM5OTMyNjItYjI2</Label>
+  <Url>http://node1855162607153993262-b26.cloudapp.net/</Url>
+  <Configuration>PFNlcnZpY2VDb25maWd1cmF0aW9uIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL1NlcnZpY2VIb3N0aW5nLzIwMDgvMTAvU2VydmljZUNvbmZpZ3VyYXRpb24iPg0KICA8Um9sZSBuYW1lPSJub2RlMTg1NTE2MjYwNzE1Mzk5MzI2Mi1iMjYiPg0KICAgIDxJbnN0YW5jZXMgY291bnQ9IjEiIC8+DQogIDwvUm9sZT4NCjwvU2VydmljZUNvbmZpZ3VyYXRpb24+</Configuration>
   <RoleInstanceList>
     <RoleInstance>
-      <RoleName>role_name_from_instance</RoleName>
-      <InstanceName>instance_name</InstanceName>
+      <RoleName>node1855162607153993262-b26</RoleName>
+      <InstanceName>node1855162607153993262-b26</InstanceName>
       <InstanceStatus>ReadyRole</InstanceStatus>
       <InstanceUpgradeDomain>0</InstanceUpgradeDomain>
       <InstanceFaultDomain>0</InstanceFaultDomain>
-      <InstanceSize>Medium</InstanceSize>
-      <InstanceStateDetails/>
-      <IpAddress>10.59.244.162</IpAddress>
+      <InstanceSize>Basic_A0</InstanceSize>
+      <InstanceStateDetails />
+      <IpAddress>10.0.2.6</IpAddress>
       <InstanceEndpoints>
         <InstanceEndpoint>
-          <Name>SSH</Name>
-          <Vip>168.63.27.148</Vip>
+          <Name>tcp_22-22</Name>
+          <Vip>191.233.85.49</Vip>
           <PublicPort>22</PublicPort>
           <LocalPort>22</LocalPort>
           <Protocol>tcp</Protocol>
         </InstanceEndpoint>
       </InstanceEndpoints>
       <PowerState>Started</PowerState>
-      <HostName>host_name</HostName>
+      <HostName>node1855162607153993262-b26</HostName>
     </RoleInstance>
   </RoleInstanceList>
   <UpgradeDomainCount>1</UpgradeDomainCount>
   <RoleList>
     <Role i:type="PersistentVMRole">
-      <RoleName>role_name_from_role_list</RoleName>
-      <OsVersion/>
+      <RoleName>node1855162607153993262-b26</RoleName>
+      <OsVersion />
       <RoleType>PersistentVMRole</RoleType>
       <ConfigurationSets>
         <ConfigurationSet i:type="NetworkConfigurationSet">
           <ConfigurationSetType>NetworkConfiguration</ConfigurationSetType>
           <InputEndpoints>
             <InputEndpoint>
-              <LocalPort>22</LocalPort>
-              <Name>SSH</Name>
-              <Port>22</Port>
+            <LocalPort>22</LocalPort>
+            <Name>tcp_22-22</Name>
+            <Port>22</Port>
+            <Protocol>tcp</Protocol>
+            <Vip>191.233.85.49</Vip>
+            <EnableDirectServerReturn>false</EnableDirectServerReturn>
+            </InputEndpoint>
+            <InputEndpoint>
+              <LocalPort>2375</LocalPort>
+              <Name>tcp_2375-2375</Name>
+              <Port>2375</Port>
               <Protocol>tcp</Protocol>
-              <Vip>168.63.27.148</Vip>
+              <Vip>191.233.85.49</Vip>
+              <EnableDirectServerReturn>false</EnableDirectServerReturn>
             </InputEndpoint>
           </InputEndpoints>
-          <SubnetNames/>
+          <SubnetNames>
+            <SubnetName>Subnet-1</SubnetName>
+          </SubnetNames>
         </ConfigurationSet>
       </ConfigurationSets>
-      <DataVirtualHardDisks/>
+      <DataVirtualHardDisks />
       <OSVirtualHardDisk>
         <HostCaching>ReadWrite</HostCaching>
-        <DiskName>neotysss-neotysss-0-20120824091357</DiskName>
-        <MediaLink>
-          http://portalvhds0g7xhnq2x7t21.blob.core.windows.net/disks/neotysss/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd
-        </MediaLink>
-        <SourceImageName>MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd</SourceImageName>
-        <OS>Windows</OS>
+        <DiskName>node1855162607153993262-b26-node1855162607153993262-b26-0-201412221704390597</DiskName>
+        <MediaLink>https://test.blob.core.windows.net/clockerblob/container-node1855162607153993262-b26.vhd</MediaLink>
+        <SourceImageName>b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-trusty-14_04_1-LTS-amd64-server-20141212-en-us-30GB</SourceImageName>
+        <OS>Linux</OS>
       </OSVirtualHardDisk>
-      <RoleSize>Medium</RoleSize>
+      <RoleSize>Basic_A0</RoleSize>
     </Role>
   </RoleList>
-  <SdkVersion/>
+  <SdkVersion />
   <Locked>false</Locked>
   <RollbackAllowed>false</RollbackAllowed>
-  <CreatedTime>2012-08-24T09:13:53Z</CreatedTime>
-  <LastModifiedTime>2012-08-27T08:55:13Z</LastModifiedTime>
-  <ExtendedProperties/>
+  <VirtualNetworkName>jclouds</VirtualNetworkName>
+  <CreatedTime>2014-12-22T17:04:35Z</CreatedTime>
+  <LastModifiedTime>2014-12-22T17:07:02Z</LastModifiedTime>
+  <ExtendedProperties />
+  <PersistentVMDowntime>
+    <StartTime>2014-12-02T01:25:12Z</StartTime>
+    <EndTime>2014-12-04T01:25:12Z</EndTime>
+    <Status>PersistentVMUpdateScheduled</Status>
+  </PersistentVMDowntime>
+  <VirtualIPs>
+    <VirtualIP>
+      <Address>191.233.85.49</Address>
+      <IsDnsProgrammed>true</IsDnsProgrammed>
+      <Name>node1855162607153993262-b26ContractContract</Name>
+    </VirtualIP>
+  </VirtualIPs>
+  <InternalDnsSuffix>node1855162607153993262-b26.a5.internal.cloudapp.net</InternalDnsSuffix>
+  <LoadBalancers />
 </Deployment>

@@ -16,6 +16,9 @@
  */
 package org.jclouds.azurecompute.domain;
 
+import static com.google.common.collect.ImmutableList.copyOf;
+import java.util.List;
+
 import org.jclouds.javax.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -43,6 +46,78 @@ public abstract class Deployment {
       UNRECOGNIZED,
    }
 
+   @AutoValue
+   public abstract static class VirtualIP {
+
+      public abstract String address();
+
+      public abstract Boolean isDnsProgrammed();
+
+      public abstract String name();
+
+      VirtualIP() { // For AutoValue only!
+      }
+
+      public static VirtualIP create(String address, Boolean isDnsProgrammed, String name) {
+         return new AutoValue_Deployment_VirtualIP(address, isDnsProgrammed, name);
+      }
+   }
+
+   @AutoValue
+   public abstract static class InstanceEndpoint {
+
+      public abstract String name();
+
+      public abstract String vip();
+
+      public abstract int publicPort();
+
+      public abstract int localPort();
+
+      public abstract String protocol();
+
+      InstanceEndpoint() { // For AutoValue only!
+      }
+
+      public static InstanceEndpoint create(String name, String vip, int publicPort, int localPort, String protocol) {
+         return new AutoValue_Deployment_InstanceEndpoint(name, vip, publicPort, localPort, protocol);
+      }
+   }
+
+   @AutoValue
+   public abstract static class RoleInstance {
+
+      public abstract String roleName();
+
+      public abstract String instanceName();
+
+      public abstract InstanceStatus instanceStatus();
+
+      public abstract int instanceUpgradeDomain();
+
+      public abstract int instanceFaultDomain();
+
+      public abstract RoleSize.Type instanceSize();
+
+      public abstract String ipAddress();
+
+      @Nullable public abstract String hostname();
+
+      @Nullable public abstract List<InstanceEndpoint> instanceEndpoints();
+
+      RoleInstance() { // For AutoValue only!
+      }
+
+      public static RoleInstance create(String roleName, String instanceName, InstanceStatus instanceStatus, int instanceUpgradeDomain,
+                                        int instanceFaultDomain, RoleSize.Type instanceSize, String ipAddress, String hostname, List<InstanceEndpoint> instanceEndpoints) {
+         return new AutoValue_Deployment_RoleInstance(roleName, instanceName, instanceStatus, instanceUpgradeDomain,
+                 instanceFaultDomain, instanceSize, ipAddress, hostname, copyOf(instanceEndpoints));
+      }
+   }
+
+   Deployment() {} // For AutoValue only!
+
+
    /** The user-supplied name for this deployment. */
    public abstract String name();
 
@@ -57,15 +132,6 @@ public abstract class Deployment {
     * purposes.
     */
    public abstract String label();
-
-   /** Specifies the name for the virtual machine. The name must be unique within Windows Azure. */
-   public abstract String virtualMachineName();
-
-   /** The name of the specific role instance (if any). */
-   @Nullable public abstract String instanceName();
-
-   /** The current status of this instance. */
-   public abstract InstanceStatus instanceStatus();
 
    /**
     * The instance state is returned as an English human-readable string that,
@@ -98,16 +164,17 @@ public abstract class Deployment {
     */
    @Nullable public abstract String instanceErrorCode();
 
-   public abstract RoleSize instanceSize();
+   public abstract List<VirtualIP> virtualIPs();
 
-   public abstract String privateIpAddress();
+   public abstract List<RoleInstance> roleInstanceList();
 
-   public abstract String publicIpAddress();
+   @Nullable public abstract List<Role> roles();
 
-   public static Deployment create(String name, Slot slot, Status status, String label, String virtualMachineName,
-         String instanceName, InstanceStatus instanceStatus, String instanceStateDetails, String instanceErrorCode,
-         RoleSize instanceSize, String privateIpAddress, String publicIpAddress) {
-      return new AutoValue_Deployment(name, slot, status, label, virtualMachineName, instanceName, instanceStatus,
-            instanceStateDetails, instanceErrorCode, instanceSize, privateIpAddress, publicIpAddress);
+   @Nullable public abstract String virtualNetworkName();
+
+   public static Deployment create(String name, Slot slot, Status status, String label, String instanceStateDetails, String instanceErrorCode,
+                                   List<VirtualIP> virtualIPs, List<RoleInstance> roleInstanceList, List<Role> roles, String virtualNetworkName) {
+      return new AutoValue_Deployment(name, slot, status, label, instanceStateDetails,
+              instanceErrorCode, copyOf(virtualIPs), copyOf(roleInstanceList), copyOf(roles), virtualNetworkName);
    }
 }

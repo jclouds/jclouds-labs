@@ -24,11 +24,16 @@ import org.xml.sax.Attributes;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+import com.google.inject.Inject;
 
 public final class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Disk>> {
    private boolean inDisk;
-   private final DiskHandler diskHandler = new DiskHandler();
+   private final DiskHandler diskHandler;
    private final Builder<Disk> disks = ImmutableList.builder();
+
+   @Inject ListDisksHandler(DiskHandler diskHandler) {
+      this.diskHandler = diskHandler;
+   }
 
    @Override public List<Disk> getResult() {
       return disks.build();

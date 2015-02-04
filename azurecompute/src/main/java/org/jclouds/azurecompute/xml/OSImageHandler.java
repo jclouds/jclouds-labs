@@ -20,9 +20,11 @@ import static com.google.common.base.Strings.emptyToNull;
 import static org.jclouds.util.SaxUtils.currentOrNull;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.functions.ParseSax;
 
 import com.google.common.base.Splitter;
@@ -33,6 +35,7 @@ import com.google.common.collect.Lists;
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
  */
 final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<OSImage> {
+
    private String name;
    private String location;
    private String affinityGroup;
@@ -40,10 +43,19 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
    private String category;
    private String description;
    private OSImage.Type os;
-   private String publisherName;
    private URI mediaLink;
    private Integer logicalSizeInGB;
    private final List<String> eulas = Lists.newArrayList();
+   private String imageFamily;
+   private Date publishedDate;
+   private String iconUri;
+   private String smallIconUri;
+   private URI privacyUri;
+   private URI pricingDetailLink;
+   private String recommendedVMSize;
+   private Boolean isPremium;
+   private Boolean showInGui;
+   private String publisherName;
 
    private final StringBuilder currentText = new StringBuilder();
 
@@ -57,11 +69,16 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
    }
 
    private void resetState() {
-      name = affinityGroup = label = description = category = null;
+      name = affinityGroup = label = description = category = imageFamily = iconUri = smallIconUri = recommendedVMSize
+              = publisherName = null;
       os = null;
       publisherName = null;
       mediaLink = null;
       logicalSizeInGB = null;
+      publishedDate = null;
+      privacyUri = pricingDetailLink = null;
+      isPremium = null;
+      showInGui = null;
       eulas.clear();
       location = null;
    }
@@ -105,7 +122,43 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
          }
       } else if (qName.equals("Label")) {
          label = currentOrNull(currentText);
+      } else if (qName.equals("ImageFamily")) {
+         imageFamily = currentOrNull(currentText);
+      } else if (qName.equals("PublishedDate")) {
+         String date = currentOrNull(currentText);
+         if (date != null) {
+            publishedDate = new SimpleDateFormatDateService().iso8601DateOrSecondsDateParse(date);
+         }
+      } else if (qName.equals("IconUri")) {
+         iconUri = currentOrNull(currentText);
+      } else if (qName.equals("SmallIconUri")) {
+         smallIconUri = currentOrNull(currentText);
+      } else if (qName.equals("PrivacyUri")) {
+         String uri = currentOrNull(currentText);
+         if (uri != null) {
+            privacyUri = URI.create(uri);
+         }
+      } else if (qName.equals("RecommendedVMSize")) {
+         recommendedVMSize = currentOrNull(currentText);
+      } else if (qName.equals("IsPremium")) {
+         String premium = currentOrNull(currentText);
+         if (premium != null) {
+            isPremium = Boolean.valueOf(premium);
+         }
+      } else if (qName.equals("ShowInGui")) {
+         String show = currentOrNull(currentText);
+         if (show != null) {
+            showInGui = Boolean.valueOf(show);
+         }
+      } else if (qName.equals("PublisherName")) {
+         publisherName = currentOrNull(currentText);
+      } else if (qName.equals("PricingDetailLink")) {
+         String uri = currentOrNull(currentText);
+         if (uri != null) {
+            pricingDetailLink = URI.create(uri);
+         }
       }
+
       currentText.setLength(0);
    }
 

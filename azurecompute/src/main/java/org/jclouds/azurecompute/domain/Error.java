@@ -23,6 +23,7 @@ import com.google.auto.value.AutoValue;
  */
 @AutoValue
 public abstract class Error {
+
    public static enum Code {
       MISSING_OR_INCORRECT_VERSION_HEADER,
       INVALID_XML_REQUEST,
@@ -38,6 +39,8 @@ public abstract class Error {
       CONFLICT_ERROR,
       UNRECOGNIZED;
    }
+
+   Error() {} // For AutoValue only!
 
    /** Error code */
    public abstract Code code();

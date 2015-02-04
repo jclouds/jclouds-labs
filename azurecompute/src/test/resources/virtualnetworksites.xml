@@ -1,0 +1,36 @@
+<VirtualNetworkSites xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <VirtualNetworkSite>
+    <Name>Group Group testDocker</Name>
+    <Id>39d0d14b-fc1d-496f-8928-b5a13a6f4b64</Id>
+    <State>Created</State>
+    <AddressSpace>
+      <AddressPrefixes>
+        <AddressPrefix>10.1.0.0/16</AddressPrefix>
+      </AddressPrefixes>
+    </AddressSpace>
+    <Subnets>
+      <Subnet>
+        <Name>Subnet-1</Name>
+        <AddressPrefix>10.1.0.0/24</AddressPrefix>
+      </Subnet>
+    </Subnets>
+    <Location>West Europe</Location>
+  </VirtualNetworkSite>
+  <VirtualNetworkSite>
+    <Name>Group Group-1 dockertest</Name>
+    <Id>12252126-cffc-4fac-8ba4-afa7150a8d4a</Id>
+    <State>Created</State>
+    <AddressSpace>
+      <AddressPrefixes>
+        <AddressPrefix>10.2.0.0/16</AddressPrefix>
+      </AddressPrefixes>
+    </AddressSpace>
+    <Subnets>
+      <Subnet>
+        <Name>Subnet-1</Name>
+        <AddressPrefix>10.2.0.0/24</AddressPrefix>
+      </Subnet>
+    </Subnets>
+    <Location>West Europe</Location>
+  </VirtualNetworkSite>
+</VirtualNetworkSites>

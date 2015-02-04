@@ -32,7 +32,7 @@ public class ListLocationsHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/locations.xml");
-      List<Location> result = factory.create(new ListLocationsHandler()).parse(is);
+      List<Location> result = factory.create(new ListLocationsHandler(new LocationHandler())).parse(is);
 
       assertEquals(result, expected());
    }
