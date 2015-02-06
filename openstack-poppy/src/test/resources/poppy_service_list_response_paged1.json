@@ -1,0 +1,135 @@
+{
+  "links": [
+    {
+      "rel": "next",
+      "href": "/v1.0/services?marker=96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0&limit=20"
+    },
+    {
+      "href": "/v1.0/services?marker=396f12f8-521e-4b91-8e21-2e003500433a&page_reverse=True",
+      "rel": "previous"
+    }
+  ],
+  "services": [
+    {
+      "id": "96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0",
+      "name": "mywebsite.com",
+      "domains": [
+        {
+          "domain": "www.mywebsite.com"
+        }
+      ],
+      "origins": [
+        {
+          "origin": "mywebsite.com",
+          "port": 80,
+          "ssl": false
+        }
+      ],
+      "caching": [
+        {
+          "name": "default",
+          "ttl": 3600
+        },
+        {
+          "name": "home",
+          "ttl": 17200,
+          "rules": [
+            {
+              "name": "index",
+              "request_url": "/index.htm"
+            }
+          ]
+        },
+        {
+          "name": "images",
+          "ttl": 12800,
+          "rules": [
+            {
+              "name": "images",
+              "request_url": "*.png"
+            }
+          ]
+        }
+      ],
+      "restrictions": [
+        {
+          "name": "website only",
+          "rules": [
+            {
+              "name": "mywebsite.com",
+              "referrer": "www.mywebsite.com"
+            }
+          ]
+        }
+      ],
+      "flavor_id": "asia",
+      "status": "deployed",
+      "errors" : [],
+      "links": [
+        {
+          "href": "https://www.poppycdn.io/v1.0/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0",
+          "rel": "self"
+        },
+        {
+          "href": "mywebsite.com.cdn123.poppycdn.net",
+          "rel": "access_url"
+        },
+        {
+          "href": "https://www.poppycdn.io/v1.0/flavors/asia",
+          "rel": "flavor"
+        }
+      ]
+    },
+    {
+      "id": "96737ae3-cfc1-4c72-be88-5d0e7cc9a3f1",
+      "name": "myothersite.com",
+      "domains": [
+        {
+          "domain": "www.myothersite.com"
+        }
+      ],
+      "origins": [
+        {
+          "origin": "44.33.22.11",
+          "port": 80,
+          "ssl": false
+        },
+        {
+          "origin": "77.66.55.44",
+          "port": 80,
+          "ssl": false,
+          "rules": [
+            {
+              "name": "videos",
+              "request_url": "^/videos/*.m3u"
+            }
+          ]
+        }
+      ],
+      "caching": [
+        {
+          "name": "default",
+          "ttl": 3600
+        }
+      ],
+      "restrictions": [
+      ],
+      "flavor_id": "europe",
+      "status": "deployed",
+      "links": [
+        {
+          "href": "https://www.poppycdn.io/v1.0/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f1",
+          "rel": "self"
+        },
+        {
+          "href": "myothersite.com.poppycdn.net",
+          "rel": "access_url"
+        },
+        {
+          "href": "https://www.poppycdn.io/v1.0/flavors/europe",
+          "rel": "flavor"
+        }
+      ]
+    }
+  ]
+}

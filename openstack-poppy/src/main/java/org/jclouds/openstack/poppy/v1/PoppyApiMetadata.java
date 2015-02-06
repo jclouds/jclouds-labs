@@ -23,6 +23,7 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
+import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
 import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
@@ -75,6 +76,7 @@ public class PoppyApiMetadata extends BaseHttpApiMetadata<PoppyApi> {
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                            .add(AuthenticationApiModule.class)
                            .add(KeystoneAuthenticationModule.class)
+                           .add(OkHttpCommandExecutorServiceModule.class)
                            .add(ProviderModule.class)
                            .add(PoppyHttpApiModule.class).build());
       }

@@ -23,22 +23,32 @@ import org.jclouds.json.SerializedNames;
 import org.jclouds.openstack.v2_0.domain.Link;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Representation of an OpenStack Poppy CDN Flavor.
  */
 @AutoValue
 public abstract class Flavor {
-
+   /**
+    * @return Specifies the name of the flavor. The name must not exceed 64 bytes in length and is limited to Unicode,
+    * digits, underscores, and hyphens.
+    */
    public abstract String getId();
+
+   /**
+    * @return Specifies the list of providers mapped to this flavor.
+    */
    public abstract List<Provider> getProviders();
+
+   /**
+    * @return Specifies the self-navigating JSON document paths.
+    */
    public abstract Set<Link> getLinks();
 
    @SerializedNames({ "id", "providers", "links" })
-   public static Flavor create(String id, List<Provider> providers, Set<Link> links) {
-      return new AutoValue_Flavor(id, providers, links);
-   }
-
-   Flavor() {
+   private static Flavor create(String id, List<Provider> providers, Set<Link> links) {
+      return new AutoValue_Flavor(id, ImmutableList.copyOf(providers), ImmutableSet.copyOf(links));
    }
 }

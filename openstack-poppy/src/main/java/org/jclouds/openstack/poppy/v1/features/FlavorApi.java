@@ -38,7 +38,7 @@ import com.google.common.annotations.Beta;
 import com.google.common.collect.FluentIterable;
 
 /**
- * Provides access to Flavor features.
+ * Provides access to OpenStack Poppy Flavor features.
  */
 @Beta
 @RequestFilters(AuthenticateRequest.class)
@@ -46,13 +46,25 @@ import com.google.common.collect.FluentIterable;
 @Endpoint(CDN.class)
 @Path("/flavors")
 public interface FlavorApi {
-
+   /**
+    * Gets a list of Flavors.
+    * <p/>
+    * If there are no Flavors, this method will fallback to an empty collection.
+    *
+    * @return an {@code Iterable} collection.
+    */
    @Named("flavor:list")
    @GET
    @SelectJson("flavors")
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    FluentIterable<Flavor> list();
 
+   /**
+    * Gets a Flavor.
+    *
+    * @param id  the id of the {@code Flavor}
+    * @return the {@code Flavor} for the specified id, otherwise {@code null}
+    */
    @Named("flavor:get")
    @GET
    @Path("/{id}")

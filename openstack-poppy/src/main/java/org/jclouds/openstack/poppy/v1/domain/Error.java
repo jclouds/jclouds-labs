@@ -16,31 +16,24 @@
  */
 package org.jclouds.openstack.poppy.v1.domain;
 
-import java.util.Set;
-
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
-import org.jclouds.openstack.v2_0.domain.Link;
 
 import com.google.auto.value.AutoValue;
 
 /**
- * Representation of an OpenStack Poppy CDN Provider.
+ * Representation of an OpenStack Poppy Error.
  */
 @AutoValue
-public abstract class Provider {
-   /**
-    * @return The name of the provider. The name must not exceed 64 bytes in length and is limited to
-    * Unicode, digits, underscores, and hyphens.
-    */
-   public abstract String getProvider();
+abstract class Error {
 
    /**
-    * @return Specifies a list with an href where rel is provider_url.
+    * @return Specifies an error message detailing why there is an error.
     */
-   public abstract Set<Link> getLinks();
+   @Nullable abstract String getMessage();
 
-   @SerializedNames({ "provider", "links" })
-   private static Provider create(String provider, Set<Link> links) {
-      return new AutoValue_Provider(provider, links);
+   @SerializedNames({ "message" })
+   static Error create(String message) {
+      return new AutoValue_Error(message);
    }
 }

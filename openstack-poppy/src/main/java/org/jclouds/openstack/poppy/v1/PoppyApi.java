@@ -25,9 +25,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
-import org.jclouds.openstack.poppy.v1.PoppyFallbacks.FalseOn500or503;
 import org.jclouds.openstack.poppy.v1.config.CDN;
+import org.jclouds.openstack.poppy.v1.fallbacks.PoppyFallbacks.FalseOn500or503;
 import org.jclouds.openstack.poppy.v1.features.FlavorApi;
+import org.jclouds.openstack.poppy.v1.features.ServiceApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.Endpoint;
 import org.jclouds.rest.annotations.Fallback;
@@ -62,4 +63,9 @@ public interface PoppyApi extends Closeable {
    @Delegate
    FlavorApi getFlavorApi();
 
+   /**
+    * Provides access to Service features.
+    */
+   @Delegate
+   ServiceApi getServiceApi();
 }

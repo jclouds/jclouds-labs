@@ -1,0 +1,36 @@
+{
+    "name": "mywebsite.com",
+    "domains": [
+        {
+            "domain": "www.mywebsite.com"
+        },
+        {
+            "domain": "blog.mywebsite.com"
+        }
+    ],
+    "origins": [
+        {
+            "origin": "mywebsite.com",
+            "port": 80,
+            "ssl": false
+        }
+    ],
+    "restrictions": [
+        {
+            "name": "website only",
+            "rules": [
+                {
+                    "name": "mywebsite.com",
+                    "referrer": "www.mywebsite.com"
+                }
+            ]
+        }
+    ],
+    "caching": [
+        {
+            "name": "default",
+            "ttl": 3600
+        }
+    ],
+    "flavor_id": "cdn"
+}

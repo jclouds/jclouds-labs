@@ -66,6 +66,5 @@ public class FlavorApiLiveTest extends BasePoppyApiLiveTest {
          assertEquals(oneFlavor.getProviders(), flavor.getProviders());
          assertEquals(oneFlavor.getLinks(), flavor.getLinks());
       }
-
    }
 }

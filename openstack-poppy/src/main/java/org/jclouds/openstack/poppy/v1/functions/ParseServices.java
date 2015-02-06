@@ -14,33 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.openstack.poppy.v1.domain;
+package org.jclouds.openstack.poppy.v1.functions;
 
-import java.util.Set;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import org.jclouds.json.SerializedNames;
-import org.jclouds.openstack.v2_0.domain.Link;
+import org.jclouds.http.functions.ParseJson;
+import org.jclouds.json.Json;
+import org.jclouds.openstack.poppy.v1.domain.Services;
 
-import com.google.auto.value.AutoValue;
+import com.google.inject.TypeLiteral;
 
 /**
- * Representation of an OpenStack Poppy CDN Provider.
+ * Used by jclouds to provide more specific collections and fallbacks.
  */
-@AutoValue
-public abstract class Provider {
-   /**
-    * @return The name of the provider. The name must not exceed 64 bytes in length and is limited to
-    * Unicode, digits, underscores, and hyphens.
-    */
-   public abstract String getProvider();
+@Singleton
+public class ParseServices extends ParseJson<Services> {
 
-   /**
-    * @return Specifies a list with an href where rel is provider_url.
-    */
-   public abstract Set<Link> getLinks();
-
-   @SerializedNames({ "provider", "links" })
-   private static Provider create(String provider, Set<Link> links) {
-      return new AutoValue_Provider(provider, links);
+   @Inject
+   ParseServices(Json json) {
+      super(json, TypeLiteral.get(Services.class));
    }
 }

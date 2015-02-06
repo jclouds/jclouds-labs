@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.openstack.poppy.v1;
+package org.jclouds.openstack.poppy.v1.fallbacks;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.in;
-import static com.google.common.base.Throwables.propagate;
 import static com.google.common.primitives.Ints.asList;
 import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
@@ -31,9 +30,7 @@ public final class PoppyFallbacks {
    public static class FalseOn500or503 implements Fallback<Boolean> {
       @Override
       public Boolean createOrPropagate(Throwable t) throws Exception {
-         if (returnValueOnCodeOrNull(checkNotNull(t, "throwable"), false, in(asList(500, 503))) != null)
-            return false;
-         throw propagate(t);
+         return returnValueOnCodeOrNull(checkNotNull(t, "throwable"), false, in(asList(500, 503)));
       }
    }
 }
