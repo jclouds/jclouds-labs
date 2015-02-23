@@ -1,0 +1,49 @@
+[
+{
+    "id": "e2f6784b75ed8768e83b7ec46ca8ef784941f6ce4c53231023804277965da1d2",
+    "name": "/atlassian-stash",
+    "image": {
+        "name": "nkatsaros/atlassian-stash:3.5",
+        "entrypoint": [
+            "/docker-entrypoint.sh"
+        ],
+        "environment": {
+            "STASH_HOME": "/var/atlassian/stash",
+            "STASH_VERSION": "3.5.0"
+        },
+        "hostname": "e2f6784b75ed",
+        "bind_ports": [
+            {
+                "proto": "tcp",
+                "host_ip": "0.0.0.0",
+                "port": 8089,
+                "container_port": 8080
+            }
+        ],
+        "volumes": [
+            "/var/atlassian/stash"
+        ],
+        "restart_policy": {},
+        "publish": true,
+        "network_mode": "bridge"
+    },
+    "engine": {
+        "id": "localhost",
+        "addr": "http://localhost:2375",
+        "cpus": 8,
+        "memory": 8096,
+        "labels": [
+            "localhost"
+        ]
+    },
+    "state": "stopped",
+    "ports": [
+        {
+            "proto": "tcp",
+            "host_ip": "0.0.0.0",
+            "port": 8089,
+            "container_port": 8080
+        }
+    ]
+}
+]
