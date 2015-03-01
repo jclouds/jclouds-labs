@@ -42,6 +42,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+/*
+ * Note: Live test for CaptureVMImage method is in VMImageApiLiveTest class
+ */
 @Test(groups = "live", testName = "VirtualMachineApiLiveTest", singleThreaded = true)
 public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
 

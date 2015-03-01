@@ -25,6 +25,9 @@ import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
+/*
+ * Note: Mock test for CaptureVMImage method is in VMImageApiMockTest class
+ */
 @Test(groups = "unit", testName = "VirtualMachineApiMockTest")
 public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
 
