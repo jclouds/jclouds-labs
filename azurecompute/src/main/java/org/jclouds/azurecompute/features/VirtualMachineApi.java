@@ -28,7 +28,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.azurecompute.binders.CaptureVMImageParamsToXML;
 import org.jclouds.azurecompute.binders.RoleToXML;
+import org.jclouds.azurecompute.domain.CaptureVMImageParams;
 import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.xml.RoleHandler;
@@ -124,4 +126,15 @@ public interface VirtualMachineApi {
    @ResponseParser(ParseRequestIdHeader.class)
    String updateRole(@PathParam("roleName") String roleName, @BinderParam(RoleToXML.class) Role role);
 
+   /**
+    * The Capture VM Image operation creates a copy of the operating system virtual hard disk (VHD) and all of the data
+    * VHDs that are associated with the Virtual Machine, saves the VHD copies in the same storage location as the original
+    * VHDs, and registers the copies as a VM Image in the image repository that is associated with the specified subscription.
+    */
+   @Named("CaptureVMImage")
+   @POST
+   @Produces(MediaType.APPLICATION_XML)
+   @Path("/roleinstances/{name}/Operations")
+   @ResponseParser(ParseRequestIdHeader.class) String capture(@PathParam("name") String name,
+         @BinderParam(CaptureVMImageParamsToXML.class) CaptureVMImageParams params);
 }
