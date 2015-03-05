@@ -16,57 +16,79 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
-import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.VIRTUAL_NETWORK_NAME;
 import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
-import java.util.logging.Logger;
-
+import com.google.common.base.Predicates;
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
-import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;
-import org.jclouds.azurecompute.domain.Operation;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import java.util.List;
+import org.jclouds.azurecompute.AzureTestUtils;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 @Test(groups = "live", testName = "VirtualNetworkApiLiveTest", singleThreaded = true)
 public class VirtualNetworkApiLiveTest extends BaseAzureComputeApiLiveTest {
 
-   private NetworkConfiguration originalNetworkConfiguration;
-   private Predicate<String> operationSucceeded;
+   @BeforeSuite
+   @Override
+   public void setup() {
+      super.setup();
 
-   @BeforeClass
-   public void init() {
-      operationSucceeded = retry(new Predicate<String>() {
-         public boolean apply(String input) {
-            return api.getOperationApi().get(input).status() == Operation.Status.SUCCEEDED;
+      final List<VirtualNetworkSite> virtualNetworkSites = Lists.newArrayList(Iterables.filter(
+              AzureTestUtils.getVirtualNetworkSite(api),
+              new AzureTestUtils.SameVirtualNetworkSiteNamePredicate(VIRTUAL_NETWORK_NAME)));
+
+      final NetworkConfiguration.AddressSpace addressSpace = NetworkConfiguration.AddressSpace.create(
+              DEFAULT_ADDRESS_SPACE);
+
+      final ImmutableList<NetworkConfiguration.Subnet> subnets = ImmutableList.of(NetworkConfiguration.Subnet.create(
+              DEFAULT_SUBNET_NAME, DEFAULT_SUBNET_ADDRESS_SPACE, null));
+
+      final NetworkConfiguration networkConfiguration = api().getNetworkConfiguration();
+      assertThat(networkConfiguration.virtualNetworkConfiguration().dns()).isEqualTo(
+              networkConfiguration.virtualNetworkConfiguration().dns());
+
+      assertThat(virtualNetworkSites.size()).isEqualTo(1);
+      assertThat(virtualNetworkSites.get(0).name()).isEqualTo(VIRTUAL_NETWORK_NAME);
+      assertThat(virtualNetworkSites.get(0).location()).isEqualTo(LOCATION);
+      assertThat(virtualNetworkSites.get(0).addressSpace()).isEqualTo(addressSpace);
+      assertThat(virtualNetworkSites.get(0).subnets()).isEqualTo(subnets);
+   }
+
+   @AfterSuite
+   @Override
+   protected void tearDown() {
+      super.tearDown();
+
+      final List<VirtualNetworkSite> virtualNetworkSites = Lists.newArrayList(Iterables.filter(api.
+              getVirtualNetworkApi().list(),
+              Predicates.not(new AzureTestUtils.SameVirtualNetworkSiteNamePredicate(VIRTUAL_NETWORK_NAME))));
+
+      retry(new ConflictManagementPredicate(operationSucceeded) {
+
+         @Override
+         protected String operation() {
+            return api.getVirtualNetworkApi().set(NetworkConfiguration.create(
+                    NetworkConfiguration.VirtualNetworkConfiguration.create(null, virtualNetworkSites)));
          }
-      }, 600, 5, 5, SECONDS);
-
-      originalNetworkConfiguration = api().getNetworkConfiguration();
+      }, 600, 30, 30, SECONDS).apply(VIRTUAL_NETWORK_NAME);
    }
 
-   @AfterClass(alwaysRun = true)
-   public void cleanup() {
-      if (originalNetworkConfiguration != null) {
-         api().set(originalNetworkConfiguration);
-      } else {
-         api().set(NetworkConfiguration.create(VirtualNetworkConfiguration.create(null, ImmutableList.<VirtualNetworkSite>of())));
-      }
-   }
-
-   @Test public void testList() {
-      for (VirtualNetworkSite virtualNetworkSite : api().list()) {
-         checkVirtualNetworkSite(virtualNetworkSite);
+   @Test
+   public void testList() {
+      for (VirtualNetworkSite vns : api().list()) {
+         checkVirtualNetworkSite(vns);
       }
    }
 
@@ -76,32 +98,12 @@ public class VirtualNetworkApiLiveTest extends BaseAzureComputeApiLiveTest {
       assertNotNull(virtualNetworkSite.subnets(), "Subnets cannot be null for: " + virtualNetworkSite);
    }
 
-   @Test public void testSet() {
-      String id = "39d0d14b-fc1d-496f-8928-b5a13a6f4123";
-      final String name = UPPER_CAMEL.to(LOWER_UNDERSCORE, getClass().getSimpleName());
-      final String location = "West Europe";
-      final NetworkConfiguration.AddressSpace addressSpace = NetworkConfiguration.AddressSpace.create("10.0.0.1/20");
-      final ImmutableList<NetworkConfiguration.Subnet> subnets = ImmutableList.of(NetworkConfiguration.Subnet.create("Subnet-jclouds", "10.0.0.1/23", null));
-      final VirtualNetworkSite virtualNetworkSite = VirtualNetworkSite.create(id, name, location, addressSpace, subnets);
-      String requestId = api().set(NetworkConfiguration.create(VirtualNetworkConfiguration.create(null, ImmutableList.of(virtualNetworkSite))));
-      assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
-
-      final NetworkConfiguration networkConfiguration = api().getNetworkConfiguration();
-      assertThat(networkConfiguration.virtualNetworkConfiguration().dns()).isEqualTo(networkConfiguration.virtualNetworkConfiguration().dns());
-      assertThat(networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites().size()).isEqualTo(1);
-      assertThat(networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites().get(0).name()).isEqualTo(name);
-      assertThat(networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites().get(0).location()).isEqualTo(location);
-      assertThat(networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites().get(0).addressSpace()).isEqualTo(addressSpace);
-      assertThat(networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites().get(0).subnets()).isEqualTo(subnets);
-   }
-
-   @Test(dependsOnMethods = "testSet")
+   @Test
    public void testGetNetworkConfiguration() {
       final NetworkConfiguration networkConfiguration = api().getNetworkConfiguration();
       assertThat(networkConfiguration).isNotNull();
-      for (VirtualNetworkSite virtualNetworkSite : networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites()) {
-         assertThat(virtualNetworkSite.name()).isNotEqualTo("not-existing");
+      for (VirtualNetworkSite vns : networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites()) {
+         assertThat(vns.name()).isNotEqualTo("not-existing");
       }
    }
 

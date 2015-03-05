@@ -33,28 +33,28 @@ public class ListDataVirtualHardDisksHandlerTest extends BaseHandlerTest {
    public void test() {
       InputStream is = getClass().getResourceAsStream("/datavirtualharddisk.xml");
       List<DataVirtualHardDisk> result = factory
-            .create(new ListDataVirtualHardDisksHandler(new DataVirtualHardDiskHandler())).parse(is);
+              .create(new ListDataVirtualHardDisksHandler(new DataVirtualHardDiskHandler())).parse(is);
       assertEquals(result, expected());
    }
 
    public static List<DataVirtualHardDisk> expected() {
       return ImmutableList.of(
-            DataVirtualHardDisk.create(
-                  DataVirtualHardDisk.Caching.READ_ONLY,
-                  "testimage1-testimage1-0-20120817095145",
-                  10,
-                  30,
-                  URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"),
-                  "Standard"
-            ),
-            DataVirtualHardDisk.create(
-                  DataVirtualHardDisk.Caching.READ_WRITE,
-                  "testimage2-testimage2-0-20120817095145",
-                  10,
-                  30,
-                  URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"),
-                  "Standard"
-            )
+              DataVirtualHardDisk.create(
+                      DataVirtualHardDisk.Caching.READ_ONLY,
+                      "testimage1-testimage1-0-20120817095145",
+                      10,
+                      30,
+                      URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"),
+                      "Standard"
+              ),
+              DataVirtualHardDisk.create(
+                      DataVirtualHardDisk.Caching.READ_WRITE,
+                      "testimage2-testimage2-0-20120817095145",
+                      10,
+                      30,
+                      URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"),
+                      "Standard"
+              )
       );
    }
 }

@@ -31,12 +31,14 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.azurecompute.binders.RoleToXML;
 import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
+import org.jclouds.azurecompute.xml.RoleHandler;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
  * The Service Management API includes operations for managing the virtual
@@ -101,7 +103,7 @@ public interface VirtualMachineApi {
    @GET
    @Path("/roles/{roleName}")
    @Produces(MediaType.APPLICATION_XML)
-   @ResponseParser(ParseRequestIdHeader.class)
+   @XMLResponseParser(RoleHandler.class)
    @Fallback(NullOnNotFoundOr404.class)
    Role getRole(@PathParam("roleName") String roleName);
 

@@ -38,11 +38,13 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 public class BaseAzureComputeApiMockTest {
-   private final Set<Module> modules = ImmutableSet
-         .<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+
+   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
 
    protected String provider;
+
    private final String identity;
+
    private final String credential;
 
    public BaseAzureComputeApiMockTest() {
@@ -57,7 +59,7 @@ public class BaseAzureComputeApiMockTest {
       Properties properties = new Properties();
       //properties.setProperty(SUBSCRIPTION_ID, "1234-1234-1234");
       return ContextBuilder.newBuilder(provider).credentials(identity, credential).endpoint(url.toString())
-            .modules(modules).overrides(properties).buildApi(AzureComputeApi.class);
+              .modules(modules).overrides(properties).buildApi(AzureComputeApi.class);
    }
 
    protected static MockWebServer mockAzureManagementServer() throws IOException {
@@ -92,7 +94,7 @@ public class BaseAzureComputeApiMockTest {
    }
 
    protected RecordedRequest assertSent(MockWebServer server, String method, String path, String resource)
-         throws InterruptedException {
+           throws InterruptedException {
       RecordedRequest request = assertSent(server, method, path);
       assertThat(new String(request.getBody(), UTF_8)).isEqualTo(stringFromResource(resource).trim());
       return request;

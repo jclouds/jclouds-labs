@@ -30,7 +30,7 @@ import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.location.config.LocationModule;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
-import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
+import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstRegionOptionallyMatchingRegionId;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
 
@@ -51,7 +51,7 @@ public class AzureComputeHttpApiModule extends HttpApiModule<AzureComputeApi> {
    @Override
    protected void installLocations() {
       install(new LocationModule());
-      bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstZone.class).in(Scopes.SINGLETON);
+      bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstRegionOptionallyMatchingRegionId.class).in(Scopes.SINGLETON);
    }
    
    @Override

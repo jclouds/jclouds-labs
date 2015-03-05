@@ -27,7 +27,8 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public final class StorageServiceParamsToXML implements Binder {
 
-   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+   @Override@SuppressWarnings("unchecked")
+ public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       StorageServiceParams params = StorageServiceParams.class.cast(input);
 
       try {

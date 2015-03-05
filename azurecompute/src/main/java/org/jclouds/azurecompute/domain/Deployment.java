@@ -93,12 +93,16 @@ public abstract class Deployment {
 
       public abstract InstanceStatus instanceStatus();
 
+      @Nullable // null value in case of StoppedDeallocated
       public abstract int instanceUpgradeDomain();
 
+      @Nullable // null value in case of StoppedDeallocated
       public abstract int instanceFaultDomain();
 
+      @Nullable // null value in case of StoppedDeallocated
       public abstract RoleSize.Type instanceSize();
 
+      @Nullable // null value in case of StoppedDeallocated
       public abstract String ipAddress();
 
       @Nullable public abstract String hostname();
@@ -111,7 +115,7 @@ public abstract class Deployment {
       public static RoleInstance create(String roleName, String instanceName, InstanceStatus instanceStatus, int instanceUpgradeDomain,
                                         int instanceFaultDomain, RoleSize.Type instanceSize, String ipAddress, String hostname, List<InstanceEndpoint> instanceEndpoints) {
          return new AutoValue_Deployment_RoleInstance(roleName, instanceName, instanceStatus, instanceUpgradeDomain,
-                 instanceFaultDomain, instanceSize, ipAddress, hostname, copyOf(instanceEndpoints));
+                 instanceFaultDomain, instanceSize, ipAddress, hostname, instanceEndpoints == null ? null : copyOf(instanceEndpoints));
       }
    }
 
@@ -175,6 +179,6 @@ public abstract class Deployment {
    public static Deployment create(String name, Slot slot, Status status, String label, String instanceStateDetails, String instanceErrorCode,
                                    List<VirtualIP> virtualIPs, List<RoleInstance> roleInstanceList, List<Role> roles, String virtualNetworkName) {
       return new AutoValue_Deployment(name, slot, status, label, instanceStateDetails,
-              instanceErrorCode, copyOf(virtualIPs), copyOf(roleInstanceList), copyOf(roles), virtualNetworkName);
+              instanceErrorCode, copyOf(virtualIPs), copyOf(roleInstanceList), roles == null ? null : copyOf(roles), virtualNetworkName);
    }
 }

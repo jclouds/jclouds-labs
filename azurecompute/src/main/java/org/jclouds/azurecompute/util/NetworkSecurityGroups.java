@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.jclouds.azurecompute.config.AzureComputeProperties;
 import org.jclouds.azurecompute.domain.NetworkSecurityGroup;
 import org.jclouds.azurecompute.domain.Rule;
 
@@ -66,8 +65,8 @@ public class NetworkSecurityGroups {
       return priority;
    }
 
-   public static String createRuleName(int fromPort, int toPort) {
-      return String.format(AzureComputeProperties.TCP_RULE_FORMAT, fromPort, toPort);
+   public static String createRuleName(String format, int fromPort, int toPort) {
+      return String.format(format, fromPort, toPort);
    }
 
 }

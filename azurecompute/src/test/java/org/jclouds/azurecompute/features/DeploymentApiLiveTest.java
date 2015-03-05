@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+
 import java.util.logging.Logger;
 
 import org.jclouds.azurecompute.compute.AzureComputeServiceAdapter;
@@ -36,31 +37,47 @@ import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import java.util.List;
+import java.util.logging.Level;
+import org.jclouds.azurecompute.domain.Role;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 @Test(groups = "live", testName = "DeploymentApiLiveTest", singleThreaded = true)
 public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
 
-   private static final String CLOUD_SERVICE = (System.getProperty("user.name") + "cloudservice").toLowerCase();
-   private static final String DEPLOYMENT = DeploymentApiLiveTest.class.getSimpleName().toLowerCase();
+   private static final String CLOUD_SERVICE = String.format("%s%d-%s",
+           System.getProperty("user.name"), RAND, DeploymentApiLiveTest.class.getSimpleName()).toLowerCase();
+
+   private static final String DEPLOYMENT = String.format("%s%d-%s",
+           System.getProperty("user.name"), RAND, DeploymentApiLiveTest.class.getSimpleName()).toLowerCase();
 
    private Predicate<Deployment> deploymentCreated;
+
    private Predicate<Deployment> deploymentGone;
 
    private Deployment deployment;
+
    private CloudService cloudService;
 
-   @BeforeClass(groups = { "integration", "live" })
+   @BeforeClass(groups = {"integration", "live"})
+   @Override
    public void setup() {
       super.setup();
-      cloudService = getOrCreateCloudService(CLOUD_SERVICE, location);
+
+      cloudService = getOrCreateCloudService(CLOUD_SERVICE, LOCATION);
 
       deploymentCreated = retry(new Predicate<Deployment>() {
-         public boolean apply(Deployment input) {
+
+         @Override
+         public boolean apply(final Deployment input) {
             return api().get(input.name()).status() == Deployment.Status.RUNNING;
          }
       }, 600, 5, 5, SECONDS);
+
       deploymentGone = retry(new Predicate<Deployment>() {
-         public boolean apply(Deployment input) {
+
+         @Override
+         public boolean apply(final Deployment input) {
             return api().get(input.name()) == null;
          }
       }, 600, 5, 5, SECONDS);
@@ -70,7 +87,7 @@ public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
       final DeploymentParams params = DeploymentParams.builder()
               .name(DEPLOYMENT)
               .os(OSImage.Type.LINUX)
-              .sourceImageName("b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_1-LTS-amd64-server-20150123-en-us-30GB")
+              .sourceImageName(DeploymentApiLiveTest.IMAGE_NAME)
               .mediaLink(AzureComputeServiceAdapter.createMediaLink(storageService.serviceName(), DEPLOYMENT))
               .username("test")
               .password("supersecurePassword1!")
@@ -103,27 +120,45 @@ public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    @Test(dependsOnMethods = "testGet")
    public void testDelete() {
-      String requestId = api().delete(deployment.name());
-      assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
+      final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roles();
+
+      retry(new ConflictManagementPredicate(operationSucceeded) {
+
+         @Override
+         protected String operation() {
+            return api().delete(deployment.name());
+         }
+      }, 600, 30, 30, SECONDS).apply(deployment.name());
 
       assertTrue(deploymentGone.apply(deployment), deployment.toString());
-      Logger.getAnonymousLogger().info("deployment deleted: " + deployment);
+      Logger.getAnonymousLogger().log(Level.INFO, "deployment deleted: {0}", deployment);
+
+      retry(new ConflictManagementPredicate(operationSucceeded) {
+
+         @Override
+         protected String operation() {
+            return api.getCloudServiceApi().delete(cloudService.name());
+         }
+      }, 600, 30, 30, SECONDS).apply(cloudService.name());
+
+      for (Role r : roles) {
+         final Role.OSVirtualHardDisk disk = r.osVirtualHardDisk();
+         if (disk != null) {
+            retry(new ConflictManagementPredicate(operationSucceeded) {
+
+               @Override
+               protected String operation() {
+                  return api.getDiskApi().delete(disk.diskName());
+               }
+            }, 600, 30, 30, SECONDS).apply(disk.diskName());
+         }
+      }
    }
 
-   @Override @AfterClass(groups = "live", alwaysRun = true)
+   @Override
+   @AfterClass(groups = "live", alwaysRun = true)
    protected void tearDown() {
       super.tearDown();
-      if (api().get(DEPLOYMENT) != null) {
-         String requestId = api().delete(deployment.name());
-         operationSucceeded.apply(requestId);
-         Logger.getAnonymousLogger().info("deployment deleted: " + deployment);
-      }
-      if (api.getCloudServiceApi().get(CLOUD_SERVICE) != null) {
-         String requestId = api.getCloudServiceApi().delete(CLOUD_SERVICE);
-         assertTrue(operationSucceeded.apply(requestId), requestId);
-         Logger.getAnonymousLogger().info("cloudservice deleted: " + CLOUD_SERVICE);
-      }
    }
 
    private DeploymentApi api() {

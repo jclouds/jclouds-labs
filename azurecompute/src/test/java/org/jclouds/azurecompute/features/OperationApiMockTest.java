@@ -28,14 +28,12 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 public class OperationApiMockTest extends BaseAzureComputeApiMockTest {
 
    public void testGet() throws Exception {
-      MockWebServer server = mockAzureManagementServer();
+      final MockWebServer server = mockAzureManagementServer();
       server.enqueue(xmlResponse("/operation.xml"));
 
       try {
-         OperationApi api = api(server.getUrl("/")).getOperationApi();
-
+         final OperationApi api = api(server.getUrl("/")).getOperationApi();
          assertEquals(api.get("request-id"), OperationHandlerTest.expected());
-
          assertSent(server, "GET", "/operations/request-id");
       } finally {
          server.shutdown();

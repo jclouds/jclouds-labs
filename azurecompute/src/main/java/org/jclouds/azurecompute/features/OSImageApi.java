@@ -61,6 +61,7 @@ public interface OSImageApi {
     */
    @Named("ListImages")
    @GET
+   @Produces(APPLICATION_XML)
    @XMLResponseParser(ListOSImagesHandler.class)
    @Fallback(EmptyListOnNotFoundOr404.class)
    List<OSImage> list();
@@ -71,7 +72,6 @@ public interface OSImageApi {
     */
    @Named("AddImage")
    @POST
-   @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String add(@BinderParam(OSImageParamsToXML.class) OSImageParams params);
 
@@ -81,7 +81,6 @@ public interface OSImageApi {
    @Named("UpdateImage")
    @PUT
    @Path("/{imageName}")
-   @Produces(APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String update(@PathParam("imageName") @ParamParser(OSImageParamsName.class)
                @BinderParam(OSImageParamsToXML.class) OSImageParams params);

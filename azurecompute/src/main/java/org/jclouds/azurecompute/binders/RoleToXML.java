@@ -26,6 +26,7 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public class RoleToXML implements Binder {
    @Override
+   @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       Role role = Role.class.cast(input);
 
@@ -53,7 +54,10 @@ public class RoleToXML implements Binder {
                for (Role.ConfigurationSet.SubnetName subnetName : configurationSet.subnetNames()) {
                   subnetNames.e("SubnetName").t(subnetName.name()).up();
                }
-               configBuilder.e("NetworkSecurityGroup").t(configurationSet.networkSecurityGroup()).up();
+               if (configurationSet.networkSecurityGroup() != null
+                            && !configurationSet.networkSecurityGroup().isEmpty()) {
+                  configBuilder.e("NetworkSecurityGroup").t(configurationSet.networkSecurityGroup()).up();
+               }
             }
          }
          builder.e("DataVirtualHardDisks").up()

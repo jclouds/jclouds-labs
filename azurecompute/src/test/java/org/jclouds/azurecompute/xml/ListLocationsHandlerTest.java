@@ -40,12 +40,12 @@ public class ListLocationsHandlerTest extends BaseHandlerTest {
    public static List<Location> expected() {
       List<String> availableServices = ImmutableList.of("Compute", "Storage", "PersistentVMRole");
       return ImmutableList.of( //
-            Location.create("West US", "West US", availableServices), //
-            Location.create("East US", "East US", availableServices), //
-            Location.create("East Asia", "East Asia", availableServices), //
-            Location.create("Southeast Asia", "Southeast Asia", availableServices), //
-            Location.create("North Europe", "North Europe", availableServices), //
-            Location.create("West Europe", "West Europe", availableServices) //
+              Location.create("West US", "West US", availableServices), //
+              Location.create("East US", "East US", availableServices), //
+              Location.create("East Asia", "East Asia", availableServices), //
+              Location.create("Southeast Asia", "Southeast Asia", availableServices), //
+              Location.create("North Europe", "North Europe", availableServices), //
+              Location.create("West Europe", "West Europe", availableServices) //
       );
    }
 

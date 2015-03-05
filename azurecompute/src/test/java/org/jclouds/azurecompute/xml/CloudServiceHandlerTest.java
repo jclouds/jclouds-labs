@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "HostedServiceHandlerTest")
 public class CloudServiceHandlerTest extends BaseHandlerTest {
+
    private static final DateService DATE_SERVICE = new SimpleDateFormatDateService();
 
    public void test() {
@@ -41,15 +42,15 @@ public class CloudServiceHandlerTest extends BaseHandlerTest {
 
    public static CloudService expected() {
       return CloudService.create( //
-            "neotys", // name
-            "West Europe", // location
-            null, // affinityGroup
-            "neotys", // label
-            "Implicitly created cloud service2012-08-06 14:55", // description
-            Status.CREATED, // status
-            DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T14:55:17Z"), // created
-            DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T15:50:34Z"), // lastModified
-            Collections.<String, String>emptyMap() // extendedProperties
+              "neotys", // name
+              "West Europe", // location
+              null, // affinityGroup
+              "neotys", // label
+              "Implicitly created cloud service2012-08-06 14:55", // description
+              Status.CREATED, // status
+              DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T14:55:17Z"), // created
+              DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T15:50:34Z"), // lastModified
+              Collections.<String, String>emptyMap() // extendedProperties
       );
    }
 }

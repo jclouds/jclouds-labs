@@ -33,6 +33,7 @@ import com.google.common.collect.ImmutableList;
 
 @Test(groups = "unit", testName = "ListHostedServicesHandlerTest")
 public class ListCloudServicesHandlerTest extends BaseHandlerTest {
+
    private static final DateService DATE_SERVICE = new SimpleDateFormatDateService();
 
    public void test() {
@@ -45,27 +46,27 @@ public class ListCloudServicesHandlerTest extends BaseHandlerTest {
 
    public static List<CloudService> expected() {
       return ImmutableList.of( //
-            CloudService.create( //
-                  "neotys", // name
-                  "West Europe", // location
-                  null, // affinityGroup
-                  "neotys", // label
-                  "Implicitly created cloud service2012-08-06 14:55", // description
-                  Status.CREATED, // status
-                  DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T14:55:17Z"), // created
-                  DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T15:50:34Z"), // lastModified
-                  Collections.<String, String>emptyMap() // extendedProperties
-            ), //
-            CloudService.create( //
-                  "neotys3", // name
-                  "West Europe", // location
-                  null, // affinityGroup
-                  "neotys3", // label
-                  null, // description
-                  Status.CREATED, // status
-                  DATE_SERVICE.iso8601SecondsDateParse("2012-08-07T09:00:02Z"), // created
-                  DATE_SERVICE.iso8601SecondsDateParse("2012-08-07T09:00:02Z"), // lastModified
-                  Collections.<String, String>emptyMap() // extendedProperties
-            ));
+              CloudService.create( //
+                      "neotys", // name
+                      "West Europe", // location
+                      null, // affinityGroup
+                      "neotys", // label
+                      "Implicitly created cloud service2012-08-06 14:55", // description
+                      Status.CREATED, // status
+                      DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T14:55:17Z"), // created
+                      DATE_SERVICE.iso8601SecondsDateParse("2012-08-06T15:50:34Z"), // lastModified
+                      Collections.<String, String>emptyMap() // extendedProperties
+              ), //
+              CloudService.create( //
+                      "neotys3", // name
+                      "West Europe", // location
+                      null, // affinityGroup
+                      "neotys3", // label
+                      null, // description
+                      Status.CREATED, // status
+                      DATE_SERVICE.iso8601SecondsDateParse("2012-08-07T09:00:02Z"), // created
+                      DATE_SERVICE.iso8601SecondsDateParse("2012-08-07T09:00:02Z"), // lastModified
+                      Collections.<String, String>emptyMap() // extendedProperties
+              ));
    }
 }

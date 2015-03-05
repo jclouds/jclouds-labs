@@ -29,8 +29,6 @@ import org.jclouds.rest.ResourceNotFoundException;
 import org.jclouds.util.Closeables2;
 import org.jclouds.util.Strings2;
 
-import com.google.common.base.Throwables;
-
 /**
  * This will parse and set an appropriate exception on the command object.
  */
@@ -72,12 +70,6 @@ public class AzureComputeErrorHandler implements HttpErrorHandler {
          return Strings2.toStringAndClose(response.getPayload().openStream());
       } catch (IOException e) {
          throw new RuntimeException(e);
-      } finally {
-         try {
-            response.getPayload().getInput().close();
-         } catch (IOException e) {
-            Throwables.propagate(e);
-         }
       }
    }
 }

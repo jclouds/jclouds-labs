@@ -29,6 +29,7 @@ import com.jamesmurty.utils.XMLBuilder;
 public class NetworkConfigurationToXML implements Binder {
 
    @Override
+   @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       NetworkConfiguration networkConfiguration = NetworkConfiguration.class.cast(input);
 

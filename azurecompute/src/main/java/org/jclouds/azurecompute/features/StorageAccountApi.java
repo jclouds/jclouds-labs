@@ -92,6 +92,6 @@ public interface StorageAccountApi {
    @DELETE
    @Path("/{serviceName}")
    @ResponseParser(ParseRequestIdHeader.class)
-   String delete(String serviceName);
+   String delete(@PathParam("serviceName") String serviceName);
 
 }

@@ -164,9 +164,10 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes extends C
     */
    private StorageService tryFindExistingStorageServiceAccountOrCreate(AzureComputeApi api, String location, final String name, final String type) {
       final List<StorageService> storageServices = api.getStorageAccountApi().list();
-      Predicate<StorageService> storageServicePredicate;
       logger.debug("Looking for a suitable existing storage account ...");
-      storageServicePredicate = and(notNull(), new SameLocationAndCreatedStorageServicePredicate(location), new Predicate<StorageService>() {
+
+      @SuppressWarnings("unchecked")
+      final Predicate<StorageService> storageServicePredicate = and(notNull(), new SameLocationAndCreatedStorageServicePredicate(location), new Predicate<StorageService>() {
          @Override
          public boolean apply(StorageService input) {
             return input.serviceName().matches(format("^%s[a-z]{10}$", DEFAULT_STORAGE_ACCOUNT_PREFIX));

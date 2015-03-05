@@ -17,6 +17,7 @@
 package org.jclouds.azurecompute.xml;
 
 import static org.testng.Assert.assertEquals;
+
 import java.io.InputStream;
 
 import org.jclouds.azurecompute.domain.NetworkSecurityGroup;
@@ -38,10 +39,22 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
 
    public static NetworkSecurityGroup expected() {
       return NetworkSecurityGroup.create( //
-            "jclouds-NSG", // name
-            "jclouds-NSG", // label
-            "West Europe", // location
+              "jclouds-NSG", // name
+              "jclouds-NSG", // label
+              "West Europe", // location
               ImmutableList.of(
+                      Rule.create("tcp_10-20", // name
+                              "Inbound", // type
+                              "100", // priority
+                              "Allow", // action
+                              "INTERNET", // sourceAddressPrefix
+                              "*", // sourcePortRange
+                              "*", // destinationAddressPrefix
+                              "10-20", // destinationPortRange
+                              "TCP", // protocol
+                              "Active", // state
+                              null // isDefault
+                      ),
                       Rule.create("ALLOW VNET INBOUND", // name
                               "Inbound", // type
                               "65000", // priority
@@ -50,7 +63,7 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
                               "*", // sourcePortRange
                               "VIRTUAL_NETWORK", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*",  // protocol
+                              "*", // protocol
                               "Active", // state
                               true // isDefault
                       ),
@@ -62,7 +75,7 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
                               "*", // sourcePortRange
                               "VIRTUAL_NETWORK", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*",  // protocol
+                              "*", // protocol
                               "Active", // state
                               true // isDefault
                       ),
@@ -74,7 +87,7 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*",  // protocol
+                              "*", // protocol
                               "Active", // state
                               true // isDefault
                       ),
@@ -86,7 +99,7 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
                               "*", // sourcePortRange
                               "INTERNET", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*",  // protocol
+                              "*", // protocol
                               "Active", // state
                               true // isDefault
                       ),
@@ -98,7 +111,7 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*",  // protocol
+                              "*", // protocol
                               "Active", // state
                               true // isDefault
                       ),
@@ -110,7 +123,7 @@ public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*",  // protocol
+                              "*", // protocol
                               "Active", // state
                               true // isDefault
                       )

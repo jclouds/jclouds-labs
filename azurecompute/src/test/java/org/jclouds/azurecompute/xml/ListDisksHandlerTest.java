@@ -42,26 +42,26 @@ public class ListDisksHandlerTest extends BaseHandlerTest {
 
    public static List<Disk> expected() {
       return ImmutableList.of( //
-            Disk.create( //
-                  "testimage2-testimage2-0-20120817095145", // name
-                  "West Europe", // location
-                  null, // affinityGroup
-                  null, //description
-                  OSImage.Type.LINUX, // os
-                  URI.create("http://blobs/vhds/testimage2-testimage2-2012-08-17.vhd"), // mediaLink
-                  30, // logicalSizeInGB
-                  null, // attachedTo
-                  "OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd" // sourceImage
-            ), Disk.create( //
-                  "neotysss-neotysss-0-20120824091357", // name
-                  "West Europe", // location
-                  null, // affinityGroup
-                  null, //description
-                  OSImage.Type.WINDOWS, // os
-                  URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"), // mediaLink
-                  30, // logicalSizeInGB
-                  Attachment.create("neotysss", "neotysss", "neotysss"), // attachedTo
-                  "MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd" // sourceImage
-            ));
+              Disk.create( //
+                      "testimage2-testimage2-0-20120817095145", // name
+                      "West Europe", // location
+                      null, // affinityGroup
+                      null, //description
+                      OSImage.Type.LINUX, // os
+                      URI.create("http://blobs/vhds/testimage2-testimage2-2012-08-17.vhd"), // mediaLink
+                      30, // logicalSizeInGB
+                      null, // attachedTo
+                      "OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd" // sourceImage
+              ), Disk.create( //
+                      "neotysss-neotysss-0-20120824091357", // name
+                      "West Europe", // location
+                      null, // affinityGroup
+                      null, //description
+                      OSImage.Type.WINDOWS, // os
+                      URI.create("http://blobs/disks/neotysss/MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd"), // mediaLink
+                      30, // logicalSizeInGB
+                      Attachment.create("neotysss", "neotysss", "neotysss"), // attachedTo
+                      "MSFT__Win2K8R2SP1-ABCD-en-us-30GB.vhd" // sourceImage
+              ));
    }
 }

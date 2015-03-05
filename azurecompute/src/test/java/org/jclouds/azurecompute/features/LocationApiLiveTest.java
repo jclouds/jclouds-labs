@@ -30,9 +30,10 @@ import org.testng.annotations.Test;
 public class LocationApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    private static final List<String> KNOWN_SERVICES = Arrays
-         .asList("Compute", "Storage", "PersistentVMRole", "HighMemory");
+           .asList("Compute", "Storage", "PersistentVMRole", "HighMemory");
 
-   @Test public void testList() {
+   @Test
+   public void testList() {
       for (Location location : api().list()) {
          checkLocation(location);
       }
@@ -43,7 +44,7 @@ public class LocationApiLiveTest extends BaseAzureComputeApiLiveTest {
       assertNotNull(location.displayName(), "DisplayName cannot be null for: " + location);
       assertNotNull(location.availableServices(), "AvailableServices cannot be null for: " + location.name());
       assertTrue(KNOWN_SERVICES.containsAll(location.availableServices()),
-            "AvailableServices in " + location + " didn't match: " + KNOWN_SERVICES);
+              "AvailableServices in " + location + " didn't match: " + KNOWN_SERVICES);
    }
 
    private LocationApi api() {

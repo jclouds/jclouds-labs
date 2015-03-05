@@ -34,19 +34,25 @@ import com.google.common.collect.ImmutableSet;
 public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    private ImmutableSet<String> locations;
+
    private ImmutableSet<String> images;
 
-   @BeforeClass(groups = { "integration", "live" })
+   @BeforeClass(groups = {"integration", "live"})
+   @Override
    public void setup() {
       super.setup();
 
       locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(),
-               new Function<Location, String>() {
-                  public String apply(Location in) {
-                     return in.name();
-                  }
-               }));
+              new Function<Location, String>() {
+
+                 @Override
+                 public String apply(Location in) {
+                    return in.name();
+                 }
+              }));
       images = ImmutableSet.copyOf(transform(api.getOSImageApi().list(), new Function<OSImage, String>() {
+
+         @Override
          public String apply(OSImage in) {
             return in.name();
          }
@@ -60,7 +66,6 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
    }
 
    // TODO testDeleteDisk, if we will need testCreateDisk
-
    private void checkDisk(Disk disk) {
       assertNotNull(disk.name(), "Name cannot be null for: " + disk);
 
@@ -74,7 +79,7 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
 
       if (disk.mediaLink() != null) {
          assertTrue(ImmutableSet.of("http", "https").contains(disk.mediaLink().getScheme()),
-               "MediaLink should be an http(s) url" + disk);
+                 "MediaLink should be an http(s) url" + disk);
       }
 
       if (disk.location() != null) {

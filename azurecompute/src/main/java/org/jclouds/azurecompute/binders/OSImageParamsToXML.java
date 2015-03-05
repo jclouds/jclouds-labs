@@ -26,7 +26,8 @@ import org.jclouds.rest.Binder;
 import com.jamesmurty.utils.XMLBuilder;
 
 public final class OSImageParamsToXML implements Binder {
-   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+   @Override@SuppressWarnings("unchecked")
+ public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       OSImageParams params = OSImageParams.class.cast(input);
       try {
          String xml = XMLBuilder.create("OSImage", "http://schemas.microsoft.com/windowsazure")

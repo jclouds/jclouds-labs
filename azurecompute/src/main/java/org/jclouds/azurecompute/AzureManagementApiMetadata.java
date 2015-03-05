@@ -48,8 +48,7 @@ public class AzureManagementApiMetadata extends BaseHttpApiMetadata<AzureCompute
    }
 
    public static Properties defaultProperties() {
-      Properties properties = BaseHttpApiMetadata.defaultProperties();
-      return properties;
+      return BaseHttpApiMetadata.defaultProperties();
    }
 
    public static class Builder extends BaseHttpApiMetadata.Builder<AzureComputeApi, Builder> {

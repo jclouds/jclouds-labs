@@ -4,6 +4,18 @@
   <Location>West Europe</Location>
   <Rules>
     <Rule>
+      <Name>tcp_10-20</Name>
+      <Type>Inbound</Type>
+      <Priority>100</Priority>
+      <Action>Allow</Action>
+      <SourceAddressPrefix>INTERNET</SourceAddressPrefix>
+      <SourcePortRange>*</SourcePortRange>
+      <DestinationAddressPrefix>*</DestinationAddressPrefix>
+      <DestinationPortRange>10-20</DestinationPortRange>
+      <Protocol>TCP</Protocol>
+      <State>Active</State>
+    </Rule>
+    <Rule>
       <Name>ALLOW VNET INBOUND</Name>
       <Type>Inbound</Type>
       <Priority>65000</Priority>

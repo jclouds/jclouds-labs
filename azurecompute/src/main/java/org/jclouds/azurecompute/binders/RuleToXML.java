@@ -26,6 +26,7 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public final class RuleToXML implements Binder {
    @Override
+   @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       Rule rule = Rule.class.cast(input);
       try {

@@ -58,13 +58,13 @@ public class VirtualNetworkApiMockTest extends BaseAzureComputeApiMockTest {
          assertThat(api.set(NetworkConfiguration.create(
                  VirtualNetworkConfiguration.create(null,
                          ImmutableList.of(NetworkConfiguration.VirtualNetworkSite.create(
-                                 UUID.randomUUID().toString(),
-                                 "jclouds-virtual-network",
-                                 "West Europe",
-                                 NetworkConfiguration.AddressSpace.create("10.0.0.0/20"),
-                                 ImmutableList.of(NetworkConfiguration.Subnet.create("jclouds-1", "10.0.0.0/23",
-                                         null)))))))
-                 ).isEqualTo("request-1");
+                                         UUID.randomUUID().toString(),
+                                         "jclouds-virtual-network",
+                                         "West Europe",
+                                         NetworkConfiguration.AddressSpace.create("10.0.0.0/20"),
+                                         ImmutableList.of(NetworkConfiguration.Subnet.create("jclouds-1", "10.0.0.0/23",
+                                                         null)))))))
+         ).isEqualTo("request-1");
 
          assertSent(server, "PUT", "/services/networking/media");
       } finally {
@@ -87,7 +87,6 @@ public class VirtualNetworkApiMockTest extends BaseAzureComputeApiMockTest {
          server.shutdown();
       }
    }
-
 
    private VirtualNetworkApi virtualNetworkApi(MockWebServer server) {
       return api(server.getUrl("/")).getVirtualNetworkApi();

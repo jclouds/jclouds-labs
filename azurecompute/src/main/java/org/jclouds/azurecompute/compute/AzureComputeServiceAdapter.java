@@ -108,7 +108,8 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       }
       logger.info("Cloud Service (%s) created with operation id: %s", name, createCloudServiceRequestId);
 
-      final OSImage.Type os = template.getImage().getOperatingSystem().getFamily().equals(OsFamily.WINDOWS) ? OSImage.Type.WINDOWS : OSImage.Type.LINUX;
+      final OSImage.Type os = template.getImage().getOperatingSystem().getFamily() == OsFamily.WINDOWS 
+              ? OSImage.Type.WINDOWS : OSImage.Type.LINUX;
       Set<ExternalEndpoint> externalEndpoints = Sets.newHashSet();
       for (int inboundPort : inboundPorts) {
          externalEndpoints.add(ExternalEndpoint.inboundTcpToLocalPort(inboundPort, inboundPort));
@@ -118,7 +119,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .os(os)
               .username(loginUser)
               .password(loginPassword)
-              .sourceImageName(template.getImage().getId())
+              .sourceImageName(Splitter.on('/').split(template.getImage().getId()).iterator().next())
               .mediaLink(createMediaLink(storageAccountName, name))
               .size(RoleSize.Type.fromString(template.getHardware().getName()))
               .externalEndpoints(externalEndpoints)
@@ -138,6 +139,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       logger.info("Deployment created with operation id: %s", createDeploymentRequestId);
 
       if (!retry(new Predicate<String>() {
+         @Override
          public boolean apply(String name) {
             return FluentIterable.from(api.getDeploymentApiForService(name).get(name).roleInstanceList())
                     .allMatch(new Predicate<RoleInstance>() {
@@ -160,7 +162,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
       Deployment deployment = api.getDeploymentApiForService(name).get(name);
 
-      return new NodeAndInitialCredentials(deployment, deployment.name(),
+      return new NodeAndInitialCredentials<Deployment>(deployment, deployment.name(),
               LoginCredentials.builder().user(loginUser).password(loginPassword).build());
    }
 
@@ -178,23 +180,38 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
    public Iterable<OSImage> listImages() {
       List<OSImage> osImages = Lists.newArrayList();
       for (OSImage osImage : api.getOSImageApi().list()) {
-         Iterable<String> locations = Splitter.on(";").split(osImage.location());
-         for (String location : locations) {
-            osImages.add(OSImage.create(
-                    osImage.name(),
-                    location,
-                    osImage.affinityGroup(),
-                    osImage.label(),
-                    osImage.description(),
-                    osImage.category(),
-                    osImage.os(),
-                    osImage.publisherName(),
-                    osImage.mediaLink(),
-                    osImage.logicalSizeInGB(),
-                    osImage.eula()
-            ));
+            if (osImage.location() == null) {
+                osImages.add(OSImage.create(
+                        osImage.name(),
+                        null,
+                        osImage.affinityGroup(),
+                        osImage.label(),
+                        osImage.description(),
+                        osImage.category(),
+                        osImage.os(),
+                        osImage.publisherName(),
+                        osImage.mediaLink(),
+                        osImage.logicalSizeInGB(),
+                        osImage.eula()
+                ));
+            } else {
+                for (String actualLocation : Splitter.on(';').split(osImage.location())) {
+                    osImages.add(OSImage.create(
+                            osImage.name() + "/" + actualLocation,
+                            actualLocation,
+                            osImage.affinityGroup(),
+                            osImage.label() + "/" + actualLocation,
+                            osImage.description(),
+                            osImage.category(),
+                            osImage.os(),
+                            osImage.publisherName(),
+                            osImage.mediaLink(),
+                            osImage.logicalSizeInGB(),
+                            osImage.eula()
+                    ));
+                }
+            }
          }
-      }
       return osImages;
    }
 

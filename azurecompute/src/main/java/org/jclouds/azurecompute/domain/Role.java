@@ -61,6 +61,7 @@ public abstract class Role {
 
          public abstract String protocol();
 
+         @Nullable
          public abstract String vip();
 
          public abstract Boolean enableDirectServerReturn();

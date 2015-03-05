@@ -21,6 +21,7 @@ import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_P
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -50,7 +51,6 @@ import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
 import org.jclouds.util.Predicates2;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -100,8 +100,7 @@ public class AzureComputeServiceContextModule
               azureComputeConstants.operationPollMaxPeriod());
    }
 
-   @VisibleForTesting
-   static class OperationSucceededPredicate implements Predicate<String> {
+   public static class OperationSucceededPredicate implements Predicate<String> {
 
       private final AzureComputeApi api;
 
@@ -146,6 +145,10 @@ public class AzureComputeServiceContextModule
       @Inject
       private String tcpRuleFormatProperty;
 
+      @Named(TCP_RULE_REGEXP)
+      @Inject
+      private String tcpRuleRegexpProperty;
+
       public Long operationTimeout() {
          return Long.parseLong(operationTimeoutProperty);
       }
@@ -160,6 +163,10 @@ public class AzureComputeServiceContextModule
 
       public String tcpRuleFormat() {
          return tcpRuleFormatProperty;
+      }
+      
+      public String tcpRuleRegexp() {
+         return tcpRuleRegexpProperty;
       }
    }
 

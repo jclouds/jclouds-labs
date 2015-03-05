@@ -122,7 +122,8 @@ public class OSImageToImage implements Function<OSImage, Image> {
             if (family != OsFamily.UNRECOGNIZED) {
                return OperatingSystem.builder().family(family).version(version)
                      .description(image.description() + "");
-            } else if (family == OsFamily.UNRECOGNIZED && image.os() == OSImage.Type.WINDOWS) {
+            }
+            if (image.os() == OSImage.Type.WINDOWS) {
                return OperatingSystem.builder().family(OsFamily.WINDOWS).version(version)
                      .description(image.description() + "");
             }

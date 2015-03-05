@@ -1,8 +1,8 @@
-=== Annotation processing
+## Annotation processing ##
 In order for value object and service loader auto-generation, you will need to enable annotation processing in your IDE.
 If you notice any inconsistencies in your IDE after you enable annotation processing, try rerunning "Make Project".
 
-=== Setting up test credentials
+## Setting up test credentials ##
 
 Azure requests are signed by via SSL certificate. You need to upload one into your account in order to run tests.
 
@@ -20,7 +20,7 @@ openssl x509 -inform pem -in $HOME/.jclouds/azure.pem -outform der -out $HOME/.j
 
 Once you do this, you will set the following to run the live tests.
 ```bash
-mvn -Plive -Dtest.azurecompute.endpoint=https://management.core.windows.net/12345678-abcd-dcba-abdc-ba0987654321
--Dtest.azurecompute.credential=P12_EXPORT_PASSWORD
+mvn -Plive -Dtest.azurecompute.endpoint=https://management.core.windows.net/12345678-abcd-dcba-abdc-ba0987654321 \
+-Dtest.azurecompute.credential=P12_EXPORT_PASSWORD \
 -Dtest.azurecompute.identity=$HOME/.jclouds/azure.p12
 ```

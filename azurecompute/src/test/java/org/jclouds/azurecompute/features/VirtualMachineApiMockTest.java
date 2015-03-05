@@ -38,8 +38,8 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
          assertThat(api.start("myvm")).isEqualTo("request-1");
 
          assertSent(server, "POST",
-               "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
-               "/startrolepayload.xml");
+                 "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
+                 "/startrolepayload.xml");
       } finally {
          server.shutdown();
       }
@@ -55,8 +55,8 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
          assertThat(api.restart("myvm")).isEqualTo("request-1");
 
          assertSent(server, "POST",
-               "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
-               "/restartrolepayload.xml");
+                 "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
+                 "/restartrolepayload.xml");
       } finally {
          server.shutdown();
       }
@@ -72,8 +72,8 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
          assertThat(api.shutdown("myvm")).isEqualTo("request-1");
 
          assertSent(server, "POST",
-               "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
-               "/shutdownrolepayload.xml");
+                 "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
+                 "/shutdownrolepayload.xml");
       } finally {
          server.shutdown();
       }
@@ -89,8 +89,8 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
          assertThat(api.capture("myvm", "myImageName", "myImageLabel")).isEqualTo("request-1");
 
          assertSent(server, "POST",
-               "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
-               "/capturerolepayload.xml");
+                 "/services/hostedservices/my-service/deployments/mydeployment/roleinstances/myvm/Operations",
+                 "/capturerolepayload.xml");
       } finally {
          server.shutdown();
       }

@@ -24,7 +24,8 @@ import org.testng.annotations.Test;
 @Test(groups = "live", testName = "SubscriptionApiLiveTest")
 public class SubscriptionApiLiveTest extends BaseAzureComputeApiLiveTest {
 
-   @Test public void testList() {
+   @Test
+   public void testList() {
       for (RoleSize roleSize : api().listRoleSizes()) {
          checkLocation(roleSize);
       }

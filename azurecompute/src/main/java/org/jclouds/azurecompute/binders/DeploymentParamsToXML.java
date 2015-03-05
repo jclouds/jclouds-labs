@@ -28,7 +28,8 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public final class DeploymentParamsToXML implements Binder {
 
-   @Override public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+   @Override@SuppressWarnings("unchecked")
+ public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       DeploymentParams params = DeploymentParams.class.cast(input);
 
       try {

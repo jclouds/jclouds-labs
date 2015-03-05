@@ -37,6 +37,6 @@ public class ErrorHandlerTest extends BaseHandlerTest {
 
    public static Error expected() {
       return Error.create(Code.MISSING_OR_INVALID_REQUIRED_QUERY_PARAMETER,
-            "A required query parameter was not specified for this request or was specified incorrectly.");
+              "A required query parameter was not specified for this request or was specified incorrectly.");
    }
 }

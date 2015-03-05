@@ -37,7 +37,7 @@ public abstract class NetworkSecurityGroup {
    @Nullable public abstract List<Rule> rules();
 
    public static NetworkSecurityGroup create(String name, String label, String location, List<Rule> rules) {
-      return new AutoValue_NetworkSecurityGroup(name, label, location, copyOf(rules));
+      return new AutoValue_NetworkSecurityGroup(name, label, location, rules == null ? null : copyOf(rules));
    }
 }
 

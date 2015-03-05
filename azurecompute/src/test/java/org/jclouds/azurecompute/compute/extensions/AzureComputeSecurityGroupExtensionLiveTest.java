@@ -30,6 +30,7 @@ import com.google.inject.Module;
 public class AzureComputeSecurityGroupExtensionLiveTest extends BaseSecurityGroupExtensionLiveTest {
 
    public AzureComputeSecurityGroupExtensionLiveTest() {
+      super();
       provider = "azurecompute";
    }
 
@@ -38,6 +39,7 @@ public class AzureComputeSecurityGroupExtensionLiveTest extends BaseSecurityGrou
       return ImmutableSet.of(getLoggingModule(), credentialStoreModule, getSshModule());
    }
 
+   @Override
    protected Module getSshModule() {
       return new SshjSshClientModule();
    }

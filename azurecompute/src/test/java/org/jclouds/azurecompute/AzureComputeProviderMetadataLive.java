@@ -20,35 +20,29 @@ import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_P
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
 import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
-import java.net.URI;
-import java.util.Properties;
-
-import org.jclouds.azurecompute.config.AzureComputeProperties;
-import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.providers.internal.BaseProviderMetadata;
 
 import com.google.auto.service.AutoService;
+import java.net.URI;
+import java.util.Properties;
+import org.jclouds.azurecompute.config.AzureComputeProperties;
+import org.jclouds.providers.ProviderMetadata;
 
 @AutoService(ProviderMetadata.class)
-public class AzureComputeProviderMetadata extends BaseProviderMetadata {
-
-   public static Builder builder() {
-      return new Builder();
-   }
+public class AzureComputeProviderMetadataLive extends AzureComputeProviderMetadata {
 
    @Override
    public Builder toBuilder() {
-      return builder().fromProviderMetadata(this);
+      return new Builder().fromProviderMetadata(this);
    }
 
-   public AzureComputeProviderMetadata() {
-      super(builder());
+   public AzureComputeProviderMetadataLive() {
+      super(new Builder());
    }
 
    public static Properties defaultProperties() {
       Properties properties = AzureManagementApiMetadata.defaultProperties();
       properties.setProperty(TEMPLATE, "osFamily=UBUNTU,loginUser=jclouds");
-      properties.setProperty(OPERATION_TIMEOUT, "" + 60 * 1000);
+      properties.setProperty(OPERATION_TIMEOUT, "" + 600 * 1000);
       properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "" + 5);
       properties.setProperty(OPERATION_POLL_MAX_PERIOD, "" + 15);
       properties.setProperty(AzureComputeProperties.TCP_RULE_FORMAT, "tcp_%s-%s");
@@ -56,11 +50,11 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
       return properties;
    }
 
-   public AzureComputeProviderMetadata(Builder builder) {
+   public AzureComputeProviderMetadataLive(final Builder builder) {
       super(builder);
    }
 
-   public static class Builder extends BaseProviderMetadata.Builder {
+   public static class Builder extends AzureComputeProviderMetadata.Builder {
 
       protected Builder() {
          id("azurecompute")
@@ -71,16 +65,16 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
                  .console(URI.create("https://windows.azure.com/default.aspx"))
                  .linkedServices("azureblob", "azurequeue", "azuretable")
                  .iso3166Codes("US-TX", "US-IL", "IE-D", "SG", "NL-NH", "HK")
-                 .defaultProperties(AzureComputeProviderMetadata.defaultProperties());
+                 .defaultProperties(AzureComputeProviderMetadataLive.defaultProperties());
       }
 
       @Override
-      public AzureComputeProviderMetadata build() {
-         return new AzureComputeProviderMetadata(this);
+      public AzureComputeProviderMetadataLive build() {
+         return new AzureComputeProviderMetadataLive(this);
       }
 
       @Override
-      public Builder fromProviderMetadata(ProviderMetadata in) {
+      public Builder fromProviderMetadata(final ProviderMetadata in) {
          super.fromProviderMetadata(in);
          return this;
       }

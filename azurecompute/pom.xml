@@ -17,7 +17,8 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.jclouds.labs</groupId>
@@ -27,7 +28,7 @@
 
   <!-- TODO: when out of labs, switch to org.jclouds.provider -->
   <artifactId>azurecompute</artifactId>
-  <name>Apache jclouds :: Azure :: Compute API</name>
+  <name>jclouds azure compute API</name>
   <description>jclouds components to access an implementation of Azure's Compute Service</description>
   <packaging>bundle</packaging>
 
@@ -35,26 +36,13 @@
     <test.jclouds.azurecompute.subscription-id>FIXME_subscription-id</test.jclouds.azurecompute.subscription-id>
     <!-- note that there's no prefix of "test." in the url.  This is to ensure that jclouds inteprets the value, as opposed to maven -->
     <test.azurecompute.endpoint>https://management.core.windows.net/${jclouds.azurecompute.subscription-id}</test.azurecompute.endpoint>
-    <test.azurecompute.api-version>2014-06-01</test.azurecompute.api-version>
+    <test.azurecompute.api-version>2014-10-01</test.azurecompute.api-version>
     <test.azurecompute.build-version />
     <test.azurecompute.identity>/path/to/cert.p12</test.azurecompute.identity>
     <test.azurecompute.credential>password to cert</test.azurecompute.credential>
     <jclouds.osgi.export>org.jclouds.azurecompute*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>org.jclouds*;version="${project.version}",*</jclouds.osgi.import>
   </properties>
-
-  <repositories>
-    <repository>
-      <id>apache-snapshots</id>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -96,6 +84,13 @@
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-slf4j</artifactId>
       <version>${project.parent.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jclouds.driver</groupId>
+      <artifactId>jclouds-slf4j</artifactId>
+      <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -107,11 +102,6 @@
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-sshj</artifactId>
       <version>${project.parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -131,7 +121,10 @@
   <profiles>
     <profile>
       <id>live</id>
+      
       <build>
+        <defaultGoal>clean verify</defaultGoal>
+          
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>

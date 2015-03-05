@@ -39,11 +39,11 @@ public class NetworkConfigurationHandlerTest extends BaseHandlerTest {
       return NetworkConfiguration.create(
               NetworkConfiguration.VirtualNetworkConfiguration.create(null,
                       ImmutableList.of(NetworkConfiguration.VirtualNetworkSite.create(
-                              null,
-                              "jclouds-virtual-network",
-                              "West Europe",
-                              NetworkConfiguration.AddressSpace.create("10.0.0.0/20"),
-                              ImmutableList.of(NetworkConfiguration.Subnet.create("jclouds-1", "10.0.0.0/23", null))))
+                                      null,
+                                      "jclouds-virtual-network",
+                                      "West Europe",
+                                      NetworkConfiguration.AddressSpace.create("10.0.0.0/20"),
+                                      ImmutableList.of(NetworkConfiguration.Subnet.create("jclouds-1", "10.0.0.0/23", null))))
               )
       );
    }

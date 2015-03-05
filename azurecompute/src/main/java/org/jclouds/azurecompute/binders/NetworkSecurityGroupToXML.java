@@ -26,6 +26,7 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public class NetworkSecurityGroupToXML implements Binder {
    @Override
+   @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       NetworkSecurityGroup networkSecurityGroup = NetworkSecurityGroup.class.cast(input);
       try {

@@ -24,6 +24,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,24 +36,32 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
+import java.util.logging.Level;
 
 @Test(groups = "live", testName = "CloudServiceApiLiveTest", singleThreaded = true)
 public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
 
-   private static final String CLOUD_SERVICE = (System.getProperty("user.name") + "cloudservice").toLowerCase();
+   private static final String CLOUD_SERVICE = String.format("%s%d-%s",
+           System.getProperty("user.name"), RAND, CloudServiceApiLiveTest.class.getSimpleName()).toLowerCase();
 
    private Predicate<CloudService> cloudServiceCreated;
+
    private Predicate<CloudService> cloudServiceGone;
 
-   @BeforeClass(groups = { "integration", "live" })
+   @BeforeClass(groups = {"integration", "live"})
+   @Override
    public void setup() {
       super.setup();
       cloudServiceCreated = retry(new Predicate<CloudService>() {
+
+         @Override
          public boolean apply(CloudService input) {
             return api().get(input.name()).status() == Status.CREATED;
          }
       }, 600, 5, 5, SECONDS);
       cloudServiceGone = retry(new Predicate<CloudService>() {
+
+         @Override
          public boolean apply(CloudService input) {
             return api().get(input.name()) == null;
          }
@@ -62,13 +71,12 @@ public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
    private CloudService cloudService;
 
    public void testCreate() {
-
-      String requestId = api().createWithLabelInLocation(CLOUD_SERVICE, CLOUD_SERVICE, location);
+      String requestId = api().createWithLabelInLocation(CLOUD_SERVICE, CLOUD_SERVICE, LOCATION);
       assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
+      Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
 
       cloudService = api().get(CLOUD_SERVICE);
-      Logger.getAnonymousLogger().info("created cloudService: " + cloudService);
+      Logger.getAnonymousLogger().log(Level.INFO, "created cloudService: {0}", cloudService);
 
       assertEquals(cloudService.name(), CLOUD_SERVICE);
 
@@ -76,7 +84,7 @@ public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
 
       assertTrue(cloudServiceCreated.apply(cloudService), cloudService.toString());
       cloudService = api().get(cloudService.name());
-      Logger.getAnonymousLogger().info("cloudService available: " + cloudService);
+      Logger.getAnonymousLogger().log(Level.INFO, "cloudService available: {0}", cloudService);
 
    }
 
@@ -90,13 +98,14 @@ public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
    public void testDelete() {
       String requestId = api().delete(cloudService.name());
       assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().info("operation succeeded: " + requestId);
+      Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
 
       assertTrue(cloudServiceGone.apply(cloudService), cloudService.toString());
-      Logger.getAnonymousLogger().info("cloudService deleted: " + cloudService);
+      Logger.getAnonymousLogger().log(Level.INFO, "cloudService deleted: {0}", cloudService);
    }
 
-   @Override @AfterClass(groups = "live", alwaysRun = true)
+   @Override
+   @AfterClass(groups = "live", alwaysRun = true)
    protected void tearDown() {
       String requestId = api().delete(CLOUD_SERVICE);
       if (requestId != null) {
@@ -109,20 +118,20 @@ public class CloudServiceApiLiveTest extends BaseAzureComputeApiLiveTest {
    public void testList() {
       List<CloudService> response = api().list();
 
-      for (CloudService cloudService : response) {
-         checkHostedService(cloudService);
+      for (CloudService cs : response) {
+         checkHostedService(cs);
       }
 
       if (!response.isEmpty()) {
-         CloudService cloudService = response.iterator().next();
-         assertEquals(api().get(cloudService.name()), cloudService);
+         CloudService cs = response.iterator().next();
+         assertEquals(api().get(cs.name()), cs);
       }
    }
 
    private void checkHostedService(CloudService cloudService) {
       assertNotNull(cloudService.name(), "ServiceName cannot be null for " + cloudService);
       assertTrue(cloudService.location() != null || cloudService.affinityGroup() != null,
-            "Location or AffinityGroup must be present for " + cloudService);
+              "Location or AffinityGroup must be present for " + cloudService);
       assertNotNull(cloudService.label(), "Label cannot be null for " + cloudService);
       assertNotNull(cloudService.status(), "Status cannot be null for " + cloudService);
       assertNotEquals(cloudService.status(), UNRECOGNIZED, "Status cannot be UNRECOGNIZED for " + cloudService);

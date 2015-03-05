@@ -30,4 +30,5 @@ public class AzureComputeProperties {
 
    public static final String TCP_RULE_FORMAT = "jclouds.azurecompute.tcp.rule.format";
 
+   public static final String TCP_RULE_REGEXP = "jclouds.azurecompute.tcp.rule.regexp";
 }

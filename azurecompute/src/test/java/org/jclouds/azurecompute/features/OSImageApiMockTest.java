@@ -53,7 +53,7 @@ public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
          OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
          OSImageParams params = OSImageParams.builder().name("myimage").label("foo").os(OSImage.Type.LINUX)
-               .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
+                 .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
 
          assertEquals(api.add(params), "request-1");
 
@@ -71,7 +71,7 @@ public class OSImageApiMockTest extends BaseAzureComputeApiMockTest {
          OSImageApi api = api(server.getUrl("/")).getOSImageApi();
 
          OSImageParams params = OSImageParams.builder().name("myimage").label("foo").os(OSImage.Type.LINUX)
-               .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
+                 .mediaLink(URI.create("http://example.blob.core.windows.net/disks/mydisk.vhd")).build();
 
          assertEquals(api.update(params), "request-1");
 

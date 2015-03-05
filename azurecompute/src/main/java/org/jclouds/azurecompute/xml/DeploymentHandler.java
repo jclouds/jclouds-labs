@@ -102,6 +102,7 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
          roleHandler.endElement(ignoredUri, ignoredName, qName);
       } else if (qName.equals("VirtualIPs")) {
          inListVirtualIPs = false;
+      } else if (qName.equals("VirtualIP")) {
          virtualIPs.add(virtualIPHandler.getResult());
       } else if (inListVirtualIPs) {
          virtualIPHandler.endElement(ignoredUri, ignoredName, qName);
