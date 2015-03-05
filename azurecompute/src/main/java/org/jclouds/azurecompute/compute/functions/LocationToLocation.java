@@ -34,6 +34,7 @@ import com.google.common.collect.ImmutableSet;
  */
 @Singleton
 public class LocationToLocation implements Function<Location, org.jclouds.domain.Location> {
+
    private final JustProvider justProvider;
 
    // allow us to lazy discover the provider of a resource
@@ -43,13 +44,13 @@ public class LocationToLocation implements Function<Location, org.jclouds.domain
    }
 
    @Override
-   public org.jclouds.domain.Location apply(Location location) {
-      LocationBuilder builder = new LocationBuilder();
+   public org.jclouds.domain.Location apply(final Location location) {
+      final LocationBuilder builder = new LocationBuilder();
       builder.id(location.name());
       builder.description(location.displayName());
       builder.scope(LocationScope.REGION);
       builder.parent(getOnlyElement(justProvider.get()));
-      builder.iso3166Codes(ImmutableSet.<String> of("name", location.name()));
+      builder.iso3166Codes(ImmutableSet.<String>of("name", location.name()));
       return builder.build();
    }
 

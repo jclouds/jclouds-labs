@@ -60,7 +60,7 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 
 public class AzureComputeServiceContextModule
-      extends ComputeServiceAdapterContextModule<Deployment, RoleSize, OSImage, Location> {
+        extends ComputeServiceAdapterContextModule<Deployment, RoleSize, OSImage, Location> {
 
    @Override
    protected void configure() {
@@ -80,21 +80,25 @@ public class AzureComputeServiceContextModule
 
       bind(TemplateOptions.class).to(AzureComputeTemplateOptions.class);
 
-      bind(new TypeLiteral<SecurityGroupExtension>() {}).to(AzureComputeSecurityGroupExtension.class);
+      bind(new TypeLiteral<SecurityGroupExtension>() {
+      }).to(AzureComputeSecurityGroupExtension.class);
       bind(CreateNodesInGroupThenAddToSet.class).to(GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes.class);
 
       // to have the compute service adapter override default locations
-      install(new LocationsFromComputeServiceAdapterModule<Deployment, RoleSize, OSImage, Location>(){});
+      install(new LocationsFromComputeServiceAdapterModule<Deployment, RoleSize, OSImage, Location>() {
+      });
    }
 
    @Override
-   protected Optional<SecurityGroupExtension> provideSecurityGroupExtension(Injector i) {
-      return Optional.of(i.getInstance(SecurityGroupExtension.class));
+   protected Optional<SecurityGroupExtension> provideSecurityGroupExtension(final Injector injector) {
+      return Optional.of(injector.getInstance(SecurityGroupExtension.class));
    }
 
    @Provides
    @Singleton
-   protected Predicate<String> provideOperationSucceededPredicate(final AzureComputeApi api, AzureComputeConstants azureComputeConstants) {
+   protected Predicate<String> provideOperationSucceededPredicate(
+           final AzureComputeApi api, final AzureComputeConstants azureComputeConstants) {
+
       return Predicates2.retry(new OperationSucceededPredicate(api),
               azureComputeConstants.operationTimeout(), azureComputeConstants.operationPollInitialPeriod(),
               azureComputeConstants.operationPollMaxPeriod());
@@ -104,22 +108,22 @@ public class AzureComputeServiceContextModule
 
       private final AzureComputeApi api;
 
-      public OperationSucceededPredicate(AzureComputeApi api) {
+      public OperationSucceededPredicate(final AzureComputeApi api) {
          this.api = checkNotNull(api, "api must not be null");
       }
 
       @Override
-      public boolean apply(String input) {
-         Operation operation = api.getOperationApi().get(input);
+      public boolean apply(final String input) {
+         final Operation operation = api.getOperationApi().get(input);
          switch (operation.status()) {
             case SUCCEEDED:
                return true;
+
             case IN_PROGRESS:
-               return false;
             case FAILED:
-               return false;
             case UNRECOGNIZED:
                return false;
+
             default:
                throw new IllegalStateException("Operation is in invalid status: " + operation.status().name());
          }
@@ -129,6 +133,7 @@ public class AzureComputeServiceContextModule
 
    @Singleton
    public static class AzureComputeConstants {
+
       @Named(OPERATION_TIMEOUT)
       @Inject
       private String operationTimeoutProperty;
@@ -164,7 +169,7 @@ public class AzureComputeServiceContextModule
       public String tcpRuleFormat() {
          return tcpRuleFormatProperty;
       }
-      
+
       public String tcpRuleRegexp() {
          return tcpRuleRegexpProperty;
       }

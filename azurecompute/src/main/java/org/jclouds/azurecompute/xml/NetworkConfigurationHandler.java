@@ -28,6 +28,7 @@ public class NetworkConfigurationHandler extends ParseSax.HandlerForGeneratedReq
    private VirtualNetworkConfiguration virtualNetworkConfiguration;
 
    private boolean inVirtualNetworkConfiguration;
+
    private final VirtualNetworkConfigurationHandler virtualNetworkConfigurationHandler;
 
    @Inject
@@ -37,7 +38,8 @@ public class NetworkConfigurationHandler extends ParseSax.HandlerForGeneratedReq
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("VirtualNetworkConfiguration")) {
          inVirtualNetworkConfiguration = true;
       }
@@ -61,10 +63,12 @@ public class NetworkConfigurationHandler extends ParseSax.HandlerForGeneratedReq
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inVirtualNetworkConfiguration) {
          virtualNetworkConfigurationHandler.characters(ch, start, length);
-      } else
+      } else {
          currentText.append(ch, start, length);
       }
+   }
 }

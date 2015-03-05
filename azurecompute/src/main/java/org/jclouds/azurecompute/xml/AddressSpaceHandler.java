@@ -23,14 +23,17 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 public class AddressSpaceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<AddressSpace> {
+
    private String addressPrefix;
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
    }
 
-   @Override public AddressSpace getResult() {
+   @Override
+   public AddressSpace getResult() {
       AddressSpace result = AddressSpace.create(addressPrefix);
       resetState(); // handler is called in a loop.
       return result;
@@ -40,14 +43,16 @@ public class AddressSpaceHandler extends ParseSax.HandlerForGeneratedRequestWith
       addressPrefix = null;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(final String ignoredUri, final String ignoredName, final String qName) {
       if (qName.equals("AddressPrefix")) {
          addressPrefix = currentOrNull(currentText);
       }
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(final char ch[], final int start, final int length) {
       currentText.append(ch, start, length);
    }
 

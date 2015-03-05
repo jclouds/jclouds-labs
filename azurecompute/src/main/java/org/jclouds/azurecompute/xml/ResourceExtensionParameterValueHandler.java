@@ -23,16 +23,21 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 public final class ResourceExtensionParameterValueHandler extends ParseSax.HandlerForGeneratedRequestWithResult<ResourceExtensionParameterValue> {
+
    private String key;
+
    private String value;
+
    private String type;
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
    }
 
-   @Override public ResourceExtensionParameterValue getResult() {
+   @Override
+   public ResourceExtensionParameterValue getResult() {
       ResourceExtensionParameterValue result = ResourceExtensionParameterValue.create(key, value, type);
       resetState(); // handler is called in a loop.
       return result;
@@ -42,7 +47,8 @@ public final class ResourceExtensionParameterValueHandler extends ParseSax.Handl
       key = value = type = null;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Key")) {
          key = currentOrNull(currentText);
       } else if (qName.equals("Value")) {
@@ -53,7 +59,8 @@ public final class ResourceExtensionParameterValueHandler extends ParseSax.Handl
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 

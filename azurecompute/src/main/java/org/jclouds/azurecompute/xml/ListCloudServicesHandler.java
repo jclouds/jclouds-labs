@@ -31,19 +31,25 @@ import com.google.common.collect.ImmutableList.Builder;
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460781">Response body description</a>
  */
 public final class ListCloudServicesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<CloudService>> {
+
    private boolean inHostedService;
+
    private final CloudServiceHandler cloudServiceHandler;
+
    private final Builder<CloudService> hostedServices = ImmutableList.builder();
 
-   @Inject ListCloudServicesHandler(CloudServiceHandler cloudServiceHandler) {
+   @Inject
+   ListCloudServicesHandler(CloudServiceHandler cloudServiceHandler) {
       this.cloudServiceHandler = cloudServiceHandler;
    }
 
-   @Override public List<CloudService> getResult() {
+   @Override
+   public List<CloudService> getResult() {
       return hostedServices.build();
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("HostedService")) {
          inHostedService = true;
       }
@@ -52,7 +58,8 @@ public final class ListCloudServicesHandler extends ParseSax.HandlerForGenerated
       }
    }
 
-   @Override public void endElement(String uri, String name, String qName) {
+   @Override
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("HostedService")) {
          inHostedService = false;
          hostedServices.add(cloudServiceHandler.getResult());
@@ -61,7 +68,8 @@ public final class ListCloudServicesHandler extends ParseSax.HandlerForGenerated
       }
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inHostedService) {
          cloudServiceHandler.characters(ch, start, length);
       }

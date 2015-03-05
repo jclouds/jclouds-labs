@@ -34,7 +34,8 @@ public class NetworkConfigurationToXML implements Binder {
       NetworkConfiguration networkConfiguration = NetworkConfiguration.class.cast(input);
 
       try {
-         XMLBuilder builder = XMLBuilder.create("NetworkConfiguration", "http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration")
+         XMLBuilder builder = XMLBuilder.create(
+                 "NetworkConfiguration", "http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration")
                  .e("VirtualNetworkConfiguration");
          if (networkConfiguration.virtualNetworkConfiguration().dns() == null) {
             builder.e("Dns");
@@ -43,14 +44,20 @@ public class NetworkConfigurationToXML implements Binder {
          }
          if (!networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites().isEmpty()) {
             XMLBuilder virtualNetworkSitesBuilder = builder.e("VirtualNetworkSites");
-            for (VirtualNetworkSite virtualNetworkSite : networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites()) {
-               XMLBuilder virtualNetworkSiteBuilder = virtualNetworkSitesBuilder.e("VirtualNetworkSite").a("name",
-                       virtualNetworkSite.name()).a("Location", virtualNetworkSite.location());
+            for (VirtualNetworkSite virtualNetworkSite
+                    : networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites()) {
+
+               XMLBuilder virtualNetworkSiteBuilder = virtualNetworkSitesBuilder.
+                       e("VirtualNetworkSite").
+                       a("name", virtualNetworkSite.name()).
+                       a("Location", virtualNetworkSite.location());
                virtualNetworkSiteBuilder.e("AddressSpace")
-                                        .e("AddressPrefix").t(virtualNetworkSite.addressSpace().addressPrefix()).up();
+                       .e("AddressPrefix").
+                       t(virtualNetworkSite.addressSpace().addressPrefix()).
+                       up();
                XMLBuilder subnetBuilder = virtualNetworkSiteBuilder.e("Subnets");
-                  for (Subnet subnet : virtualNetworkSite.subnets()) {
-                     subnetBuilder.e("Subnet").a("name", subnet.name()).e("AddressPrefix").t(subnet.addressPrefix());
+               for (Subnet subnet : virtualNetworkSite.subnets()) {
+                  subnetBuilder.e("Subnet").a("name", subnet.name()).e("AddressPrefix").t(subnet.addressPrefix());
                }
             }
          }

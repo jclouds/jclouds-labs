@@ -57,8 +57,7 @@ public interface DiskApi {
    List<Disk> list();
 
    /**
-    * The Delete Disk operation deletes the specified data or operating system disk from your image
-    * repository.
+    * The Delete Disk operation deletes the specified data or operating system disk from your image repository.
     *
     * @return request id or null, if not found
     */

@@ -28,18 +28,23 @@ import com.google.inject.Inject;
 public class ListVirtualNetworkSitesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<VirtualNetworkSite>> {
 
    private boolean inVirtualNetworkSite;
+
    private final VirtualNetworkSiteHandler virtualNetworkSiteHandler;
+
    private final ImmutableList.Builder<VirtualNetworkSite> virtualNetworkSites = ImmutableList.builder();
 
-   @Inject ListVirtualNetworkSitesHandler(VirtualNetworkSiteHandler virtualNetworkSiteHandler) {
+   @Inject
+   ListVirtualNetworkSitesHandler(VirtualNetworkSiteHandler virtualNetworkSiteHandler) {
       this.virtualNetworkSiteHandler = virtualNetworkSiteHandler;
    }
 
-   @Override public List<VirtualNetworkSite> getResult() {
+   @Override
+   public List<VirtualNetworkSite> getResult() {
       return virtualNetworkSites.build();
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("VirtualNetworkSite")) {
          inVirtualNetworkSite = true;
       }
@@ -48,7 +53,8 @@ public class ListVirtualNetworkSitesHandler extends ParseSax.HandlerForGenerated
       }
    }
 
-   @Override public void endElement(String uri, String name, String qName) {
+   @Override
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("VirtualNetworkSite")) {
          inVirtualNetworkSite = false;
          virtualNetworkSites.add(virtualNetworkSiteHandler.getResult());

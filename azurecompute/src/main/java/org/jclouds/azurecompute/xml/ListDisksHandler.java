@@ -27,19 +27,25 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.inject.Inject;
 
 public final class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Disk>> {
+
    private boolean inDisk;
+
    private final DiskHandler diskHandler;
+
    private final Builder<Disk> disks = ImmutableList.builder();
 
-   @Inject ListDisksHandler(DiskHandler diskHandler) {
+   @Inject
+   ListDisksHandler(DiskHandler diskHandler) {
       this.diskHandler = diskHandler;
    }
 
-   @Override public List<Disk> getResult() {
+   @Override
+   public List<Disk> getResult() {
       return disks.build();
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("Disk")) {
          inDisk = true;
       }
@@ -48,7 +54,8 @@ public final class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestW
       }
    }
 
-   @Override public void endElement(String uri, String name, String qName) {
+   @Override
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("Disk")) {
          inDisk = false;
          disks.add(diskHandler.getResult());
@@ -57,7 +64,8 @@ public final class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestW
       }
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inDisk) {
          diskHandler.characters(ch, start, length);
       }

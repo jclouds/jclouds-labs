@@ -43,13 +43,16 @@ public abstract class Rule {
 
    public abstract String state();
 
-   @Nullable public abstract Boolean isDefault();
+   @Nullable
+   public abstract Boolean isDefault();
 
-   Rule() {} // For AutoValue only!
+   Rule() {
+   } // For AutoValue only!
 
-   public static Rule create(String name, String type, String priority, String action, String sourceAddressPrefix,
-                             String sourcePortRange, String destinationAddressPrefix, String destinationPortRange,
-                             String protocol, String state, Boolean isDefault) {
+   public static Rule create(final String name, final String type, final String priority, final String action,
+           final String sourceAddressPrefix, final String sourcePortRange, final String destinationAddressPrefix,
+           final String destinationPortRange, final String protocol, final String state, final Boolean isDefault) {
+
       return new AutoValue_Rule(name, type, priority, action, sourceAddressPrefix, sourcePortRange,
               destinationAddressPrefix, destinationPortRange, protocol, state, isDefault);
    }

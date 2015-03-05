@@ -50,7 +50,7 @@ public interface VirtualNetworkApi {
     * The Get Network Configuration operation retrieves the network configuration file.
     *
     * @return The response body is a netcfg.cfg file.
-
+    *
     */
    @Named("GetVirtualNetworkConfiguration")
    @Path("/media")

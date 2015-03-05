@@ -30,22 +30,33 @@ import com.google.auto.value.AutoValue;
 public abstract class Operation {
 
    public enum Status {
-      IN_PROGRESS, SUCCEEDED, FAILED,
+
+      IN_PROGRESS,
+      SUCCEEDED,
+      FAILED,
       UNRECOGNIZED;
+
    }
 
-   Operation() {} // For AutoValue only!
+   Operation() {
+   } // For AutoValue only!
 
    public abstract String id();
 
    public abstract Status status();
 
-   @Nullable public abstract Integer httpStatusCode();
+   @Nullable
+   public abstract Integer httpStatusCode();
 
-   /** Present when the operation {@link Status#FAILED failed}. */
-   @Nullable public abstract Error error();
+   /**
+    * Present when the operation {@link Status#FAILED failed}.
+    */
+   @Nullable
+   public abstract Error error();
 
-   public static Operation create(String id, Status status, Integer httpStatusCode, Error error) {
+   public static Operation create(
+           final String id, final Status status, final Integer httpStatusCode, final Error error) {
+
       return new AutoValue_Operation(id, status, httpStatusCode, error);
    }
 }

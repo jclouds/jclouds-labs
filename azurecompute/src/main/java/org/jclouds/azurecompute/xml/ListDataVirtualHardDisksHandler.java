@@ -26,12 +26,16 @@ import org.xml.sax.Attributes;
 import java.util.List;
 
 public final class ListDataVirtualHardDisksHandler
-      extends ParseSax.HandlerForGeneratedRequestWithResult<List<DataVirtualHardDisk>> {
+        extends ParseSax.HandlerForGeneratedRequestWithResult<List<DataVirtualHardDisk>> {
+
    private boolean inDataVHD;
+
    private final DataVirtualHardDiskHandler dataVirtualHardDiskHandler;
+
    private final Builder<DataVirtualHardDisk> VHDs = ImmutableList.builder();
 
-   @Inject ListDataVirtualHardDisksHandler(DataVirtualHardDiskHandler dataVirtualHardDiskHandler) {
+   @Inject
+   ListDataVirtualHardDisksHandler(DataVirtualHardDiskHandler dataVirtualHardDiskHandler) {
       this.dataVirtualHardDiskHandler = dataVirtualHardDiskHandler;
    }
 

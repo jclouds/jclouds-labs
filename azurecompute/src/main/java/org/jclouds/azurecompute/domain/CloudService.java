@@ -25,9 +25,8 @@ import org.jclouds.javax.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 /**
- * System properties for the specified cloud service. These properties include the service name and
- * service type; the name of the affinity group to which the service belongs, or its location if it
- * is not part of an affinity group.
+ * System properties for the specified cloud service. These properties include the service name and service type; the
+ * name of the affinity group to which the service belongs, or its location if it is not part of an affinity group.
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >CloudService</a>
  */
@@ -35,33 +34,42 @@ import com.google.auto.value.AutoValue;
 public abstract class CloudService {
 
    public enum Status {
-      CREATING, CREATED, DELETING, DELETED, CHANGING, RESOLVING_DNS,
+
+      CREATING,
+      CREATED,
+      DELETING,
+      DELETED,
+      CHANGING,
+      RESOLVING_DNS,
       UNRECOGNIZED;
+
    }
 
-   CloudService() {} // For AutoValue only!
+   CloudService() {
+   } // For AutoValue only!
 
    /**
-    * The name of the cloud service. This name is the DNS prefix name and can be used to access the
-    * cloud service.
+    * The name of the cloud service. This name is the DNS prefix name and can be used to access the cloud service.
     *
-    * <p/>For example, if the service name is MyService you could access the access the service by
-    * calling: http://MyService.cloudapp.net
+    * <p/>
+    * For example, if the service name is MyService you could access the access the service by calling:
+    * http://MyService.cloudapp.net
     */
    public abstract String name();
 
    /**
-    * The geo-location of the cloud service in Windows Azure, if the cloud service is not
-    * associated with an affinity group. If a location has been specified, the AffinityGroup element
-    * is not returned.
+    * The geo-location of the cloud service in Windows Azure, if the cloud service is not associated with an affinity
+    * group. If a location has been specified, the AffinityGroup element is not returned.
     */
-   @Nullable public abstract String location();
+   @Nullable
+   public abstract String location();
 
    /**
-    * The affinity group with which this cloud service is associated, if any. If the service is
-    * associated with an affinity group, the Location element is not returned.
+    * The affinity group with which this cloud service is associated, if any. If the service is associated with an
+    * affinity group, the Location element is not returned.
     */
-   @Nullable public abstract String affinityGroup();
+   @Nullable
+   public abstract String affinityGroup();
 
    /**
     * The name can be up to 100 characters in length. The name can be used identify the storage account for your
@@ -69,7 +77,8 @@ public abstract class CloudService {
     */
    public abstract String label();
 
-   @Nullable public abstract String description();
+   @Nullable
+   public abstract String description();
 
    public abstract Status status();
 
@@ -78,19 +87,21 @@ public abstract class CloudService {
    public abstract Date lastModified();
 
    /**
-    * Represents the name of an extended cloud service property. Each extended property must have
-    * both a defined name and value. You can have a maximum of 50 extended property name/value
-    * pairs.
+    * Represents the name of an extended cloud service property. Each extended property must have both a defined name
+    * and value. You can have a maximum of 50 extended property name/value pairs.
     *
-    * <p/>The maximum length of the Name element is 64 characters, only alphanumeric characters and
-    * underscores are valid in the Name, and the name must start with a letter. Each extended
-    * property value has a maximum length of 255 characters.
+    * <p/>
+    * The maximum length of the Name element is 64 characters, only alphanumeric characters and underscores are valid in
+    * the Name, and the name must start with a letter. Each extended property value has a maximum length of 255
+    * characters.
     */
    public abstract Map<String, String> extendedProperties();
 
-   public static CloudService create(String name, String location, String affinityGroup, String label,
-         String description, Status status, Date created, Date lastModified, Map<String, String> extendedProperties) {
+   public static CloudService create(final String name, final String location, final String affinityGroup,
+           final String label, final String description, final Status status, final Date created,
+           final Date lastModified, final Map<String, String> extendedProperties) {
+
       return new AutoValue_CloudService(name, location, affinityGroup, label, description, status, created,
-            lastModified, copyOf(extendedProperties));
+              lastModified, copyOf(extendedProperties));
    }
 }

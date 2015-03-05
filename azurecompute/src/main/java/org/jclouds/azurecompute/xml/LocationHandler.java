@@ -30,20 +30,25 @@ import com.google.common.collect.Lists;
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
  */
 final class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Location> {
+
    private String name;
+
    private String displayName;
+
    private final List<String> availableServices = Lists.newArrayList();
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Location getResult() {
+   @Override
+   public Location getResult() {
       Location result = Location.create(name, displayName, ImmutableList.copyOf(availableServices));
       name = displayName = null; // handler is called in a loop.
       availableServices.clear();
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Name")) {
          name = currentOrNull(currentText);
       } else if (qName.equals("DisplayName")) {
@@ -54,7 +59,8 @@ final class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResul
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

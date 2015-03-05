@@ -35,27 +35,34 @@ import org.jclouds.util.Strings2;
 @Singleton
 public class AzureComputeErrorHandler implements HttpErrorHandler {
 
-   public void handleError(HttpCommand command, HttpResponse response) {
+   @Override
+   public void handleError(final HttpCommand command, final HttpResponse response) {
       // it is important to always read fully and close streams
       String message = parseMessage(response);
-      Exception exception = message != null ? new HttpResponseException(command, response, message)
-               : new HttpResponseException(command, response);
+      Exception exception = message == null
+              ? new HttpResponseException(command, response)
+              : new HttpResponseException(command, response, message);
       try {
-         message = message != null ? message : String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
-                  response.getStatusLine());
+         message = message == null
+                 ? String.format("%s -> %s", command.getCurrentRequest().getRequestLine(), response.getStatusLine())
+                 : message;
          switch (response.getStatusCode()) {
             case 401:
             case 403:
                exception = new AuthorizationException(message, exception);
                break;
+
             case 404:
                if (!command.getCurrentRequest().getMethod().equals("DELETE")) {
                   exception = new ResourceNotFoundException(message, exception);
                }
                break;
+
             case 409:
                exception = new IllegalStateException(message, exception);
                break;
+
+            default:
          }
       } finally {
          Closeables2.closeQuietly(response.getPayload());
@@ -63,9 +70,10 @@ public class AzureComputeErrorHandler implements HttpErrorHandler {
       }
    }
 
-   public String parseMessage(HttpResponse response) {
-      if (response.getPayload() == null)
+   public String parseMessage(final HttpResponse response) {
+      if (response.getPayload() == null) {
          return null;
+      }
       try {
          return Strings2.toStringAndClose(response.getPayload().openStream());
       } catch (IOException e) {

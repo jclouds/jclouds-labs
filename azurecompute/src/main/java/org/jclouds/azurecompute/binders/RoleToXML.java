@@ -25,6 +25,7 @@ import org.jclouds.rest.Binder;
 import com.jamesmurty.utils.XMLBuilder;
 
 public class RoleToXML implements Binder {
+
    @Override
    @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
@@ -55,20 +56,20 @@ public class RoleToXML implements Binder {
                   subnetNames.e("SubnetName").t(subnetName.name()).up();
                }
                if (configurationSet.networkSecurityGroup() != null
-                            && !configurationSet.networkSecurityGroup().isEmpty()) {
+                       && !configurationSet.networkSecurityGroup().isEmpty()) {
                   configBuilder.e("NetworkSecurityGroup").t(configurationSet.networkSecurityGroup()).up();
                }
             }
          }
          builder.e("DataVirtualHardDisks").up()
-                .e("OSVirtualHardDisk")
-                .e("HostCaching").t(role.osVirtualHardDisk().hostCaching()).up()
-                .e("DiskName").t(role.osVirtualHardDisk().diskName()).up()
-                .e("MediaLink").t(role.osVirtualHardDisk().mediaLink().toString()).up()
-                .e("SourceImageName").t(role.osVirtualHardDisk().sourceImageName()).up()
-                .e("OS").t(role.osVirtualHardDisk().os().toString()).up()
-                .up() // DataVirtualHardDisks
-                .e("RoleSize").t(role.roleSize().getText());
+                 .e("OSVirtualHardDisk")
+                 .e("HostCaching").t(role.osVirtualHardDisk().hostCaching()).up()
+                 .e("DiskName").t(role.osVirtualHardDisk().diskName()).up()
+                 .e("MediaLink").t(role.osVirtualHardDisk().mediaLink().toString()).up()
+                 .e("SourceImageName").t(role.osVirtualHardDisk().sourceImageName()).up()
+                 .e("OS").t(role.osVirtualHardDisk().os().toString()).up()
+                 .up() // DataVirtualHardDisks
+                 .e("RoleSize").t(role.roleSize().getText());
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
          throw propagate(e);

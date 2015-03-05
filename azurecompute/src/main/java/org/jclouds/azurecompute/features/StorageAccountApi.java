@@ -17,6 +17,7 @@
 package org.jclouds.azurecompute.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+
 import java.util.List;
 
 import javax.inject.Named;
@@ -80,7 +81,8 @@ public interface StorageAccountApi {
    List<StorageService> list();
 
    /**
-    * The Check Storage Account Name Availability operation checks to see if the specified storage account name is available, or if it has already been taken.
+    * The Check Storage Account Name Availability operation checks to see if the specified storage account name is
+    * available, or if it has already been taken.
     */
    @Named("CheckStorageAccountNameAvailability")
    @GET

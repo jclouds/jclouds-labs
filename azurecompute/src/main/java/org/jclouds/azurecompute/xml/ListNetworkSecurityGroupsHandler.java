@@ -28,24 +28,30 @@ import com.google.inject.Inject;
 public class ListNetworkSecurityGroupsHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<NetworkSecurityGroup>> {
 
    private boolean inNetworkSecurityGroup;
+
    private final NetworkSecurityGroupHandler networkSecurityGroupHandler;
+
    private final ImmutableList.Builder<NetworkSecurityGroup> networkSecurityGroups = ImmutableList.builder();
 
-   @Inject ListNetworkSecurityGroupsHandler(NetworkSecurityGroupHandler networkSecurityGroupHandler) {
+   @Inject
+   ListNetworkSecurityGroupsHandler(NetworkSecurityGroupHandler networkSecurityGroupHandler) {
       this.networkSecurityGroupHandler = networkSecurityGroupHandler;
    }
 
-   @Override public List<NetworkSecurityGroup> getResult() {
+   @Override
+   public List<NetworkSecurityGroup> getResult() {
       return networkSecurityGroups.build();
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("NetworkSecurityGroup")) {
          inNetworkSecurityGroup = true;
       }
    }
 
-   @Override public void endElement(String uri, String name, String qName) {
+   @Override
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("NetworkSecurityGroup")) {
          inNetworkSecurityGroup = false;
          networkSecurityGroups.add(networkSecurityGroupHandler.getResult());

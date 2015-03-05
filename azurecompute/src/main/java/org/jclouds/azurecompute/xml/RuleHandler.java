@@ -24,29 +24,41 @@ import org.jclouds.http.functions.ParseSax;
 final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Rule> {
 
    private String name;
+
    private String type;
+
    private String priority;
+
    private String action;
+
    private String sourceAddressPrefix;
+
    private String sourcePortRange;
+
    private String destinationAddressPrefix;
+
    private String destinationPortRange;
+
    private String protocol;
+
    private String state;
+
    private Boolean isDefault;
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Rule getResult() {
+   @Override
+   public Rule getResult() {
       Rule result = Rule.create(name, type, priority, action, sourceAddressPrefix, sourcePortRange,
               destinationAddressPrefix, destinationPortRange, protocol, state, isDefault);
-      name = type = priority = action = sourceAddressPrefix = sourcePortRange = destinationAddressPrefix =
-             destinationPortRange = protocol = state = null; // handler is called in a loop.
-             isDefault = false;
+      name = type = priority = action = sourceAddressPrefix = sourcePortRange = destinationAddressPrefix
+              = destinationPortRange = protocol = state = null; // handler is called in a loop.
+      isDefault = false;
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Name")) {
          name = currentOrNull(currentText);
       } else if (qName.equals("Type")) {
@@ -76,7 +88,8 @@ final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Ru
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

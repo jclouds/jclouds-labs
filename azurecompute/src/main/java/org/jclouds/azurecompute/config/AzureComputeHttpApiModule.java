@@ -17,7 +17,6 @@
 package org.jclouds.azurecompute.config;
 
 import java.security.KeyStore;
-
 import javax.net.ssl.SSLContext;
 
 import org.jclouds.azurecompute.AzureComputeApi;
@@ -51,9 +50,11 @@ public class AzureComputeHttpApiModule extends HttpApiModule<AzureComputeApi> {
    @Override
    protected void installLocations() {
       install(new LocationModule());
-      bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstRegionOptionallyMatchingRegionId.class).in(Scopes.SINGLETON);
+      bind(ImplicitLocationSupplier.class).
+              to(OnlyLocationOrFirstRegionOptionallyMatchingRegionId.class).
+              in(Scopes.SINGLETON);
    }
-   
+
    @Override
    protected void configure() {
       install(new AzureComputeParserModule());

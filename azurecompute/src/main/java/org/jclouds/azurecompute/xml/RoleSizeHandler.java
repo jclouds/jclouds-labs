@@ -24,14 +24,23 @@ import org.jclouds.http.functions.ParseSax;
  * @see <a href="http://msdn.microsoft.com/en-us/library/dn469422.aspx" >api</a>
  */
 final class RoleSizeHandler extends ParseSax.HandlerForGeneratedRequestWithResult<RoleSize> {
+
    private RoleSize.Type name;
+
    private String label;
+
    private Integer cores;
+
    private Integer memoryInMb;
+
    private Boolean supportedByWebWorkerRoles;
+
    private Boolean supportedByVirtualMachines;
+
    private Integer maxDataDiskCount;
+
    private Integer webWorkerResourceDiskSizeInMb;
+
    private Integer virtualMachineResourceDiskSizeInMb;
 
    private final StringBuilder currentText = new StringBuilder();
@@ -91,7 +100,8 @@ final class RoleSizeHandler extends ParseSax.HandlerForGeneratedRequestWithResul
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 

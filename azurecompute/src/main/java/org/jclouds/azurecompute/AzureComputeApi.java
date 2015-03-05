@@ -34,16 +34,16 @@ import org.jclouds.azurecompute.features.VirtualNetworkApi;
 import org.jclouds.rest.annotations.Delegate;
 
 /**
- * The Windows Azure Service Management API is a REST API for managing your services and
- * deployments.
+ * The Windows Azure Service Management API is a REST API for managing your services and deployments.
  * <p/>
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460799" >doc</a>
  */
 public interface AzureComputeApi extends Closeable {
+
    /**
-    * The Service Management API includes operations for listing the available data center locations
-    * for a cloud service in your subscription.
+    * The Service Management API includes operations for listing the available data center locations for a cloud service
+    * in your subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299">docs</a>
     */
@@ -51,8 +51,7 @@ public interface AzureComputeApi extends Closeable {
    LocationApi getLocationApi();
 
    /**
-    * The Service Management API includes operations for managing the cloud services beneath your
-    * subscription.
+    * The Service Management API includes operations for managing the cloud services beneath your subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/ee460812">docs</a>
     */
@@ -60,8 +59,7 @@ public interface AzureComputeApi extends Closeable {
    CloudServiceApi getCloudServiceApi();
 
    /**
-    * The Service Management API includes operations for managing the virtual machines in your
-    * subscription.
+    * The Service Management API includes operations for managing the virtual machines in your subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/jj157206">docs</a>
     */
@@ -69,19 +67,17 @@ public interface AzureComputeApi extends Closeable {
    DeploymentApi getDeploymentApiForService(@PathParam("serviceName") String serviceName);
 
    /**
-    * The Service Management API includes operations for managing the virtual machines in your
-    * subscription.
+    * The Service Management API includes operations for managing the virtual machines in your subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/jj157206">docs</a>
     */
    // TODO: revisit once we have multi-level @Delegate working
    @Delegate
    VirtualMachineApi getVirtualMachineApiForDeploymentInService(@PathParam("deploymentName") String deploymentName,
-         @PathParam("serviceName") String serviceName);
+           @PathParam("serviceName") String serviceName);
 
    /**
-    * The Service Management API includes operations for managing the OS images in your
-    * subscription.
+    * The Service Management API includes operations for managing the OS images in your subscription.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/jj157175">docs</a>
     */
@@ -89,8 +85,7 @@ public interface AzureComputeApi extends Closeable {
    OSImageApi getOSImageApi();
 
    /**
-    * The Service Management API includes operations for Tracking Asynchronous Service Management
-    * Requests.
+    * The Service Management API includes operations for Tracking Asynchronous Service Management Requests.
     *
     * @see <a href="http://msdn.microsoft.com/en-us/library/ee460791">docs</a>
     */
@@ -130,8 +125,7 @@ public interface AzureComputeApi extends Closeable {
    StorageAccountApi getStorageAccountApi();
 
    /**
-    * The Service Management API includes operations for managing the Network Security Groups in your
-    * subscription.
+    * The Service Management API includes operations for managing the Network Security Groups in your subscription.
     *
     */
    @Delegate

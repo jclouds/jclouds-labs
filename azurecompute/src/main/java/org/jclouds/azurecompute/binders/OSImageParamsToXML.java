@@ -26,16 +26,18 @@ import org.jclouds.rest.Binder;
 import com.jamesmurty.utils.XMLBuilder;
 
 public final class OSImageParamsToXML implements Binder {
-   @Override@SuppressWarnings("unchecked")
- public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+
+   @Override
+   @SuppressWarnings("unchecked")
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       OSImageParams params = OSImageParams.class.cast(input);
       try {
          String xml = XMLBuilder.create("OSImage", "http://schemas.microsoft.com/windowsazure")
-                                .e("Label").t(params.label()).up()
-                                .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
-                                .e("Name").t(params.name()).up()
-                                .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
-                                .up().asString();
+                 .e("Label").t(params.label()).up()
+                 .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
+                 .e("Name").t(params.name()).up()
+                 .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
+                 .up().asString();
          return (R) request.toBuilder().payload(xml).build();
       } catch (Exception e) {
          throw propagate(e);

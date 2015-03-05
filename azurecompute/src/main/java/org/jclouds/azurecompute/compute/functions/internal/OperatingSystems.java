@@ -26,12 +26,19 @@ import com.google.common.collect.Iterables;
 public class OperatingSystems {
 
    protected static final String CENTOS = "CentOS";
+
    protected static final String SUSE = "SUSE";
+
    protected static final String OPENSUSE = "openSUSE";
+
    protected static final String UBUNTU = "Ubuntu";
+
    protected static final String WINDOWS = "Windows";
+
    private static final String MICROSOFT = "Microsoft";
+
    public static final String WINDOWS_SERVER = "Windows Server";
+
    public static final String MICROSOFT_SQL_SERVER = "Microsoft SQL Server";
 
    public static Function<String, OsFamily> osFamily() {
@@ -39,10 +46,15 @@ public class OperatingSystems {
          @Override
          public OsFamily apply(final String label) {
             if (label != null) {
-               if (label.contains(CENTOS)) return OsFamily.CENTOS;
-               else if (label.contains(SUSE)) return OsFamily.SUSE;
-               else if (label.contains(UBUNTU)) return OsFamily.UBUNTU;
-               else if (label.contains(WINDOWS)) return OsFamily.WINDOWS;
+               if (label.contains(CENTOS)) {
+                  return OsFamily.CENTOS;
+               } else if (label.contains(SUSE)) {
+                  return OsFamily.SUSE;
+               } else if (label.contains(UBUNTU)) {
+                  return OsFamily.UBUNTU;
+               } else if (label.contains(WINDOWS)) {
+                  return OsFamily.WINDOWS;
+               }
             }
             return OsFamily.UNRECOGNIZED;
          }
@@ -52,7 +64,7 @@ public class OperatingSystems {
    public static Function<OSImage, String> version() {
       return new Function<OSImage, String>() {
          @Override
-         public String apply(OSImage osImage) {
+         public String apply(final OSImage osImage) {
             if (osImage.category().matches("Canonical|OpenLogic")) {
                return Iterables.get(Splitter.on(" ").split(osImage.label()), 2);
             } else if (osImage.category().matches(SUSE)) {
@@ -70,7 +82,7 @@ public class OperatingSystems {
                   return osImage.label().substring(MICROSOFT_SQL_SERVER.length() + 1);
                }
             } else if (osImage.category().matches("RightScale with Linux|Public ")) {
-               Iterable<String> splittedLabel = Splitter.on("-").split(osImage.label());
+               final Iterable<String> splittedLabel = Splitter.on("-").split(osImage.label());
                if (Iterables.size(splittedLabel) > 2) {
                   return Iterables.get(splittedLabel, 2);
                }

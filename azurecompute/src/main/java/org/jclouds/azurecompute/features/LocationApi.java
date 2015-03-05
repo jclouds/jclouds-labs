@@ -33,8 +33,8 @@ import org.jclouds.rest.annotations.Headers;
 import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
- * The Service Management API includes operations for listing the available data center locations
- * for a cloud service in your subscription.
+ * The Service Management API includes operations for listing the available data center locations for a cloud service in
+ * your subscription.
  * <p/>
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299" />
@@ -45,8 +45,7 @@ import org.jclouds.rest.annotations.XMLResponseParser;
 public interface LocationApi {
 
    /**
-    * The List Locations operation lists all of the data center locations that are valid for your
-    * subscription.
+    * The List Locations operation lists all of the data center locations that are valid for your subscription.
     */
    @Named("ListLocations")
    @GET

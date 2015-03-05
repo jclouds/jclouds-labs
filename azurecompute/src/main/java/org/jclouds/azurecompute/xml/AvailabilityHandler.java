@@ -22,16 +22,20 @@ import org.jclouds.azurecompute.domain.Availability;
 import org.jclouds.http.functions.ParseSax;
 
 public class AvailabilityHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Availability> {
+
    private Boolean result;
+
    private String reason;
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Availability getResult() {
+   @Override
+   public Availability getResult() {
       return Availability.create(result, reason);
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Result")) {
          String resultText = currentOrNull(currentText);
          if (resultText != null) {
@@ -43,7 +47,8 @@ public class AvailabilityHandler extends ParseSax.HandlerForGeneratedRequestWith
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

@@ -23,13 +23,15 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class Availability {
 
-   Availability() {} // For AutoValue only!
+   Availability() {
+   } // For AutoValue only!
 
    public abstract Boolean result();
 
-   @Nullable public abstract String reason();
+   @Nullable
+   public abstract String reason();
 
-   public static Availability create(Boolean result, String reason) {
+   public static Availability create(final Boolean result, final String reason) {
       return new AutoValue_Availability(result, reason);
    }
 

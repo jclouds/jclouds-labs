@@ -17,12 +17,11 @@
 package org.jclouds.azurecompute.config;
 
 /**
- * Configuration properties and constants used in Azure Service Management
- * connections.
+ * Configuration properties and constants used in Azure Service Management connections.
  */
 public class AzureComputeProperties {
 
-	public static final String OPERATION_TIMEOUT = "jclouds.azurecompute.operation.timeout";
+   public static final String OPERATION_TIMEOUT = "jclouds.azurecompute.operation.timeout";
 
    public static final String OPERATION_POLL_INITIAL_PERIOD = "jclouds.azurecompute..operation.poll.initial.period";
 
@@ -31,4 +30,5 @@ public class AzureComputeProperties {
    public static final String TCP_RULE_FORMAT = "jclouds.azurecompute.tcp.rule.format";
 
    public static final String TCP_RULE_REGEXP = "jclouds.azurecompute.tcp.rule.regexp";
+
 }

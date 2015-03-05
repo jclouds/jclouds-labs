@@ -24,14 +24,23 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 public class InputEndpointHandler extends ParseSax.HandlerForGeneratedRequestWithResult<InputEndpoint> {
+
    private Integer localPort;
+
    private String name;
+
    private Integer port;
+
    private String protocol;
+
    private Boolean enableDirectServerReturn;
+
    private String vip;
+
    private String loadBalancerName;
+
    private LoadBalancerProbe loadBalancerProbe;
+
    private Integer idleTimeoutInMinutes;
 
    private StringBuilder currentText = new StringBuilder();

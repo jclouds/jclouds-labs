@@ -23,18 +23,25 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 public class InstanceEndpointHandler extends ParseSax.HandlerForGeneratedRequestWithResult<InstanceEndpoint> {
+
    private String name;
+
    private String vip;
+
    private Integer publicPort;
+
    private Integer localPort;
+
    private String protocol;
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
    }
 
-   @Override public InstanceEndpoint getResult() {
+   @Override
+   public InstanceEndpoint getResult() {
       InstanceEndpoint result = InstanceEndpoint.create(name, vip, publicPort, localPort, protocol);
       resetState(); // handler is called in a loop.
       return result;
@@ -45,19 +52,20 @@ public class InstanceEndpointHandler extends ParseSax.HandlerForGeneratedRequest
       publicPort = localPort = null;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Name")) {
          name = currentOrNull(currentText);
       } else if (qName.equals("Vip")) {
          vip = currentOrNull(currentText);
       } else if (qName.equals("PublicPort")) {
          String publicPortText = currentOrNull(currentText);
-         if (publicPortText != null){
+         if (publicPortText != null) {
             publicPort = Integer.parseInt(publicPortText);
          }
       } else if (qName.equals("LocalPort")) {
          String localPortText = currentOrNull(currentText);
-         if (localPortText != null){
+         if (localPortText != null) {
             localPort = Integer.parseInt(localPortText);
          }
       } else if (qName.equals("Protocol")) {
@@ -66,7 +74,8 @@ public class InstanceEndpointHandler extends ParseSax.HandlerForGeneratedRequest
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

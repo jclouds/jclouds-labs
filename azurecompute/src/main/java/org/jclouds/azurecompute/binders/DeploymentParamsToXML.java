@@ -28,49 +28,50 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public final class DeploymentParamsToXML implements Binder {
 
-   @Override@SuppressWarnings("unchecked")
- public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+   @Override
+   @SuppressWarnings("unchecked")
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       DeploymentParams params = DeploymentParams.class.cast(input);
 
       try {
          XMLBuilder builder = XMLBuilder.create("Deployment", "http://schemas.microsoft.com/windowsazure")
-            .e("Name").t(params.name()).up()
-            .e("DeploymentSlot").t("Production").up()
-            .e("Label").t(params.name()).up()
-            .e("RoleList")
-            .e("Role")
-            .e("RoleName").t(params.name()).up()
-            .e("RoleType").t("PersistentVMRole").up()
-            .e("ConfigurationSets");
+                 .e("Name").t(params.name()).up()
+                 .e("DeploymentSlot").t("Production").up()
+                 .e("Label").t(params.name()).up()
+                 .e("RoleList")
+                 .e("Role")
+                 .e("RoleName").t(params.name()).up()
+                 .e("RoleType").t("PersistentVMRole").up()
+                 .e("ConfigurationSets");
 
          if (params.os() == OSImage.Type.WINDOWS) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Windows
             configBuilder.e("ConfigurationSetType").t("WindowsProvisioningConfiguration").up()
-               .e("ComputerName").t(params.name()).up()
-               .e("AdminPassword").t(params.password()).up()
-               .e("ResetPasswordOnFirstLogon").t("false").up()
-               .e("EnableAutomaticUpdate").t("false").up()
-               .e("DomainJoin")
-               .e("Credentials")
-                  .e("Domain").t(params.name()).up()
-                  .e("Username").t(params.username()).up()
-                  .e("Password").t(params.password()).up()
-               .up() // Credentials
-               .e("JoinDomain").t(params.name()).up()
-               .up() // Domain Join
-               .e("StoredCertificateSettings").up()
-               .up(); // Windows ConfigurationSet
+                    .e("ComputerName").t(params.name()).up()
+                    .e("AdminPassword").t(params.password()).up()
+                    .e("ResetPasswordOnFirstLogon").t("false").up()
+                    .e("EnableAutomaticUpdate").t("false").up()
+                    .e("DomainJoin")
+                    .e("Credentials")
+                    .e("Domain").t(params.name()).up()
+                    .e("Username").t(params.username()).up()
+                    .e("Password").t(params.password()).up()
+                    .up() // Credentials
+                    .e("JoinDomain").t(params.name()).up()
+                    .up() // Domain Join
+                    .e("StoredCertificateSettings").up()
+                    .up(); // Windows ConfigurationSet
          } else if (params.os() == OSImage.Type.LINUX) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Linux
             configBuilder.e("ConfigurationSetType").t("LinuxProvisioningConfiguration").up()
-               .e("HostName").t(params.name()).up()
-               .e("UserName").t(params.username()).up()
-               .e("UserPassword").t(params.password()).up()
-               .e("DisableSshPasswordAuthentication").t("false").up()
-               .e("SSH")
+                    .e("HostName").t(params.name()).up()
+                    .e("UserName").t(params.username()).up()
+                    .e("UserPassword").t(params.password()).up()
+                    .e("DisableSshPasswordAuthentication").t("false").up()
+                    .e("SSH")
                     .e("PublicKeys").up()
                     .e("KeyPairs").up()
-               .up(); // Linux ConfigurationSet
+                    .up(); // Linux ConfigurationSet
          } else {
             throw new IllegalArgumentException("Unrecognized os type " + params);
          }
@@ -82,10 +83,10 @@ public final class DeploymentParamsToXML implements Binder {
          for (DeploymentParams.ExternalEndpoint endpoint : params.externalEndpoints()) {
             XMLBuilder inputBuilder = inputEndpoints.e("InputEndpoint");
             inputBuilder.e("LocalPort").t(Integer.toString(endpoint.localPort())).up()
-               .e("Name").t(endpoint.name()).up()
-               .e("Port").t(Integer.toString(endpoint.port())).up()
-               .e("Protocol").t(endpoint.protocol().toLowerCase()).up()
-               .up(); //InputEndpoint
+                    .e("Name").t(endpoint.name()).up()
+                    .e("Port").t(Integer.toString(endpoint.port())).up()
+                    .e("Protocol").t(endpoint.protocol().toLowerCase()).up()
+                    .up(); //InputEndpoint
          }
 
          inputEndpoints.up();
@@ -98,19 +99,20 @@ public final class DeploymentParamsToXML implements Binder {
          }
 
          builder.up() //ConfigurationSets
-            // TODO No Disk should be specified for a Role if using a VMImage
-            .e("DataVirtualHardDisks").up()
-            .e("OSVirtualHardDisk")
-            .e("HostCaching").t("ReadWrite").up()
-            .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
-            // TODO
-            /// If you are using a VM image, it must be specified as VMImageName for the role, not as SourceImageNamefor OSVirtualHardDisk.</Message></Error>]
-            .e("SourceImageName").t(params.sourceImageName()).up()
-            .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
-             .up() //OSVirtualHardDisk
-            .e("RoleSize").t(params.size().getText()).up()
-            .up() //Role
-            .up() //RoleList
+                 // TODO No Disk should be specified for a Role if using a VMImage
+                 .e("DataVirtualHardDisks").up()
+                 .e("OSVirtualHardDisk")
+                 .e("HostCaching").t("ReadWrite").up()
+                 .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
+                 // TODO
+                 /// If you are using a VM image, it must be specified as VMImageName for the role, 
+                 // not as SourceImageNamefor OSVirtualHardDisk.</Message></Error>]
+                 .e("SourceImageName").t(params.sourceImageName()).up()
+                 .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
+                 .up() //OSVirtualHardDisk
+                 .e("RoleSize").t(params.size().getText()).up()
+                 .up() //Role
+                 .up() //RoleList
                  .e("VirtualNetworkName").t(params.virtualNetworkName()).up();
          // TODO: Undeprecate this method as forcing users to wrap a String in guava's ByteSource is not great.
          return (R) request.toBuilder().payload(builder.asString()).build();

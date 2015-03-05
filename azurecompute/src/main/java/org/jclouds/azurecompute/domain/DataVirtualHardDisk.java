@@ -24,41 +24,40 @@ import java.net.URI;
 /**
  * @see <a href="https://msdn.microsoft.com/en-us/library/azure/jj157193.aspx#DataVirtualHardDisks" >api</a>
  */
-
 @AutoValue
 public abstract class DataVirtualHardDisk {
 
    public enum Caching {
+
       READ_ONLY,
       READ_WRITE,
       NONE
+
    }
 
    /**
-    * Specifies the caching mode of the operating system disk.
-    * This setting impacts the consistency and performance of the disk.
-    * Possible values are:
-    * ReadOnly
-    * ReadWrite
-    * The default value is ReadWrite
+    * Specifies the caching mode of the operating system disk. This setting impacts the consistency and performance of
+    * the disk. Possible values are: ReadOnly ReadWrite The default value is ReadWrite
     */
-   @Nullable public abstract Caching hostCaching();
+   @Nullable
+   public abstract Caching hostCaching();
 
    /**
-    * Required if an existing disk is being used to create a Virtual Machine.
-    * Specifies the name of a new or existing disk
+    * Required if an existing disk is being used to create a Virtual Machine. Specifies the name of a new or existing
+    * disk
     */
-   @Nullable public abstract String diskName();
+   @Nullable
+   public abstract String diskName();
 
    /**
-    * Specifies the Logical Unit Number (LUN) for the data disk. If the disk is the first disk that is added,
-    * this element is optional and the default value of 0 is used. If more than one disk is being added,
-    * this element is required.
+    * Specifies the Logical Unit Number (LUN) for the data disk. If the disk is the first disk that is added, this
+    * element is optional and the default value of 0 is used. If more than one disk is being added, this element is
+    * required.
     * <p/>
-    * You can use Get Role to find the LUN numbers that are already being used.
-    * Valid LUN values are 0 through 31
+    * You can use Get Role to find the LUN numbers that are already being used. Valid LUN values are 0 through 31
     */
-   @Nullable public abstract Integer lun();
+   @Nullable
+   public abstract Integer lun();
 
    /**
     * Specifies the size, in GB, of an empty disk to be attached to the Virtual Machine.If the disk that is being added
@@ -69,27 +68,30 @@ public abstract class DataVirtualHardDisk {
     * <p/>
     * This element is used with the MediaLink element.
     */
-   @Nullable public abstract Integer logicalDiskSizeInGB();
+   @Nullable
+   public abstract Integer logicalDiskSizeInGB();
 
    /**
     * If the disk that is being added is already registered in the subscription or the VHD for the disk already exists
     * in blob storage, this element is ignored. If a VHD file does not exist in blob storage, this element defines the
-    * location of the new VHD that is created when the new disk is added.
-    * Example:
+    * location of the new VHD that is created when the new disk is added. Example:
     * http://example.blob.core.windows.net/disks/mydatadisk.vhd
     */
-   @Nullable public abstract URI mediaLink();
+   @Nullable
+   public abstract URI mediaLink();
 
    /**
-    * This property identifies the type of the storage account for the backing VHD.
-    * If the backing VHD is in an Provisioned Storage account, “Provisioned” is returned otherwise “Standard”
-    * is returned.
+    * This property identifies the type of the storage account for the backing VHD. If the backing VHD is in an
+    * Provisioned Storage account, “Provisioned” is returned otherwise “Standard” is returned.
     * <p/>
     * This property is only returned with a version header of 2014-10-01 or newer
     */
-   @Nullable public abstract String ioType();
+   @Nullable
+   public abstract String ioType();
 
-   public static DataVirtualHardDisk create(Caching hostCaching, String diskName, Integer lun, Integer logicalDiskSizeInGB, URI mediaLink, String ioType) {
+   public static DataVirtualHardDisk create(final Caching hostCaching, final String diskName,
+           final Integer lun, final Integer logicalDiskSizeInGB, final URI mediaLink, final String ioType) {
+
       return new AutoValue_DataVirtualHardDisk(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink, ioType);
    }
 }

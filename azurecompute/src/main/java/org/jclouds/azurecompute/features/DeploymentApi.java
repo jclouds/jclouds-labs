@@ -47,8 +47,7 @@ public interface DeploymentApi {
    /**
     * The Get Deployment operation returns the specified deployment from Windows Azure.
     *
-    * @param name
-    *           the unique DNS Prefix value in the Windows Azure Management Portal
+    * @param name the unique DNS Prefix value in the Windows Azure Management Portal
     */
    @Named("GetDeployment")
    @GET
@@ -66,8 +65,7 @@ public interface DeploymentApi {
    /**
     * The Delete Deployment operation deletes the specified deployment from Windows Azure.
     *
-    * @param name
-    *           the unique DNS Prefix value in the Windows Azure Management Portal
+    * @param name the unique DNS Prefix value in the Windows Azure Management Portal
     */
    @Named("DeleteDeployment")
    @DELETE
@@ -75,5 +73,5 @@ public interface DeploymentApi {
    @Fallback(NullOnNotFoundOr404.class)
    @ResponseParser(ParseRequestIdHeader.class)
    String delete(@PathParam("name") String name);
-   
+
 }

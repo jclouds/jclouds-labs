@@ -38,86 +38,90 @@ import com.google.common.collect.Sets;
 
 public class DeploymentToNodeMetadata implements Function<Deployment, NodeMetadata> {
 
-	private final Supplier<Set<? extends Location>> locations;
-	private final GroupNamingConvention nodeNamingConvention;
-	private final OSImageToImage osImageToImage;
-	private final RoleSizeToHardware roleSizeToHardware;
-	private final Map<String, Credentials> credentialStore;
+   private static final Map<Deployment.Status, NodeMetadata.Status> serverStateToNodeStatus
+           = ImmutableMap.<Deployment.Status, NodeMetadata.Status>builder()
+           .put(Deployment.Status.DELETING, NodeMetadata.Status.PENDING)
+           .put(Deployment.Status.SUSPENDED_TRANSITIONING, NodeMetadata.Status.PENDING)
+           .put(Deployment.Status.RUNNING_TRANSITIONING, NodeMetadata.Status.PENDING)
+           .put(Deployment.Status.DEPLOYING, NodeMetadata.Status.PENDING)
+           .put(Deployment.Status.STARTING, NodeMetadata.Status.PENDING)
+           .put(Deployment.Status.SUSPENDED, NodeMetadata.Status.SUSPENDED)
+           .put(Deployment.Status.RUNNING, NodeMetadata.Status.RUNNING)
+           .put(Deployment.Status.UNRECOGNIZED, NodeMetadata.Status.UNRECOGNIZED).build();
 
-	public static final Map<Deployment.Status, NodeMetadata.Status> serverStateToNodeStatus = ImmutableMap
-			  .<Deployment.Status, NodeMetadata.Status> builder()
-			  .put(Deployment.Status.DELETING, NodeMetadata.Status.PENDING)
-			  .put(Deployment.Status.SUSPENDED_TRANSITIONING, NodeMetadata.Status.PENDING)
-			  .put(Deployment.Status.RUNNING_TRANSITIONING, NodeMetadata.Status.PENDING)
-			  .put(Deployment.Status.DEPLOYING, NodeMetadata.Status.PENDING)
-			  .put(Deployment.Status.STARTING, NodeMetadata.Status.PENDING)
-			  .put(Deployment.Status.SUSPENDED, NodeMetadata.Status.SUSPENDED)
-			  .put(Deployment.Status.RUNNING, NodeMetadata.Status.RUNNING)
-			  .put(Deployment.Status.UNRECOGNIZED, NodeMetadata.Status.UNRECOGNIZED).build();
+   private final Supplier<Set<? extends Location>> locations;
 
-	@Inject
-	DeploymentToNodeMetadata(@Memoized Supplier<Set<? extends Location>> locations,
-										GroupNamingConvention.Factory namingConvention, OSImageToImage osImageToImage,
-										RoleSizeToHardware roleSizeToHardware, Map<String, Credentials> credentialStore) {
-		this.nodeNamingConvention = namingConvention.createWithoutPrefix();
-		this.locations = locations;
-		this.osImageToImage = osImageToImage;
-		this.roleSizeToHardware = roleSizeToHardware;
-		this.credentialStore = credentialStore;
-	}
+   private final GroupNamingConvention nodeNamingConvention;
 
-	@Override
-	public NodeMetadata apply(Deployment from) {
-		NodeMetadataBuilder builder = new NodeMetadataBuilder();
-		builder.id(from.name());
-      builder.providerId(from.name());
-		builder.name(from.name());
-		builder.hostname(getHostname(from));
-		/* TODO
-		if (from.getDatacenter() != null) {
-			builder.location(from(locations.get()).firstMatch(
-					  LocationPredicates.idEquals(from.getDatacenter().getId() + "")).orNull());
-		}
-		builder.group(nodeNamingConvention.groupInUniqueNameOrNull(from.getHostname()));
-		builder.hardware(roleSizeToHardware.apply(from.instanceSize()));
-		Image image = osImageToImage.apply(from);
-		if (image != null) {
-			builder.imageId(image.getId());
-			builder.operatingSystem(image.getOperatingSystem());
-		}
-		*/
-		if (from.status() != null) {
-			builder.status(serverStateToNodeStatus.get(from.status()));
-		}
-		Set<String> publicIpAddresses = Sets.newLinkedHashSet();
-		if (from.virtualIPs() != null) {
-			for (Deployment.VirtualIP virtualIP : from.virtualIPs()) {
-				publicIpAddresses.add(virtualIP.address());
-			}
-			builder.publicAddresses(publicIpAddresses);
-		}
-		Set<String> privateIpAddresses = Sets.newLinkedHashSet();
-		if (from.roleInstanceList() != null) {
-			for (RoleInstance roleInstance : from.roleInstanceList()) {
-				privateIpAddresses.add(roleInstance.ipAddress());
-			}
-			builder.privateAddresses(privateIpAddresses);
-		}
-		return builder.build();
-	}
+   private final OSImageToImage osImageToImage;
 
-	private String getHostname(Deployment from) {
-      final Optional<RoleInstance> roleInstanceOptional = tryFindFirstRoleInstanceInDeployment(from);
-      if (!roleInstanceOptional.isPresent()) {
-         return from.name();
-      } else {
-         return roleInstanceOptional.get().hostname();
-      }
+   private final RoleSizeToHardware roleSizeToHardware;
+
+   private final Map<String, Credentials> credentialStore;
+
+   @Inject
+   DeploymentToNodeMetadata(@Memoized Supplier<Set<? extends Location>> locations,
+           GroupNamingConvention.Factory namingConvention, OSImageToImage osImageToImage,
+           RoleSizeToHardware roleSizeToHardware, Map<String, Credentials> credentialStore) {
+
+      this.nodeNamingConvention = namingConvention.createWithoutPrefix();
+      this.locations = locations;
+      this.osImageToImage = osImageToImage;
+      this.roleSizeToHardware = roleSizeToHardware;
+      this.credentialStore = credentialStore;
    }
 
-   private Optional<RoleInstance> tryFindFirstRoleInstanceInDeployment(Deployment deployment) {
-      if (deployment.roleInstanceList() == null || deployment.roleInstanceList().isEmpty()) return Optional.absent();
-      return Optional.of(deployment.roleInstanceList().get(0));
+   @Override
+   public NodeMetadata apply(final Deployment from) {
+      final NodeMetadataBuilder builder = new NodeMetadataBuilder();
+      builder.id(from.name());
+      builder.providerId(from.name());
+      builder.name(from.name());
+      builder.hostname(getHostname(from));
+      /* TODO
+       if (from.getDatacenter() != null) {
+       builder.location(from(locations.get()).firstMatch(
+       LocationPredicates.idEquals(from.getDatacenter().getId() + "")).orNull());
+       }
+       builder.group(nodeNamingConvention.groupInUniqueNameOrNull(from.getHostname()));
+       builder.hardware(roleSizeToHardware.apply(from.instanceSize()));
+       Image image = osImageToImage.apply(from);
+       if (image != null) {
+       builder.imageId(image.getId());
+       builder.operatingSystem(image.getOperatingSystem());
+       }
+       */
+      if (from.status() != null) {
+         builder.status(serverStateToNodeStatus.get(from.status()));
+      }
+      final Set<String> publicIpAddresses = Sets.newLinkedHashSet();
+      if (from.virtualIPs() != null) {
+         for (Deployment.VirtualIP virtualIP : from.virtualIPs()) {
+            publicIpAddresses.add(virtualIP.address());
+         }
+         builder.publicAddresses(publicIpAddresses);
+      }
+      final Set<String> privateIpAddresses = Sets.newLinkedHashSet();
+      if (from.roleInstanceList() != null) {
+         for (RoleInstance roleInstance : from.roleInstanceList()) {
+            privateIpAddresses.add(roleInstance.ipAddress());
+         }
+         builder.privateAddresses(privateIpAddresses);
+      }
+      return builder.build();
+   }
+
+   private String getHostname(final Deployment from) {
+      final Optional<RoleInstance> roleInstanceOptional = tryFindFirstRoleInstanceInDeployment(from);
+      return roleInstanceOptional.isPresent()
+              ? roleInstanceOptional.get().hostname()
+              : from.name();
+   }
+
+   private Optional<RoleInstance> tryFindFirstRoleInstanceInDeployment(final Deployment deployment) {
+      return (deployment.roleInstanceList() == null || deployment.roleInstanceList().isEmpty())
+              ? Optional.<RoleInstance>absent()
+              : Optional.of(deployment.roleInstanceList().get(0));
    }
 
 }

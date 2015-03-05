@@ -30,14 +30,21 @@ import com.google.inject.Inject;
 public class ResourceExtensionReferenceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<ResourceExtensionReference> {
 
    private String referenceName;
+
    private String publisher;
+
    private String name;
+
    private String version;
+
    private List<ResourceExtensionParameterValue> resourceExtensionParameterValues = Lists.newArrayList();
+
    private String state;
 
    private final ResourceExtensionParameterValueHandler resourceExtensionParameterValueHandler;
+
    private boolean inResourceExtensionParameterValue = false;
+
    private final StringBuilder currentText = new StringBuilder();
 
    @Inject

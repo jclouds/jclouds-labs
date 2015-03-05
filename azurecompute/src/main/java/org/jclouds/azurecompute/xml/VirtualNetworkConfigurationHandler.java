@@ -29,14 +29,17 @@ import com.google.common.collect.Lists;
 public class VirtualNetworkConfigurationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<VirtualNetworkConfiguration> {
 
    private String dns;
+
    private List<NetworkConfiguration.VirtualNetworkSite> virtualNetworkSites = Lists.newArrayList();
 
    private boolean inVirtualNetworkSite;
+
    private final VirtualNetworkSiteHandler virtualNetworkSiteHandler = new VirtualNetworkSiteHandler();
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("VirtualNetworkSite")) {
          inVirtualNetworkSite = true;
       }
@@ -64,10 +67,12 @@ public class VirtualNetworkConfigurationHandler extends ParseSax.HandlerForGener
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inVirtualNetworkSite) {
          virtualNetworkSiteHandler.characters(ch, start, length);
-      } else
+      } else {
          currentText.append(ch, start, length);
       }
+   }
 }

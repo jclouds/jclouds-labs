@@ -31,12 +31,17 @@ import com.google.common.base.Throwables;
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460787.aspx" >api</a>
  */
 public class StorageServiceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<StorageService> {
+
    private URL url;
+
    private String serviceName;
+
    private StorageService.StorageServiceProperties storageServiceProperties;
 
    private boolean inStorageServiceProperties;
+
    private final StorageServicePropertiesHandler storageServicePropertiesHandler = new StorageServicePropertiesHandler();
+
    private final StringBuilder currentText = new StringBuilder();
 
    @Override
@@ -52,7 +57,8 @@ public class StorageServiceHandler extends ParseSax.HandlerForGeneratedRequestWi
       storageServiceProperties = null;
    }
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
       if (qName.equals("StorageServiceProperties")) {
          inStorageServiceProperties = true;
       }
@@ -80,7 +86,8 @@ public class StorageServiceHandler extends ParseSax.HandlerForGeneratedRequestWi
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inStorageServiceProperties) {
          storageServicePropertiesHandler.characters(ch, start, length);
       } else {

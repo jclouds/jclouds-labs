@@ -34,24 +34,28 @@ import com.google.inject.Singleton;
 @Singleton
 public class UseNodeCredentialsButOverrideFromTemplate extends PrioritizeCredentialsFromTemplate {
 
-
    @Inject
    public UseNodeCredentialsButOverrideFromTemplate(
            Function<Template, LoginCredentials> credentialsFromImageOrTemplateOptions) {
+
       super(credentialsFromImageOrTemplateOptions);
    }
 
-   public LoginCredentials apply(Template template, LoginCredentials fromNode) {
-      RunScriptOptions options = checkNotNull(template.getOptions(), "template options are required");
-      LoginCredentials.Builder builder = LoginCredentials.builder(fromNode);
-      if (options.getLoginUser() != null)
+   public LoginCredentials apply(final Template template, final LoginCredentials fromNode) {
+      final RunScriptOptions options = checkNotNull(template.getOptions(), "template options are required");
+      final LoginCredentials.Builder builder = LoginCredentials.builder(fromNode);
+      if (options.getLoginUser() != null) {
          builder.user(template.getOptions().getLoginUser());
-      if (options.getLoginPassword() != null)
+      }
+      if (options.getLoginPassword() != null) {
          builder.password(options.getLoginPassword());
-      if (options.getLoginPrivateKey() != null)
+      }
+      if (options.getLoginPrivateKey() != null) {
          builder.privateKey(options.getLoginPrivateKey());
-      if (options.shouldAuthenticateSudo() != null && options.shouldAuthenticateSudo())
+      }
+      if (options.shouldAuthenticateSudo() != null && options.shouldAuthenticateSudo()) {
          builder.authenticateSudo(true);
+      }
       return builder.build();
    }
 }

@@ -21,22 +21,31 @@ import java.util.List;
 
 import com.google.auto.value.AutoValue;
 
-/** A data center location that is valid for your subscription. */
+/**
+ * A data center location that is valid for your subscription.
+ */
 @AutoValue
 public abstract class Location {
 
-   Location() {} // For AutoValue only!
+   Location() {
+   } // For AutoValue only!
 
-   /** The name of the data center location. Ex. {@code West Europe}. */
+   /**
+    * The name of the data center location. Ex. {@code West Europe}.
+    */
    public abstract String name();
 
-   /** The localized name of the data center location. */
+   /**
+    * The localized name of the data center location.
+    */
    public abstract String displayName();
 
-   /** Indicates the services available at this location. Ex. {@code Compute}. */
+   /**
+    * Indicates the services available at this location. Ex. {@code Compute}.
+    */
    public abstract List<String> availableServices();
 
-   public static Location create(String name, String displayName, List<String> availableServices) {
+   public static Location create(final String name, final String displayName, final List<String> availableServices) {
       return new AutoValue_Location(name, displayName, copyOf(availableServices));
    }
 }

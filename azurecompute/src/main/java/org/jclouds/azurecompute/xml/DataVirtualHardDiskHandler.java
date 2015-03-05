@@ -31,25 +31,32 @@ import org.xml.sax.Attributes;
 final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<DataVirtualHardDisk> {
 
    private DataVirtualHardDisk.Caching hostCaching;
+
    private String diskName;
+
    private Integer lun;
+
    private Integer logicalDiskSizeInGB;
+
    private URI mediaLink;
+
    private String ioType;
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
    }
 
    @Override
    public DataVirtualHardDisk getResult() {
       DataVirtualHardDisk result = DataVirtualHardDisk
-            .create(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink, ioType);
+              .create(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink, ioType);
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
 
       if (qName.equals("HostCaching")) {
          String hostCachingText = currentOrNull(currentText);
@@ -87,7 +94,8 @@ final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReque
       }
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

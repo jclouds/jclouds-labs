@@ -26,18 +26,23 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class NetworkSecurityGroup {
 
-   NetworkSecurityGroup() {} // For AutoValue only!
+   NetworkSecurityGroup() {
+   } // For AutoValue only!
 
    public abstract String name();
 
-   @Nullable public abstract String label();
+   @Nullable
+   public abstract String label();
 
-   @Nullable public abstract String location();
+   @Nullable
+   public abstract String location();
 
-   @Nullable public abstract List<Rule> rules();
+   @Nullable
+   public abstract List<Rule> rules();
 
-   public static NetworkSecurityGroup create(String name, String label, String location, List<Rule> rules) {
+   public static NetworkSecurityGroup create(
+           final String name, final String label, String location, final List<Rule> rules) {
+
       return new AutoValue_NetworkSecurityGroup(name, label, location, rules == null ? null : copyOf(rules));
    }
 }
-

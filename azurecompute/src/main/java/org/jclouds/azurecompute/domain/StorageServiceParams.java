@@ -23,12 +23,21 @@ import com.google.auto.value.AutoValue;
 public abstract class StorageServiceParams {
 
    public enum Type {
-      Standard_LRS, Standard_ZRS, Standard_GRS, Standard_RAGRS, Premium_LRS;
+
+      Standard_LRS,
+      Standard_ZRS,
+      Standard_GRS,
+      Standard_RAGRS,
+      Premium_LRS;
+
    }
 
-   StorageServiceParams() {} // For AutoValue only!
+   StorageServiceParams() {
+   } // For AutoValue only!
 
-   /** The user-supplied name for this deployment. */
+   /**
+    * The user-supplied name for this deployment.
+    */
    public abstract String name();
 
    public abstract String label();
@@ -46,27 +55,31 @@ public abstract class StorageServiceParams {
    }
 
    public static final class Builder {
+
       private String name;
+
       private String label;
+
       private String location;
+
       private Type accountType;
 
-      public Builder name(String name) {
+      public Builder name(final String name) {
          this.name = name;
          return this;
       }
 
-      public Builder label(String label) {
+      public Builder label(final String label) {
          this.label = label;
          return this;
       }
 
-      public Builder location(String location) {
+      public Builder location(final String location) {
          this.location = location;
          return this;
       }
 
-      public Builder accountType(Type accountType) {
+      public Builder accountType(final Type accountType) {
          this.accountType = accountType;
          return this;
       }
@@ -75,15 +88,17 @@ public abstract class StorageServiceParams {
          return StorageServiceParams.create(name, label, location, accountType);
       }
 
-      public Builder fromStorageServiceParams(StorageServiceParams in) {
-         return name(in.name())
-               .label(in.label())
-               .location(in.location())
-               .accountType(in.accountType());
+      public Builder fromStorageServiceParams(final StorageServiceParams storageServiceParams) {
+         return name(storageServiceParams.name())
+                 .label(storageServiceParams.label())
+                 .location(storageServiceParams.location())
+                 .accountType(storageServiceParams.accountType());
       }
    }
 
-   private static StorageServiceParams create(String name, String label, String location, Type accountType) {
+   private static StorageServiceParams create(
+           final String name, final String label, final String location, final Type accountType) {
+
       return new AutoValue_StorageServiceParams(name, label, location, accountType);
    }
 }

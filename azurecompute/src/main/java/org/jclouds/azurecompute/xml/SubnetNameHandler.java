@@ -23,6 +23,7 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 public class SubnetNameHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Role.ConfigurationSet.SubnetName> {
+
    private String name;
 
    private StringBuilder currentText = new StringBuilder();

@@ -24,21 +24,30 @@ import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.http.functions.ParseSax;
 
 public class OSVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Role.OSVirtualHardDisk> {
+
    private String hostCaching;
+
    private String diskName;
+
    private URI mediaLink;
+
    private String sourceImageName;
+
    private OSImage.Type os;
+
    private Integer lun;
+
    private Integer logicalDiskSizeInGB;
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Role.OSVirtualHardDisk getResult() {
+   @Override
+   public Role.OSVirtualHardDisk getResult() {
       return Role.OSVirtualHardDisk.create(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink, sourceImageName, os);
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("HostCaching")) {
          hostCaching = currentOrNull(currentText);
       } else if (qName.equals("DiskName")) {
@@ -59,8 +68,9 @@ public class OSVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReques
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
-         currentText.append(ch, start, length);
+   @Override
+   public void characters(char ch[], int start, int length) {
+      currentText.append(ch, start, length);
    }
 
 }

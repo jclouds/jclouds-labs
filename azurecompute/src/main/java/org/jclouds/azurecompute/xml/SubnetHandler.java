@@ -25,18 +25,22 @@ import org.xml.sax.Attributes;
 public class SubnetHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Subnet> {
 
    private String name;
+
    private String addressPrefix;
+
    private String networkSecurityGroup;
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
-      if (qName.equalsIgnoreCase("Subnet")){
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
+      if (qName.equalsIgnoreCase("Subnet")) {
          name = attributes.getValue("name");
       }
    }
 
-   @Override public Subnet getResult() {
+   @Override
+   public Subnet getResult() {
       Subnet result = Subnet.create(name, addressPrefix, networkSecurityGroup);
       resetState(); // handler is called in a loop.
       return result;
@@ -46,7 +50,8 @@ public class SubnetHandler extends ParseSax.HandlerForGeneratedRequestWithResult
       name = addressPrefix = null;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Name")) {
          name = currentOrNull(currentText);
       } else if (qName.equals("AddressPrefix")) {
@@ -57,7 +62,8 @@ public class SubnetHandler extends ParseSax.HandlerForGeneratedRequestWithResult
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 

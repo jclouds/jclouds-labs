@@ -46,28 +46,31 @@ import com.google.common.base.Supplier;
 @Deprecated
 @Singleton
 public class SSLContextWithKeysSupplier implements Supplier<SSLContext> {
+
    private final Supplier<KeyStore> keyStore;
+
    private final TrustManager[] trustManager;
+
    private final Supplier<Credentials> creds;
 
    @Inject
    SSLContextWithKeysSupplier(Supplier<KeyStore> keyStore, @Provider Supplier<Credentials> creds, HttpUtils utils,
-         TrustAllCerts trustAllCerts) {
+           TrustAllCerts trustAllCerts) {
       this.keyStore = keyStore;
-      this.trustManager = utils.trustAllCerts() ? new TrustManager[] { trustAllCerts } : null;
+      this.trustManager = utils.trustAllCerts() ? new TrustManager[]{trustAllCerts} : null;
       this.creds = creds;
    }
 
    @Override
    public SSLContext get() {
-      Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
-      String keyStorePassword = checkNotNull(currentCreds.credential,
-            "credential supplier returned null credential (should be keyStorePassword)");
+      final Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
+      final String keyStorePassword = checkNotNull(currentCreds.credential,
+              "credential supplier returned null credential (should be keyStorePassword)");
       KeyManagerFactory kmf;
       try {
          kmf = KeyManagerFactory.getInstance("SunX509");
          kmf.init(keyStore.get(), keyStorePassword.toCharArray());
-         SSLContext sc = SSLContext.getInstance("TLS");
+         final SSLContext sc = SSLContext.getInstance("TLS");
          sc.init(kmf.getKeyManagers(), trustManager, new SecureRandom());
          return sc;
       } catch (NoSuchAlgorithmException e) {

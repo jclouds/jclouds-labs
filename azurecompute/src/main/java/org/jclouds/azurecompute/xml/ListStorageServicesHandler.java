@@ -28,10 +28,13 @@ import com.google.inject.Inject;
 public class ListStorageServicesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<StorageService>> {
 
    private boolean inStorageService;
+
    private final StorageServiceHandler storageServiceHandler;
+
    private final ImmutableList.Builder<StorageService> storageAccounts = ImmutableList.builder();
 
-   @Inject ListStorageServicesHandler(StorageServiceHandler storageServiceHandler) {
+   @Inject
+   ListStorageServicesHandler(StorageServiceHandler storageServiceHandler) {
       this.storageServiceHandler = storageServiceHandler;
    }
 

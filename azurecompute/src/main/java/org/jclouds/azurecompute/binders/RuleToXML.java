@@ -25,20 +25,21 @@ import org.jclouds.rest.Binder;
 import com.jamesmurty.utils.XMLBuilder;
 
 public final class RuleToXML implements Binder {
+
    @Override
    @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       Rule rule = Rule.class.cast(input);
       try {
          String xml = XMLBuilder.create("Rule", "http://schemas.microsoft.com/windowsazure")
-                         .e("Type").t(rule.type()).up()
-                         .e("Priority").t(rule.priority()).up()
-                         .e("Action").t(rule.action()).up()
-                         .e("SourceAddressPrefix").t(rule.sourceAddressPrefix()).up()
-                         .e("SourcePortRange").t(rule.sourcePortRange()).up()
-                         .e("DestinationAddressPrefix").t(rule.destinationAddressPrefix()).up()
-                         .e("DestinationPortRange").t(rule.destinationPortRange()).up()
-                         .e("Protocol").t(rule.protocol()).up().asString();
+                 .e("Type").t(rule.type()).up()
+                 .e("Priority").t(rule.priority()).up()
+                 .e("Action").t(rule.action()).up()
+                 .e("SourceAddressPrefix").t(rule.sourceAddressPrefix()).up()
+                 .e("SourcePortRange").t(rule.sourcePortRange()).up()
+                 .e("DestinationAddressPrefix").t(rule.destinationAddressPrefix()).up()
+                 .e("DestinationPortRange").t(rule.destinationPortRange()).up()
+                 .e("Protocol").t(rule.protocol()).up().asString();
          return (R) request.toBuilder().payload(xml).build();
       } catch (Exception e) {
          throw propagate(e);

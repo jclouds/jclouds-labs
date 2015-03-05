@@ -30,21 +30,31 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 public class ConfigurationSetHandler extends ParseSax.HandlerForGeneratedRequestWithResult<ConfigurationSet> {
+
    private String configurationSetType;
+
    private List<InputEndpoint> inputEndpoint = Lists.newArrayList();
+
    private List<SubnetName> subnetNames = Lists.newArrayList();
+
    private String staticVirtualNetworkIPAddress;
+
    private List<PublicIP> publicIPs = Lists.newArrayList();
+
    private String networkSecurityGroup;
 
    private boolean inInputEndpoint;
+
    private boolean inSubnetNames;
 
    private final InputEndpointHandler inputEndpointHandler;
+
    private final SubnetNameHandler subnetNameHandler;
+
    private final StringBuilder currentText = new StringBuilder();
 
-   @Inject ConfigurationSetHandler(InputEndpointHandler inputEndpointHandler, SubnetNameHandler subnetNameHandler) {
+   @Inject
+   ConfigurationSetHandler(InputEndpointHandler inputEndpointHandler, SubnetNameHandler subnetNameHandler) {
       this.inputEndpointHandler = inputEndpointHandler;
       this.subnetNameHandler = subnetNameHandler;
    }

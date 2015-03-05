@@ -56,8 +56,7 @@ import org.jclouds.rest.annotations.XMLResponseParser;
 public interface OSImageApi {
 
    /**
-    * The List Cloud Services operation lists the cloud services available under the current
-    * subscription.
+    * The List Cloud Services operation lists the cloud services available under the current subscription.
     */
    @Named("ListImages")
    @GET
@@ -83,13 +82,12 @@ public interface OSImageApi {
    @Path("/{imageName}")
    @ResponseParser(ParseRequestIdHeader.class)
    String update(@PathParam("imageName") @ParamParser(OSImageParamsName.class)
-               @BinderParam(OSImageParamsToXML.class) OSImageParams params);
+           @BinderParam(OSImageParamsToXML.class) OSImageParams params);
 
    /**
     * The Delete Cloud Service operation deletes the specified cloud service from Windows Azure.
     *
-    * @param imageName
-    *           the unique DNS Prefix value in the Windows Azure Management Portal
+    * @param imageName the unique DNS Prefix value in the Windows Azure Management Portal
     */
    @Named("DeleteImage")
    @DELETE

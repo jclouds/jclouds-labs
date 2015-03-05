@@ -25,6 +25,7 @@ import com.google.auto.value.AutoValue;
 public abstract class Error {
 
    public static enum Code {
+
       MISSING_OR_INCORRECT_VERSION_HEADER,
       INVALID_XML_REQUEST,
       MISSING_OR_INVALID_REQUIRED_QUERY_PARAMETER,
@@ -38,17 +39,23 @@ public abstract class Error {
       BAD_REQUEST,
       CONFLICT_ERROR,
       UNRECOGNIZED;
+
    }
 
-   Error() {} // For AutoValue only!
+   Error() {
+   } // For AutoValue only!
 
-   /** Error code */
+   /**
+    * Error code
+    */
    public abstract Code code();
 
-   /** User message */
+   /**
+    * User message
+    */
    public abstract String message();
 
-   public static Error create(Code code, String message) {
+   public static Error create(final Code code, final String message) {
       return new AutoValue_Error(code, message);
    }
 }

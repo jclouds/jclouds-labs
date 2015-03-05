@@ -27,11 +27,15 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.inject.Inject;
 
 public final class ListOSImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<OSImage>> {
+
    private boolean inOSImage;
+
    private final OSImageHandler osImageHandler;
+
    private final Builder<OSImage> images = ImmutableList.builder();
 
-   @Inject ListOSImagesHandler(OSImageHandler osImageHandler) {
+   @Inject
+   ListOSImagesHandler(OSImageHandler osImageHandler) {
       this.osImageHandler = osImageHandler;
    }
 

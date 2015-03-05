@@ -17,6 +17,7 @@
 package org.jclouds.azurecompute;
 
 import static org.jclouds.reflect.Reflection2.typeToken;
+
 import java.net.URI;
 import java.util.Properties;
 
@@ -43,7 +44,7 @@ public class AzureManagementApiMetadata extends BaseHttpApiMetadata<AzureCompute
       this(new Builder());
    }
 
-   protected AzureManagementApiMetadata(Builder builder) {
+   protected AzureManagementApiMetadata(final Builder builder) {
       super(builder);
    }
 
@@ -54,18 +55,20 @@ public class AzureManagementApiMetadata extends BaseHttpApiMetadata<AzureCompute
    public static class Builder extends BaseHttpApiMetadata.Builder<AzureComputeApi, Builder> {
 
       protected Builder() {
+         super();
+
          id("azurecompute")
                  .name("Microsoft Azure Service Management Service API")
                  .version("2014-10-01")
-         .identityName("Path to Management Certificate .p12 file, or PEM string")
-         .credentialName("Password to Management Certificate")
-         .endpointName("Service Management Endpoint ending in your Subscription Id")
-         .documentation(URI.create("http://msdn.microsoft.com/en-us/library/ee460799"))
-         .defaultProperties(AzureManagementApiMetadata.defaultProperties())
-         .view(typeToken(ComputeServiceContext.class))
-         .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                 .add(AzureComputeServiceContextModule.class)
-                 .add(AzureComputeHttpApiModule.class).build());
+                 .identityName("Path to Management Certificate .p12 file, or PEM string")
+                 .credentialName("Password to Management Certificate")
+                 .endpointName("Service Management Endpoint ending in your Subscription Id")
+                 .documentation(URI.create("http://msdn.microsoft.com/en-us/library/ee460799"))
+                 .defaultProperties(AzureManagementApiMetadata.defaultProperties())
+                 .view(typeToken(ComputeServiceContext.class))
+                 .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
+                         .add(AzureComputeServiceContextModule.class)
+                         .add(AzureComputeHttpApiModule.class).build());
       }
 
       @Override

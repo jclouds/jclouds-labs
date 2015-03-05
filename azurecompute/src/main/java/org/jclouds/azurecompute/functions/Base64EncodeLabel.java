@@ -22,7 +22,9 @@ import static com.google.common.io.BaseEncoding.base64;
 import com.google.common.base.Function;
 
 public final class Base64EncodeLabel implements Function<Object, String> {
-   @Override public String apply(Object label) {
+
+   @Override
+   public String apply(final Object label) {
       return base64().encode(label.toString().getBytes(UTF_8));
    }
 }

@@ -29,35 +29,35 @@ import com.google.common.collect.FluentIterable;
 
 public class NetworkSecurityGroups {
 
-   public static List<Rule> getCustomRules(NetworkSecurityGroup networkSecurityGroup) {
+   public static List<Rule> getCustomRules(final NetworkSecurityGroup networkSecurityGroup) {
       final List<Rule> rules = networkSecurityGroup.rules();
       return FluentIterable.from(rules)
               .filter(Predicates.notNull())
               .filter(new Predicate<Rule>() {
                  @Override
-                 public boolean apply(Rule rule) {
+                 public boolean apply(final Rule rule) {
                     return rule.isDefault() == null || !rule.isDefault();
                  }
               })
               .toSortedList(new Comparator<Rule>() {
                  @Override
-                 public int compare(Rule r1, Rule r2) {
-                    int p1 = Integer.parseInt(r1.priority());
-                    int p2 = Integer.parseInt(r2.priority());
+                 public int compare(final Rule r1, final Rule r2) {
+                    final int p1 = Integer.parseInt(r1.priority());
+                    final int p2 = Integer.parseInt(r2.priority());
                     return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
 
                  }
               });
    }
 
-   public static int getFirstAvailablePriority(List<Rule> rules) {
+   public static int getFirstAvailablePriority(final List<Rule> rules) {
       int priority;
       if (rules.isEmpty()) {
          priority = 100;
       } else {
          priority = Integer.parseInt(Collections.max(rules, new Comparator<Rule>() {
             @Override
-            public int compare(Rule rule1, Rule rule2) {
+            public int compare(final Rule rule1, final Rule rule2) {
                return Integer.valueOf(rule1.priority()).compareTo(Integer.valueOf(rule2.priority()));
             }
          }).priority()) + 1;
@@ -65,7 +65,7 @@ public class NetworkSecurityGroups {
       return priority;
    }
 
-   public static String createRuleName(String format, int fromPort, int toPort) {
+   public static String createRuleName(final String format, final int fromPort, final int toPort) {
       return String.format(format, fromPort, toPort);
    }
 

@@ -26,11 +26,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
 public final class ListRoleSizesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<RoleSize>> {
+
    private boolean inRoleSize;
+
    private final RoleSizeHandler roleSizeHandler;
+
    private final ImmutableList.Builder<RoleSize> roleSizes = ImmutableList.builder();
 
-   @Inject ListRoleSizesHandler(RoleSizeHandler roleSizeHandler) {
+   @Inject
+   ListRoleSizesHandler(RoleSizeHandler roleSizeHandler) {
       this.roleSizeHandler = roleSizeHandler;
    }
 

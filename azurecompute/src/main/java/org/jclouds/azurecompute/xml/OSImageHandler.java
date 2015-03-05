@@ -37,24 +37,43 @@ import com.google.common.collect.Lists;
 final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult<OSImage> {
 
    private String name;
+
    private String location;
+
    private String affinityGroup;
+
    private String label;
+
    private String category;
+
    private String description;
+
    private OSImage.Type os;
+
    private URI mediaLink;
+
    private Integer logicalSizeInGB;
+
    private final List<String> eulas = Lists.newArrayList();
+
    private String imageFamily;
+
    private Date publishedDate;
+
    private String iconUri;
+
    private String smallIconUri;
+
    private URI privacyUri;
+
    private URI pricingDetailLink;
+
    private String recommendedVMSize;
+
    private Boolean isPremium;
+
    private Boolean showInGui;
+
    private String publisherName;
 
    private final StringBuilder currentText = new StringBuilder();
@@ -62,8 +81,8 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
    @Override
    public OSImage getResult() {
       OSImage result = OSImage
-            .create(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
-                  logicalSizeInGB, ImmutableList.copyOf(eulas));
+              .create(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
+                      logicalSizeInGB, ImmutableList.copyOf(eulas));
       resetState(); // handler is called in a loop.
       return result;
    }
@@ -83,7 +102,8 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
       location = null;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("OS")) {
          String osText = currentOrNull(currentText);
          if (osText != null) {
@@ -162,7 +182,8 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

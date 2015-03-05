@@ -25,6 +25,7 @@ import org.jclouds.rest.Binder;
 import com.jamesmurty.utils.XMLBuilder;
 
 public class NetworkSecurityGroupToXML implements Binder {
+
    @Override
    @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {

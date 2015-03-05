@@ -69,9 +69,9 @@ public interface NetworkSecurityGroupApi {
    String create(@BinderParam(NetworkSecurityGroupToXML.class) NetworkSecurityGroup networkSecurityGroup);
 
    /**
-    * Deletes the pecified Network Security Group from your subscription.
-    * If the Network Security group is still associated with some VM/Role/Subnet, the deletion will fail.
-    * In order to successfully delete the Network Security, it needs to be not used.
+    * Deletes the pecified Network Security Group from your subscription. If the Network Security group is still
+    * associated with some VM/Role/Subnet, the deletion will fail. In order to successfully delete the Network Security,
+    * it needs to be not used.
     *
     * @param networkSecurityGroupName
     * @return request id
@@ -82,7 +82,6 @@ public interface NetworkSecurityGroupApi {
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String delete(@PathParam("networkSecurityGroupName") String networkSecurityGroupName);
-
 
    /**
     * Gets the Network Security Group applied to a specific subnet.
@@ -96,8 +95,8 @@ public interface NetworkSecurityGroupApi {
    @GET
    @XMLResponseParser(NetworkSecurityGroupHandler.class)
    @Fallback(NullOnNotFoundOr404.class)
-   NetworkSecurityGroup getNetworkSecurityGroupAppliedToSubnet(@PathParam("virtualNetworkName") String virtualNetworkName,
-                            @PathParam("subnetName") String subnetName);
+   NetworkSecurityGroup getNetworkSecurityGroupAppliedToSubnet(
+           @PathParam("virtualNetworkName") String virtualNetworkName, @PathParam("subnetName") String subnetName);
 
    /**
     * Gets the details for the specified Network Security Group in the subscription
@@ -114,7 +113,7 @@ public interface NetworkSecurityGroupApi {
    NetworkSecurityGroup getFullDetails(@PathParam("networkSecurityGroupName") String networkSecurityGroupName);
 
    /**
-    *  Adds a Network Security Group to a subnet.
+    * Adds a Network Security Group to a subnet.
     *
     * @param virtualNetworkName
     * @return
@@ -125,8 +124,8 @@ public interface NetworkSecurityGroupApi {
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String addToSubnet(@PathParam("virtualNetworkName") String virtualNetworkName,
-                      @PathParam("subnetName") String subnetName,
-                      @BinderParam(NetworkSecurityGroupToXML.class) NetworkSecurityGroup networkSecurityGroup);
+           @PathParam("subnetName") String subnetName,
+           @BinderParam(NetworkSecurityGroupToXML.class) NetworkSecurityGroup networkSecurityGroup);
 
    /**
     * Removes a Network Security Group from a subnet
@@ -137,8 +136,8 @@ public interface NetworkSecurityGroupApi {
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String removeFromSubnet(@PathParam("virtualNetworkName") String virtualNetworkName,
-                      @PathParam("subnetName") String subnetName,
-                      @PathParam("networkSecurityGroupName") String networkSecurityGroupName);
+           @PathParam("subnetName") String subnetName,
+           @PathParam("networkSecurityGroupName") String networkSecurityGroupName);
 
    /**
     * Sets a new Network Security Rule to existing Network Security Group
@@ -151,7 +150,7 @@ public interface NetworkSecurityGroupApi {
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String setRule(@PathParam("networkSecurityGroupName") String networkSecurityGroupName,
-                      @PathParam("ruleName") String ruleName, @BinderParam(RuleToXML.class) Rule rule);
+           @PathParam("ruleName") String ruleName, @BinderParam(RuleToXML.class) Rule rule);
 
    /**
     * Deletes a rule from the specified Network Security Group.
@@ -163,5 +162,5 @@ public interface NetworkSecurityGroupApi {
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    String deleteRule(@PathParam("networkSecurityGroupName") String networkSecurityGroupName,
-                  @PathParam("ruleName") String ruleName);
+           @PathParam("ruleName") String ruleName);
 }

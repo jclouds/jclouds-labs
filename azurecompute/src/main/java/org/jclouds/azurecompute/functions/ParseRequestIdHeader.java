@@ -27,16 +27,16 @@ import com.google.common.base.Function;
 /**
  * Parses an x-ms-request-id the header
  *
- * A value that uniquely identifies a request made against the management service. For an
- * asynchronous operation, you can call get operation status with the value of the header to
- * determine whether the operation is complete, has failed, or is still in progress.
+ * A value that uniquely identifies a request made against the management service. For an asynchronous operation, you
+ * can call get operation status with the value of the header to determine whether the operation is complete, has
+ * failed, or is still in progress.
  */
 @Singleton
 public class ParseRequestIdHeader implements Function<HttpResponse, String> {
 
-   public String apply(HttpResponse from) {
+   public String apply(final HttpResponse from) {
       releasePayload(from);
-      String requestId = from.getFirstHeaderOrNull("x-ms-request-id");
+      final String requestId = from.getFirstHeaderOrNull("x-ms-request-id");
       if (requestId != null) {
          return requestId;
       }

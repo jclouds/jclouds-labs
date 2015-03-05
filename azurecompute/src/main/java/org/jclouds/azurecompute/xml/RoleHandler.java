@@ -33,31 +33,48 @@ import com.google.inject.Inject;
 public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Role> {
 
    private String roleName;
+
    private String roleType;
+
    private String vmImage;
+
    private String mediaLocation;
+
    private List<ConfigurationSet> configurationSets = Lists.newArrayList();
+
    private List<ResourceExtensionReference> resourceExtensionReferences = Lists.newArrayList();
+
    private String availabilitySetName;
+
    private List<DataVirtualHardDisk> dataVirtualHardDisks = Lists.newArrayList();
+
    private Role.OSVirtualHardDisk osVirtualHardDisk;
+
    private RoleSize.Type roleSize;
+
    private Boolean provisionGuestAgent;
+
    private String defaultWinRmCertificateThumbprint;
 
    private boolean inConfigurationSets;
+
    private boolean inOSVirtualHardDisk;
+
    private boolean inDataVirtualHardDisks;
+
    private boolean inResourceExtensionReference;
 
    private final ConfigurationSetHandler configurationSetHandler;
+
    private final OSVirtualHardDiskHandler osVirtualDiskHandler;
+
    private final DataVirtualHardDiskHandler dataVirtualHardDiskHandler;
+
    private final ResourceExtensionReferenceHandler resourceExtensionReferenceHandler;
 
    @Inject
    RoleHandler(ConfigurationSetHandler configurationSetHandler, OSVirtualHardDiskHandler osVirtualDiskHandler,
-                      DataVirtualHardDiskHandler dataVirtualHardDiskHandler, ResourceExtensionReferenceHandler resourceExtensionReferenceHandler) {
+           DataVirtualHardDiskHandler dataVirtualHardDiskHandler, ResourceExtensionReferenceHandler resourceExtensionReferenceHandler) {
       this.configurationSetHandler = configurationSetHandler;
       this.osVirtualDiskHandler = osVirtualDiskHandler;
       this.dataVirtualHardDiskHandler = dataVirtualHardDiskHandler;
@@ -66,7 +83,8 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
       if (qName.equals("ConfigurationSets")) {
          inConfigurationSets = true;
       }
@@ -111,7 +129,8 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("DataVirtualHardDisks")) {
          inDataVirtualHardDisks = false;
       } else if (qName.equals("ConfigurationSet")) {
@@ -157,7 +176,8 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inConfigurationSets) {
          configurationSetHandler.characters(ch, start, length);
       } else if (inOSVirtualHardDisk) {

@@ -41,37 +41,56 @@ import com.google.inject.Inject;
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460804" >Response body description</a>.
  */
 public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Deployment> {
+
    private String name;
+
    private Slot slot;
+
    private Status status;
+
    private String label;
+
    private String instanceStateDetails;
+
    private String virtualNetworkName;
+
    private List<Deployment.VirtualIP> virtualIPs = Lists.newArrayList();
+
    private List<Deployment.RoleInstance> roleInstanceList = Lists.newArrayList();
+
    private List<Role> roleList = Lists.newArrayList();
+
    private String instanceErrorCode;
 
    private boolean inRoleInstanceList;
+
    private boolean inRoleList;
+
    private boolean inListVirtualIPs;
+
    private final VirtualIPHandler virtualIPHandler;
+
    private final RoleInstanceHandler roleInstanceHandler;
+
    private final RoleHandler roleHandler;
+
    private final StringBuilder currentText = new StringBuilder();
 
-   @Inject DeploymentHandler(VirtualIPHandler virtualIPHandler, RoleInstanceHandler roleInstanceHandler, RoleHandler roleHandler) {
+   @Inject
+   DeploymentHandler(VirtualIPHandler virtualIPHandler, RoleInstanceHandler roleInstanceHandler, RoleHandler roleHandler) {
       this.virtualIPHandler = virtualIPHandler;
       this.roleInstanceHandler = roleInstanceHandler;
       this.roleHandler = roleHandler;
    }
 
-   @Override public Deployment getResult() { // Fields don't need to be reset as this isn't used in a loop.
+   @Override
+   public Deployment getResult() { // Fields don't need to be reset as this isn't used in a loop.
       return Deployment.create(name, slot, status, label, //
-            instanceStateDetails, instanceErrorCode, virtualIPs, roleInstanceList, roleList, virtualNetworkName);
+              instanceStateDetails, instanceErrorCode, virtualIPs, roleInstanceList, roleList, virtualNetworkName);
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("VirtualIPs")) {
          inListVirtualIPs = true;
       } else if (qName.equals("RoleInstanceList")) {
@@ -87,7 +106,8 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
       }
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("RoleInstanceList")) {
          inRoleInstanceList = false;
       } else if (qName.equals("RoleInstance")) {
@@ -133,7 +153,8 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inListVirtualIPs) {
          virtualIPHandler.characters(ch, start, length);
       } else if (inRoleInstanceList) {
@@ -161,7 +182,8 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
       }
    }
 
-   @VisibleForTesting static InstanceStatus parseInstanceStatus(String instanceStatus) {
+   @VisibleForTesting
+   static InstanceStatus parseInstanceStatus(String instanceStatus) {
       try {
          // Azure isn't exactly upper-camel, as some states end in VM, not Vm.
          return InstanceStatus.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatus).replace("V_M", "VM"));

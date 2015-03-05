@@ -28,9 +28,11 @@ public abstract class StorageService {
    @AutoValue
    public abstract static class StorageServiceProperties {
 
-      StorageServiceProperties() {} // For AutoValue only!
+      StorageServiceProperties() {
+      } // For AutoValue only!
 
-      @Nullable public abstract String description();
+      @Nullable
+      public abstract String description();
 
       public abstract String status();
 
@@ -38,12 +40,15 @@ public abstract class StorageService {
 
       public abstract String accountType();
 
-      public static StorageServiceProperties create(String description, String status, String location, String accountType) {
+      public static StorageServiceProperties create(final String description, final String status,
+              final String location, final String accountType) {
+
          return new AutoValue_StorageService_StorageServiceProperties(description, status, location, accountType);
       }
    }
 
-   StorageService() {} // For AutoValue only!
+   StorageService() {
+   } // For AutoValue only!
 
    public abstract URL url();
 
@@ -51,7 +56,9 @@ public abstract class StorageService {
 
    public abstract StorageServiceProperties storageServiceProperties();
 
-   public static StorageService create(URL url, String serviceName, StorageServiceProperties storageServiceProperties) {
+   public static StorageService create(final URL url, final String serviceName,
+           final StorageServiceProperties storageServiceProperties) {
+
       return new AutoValue_StorageService(url, serviceName, storageServiceProperties);
    }
 }

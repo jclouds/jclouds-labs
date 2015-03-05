@@ -39,28 +39,42 @@ import com.google.common.collect.Maps;
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >Response body description</a>
  */
 public final class CloudServiceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<CloudService> {
+
    private String name;
+
    private String location;
+
    private String affinityGroup;
+
    private String label;
+
    private String description;
+
    private CloudService.Status status;
+
    private Date created;
+
    private Date lastModified;
+
    private Map<String, String> extendedProperties = Maps.newLinkedHashMap();
 
    private boolean inHostedServiceProperties;
+
    private String propertyName;
+
    private StringBuilder currentText = new StringBuilder();
+
    private final DateService dateService;
 
-   @Inject CloudServiceHandler(DateService dateService) {
+   @Inject
+   CloudServiceHandler(DateService dateService) {
       this.dateService = dateService;
    }
 
-   @Override public CloudService getResult() {
+   @Override
+   public CloudService getResult() {
       CloudService result = CloudService.create(name, location, affinityGroup, label, description, status, created, //
-            lastModified, ImmutableMap.copyOf(extendedProperties));
+              lastModified, ImmutableMap.copyOf(extendedProperties));
       resetState(); // handler is called in a loop.
       return result;
    }
@@ -74,13 +88,15 @@ public final class CloudServiceHandler extends ParseSax.HandlerForGeneratedReque
       propertyName = null;
    }
 
-   @Override public void startElement(String ignoredUri, String ignoredLocalName, String qName, Attributes ignoredAttributes) {
+   @Override
+   public void startElement(String ignoredUri, String ignoredLocalName, String qName, Attributes ignoredAttributes) {
       if (qName.equals("HostedServiceProperties")) {
          inHostedServiceProperties = true;
       }
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("HostedServiceProperties")) {
          inHostedServiceProperties = false;
       } else if (inHostedServiceProperties) {
@@ -113,7 +129,8 @@ public final class CloudServiceHandler extends ParseSax.HandlerForGeneratedReque
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 

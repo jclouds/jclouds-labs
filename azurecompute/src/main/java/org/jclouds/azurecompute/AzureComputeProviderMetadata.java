@@ -20,6 +20,7 @@ import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_P
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
 import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
+
 import java.net.URI;
 import java.util.Properties;
 
@@ -46,23 +47,25 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
    }
 
    public static Properties defaultProperties() {
-      Properties properties = AzureManagementApiMetadata.defaultProperties();
+      final Properties properties = AzureManagementApiMetadata.defaultProperties();
       properties.setProperty(TEMPLATE, "osFamily=UBUNTU,loginUser=jclouds");
-      properties.setProperty(OPERATION_TIMEOUT, "" + 60 * 1000);
-      properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "" + 5);
-      properties.setProperty(OPERATION_POLL_MAX_PERIOD, "" + 15);
+      properties.setProperty(OPERATION_TIMEOUT, "60000");
+      properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "5");
+      properties.setProperty(OPERATION_POLL_MAX_PERIOD, "15");
       properties.setProperty(AzureComputeProperties.TCP_RULE_FORMAT, "tcp_%s-%s");
       properties.setProperty(AzureComputeProperties.TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
       return properties;
    }
 
-   public AzureComputeProviderMetadata(Builder builder) {
+   public AzureComputeProviderMetadata(final Builder builder) {
       super(builder);
    }
 
    public static class Builder extends BaseProviderMetadata.Builder {
 
       protected Builder() {
+         super();
+
          id("azurecompute")
                  .name("Microsoft Azure Service Management Service")
                  .apiMetadata(new AzureManagementApiMetadata())
@@ -80,8 +83,8 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
       }
 
       @Override
-      public Builder fromProviderMetadata(ProviderMetadata in) {
-         super.fromProviderMetadata(in);
+      public Builder fromProviderMetadata(final ProviderMetadata providerMetadata) {
+         super.fromProviderMetadata(providerMetadata);
          return this;
       }
    }

@@ -29,15 +29,18 @@ public abstract class NetworkConfiguration {
    @AutoValue
    public abstract static class Subnet {
 
-      Subnet() {} // For AutoValue only!
+      Subnet() {
+      } // For AutoValue only!
 
       public abstract String name();
 
-      @Nullable public abstract String addressPrefix();
+      @Nullable
+      public abstract String addressPrefix();
 
-      @Nullable public abstract String networkSecurityGroup();
+      @Nullable
+      public abstract String networkSecurityGroup();
 
-      public static Subnet create(String name, String addressPrefix, String networkSecurityGroup) {
+      public static Subnet create(final String name, final String addressPrefix, final String networkSecurityGroup) {
          return new AutoValue_NetworkConfiguration_Subnet(name, addressPrefix, networkSecurityGroup);
       }
    }
@@ -45,11 +48,13 @@ public abstract class NetworkConfiguration {
    @AutoValue
    public abstract static class AddressSpace {
 
-      AddressSpace() {} // For AutoValue only!
+      AddressSpace() {
+      } // For AutoValue only!
 
-      @Nullable public abstract String addressPrefix();
+      @Nullable
+      public abstract String addressPrefix();
 
-      public static AddressSpace create(String addressPrefix) {
+      public static AddressSpace create(final String addressPrefix) {
          return new AutoValue_NetworkConfiguration_AddressSpace(addressPrefix);
       }
    }
@@ -57,19 +62,26 @@ public abstract class NetworkConfiguration {
    @AutoValue
    public abstract static class VirtualNetworkSite {
 
-      VirtualNetworkSite() {} // For AutoValue only!
+      VirtualNetworkSite() {
+      } // For AutoValue only!
 
-      @Nullable public abstract String id();
+      @Nullable
+      public abstract String id();
 
-      @Nullable public abstract String name();
+      @Nullable
+      public abstract String name();
 
-      @Nullable public abstract String location();
+      @Nullable
+      public abstract String location();
 
       public abstract AddressSpace addressSpace();
 
       public abstract List<Subnet> subnets();
 
-      public static VirtualNetworkSite create(String id, String name, String location, AddressSpace addressSpace, List<Subnet> subnets) {
+      public static VirtualNetworkSite create(
+              final String id, final String name, final String location,
+              final AddressSpace addressSpace, final List<Subnet> subnets) {
+
          return new AutoValue_NetworkConfiguration_VirtualNetworkSite(id, name, location, addressSpace, subnets);
       }
 
@@ -81,19 +93,25 @@ public abstract class NetworkConfiguration {
       VirtualNetworkConfiguration() {
       } // For AutoValue only!
 
-      @Nullable public abstract String dns();
-      @Nullable public abstract List<VirtualNetworkSite> virtualNetworkSites();
+      @Nullable
+      public abstract String dns();
 
-      public static VirtualNetworkConfiguration create(String dns, List<VirtualNetworkSite> virtualNetworkSites) {
+      @Nullable
+      public abstract List<VirtualNetworkSite> virtualNetworkSites();
+
+      public static VirtualNetworkConfiguration create(
+              final String dns, final List<VirtualNetworkSite> virtualNetworkSites) {
+
          return new AutoValue_NetworkConfiguration_VirtualNetworkConfiguration(dns, copyOf(virtualNetworkSites));
       }
    }
 
-   public NetworkConfiguration() {} // For AutoValue only!
+   public NetworkConfiguration() {
+   } // For AutoValue only!
 
    public abstract VirtualNetworkConfiguration virtualNetworkConfiguration();
 
-   public static NetworkConfiguration create(VirtualNetworkConfiguration virtualNetworkConfiguration) {
+   public static NetworkConfiguration create(final VirtualNetworkConfiguration virtualNetworkConfiguration) {
       return new AutoValue_NetworkConfiguration(virtualNetworkConfiguration);
    }
 }

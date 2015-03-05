@@ -27,20 +27,22 @@ import com.jamesmurty.utils.XMLBuilder;
 
 public final class StorageServiceParamsToXML implements Binder {
 
-   @Override@SuppressWarnings("unchecked")
- public <R extends HttpRequest> R bindToRequest(R request, Object input) {
+   @Override
+   @SuppressWarnings("unchecked")
+   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       StorageServiceParams params = StorageServiceParams.class.cast(input);
 
       try {
-         XMLBuilder builder = XMLBuilder.create("CreateStorageServiceInput", "http://schemas.microsoft.com/windowsazure")
-            .e("ServiceName").t(params.name()).up()
-            //.e("Description").up()
-            .e("Label").t(BaseEncoding.base64().encode(params.label().getBytes(Charsets.UTF_16))).up()
-            .e("Location").t(params.location()).up()
-            //.e("GeoReplicationEnabled").up()
-            //.e("ExtendedProperties").up()
-            //.e("SecondaryReadEnabled").up()
-            .e("AccountType").t(params.accountType().name()).up();
+         XMLBuilder builder = XMLBuilder.create(
+                 "CreateStorageServiceInput", "http://schemas.microsoft.com/windowsazure")
+                 .e("ServiceName").t(params.name()).up()
+                 //.e("Description").up()
+                 .e("Label").t(BaseEncoding.base64().encode(params.label().getBytes(Charsets.UTF_16))).up()
+                 .e("Location").t(params.location()).up()
+                 //.e("GeoReplicationEnabled").up()
+                 //.e("ExtendedProperties").up()
+                 //.e("SecondaryReadEnabled").up()
+                 .e("AccountType").t(params.accountType().name()).up();
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
          throw propagate(e);

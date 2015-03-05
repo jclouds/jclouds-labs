@@ -21,7 +21,9 @@ import org.jclouds.azurecompute.domain.OSImageParams;
 import com.google.common.base.Function;
 
 public class OSImageParamsName implements Function<Object, String> {
-   @Override public String apply(Object input) {
+
+   @Override
+   public String apply(final Object input) {
       return OSImageParams.class.cast(input).name();
    }
 }

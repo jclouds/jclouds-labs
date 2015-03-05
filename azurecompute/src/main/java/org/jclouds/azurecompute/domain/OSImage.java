@@ -33,18 +33,28 @@ import com.google.auto.value.AutoValue;
 public abstract class OSImage {
 
    public enum Type {
-      LINUX, WINDOWS;
+
+      LINUX,
+      WINDOWS;
+
    }
 
-   OSImage() {} // For AutoValue only!
+   OSImage() {
+   } // For AutoValue only!
 
    public abstract String name();
 
-   /** The geo-locations of the image, if the image is not associated with an affinity group. */
-   @Nullable public abstract String location();
+   /**
+    * The geo-locations of the image, if the image is not associated with an affinity group.
+    */
+   @Nullable
+   public abstract String location();
 
-   /** The affinity group with which this image is associated, if any. */
-   @Nullable public abstract String affinityGroup();
+   /**
+    * The affinity group with which this image is associated, if any.
+    */
+   @Nullable
+   public abstract String affinityGroup();
 
    /**
     * The name can be up to 100 characters in length. The name can be used identify the storage account for your
@@ -52,41 +62,50 @@ public abstract class OSImage {
     */
    public abstract String label();
 
-   @Nullable public abstract String description();
+   @Nullable
+   public abstract String description();
 
    /**
-    * The repository classification of image. All user images have the category "User", but
-    * categories for other images could be, for example "Canonical"
+    * The repository classification of image. All user images have the category "User", but categories for other images
+    * could be, for example "Canonical"
     */
-   @Nullable public abstract String category();
+   @Nullable
+   public abstract String category();
 
-   /** The operating system type of the OS image. */
+   /**
+    * The operating system type of the OS image.
+    */
    public abstract Type os();
 
-
    //The name of the publisher of the image. All user images have a publisher name of User.
-   @Nullable public abstract String publisherName();
+   @Nullable
+   public abstract String publisherName();
+
    /**
-    * The locations of the blob in the blob store in which the media for the image is located. The
-    * blob locations belongs to a storage account in the subscription specified by the
+    * The locations of the blob in the blob store in which the media for the image is located. The blob locations
+    * belongs to a storage account in the subscription specified by the
     * <subscription-id> value in the operation call.
     *
     * Example:
     *
     * http://example.blob.core.windows.net/disks/myimage.vhd
     */
-   @Nullable public abstract URI mediaLink();
+   @Nullable
+   public abstract URI mediaLink();
 
    public abstract int logicalSizeInGB();
 
-   /** The eulas for the image, if available. */
+   /**
+    * The eulas for the image, if available.
+    */
    // Not URI as some providers put non-uri data in, such as riverbed.
    public abstract List<String> eula();
 
+   public static OSImage create(final String name, final String location, final String affinityGroup, final String label,
+           final String description, final String category, final Type os, final String publisherName,
+           final URI mediaLink, final int logicalSizeInGB, final List<String> eula) {
 
-   public static OSImage create(String name, String location, String affinityGroup, String label,
-         String description, String category, Type os, String publisherName, URI mediaLink, int logicalSizeInGB, List<String> eula) {
-      return new AutoValue_OSImage(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
-            logicalSizeInGB, copyOf(eula));
+      return new AutoValue_OSImage(name, location, affinityGroup, label, description, category, os, publisherName,
+              mediaLink, logicalSizeInGB, copyOf(eula));
    }
 }

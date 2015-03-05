@@ -30,23 +30,35 @@ import org.xml.sax.Attributes;
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
  */
 final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Disk> {
+
    private String name;
+
    private String location;
+
    private String affinityGroup;
+
    private String description;
+
    private OSImage.Type os;
+
    private URI mediaLink;
+
    private Integer logicalSizeInGB;
+
    private Attachment attachedTo;
+
    private String sourceImage;
 
    private boolean inAttachment;
+
    private final AttachmentHandler attachmentHandler = new AttachmentHandler();
+
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Disk getResult() {
+   @Override
+   public Disk getResult() {
       Disk result = Disk.create(name, location, affinityGroup, description, os, mediaLink, logicalSizeInGB, attachedTo,
-            sourceImage);
+              sourceImage);
       resetState(); // handler is called in a loop.
       return result;
    }
@@ -59,13 +71,15 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
       attachedTo = null;
    }
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
       if (qName.equals("AttachedTo")) {
          inAttachment = true;
       }
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("AttachedTo")) {
          attachedTo = attachmentHandler.getResult();
          inAttachment = false;
@@ -100,7 +114,8 @@ final class DiskHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Di
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inAttachment) {
          attachmentHandler.characters(ch, start, length);
       } else {

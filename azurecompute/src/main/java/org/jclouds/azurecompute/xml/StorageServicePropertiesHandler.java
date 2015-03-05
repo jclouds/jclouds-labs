@@ -22,20 +22,26 @@ import org.jclouds.azurecompute.domain.StorageService;
 import org.jclouds.http.functions.ParseSax;
 
 public class StorageServicePropertiesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<StorageService.StorageServiceProperties> {
+
    private String description;
+
    private String status;
+
    private String location;
+
    private String accountType;
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public StorageService.StorageServiceProperties getResult() {
+   @Override
+   public StorageService.StorageServiceProperties getResult() {
       StorageService.StorageServiceProperties result = StorageService.StorageServiceProperties.create(description, status, location, accountType);
       description = status = location = accountType = null; // handler could be called in a loop.
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Description")) {
          description = currentOrNull(currentText);
       } else if (qName.equals("Status")) {
@@ -48,7 +54,8 @@ public class StorageServicePropertiesHandler extends ParseSax.HandlerForGenerate
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 }

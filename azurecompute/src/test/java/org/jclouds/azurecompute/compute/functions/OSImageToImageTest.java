@@ -100,7 +100,7 @@ public class OSImageToImageTest {
                       "Central US", // location
                       null, // affinityGroup
                       "openSUSE 13.1", // label
-                  "openSUSE 13.1 brings updated desktop environments and software, lot of polishing, a brand new KDE theme, "
+                      "openSUSE 13.1 brings updated desktop environments and software, lot of polishing, a brand new KDE theme, "
                       + "complete systemd integration and many other features.", // description
                       "MSDN", // category
                       OSImage.Type.WINDOWS, // os
@@ -131,7 +131,7 @@ public class OSImageToImageTest {
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
-                  URI.create("http://blobs/disks/mydeployment/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd"),
+                      URI.create("http://blobs/disks/mydeployment/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd"),
                       // mediaLink
                       30, // logicalSizeInGB
                       Collections.<String>emptyList() // eula
@@ -185,7 +185,7 @@ public class OSImageToImageTest {
                       "OpenLogic", // category
                       OSImage.Type.LINUX, // os
                       "openLogic", //publisherName
-                  URI.create("http://blobs/disks/mydeployment/OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd"),
+                      URI.create("http://blobs/disks/mydeployment/OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd"),
                       // mediaLink
                       30, //logicalSizeInGB
                       Arrays.asList("http://www.openlogic.com/azure/service-agreement/") // eula

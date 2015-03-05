@@ -54,7 +54,9 @@ import com.google.common.io.ByteSource;
 @Deprecated
 @Singleton
 public class KeyStoreSupplier implements Supplier<KeyStore> {
+
    private final Crypto crypto;
+
    private final Supplier<Credentials> creds;
 
    @Inject
@@ -65,16 +67,17 @@ public class KeyStoreSupplier implements Supplier<KeyStore> {
 
    @Override
    public KeyStore get() {
-      Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
-      String cert = checkNotNull(currentCreds.identity, "credential supplier returned null identity (should be cert)");
-      String keyStorePassword = checkNotNull(currentCreds.credential,
-            "credential supplier returned null credential (should be keyStorePassword)");
+      final Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
+      final String cert = checkNotNull(currentCreds.identity,
+              "credential supplier returned null identity (should be cert)");
+      final String keyStorePassword = checkNotNull(currentCreds.credential,
+              "credential supplier returned null credential (should be keyStorePassword)");
       try {
-         KeyStore keyStore = KeyStore.getInstance("PKCS12");
+         final KeyStore keyStore = KeyStore.getInstance("PKCS12");
 
-         File certFile = new File(checkNotNull(cert));
+         final File certFile = new File(checkNotNull(cert));
          if (certFile.isFile()) { // cert is path to pkcs12 file
-            FileInputStream stream = new FileInputStream(certFile);
+            final FileInputStream stream = new FileInputStream(certFile);
             try {
                keyStore.load(stream, keyStorePassword.toCharArray());
             } finally {
@@ -83,35 +86,35 @@ public class KeyStoreSupplier implements Supplier<KeyStore> {
          } else { // cert is PEM encoded, containing private key and certs
 
             // split in private key and certs
-            int privateKeyBeginIdx = cert.indexOf("-----BEGIN PRIVATE KEY");
-            int privateKeyEndIdx = cert.indexOf("-----END PRIVATE KEY");
-            String pemPrivateKey = cert.substring(privateKeyBeginIdx, privateKeyEndIdx + 26);
+            final int privateKeyBeginIdx = cert.indexOf("-----BEGIN PRIVATE KEY");
+            final int privateKeyEndIdx = cert.indexOf("-----END PRIVATE KEY");
+            final String pemPrivateKey = cert.substring(privateKeyBeginIdx, privateKeyEndIdx + 26);
 
-            StringBuilder pemCerts = new StringBuilder();
+            final StringBuilder pemCerts = new StringBuilder();
             int certsBeginIdx = 0;
 
             do {
                certsBeginIdx = cert.indexOf("-----BEGIN CERTIFICATE", certsBeginIdx);
 
                if (certsBeginIdx >= 0) {
-                  int certsEndIdx = cert.indexOf("-----END CERTIFICATE", certsBeginIdx) + 26;
+                  final int certsEndIdx = cert.indexOf("-----END CERTIFICATE", certsBeginIdx) + 26;
                   pemCerts.append(cert.substring(certsBeginIdx, certsEndIdx));
                   certsBeginIdx = certsEndIdx;
                }
             } while (certsBeginIdx != -1);
 
             // parse private key
-            KeySpec keySpec = Pems.privateKeySpec(ByteSource.wrap(pemPrivateKey.getBytes(Charsets.UTF_8)));
-            PrivateKey privateKey = crypto.rsaKeyFactory().generatePrivate(keySpec);
+            final KeySpec keySpec = Pems.privateKeySpec(ByteSource.wrap(pemPrivateKey.getBytes(Charsets.UTF_8)));
+            final PrivateKey privateKey = crypto.rsaKeyFactory().generatePrivate(keySpec);
 
             // populate keystore with private key and certs
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            final CertificateFactory cf = CertificateFactory.getInstance("X.509");
             @SuppressWarnings("unchecked")
-            Collection<Certificate> certs = (Collection<Certificate>) cf.generateCertificates(new ByteArrayInputStream(
-                  pemCerts.toString().getBytes(Charsets.UTF_8)));
+            final Collection<Certificate> certs = (Collection<Certificate>) cf.generateCertificates(
+                    new ByteArrayInputStream(pemCerts.toString().getBytes(Charsets.UTF_8)));
             keyStore.load(null);
             keyStore.setKeyEntry("dummy", privateKey, keyStorePassword.toCharArray(),
-                  certs.toArray(new java.security.cert.Certificate[0]));
+                    certs.toArray(new java.security.cert.Certificate[0]));
 
          }
          return keyStore;

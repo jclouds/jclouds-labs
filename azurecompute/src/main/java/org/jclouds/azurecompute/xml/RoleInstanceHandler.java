@@ -33,20 +33,29 @@ import com.google.common.collect.Lists;
 public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWithResult<RoleInstance> {
 
    private String roleName;
+
    private String instanceName;
+
    private InstanceStatus instanceStatus;
+
    private Integer instanceUpgradeDomain;
+
    private Integer instanceFaultDomain;
+
    private RoleSize.Type instanceSize;
+
    private String ipAddress;
+
    private String hostname;
 
    private boolean inInstanceEndpoints;
+
    private final InstanceEndpointHandler instanceEndpointHandler = new InstanceEndpointHandler();
 
    private List<InstanceEndpoint> instanceEndpoints = Lists.newArrayList();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
       if (qName.equals("InstanceEndpoints")) {
          inInstanceEndpoints = true;
       }
@@ -64,6 +73,7 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
    }
 
    private StringBuilder currentText = new StringBuilder();
+
    @Override
    public RoleInstance getResult() {
       RoleInstance result = RoleInstance.create(roleName, instanceName, instanceStatus, instanceUpgradeDomain,
@@ -72,7 +82,8 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("InstanceEndpoints")) {
          inInstanceEndpoints = false;
       } else if (qName.equals("InstanceEndpoint")) {
@@ -111,7 +122,8 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inInstanceEndpoints) {
          instanceEndpointHandler.characters(ch, start, length);
       } else {

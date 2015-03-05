@@ -30,26 +30,35 @@ import org.xml.sax.Attributes;
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460783" >api</a>
  */
 public final class OperationHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Operation> {
+
    private String id;
+
    private Status status;
+
    private Integer httpStatusCode;
+
    private Error error;
 
    private boolean inError;
+
    private final ErrorHandler errorHandler = new ErrorHandler();
+
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Operation getResult() {
+   @Override
+   public Operation getResult() {
       return Operation.create(id, status, httpStatusCode, error);
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("Error")) {
          inError = true;
       }
    }
 
-   @Override public void endElement(String uri, String name, String qName) {
+   @Override
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("Error")) {
          error = errorHandler.getResult();
          inError = false;
@@ -66,7 +75,8 @@ public final class OperationHandler extends ParseSax.HandlerForGeneratedRequestW
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inError) {
          errorHandler.characters(ch, start, length);
       } else {

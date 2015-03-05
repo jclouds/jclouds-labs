@@ -30,21 +30,28 @@ import com.google.common.collect.Lists;
 public class VirtualNetworkSiteHandler extends ParseSax.HandlerForGeneratedRequestWithResult<VirtualNetworkSite> {
 
    private String id;
+
    private String name;
+
    private String location;
+
    private AddressSpace addressSpace;
+
    private List<Subnet> subnets = Lists.newArrayList();
 
    private boolean inSubnet;
+
    private boolean inAddressSpace;
+
    private final SubnetHandler subnetHandler = new SubnetHandler();
+
    private final AddressSpaceHandler addressSpaceHandler = new AddressSpaceHandler();
 
    private StringBuilder currentText = new StringBuilder();
 
    @Override
    public void startElement(String uri, String localName, String qName, Attributes attributes) {
-      if (qName.equalsIgnoreCase("VirtualNetworkSite")){
+      if (qName.equalsIgnoreCase("VirtualNetworkSite")) {
          name = attributes.getValue("name");
          location = attributes.getValue("Location");
       }
@@ -97,7 +104,8 @@ public class VirtualNetworkSiteHandler extends ParseSax.HandlerForGeneratedReque
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inAddressSpace) {
          addressSpaceHandler.characters(ch, start, length);
       } else if (inSubnet) {

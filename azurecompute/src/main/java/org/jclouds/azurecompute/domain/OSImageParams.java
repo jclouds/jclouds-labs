@@ -20,22 +20,33 @@ import java.net.URI;
 
 import com.google.auto.value.AutoValue;
 
-/** To create a new operating system image. */
+/**
+ * To create a new operating system image.
+ */
 @AutoValue
 public abstract class OSImageParams {
 
-   OSImageParams() {} // For AutoValue only!
+   OSImageParams() {
+   } // For AutoValue only!
 
-   /** Specifies a name that is used to identify the image when you create a Virtual Machine. */
+   /**
+    * Specifies a name that is used to identify the image when you create a Virtual Machine.
+    */
    public abstract String name();
 
-   /** Specifies the friendly name of the image. */
+   /**
+    * Specifies the friendly name of the image.
+    */
    public abstract String label();
 
-   /** Specifies the location of the vhd file for the image. */
+   /**
+    * Specifies the location of the vhd file for the image.
+    */
    public abstract URI mediaLink();
 
-   /** {@link OSImage#os() Os type} of the image. */
+   /**
+    * {@link OSImage#os() Os type} of the image.
+    */
    public abstract OSImage.Type os();
 
    public Builder toBuilder() {
@@ -47,27 +58,31 @@ public abstract class OSImageParams {
    }
 
    public static final class Builder {
+
       private String name;
+
       private String label;
+
       private URI mediaLink;
+
       private OSImage.Type os;
 
-      public Builder name(String name) {
+      public Builder name(final String name) {
          this.name = name;
          return this;
       }
 
-      public Builder label(String label) {
+      public Builder label(final String label) {
          this.label = label;
          return this;
       }
 
-      public Builder mediaLink(URI mediaLink) {
+      public Builder mediaLink(final URI mediaLink) {
          this.mediaLink = mediaLink;
          return this;
       }
 
-      public Builder os(OSImage.Type os) {
+      public Builder os(final OSImage.Type os) {
          this.os = os;
          return this;
       }
@@ -76,15 +91,17 @@ public abstract class OSImageParams {
          return OSImageParams.create(name, label, mediaLink, os);
       }
 
-      public Builder fromImageParams(OSImageParams in) {
+      public Builder fromImageParams(final OSImageParams in) {
          return name(in.name())
-               .label(in.label())
-               .mediaLink(in.mediaLink())
-               .os(in.os());
+                 .label(in.label())
+                 .mediaLink(in.mediaLink())
+                 .os(in.os());
       }
    }
 
-   private static OSImageParams create(String name, String label, URI mediaLink, OSImage.Type os) {
+   private static OSImageParams create(
+           final String name, final String label, final URI mediaLink, final OSImage.Type os) {
+
       return new AutoValue_OSImageParams(name, label, mediaLink, os);
    }
 }

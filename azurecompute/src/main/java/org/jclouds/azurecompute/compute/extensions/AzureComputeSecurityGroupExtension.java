@@ -58,15 +58,17 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 
 /**
- * An extension to compute service to allow for the manipulation of {@link org.jclouds.compute.domain.SecurityGroup}s. Implementation
- * is optional by providers.
+ * An extension to compute service to allow for the manipulation of {@link org.jclouds.compute.domain.SecurityGroup}s.
+ * Implementation is optional by providers.
  *
  * It considers only the custom rules added by the user and ignores the default rules created by Azure
  */
 public class AzureComputeSecurityGroupExtension implements SecurityGroupExtension {
 
    protected final AzureComputeApi api;
+
    private final Predicate<String> operationSucceededPredicate;
+
    private final AzureComputeConstants azureComputeConstants;
 
    @Resource
@@ -74,7 +76,9 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    protected Logger logger = Logger.NULL;
 
    @Inject
-   AzureComputeSecurityGroupExtension(final AzureComputeApi api, Predicate<String> operationSucceededPredicate, AzureComputeConstants azureComputeConstants) {
+   AzureComputeSecurityGroupExtension(final AzureComputeApi api,
+           final Predicate<String> operationSucceededPredicate, final AzureComputeConstants azureComputeConstants) {
+
       this.api = api;
       this.operationSucceededPredicate = operationSucceededPredicate;
       this.azureComputeConstants = azureComputeConstants;
@@ -83,8 +87,8 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    @Override
    public Set<SecurityGroup> listSecurityGroups() {
       return FluentIterable.from(api.getNetworkSecurityGroupApi().list())
-                           .transform(new NetworkSecurityGroupSecurityGroupFunction())
-                           .toSet();
+              .transform(new NetworkSecurityGroupSecurityGroupFunction())
+              .toSet();
    }
 
    @Override
@@ -99,38 +103,39 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
     * @return Set<SecurityGroup>
     */
    @Override
-   public Set<SecurityGroup> listSecurityGroupsForNode(String name) {
+   public Set<SecurityGroup> listSecurityGroupsForNode(final String name) {
       checkNotNull(name, "name");
 
-      Deployment deployment = api.getDeploymentApiForService(name).get(name);
+      final Deployment deployment = api.getDeploymentApiForService(name).get(name);
       final String virtualNetworkName = deployment.virtualNetworkName();
 
-      List<String> subnetNames = FluentIterable.from(deployment.roles())
-                    .transformAndConcat(new Function<Role, Iterable<Role.ConfigurationSet>>() {
-                       @Override
-                       public Iterable<Role.ConfigurationSet> apply(Role input) {
-                          return input.configurationSets();
-                       }
-                    })
-                    .transformAndConcat(new Function<Role.ConfigurationSet, Iterable<Role.ConfigurationSet.SubnetName>>() {
-                       @Override
-                       public Iterable<Role.ConfigurationSet.SubnetName> apply(Role.ConfigurationSet input) {
-                          return input.subnetNames();
-                       }
-                    })
-                    .transform(new Function<Role.ConfigurationSet.SubnetName, String>() {
-                       @Override
-                       public String apply(Role.ConfigurationSet.SubnetName input) {
-                          return input.name();
-                       }
-                    })
-                    .toList();
+      final List<String> subnetNames = FluentIterable.from(deployment.roles())
+              .transformAndConcat(new Function<Role, Iterable<Role.ConfigurationSet>>() {
+                 @Override
+                 public Iterable<Role.ConfigurationSet> apply(final Role input) {
+                    return input.configurationSets();
+                 }
+              })
+              .transformAndConcat(new Function<Role.ConfigurationSet, Iterable<Role.ConfigurationSet.SubnetName>>() {
+                 @Override
+                 public Iterable<Role.ConfigurationSet.SubnetName> apply(final Role.ConfigurationSet input) {
+                    return input.subnetNames();
+                 }
+              })
+              .transform(new Function<Role.ConfigurationSet.SubnetName, String>() {
+                 @Override
+                 public String apply(final Role.ConfigurationSet.SubnetName input) {
+                    return input.name();
+                 }
+              })
+              .toList();
 
       return FluentIterable.from(subnetNames)
               .transform(new Function<String, NetworkSecurityGroup>() {
                  @Override
-                 public NetworkSecurityGroup apply(String input) {
-                    return api.getNetworkSecurityGroupApi().getNetworkSecurityGroupAppliedToSubnet(virtualNetworkName, input);
+                 public NetworkSecurityGroup apply(final String input) {
+                    return api.getNetworkSecurityGroupApi().
+                    getNetworkSecurityGroupAppliedToSubnet(virtualNetworkName, input);
                  }
               })
               .transform(new NetworkSecurityGroupSecurityGroupFunction())
@@ -138,26 +143,27 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    }
 
    @Override
-   public SecurityGroup getSecurityGroupById(String id) {
+   public SecurityGroup getSecurityGroupById(final String id) {
       return transformNetworkSecurityGroupToSecurityGroup(id);
    }
 
    @Override
-   public SecurityGroup createSecurityGroup(final String name, Location location) {
+   public SecurityGroup createSecurityGroup(final String name, final Location location) {
       checkNotNull(name, "name");
       checkNotNull(location, "location");
 
       final NetworkSecurityGroup networkSecurityGroup = NetworkSecurityGroup.create(name, name, location.getId(), null);
       String createNSGRequestId = api.getNetworkSecurityGroupApi().create(networkSecurityGroup);
       if (!operationSucceededPredicate.apply(createNSGRequestId)) {
-         final String message = generateIllegalStateExceptionMessage(createNSGRequestId, azureComputeConstants.operationTimeout());
+         final String message = generateIllegalStateExceptionMessage(
+                 createNSGRequestId, azureComputeConstants.operationTimeout());
          logger.warn(message);
          throw new IllegalStateException(message);
       }
       return transformNetworkSecurityGroupToSecurityGroup(name);
    }
 
-   private SecurityGroup transformNetworkSecurityGroupToSecurityGroup(String name) {
+   private SecurityGroup transformNetworkSecurityGroupToSecurityGroup(final String name) {
       final NetworkSecurityGroup fullDetails = api.getNetworkSecurityGroupApi().getFullDetails(name);
       return fullDetails == null
               ? null
@@ -165,10 +171,12 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    }
 
    @Override
-   public boolean removeSecurityGroup(String id) {
+   public boolean removeSecurityGroup(final String id) {
       final NetworkConfiguration networkConfiguration = api.getVirtualNetworkApi().getNetworkConfiguration();
       if (networkConfiguration != null) {
-         for (VirtualNetworkSite virtualNetworkSite : networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites()) {
+         for (VirtualNetworkSite virtualNetworkSite
+                 : networkConfiguration.virtualNetworkConfiguration().virtualNetworkSites()) {
+
             for (NetworkConfiguration.Subnet subnet : virtualNetworkSite.subnets()) {
                final String virtualNetworkName = virtualNetworkSite.name();
                final String subnetName = subnet.name();
@@ -177,12 +185,14 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
                           .getNetworkSecurityGroupAppliedToSubnet(virtualNetworkName, subnetName);
                   if (networkSecurityGroupAppliedToSubnet != null) {
                      if (!networkSecurityGroupAppliedToSubnet.name().equals(id)) {
-                        logger.debug("Removing a networkSecurityGroup %s is already applied to subnet '%s' ...", id, subnetName);
+                        logger.debug("Removing a networkSecurityGroup %s is already applied to subnet '%s' ...",
+                                id, subnetName);
                         // remove existing nsg from subnet
-                        String removeFromSubnetRequestId = api.getNetworkSecurityGroupApi().removeFromSubnet
-                                (virtualNetworkName, subnetName, networkSecurityGroupAppliedToSubnet.name());
+                        String removeFromSubnetRequestId = api.getNetworkSecurityGroupApi().removeFromSubnet(
+                                virtualNetworkName, subnetName, networkSecurityGroupAppliedToSubnet.name());
                         if (!operationSucceededPredicate.apply(removeFromSubnetRequestId)) {
-                           final String message = generateIllegalStateExceptionMessage(removeFromSubnetRequestId, azureComputeConstants.operationTimeout());
+                           final String message = generateIllegalStateExceptionMessage(
+                                   removeFromSubnetRequestId, azureComputeConstants.operationTimeout());
                            logger.warn(message);
                            throw new IllegalStateException(message);
                         }
@@ -197,10 +207,10 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    }
 
    @Override
-   public SecurityGroup addIpPermission(IpPermission ipPermission, SecurityGroup group) {
+   public SecurityGroup addIpPermission(final IpPermission ipPermission, final SecurityGroup group) {
       checkNotNull(group, "group");
       checkNotNull(ipPermission, "ipPermission");
-      
+
       final String id = checkNotNull(group.getId(), "group.getId()");
 
       final int priority = NetworkSecurityGroups.getFirstAvailablePriority(
@@ -261,16 +271,21 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
             }
          }
       }
-      
+
       return transformNetworkSecurityGroupToSecurityGroup(id);
    }
 
    @Override
-   public SecurityGroup addIpPermission(IpProtocol protocol, int startPort, int endPort,
-                                        Multimap<String, String> tenantIdGroupNamePairs,
-                                        Iterable<String> ipRanges,
-                                        Iterable<String> groupIds, SecurityGroup group) {
-      IpPermission.Builder permBuilder = IpPermission.builder();
+   public SecurityGroup addIpPermission(
+           final IpProtocol protocol,
+           final int startPort,
+           final int endPort,
+           final Multimap<String, String> tenantIdGroupNamePairs,
+           final Iterable<String> ipRanges,
+           final Iterable<String> groupIds,
+           final SecurityGroup group) {
+
+      final IpPermission.Builder permBuilder = IpPermission.builder();
       permBuilder.ipProtocol(protocol);
       permBuilder.fromPort(startPort);
       permBuilder.toPort(endPort);
@@ -282,15 +297,15 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    }
 
    @Override
-   public SecurityGroup removeIpPermission(IpPermission ipPermission, SecurityGroup group) {
+   public SecurityGroup removeIpPermission(final IpPermission ipPermission, final SecurityGroup group) {
       checkNotNull(group, "group");
       checkNotNull(ipPermission, "ipPermission");
-      
+
       final String id = checkNotNull(group.getId(), "group.getId()");
 
       final String ruleName = NetworkSecurityGroups.createRuleName(
               azureComputeConstants.tcpRuleFormat(), ipPermission.getFromPort(), ipPermission.getToPort());
-      
+
       // remove rule to NSG
       removeRuleFromNetworkSecurityGroup(id, ruleName);
 
@@ -336,16 +351,21 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
             }
          }
       }
-      
+
       return transformNetworkSecurityGroupToSecurityGroup(id);
    }
 
    @Override
-   public SecurityGroup removeIpPermission(IpProtocol protocol, int startPort, int endPort,
-                                           Multimap<String, String> tenantIdGroupNamePairs,
-                                           Iterable<String> ipRanges,
-                                           Iterable<String> groupIds, SecurityGroup group) {
-      IpPermission.Builder permBuilder = IpPermission.builder();
+   public SecurityGroup removeIpPermission(
+           final IpProtocol protocol,
+           final int startPort,
+           final int endPort,
+           final Multimap<String, String> tenantIdGroupNamePairs,
+           final Iterable<String> ipRanges,
+           final Iterable<String> groupIds,
+           final SecurityGroup group) {
+
+      final IpPermission.Builder permBuilder = IpPermission.builder();
       permBuilder.ipProtocol(protocol);
       permBuilder.fromPort(startPort);
       permBuilder.toPort(endPort);
@@ -384,8 +404,8 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
    private class RuleToIpPermission implements Function<Rule, IpPermission> {
 
       @Override
-      public IpPermission apply(Rule rule) {
-         IpPermission.Builder builder = IpPermission.builder();
+      public IpPermission apply(final Rule rule) {
+         final IpPermission.Builder builder = IpPermission.builder();
          if (rule.name().matches(azureComputeConstants.tcpRuleRegexp())) {
             builder.fromPort(extractPort(rule.name(), 0))
                     .toPort(extractPort(rule.name(), 1));
@@ -400,71 +420,74 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
       }
 
       private int extractPort(String ruleName, int position) {
-         return Integer.parseInt(Iterables.get(Splitter.on("-").omitEmptyStrings().split(ruleName.substring(4, ruleName.length())),
-                 position));
+         return Integer.parseInt(Iterables.get(Splitter.on("-").omitEmptyStrings().
+                 split(ruleName.substring(4, ruleName.length())), position));
       }
    }
 
    private class NetworkSecurityGroupSecurityGroupFunction implements Function<NetworkSecurityGroup, SecurityGroup> {
+
       @Override
-      public SecurityGroup apply(NetworkSecurityGroup networkSecurityGroup) {
-         SecurityGroupBuilder securityGroupBuilder = new SecurityGroupBuilder()
+      public SecurityGroup apply(final NetworkSecurityGroup networkSecurityGroup) {
+         final SecurityGroupBuilder securityGroupBuilder = new SecurityGroupBuilder()
                  .id(networkSecurityGroup.name())
                  .providerId(networkSecurityGroup.label())
                  .name(networkSecurityGroup.name());
          if (networkSecurityGroup.rules() != null) {
-            List<Rule> filteredRules = NetworkSecurityGroups.getCustomRules(networkSecurityGroup);
+            final List<Rule> filteredRules = NetworkSecurityGroups.getCustomRules(networkSecurityGroup);
 
-            Iterable<IpPermission> permissions = Iterables.transform(filteredRules, new RuleToIpPermission());
+            final Iterable<IpPermission> permissions = Iterables.transform(filteredRules, new RuleToIpPermission());
             securityGroupBuilder.ipPermissions(permissions);
          }
          return securityGroupBuilder.build();
       }
    }
 
-   private void addRuleToNetworkSecurityGroup(String networkSecurityGroupId, String ruleName, int
-           priority, IpPermission ipPermission) {
+   private void addRuleToNetworkSecurityGroup(final String networkSecurityGroupId, final String ruleName,
+           final int priority, final IpPermission ipPermission) {
 
-      String protocol = ipPermission.getIpProtocol().name();
-      String destinationPortRange;
-      if (ipPermission.getFromPort() != ipPermission.getToPort()) {
-         destinationPortRange = String.format("%s-%s", ipPermission.getFromPort(), ipPermission.getToPort());
-      } else {
-         destinationPortRange = String.valueOf(ipPermission.getToPort());
-      }
-      final String destinationAddressPrefix =
-              ipPermission.getCidrBlocks().isEmpty() || Iterables.get(ipPermission.getCidrBlocks(), 0).equals("0.0.0.0/0") ?
-                      "*" : Iterables.get(ipPermission.getCidrBlocks(), 0);
-      String setRuleToNSGRequestId = api.getNetworkSecurityGroupApi().setRule(networkSecurityGroupId, ruleName,
-              Rule.create(ruleName, // name
-                      "Inbound", // type
-                      String.valueOf(priority), // priority
-                      "Allow", // action
-                      "INTERNET", // sourceAddressPrefix
-                      "*", // sourcePortRange
-                      destinationAddressPrefix, // destinationAddressPrefix
-                      destinationPortRange, // destinationPortRange
-                      protocol,  // protocol
-                      "Active", // state
-                      true // isDefault
-              ));
+      final String protocol = ipPermission.getIpProtocol().name();
+      final String destinationPortRange = ipPermission.getFromPort() == ipPermission.getToPort()
+              ? String.valueOf(ipPermission.getToPort())
+              : String.format("%s-%s", ipPermission.getFromPort(), ipPermission.getToPort());
+      final String destinationAddressPrefix
+              = ipPermission.getCidrBlocks().isEmpty() || Iterables.get(ipPermission.getCidrBlocks(), 0).equals("0.0.0.0/0")
+                      ? "*"
+                      : Iterables.get(ipPermission.getCidrBlocks(), 0);
+      final String setRuleToNSGRequestId = api.getNetworkSecurityGroupApi().
+              setRule(networkSecurityGroupId, ruleName, Rule.create(ruleName, // name
+                              "Inbound", // type
+                              String.valueOf(priority), // priority
+                              "Allow", // action
+                              "INTERNET", // sourceAddressPrefix
+                              "*", // sourcePortRange
+                              destinationAddressPrefix, // destinationAddressPrefix
+                              destinationPortRange, // destinationPortRange
+                              protocol, // protocol
+                              "Active", // state
+                              true // isDefault
+                      ));
       if (!operationSucceededPredicate.apply(setRuleToNSGRequestId)) {
-         final String message = generateIllegalStateExceptionMessage(setRuleToNSGRequestId, azureComputeConstants.operationTimeout());
+         final String message = generateIllegalStateExceptionMessage(
+                 setRuleToNSGRequestId, azureComputeConstants.operationTimeout());
          logger.warn(message);
          throw new IllegalStateException(message);
       }
    }
 
-   private void removeRuleFromNetworkSecurityGroup(String id, String ruleName) {
+   private void removeRuleFromNetworkSecurityGroup(final String id, final String ruleName) {
       String setRuleToNSGRequestId = api.getNetworkSecurityGroupApi().deleteRule(id, ruleName);
       if (!operationSucceededPredicate.apply(setRuleToNSGRequestId)) {
-         final String message = generateIllegalStateExceptionMessage(setRuleToNSGRequestId, azureComputeConstants.operationTimeout());
+         final String message = generateIllegalStateExceptionMessage(
+                 setRuleToNSGRequestId, azureComputeConstants.operationTimeout());
          logger.warn(message);
          throw new IllegalStateException(message);
       }
    }
 
-   private Role.ConfigurationSet.InputEndpoint createInputEndpoint(String ruleName, String protocol, String address, int port) {
+   private Role.ConfigurationSet.InputEndpoint createInputEndpoint(
+           final String ruleName, final String protocol, final String address, final int port) {
+
       return Role.ConfigurationSet.InputEndpoint.create(
               ruleName,
               protocol,

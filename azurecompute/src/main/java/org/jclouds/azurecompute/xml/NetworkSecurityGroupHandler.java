@@ -27,12 +27,17 @@ import org.xml.sax.Attributes;
 import com.google.common.collect.Lists;
 
 public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedRequestWithResult<NetworkSecurityGroup> {
+
    private String name;
+
    private String label;
+
    private String location;
+
    private List<Rule> rules = Lists.newArrayList();
 
    private boolean inRule;
+
    private final RuleHandler ruleHandler = new RuleHandler();
 
    private final StringBuilder currentText = new StringBuilder();
@@ -44,14 +49,16 @@ public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedReq
       }
    }
 
-   @Override public NetworkSecurityGroup getResult() {
+   @Override
+   public NetworkSecurityGroup getResult() {
       NetworkSecurityGroup result = NetworkSecurityGroup.create(name, label, location, rules);
       name = label = location = null; // handler is called in a loop.
       rules = Lists.newArrayList();
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Rule")) {
          inRule = false;
          rules.add(ruleHandler.getResult());
@@ -63,11 +70,12 @@ public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedReq
          label = currentOrNull(currentText);
       } else if (qName.equals("Location")) {
          location = currentOrNull(currentText);
-   }
+      }
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       if (inRule) {
          ruleHandler.characters(ch, start, length);
       } else {

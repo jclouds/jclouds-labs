@@ -28,16 +28,20 @@ import org.jclouds.http.functions.ParseSax;
  * @see <a href="http://msdn.microsoft.com/en-us/library/ee460801" >api</a>
  */
 public final class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Error> {
+
    private Code code;
+
    private String message;
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public Error getResult() {
+   @Override
+   public Error getResult() {
       return Error.create(code, message);
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Code")) {
          String codeText = currentOrNull(currentText);
          code = parseCode(codeText);
@@ -47,7 +51,8 @@ public final class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithR
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 

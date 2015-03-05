@@ -41,8 +41,7 @@ import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
 
 /**
- * The Service Management API includes operations for managing the virtual
- * machines in your subscription.
+ * The Service Management API includes operations for managing the virtual machines in your subscription.
  *
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157206">docs</a>
  */
@@ -55,11 +54,13 @@ public interface VirtualMachineApi {
    @Named("RestartRole")
    @POST
    // Warning : the url in the documentation is WRONG ! @see
-   // http://social.msdn.microsoft.com/Forums/pl-PL/WAVirtualMachinesforWindows/thread/7ba2367b-e450-49e0-89e4-46c240e9d213
+   // http://social.msdn.microsoft.com/Forums/pl-PL/WAVirtualMachinesforWindows/thread/\
+   // 7ba2367b-e450-49e0-89e4-46c240e9d213
    @Path("/roleinstances/{name}/Operations")
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   @Payload(value = "<RestartRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\"><OperationType>RestartRoleOperation</OperationType></RestartRoleOperation>")
+   @Payload(value = "<RestartRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\">"
+           + "<OperationType>RestartRoleOperation</OperationType></RestartRoleOperation>")
    String restart(@PathParam("name") String name);
 
    /**
@@ -70,9 +71,13 @@ public interface VirtualMachineApi {
    @Path("/roleinstances/{name}/Operations")
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   @Payload(value = "<CaptureRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\"><OperationType>CaptureRoleOperation</OperationType><PostCaptureAction>Delete</PostCaptureAction><TargetImageLabel>{imageLabel}</TargetImageLabel><TargetImageName>{imageName}</TargetImageName></CaptureRoleOperation>")
+   @Payload(value = "<CaptureRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\">"
+           + "<OperationType>CaptureRoleOperation</OperationType>"
+           + "<PostCaptureAction>Delete</PostCaptureAction>"
+           + "<TargetImageLabel>{imageLabel}</TargetImageLabel>"
+           + "<TargetImageName>{imageName}</TargetImageName></CaptureRoleOperation>")
    String capture(@PathParam("name") String name, @PayloadParam("imageName") String imageName,
-         @PayloadParam("imageLabel") String imageLabel);
+           @PayloadParam("imageLabel") String imageLabel);
 
    /**
     * http://msdn.microsoft.com/en-us/library/jj157195
@@ -82,7 +87,8 @@ public interface VirtualMachineApi {
    @Path("/roleinstances/{name}/Operations")
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   @Payload(value = "<ShutdownRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\"><OperationType>ShutdownRoleOperation</OperationType></ShutdownRoleOperation>")
+   @Payload(value = "<ShutdownRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\">"
+           + "<OperationType>ShutdownRoleOperation</OperationType></ShutdownRoleOperation>")
    String shutdown(@PathParam("name") String name);
 
    /**
@@ -93,7 +99,8 @@ public interface VirtualMachineApi {
    @Path("/roleinstances/{name}/Operations")
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
-   @Payload(value = "<StartRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\"><OperationType>StartRoleOperation</OperationType></StartRoleOperation>")
+   @Payload(value = "<StartRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\">"
+           + "<OperationType>StartRoleOperation</OperationType></StartRoleOperation>")
    String start(@PathParam("name") String name);
 
    /**

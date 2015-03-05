@@ -48,7 +48,7 @@ public abstract class Role {
             LoadBalancerProbe() { // For AutoValue only!
             }
 
-            public static LoadBalancerProbe create(String path, int port, String protocol) {
+            public static LoadBalancerProbe create(final String path, final int port, final String protocol) {
                return new AutoValue_Role_ConfigurationSet_InputEndpoint_LoadBalancerProbe(path, port, protocol);
             }
          }
@@ -66,18 +66,23 @@ public abstract class Role {
 
          public abstract Boolean enableDirectServerReturn();
 
-         @Nullable public abstract String loadBalancerName();
+         @Nullable
+         public abstract String loadBalancerName();
 
-         @Nullable public abstract LoadBalancerProbe loadBalancerProbe();
+         @Nullable
+         public abstract LoadBalancerProbe loadBalancerProbe();
 
-         @Nullable public abstract Integer idleTimeoutInMinutes();
+         @Nullable
+         public abstract Integer idleTimeoutInMinutes();
 
          InputEndpoint() { // For AutoValue only!
          }
 
-         public static InputEndpoint create(String name, String protocol, int localPort, int port,
-                                            String vip, boolean enableDirectServerReturn, String loadBalancerName,
-                                            LoadBalancerProbe loadBalancerProbe, Integer idleTimeoutInMinutes) {
+         public static InputEndpoint create(
+                 final String name, final String protocol, final int localPort, final int port,
+                 final String vip, final boolean enableDirectServerReturn, final String loadBalancerName,
+                 final LoadBalancerProbe loadBalancerProbe, final Integer idleTimeoutInMinutes) {
+
             return new AutoValue_Role_ConfigurationSet_InputEndpoint(localPort, name, port, protocol, vip,
                     enableDirectServerReturn, loadBalancerName, loadBalancerProbe, idleTimeoutInMinutes);
          }
@@ -86,12 +91,13 @@ public abstract class Role {
       @AutoValue
       public abstract static class SubnetName {
 
-         @Nullable public abstract String name();
+         @Nullable
+         public abstract String name();
 
          SubnetName() { // For AutoValue only!
          }
 
-         public static SubnetName create(String name) {
+         public static SubnetName create(final String name) {
             return new AutoValue_Role_ConfigurationSet_SubnetName(name);
          }
       }
@@ -106,7 +112,7 @@ public abstract class Role {
          PublicIP() { // For AutoValue only!
          }
 
-         public static PublicIP create(String name, int idleTimeoutInMinutes) {
+         public static PublicIP create(final String name, final int idleTimeoutInMinutes) {
             return new AutoValue_Role_ConfigurationSet_PublicIP(name, idleTimeoutInMinutes);
          }
       }
@@ -115,20 +121,26 @@ public abstract class Role {
 
       public abstract List<InputEndpoint> inputEndpoints();
 
-      @Nullable public abstract List<SubnetName> subnetNames();
+      @Nullable
+      public abstract List<SubnetName> subnetNames();
 
-      @Nullable public abstract String staticVirtualNetworkIPAddress();
+      @Nullable
+      public abstract String staticVirtualNetworkIPAddress();
 
-      @Nullable public abstract List<PublicIP> publicIPs();
+      @Nullable
+      public abstract List<PublicIP> publicIPs();
 
-      @Nullable public abstract String networkSecurityGroup();
+      @Nullable
+      public abstract String networkSecurityGroup();
 
       ConfigurationSet() { // For AutoValue only!
       }
 
-      public static ConfigurationSet create(String configurationSetType, List<InputEndpoint> inputEndpoints,
-                                            List<SubnetName> subnetNames, String staticVirtualNetworkIPAddress,
-                                            List<PublicIP> publicIPs, String networkSecurityGroup) {
+      public static ConfigurationSet create(
+              final String configurationSetType, final List<InputEndpoint> inputEndpoints,
+              final List<SubnetName> subnetNames, final String staticVirtualNetworkIPAddress,
+              final List<PublicIP> publicIPs, final String networkSecurityGroup) {
+
          return new AutoValue_Role_ConfigurationSet(configurationSetType, inputEndpoints, subnetNames,
                  staticVirtualNetworkIPAddress, publicIPs, networkSecurityGroup);
       }
@@ -149,7 +161,9 @@ public abstract class Role {
          ResourceExtensionParameterValue() { // For AutoValue only!
          }
 
-         public static ResourceExtensionParameterValue create(String key, String value, String type) {
+         public static ResourceExtensionParameterValue create(
+                 final String key, final String value, final String type) {
+
             return new AutoValue_Role_ResourceExtensionReference_ResourceExtensionParameterValue(key, value, type);
          }
       }
@@ -162,15 +176,18 @@ public abstract class Role {
 
       public abstract String version();
 
-      @Nullable public abstract List<ResourceExtensionParameterValue> resourceExtensionParameterValues();
+      @Nullable
+      public abstract List<ResourceExtensionParameterValue> resourceExtensionParameterValues();
 
       public abstract String state();
 
       ResourceExtensionReference() { // For AutoValue only!
       }
 
-      public static ResourceExtensionReference create(String referenceName, String publisher, String name, String
-              version, List<ResourceExtensionParameterValue> resourceExtensionParameterValues, String state) {
+      public static ResourceExtensionReference create(
+              final String referenceName, final String publisher, final String name, final String version,
+              final List<ResourceExtensionParameterValue> resourceExtensionParameterValues, final String state) {
+
          return new AutoValue_Role_ResourceExtensionReference(referenceName, publisher, name, version,
                  resourceExtensionParameterValues, state);
       }
@@ -183,9 +200,11 @@ public abstract class Role {
 
       public abstract String diskName();
 
-      @Nullable public abstract Integer lun();
+      @Nullable
+      public abstract Integer lun();
 
-      @Nullable public abstract Integer logicalDiskSizeInGB();
+      @Nullable
+      public abstract Integer logicalDiskSizeInGB();
 
       public abstract URI mediaLink();
 
@@ -196,8 +215,12 @@ public abstract class Role {
       OSVirtualHardDisk() { // For AutoValue only!
       }
 
-      public static OSVirtualHardDisk create(String hostCaching, String diskName, Integer lun, Integer logicalDiskSizeInGB, URI mediaLink, String sourceImageName, OSImage.Type os) {
-         return new AutoValue_Role_OSVirtualHardDisk(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink, sourceImageName, os);
+      public static OSVirtualHardDisk create(final String hostCaching, final String diskName, final Integer lun,
+              final Integer logicalDiskSizeInGB, final URI mediaLink, final String sourceImageName,
+              final OSImage.Type os) {
+
+         return new AutoValue_Role_OSVirtualHardDisk(hostCaching, diskName, lun, logicalDiskSizeInGB, mediaLink,
+                 sourceImageName, os);
       }
    }
 
@@ -214,12 +237,14 @@ public abstract class Role {
    /**
     * Specifies the name of the VM Image that was used to create the Virtual Machine.
     */
-   @Nullable public abstract String vmImage();
+   @Nullable
+   public abstract String vmImage();
 
    /**
     * Specifies the path to the VHD files that are associated with the VM Image.
     */
-   @Nullable public abstract String mediaLocation();
+   @Nullable
+   public abstract String mediaLocation();
 
    /**
     * Contains a collection of configuration sets that define system and application settings.
@@ -227,20 +252,24 @@ public abstract class Role {
    public abstract List<ConfigurationSet> configurationSets();
 
    /**
-    * Optional. Contains a collection of resource extensions that are installed on the Virtual Machine. This element is used if ProvisionGuestAgent is set to true.
+    * Optional. Contains a collection of resource extensions that are installed on the Virtual Machine. This element is
+    * used if ProvisionGuestAgent is set to true.
     */
-   @Nullable public abstract List<ResourceExtensionReference> resourceExtensionReferences();
+   @Nullable
+   public abstract List<ResourceExtensionReference> resourceExtensionReferences();
 
    /**
-    * Specifies the name of a collection of Virtual Machines.
-    * Virtual Machines specified in the same availability set are allocated to different nodes to maximize availability.
+    * Specifies the name of a collection of Virtual Machines. Virtual Machines specified in the same availability set
+    * are allocated to different nodes to maximize availability.
     */
-   @Nullable public abstract String availabilitySetName();
+   @Nullable
+   public abstract String availabilitySetName();
 
    /**
     * Contains the parameters that were used to add a data disk to a Virtual Machine.
     */
-   @Nullable public abstract List<DataVirtualHardDisk> dataVirtualHardDisks();
+   @Nullable
+   public abstract List<DataVirtualHardDisk> dataVirtualHardDisks();
 
    /**
     * Contains the parameters that were used to create the operating system disk for a Virtual Machine.
@@ -253,23 +282,29 @@ public abstract class Role {
    public abstract RoleSize.Type roleSize();
 
    /**
-    * Optional. Indicates whether the VM Agent is installed on the Virtual Machine.
-    * To run a resource extension in a Virtual Machine, this service must be installed.
+    * Optional. Indicates whether the VM Agent is installed on the Virtual Machine. To run a resource extension in a
+    * Virtual Machine, this service must be installed.
+    *
     * @return true or false
     */
-   @Nullable public abstract Boolean provisionGuestAgent();
+   @Nullable
+   public abstract Boolean provisionGuestAgent();
 
    /**
     * Specifies the read-only thumbprint of the certificate that is used with the HTTPS listener for WinRM.
     */
-   @Nullable public abstract String defaultWinRmCertificateThumbprint();
+   @Nullable
+   public abstract String defaultWinRmCertificateThumbprint();
 
-   public static Role create(String roleName, String roleType, String vmImage, String mediaLocation,
-                             List<ConfigurationSet> configurationSets, List<ResourceExtensionReference> resourceExtensionReferences,
-                             String availabilitySetName, List<DataVirtualHardDisk> dataVirtualHardDisks,
-                             OSVirtualHardDisk osVirtualHardDisk, RoleSize.Type roleSize, Boolean provisionGuestAgent,
-                             String defaultWinRmCertificateThumbprint) {
-      return new AutoValue_Role(roleName, roleType, vmImage, mediaLocation, copyOf(configurationSets), copyOf(resourceExtensionReferences),
-              availabilitySetName, copyOf(dataVirtualHardDisks), osVirtualHardDisk, roleSize, provisionGuestAgent, defaultWinRmCertificateThumbprint);
+   public static Role create(final String roleName, final String roleType, final String vmImage,
+           final String mediaLocation, final List<ConfigurationSet> configurationSets,
+           final List<ResourceExtensionReference> resourceExtensionReferences,
+           final String availabilitySetName, final List<DataVirtualHardDisk> dataVirtualHardDisks,
+           final OSVirtualHardDisk osVirtualHardDisk, final RoleSize.Type roleSize, final Boolean provisionGuestAgent,
+           final String defaultWinRmCertificateThumbprint) {
+
+      return new AutoValue_Role(roleName, roleType, vmImage, mediaLocation, copyOf(configurationSets),
+              copyOf(resourceExtensionReferences), availabilitySetName, copyOf(dataVirtualHardDisks),
+              osVirtualHardDisk, roleSize, provisionGuestAgent, defaultWinRmCertificateThumbprint);
    }
 }

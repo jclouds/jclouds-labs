@@ -25,19 +25,24 @@ import org.jclouds.http.functions.ParseSax;
  * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
  */
 final class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Attachment> {
+
    private String hostedService;
+
    private String deployment;
+
    private String virtualMachine;
 
    private final StringBuilder currentText = new StringBuilder();
 
-   @Override public Attachment getResult() {
-      Attachment result = Attachment.create(hostedService, deployment, virtualMachine);
+   @Override
+   public Attachment getResult() {
+      final Attachment result = Attachment.create(hostedService, deployment, virtualMachine);
       hostedService = deployment = virtualMachine = null; // handler could be called in a loop.
       return result;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(final String ignoredUri, final String ignoredName, final String qName) {
       if (qName.equals("HostedServiceName")) {
          hostedService = currentOrNull(currentText);
       } else if (qName.equals("DeploymentName")) {
@@ -48,7 +53,8 @@ final class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithRes
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(final char ch[], final int start, final int length) {
       currentText.append(ch, start, length);
    }
 }

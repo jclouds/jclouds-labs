@@ -23,16 +23,21 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 public final class VirtualIPHandler extends ParseSax.HandlerForGeneratedRequestWithResult<VirtualIP> {
+
    private String address;
+
    private Boolean isDnsProgrammed;
+
    private String name;
 
    private StringBuilder currentText = new StringBuilder();
 
-   @Override public void startElement(String uri, String localName, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String uri, String localName, String qName, Attributes attributes) {
    }
 
-   @Override public VirtualIP getResult() {
+   @Override
+   public VirtualIP getResult() {
       VirtualIP result = VirtualIP.create(address, isDnsProgrammed, name);
       resetState(); // handler is called in a loop.
       return result;
@@ -43,7 +48,8 @@ public final class VirtualIPHandler extends ParseSax.HandlerForGeneratedRequestW
       isDnsProgrammed = null;
    }
 
-   @Override public void endElement(String ignoredUri, String ignoredName, String qName) {
+   @Override
+   public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Address")) {
          address = currentOrNull(currentText);
       } else if (qName.equals("IsDnsProgrammed")) {
@@ -52,12 +58,13 @@ public final class VirtualIPHandler extends ParseSax.HandlerForGeneratedRequestW
             isDnsProgrammed = Boolean.valueOf(dnsProgrammed);
          }
       } else if (qName.equals("Name")) {
-            name = currentOrNull(currentText);
+         name = currentOrNull(currentText);
       }
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override
+   public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
    }
 

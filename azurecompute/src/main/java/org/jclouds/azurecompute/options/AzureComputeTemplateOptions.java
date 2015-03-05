@@ -23,15 +23,13 @@ import org.jclouds.compute.options.TemplateOptions;
 import com.google.common.base.Optional;
 
 /**
- * Contains options supported by the
- * {@link org.jclouds.compute.ComputeService#createNodesInGroup(String, int, org.jclouds.compute.options.TemplateOptions)} and
- * {@link org.jclouds.compute.ComputeService#createNodesInGroup(String, int, org.jclouds.compute.options.TemplateOptions)}
- * operations on the <em>gogrid</em> provider.
+ * Contains options supported by the null {@link org.jclouds.compute.ComputeService#createNodesInGroup(
+ * String, int, org.jclouds.compute.options.TemplateOptions)} and null {@link org.jclouds.compute.ComputeService#createNodesInGroup(
+ * String, int, org.jclouds.compute.options.TemplateOptions)} operations on the <em>gogrid</em> provider.
  *
- * <h2>Usage</h2> The recommended way to instantiate a
- * {@link AzureComputeTemplateOptions} object is to statically import
- * {@code AzureComputeTemplateOptions.*} and invoke a static creation method
- * followed by an instance mutator (if needed):
+ * <h2>Usage</h2> The recommended way to instantiate a {@link AzureComputeTemplateOptions} object is to statically
+ * import {@code AzureComputeTemplateOptions.*} and invoke a static creation method followed by an instance mutator (if
+ * needed):
  * <p>
  *
  * <pre>
@@ -45,25 +43,31 @@ import com.google.common.base.Optional;
 public class AzureComputeTemplateOptions extends TemplateOptions implements Cloneable {
 
    private Optional<String> virtualNetworkName = Optional.absent();
+
    private Optional<String> addressSpaceAddressPrefix = Optional.absent();
+
    private Optional<String> subnetName = Optional.absent();
+
    private Optional<String> subnetAddressPrefix = Optional.absent();
+
    private Optional<String> storageAccountName = Optional.absent();
+
    private Optional<String> storageAccountType = Optional.absent();
+
    private Optional<String> networkSecurityGroupName = Optional.absent();
 
    @Override
    public AzureComputeTemplateOptions clone() {
-      AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
       copyTo(options);
       return options;
    }
 
    @Override
-   public void copyTo(TemplateOptions to) {
+   public void copyTo(final TemplateOptions to) {
       super.copyTo(to);
       if (to instanceof AzureComputeTemplateOptions) {
-         AzureComputeTemplateOptions eTo = AzureComputeTemplateOptions.class.cast(to);
+         final AzureComputeTemplateOptions eTo = AzureComputeTemplateOptions.class.cast(to);
          if (virtualNetworkName.isPresent()) {
             eTo.virtualNetworkName(virtualNetworkName.get());
          }
@@ -88,37 +92,37 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       }
    }
 
-   public TemplateOptions virtualNetworkName(String virtualNetworkName) {
+   public TemplateOptions virtualNetworkName(final String virtualNetworkName) {
       this.virtualNetworkName = Optional.of(virtualNetworkName);
       return this;
    }
 
-   public TemplateOptions addressSpaceAddressPrefix(String addressSpaceAddressPrefix) {
+   public TemplateOptions addressSpaceAddressPrefix(final String addressSpaceAddressPrefix) {
       this.addressSpaceAddressPrefix = Optional.of(addressSpaceAddressPrefix);
       return this;
    }
 
-   public TemplateOptions subnetName(String subnetName) {
+   public TemplateOptions subnetName(final String subnetName) {
       this.subnetName = Optional.of(subnetName);
       return this;
    }
 
-   public TemplateOptions networkSecurityGroupName(String networkSecurityGroupName) {
+   public TemplateOptions networkSecurityGroupName(final String networkSecurityGroupName) {
       this.networkSecurityGroupName = Optional.of(networkSecurityGroupName);
       return this;
    }
 
-   public TemplateOptions subnetAddressPrefix(String subnetAddressPrefix) {
+   public TemplateOptions subnetAddressPrefix(final String subnetAddressPrefix) {
       this.subnetAddressPrefix = Optional.of(subnetAddressPrefix);
       return this;
    }
 
-   public TemplateOptions storageAccountName(String storageAccountName) {
+   public TemplateOptions storageAccountName(final String storageAccountName) {
       this.storageAccountName = Optional.of(storageAccountName);
       return this;
    }
 
-   public TemplateOptions storageAccountType(String storageAccountType) {
+   public TemplateOptions storageAccountType(final String storageAccountType) {
       this.storageAccountType = Optional.of(storageAccountType);
       return this;
    }
@@ -131,9 +135,13 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       return addressSpaceAddressPrefix;
    }
 
-   public Optional<String> getSubnetName() { return subnetName; }
+   public Optional<String> getSubnetName() {
+      return subnetName;
+   }
 
-   public Optional<String> getSubnetAddressPrefix() { return subnetAddressPrefix; }
+   public Optional<String> getSubnetAddressPrefix() {
+      return subnetAddressPrefix;
+   }
 
    public Optional<String> getStorageAccountName() {
       return storageAccountName;
@@ -152,117 +160,115 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       /**
        * @see #virtualNetworkName
        */
-      public static AzureComputeTemplateOptions virtualNetworkName(String virtualNetworkName) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions virtualNetworkName(final String virtualNetworkName) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.virtualNetworkName(virtualNetworkName));
       }
 
       /**
        * @see #addressSpaceAddressPrefix
        */
-      public static AzureComputeTemplateOptions addressSpaceAddressPrefix(String addressSpaceAddressPrefix) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions addressSpaceAddressPrefix(final String addressSpaceAddressPrefix) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.addressSpaceAddressPrefix(addressSpaceAddressPrefix));
       }
 
       /**
        * @see #subnetName
        */
-      public static AzureComputeTemplateOptions subnetName(String subnetName) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions subnetName(final String subnetName) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.subnetName(subnetName));
       }
 
       /**
        * @see #networkSecurityGroupName
        */
-      public static AzureComputeTemplateOptions networkSecurityGroupName(String networkSecurityGroupName) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions networkSecurityGroupName(final String networkSecurityGroupName) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.subnetName(networkSecurityGroupName));
       }
 
       /**
        * @see #subnetAddressPrefix
        */
-      public static AzureComputeTemplateOptions subnetAddressPrefix(String subnetAddressPrefix) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions subnetAddressPrefix(final String subnetAddressPrefix) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.subnetAddressPrefix(subnetAddressPrefix));
       }
 
       /**
        * @see #storageAccountName
        */
-      public static AzureComputeTemplateOptions storageAccountName(String storageAccountName) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions storageAccountName(final String storageAccountName) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.storageAccountName(storageAccountName));
       }
 
       /**
        * @see #storageAccountType
        */
-      public static AzureComputeTemplateOptions storageAccountType(String storageAccountType) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions storageAccountType(final String storageAccountType) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.storageAccountType(storageAccountType));
       }
 
       // methods that only facilitate returning the correct object type
-
       /**
        * @see org.jclouds.compute.options.TemplateOptions#inboundPorts(int...)
        */
-      public static AzureComputeTemplateOptions inboundPorts(int... ports) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions inboundPorts(final int... ports) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.inboundPorts(ports));
       }
 
       /**
        * @see org.jclouds.compute.options.TemplateOptions#blockOnPort(int, int)
        */
-      public static AzureComputeTemplateOptions blockOnPort(int port, int seconds) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions blockOnPort(final int port, final int seconds) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.blockOnPort(port, seconds));
       }
 
       /**
        * @see org.jclouds.compute.options.TemplateOptions#userMetadata(java.util.Map)
        */
-      public static AzureComputeTemplateOptions userMetadata(Map<String, String> userMetadata) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions userMetadata(final Map<String, String> userMetadata) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.userMetadata(userMetadata));
       }
 
       /**
        * @see org.jclouds.compute.options.TemplateOptions#userMetadata(String, String)
        */
-      public static AzureComputeTemplateOptions userMetadata(String key, String value) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions userMetadata(final String key, final String value) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.userMetadata(key, value));
       }
 
       /**
        * @see org.jclouds.compute.options.TemplateOptions#nodeNames(Iterable)
        */
-      public static AzureComputeTemplateOptions nodeNames(Iterable<String> nodeNames) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions nodeNames(final Iterable<String> nodeNames) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.nodeNames(nodeNames));
       }
 
       /**
        * @see org.jclouds.compute.options.TemplateOptions#networks(Iterable)
        */
-      public static AzureComputeTemplateOptions networks(Iterable<String> networks) {
-         AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
+      public static AzureComputeTemplateOptions networks(final Iterable<String> networks) {
+         final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
          return AzureComputeTemplateOptions.class.cast(options.networks(networks));
       }
    }
 
    // methods that only facilitate returning the correct object type
-
    /**
     * @see org.jclouds.compute.options.TemplateOptions#blockOnPort(int, int)
     */
    @Override
-   public AzureComputeTemplateOptions blockOnPort(int port, int seconds) {
+   public AzureComputeTemplateOptions blockOnPort(final int port, final int seconds) {
       return AzureComputeTemplateOptions.class.cast(super.blockOnPort(port, seconds));
    }
 
@@ -270,7 +276,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * @see org.jclouds.compute.options.TemplateOptions#inboundPorts(int...)
     */
    @Override
-   public AzureComputeTemplateOptions inboundPorts(int... ports) {
+   public AzureComputeTemplateOptions inboundPorts(final int... ports) {
       return AzureComputeTemplateOptions.class.cast(super.inboundPorts(ports));
    }
 
@@ -278,7 +284,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * @see org.jclouds.compute.options.TemplateOptions#authorizePublicKey(String)
     */
    @Override
-   public AzureComputeTemplateOptions authorizePublicKey(String publicKey) {
+   public AzureComputeTemplateOptions authorizePublicKey(final String publicKey) {
       return AzureComputeTemplateOptions.class.cast(super.authorizePublicKey(publicKey));
    }
 
@@ -286,7 +292,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * @see org.jclouds.compute.options.TemplateOptions#installPrivateKey(String)
     */
    @Override
-   public AzureComputeTemplateOptions installPrivateKey(String privateKey) {
+   public AzureComputeTemplateOptions installPrivateKey(final String privateKey) {
       return AzureComputeTemplateOptions.class.cast(super.installPrivateKey(privateKey));
    }
 
@@ -294,7 +300,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * {@inheritDoc}
     */
    @Override
-   public AzureComputeTemplateOptions userMetadata(Map<String, String> userMetadata) {
+   public AzureComputeTemplateOptions userMetadata(final Map<String, String> userMetadata) {
       return AzureComputeTemplateOptions.class.cast(super.userMetadata(userMetadata));
    }
 
@@ -302,7 +308,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * {@inheritDoc}
     */
    @Override
-   public AzureComputeTemplateOptions userMetadata(String key, String value) {
+   public AzureComputeTemplateOptions userMetadata(final String key, final String value) {
       return AzureComputeTemplateOptions.class.cast(super.userMetadata(key, value));
    }
 
@@ -310,7 +316,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * {@inheritDoc}
     */
    @Override
-   public AzureComputeTemplateOptions nodeNames(Iterable<String> nodeNames) {
+   public AzureComputeTemplateOptions nodeNames(final Iterable<String> nodeNames) {
       return AzureComputeTemplateOptions.class.cast(super.nodeNames(nodeNames));
    }
 
@@ -318,7 +324,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
     * {@inheritDoc}
     */
    @Override
-   public AzureComputeTemplateOptions networks(Iterable<String> networks) {
+   public AzureComputeTemplateOptions networks(final Iterable<String> networks) {
       return AzureComputeTemplateOptions.class.cast(super.networks(networks));
    }
 }

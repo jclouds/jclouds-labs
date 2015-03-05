@@ -27,25 +27,32 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.inject.Inject;
 
 public final class ListLocationsHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<Location>> {
+
    private boolean inLocation;
+
    private final LocationHandler locationHandler;
+
    private final Builder<Location> locations = ImmutableList.builder();
 
-   @Inject ListLocationsHandler(LocationHandler locationHandler) {
+   @Inject
+   ListLocationsHandler(LocationHandler locationHandler) {
       this.locationHandler = locationHandler;
    }
 
-   @Override public List<Location> getResult() {
+   @Override
+   public List<Location> getResult() {
       return locations.build();
    }
 
-   @Override public void startElement(String url, String name, String qName, Attributes attributes) {
+   @Override
+   public void startElement(String url, String name, String qName, Attributes attributes) {
       if (qName.equals("Location")) {
          inLocation = true;
       }
    }
 
-   @Override public void endElement(String uri, String name, String qName) {
+   @Override
+   public void endElement(String uri, String name, String qName) {
       if (qName.equals("Location")) {
          inLocation = false;
          locations.add(locationHandler.getResult());
