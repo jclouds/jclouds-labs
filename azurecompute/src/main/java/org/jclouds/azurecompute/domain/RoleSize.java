@@ -23,7 +23,7 @@ import com.google.auto.value.AutoValue;
 /**
  * A Role Size that is available in a given subscription.
  *
- * @see <a href="http://msdn.microsoft.com/en-us/library/jj157176" >api</a>
+ * @see <a href="https://msdn.microsoft.com/en-us/library/azure/dn469422.aspx" >api</a>
  */
 @AutoValue
 public abstract class RoleSize {
@@ -45,6 +45,8 @@ public abstract class RoleSize {
       A7("A7"),
       A8("A8"),
       A9("A9"),
+      A10("A10"),
+      A11("A11"),
       STANDARD_A0("Standard_A0"),
       STANDARD_A1("Standard_A1"),
       STANDARD_A2("Standard_A2"),
@@ -75,7 +77,7 @@ public abstract class RoleSize {
       EXTRALARGE("ExtraLarge"),
       UNRECOGNIZED("UNRECOGNIZED");
 
-      private String text;
+      private final String text;
 
       Type(final String text) {
          this.text = text;
@@ -87,13 +89,13 @@ public abstract class RoleSize {
 
       public static Type fromString(final String text) {
          if (text != null) {
-            for (Type b : Type.values()) {
-               if (text.equalsIgnoreCase(b.text)) {
-                  return b;
+            for (Type type : Type.values()) {
+               if (text.equalsIgnoreCase(type.text)) {
+                  return type;
                }
             }
          }
-         throw new IllegalArgumentException("No constant with text " + text + " found");
+         return UNRECOGNIZED;
       }
    }
 

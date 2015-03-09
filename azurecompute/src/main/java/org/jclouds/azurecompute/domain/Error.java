@@ -40,6 +40,16 @@ public abstract class Error {
       CONFLICT_ERROR,
       UNRECOGNIZED;
 
+      public static Code fromString(final String text) {
+         if (text != null) {
+            for (Code code : Code.values()) {
+               if (text.equalsIgnoreCase(code.name())) {
+                  return code;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
    }
 
    Error() {

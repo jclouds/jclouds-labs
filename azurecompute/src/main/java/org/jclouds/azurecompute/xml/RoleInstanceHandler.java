@@ -19,6 +19,7 @@ package org.jclouds.azurecompute.xml;
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static org.jclouds.util.SaxUtils.currentOrNull;
+
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.Deployment.InstanceEndpoint;
@@ -96,9 +97,7 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
          instanceName = currentOrNull(currentText);
       } else if (qName.equals("InstanceStatus")) {
          String instanceStatusText = currentOrNull(currentText);
-         if (instanceStatusText != null) {
-            instanceStatus = parseInstanceStatus(instanceStatusText);
-         }
+         instanceStatus = InstanceStatus.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatusText));
       } else if (qName.equals("InstanceUpgradeDomain")) {
          String upgradeDomain = currentOrNull(currentText);
          if (upgradeDomain != null) {
@@ -128,15 +127,6 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
          instanceEndpointHandler.characters(ch, start, length);
       } else {
          currentText.append(ch, start, length);
-      }
-   }
-
-   static InstanceStatus parseInstanceStatus(String instanceStatus) {
-      try {
-         // Azure isn't exactly upper-camel, as some states end in VM, not Vm.
-         return InstanceStatus.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatus).replace("V_M", "VM"));
-      } catch (IllegalArgumentException e) {
-         return InstanceStatus.UNRECOGNIZED;
       }
    }
 

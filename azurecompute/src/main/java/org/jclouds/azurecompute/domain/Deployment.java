@@ -33,6 +33,16 @@ public abstract class Deployment {
       STAGING,
       UNRECOGNIZED;
 
+      public static Slot fromString(final String text) {
+         if (text != null) {
+            for (Slot slot : Slot.values()) {
+               if (text.equalsIgnoreCase(slot.name())) {
+                  return slot;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
    }
 
    public enum Status {
@@ -47,6 +57,16 @@ public abstract class Deployment {
       DELETING,
       UNRECOGNIZED;
 
+      public static Status fromString(final String text) {
+         if (text != null) {
+            for (Status status : Status.values()) {
+               if (text.equalsIgnoreCase(status.name())) {
+                  return status;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
    }
 
    public enum InstanceStatus {
@@ -75,7 +95,19 @@ public abstract class Deployment {
       /**
        * Not parsable into one of the above.
        */
-      UNRECOGNIZED,
+      UNRECOGNIZED;
+
+      public static InstanceStatus fromString(final String text) {
+         if (text != null) {
+            for (InstanceStatus status : InstanceStatus.values()) {
+               // Azure isn't exactly upper-camel, as some states end in VM, not Vm.
+               if (text.replace("V_M", "VM").equalsIgnoreCase(status.name())) {
+                  return status;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
    }
 
    @AutoValue

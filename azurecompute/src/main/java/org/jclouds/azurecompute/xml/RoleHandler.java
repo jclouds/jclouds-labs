@@ -161,7 +161,7 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
       } else if (inOSVirtualHardDisk) {
          osVirtualDiskHandler.endElement(ignoredUri, ignoredName, qName);
       } else if (qName.equals("RoleSize")) {
-         roleSize = RoleSize.Type.valueOf(currentOrNull(currentText).toUpperCase());
+         roleSize = RoleSize.Type.fromString(currentOrNull(currentText).toUpperCase());
       } else if (qName.equals("ProvisionGuestAgent")) {
          String provisionGuestAgentString = currentOrNull(currentText);
          if (provisionGuestAgentString != null) {

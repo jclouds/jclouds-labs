@@ -16,8 +16,10 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import static org.jclouds.azurecompute.xml.DeploymentHandler.parseInstanceStatus;
+import static com.google.common.base.CaseFormat.UPPER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static org.testng.Assert.assertEquals;
+
 import java.io.InputStream;
 import java.net.URI;
 
@@ -39,6 +41,10 @@ import com.google.common.collect.ImmutableList;
 
 @Test(groups = "unit", testName = "DeploymentHandlerTest")
 public class DeploymentHandlerTest extends BaseHandlerTest {
+
+   private InstanceStatus parseInstanceStatus(final String instanceStatus) {
+      return InstanceStatus.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatus));
+   }
 
    /**
     * Covers values listed

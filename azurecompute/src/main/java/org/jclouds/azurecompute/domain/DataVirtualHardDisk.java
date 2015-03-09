@@ -31,7 +31,18 @@ public abstract class DataVirtualHardDisk {
 
       READ_ONLY,
       READ_WRITE,
-      NONE
+      NONE;
+
+      public static Caching fromString(final String text) {
+         if (text != null) {
+            for (Caching caching : Caching.values()) {
+               if (text.equalsIgnoreCase(caching.name())) {
+                  return caching;
+               }
+            }
+         }
+         return NONE;
+      }
 
    }
 

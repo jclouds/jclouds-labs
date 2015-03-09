@@ -43,6 +43,16 @@ public abstract class CloudService {
       RESOLVING_DNS,
       UNRECOGNIZED;
 
+      public static Status fromString(final String text) {
+         if (text != null) {
+            for (Status status : Status.values()) {
+               if (text.equalsIgnoreCase(status.name())) {
+                  return status;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
    }
 
    CloudService() {

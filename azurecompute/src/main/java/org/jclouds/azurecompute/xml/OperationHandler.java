@@ -68,7 +68,7 @@ public final class OperationHandler extends ParseSax.HandlerForGeneratedRequestW
          id = currentOrNull(currentText);
       } else if (qName.equals("Status")) {
          String statusText = currentOrNull(currentText);
-         status = parseStatus(statusText);
+         status = Status.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, statusText));
       } else if (qName.equals("HttpStatusCode")) {
          httpStatusCode = Integer.parseInt(currentOrNull(currentText));
       }
@@ -81,14 +81,6 @@ public final class OperationHandler extends ParseSax.HandlerForGeneratedRequestW
          errorHandler.characters(ch, start, length);
       } else {
          currentText.append(ch, start, length);
-      }
-   }
-
-   private static Status parseStatus(String status) {
-      try {
-         return Status.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, status));
-      } catch (IllegalArgumentException e) {
-         return Status.UNRECOGNIZED;
       }
    }
 }

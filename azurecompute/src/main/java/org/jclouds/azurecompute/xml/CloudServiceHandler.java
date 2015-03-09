@@ -106,9 +106,7 @@ public final class CloudServiceHandler extends ParseSax.HandlerForGeneratedReque
             lastModified = dateService.iso8601SecondsDateParse(currentOrNull(currentText));
          } else if (qName.equals("Status")) {
             String statusText = currentOrNull(currentText);
-            if (statusText != null) {
-               status = status(statusText);
-            }
+            status = CloudService.Status.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, statusText));
          } else if (qName.equals("Name")) {
             propertyName = currentOrNull(currentText);
          } else if (qName.equals("Value")) {
@@ -132,13 +130,5 @@ public final class CloudServiceHandler extends ParseSax.HandlerForGeneratedReque
    @Override
    public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
-   }
-
-   private static CloudService.Status status(String status) {
-      try {
-         return CloudService.Status.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, status));
-      } catch (IllegalArgumentException e) {
-         return CloudService.Status.UNRECOGNIZED;
-      }
    }
 }

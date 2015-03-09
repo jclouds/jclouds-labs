@@ -60,9 +60,7 @@ final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReque
 
       if (qName.equals("HostCaching")) {
          String hostCachingText = currentOrNull(currentText);
-         if (hostCachingText != null) {
-            hostCaching = parseHostCache(hostCachingText);
-         }
+         hostCaching = DataVirtualHardDisk.Caching.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, hostCachingText));
       } else if (qName.equals("DiskName")) {
          diskName = currentOrNull(currentText);
       } else if (qName.equals("Lun")) {
@@ -84,14 +82,6 @@ final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReque
          ioType = currentOrNull(currentText);
       }
       currentText.setLength(0);
-   }
-
-   private static DataVirtualHardDisk.Caching parseHostCache(String hostCaching) {
-      try {
-         return DataVirtualHardDisk.Caching.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, hostCaching));
-      } catch (IllegalArgumentException e) {
-         return DataVirtualHardDisk.Caching.NONE;
-      }
    }
 
    @Override

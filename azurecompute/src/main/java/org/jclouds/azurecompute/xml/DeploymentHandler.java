@@ -25,15 +25,12 @@ import static org.jclouds.util.SaxUtils.currentOrNull;
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.Deployment;
-import org.jclouds.azurecompute.domain.Deployment.InstanceStatus;
 import org.jclouds.azurecompute.domain.Deployment.Slot;
 import org.jclouds.azurecompute.domain.Deployment.Status;
 import org.jclouds.azurecompute.domain.Role;
-import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
@@ -130,13 +127,11 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
          name = currentOrNull(currentText);
       } else if (qName.equals("DeploymentSlot")) {
          String slotText = currentOrNull(currentText);
-         if (slotText != null) {
-            slot = parseSlot(slotText);
-         }
+         slot = Slot.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, slotText));
       } else if (qName.equals("Status")) {
          String statusText = currentOrNull(currentText);
          if (status == null && statusText != null) {
-            status = parseStatus(statusText);
+            status = Status.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, statusText));
          }
       } else if (qName.equals("Label")) {
          String labelText = currentOrNull(currentText);
@@ -163,40 +158,6 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
          roleHandler.characters(ch, start, length);
       } else if (!inListVirtualIPs && !inRoleInstanceList && !inRoleList) {
          currentText.append(ch, start, length);
-      }
-   }
-
-   private static Status parseStatus(String status) {
-      try {
-         return Status.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, status));
-      } catch (IllegalArgumentException e) {
-         return Status.UNRECOGNIZED;
-      }
-   }
-
-   private static Slot parseSlot(String slot) {
-      try {
-         return Slot.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, slot));
-      } catch (IllegalArgumentException e) {
-         return Slot.UNRECOGNIZED;
-      }
-   }
-
-   @VisibleForTesting
-   static InstanceStatus parseInstanceStatus(String instanceStatus) {
-      try {
-         // Azure isn't exactly upper-camel, as some states end in VM, not Vm.
-         return InstanceStatus.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatus).replace("V_M", "VM"));
-      } catch (IllegalArgumentException e) {
-         return InstanceStatus.UNRECOGNIZED;
-      }
-   }
-
-   private static RoleSize.Type parseRoleSize(String roleSize) {
-      try {
-         return RoleSize.Type.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, roleSize));
-      } catch (IllegalArgumentException e) {
-         return RoleSize.Type.UNRECOGNIZED;
       }
    }
 }

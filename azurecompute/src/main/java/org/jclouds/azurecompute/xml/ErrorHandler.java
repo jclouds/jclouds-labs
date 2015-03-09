@@ -44,7 +44,7 @@ public final class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithR
    public void endElement(String ignoredUri, String ignoredName, String qName) {
       if (qName.equals("Code")) {
          String codeText = currentOrNull(currentText);
-         code = parseCode(codeText);
+         code = Code.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, codeText));
       } else if (qName.equals("Message")) {
          message = currentOrNull(currentText);
       }
@@ -54,13 +54,5 @@ public final class ErrorHandler extends ParseSax.HandlerForGeneratedRequestWithR
    @Override
    public void characters(char ch[], int start, int length) {
       currentText.append(ch, start, length);
-   }
-
-   private static Code parseCode(String code) {
-      try {
-         return Code.valueOf(UPPER_CAMEL.to(UPPER_UNDERSCORE, code));
-      } catch (IllegalArgumentException e) {
-         return Code.UNRECOGNIZED;
-      }
    }
 }
