@@ -36,6 +36,7 @@
     <test.shipyard.endpoint>http://localhost:8080</test.shipyard.endpoint>
     <test.shipyard.docker.endpoint>http://localhost:2375</test.shipyard.docker.endpoint>
     <test.shipyard.identity>FIXME</test.shipyard.identity>
+    <test.shipyard.credential>NA</test.shipyard.credential>
     <test.shipyard.api-version>2.0.8</test.shipyard.api-version>
     <jclouds.osgi.export>org.jclouds.shipyard*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>
@@ -132,6 +133,7 @@
                     <test.shipyard.endpoint>${test.shipyard.endpoint}</test.shipyard.endpoint>
                     <test.shipyard.docker.endpoint>${test.shipyard.docker.endpoint}</test.shipyard.docker.endpoint>
                     <test.shipyard.identity>${test.shipyard.identity}</test.shipyard.identity>
+                    <test.shipyard.credential>${test.shipyard.credential}</test.shipyard.credential>
                     <test.shipyard.api-version>${test.shipyard.api-version}</test.shipyard.api-version>
                   </systemPropertyVariables>
                 </configuration>

@@ -76,7 +76,7 @@ public class ContainersApiLiveTest extends EnginesApiLiveTest {
       containerID = container.get(0).id();
    }
    
-   @Test (dependsOnMethods = "testDeployContainer")
+   @Test (dependsOnMethods = "testDeployContainer", expectedExceptions = HttpResponseException.class)
    public void testDeployAlreadyExistentContainer() throws Exception {
 
       DeployContainer deployContainer = DeployContainer.create("ubuntu:14.04.1", 
@@ -97,6 +97,7 @@ public class ContainersApiLiveTest extends EnginesApiLiveTest {
       assertNull(container);
    }
    
+   @Test (expectedExceptions = HttpResponseException.class)
    public void testDeployNonExistentContainer() throws Exception {
 
       DeployContainer deployContainer = DeployContainer.create("jclouds-shipyard-test:99.99.99", 
