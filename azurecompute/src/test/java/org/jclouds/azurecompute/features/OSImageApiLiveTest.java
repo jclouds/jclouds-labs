@@ -22,8 +22,6 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import java.util.List;
-
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
@@ -33,6 +31,7 @@ import org.testng.annotations.Test;
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 @Test(groups = "live", testName = "OSImageApiLiveTest")
 public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
@@ -74,8 +73,9 @@ public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
                  "MediaLink should be an http(s) url" + osImage);
       }
 
-      List<String> osImageLocations = Splitter.on(';').splitToList(osImage.location());
-      assertTrue(locations.containsAll(osImageLocations), "Locations not in " + locations + " :" + osImageLocations);
+      ImmutableSet<String> osImageLocations = ImmutableSet.copyOf(Splitter.on(';').splitToList(osImage.location()));
+      assertFalse(Sets.intersection(osImageLocations, locations).isEmpty(),
+              "No shared locations between " + locations + " and " + osImageLocations);
 
       // Ex. Dirty data in RightScale eula field comes out as an empty string.
       assertFalse(osImage.eula().contains(""));
