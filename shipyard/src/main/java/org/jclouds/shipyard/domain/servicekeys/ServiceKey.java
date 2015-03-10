@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.shipyard;
+package org.jclouds.shipyard.domain.servicekeys;
 
-import org.jclouds.rest.annotations.Delegate;
-import org.jclouds.shipyard.features.ContainersApi;
-import org.jclouds.shipyard.features.EnginesApi;
-import org.jclouds.shipyard.features.ImagesApi;
-import org.jclouds.shipyard.features.ServiceKeysApi;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-import java.io.Closeable;
+import com.google.auto.value.AutoValue;
 
-public interface ShipyardApi extends Closeable {
+@AutoValue
+public abstract class ServiceKey {
 
-   @Delegate
-   ContainersApi containersApi();
-
-   @Delegate
-   ImagesApi imagesApi();
+   public abstract String key();
    
-   @Delegate
-   EnginesApi enginesApi();
-   
-   @Delegate
-   ServiceKeysApi serviceKeysApi();
+   @Nullable public abstract String description();
+      
+   ServiceKey() {
+   }
+
+   @SerializedNames({ "key", "description" })
+   public static ServiceKey create(String key, String description) {
+      return new AutoValue_ServiceKey(key, description);
+   }
 }

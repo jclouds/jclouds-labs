@@ -28,6 +28,7 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.AuthorizationException;
+import org.jclouds.rest.ResourceNotFoundException;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
@@ -42,10 +43,10 @@ public class ShipyardErrorHandler implements HttpErrorHandler {
 
    public void handleError(HttpCommand command, HttpResponse response) {
 
+      String message = parseMessage(response);
       Exception exception = null;
       try {
-
-         String message = parseMessage(response);
+         
          message = message != null ? message : String.format("%s -> %s", command.getCurrentRequest().getRequestLine(), response.getStatusLine());
          switch (response.getStatusCode()) {
             case 401:
@@ -53,22 +54,24 @@ public class ShipyardErrorHandler implements HttpErrorHandler {
                break;
             case 404:
                if (command.getCurrentRequest().getMethod().equals("GET")) {
-                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/images/json")) {
+                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/images/json")) 
                      exception = new HttpResponseException("Unable to reach docker daemon", command, response);
-                  }
                }
                break;
             case 409:
                if (command.getCurrentRequest().getMethod().equals("POST")) {
-                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/containers")) {
+                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/containers"))
                      exception = new HttpResponseException("Container already exists", command, response);
-                  }
                }
                break;
             case 500:
                if (command.getCurrentRequest().getMethod().equals("POST")) {
-                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/engines")) {
+                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/engines")) 
                      exception = new HttpResponseException("Connection refused registering docker daemon", command, response);
+               } else if (command.getCurrentRequest().getMethod().equals("DELETE")) {
+                  if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/servicekeys") && 
+                        message.contains("service key does not exist")) {
+                     exception = new ResourceNotFoundException(message, new HttpResponseException(command, response, message));
                   }
                }
                break;
@@ -79,6 +82,10 @@ public class ShipyardErrorHandler implements HttpErrorHandler {
       } catch (Exception e) {
          exception = new HttpResponseException(command, response, e);
       } finally {
+         if (exception == null) {
+            exception = message != null ? new HttpResponseException(command, response, message)
+                        : new HttpResponseException(command, response);
+         }
          closeQuietly(response.getPayload());
          command.setException(exception);
       }
