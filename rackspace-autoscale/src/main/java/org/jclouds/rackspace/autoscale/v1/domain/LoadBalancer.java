@@ -26,7 +26,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Autoscale LoadBalancer. Part of the launch configuration.
- * 
+ *
  * @see LaunchConfiguration#getLoadBalancers()
  */
 public class LoadBalancer {
@@ -95,6 +95,11 @@ public class LoadBalancer {
       protected int id;
 
       /**
+       * Required.
+       * The port number of the service (on the new servers) to use for this particular load balancer. In most cases,
+       * this port number is 80. NOTE that when using RackConnectV3, instead of a cloud load balancer, leave this
+       * parameter empty.
+       *
        * @param port The port of this LoadBalancer.
        * @return The builder object.
        * @see LoadBalancer#getPort()
@@ -105,6 +110,12 @@ public class LoadBalancer {
       }
 
       /**
+       * Required.
+       * The ID of the cloud load balancer, or RackConnectV3 load balancer pool, to which new servers are added. For
+       * cloud load balancers set the ID as an integer, for RackConnectV3 set the UUID as a string. NOTE that when
+       * using RackConnectV3, this value is supplied to you by Rackspace Support after they configure your load
+       * balancer pool.
+       *
        * @param id The id of this LoadBalancer.
        * @return The builder object.
        * @see LoadBalancer#getId()

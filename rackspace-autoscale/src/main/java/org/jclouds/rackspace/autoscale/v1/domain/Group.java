@@ -42,7 +42,7 @@ public class Group {
       this.scalingPolicy = scalingPolicy;
       this.groupConfiguration = groupConfiguration;
       this.launchConfiguration = launchConfiguration;
-   }      
+   }
 
    /**
     * Unique group identifier, usually UUID
@@ -99,7 +99,7 @@ public class Group {
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
       Group that = Group.class.cast(obj);
-      return Objects.equal(this.id, that.id) && 
+      return Objects.equal(this.id, that.id) &&
             Objects.equal(this.links, that.links) &&
             Objects.equal(this.scalingPolicy, that.scalingPolicy) &&
             Objects.equal(this.groupConfiguration, that.groupConfiguration) &&
@@ -120,11 +120,11 @@ public class Group {
       return string().toString();
    }
 
-   public static Builder builder() { 
+   public static Builder builder() {
       return new Builder();
    }
 
-   public Builder toBuilder() { 
+   public Builder toBuilder() {
       return new Builder().fromGroup(this);
    }
 
@@ -135,7 +135,7 @@ public class Group {
       protected GroupConfiguration groupConfiguration;
       protected LaunchConfiguration launchConfiguration;
 
-      /** 
+      /**
        * @param id The id of this Group.
        * @return The builder object.
        * @see Group#getId()
@@ -145,7 +145,7 @@ public class Group {
          return this;
       }
 
-      /** 
+      /**
        * @param links The links of this Group.
        * @return The builder object.
        * @see Group#getLinks()
@@ -155,17 +155,17 @@ public class Group {
          return this;
       }
 
-      /** 
+      /**
        * @param scalingPolicy The scaling policies list of this Group.
        * @return The builder object.
-       * @see Group#getScalingPolicy()
+       * @see Group#getScalingPolicies()
        */
       public Builder scalingPolicy(List<ScalingPolicy> scalingPolicy) {
          this.scalingPolicy = ImmutableList.copyOf(scalingPolicy);
          return this;
       }
 
-      /** 
+      /**
        * @param groupConfiguration The groupConfiguration of this Group.
        * @return The builder object.
        * @see Group#getGroupConfiguration()
@@ -175,7 +175,7 @@ public class Group {
          return this;
       }
 
-      /** 
+      /**
        * @param launchConfiguration The launchConfiguration of this Group.
        * @return The builder object.
        * @see Group#getLaunchConfiguration()
@@ -199,6 +199,6 @@ public class Group {
                .scalingPolicy(in.getScalingPolicies())
                .groupConfiguration(in.getGroupConfiguration())
                .launchConfiguration(in.getLaunchConfiguration());
-      }        
+      }
    }
 }

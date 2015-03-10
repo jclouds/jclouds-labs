@@ -31,7 +31,10 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Autoscale LaunchConfiguration.
- * 
+ * What to do when a new server is created. Its configuration includes information about the server image,
+ * the flavor of the server image, and to which cloud load balancer or RackConnectV3 load balancer pool to connect.
+ * The type parameter for launchConfiguration must be set to LAUNCH_SERVER
+ *
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, List)
  */
 public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
@@ -130,7 +133,7 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
 
    /**
     * @return the server metadata for this LaunchConfiguration.
-    * @see LaunchConfiguration.Builder#serverMetadata(ImmutableMap)
+    * @see LaunchConfiguration.Builder#serverMetadata(Map)
     */
    public ImmutableMap<String, String> getServerMetadata() {
       return this.serverMetadata;
@@ -146,11 +149,11 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
       LaunchConfiguration that = LaunchConfiguration.class.cast(obj);
-      return Objects.equal(this.loadBalancers, that.loadBalancers) && 
+      return Objects.equal(this.loadBalancers, that.loadBalancers) &&
             Objects.equal(this.type, that.type) &&
             Objects.equal(this.networks, that.networks) &&
             Objects.equal(this.personalities, that.personalities) &&
-            Objects.equal(this.serverName, that.serverName) &&      
+            Objects.equal(this.serverName, that.serverName) &&
             Objects.equal(this.serverImageRef, that.serverImageRef) &&
             Objects.equal(this.serverFlavorRef, that.serverFlavorRef) &&
             Objects.equal(this.serverDiskConfig, that.serverDiskConfig) &&
@@ -175,11 +178,11 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
       return string().toString();
    }
 
-   public static Builder builder() { 
+   public static Builder builder() {
       return new Builder();
    }
 
-   public Builder toBuilder() { 
+   public Builder toBuilder() {
       return new Builder().fromLaunchConfiguration(this);
    }
 
@@ -195,7 +198,11 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
       protected String serverDiskConfig;
       protected ImmutableMap<String, String> serverMetadata;
 
-      /** 
+      /**
+       * Optional.
+       * Details about one or more load balancers to add new servers to. All servers are added to these load balancers
+       * with the IP addresses of their ServiceNet network. All servers are enabled and equally weighted.
+       * Any new servers that are not connected to the ServiceNet network are not added to any load balancers.
        * @param loadBalancers The load balancers of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getLoadBalancers()
@@ -205,7 +212,9 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Required.
+       * The type of the launch configuration. Currently, this parameter must be set to launch_server.
        * @param type The type for this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getType()
@@ -215,7 +224,22 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Optional.
+       * The networks to which you want to attach the server.
+       * This attribute enables you to attach to an isolated network for your tenant ID, the public Internet network,
+       * and the private ServiceNet network.
+       * If you do not specify any networks, your server is attached to the public Internet and private
+       * ServiceNet networks.
+       * If you specify one or more networks, your server is attached to only the networks that you specify.
+       * If you want to attach to the private ServiceNet or public Internet networks, you must specify them explicitly.
+       * The UUID for the private ServiceNet is 11111111-1111-1111-1111-111111111111.
+       * The UUID for the public Internet is 00000000-0000-0000-0000-000000000000.
+       *
+       * You cannot attach a private network to an OnMetal server. Future generations of OnMetal servers will have
+       * this capability. Until then, use ServiceNet for internal traffic, and remember to secure your OnMetal
+       * server because ServiceNet is open to other Rackspace customers.
+       *
        * @param networks The networks of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getNetworks()
@@ -225,18 +249,32 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Optional.
+       * The file path and/or the content that you want to inject into a server image.
+       * For more information, see the Server Personality documentation for Rackspace Cloud Servers.
+       *
        * @param personalities The personalities of this LaunchConfiguration.
        * @return The builder object.
        * @see Personality
        * @see LaunchConfiguration#getPersonalities()
+       * @see <a href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Server_Personality-d1e2543.html">
+       *    Server Personality
+       *    </a>
        */
       public Builder personalities(List<Personality> personalities) {
          this.personalities = personalities;
          return this;
       }
 
-      /** 
+      /**
+       * Required.
+       * The server name.
+       * The name that you specify in a create request becomes the initial host name of the server.
+       * After the server is built, if you change the server name in the API or change the host name directly,
+       * the names are not kept in sync.
+       * Also, server names are not guaranteed to be unique.
+       *
        * @param serverName The serverName of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getServerName()
@@ -246,7 +284,9 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Required.
+       * The ID of the cloud server image, after which new server images are created.
        * @param serverImageRef The serverImageRef of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getServerImageRef()
@@ -256,7 +296,9 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Required.
+       * The flavor ID for the server. A flavor is a resource configuration for a server.
        * @param serverFlavorRef The serverFlavorRef of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getServerFlavorRef()
@@ -266,7 +308,20 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Optional.
+       * The disk configuration value. A server inherits the OS-DCF:diskConfig value from the image used to create it.
+       * If an image has OS-DCF:diskConfig value of MANUAL, you cannot create a server from that image with a
+       * OS-DCF:diskConfig value of AUTO.
+       * Valid values are:
+       * AUTO: The server is built with a single partition the size of the target flavor disk.
+       * The file system is automatically adjusted to fit the entire partition. This keeps things simple and automated.
+       * AUTO is valid only for images and servers with a single partition that use the EXT3 file system.
+       * This is the default setting for applicable Rackspace base images.
+       * MANUAL: The server is built using whatever partition scheme and file system is in the source image.
+       * If the target flavor disk is larger, the remaining disk space is left unpartitioned. This enables images to
+       * have non-EXT3 file systems, multiple partitions, and so on, and enables you to manage the disk configuration.
+       *
        * @param serverDiskConfig The serverDiskConfig of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getServerDiskConfig()
@@ -276,7 +331,9 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
          return this;
       }
 
-      /** 
+      /**
+       * Optional.
+       * Metadata key and value pairs. The maximum size of the metadata key and value is 255 bytes each.
        * @param serverMetadata The serverMetadata of this LaunchConfiguration.
        * @return The builder object.
        * @see LaunchConfiguration#getServerMetadata()
@@ -304,7 +361,7 @@ public class LaunchConfiguration implements Comparable<LaunchConfiguration>{
                .serverFlavorRef(in.getServerFlavorRef())
                .serverDiskConfig(in.getServerDiskConfig())
                .serverMetadata(in.getServerMetadata());
-      }        
+      }
    }
 
    @Override

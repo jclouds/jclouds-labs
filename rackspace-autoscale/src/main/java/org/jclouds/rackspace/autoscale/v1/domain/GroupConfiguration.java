@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Autoscale GroupConfiguration.
- * 
+ *
  * @see GroupApi#create(GroupConfiguration, LaunchConfiguration, java.util.List)
  */
 public class GroupConfiguration implements Comparable<GroupConfiguration>{
@@ -65,7 +65,7 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
     */
    public String getName() {
       return this.name;
-   }   
+   }
 
    /**
     * @return the cooldown for this GroupConfiguration.
@@ -109,7 +109,7 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
       GroupConfiguration that = GroupConfiguration.class.cast(obj);
-      return Objects.equal(this.name, that.name) && 
+      return Objects.equal(this.name, that.name) &&
             Objects.equal(this.cooldown, that.cooldown) &&
             Objects.equal(this.minEntities, that.minEntities) &&
             Objects.equal(this.maxEntities, that.maxEntities) &&
@@ -130,11 +130,11 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
       return string().toString();
    }
 
-   public static Builder builder() { 
+   public static Builder builder() {
       return new Builder();
    }
 
-   public Builder toBuilder() { 
+   public Builder toBuilder() {
       return new Builder().fromGroupConfiguration(this);
    }
 
@@ -145,7 +145,10 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
       protected int maxEntities;
       protected Map<String, String> metadata;
 
-      /** 
+      /**
+       * Required.
+       * The name of the scaling group, does not need to be unique.
+       *
        * @param name The name of this GroupConfiguration.
        * @return The builder object.
        * @see GroupConfiguration#getName()
@@ -155,8 +158,12 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
          return this;
       }
 
-      /** 
-       * @param name The cooldown for this GroupConfiguration.
+      /**
+       * Required.
+       * The period of time, in seconds, that must pass before any scaling can occur after the previous scaling.
+       * Must be an integer between 0 and 86400 (24 hrs).
+       *
+       * @param cooldown The cooldown for this GroupConfiguration.
        * @return The builder object.
        * @see GroupConfiguration#getCooldown()
        */
@@ -165,8 +172,11 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
          return this;
       }
 
-      /** 
-       * @param name The cooldown for this GroupConfiguration.
+      /**
+       * Required.
+       * The minimum number of entities in the scaling group. This number must be an integer between 0 and 1000.
+       *
+       * @param minEntities The cooldown for this GroupConfiguration.
        * @return The builder object.
        * @see GroupConfiguration#getCooldown()
        */
@@ -175,8 +185,12 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
          return this;
       }
 
-      /** 
-       * @param name The maxEntities for this GroupConfiguration.
+      /**
+       * Optional.
+       * The maximum number of entities that are allowed in the scaling group. If unconfigured, defaults to 1000.
+       * If this parameter is provided it must be set to an integer between 0 and 1000.
+       *
+       * @param maxEntities The maxEntities for this GroupConfiguration.
        * @return The builder object.
        * @see GroupConfiguration#getCooldown()
        */
@@ -185,10 +199,15 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
          return this;
       }
 
-      /** 
-       * @param name The metadata for this GroupConfiguration.
+      /**
+       * Optional.
+       * This optional parameter specifies custom metadata for your group configuration. You can use the metadata
+       * parameter for customer automation, but it does not change any functionality in Auto Scale. There currently is
+       * no limitation on depth.
+       *
+       * @param metadata The metadata for this GroupConfiguration.
        * @return The builder object.
-       * @see GroupConfiguration#getDatabases()
+       * @see GroupConfiguration#getMetadata()
        */
       public Builder metadata(Map<String, String> metadata) {
          this.metadata = metadata;
@@ -196,7 +215,6 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
       }
 
       /**
-       * 
        * @return A new GroupConfiguration object.
        */
       public GroupConfiguration build() {
@@ -210,7 +228,7 @@ public class GroupConfiguration implements Comparable<GroupConfiguration>{
                .minEntities(in.getMinEntities())
                .maxEntities(in.getMaxEntities())
                .metadata(in.getMetadata());
-      }        
+      }
    }
 
    @Override

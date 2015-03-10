@@ -25,8 +25,16 @@ import com.google.common.base.Objects.ToStringHelper;
 
 /**
  * Autoscale Personality. Part of the launch configuration.
- * 
+ * You can inject data into the file system of the cloud server instance.
+ * For example, you might want to insert ssh keys, set configuration files,
+ * or store data that you want to retrieve from inside the instance.
+ * This feature provides a minimal amount of launch-time personalization.
+ * If you require significant customization, create a custom image.
+ *
  * @see LaunchConfiguration#getPersonalities()
+ * @see <a href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Server_Personality-d1e2543.html">
+ *    Server Personality
+ *    </a>
  */
 public class Personality {
    private final String path;

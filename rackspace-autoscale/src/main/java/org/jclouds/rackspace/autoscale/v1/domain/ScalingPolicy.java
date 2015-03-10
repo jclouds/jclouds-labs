@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Autoscale ScalingPolicyResponse. Extends ScalingPolicy with id and links.
- * 
+ *
  * @see Group#getScalingPolicies()
  */
 public class ScalingPolicy extends CreateScalingPolicy{
@@ -48,15 +48,13 @@ public class ScalingPolicy extends CreateScalingPolicy{
 
    /**
     * @return the unique id of this ScalingPolicy.
-    * @see ScalingPolicyResponse.Builder#id(String)
     */
    public String getId() {
       return this.id;
-   }   
+   }
 
    /**
     * @return the links to this ScalingPolicy.
-    * @see ScalingPolicyResponse.Builder#links(String)
     */
    public ImmutableList<Link> getLinks() {
       return this.links;
@@ -72,7 +70,7 @@ public class ScalingPolicy extends CreateScalingPolicy{
       if (this == obj) return true;
       if (obj == null || getClass() != obj.getClass()) return false;
       ScalingPolicy that = ScalingPolicy.class.cast(obj);
-      return Objects.equal(this.id, that.id) && 
+      return Objects.equal(this.id, that.id) &&
             Objects.equal(this.links, that.links) &&
             super.equals(obj);
    }
@@ -86,5 +84,5 @@ public class ScalingPolicy extends CreateScalingPolicy{
    @Override
    public String toString() {
       return string().toString();
-   }   
+   }
 }
