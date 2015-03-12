@@ -30,6 +30,7 @@ import org.jclouds.azurecompute.features.OSImageApi;
 import org.jclouds.azurecompute.features.OperationApi;
 import org.jclouds.azurecompute.features.StorageAccountApi;
 import org.jclouds.azurecompute.features.SubscriptionApi;
+import org.jclouds.azurecompute.features.TrafficManagerApi;
 import org.jclouds.azurecompute.features.VirtualMachineApi;
 import org.jclouds.azurecompute.features.VirtualNetworkApi;
 import org.jclouds.rest.annotations.Delegate;
@@ -139,4 +140,13 @@ public interface AzureComputeApi extends Closeable {
     */
    @Delegate
    NetworkSecurityGroupApi getNetworkSecurityGroupApi();
+
+   /**
+    * The Service Management API includes operations for creating, updating, listing, and deleting Azure Traffic Manager
+    * profiles and definitions.
+    *
+    * @see <a href="https://msdn.microsoft.com/en-us/library/azure/hh758255.aspx">docs</a>
+    */
+   @Delegate
+   TrafficManagerApi getTrafficManaerApi();
 }

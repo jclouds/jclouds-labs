@@ -1,0 +1,35 @@
+<Definition xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <DnsOptions>
+    <TimeToLiveInSeconds>300</TimeToLiveInSeconds>
+  </DnsOptions>
+  <Monitors>
+    <Monitor>
+      <IntervalInSeconds>30</IntervalInSeconds>
+      <TimeoutInSeconds>10</TimeoutInSeconds>
+      <ToleratedNumberOfFailures>3</ToleratedNumberOfFailures>
+      <Protocol>HTTP</Protocol>
+      <Port>80</Port>
+      <HttpOptions>
+	<Verb>GET</Verb>
+	<RelativePath>/</RelativePath>
+	<ExpectedStatusCode>200</ExpectedStatusCode>
+      </HttpOptions>
+    </Monitor>
+  </Monitors>
+  
+  <Policy>
+    <LoadBalancingMethod>RoundRobin</LoadBalancingMethod>
+    
+    <Endpoints>
+      <Endpoint>
+        <DomainName>jcloudsprova.cloudapp.net</DomainName>
+        <Status>Enabled</Status>
+        <Type>TrafficManager</Type>
+        <Location>West Europe</Location>
+        <MinChildEndpoints>1</MinChildEndpoints>
+        <Weight>1</Weight>
+      </Endpoint>
+    </Endpoints>
+    
+  </Policy>
+</Definition>
