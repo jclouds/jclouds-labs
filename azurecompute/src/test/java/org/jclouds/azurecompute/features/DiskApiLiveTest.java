@@ -20,10 +20,12 @@ import static com.google.common.collect.Iterables.transform;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import org.jclouds.azurecompute.domain.AffinityGroup;
 import org.jclouds.azurecompute.domain.Disk;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.internal.AbstractAzureComputeApiLiveTest;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -31,11 +33,13 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 
 @Test(groups = "live", testName = "DiskApiLiveTest")
-public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
+public class DiskApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
    private ImmutableSet<String> locations;
 
    private ImmutableSet<String> images;
+
+   private ImmutableSet<String> groups;
 
    @BeforeClass(groups = {"integration", "live"})
    @Override
@@ -46,15 +50,22 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
               new Function<Location, String>() {
 
                  @Override
-                 public String apply(Location in) {
-                    return in.name();
+                 public String apply(final Location location) {
+                    return location.name();
                  }
               }));
       images = ImmutableSet.copyOf(transform(api.getOSImageApi().list(), new Function<OSImage, String>() {
 
          @Override
-         public String apply(OSImage in) {
-            return in.name();
+         public String apply(final OSImage image) {
+            return image.name();
+         }
+      }));
+      groups = ImmutableSet.copyOf(transform(api.getAffinityGroupApi().list(), new Function<AffinityGroup, String>() {
+
+         @Override
+         public String apply(final AffinityGroup group) {
+            return group.name();
          }
       }));
    }
@@ -91,7 +102,7 @@ public class DiskApiLiveTest extends BaseAzureComputeApiLiveTest {
       }
 
       if (disk.affinityGroup() != null) {
-         // TODO: list affinityGroups and check if there
+         assertTrue(groups.contains(disk.affinityGroup()), "AffinityGroup not in " + groups + " :" + disk);
       }
    }
 

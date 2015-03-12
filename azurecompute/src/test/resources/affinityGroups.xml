@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<AffinityGroups xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <AffinityGroup>
+    <Name>Test1</Name>
+    <Label>VGVzdDE=</Label>
+    <Description>Test 1 description</Description>
+    <Location>West Europe</Location>
+    <Capabilities>
+      <Capability>PersistentVMRole</Capability>
+      <Capability>HighMemory</Capability>
+    </Capabilities>
+    <CreatedTime>2015-03-09T15:15:29Z</CreatedTime>
+    <ComputeCapabilities>
+      <WebWorkerRoleSizes>
+        <RoleSize>A10</RoleSize>
+        <RoleSize>A11</RoleSize>
+      </WebWorkerRoleSizes>
+      <VirtualMachinesRoleSizes>
+        <RoleSize>A10</RoleSize>
+        <RoleSize>A11</RoleSize>
+      </VirtualMachinesRoleSizes>
+    </ComputeCapabilities>
+  </AffinityGroup>
+  <AffinityGroup>
+    <Name>Test2</Name>
+    <Label>VGVzdDI=</Label>
+    <Description/>
+    <Location>Southeast Asia</Location>
+    <Capabilities>
+      <Capability>PersistentVMRole</Capability>
+      <Capability>HighMemory</Capability>
+    </Capabilities>
+    <CreatedTime>2015-03-09T15:16:10Z</CreatedTime>
+    <ComputeCapabilities>
+      <WebWorkerRoleSizes>
+        <RoleSize>ExtraLarge</RoleSize>
+        <RoleSize>ExtraSmall</RoleSize>
+      </WebWorkerRoleSizes>
+      <VirtualMachinesRoleSizes>
+        <RoleSize>ExtraLarge</RoleSize>
+        <RoleSize>ExtraSmall</RoleSize>
+      </VirtualMachinesRoleSizes>
+    </ComputeCapabilities>
+  </AffinityGroup>
+</AffinityGroups>

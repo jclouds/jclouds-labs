@@ -24,11 +24,13 @@ import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertTrue;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.UUID;
+import java.util.logging.Level;
 
-import org.jclouds.apis.BaseApiLiveTest;
-import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.domain.CloudService;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.DeploymentParams;
@@ -36,25 +38,16 @@ import org.jclouds.azurecompute.domain.NetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
 import org.jclouds.azurecompute.domain.StorageService;
 import org.jclouds.azurecompute.domain.StorageServiceParams;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-
-import java.util.Random;
-import java.util.UUID;
-import java.util.logging.Level;
 import org.jclouds.azurecompute.AzureTestUtils;
 import org.jclouds.azurecompute.AzureTestUtils.SameVirtualNetworkSiteNamePredicate;
-import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.AddressSpace;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.Subnet;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
-public class BaseAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi> {
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
-   protected static final int RAND = new Random().nextInt(999);
+public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
    public static final String DEFAULT_ADDRESS_SPACE = "10.0.0.0/20";
 
@@ -71,15 +64,9 @@ public class BaseAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi
 
    protected StorageService storageService;
 
-   protected Predicate<String> operationSucceeded;
-
    protected VirtualNetworkSite virtualNetworkSite;
 
    private String storageServiceName = null;
-
-   public BaseAzureComputeApiLiveTest() {
-      provider = "azurecompute";
-   }
 
    protected String getStorageServiceName() {
       if (storageServiceName == null) {
@@ -93,9 +80,6 @@ public class BaseAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi
    @Override
    public void setup() {
       super.setup();
-
-      operationSucceeded = retry(
-              new AzureComputeServiceContextModule.OperationSucceededPredicate(api), 600, 5, 5, SECONDS);
 
       virtualNetworkSite = getOrCreateVirtualNetworkSite(VIRTUAL_NETWORK_NAME, LOCATION);
 
@@ -111,6 +95,8 @@ public class BaseAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi
    @AfterClass(alwaysRun = true)
    @Override
    protected void tearDown() {
+      super.tearDown();
+      
       retry(new ConflictManagementPredicate(operationSucceeded) {
 
          @Override

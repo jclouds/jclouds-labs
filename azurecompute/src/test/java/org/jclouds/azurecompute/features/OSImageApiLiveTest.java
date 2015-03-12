@@ -22,9 +22,11 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import org.jclouds.azurecompute.domain.AffinityGroup;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.internal.AbstractAzureComputeApiLiveTest;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -34,9 +36,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 @Test(groups = "live", testName = "OSImageApiLiveTest")
-public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
+public class OSImageApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
    private ImmutableSet<String> locations;
+
+   private ImmutableSet<String> groups;
 
    @BeforeClass(groups = {"integration", "live"})
    @Override
@@ -46,8 +50,15 @@ public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
       locations = ImmutableSet.copyOf(transform(api.getLocationApi().list(), new Function<Location, String>() {
 
          @Override
-         public String apply(final Location in) {
-            return in.name();
+         public String apply(final Location location) {
+            return location.name();
+         }
+      }));
+      groups = ImmutableSet.copyOf(transform(api.getAffinityGroupApi().list(), new Function<AffinityGroup, String>() {
+
+         @Override
+         public String apply(final AffinityGroup group) {
+            return group.name();
          }
       }));
    }
@@ -80,7 +91,7 @@ public class OSImageApiLiveTest extends BaseAzureComputeApiLiveTest {
       // Ex. Dirty data in RightScale eula field comes out as an empty string.
       assertFalse(osImage.eula().contains(""));
       if (osImage.affinityGroup() != null) {
-         // TODO: list getAffinityGroups and check if there
+         assertTrue(locations.contains(osImage.affinityGroup()), "No " + osImage.affinityGroup() + " in " + locations);
       }
    }
 

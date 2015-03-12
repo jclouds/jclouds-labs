@@ -17,12 +17,13 @@
 package org.jclouds.azurecompute.features;
 
 import static org.testng.Assert.assertNotNull;
+
 import org.jclouds.azurecompute.domain.RoleSize;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.internal.AbstractAzureComputeApiLiveTest;
 import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "SubscriptionApiLiveTest")
-public class SubscriptionApiLiveTest extends BaseAzureComputeApiLiveTest {
+public class SubscriptionApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
    @Test
    public void testList() {
@@ -31,7 +32,7 @@ public class SubscriptionApiLiveTest extends BaseAzureComputeApiLiveTest {
       }
    }
 
-   private void checkLocation(RoleSize roleSize) {
+   private void checkLocation(final RoleSize roleSize) {
       assertNotNull(roleSize.name(), "Name cannot be null for a Location.");
       assertNotNull(roleSize.label(), "Label cannot be null for: " + roleSize);
       assertNotNull(roleSize.cores(), "Cores cannot be null for: " + roleSize.name());
