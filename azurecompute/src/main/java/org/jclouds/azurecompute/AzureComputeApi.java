@@ -20,6 +20,7 @@ import java.io.Closeable;
 
 import javax.ws.rs.PathParam;
 
+import org.jclouds.azurecompute.features.AffinityGroupApi;
 import org.jclouds.azurecompute.features.CloudServiceApi;
 import org.jclouds.azurecompute.features.DeploymentApi;
 import org.jclouds.azurecompute.features.DiskApi;
@@ -41,6 +42,14 @@ import org.jclouds.rest.annotations.Delegate;
  */
 public interface AzureComputeApi extends Closeable {
 
+   /**
+    * The Service Management API includes operations for managing affinity groups in your subscription.
+    *
+    * @see <a href="http://msdn.microsoft.com/en-us/library/azure/ee460798">docs</a>
+    */
+   @Delegate
+   AffinityGroupApi getAffinityGroupApi();
+   
    /**
     * The Service Management API includes operations for listing the available data center locations for a cloud service
     * in your subscription.

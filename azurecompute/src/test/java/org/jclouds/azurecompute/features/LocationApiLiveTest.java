@@ -23,11 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.Location;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.internal.AbstractAzureComputeApiLiveTest;
+
 import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "LocationApiLiveTest")
-public class LocationApiLiveTest extends BaseAzureComputeApiLiveTest {
+public class LocationApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
    private static final List<String> KNOWN_SERVICES = Arrays
            .asList("Compute", "Storage", "PersistentVMRole", "HighMemory");
@@ -39,7 +40,7 @@ public class LocationApiLiveTest extends BaseAzureComputeApiLiveTest {
       }
    }
 
-   private void checkLocation(Location location) {
+   private void checkLocation(final Location location) {
       assertNotNull(location.name(), "Name cannot be null for a Location.");
       assertNotNull(location.displayName(), "DisplayName cannot be null for: " + location);
       assertNotNull(location.availableServices(), "AvailableServices cannot be null for: " + location.name());
