@@ -28,6 +28,7 @@ import org.jclouds.azurecompute.features.LocationApi;
 import org.jclouds.azurecompute.features.NetworkSecurityGroupApi;
 import org.jclouds.azurecompute.features.OSImageApi;
 import org.jclouds.azurecompute.features.OperationApi;
+import org.jclouds.azurecompute.features.ServiceCertificatesApi;
 import org.jclouds.azurecompute.features.StorageAccountApi;
 import org.jclouds.azurecompute.features.SubscriptionApi;
 import org.jclouds.azurecompute.features.TrafficManagerApi;
@@ -149,4 +150,12 @@ public interface AzureComputeApi extends Closeable {
     */
    @Delegate
    TrafficManagerApi getTrafficManaerApi();
+
+   /**
+    * The Service Management API includes operations for managing service certificates in your subscription.
+    *
+    * @see <a href="https://msdn.microsoft.com/en-us/library/azure/ee795178.aspx">docs</a>
+    */
+   @Delegate
+   ServiceCertificatesApi getServiceCertificatesApi();
 }
