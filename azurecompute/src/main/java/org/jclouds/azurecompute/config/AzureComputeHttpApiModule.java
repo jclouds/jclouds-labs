@@ -16,13 +16,11 @@
  */
 package org.jclouds.azurecompute.config;
 
-import java.security.KeyStore;
 import javax.net.ssl.SSLContext;
 
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.handlers.AzureComputeErrorHandler;
-import org.jclouds.azurecompute.suppliers.KeyStoreSupplier;
-import org.jclouds.azurecompute.suppliers.SSLContextWithKeysSupplier;
+import org.jclouds.azurecompute.suppliers.DelegatingSSLContextSupplier;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
@@ -60,10 +58,7 @@ public class AzureComputeHttpApiModule extends HttpApiModule<AzureComputeApi> {
       install(new AzureComputeParserModule());
       super.configure();
       bind(new TypeLiteral<Supplier<SSLContext>>() {
-      }).to(new TypeLiteral<SSLContextWithKeysSupplier>() {
-      });
-      bind(new TypeLiteral<Supplier<KeyStore>>() {
-      }).to(new TypeLiteral<KeyStoreSupplier>() {
+      }).to(new TypeLiteral<DelegatingSSLContextSupplier>() {
       });
    }
 }
