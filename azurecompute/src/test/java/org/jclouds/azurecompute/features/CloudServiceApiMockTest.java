@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.CloudServiceHandlerTest;
+import org.jclouds.azurecompute.xml.CloudServicePropertiesHandlerTest;
 import org.jclouds.azurecompute.xml.ListCloudServicesHandlerTest;
 import org.testng.annotations.Test;
 
@@ -90,6 +91,36 @@ public class CloudServiceApiMockTest extends BaseAzureComputeApiMockTest {
          server.shutdown();
       }
    }
+
+    public void getPropertiesWhenFound() throws Exception {
+        MockWebServer server = mockAzureManagementServer();
+        server.enqueue(xmlResponse("/cloudserviceproperties.xml"));
+
+        try {
+            CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
+
+            assertEquals(api.getProperties("myservice"), CloudServicePropertiesHandlerTest.expected());
+
+            assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
+        } finally {
+            server.shutdown();
+        }
+    }
+
+    public void getPropertiesWhenNotFound() throws Exception {
+        MockWebServer server = mockAzureManagementServer();
+        server.enqueue(new MockResponse().setResponseCode(404));
+
+        try {
+            CloudServiceApi api = api(server.getUrl("/")).getCloudServiceApi();
+
+            assertNull(api.getProperties("myservice"));
+
+            assertSent(server, "GET", "/services/hostedservices/myservice?embed-detail=true");
+        } finally {
+            server.shutdown();
+        }
+    }
 
    public void createWithLabelInLocation() throws Exception {
       MockWebServer server = mockAzureManagementServer();
