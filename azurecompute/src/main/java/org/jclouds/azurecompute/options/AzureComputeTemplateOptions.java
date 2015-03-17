@@ -23,9 +23,8 @@ import org.jclouds.compute.options.TemplateOptions;
 import com.google.common.base.Optional;
 
 /**
- * Contains options supported by the null {@link org.jclouds.compute.ComputeService#createNodesInGroup(
- * String, int, org.jclouds.compute.options.TemplateOptions)} and null {@link org.jclouds.compute.ComputeService#createNodesInGroup(
- * String, int, org.jclouds.compute.options.TemplateOptions)} operations on the <em>gogrid</em> provider.
+ * Contains options supported by the {@link org.jclouds.compute.ComputeService#createNodesInGroup(
+ * String, int, org.jclouds.compute.options.TemplateOptions)} operation.
  *
  * <h2>Usage</h2> The recommended way to instantiate a {@link AzureComputeTemplateOptions} object is to statically
  * import {@code AzureComputeTemplateOptions.*} and invoke a static creation method followed by an instance mutator (if
@@ -327,4 +326,5 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
    public AzureComputeTemplateOptions networks(final Iterable<String> networks) {
       return AzureComputeTemplateOptions.class.cast(super.networks(networks));
    }
+
 }

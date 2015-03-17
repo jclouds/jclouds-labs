@@ -50,41 +50,43 @@ class InMemoryKeyManagersSupplier implements Supplier<KeyManager[]> {
    public KeyManager[] get() {
       KeyManager[] keyManagers = null;
 
-      try {
-         // split in private key and certs
-         final int privateKeyBeginIdx = identity.indexOf("-----BEGIN PRIVATE KEY");
-         final int privateKeyEndIdx = identity.indexOf("-----END PRIVATE KEY");
-         final String pemPrivateKey = identity.substring(privateKeyBeginIdx, privateKeyEndIdx + 26);
+      // split in private key and certs
+      final int privateKeyBeginIdx = identity.indexOf("-----BEGIN PRIVATE KEY");
+      final int privateKeyEndIdx = identity.indexOf("-----END PRIVATE KEY");
+      if (privateKeyBeginIdx != -1 && privateKeyEndIdx != -1) {
+         try {
+            final String pemPrivateKey = identity.substring(privateKeyBeginIdx, privateKeyEndIdx + 26);
 
-         final StringBuilder pemCerts = new StringBuilder();
-         int certsBeginIdx = 0;
-         do {
-            certsBeginIdx = identity.indexOf("-----BEGIN CERTIFICATE", certsBeginIdx);
-            if (certsBeginIdx >= 0) {
-               final int certsEndIdx = identity.indexOf("-----END CERTIFICATE", certsBeginIdx) + 26;
-               pemCerts.append(identity.substring(certsBeginIdx, certsEndIdx));
-               certsBeginIdx = certsEndIdx;
+            final StringBuilder pemCerts = new StringBuilder();
+            int certsBeginIdx = 0;
+            do {
+               certsBeginIdx = identity.indexOf("-----BEGIN CERTIFICATE", certsBeginIdx);
+               if (certsBeginIdx >= 0) {
+                  final int certsEndIdx = identity.indexOf("-----END CERTIFICATE", certsBeginIdx) + 26;
+                  pemCerts.append(identity.substring(certsBeginIdx, certsEndIdx));
+                  certsBeginIdx = certsEndIdx;
+               }
+            } while (certsBeginIdx != -1);
+
+            // parse private key
+            final KeySpec keySpec = Pems.privateKeySpec(ByteSource.wrap(pemPrivateKey.getBytes(Charsets.UTF_8)));
+            final PrivateKey privateKey = crypto.rsaKeyFactory().generatePrivate(keySpec);
+
+            // parse cert(s)
+            @SuppressWarnings("unchecked")
+            final Collection<Certificate> certs = (Collection<Certificate>) CertificateFactory.getInstance("X.509").
+                    generateCertificates(new ByteArrayInputStream(pemCerts.toString().getBytes(Charsets.UTF_8)));
+
+            if (certs.isEmpty()) {
+               throw new IllegalStateException("Could not find any valid certificate");
             }
-         } while (certsBeginIdx != -1);
 
-         // parse private key
-         final KeySpec keySpec = Pems.privateKeySpec(ByteSource.wrap(pemPrivateKey.getBytes(Charsets.UTF_8)));
-         final PrivateKey privateKey = crypto.rsaKeyFactory().generatePrivate(keySpec);
+            final X509Certificate certificate = (X509Certificate) certs.iterator().next();
 
-         // parse cert(s)
-         @SuppressWarnings("unchecked")
-         final Collection<Certificate> certs = (Collection<Certificate>) CertificateFactory.getInstance("X.509").
-                 generateCertificates(new ByteArrayInputStream(pemCerts.toString().getBytes(Charsets.UTF_8)));
-
-         if (certs.isEmpty()) {
-            throw new IllegalStateException("Could not find any valid certificate");
+            keyManagers = new KeyManager[]{new InMemoryKeyManager(certificate, privateKey)};
+         } catch (Exception e) {
+            propagate(e);
          }
-
-         final X509Certificate certificate = (X509Certificate) certs.iterator().next();
-
-         keyManagers = new KeyManager[]{new InMemoryKeyManager(certificate, privateKey)};
-      } catch (Exception e) {
-         propagate(e);
       }
 
       return keyManagers;

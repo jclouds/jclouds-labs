@@ -29,7 +29,7 @@ import com.google.inject.Inject;
 import org.jclouds.http.functions.ParseSax;
 import org.jclouds.azurecompute.domain.AffinityGroup;
 import org.jclouds.azurecompute.domain.AffinityGroup.Capability;
-import org.jclouds.azurecompute.domain.AffinityGroup.ComputeCapabilities;
+import org.jclouds.azurecompute.domain.ComputeCapabilities;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 
 import org.xml.sax.Attributes;
@@ -61,7 +61,7 @@ public final class AffinityGroupHandler extends ParseSax.HandlerForGeneratedRequ
    private boolean inComputeCapabilities = false;
 
    @Inject
-   AffinityGroupHandler(ComputeCapabilitiesHandler computeCapabilitiesHandler) {
+   AffinityGroupHandler(final ComputeCapabilitiesHandler computeCapabilitiesHandler) {
       this.computeCapabilitiesHandler = computeCapabilitiesHandler;
    }
 

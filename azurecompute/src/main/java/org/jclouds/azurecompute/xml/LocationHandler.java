@@ -25,6 +25,10 @@ import org.jclouds.http.functions.ParseSax;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import org.jclouds.azurecompute.domain.ComputeCapabilities;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 /**
  * @see <a href="http://msdn.microsoft.com/en-us/library/gg441293" >api</a>
@@ -37,14 +41,41 @@ final class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResul
 
    private final List<String> availableServices = Lists.newArrayList();
 
+   private ComputeCapabilities computeCapabilities;
+
+   private boolean inComputeCapabilities = false;
+
+   private final ComputeCapabilitiesHandler computeCapabilitiesHandler;
+
    private final StringBuilder currentText = new StringBuilder();
+
+   @Inject
+   LocationHandler(final ComputeCapabilitiesHandler computeCapabilitiesHandler) {
+      this.computeCapabilitiesHandler = computeCapabilitiesHandler;
+   }
 
    @Override
    public Location getResult() {
-      Location result = Location.create(name, displayName, ImmutableList.copyOf(availableServices));
-      name = displayName = null; // handler is called in a loop.
+      Location result = Location.create(
+              name, displayName, ImmutableList.copyOf(availableServices), computeCapabilities);
+
+      // handler is called in a loop.
+      name = displayName = null;
       availableServices.clear();
+      computeCapabilities = null;
+
       return result;
+   }
+
+   @Override
+   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+           throws SAXException {
+
+      if ("ComputeCapabilities".equals(qName)) {
+         inComputeCapabilities = true;
+      } else if (inComputeCapabilities) {
+         computeCapabilitiesHandler.startElement(uri, localName, qName, attributes);
+      }
    }
 
    @Override
@@ -55,12 +86,22 @@ final class LocationHandler extends ParseSax.HandlerForGeneratedRequestWithResul
          displayName = currentOrNull(currentText);
       } else if (qName.equals("AvailableService")) {
          availableServices.add(currentOrNull(currentText));
+      } else if ("ComputeCapabilities".equals(qName)) {
+         inComputeCapabilities = false;
+         computeCapabilities = computeCapabilitiesHandler.getResult();
+      } else if (inComputeCapabilities) {
+         computeCapabilitiesHandler.endElement(ignoredUri, ignoredName, qName);
       }
+
       currentText.setLength(0);
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
-      currentText.append(ch, start, length);
+   public void characters(final char ch[], final int start, final int length) {
+      if (inComputeCapabilities) {
+         computeCapabilitiesHandler.characters(ch, start, length);
+      } else {
+         currentText.append(ch, start, length);
+      }
    }
 }

@@ -20,7 +20,7 @@ import static org.jclouds.util.SaxUtils.currentOrNull;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import org.jclouds.azurecompute.domain.AffinityGroup.ComputeCapabilities;
+import org.jclouds.azurecompute.domain.ComputeCapabilities;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;

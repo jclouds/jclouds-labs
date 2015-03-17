@@ -23,27 +23,51 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-import com.google.common.base.Suppliers;
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.azurecompute.domain.Region;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.domain.Location;
-import org.jclouds.location.suppliers.all.JustProvider;
+import org.jclouds.domain.LocationBuilder;
+import org.jclouds.domain.LocationScope;
+
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "OSImageToImageTest")
 public class OSImageToImageTest {
 
    public void testImageTransform() {
-      OSImageToImage imageToImage = new OSImageToImage(new JustProvider("azurecompute", Suppliers
-              .ofInstance(URI.create("foo")), ImmutableSet.<String>of()));
-      // OSImage OSImage = createOSImage();
+      final OSImageToImage imageToImage = new OSImageToImage(new Supplier<Set<? extends Location>>() {
+
+         private Location getLocation(final String input) {
+            final LocationBuilder builder = new LocationBuilder();
+            builder.id(input);
+            builder.description(input);
+
+            builder.scope(LocationScope.REGION);
+            final Region region = Region.byName(input);
+            if (region != null) {
+               builder.iso3166Codes(ImmutableSet.of(region.iso3166Code()));
+            }
+
+            return builder.build();
+         }
+
+         @Override
+         public Set<? extends Location> get() {
+            return ImmutableSet.of(getLocation("Central US"), getLocation("North Europe"));
+         }
+      });
+
       for (OSImage osImage : createOSImage()) {
-         org.jclouds.compute.domain.Image transformed = imageToImage.apply(osImage);
-         OperatingSystem os = OSImageToImage.osFamily().apply(osImage).build();
+         final org.jclouds.compute.domain.Image transformed = imageToImage.apply(osImage);
+         final OperatingSystem os = OSImageToImage.osFamily().apply(osImage).build();
          assertNotNull(osImage.label());
          assertNotNull(transformed.getId());
          assertEquals(transformed.getId(), osImage.name());
@@ -51,10 +75,8 @@ public class OSImageToImageTest {
          assertEquals(transformed.getOperatingSystem().getFamily(), os.getFamily());
          assertEquals(transformed.getOperatingSystem().getVersion(), os.getVersion());
          assertEquals(transformed.getProviderId(), osImage.name());
-         Location location = transformed.getLocation();
-         if (location != null) {
-            assertEquals(location.getId(), osImage.location());
-         }
+         final Location location = transformed.getLocation();
+         assertEquals(location.getId(), osImage.location());
       }
    }
 
@@ -102,6 +124,7 @@ public class OSImageToImageTest {
                       "openSUSE 13.1", // label
                       "openSUSE 13.1 brings updated desktop environments and software, lot of polishing, a brand new KDE theme, "
                       + "complete systemd integration and many other features.", // description
+                      null, // imageFamily
                       "MSDN", // category
                       OSImage.Type.WINDOWS, // os
                       "SUSE", // publisherName
@@ -111,10 +134,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create(
                       "CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "Ubuntu Server 12.04 LTS", // label
                       "Ubuntu Server 12.04 LTS amd64 20120528 Cloud Image", //description
+                      null, // imageFamily
                       "Canonical", // category
                       OSImage.Type.LINUX, // os
                       "Canonical", // publisherName
@@ -128,6 +152,7 @@ public class OSImageToImageTest {
                       null, // affinityGroup
                       "Windows Server 2008 R2 SP1, June 2012", // label
                       "Windows Server 2008 R2 is a multi-purpose server.", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -138,10 +163,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "MSFT__Sql-Server-11EVAL-11.0.2215.0-05152012-en-us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "Microsoft SQL Server 2012 Evaluation Edition", // label
                       "SQL Server 2012 Evaluation Edition (64-bit).", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -152,10 +178,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "MSFT__Win2K12RC-Datacenter-201207.02-en.us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "Windows Server 2012 Release Candidate, July 2012", // label
                       "Windows Server 2012 incorporates Microsoft's experience building.", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -165,10 +192,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "MSFT__Win2K8R2SP1-Datacenter-201207.01-en.us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "Windows Server 2008 R2 SP1, July 2012", // label
                       "Windows Server 2008 R2 is a multi-purpose server.", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -178,10 +206,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "OpenLogic CentOS 6.2", // label
                       "This distribution of Linux is based on CentOS.", //description
+                      null, // imageFamily
                       "OpenLogic", // category
                       OSImage.Type.LINUX, // os
                       "openLogic", //publisherName
@@ -192,10 +221,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "SUSE__openSUSE-12-1-20120603-en-us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "openSUSE 12.1", // label
                       "openSUSE is a free and Linux-based operating system!", //description
+                      null, // imageFamily
                       "SUSE", // category
                       OSImage.Type.LINUX, // os
                       "SUSE", //publisherName
@@ -205,10 +235,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "SUSE__SUSE-Linux-Enterprise-Server-11SP2-20120601-en-us-30GB.vhd", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "SUSE Linux Enterprise Server", // label
                       "SUSE Linux Enterprise Server is a highly reliable value.", //description
+                      null, // imageFamily
                       "SUSE", // category
                       OSImage.Type.LINUX, // os
                       "SUSE", //publisherName
@@ -218,10 +249,11 @@ public class OSImageToImageTest {
               ),
               OSImage.create( //
                       "0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.4-x64-v13.4", // name
-                      null, // locations
+                      "North Europe", // locations
                       null, // affinityGroup
                       "RightImage-CentOS-6.4-x64-v13.4", // label
                       null, //description
+                      null, // imageFamily
                       "RightScale with Linux", // category
                       OSImage.Type.LINUX, // os
                       "RightScale with Linux",

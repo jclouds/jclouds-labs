@@ -24,11 +24,6 @@ import com.google.auto.value.AutoValue;
 import java.util.Date;
 import org.jclouds.javax.annotation.Nullable;
 
-/**
- * Affinity group.
- *
- * @see <a href="http://msdn.microsoft.com/en-us/library/azure/ee460797">api</a>
- */
 @AutoValue
 public abstract class AffinityGroup {
 
@@ -43,34 +38,6 @@ public abstract class AffinityGroup {
        */
       HighMemory;
 
-   }
-
-   @AutoValue
-   public abstract static class ComputeCapabilities {
-
-      ComputeCapabilities() {
-      } // For AutoValue only!
-
-      /**
-       * Specifies the role size that is available for the type of deployment.
-       *
-       * @return the role size that is available for the type of deployment
-       */
-      public abstract List<RoleSize.Type> virtualMachineRoleSizes();
-
-      /**
-       * Specifies the role size that is available for the type of deployment.
-       *
-       * @return the role size that is available for the type of deployment
-       */
-      public abstract List<RoleSize.Type> webWorkerRoleSizes();
-
-      public static ComputeCapabilities create(
-              final List<RoleSize.Type> virtualMachineRoleSizes, final List<RoleSize.Type> webWorkerRoleSizes) {
-
-         return new AutoValue_AffinityGroup_ComputeCapabilities(
-                 copyOf(virtualMachineRoleSizes), copyOf(webWorkerRoleSizes));
-      }
    }
 
    AffinityGroup() {

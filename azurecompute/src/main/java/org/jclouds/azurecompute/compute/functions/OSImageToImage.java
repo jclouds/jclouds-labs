@@ -18,19 +18,20 @@ package org.jclouds.azurecompute.compute.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Set;
+
 import org.jclouds.azurecompute.domain.OSImage;
+import org.jclouds.collect.Memoized;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
-import org.jclouds.domain.Location;
-import org.jclouds.domain.LocationBuilder;
-import org.jclouds.domain.LocationScope;
-import org.jclouds.location.suppliers.all.JustProvider;
+import org.jclouds.location.predicates.LocationPredicates;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Splitter;
+import com.google.common.base.Supplier;
+import com.google.common.collect.FluentIterable;
 import com.google.inject.Inject;
 
 public class OSImageToImage implements Function<OSImage, Image> {
@@ -55,11 +56,21 @@ public class OSImageToImage implements Function<OSImage, Image> {
 
    private static final String ORACLE_lINUX = "Oracle Linux";
 
-   private final JustProvider provider;
+   public static String toGeoName(final String name, final String location) {
+      return name + "/" + location;
+   }
+
+   public static String[] fromGeoName(final String geoName) {
+      final String[] parts = checkNotNull(geoName, "geoName").split("/");
+      return (parts.length == 1) ? new String[]{geoName, null} : parts;
+   }
+
+   private final Supplier<Set<? extends org.jclouds.domain.Location>> locations;
 
    @Inject
-   OSImageToImage(final JustProvider provider) {
-      this.provider = provider;
+   OSImageToImage(@Memoized final Supplier<Set<? extends org.jclouds.domain.Location>> locations) {
+
+      this.locations = locations;
    }
 
    @Override
@@ -71,53 +82,36 @@ public class OSImageToImage implements Function<OSImage, Image> {
               .status(Image.Status.AVAILABLE)
               .uri(image.mediaLink())
               .providerId(image.name())
-              .location(createLocation(image.location()));
+              .location(FluentIterable.from(locations.get())
+                      .firstMatch(LocationPredicates.idEquals(image.location())).orNull());
 
       final OperatingSystem.Builder osBuilder = osFamily().apply(image);
       return builder.operatingSystem(osBuilder.build()).build();
-   }
-
-   private Location createLocation(final String input) {
-      if (input == null) {
-         return null;
-      }
-      return new LocationBuilder().
-              id(input).
-              scope(LocationScope.REGION).
-              description(input).
-              parent(Iterables.getOnlyElement(provider.get())).
-              metadata(ImmutableMap.<String, Object>of("name", input)).
-              build();
-   }
-
-   public static String toGeoName(final String name, final String location) {
-      return name + "/" + location;
-   }
-
-   public static String[] fromGeoName(final String geoName) {
-      final String[] parts = checkNotNull(geoName, "geoName").split("/");
-      return (parts.length == 1) ? new String[]{geoName, null} : parts;
    }
 
    public static Function<OSImage, OperatingSystem.Builder> osFamily() {
       return new Function<OSImage, OperatingSystem.Builder>() {
          @Override
          public OperatingSystem.Builder apply(final OSImage image) {
+            checkNotNull(image.label(), "label");
+            final String label = Splitter.on('/').split(image.label()).iterator().next();
 
-            final String label = image.label();
-            checkNotNull(label, "label");
+            boolean is64Bit = false;
+
             OsFamily family = OsFamily.UNRECOGNIZED;
-
             if (label.contains(CENTOS)) {
                family = OsFamily.CENTOS;
+               is64Bit = image.name().contains("x64");
             } else if (label.contains(OPENLOGIC)) {
                family = OsFamily.CENTOS;
             } else if (label.contains(SUSE)) {
                family = OsFamily.SUSE;
             } else if (label.contains(UBUNTU)) {
                family = OsFamily.UBUNTU;
+               is64Bit = image.name().contains("amd64");
             } else if (label.contains(WINDOWS)) {
                family = OsFamily.WINDOWS;
+               is64Bit = true;
             } else if (label.contains(ORACLE_lINUX)) {
                family = OsFamily.OEL;
             }
@@ -144,15 +138,16 @@ public class OSImageToImage implements Function<OSImage, Image> {
             } else if (label.equals(ORACLE_lINUX)) {
                version = label;
             }
-            if (family != OsFamily.UNRECOGNIZED) {
-               return OperatingSystem.builder().family(family).version(version)
-                       .description(image.description() + "");
-            }
-            if (image.os() == OSImage.Type.WINDOWS) {
-               return OperatingSystem.builder().family(OsFamily.WINDOWS).version(version)
-                       .description(image.description() + "");
-            }
-            return OperatingSystem.builder().family(OsFamily.LINUX).version(version).description(image.description());
+
+            return OperatingSystem.builder().
+                    family(family != OsFamily.UNRECOGNIZED
+                                    ? family
+                                    : image.os() == OSImage.Type.WINDOWS
+                                            ? OsFamily.WINDOWS
+                                            : OsFamily.LINUX).
+                    version(version).
+                    is64Bit(is64Bit).
+                    description(image.description() + "");
          }
       };
    }

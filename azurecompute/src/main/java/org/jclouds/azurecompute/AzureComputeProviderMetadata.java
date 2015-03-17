@@ -19,12 +19,14 @@ package org.jclouds.azurecompute;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_INITIAL_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
 import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
 
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.azurecompute.config.AzureComputeProperties;
+import org.jclouds.azurecompute.domain.Region;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 
@@ -52,8 +54,8 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
       properties.setProperty(OPERATION_TIMEOUT, "60000");
       properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "5");
       properties.setProperty(OPERATION_POLL_MAX_PERIOD, "15");
-      properties.setProperty(AzureComputeProperties.TCP_RULE_FORMAT, "tcp_%s-%s");
-      properties.setProperty(AzureComputeProperties.TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
+      properties.setProperty(TCP_RULE_FORMAT, "tcp_%s-%s");
+      properties.setProperty(TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
       return properties;
    }
 
@@ -73,7 +75,7 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
                  .homepage(URI.create("https://www.windowsazure.com/"))
                  .console(URI.create("https://windows.azure.com/default.aspx"))
                  .linkedServices("azureblob", "azurequeue", "azuretable")
-                 .iso3166Codes("US-TX", "US-IL", "IE-D", "SG", "NL-NH", "HK")
+                 .iso3166Codes(Region.iso3166Codes())
                  .defaultProperties(AzureComputeProviderMetadata.defaultProperties());
       }
 

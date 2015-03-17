@@ -27,7 +27,7 @@ import com.google.auto.value.AutoValue;
 /**
  * OS image from the image repository
  *
- * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191" >api</a>
+ * @see <a href="http://msdn.microsoft.com/en-us/library/jj157191">api</a>
  */
 @AutoValue
 public abstract class OSImage {
@@ -66,6 +66,14 @@ public abstract class OSImage {
    public abstract String description();
 
    /**
+    * Specifies a value that can be used to group images.
+    *
+    * @return value that can be used to group images
+    */
+   @Nullable
+   public abstract String imageFamily();
+
+   /**
     * The repository classification of image. All user images have the category "User", but categories for other images
     * could be, for example "Canonical"
     */
@@ -102,10 +110,10 @@ public abstract class OSImage {
    public abstract List<String> eula();
 
    public static OSImage create(final String name, final String location, final String affinityGroup, final String label,
-           final String description, final String category, final Type os, final String publisherName,
-           final URI mediaLink, final int logicalSizeInGB, final List<String> eula) {
+           final String description, final String imageFamily, final String category, final Type os,
+           final String publisherName, final URI mediaLink, final int logicalSizeInGB, final List<String> eula) {
 
-      return new AutoValue_OSImage(name, location, affinityGroup, label, description, category, os, publisherName,
-              mediaLink, logicalSizeInGB, copyOf(eula));
+      return new AutoValue_OSImage(name, location, affinityGroup, label, description, imageFamily, category, os,
+              publisherName, mediaLink, logicalSizeInGB, copyOf(eula));
    }
 }
