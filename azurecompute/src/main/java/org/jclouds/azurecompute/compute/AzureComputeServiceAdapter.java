@@ -19,7 +19,6 @@ package org.jclouds.azurecompute.compute;
 import static com.google.common.base.Predicates.notNull;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.jclouds.azurecompute.domain.Deployment.InstanceStatus.READY_ROLE;
 import static org.jclouds.util.Predicates2.retry;
 
 import java.net.URI;
@@ -36,13 +35,16 @@ import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule.
 import org.jclouds.azurecompute.config.AzureComputeProperties;
 import org.jclouds.azurecompute.domain.CloudService;
 import org.jclouds.azurecompute.domain.Deployment;
-import org.jclouds.azurecompute.domain.Deployment.RoleInstance;
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.DeploymentParams.ExternalEndpoint;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.RoleSize;
+import org.jclouds.azurecompute.domain.Deployment.RoleInstance;
+import org.jclouds.azurecompute.domain.Role;
+import org.jclouds.azurecompute.compute.functions.OSImageToImage;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.domain.Template;
@@ -60,8 +62,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
- * defines the connection between the {@link AzureComputeApi} implementation and the jclouds
- * {@link org.jclouds.compute.ComputeService}
+ * Defines the connection between the {@link AzureComputeApi} implementation and the jclouds
+ * {@link org.jclouds.compute.ComputeService}.
  */
 @Singleton
 public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deployment, RoleSize, OSImage, Location> {
@@ -72,7 +74,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
    @Resource
    @Named(ComputeServiceConstants.COMPUTE_LOGGER)
-   protected Logger logger = Logger.NULL;
+   private Logger logger = Logger.NULL;
 
    private final AzureComputeApi api;
 
@@ -108,7 +110,8 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       final String subnetName = templateOptions.getSubnetName().get();
 
       logger.debug("Creating a cloud service with name '%s', label '%s' in location '%s'", name, name, location);
-      String createCloudServiceRequestId = api.getCloudServiceApi().createWithLabelInLocation(name, name, location);
+      final String createCloudServiceRequestId =
+              api.getCloudServiceApi().createWithLabelInLocation(name, name, location);
       if (!operationSucceededPredicate.apply(createCloudServiceRequestId)) {
          final String message = generateIllegalStateExceptionMessage(
                  createCloudServiceRequestId, azureComputeConstants.operationTimeout());
@@ -119,7 +122,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
       final OSImage.Type os = template.getImage().getOperatingSystem().getFamily() == OsFamily.WINDOWS
               ? OSImage.Type.WINDOWS : OSImage.Type.LINUX;
-      Set<ExternalEndpoint> externalEndpoints = Sets.newHashSet();
+      final Set<ExternalEndpoint> externalEndpoints = Sets.newHashSet();
       for (int inboundPort : inboundPorts) {
          externalEndpoints.add(ExternalEndpoint.inboundTcpToLocalPort(inboundPort, inboundPort));
       }
@@ -128,7 +131,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .os(os)
               .username(loginUser)
               .password(loginPassword)
-              .sourceImageName(Splitter.on('/').split(template.getImage().getId()).iterator().next())
+              .sourceImageName(OSImageToImage.fromGeoName(template.getImage().getId())[0])
               .mediaLink(createMediaLink(storageAccountName, name))
               .size(RoleSize.Type.fromString(template.getHardware().getName()))
               .externalEndpoints(externalEndpoints)
@@ -137,42 +140,37 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .build();
 
       logger.debug("Creating a deployment with params '%s' ...", params);
-      String createDeploymentRequestId = api.getDeploymentApiForService(name).create(params);
-      if (!operationSucceededPredicate.apply(createDeploymentRequestId)) {
-         final String message = generateIllegalStateExceptionMessage(
-                 createCloudServiceRequestId, azureComputeConstants.operationTimeout());
-         logger.warn(message);
-         logger.debug("Deleting cloud service (%s) ...", name);
-         deleteCloudService(name);
-         logger.debug("Cloud service (%s) deleted.", name);
-      }
-      logger.info("Deployment created with operation id: %s", createDeploymentRequestId);
+      retry(new ConflictManagementPredicate() {
 
+         @Override
+         protected String operation() {
+            return api.getDeploymentApiForService(name).create(params);
+         }
+      }, 30 * 60, 1, SECONDS).apply(name);
+
+      final Set<Deployment> deployments = Sets.newHashSet();
       if (!retry(new Predicate<String>() {
          @Override
-         public boolean apply(String name) {
-            return FluentIterable.from(api.getDeploymentApiForService(name).get(name).roleInstanceList())
-                    .allMatch(new Predicate<RoleInstance>() {
-                       @Override
-                       public boolean apply(RoleInstance input) {
-                          return input != null && input.instanceStatus() == READY_ROLE;
-                       }
-                    });
+         public boolean apply(final String name) {
+            final Deployment deployment = api.getDeploymentApiForService(name).get(name);
+            if (deployment != null) {
+               deployments.add(deployment);
+            }
+            return !deployments.isEmpty();
          }
       }, 30 * 60, 1, SECONDS).apply(name)) {
-         logger.warn("Instances %s of %s has not reached the status %s within %sms so it will be destroyed.",
-                 Iterables.toString(api.getDeploymentApiForService(name).get(name).roleInstanceList()), name,
-                 READY_ROLE, azureComputeConstants.operationTimeout());
-         api.getDeploymentApiForService(group).delete(name);
+         final String message = format("Deployment %s was not created within %sms so it will be destroyed.",
+                 name, azureComputeConstants.operationTimeout());
+         logger.warn(message);
+
+         api.getDeploymentApiForService(name).delete(name);
          api.getCloudServiceApi().delete(name);
-         throw new IllegalStateException(format("Deployment %s is being destroyed as its instanceStatus didn't reach "
-                 + "status %s after %ss. Please, try by increasing `jclouds.azure.operation-timeout` and "
-                 + " try again", name, READY_ROLE, 30 * 60));
+
+         throw new IllegalStateException(message);
       }
 
-      Deployment deployment = api.getDeploymentApiForService(name).get(name);
-
-      return new NodeAndInitialCredentials<Deployment>(deployment, deployment.name(),
+      final Deployment deployment = deployments.iterator().next();
+      return new NodeAndInitialCredentials<Deployment>(deployment, name,
               LoginCredentials.builder().user(loginUser).password(loginPassword).build());
    }
 
@@ -189,7 +187,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
    @Override
    public Iterable<OSImage> listImages() {
-      List<OSImage> osImages = Lists.newArrayList();
+      final List<OSImage> osImages = Lists.newArrayList();
       for (OSImage osImage : api.getOSImageApi().list()) {
          if (osImage.location() == null) {
             osImages.add(OSImage.create(
@@ -208,10 +206,10 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
          } else {
             for (String actualLocation : Splitter.on(';').split(osImage.location())) {
                osImages.add(OSImage.create(
-                       osImage.name() + "/" + actualLocation,
+                       OSImageToImage.toGeoName(osImage.name(), actualLocation),
                        actualLocation,
                        osImage.affinityGroup(),
-                       osImage.label() + "/" + actualLocation,
+                       osImage.label(),
                        osImage.description(),
                        osImage.category(),
                        osImage.os(),
@@ -228,12 +226,30 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
    @Override
    public OSImage getImage(final String id) {
-      return Iterables.find(api.getOSImageApi().list(), new Predicate<OSImage>() {
+      final String[] idParts = OSImageToImage.fromGeoName(id);
+      final OSImage image = Iterables.find(api.getOSImageApi().list(), new Predicate<OSImage>() {
          @Override
-         public boolean apply(OSImage input) {
-            return input.name().equals(id);
+         public boolean apply(final OSImage input) {
+            return idParts[0].equals(input.name());
          }
       });
+
+      return image == null
+              ? null
+              : idParts[1] == null
+                      ? image
+                      : OSImage.create(
+                              id,
+                              idParts[1],
+                              image.affinityGroup(),
+                              image.label(),
+                              image.description(),
+                              image.category(),
+                              image.os(),
+                              image.publisherName(),
+                              image.mediaLink(),
+                              image.logicalSizeInGB(),
+                              image.eula());
    }
 
    @Override
@@ -243,97 +259,165 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
    @Override
    public Deployment getNode(final String id) {
-      return FluentIterable.from(api.getCloudServiceApi().list())
-              .transform(new Function<CloudService, Deployment>() {
+      return FluentIterable.from(api.getCloudServiceApi().list()).
+              transform(new Function<CloudService, Deployment>() {
                  @Override
                  public Deployment apply(final CloudService input) {
-                    return api.getDeploymentApiForService(input.name()).get(id);
+                    final Deployment deployment = api.getDeploymentApiForService(input.name()).get(id);
+                    return deployment == null || deployment.roleInstanceList().isEmpty()
+                            ? null
+                            : FluentIterable.from(deployment.roleInstanceList()).allMatch(
+                                    new Predicate<RoleInstance>() {
+                                       @Override
+                                       public boolean apply(final RoleInstance input) {
+                                          return input != null && !input.instanceStatus().isTransient();
+                                       }
+                                    })
+                                    ? deployment
+                                    : null;
                  }
-              })
-              .firstMatch(notNull())
-              .orNull();
+              }).
+              firstMatch(notNull()).
+              orNull();
+   }
+
+   private void trackRequest(final String requestId) {
+      if (!operationSucceededPredicate.apply(requestId)) {
+         final String message = generateIllegalStateExceptionMessage(
+                 requestId, azureComputeConstants.operationTimeout());
+         logger.warn(message);
+         throw new IllegalStateException(message);
+      }
+   }
+
+   private List<CloudService> getCloudServicesForDeployment(final String id) {
+      return FluentIterable.from(api.getCloudServiceApi().list()).filter(new Predicate<CloudService>() {
+
+         @Override
+         public boolean apply(final CloudService input) {
+            final Deployment deployment =
+                    input.status() == CloudService.Status.DELETING || input.status() == CloudService.Status.DELETED
+                            ? null
+                            : api.getDeploymentApiForService(input.name()).get(id);
+            return deployment != null && deployment.status() != Deployment.Status.DELETING;
+         }
+      }).toList();
+   }
+
+   public Deployment internalDestroyNode(final String id) {
+      Deployment deployment = null;
+
+      for (CloudService cloudService : getCloudServicesForDeployment(id)) {
+         final List<Deployment> nodes = Lists.newArrayList();
+         retry(new Predicate<String>() {
+            @Override
+            public boolean apply(final String input) {
+               final Deployment deployment = getNode(id);
+               if (deployment != null) {
+                  nodes.add(deployment);
+               }
+               return !nodes.isEmpty();
+            }
+         }, 30 * 60, 1, SECONDS).apply(id);
+
+         if (!nodes.isEmpty()) {
+            deployment = nodes.iterator().next();
+         }
+
+         final String cloudServiceName = cloudService.name();
+         logger.debug("Deleting deployment(%s) of cloud service (%s)", id, cloudServiceName);
+         retry(new ConflictManagementPredicate(operationSucceededPredicate) {
+
+            @Override
+            protected String operation() {
+               return api.getDeploymentApiForService(cloudServiceName).delete(id);
+            }
+         }, 30 * 60, 1, SECONDS).apply(id);
+
+         logger.debug("Deleting cloud service (%s) ...", cloudServiceName);
+         trackRequest(api.getCloudServiceApi().delete(cloudServiceName));
+         logger.debug("Cloud service (%s) deleted.", cloudServiceName);
+
+         if (deployment != null) {
+            for (Role role : deployment.roleList()) {
+               final Role.OSVirtualHardDisk disk = role.osVirtualHardDisk();
+               if (disk != null) {
+                  retry(new ConflictManagementPredicate(operationSucceededPredicate) {
+
+                     @Override
+                     protected String operation() {
+                        return api.getDiskApi().delete(disk.diskName());
+                     }
+                  }, 30 * 60, 1, SECONDS).apply(id);
+               }
+            }
+         }
+      }
+
+      return deployment;
    }
 
    @Override
    public void destroyNode(final String id) {
-      CloudService cloudService = api.getCloudServiceApi().get(id);
-      if (cloudService != null) {
-         // TODO detach disk before deleting node
-
-         final String cloudServiceName = cloudService.name();
-         logger.debug("Deleting deployment(%s) of cloud service (%s)", id, cloudServiceName);
-         deleteDeployment(id, cloudServiceName);
-         logger.debug("Deployment (%s) deleted in cloud service (%s).", id, cloudServiceName);
-
-         logger.debug("Deleting cloud service (%s) ...", cloudServiceName);
-         deleteCloudService(cloudServiceName);
-         logger.debug("Cloud service (%s) deleted.", cloudServiceName);
-      }
+      internalDestroyNode(id);
    }
 
    @Override
    public void rebootNode(final String id) {
-      throw new UnsupportedOperationException();
+      final CloudService cloudService = api.getCloudServiceApi().get(id);
+      if (cloudService != null) {
+         logger.debug("Restarting %s ...", id);
+         trackRequest(api.getVirtualMachineApiForDeploymentInService(id, cloudService.name()).restart(id));
+         logger.debug("Restarted %s", id);
+      }
    }
 
    @Override
    public void resumeNode(final String id) {
-      throw new UnsupportedOperationException();
+      final CloudService cloudService = api.getCloudServiceApi().get(id);
+      if (cloudService != null) {
+         logger.debug("Resuming %s ...", id);
+         trackRequest(api.getVirtualMachineApiForDeploymentInService(id, cloudService.name()).start(id));
+         logger.debug("Resumed %s", id);
+      }
    }
 
    @Override
    public void suspendNode(final String id) {
-      throw new UnsupportedOperationException();
+      final CloudService cloudService = api.getCloudServiceApi().get(id);
+      if (cloudService != null) {
+         logger.debug("Suspending %s ...", id);
+         trackRequest(api.getVirtualMachineApiForDeploymentInService(id, cloudService.name()).shutdown(id));
+         logger.debug("Suspended %s", id);
+      }
    }
 
    @Override
    public Iterable<Deployment> listNodes() {
-      Set<Deployment> deployments = FluentIterable.from(api.getCloudServiceApi().list())
-              .transform(new Function<CloudService, Deployment>() {
+      return FluentIterable.from(api.getCloudServiceApi().list()).
+              transform(new Function<CloudService, Deployment>() {
                  @Override
-                 public Deployment apply(CloudService cloudService) {
+                 public Deployment apply(final CloudService cloudService) {
                     return api.getDeploymentApiForService(cloudService.name()).get(cloudService.name());
                  }
-              })
-              .filter(notNull())
-              .toSet();
-      return deployments;
+              }).
+              filter(notNull()).
+              toSet();
    }
 
    @Override
    public Iterable<Deployment> listNodesByIds(final Iterable<String> ids) {
       return Iterables.filter(listNodes(), new Predicate<Deployment>() {
          @Override
-         public boolean apply(Deployment input) {
+         public boolean apply(final Deployment input) {
             return Iterables.contains(ids, input.name());
          }
       });
    }
 
    @VisibleForTesting
-   public static URI createMediaLink(String storageServiceName, String diskName) {
+   public static URI createMediaLink(final String storageServiceName, final String diskName) {
       return URI.create(
               String.format("https://%s.blob.core.windows.net/vhds/disk-%s.vhd", storageServiceName, diskName));
    }
-
-   private void deleteCloudService(final String name) {
-      String deleteCloudServiceId = api.getCloudServiceApi().delete(name);
-      if (!operationSucceededPredicate.apply(deleteCloudServiceId)) {
-         final String deleteMessage = generateIllegalStateExceptionMessage(
-                 deleteCloudServiceId, azureComputeConstants.operationTimeout());
-         logger.warn(deleteMessage);
-         throw new IllegalStateException(deleteMessage);
-      }
-   }
-
-   private void deleteDeployment(final String id, final String cloudServiceName) {
-      String deleteDeploymentId = api.getDeploymentApiForService(cloudServiceName).delete(id);
-      if (!operationSucceededPredicate.apply(deleteDeploymentId)) {
-         final String deleteMessage = generateIllegalStateExceptionMessage(
-                 deleteDeploymentId, azureComputeConstants.operationTimeout());
-         logger.warn(deleteMessage);
-         throw new IllegalStateException(deleteMessage);
-      }
-   }
-
 }

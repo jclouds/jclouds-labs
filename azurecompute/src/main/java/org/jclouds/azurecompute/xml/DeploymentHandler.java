@@ -131,7 +131,7 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
       } else if (qName.equals("Status")) {
          String statusText = currentOrNull(currentText);
          if (status == null && statusText != null) {
-            status = Status.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, statusText));
+            status = Status.fromString(statusText);
          }
       } else if (qName.equals("Label")) {
          String labelText = currentOrNull(currentText);

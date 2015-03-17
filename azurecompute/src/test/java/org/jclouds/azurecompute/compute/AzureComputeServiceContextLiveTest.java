@@ -21,10 +21,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Predicates2.retry;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.reflect.TypeToken;
+import com.google.inject.Module;
+
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
 import org.jclouds.compute.domain.NodeMetadata;
@@ -34,16 +43,6 @@ import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.sshj.config.SshjSshClientModule;
 
-import com.google.common.collect.Iterables;
-import com.google.common.reflect.TypeToken;
-import com.google.inject.Module;
-import java.util.Arrays;
-import java.util.List;
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
-import org.jclouds.azurecompute.domain.Role;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -122,7 +121,7 @@ public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContex
       templateBuilder.imageId(BaseAzureComputeApiLiveTest.IMAGE_NAME);
       templateBuilder.hardwareId("BASIC_A0");
       templateBuilder.locationId(BaseAzureComputeApiLiveTest.LOCATION);
-      Template tmp = templateBuilder.build();
+      final Template tmp = templateBuilder.build();
 
       // test passing custom options
       final AzureComputeTemplateOptions options = tmp.getOptions().as(AzureComputeTemplateOptions.class);
@@ -145,22 +144,7 @@ public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContex
          assertThat(hello.getOutput().trim()).isEqualTo("hello");
       } finally {
          if (node != null) {
-            final List<Role> roles = api.getDeploymentApiForService(node.getId()).get(node.getId()).roles();
-
             view.getComputeService().destroyNode(node.getId());
-
-            for (Role role : roles) {
-               final Role.OSVirtualHardDisk disk = role.osVirtualHardDisk();
-               if (disk != null) {
-                  retry(new ConflictManagementPredicate(operationSucceeded) {
-
-                     @Override
-                     protected String operation() {
-                        return api.getDiskApi().delete(disk.diskName());
-                     }
-                  }, 600, 30, 30, SECONDS).apply(disk.diskName());
-               }
-            }
          }
       }
    }

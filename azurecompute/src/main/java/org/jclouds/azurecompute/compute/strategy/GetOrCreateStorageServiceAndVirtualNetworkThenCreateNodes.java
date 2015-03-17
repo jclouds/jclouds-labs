@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -43,12 +42,10 @@ import org.jclouds.compute.config.CustomizationResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.functions.GroupNamingConvention;
-import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.compute.strategy.CreateNodeWithGroupEncodedIntoName;
 import org.jclouds.compute.strategy.CustomizeNodeAndAddToGoodMapOrPutExceptionIntoBadMap.Factory;
 import org.jclouds.compute.strategy.ListNodesStrategy;
 import org.jclouds.compute.strategy.impl.CreateNodesWithGroupEncodedIntoNameThenAddToSet;
-import org.jclouds.logging.Logger;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -76,10 +73,6 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
    private static final String DEFAULT_SUBNET_NAME = "jclouds-1";
 
    private static final String DEFAULT_SUBNET_ADDRESS_PREFIX = "10.0.0.0/23";
-
-   @Resource
-   @Named(ComputeServiceConstants.COMPUTE_LOGGER)
-   protected Logger logger = Logger.NULL;
 
    private final AzureComputeApi api;
 

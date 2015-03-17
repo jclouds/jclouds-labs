@@ -22,14 +22,25 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 
-import java.util.List;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
+import com.google.common.net.HostAndPort;
+import com.google.common.net.InetAddresses;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.compute.ComputeServiceAdapter.NodeAndInitialCredentials;
 import org.jclouds.compute.domain.ExecResponse;
 import org.jclouds.compute.domain.Template;
@@ -37,20 +48,9 @@ import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.ssh.SshClient.Factory;
 import org.jclouds.sshj.config.SshjSshClientModule;
-import org.jclouds.azurecompute.domain.Role;
-import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.AfterGroups;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.net.HostAndPort;
-import com.google.common.net.InetAddresses;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import java.util.Arrays;
-import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 @Test(groups = "live", singleThreaded = true, testName = "AzureComputeServiceAdapterLiveTest")
 public class AzureComputeServiceAdapterLiveTest extends BaseAzureComputeApiLiveTest {
@@ -111,40 +111,41 @@ public class AzureComputeServiceAdapterLiveTest extends BaseAzureComputeApiLiveT
          deployment = adapter.createNodeWithGroupEncodedIntoName(groupName, name, template);
          assertEquals(deployment.getNode().name(), name);
          assertEquals(deployment.getNodeId(), deployment.getNode().name());
-         assert InetAddresses.isInetAddress(deployment.getNode().virtualIPs().get(0).address()) : deployment;
 
-         SshClient client = sshFactory.create(
-                 HostAndPort.fromParts(deployment.getNode().virtualIPs().get(0).address(), 22),
+         // wait for node to start...
+         final Set<Deployment> nodes = Sets.newHashSet();
+         retry(new Predicate<String>() {
+
+            @Override
+            public boolean apply(final String input) {
+               final Deployment node = adapter.getNode(input);
+               if (node != null) {
+                  nodes.add(node);
+               }
+               return !nodes.isEmpty();
+            }
+         }, 600, 30, 30, SECONDS).apply(name);
+
+         assertFalse(nodes.isEmpty());
+         final Deployment node = nodes.iterator().next();
+         assert InetAddresses.isInetAddress(node.virtualIPs().get(0).address()) : deployment;
+
+         final SshClient client = sshFactory.create(
+                 HostAndPort.fromParts(node.virtualIPs().get(0).address(), 22),
                  deployment.getCredentials());
          client.connect();
-         ExecResponse hello = client.exec("echo hello");
+         final ExecResponse hello = client.exec("echo hello");
          assertEquals(hello.getOutput().trim(), "hello");
       } finally {
          if (deployment != null) {
-            final List<Role> roles = api.getDeploymentApiForService(deployment.getNodeId()).
-                    get(deployment.getNodeId()).roles();
-
             adapter.destroyNode(deployment.getNodeId());
-
-            for (Role role : roles) {
-               final Role.OSVirtualHardDisk disk = role.osVirtualHardDisk();
-               if (disk != null) {
-                  retry(new ConflictManagementPredicate(operationSucceeded) {
-
-                     @Override
-                     protected String operation() {
-                        return api.getDiskApi().delete(disk.diskName());
-                     }
-                  }, 600, 30, 30, SECONDS).apply(disk.diskName());
-               }
-            }
          }
       }
    }
 
    @Test
    public void testListHardwareProfiles() {
-      Iterable<RoleSize> roleSizes = adapter.listHardwareProfiles();
+      final Iterable<RoleSize> roleSizes = adapter.listHardwareProfiles();
       assertFalse(Iterables.isEmpty(roleSizes));
 
       for (RoleSize roleSize : roleSizes) {

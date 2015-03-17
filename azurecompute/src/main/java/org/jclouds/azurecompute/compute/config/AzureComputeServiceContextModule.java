@@ -35,6 +35,7 @@ import org.jclouds.azurecompute.compute.functions.OSImageToImage;
 import org.jclouds.azurecompute.compute.functions.RoleSizeToHardware;
 import org.jclouds.azurecompute.compute.strategy.GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes;
 import org.jclouds.azurecompute.compute.strategy.UseNodeCredentialsButOverrideFromTemplate;
+import org.jclouds.azurecompute.compute.strategy.impl.AzureAdaptingComputeServiceStrategies;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
@@ -49,6 +50,7 @@ import org.jclouds.compute.extensions.SecurityGroupExtension;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
+import org.jclouds.compute.strategy.impl.AdaptingComputeServiceStrategies;
 import org.jclouds.util.Predicates2;
 
 import com.google.common.base.Function;
@@ -65,6 +67,7 @@ public class AzureComputeServiceContextModule
    @Override
    protected void configure() {
       super.configure();
+
       bind(new TypeLiteral<ComputeServiceAdapter<Deployment, RoleSize, OSImage, Location>>() {
       }).to(AzureComputeServiceAdapter.class);
       bind(new TypeLiteral<Function<OSImage, org.jclouds.compute.domain.Image>>() {
@@ -73,6 +76,8 @@ public class AzureComputeServiceContextModule
       }).to(RoleSizeToHardware.class);
       bind(new TypeLiteral<Function<Deployment, NodeMetadata>>() {
       }).to(DeploymentToNodeMetadata.class);
+      bind(new TypeLiteral<AdaptingComputeServiceStrategies<Deployment, RoleSize, OSImage, Location>>() {
+      }).to(AzureAdaptingComputeServiceStrategies.class);
 
       bind(PrioritizeCredentialsFromTemplate.class).to(UseNodeCredentialsButOverrideFromTemplate.class);
       bind(new TypeLiteral<Function<Location, org.jclouds.domain.Location>>() {

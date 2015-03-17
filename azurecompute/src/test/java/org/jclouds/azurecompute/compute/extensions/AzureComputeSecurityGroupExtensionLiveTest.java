@@ -16,12 +16,21 @@
  */
 package org.jclouds.azurecompute.compute.extensions;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.inject.Module;
+
 import org.jclouds.compute.extensions.internal.BaseSecurityGroupExtensionLiveTest;
 import org.jclouds.sshj.config.SshjSshClientModule;
-import org.testng.annotations.Test;
+import org.jclouds.compute.ComputeService;
+import org.jclouds.compute.domain.SecurityGroup;
+import org.jclouds.compute.extensions.SecurityGroupExtension;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
+import org.testng.annotations.Test;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 /**
  * Live test for AzureCompute {@link org.jclouds.compute.extensions.SecurityGroupExtension} implementation.
@@ -42,6 +51,32 @@ public class AzureComputeSecurityGroupExtensionLiveTest extends BaseSecurityGrou
    @Override
    protected Module getSshModule() {
       return new SshjSshClientModule();
+   }
+
+   @BeforeClass(groups = {"integration", "live"})
+   public void setup() {
+      final ComputeService computeService = view.getComputeService();
+
+      final Optional<SecurityGroupExtension> securityGroupExtension = computeService.getSecurityGroupExtension();
+      if (securityGroupExtension.isPresent()) {
+         final Optional<SecurityGroup> group = Iterables.tryFind(securityGroupExtension.get().listSecurityGroups(),
+                 new Predicate<SecurityGroup>() {
+                    @Override
+                    public boolean apply(final SecurityGroup input) {
+                       return input.getId().equals(secGroupName);
+                    }
+                 });
+
+         if (group.isPresent()) {
+            securityGroupExtension.get().removeSecurityGroup(group.get().getId());
+         }
+      }
+   }
+
+   @AfterClass(groups = {"integration", "live"}, alwaysRun = true)
+   @Override
+   protected void tearDownContext() {
+      super.tearDownContext();
    }
 
 }
