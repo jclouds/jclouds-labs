@@ -48,6 +48,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "Ubuntu Server 12.04 LTS", // label
                       "Ubuntu Server 12.04 LTS amd64 20120528 Cloud Image", //description
+                      "Ubuntu Server 12.04 LTS", // imageFamily
                       "Canonical", // category
                       OSImage.Type.LINUX, // os
                       "Canonical", //publisherName
@@ -61,10 +62,12 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "Windows Server 2008 R2 SP1, June 2012", // label
                       "Windows Server 2008 R2 is a multi-purpose server.", //description
+                      "Windows Server 2008 R2 SP1", // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
-                      URI.create("http://blobs/disks/mydeployment/MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd"),
+                      URI.create("http://blobs/disks/mydeployment/"
+                              + "MSFT__Win2K8R2SP1-120612-1520-121206-01-en-us-30GB.vhd"),
                       // mediaLink
                       30, // logicalSizeInGB
                       Collections.<String>emptyList() // eula
@@ -75,6 +78,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "Microsoft SQL Server 2012 Evaluation Edition", // label
                       "SQL Server 2012 Evaluation Edition (64-bit).", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -89,6 +93,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "Windows Server 2012 Release Candidate, July 2012", // label
                       "Windows Server 2012 incorporates Microsoft's experience building.", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -102,6 +107,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "Windows Server 2008 R2 SP1, July 2012", // label
                       "Windows Server 2008 R2 is a multi-purpose server.", //description
+                      null, // imageFamily
                       "Microsoft", // category
                       OSImage.Type.WINDOWS, // os
                       "Microsoft", //publisherName
@@ -115,10 +121,12 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "OpenLogic CentOS 6.2", // label
                       "This distribution of Linux is based on CentOS.", //description
+                      null, // imageFamily
                       "OpenLogic", // category
                       OSImage.Type.LINUX, // os
                       "openLogic", //publisherName
-                      URI.create("http://blobs/disks/mydeployment/OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd"),
+                      URI.create("http://blobs/disks/mydeployment/"
+                              + "OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd"),
                       // mediaLink
                       30, //logicalSizeInGB
                       Arrays.asList("http://www.openlogic.com/azure/service-agreement/") // eula
@@ -129,6 +137,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "openSUSE 12.1", // label
                       "openSUSE is a free and Linux-based operating system!", //description
+                      null, // imageFamily
                       "SUSE", // category
                       OSImage.Type.LINUX, // os
                       "SUSE", //publisherName
@@ -142,6 +151,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "SUSE Linux Enterprise Server", // label
                       "SUSE Linux Enterprise Server is a highly reliable value.", //description
+                      null, // imageFamily
                       "SUSE", // category
                       OSImage.Type.LINUX, // os
                       "SUSE", //publisherName
@@ -155,6 +165,7 @@ public class ListOSImagesHandlerTest extends BaseHandlerTest {
                       null, // affinityGroup
                       "RightImage-CentOS-6.4-x64-v13.4", // label
                       null, //description
+                      null, // imageFamily
                       "RightScale with Linux", // category
                       OSImage.Type.LINUX, // os
                       "RightScale with Linux",

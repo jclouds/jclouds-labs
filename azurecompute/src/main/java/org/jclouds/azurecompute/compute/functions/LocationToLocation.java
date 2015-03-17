@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.azurecompute.domain.Location;
+import org.jclouds.azurecompute.domain.Region;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
 import org.jclouds.location.suppliers.all.JustProvider;
@@ -48,9 +49,14 @@ public class LocationToLocation implements Function<Location, org.jclouds.domain
       final LocationBuilder builder = new LocationBuilder();
       builder.id(location.name());
       builder.description(location.displayName());
-      builder.scope(LocationScope.REGION);
       builder.parent(getOnlyElement(justProvider.get()));
-      builder.iso3166Codes(ImmutableSet.<String>of("name", location.name()));
+
+      builder.scope(LocationScope.REGION);
+      final Region region = Region.byName(location.name());
+      if (region != null) {
+         builder.iso3166Codes(ImmutableSet.of(region.iso3166Code()));
+      }
+
       return builder.build();
    }
 

@@ -135,11 +135,13 @@ public abstract class StorageService {
       /**
        * Indicates the primary geographical region in which the storage account exists at this time.
        */
+      @Nullable
       public abstract String geoPrimaryRegion();
 
       /**
        * Indicates whether the primary storage region is available.
        */
+      @Nullable
       public abstract RegionStatus statusOfPrimary();
 
       /**

@@ -32,20 +32,21 @@ public class ListLocationsHandlerTest extends BaseHandlerTest {
 
    public void test() {
       InputStream is = getClass().getResourceAsStream("/locations.xml");
-      List<Location> result = factory.create(new ListLocationsHandler(new LocationHandler())).parse(is);
+      List<Location> result = factory.create(
+              new ListLocationsHandler(new LocationHandler(new ComputeCapabilitiesHandler()))).parse(is);
 
       assertEquals(result, expected());
    }
 
    public static List<Location> expected() {
       List<String> availableServices = ImmutableList.of("Compute", "Storage", "PersistentVMRole");
-      return ImmutableList.of( //
-              Location.create("West US", "West US", availableServices), //
-              Location.create("East US", "East US", availableServices), //
-              Location.create("East Asia", "East Asia", availableServices), //
-              Location.create("Southeast Asia", "Southeast Asia", availableServices), //
-              Location.create("North Europe", "North Europe", availableServices), //
-              Location.create("West Europe", "West Europe", availableServices) //
+      return ImmutableList.of(
+              Location.create("West US", "West US", availableServices, null),
+              Location.create("East US", "East US", availableServices, null),
+              Location.create("East Asia", "East Asia", availableServices, null),
+              Location.create("Southeast Asia", "Southeast Asia", availableServices, null),
+              Location.create("North Europe", "North Europe", availableServices, null),
+              Location.create("West Europe", "West Europe", availableServices, null)
       );
    }
 

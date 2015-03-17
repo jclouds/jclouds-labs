@@ -37,7 +37,7 @@ import org.jclouds.rest.annotations.XMLResponseParser;
  * your subscription.
  * <p/>
  *
- * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299" />
+ * @see <a href="http://msdn.microsoft.com/en-us/library/gg441299">docs</a>
  */
 @Path("/locations")
 @Headers(keys = "x-ms-version", values = "{jclouds.api-version}")

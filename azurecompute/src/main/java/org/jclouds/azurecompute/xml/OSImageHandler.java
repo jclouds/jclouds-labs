@@ -48,6 +48,8 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
 
    private String description;
 
+   private String imageFamily;
+
    private OSImage.Type os;
 
    private URI mediaLink;
@@ -55,8 +57,6 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
    private Integer logicalSizeInGB;
 
    private final List<String> eulas = Lists.newArrayList();
-
-   private String imageFamily;
 
    private Date publishedDate;
 
@@ -80,9 +80,8 @@ final class OSImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
 
    @Override
    public OSImage getResult() {
-      OSImage result = OSImage
-              .create(name, location, affinityGroup, label, description, category, os, publisherName, mediaLink,
-                      logicalSizeInGB, ImmutableList.copyOf(eulas));
+      OSImage result = OSImage.create(name, location, affinityGroup, label, description, imageFamily, category, os,
+              publisherName, mediaLink, logicalSizeInGB, ImmutableList.copyOf(eulas));
       resetState(); // handler is called in a loop.
       return result;
    }

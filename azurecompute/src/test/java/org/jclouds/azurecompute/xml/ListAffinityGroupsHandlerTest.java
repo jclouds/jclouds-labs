@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.AffinityGroup;
-import org.jclouds.azurecompute.domain.AffinityGroup.ComputeCapabilities;
+import org.jclouds.azurecompute.domain.ComputeCapabilities;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.functions.BaseHandlerTest;

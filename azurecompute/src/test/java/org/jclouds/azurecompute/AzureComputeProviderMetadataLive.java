@@ -19,12 +19,14 @@ package org.jclouds.azurecompute;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_INITIAL_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
 import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
 
 import com.google.auto.service.AutoService;
 import java.net.URI;
 import java.util.Properties;
-import org.jclouds.azurecompute.config.AzureComputeProperties;
+import org.jclouds.azurecompute.domain.Region;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.providers.ProviderMetadata;
 
@@ -41,14 +43,14 @@ public class AzureComputeProviderMetadataLive extends AzureComputeProviderMetada
    }
 
    public static Properties defaultProperties() {
-      Properties properties = AzureManagementApiMetadata.defaultProperties();
-      properties.setProperty(TEMPLATE, "osFamily=UBUNTU,osVersionMatches=.*14\\.10.*,loginUser=jclouds,"
+      final Properties properties = AzureManagementApiMetadata.defaultProperties();
+      properties.setProperty(TEMPLATE, "osFamily=UBUNTU,osVersionMatches=.*14\\.10,loginUser=jclouds,"
               + "locationId=" + BaseAzureComputeApiLiveTest.LOCATION);
-      properties.setProperty(OPERATION_TIMEOUT, "" + 600 * 1000);
-      properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "" + 5);
-      properties.setProperty(OPERATION_POLL_MAX_PERIOD, "" + 15);
-      properties.setProperty(AzureComputeProperties.TCP_RULE_FORMAT, "tcp_%s-%s");
-      properties.setProperty(AzureComputeProperties.TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
+      properties.setProperty(OPERATION_TIMEOUT, "600000");
+      properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "5");
+      properties.setProperty(OPERATION_POLL_MAX_PERIOD, "15");
+      properties.setProperty(TCP_RULE_FORMAT, "tcp_%s-%s");
+      properties.setProperty(TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
       return properties;
    }
 
@@ -66,7 +68,7 @@ public class AzureComputeProviderMetadataLive extends AzureComputeProviderMetada
                  .homepage(URI.create("https://www.windowsazure.com/"))
                  .console(URI.create("https://windows.azure.com/default.aspx"))
                  .linkedServices("azureblob", "azurequeue", "azuretable")
-                 .iso3166Codes("US-TX", "US-IL", "IE-D", "SG", "NL-NH", "HK")
+                 .iso3166Codes(Region.iso3166Codes())
                  .defaultProperties(AzureComputeProviderMetadataLive.defaultProperties());
       }
 
@@ -76,8 +78,8 @@ public class AzureComputeProviderMetadataLive extends AzureComputeProviderMetada
       }
 
       @Override
-      public Builder fromProviderMetadata(final ProviderMetadata in) {
-         super.fromProviderMetadata(in);
+      public Builder fromProviderMetadata(final ProviderMetadata providerMetadata) {
+         super.fromProviderMetadata(providerMetadata);
          return this;
       }
    }

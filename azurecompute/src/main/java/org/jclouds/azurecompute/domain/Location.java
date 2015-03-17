@@ -17,9 +17,11 @@
 package org.jclouds.azurecompute.domain;
 
 import static com.google.common.collect.ImmutableList.copyOf;
+
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
 
 /**
  * A data center location that is valid for your subscription.
@@ -45,7 +47,15 @@ public abstract class Location {
     */
    public abstract List<String> availableServices();
 
-   public static Location create(final String name, final String displayName, final List<String> availableServices) {
-      return new AutoValue_Location(name, displayName, copyOf(availableServices));
+   /**
+    * Specifies the roles sizes that are available for deployments in the location.
+    */
+   @Nullable
+   public abstract ComputeCapabilities computeCapabilities();
+
+   public static Location create(final String name, final String displayName, final List<String> availableServices,
+           final ComputeCapabilities computeCapabilities) {
+
+      return new AutoValue_Location(name, displayName, copyOf(availableServices), computeCapabilities);
    }
 }
