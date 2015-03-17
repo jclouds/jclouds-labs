@@ -32,9 +32,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.jclouds.azurecompute.domain.CloudService;
+import org.jclouds.azurecompute.domain.CloudServiceProperties;
 import org.jclouds.azurecompute.functions.Base64EncodeLabel;
 import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.xml.CloudServiceHandler;
+import org.jclouds.azurecompute.xml.CloudServicePropertiesHandler;
 import org.jclouds.azurecompute.xml.ListCloudServicesHandler;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.Fallback;
@@ -122,4 +124,28 @@ public interface CloudServiceApi {
    @Fallback(NullOnNotFoundOr404.class)
    @ResponseParser(ParseRequestIdHeader.class)
    String delete(@PathParam("name") String name);
+
+   /*
+   * The Get Cloud Service Properties operation retrieves properties for the specified cloud service.
+   *
+   * These properties include the following values:
+   *  The name and the description of the cloud service.
+   *
+   *  The name of the affinity group to which the cloud service belongs, or its location if it is not part of an affinity group.
+   *
+   *  The label that can be used to track the cloud service.
+   *
+   *  The date and time that the cloud service was created or modified.
+   *
+   *  If details are requested, information about deployments in the cloud service is returned.
+   *
+   * */
+
+   @Named("CloudServiceProperties")
+   @GET
+   @Path("/{name}")
+   @QueryParams(keys = "embed-detail", values = "true")
+   @XMLResponseParser(CloudServicePropertiesHandler.class)
+   @Fallback(NullOnNotFoundOr404.class)
+   @Nullable CloudServiceProperties getProperties(@PathParam("name") String name);
 }
