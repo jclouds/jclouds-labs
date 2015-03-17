@@ -49,7 +49,12 @@ public class AzureManagementApiMetadata extends BaseHttpApiMetadata<AzureCompute
    }
 
    public static Properties defaultProperties() {
-      return BaseHttpApiMetadata.defaultProperties();
+      final Properties properties = BaseHttpApiMetadata.defaultProperties();
+      // Sometimes SSH Authentication failure happens in Azure.
+      // It seems that the authorized key is injected after ssh has been started.  
+      properties.setProperty("jclouds.ssh.max-retries", "15");
+      properties.setProperty("jclouds.ssh.retry-auth", "true");
+      return properties;
    }
 
    public static class Builder extends BaseHttpApiMetadata.Builder<AzureComputeApi, Builder> {

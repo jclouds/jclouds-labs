@@ -16,14 +16,13 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import static com.google.common.base.CaseFormat.UPPER_CAMEL;
-import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static org.jclouds.util.SaxUtils.currentOrNull;
 
 import java.util.List;
 
 import org.jclouds.azurecompute.domain.Deployment.InstanceEndpoint;
 import org.jclouds.azurecompute.domain.Deployment.InstanceStatus;
+import org.jclouds.azurecompute.domain.Deployment.PowerState;
 import org.jclouds.azurecompute.domain.Deployment.RoleInstance;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.http.functions.ParseSax;
@@ -38,6 +37,8 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
    private String instanceName;
 
    private InstanceStatus instanceStatus;
+
+   private PowerState powerState;
 
    private Integer instanceUpgradeDomain;
 
@@ -68,6 +69,7 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
    private void resetState() {
       roleName = instanceName = ipAddress = hostname = null;
       instanceStatus = null;
+      powerState = null;
       instanceUpgradeDomain = instanceFaultDomain = null;
       instanceSize = null;
       instanceEndpoints = Lists.newArrayList();
@@ -77,8 +79,8 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
 
    @Override
    public RoleInstance getResult() {
-      RoleInstance result = RoleInstance.create(roleName, instanceName, instanceStatus, instanceUpgradeDomain,
-              instanceFaultDomain, instanceSize, ipAddress, hostname, instanceEndpoints);
+      RoleInstance result = RoleInstance.create(roleName, instanceName, instanceStatus, powerState,
+              instanceUpgradeDomain, instanceFaultDomain, instanceSize, ipAddress, hostname, instanceEndpoints);
       resetState(); // handler is called in a loop.
       return result;
    }
@@ -96,8 +98,9 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
       } else if (qName.equals("InstanceName")) {
          instanceName = currentOrNull(currentText);
       } else if (qName.equals("InstanceStatus")) {
-         String instanceStatusText = currentOrNull(currentText);
-         instanceStatus = InstanceStatus.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatusText));
+         instanceStatus = InstanceStatus.fromString(currentOrNull(currentText));
+      } else if (qName.equals("PowerState")) {
+         powerState = PowerState.fromString(currentOrNull(currentText));
       } else if (qName.equals("InstanceUpgradeDomain")) {
          String upgradeDomain = currentOrNull(currentText);
          if (upgradeDomain != null) {

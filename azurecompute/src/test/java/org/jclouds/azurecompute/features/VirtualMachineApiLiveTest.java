@@ -161,7 +161,7 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
    @AfterClass(alwaysRun = true)
    public void cleanup() {
       if (cloudService != null && api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT) != null) {
-         final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roles();
+         final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roleList();
 
          retry(new ConflictManagementPredicate(operationSucceeded) {
 

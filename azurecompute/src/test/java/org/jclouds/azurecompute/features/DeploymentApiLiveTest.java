@@ -96,7 +96,7 @@ public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
               .virtualNetworkName(virtualNetworkSite.name())
               .externalEndpoint(DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort(22, 22))
               .build();
-      String requestId = api().create(params);
+      final String requestId = api().create(params);
       assertTrue(operationSucceeded.apply(requestId), requestId);
 
       deployment = api().get(DEPLOYMENT);
@@ -106,7 +106,7 @@ public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
       assertThat(deployment.status()).isEqualTo(Deployment.Status.RUNNING);
       assertThat(deployment.label()).isEqualTo(DEPLOYMENT);
       assertThat(deployment.slot()).isEqualTo(Deployment.Slot.PRODUCTION);
-      assertThat(deployment.roles().size()).isEqualTo(1);
+      assertThat(deployment.roleList().size()).isEqualTo(1);
       assertThat(deployment.roleInstanceList().size()).isEqualTo(1);
       assertThat(deployment.virtualNetworkName()).isEqualTo(virtualNetworkSite.name());
 
@@ -120,7 +120,7 @@ public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    @Test(dependsOnMethods = "testGet")
    public void testDelete() {
-      final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roles();
+      final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roleList();
 
       retry(new ConflictManagementPredicate(operationSucceeded) {
 

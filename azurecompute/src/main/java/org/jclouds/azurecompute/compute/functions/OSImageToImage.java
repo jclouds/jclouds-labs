@@ -90,6 +90,15 @@ public class OSImageToImage implements Function<OSImage, Image> {
               build();
    }
 
+   public static String toGeoName(final String name, final String location) {
+      return name + "/" + location;
+   }
+
+   public static String[] fromGeoName(final String geoName) {
+      final String[] parts = checkNotNull(geoName, "geoName").split("/");
+      return (parts.length == 1) ? new String[]{geoName, null} : parts;
+   }
+
    public static Function<OSImage, OperatingSystem.Builder> osFamily() {
       return new Function<OSImage, OperatingSystem.Builder>() {
          @Override

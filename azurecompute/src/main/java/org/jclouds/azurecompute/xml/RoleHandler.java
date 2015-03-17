@@ -169,6 +169,7 @@ public class RoleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<R
          }
       } else if (qName.equals("ResourceExtensionReferences")) {
          inResourceExtensionReference = false;
+      } else if (qName.equals("ResourceExtensionReference")) {
          resourceExtensionReferences.add(resourceExtensionReferenceHandler.getResult());
       } else if (inResourceExtensionReference) {
          resourceExtensionReferenceHandler.endElement(ignoredUri, ignoredName, qName);

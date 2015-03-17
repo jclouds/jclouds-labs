@@ -41,6 +41,10 @@ public abstract class ConflictManagementPredicate implements Predicate<String> {
 
    private boolean raiseException = false;
 
+   public ConflictManagementPredicate() {
+      this(null);
+   }
+
    /**
     * Constructor.
     *
@@ -88,7 +92,7 @@ public abstract class ConflictManagementPredicate implements Predicate<String> {
             return true;
          }
 
-         final boolean res = operationSucceeded.apply(requestId);
+         final boolean res = operationSucceeded == null ? true : operationSucceeded.apply(requestId);
          if (!res && raiseException) {
             final String message = generateIllegalStateExceptionMessage(requestId, timeout);
             logger.warn(message);

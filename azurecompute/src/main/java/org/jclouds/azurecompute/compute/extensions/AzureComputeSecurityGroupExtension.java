@@ -109,7 +109,7 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
       final Deployment deployment = api.getDeploymentApiForService(name).get(name);
       final String virtualNetworkName = deployment.virtualNetworkName();
 
-      final List<String> subnetNames = FluentIterable.from(deployment.roles())
+      final List<String> subnetNames = FluentIterable.from(deployment.roleList())
               .transformAndConcat(new Function<Role, Iterable<Role.ConfigurationSet>>() {
                  @Override
                  public Iterable<Role.ConfigurationSet> apply(final Role input) {
@@ -153,7 +153,7 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
       checkNotNull(location, "location");
 
       final NetworkSecurityGroup networkSecurityGroup = NetworkSecurityGroup.create(name, name, location.getId(), null);
-      String createNSGRequestId = api.getNetworkSecurityGroupApi().create(networkSecurityGroup);
+      final String createNSGRequestId = api.getNetworkSecurityGroupApi().create(networkSecurityGroup);
       if (!operationSucceededPredicate.apply(createNSGRequestId)) {
          final String message = generateIllegalStateExceptionMessage(
                  createNSGRequestId, azureComputeConstants.operationTimeout());
@@ -181,7 +181,7 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
                final String virtualNetworkName = virtualNetworkSite.name();
                final String subnetName = subnet.name();
                if (virtualNetworkName != null && subnetName != null) {
-                  NetworkSecurityGroup networkSecurityGroupAppliedToSubnet = api.getNetworkSecurityGroupApi()
+                  final NetworkSecurityGroup networkSecurityGroupAppliedToSubnet = api.getNetworkSecurityGroupApi()
                           .getNetworkSecurityGroupAppliedToSubnet(virtualNetworkName, subnetName);
                   if (networkSecurityGroupAppliedToSubnet != null) {
                      if (!networkSecurityGroupAppliedToSubnet.name().equals(id)) {
@@ -228,7 +228,7 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
          final Deployment deployment = api.getDeploymentApiForService(service.name()).get(service.name());
          if (deployment != null && deployment.status() != Status.DELETING) {
             for (Deployment.VirtualIP vip : Iterables.filter(deployment.virtualIPs(), Predicates.notNull())) {
-               for (final Role role : deployment.roles()) {
+               for (final Role role : deployment.roleList()) {
                   for (Role.ConfigurationSet configurationSet : role.configurationSets()) {
                      if (ipPermission.getFromPort() < ipPermission.getToPort()) {
                         for (int i = ipPermission.getFromPort(); i <= ipPermission.getToPort(); i++) {
@@ -315,7 +315,7 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
          final Deployment deployment = api.getDeploymentApiForService(service.name()).get(service.name());
          if (deployment != null && deployment.status() != Status.DELETING) {
             for (Deployment.VirtualIP vip : Iterables.filter(deployment.virtualIPs(), Predicates.notNull())) {
-               for (final Role role : deployment.roles()) {
+               for (final Role role : deployment.roleList()) {
                   for (Role.ConfigurationSet configurationSet : role.configurationSets()) {
                      for (int i = ipPermission.getFromPort(); i <= ipPermission.getToPort(); i++) {
                         final String name = NetworkSecurityGroups.createRuleName(
@@ -450,8 +450,9 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
       final String destinationPortRange = ipPermission.getFromPort() == ipPermission.getToPort()
               ? String.valueOf(ipPermission.getToPort())
               : String.format("%s-%s", ipPermission.getFromPort(), ipPermission.getToPort());
-      final String destinationAddressPrefix
-              = ipPermission.getCidrBlocks().isEmpty() || Iterables.get(ipPermission.getCidrBlocks(), 0).equals("0.0.0.0/0")
+      final String destinationAddressPrefix =
+              ipPermission.getCidrBlocks().isEmpty()
+              || Iterables.get(ipPermission.getCidrBlocks(), 0).equals("0.0.0.0/0")
                       ? "*"
                       : Iterables.get(ipPermission.getCidrBlocks(), 0);
       final String setRuleToNSGRequestId = api.getNetworkSecurityGroupApi().

@@ -16,8 +16,6 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import static com.google.common.base.CaseFormat.UPPER_CAMEL;
-import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static org.testng.Assert.assertEquals;
 
 import java.io.InputStream;
@@ -43,7 +41,7 @@ import com.google.common.collect.ImmutableList;
 public class DeploymentHandlerTest extends BaseHandlerTest {
 
    private InstanceStatus parseInstanceStatus(final String instanceStatus) {
-      return InstanceStatus.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, instanceStatus));
+      return InstanceStatus.fromString(instanceStatus);
    }
 
    /**
@@ -51,7 +49,7 @@ public class DeploymentHandlerTest extends BaseHandlerTest {
     * <a href="http://msdn.microsoft.com/en-us/library/azure/ee460804.aspx#RoleInstanceList">here</a>.
     */
    public void parseInstanceStatus_Recognized() {
-      assertEquals(parseInstanceStatus("Unknown"), InstanceStatus.UNKNOWN);
+      assertEquals(parseInstanceStatus("RoleStateUnknown"), InstanceStatus.ROLE_STATE_UNKNOWN);
       assertEquals(parseInstanceStatus("CreatingVM"), InstanceStatus.CREATING_VM);
       assertEquals(parseInstanceStatus("StartingVM"), InstanceStatus.STARTING_VM);
       assertEquals(parseInstanceStatus("CreatingRole"), InstanceStatus.CREATING_ROLE);
@@ -103,6 +101,7 @@ public class DeploymentHandlerTest extends BaseHandlerTest {
                               "node1855162607153993262-b26", // roleName
                               "node1855162607153993262-b26", // instanceName
                               InstanceStatus.READY_ROLE, //instanceStatus
+                              Deployment.PowerState.STARTED,
                               0,
                               0,
                               RoleSize.Type.BASIC_A0,

@@ -47,20 +47,26 @@ public abstract class Deployment {
 
    public enum Status {
 
-      RUNNING,
-      SUSPENDED,
-      RUNNING_TRANSITIONING,
-      SUSPENDED_TRANSITIONING,
-      STARTING,
-      SUSPENDING,
-      DEPLOYING,
-      DELETING,
-      UNRECOGNIZED;
+      RUNNING("Running"),
+      SUSPENDED("Suspended"),
+      RUNNING_TRANSITIONING("RunningTransitioning"),
+      SUSPENDED_TRANSITIONING("SuspendedTransitioning"),
+      STARTING("Starting"),
+      SUSPENDING("Suspending"),
+      DEPLOYING("Deploying"),
+      DELETING("Deleting"),
+      UNRECOGNIZED("");
+
+      private final String key;
+
+      private Status(final String key) {
+         this.key = key;
+      }
 
       public static Status fromString(final String text) {
          if (text != null) {
             for (Status status : Status.values()) {
-               if (text.equalsIgnoreCase(status.name())) {
+               if (text.equalsIgnoreCase(status.key)) {
                   return status;
                }
             }
@@ -71,38 +77,82 @@ public abstract class Deployment {
 
    public enum InstanceStatus {
 
-      CREATING_VM,
-      STARTING_VM,
-      CREATING_ROLE,
-      STARTING_ROLE,
-      READY_ROLE,
-      BUSY_ROLE,
-      STOPPING_ROLE,
-      STOPPING_VM,
-      DELETING_VM,
-      STOPPED_VM,
-      RESTARTING_ROLE,
-      CYCLING_ROLE,
-      FAILED_STARTING_ROLE,
-      FAILED_STARTING_VM,
-      UNRESPONSIVE_ROLE,
-      STOPPED_DEALLOCATED,
-      PREPARING,
-      /**
-       * Unknown to Azure.
-       */
-      UNKNOWN,
+      ROLE_STATE_UNKNOWN("RoleStateUnknown"),
+      CREATING_VM("CreatingVM"),
+      STARTING_VM("StartingVM"),
+      CREATING_ROLE("CreatingRole"),
+      STARTING_ROLE("StartingRole"),
+      READY_ROLE("ReadyRole", false),
+      BUSY_ROLE("BusyRole"),
+      STOPPING_ROLE("StoppingRole"),
+      STOPPING_VM("StoppingVM"),
+      STOPPED_DEALLOCATED("StoppedDeallocated", false),
+      PREPARING("Preparing"),
+      DELETING_VM("DeletingVM"),
+      STOPPED_VM("StoppedVM", false),
+      RESTARTING_ROLE("RestartingRole"),
+      CYCLING_ROLE("CyclingRole"),
+      FAILED_STARTING_ROLE("FailedStartingRole", false),
+      FAILED_STARTING_VM("FailedStartingVM", false),
+      UNRESPONSIVE_ROLE("UnresponsiveRole"),
+      PROVISIONING("Provisioning"),
       /**
        * Not parsable into one of the above.
        */
-      UNRECOGNIZED;
+      UNRECOGNIZED("");
+
+      private final String key;
+
+      private final boolean _transient;
+
+      private InstanceStatus(final String key) {
+         this(key, true);
+      }
+
+      private InstanceStatus(final String key, final boolean _transient) {
+         this.key = key;
+         this._transient = _transient;
+      }
+
+      public boolean isTransient() {
+         return _transient;
+      }
 
       public static InstanceStatus fromString(final String text) {
          if (text != null) {
             for (InstanceStatus status : InstanceStatus.values()) {
-               // Azure isn't exactly upper-camel, as some states end in VM, not Vm.
-               if (text.replace("V_M", "VM").equalsIgnoreCase(status.name())) {
+               if (text.equalsIgnoreCase(status.key)) {
                   return status;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
+   }
+
+   public enum PowerState {
+
+      STARTING("Starting"),
+      STARTED("Started"),
+      STOPPING("Stopping"),
+      STOPPED("Stopped"),
+      UNKNOWN("Unknown"),
+      /**
+       * Not parsable into one of the above.
+       */
+      UNRECOGNIZED("");
+
+      private final String key;
+
+      private PowerState(final String key) {
+         this.key = key;
+      }
+
+      public static PowerState fromString(final String text) {
+         if (text != null) {
+            for (PowerState state : PowerState.values()) {
+               if (text.equalsIgnoreCase(state.key)) {
+                  return state;
                }
             }
          }
@@ -159,11 +209,13 @@ public abstract class Deployment {
 
       public abstract InstanceStatus instanceStatus();
 
-      @Nullable // null value in case of StoppedDeallocated
-      public abstract int instanceUpgradeDomain();
+      public abstract PowerState powerState();
 
       @Nullable // null value in case of StoppedDeallocated
-      public abstract int instanceFaultDomain();
+      public abstract Integer instanceUpgradeDomain();
+
+      @Nullable // null value in case of StoppedDeallocated
+      public abstract Integer instanceFaultDomain();
 
       @Nullable // null value in case of StoppedDeallocated
       public abstract RoleSize.Type instanceSize();
@@ -181,12 +233,12 @@ public abstract class Deployment {
       }
 
       public static RoleInstance create(final String roleName, final String instanceName,
-              final InstanceStatus instanceStatus, final int instanceUpgradeDomain,
-              final int instanceFaultDomain, final RoleSize.Type instanceSize,
+              final InstanceStatus instanceStatus, final PowerState powerState, final Integer instanceUpgradeDomain,
+              final Integer instanceFaultDomain, final RoleSize.Type instanceSize,
               final String ipAddress, final String hostname, final List<InstanceEndpoint> instanceEndpoints) {
 
-         return new AutoValue_Deployment_RoleInstance(roleName, instanceName, instanceStatus, instanceUpgradeDomain,
-                 instanceFaultDomain, instanceSize, ipAddress, hostname,
+         return new AutoValue_Deployment_RoleInstance(roleName, instanceName, instanceStatus, powerState,
+                 instanceUpgradeDomain, instanceFaultDomain, instanceSize, ipAddress, hostname,
                  instanceEndpoints == null ? null : copyOf(instanceEndpoints));
       }
    }
@@ -245,7 +297,7 @@ public abstract class Deployment {
    public abstract List<RoleInstance> roleInstanceList();
 
    @Nullable
-   public abstract List<Role> roles();
+   public abstract List<Role> roleList();
 
    @Nullable
    public abstract String virtualNetworkName();
