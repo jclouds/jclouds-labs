@@ -26,6 +26,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks;
@@ -51,6 +52,7 @@ import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
 import org.jclouds.rest.annotations.PATCH;
 import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.Transform;
@@ -121,7 +123,7 @@ public interface ServiceApi {
     * @param id the id of the {@code Service} to delete.
     * @return true if delete was successful, false if not.
     */
-   @Named("network:delete")
+   @Named("service:delete")
    @DELETE
    @Path("/{id}")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
@@ -144,4 +146,30 @@ public interface ServiceApi {
    @MapBinder(JSONPatchUpdate.class)
    @Nullable
    URI update(@PathParam("id") String id, @PayloadParam("service") Service service, @PayloadParam("updateService") UpdateService updateService);
+
+   /**
+    * Delete a cached service asset.
+    *
+    * @param id the id of the {@code Service} to delete.
+    * @return true if delete was successful, false if not.
+    */
+   @Named("service:deleteAsset")
+   @DELETE
+   //@Path("/{id}/assets?url={url : .+}")
+   @Path("/{id}/assets")
+   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   boolean deleteAsset(@PathParam("id") String id, @QueryParam("url") String url);
+
+   /**
+    * Delete all cached service assets.
+    *
+    * @param id the id of the {@code Service} to delete.
+    * @return true if delete was successful, false if not.
+    */
+   @Named("service:deleteAssets")
+   @DELETE
+   @Path("/{id}/assets")
+   @QueryParams(keys = "all", values = "true")
+   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   boolean deleteAssets(@PathParam("id") String id);
 }

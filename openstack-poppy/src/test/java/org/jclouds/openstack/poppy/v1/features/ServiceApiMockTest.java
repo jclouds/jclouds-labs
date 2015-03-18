@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertFalse;
 
 import java.io.IOException;
 import java.net.URI;
@@ -278,6 +279,142 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
 
          assertThat(uri).isEqualTo(URI.create("https://poppycdn.org/v1.0/services/123123"));
 
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testDeleteService() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(
+            new MockResponse().setResponseCode(200)));
+
+      try {
+         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
+         ServiceApi api = poppyApi.getServiceApi();
+
+         boolean result = api.delete("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
+
+         assertThat(server.getRequestCount()).isEqualTo(2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE", BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
+
+         assertTrue(result);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testDeleteServiceFail() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(
+            new MockResponse().setResponseCode(404)));
+
+      try {
+         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
+         ServiceApi api = poppyApi.getServiceApi();
+
+         boolean result = api.delete("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
+
+         assertThat(server.getRequestCount()).isEqualTo(2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE", BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
+
+         assertFalse(result);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testDeleteServiceAsset() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(
+            new MockResponse().setResponseCode(200)));
+
+      try {
+         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
+         ServiceApi api = poppyApi.getServiceApi();
+
+         boolean result = api.deleteAsset("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0", "/images/1.jpg");
+
+         assertThat(server.getRequestCount()).isEqualTo(2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE",
+               BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?url=/images/1.jpg");
+
+         assertTrue(result);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testDeleteServiceAssetFail() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(
+            new MockResponse().setResponseCode(404)));
+
+      try {
+         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
+         ServiceApi api = poppyApi.getServiceApi();
+
+         boolean result = api.deleteAsset("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0", "/images/1.jpg");
+
+         assertThat(server.getRequestCount()).isEqualTo(2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE",
+               BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?url=/images/1.jpg");
+
+         assertFalse(result);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testDeleteAllServiceAssets() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(
+            new MockResponse().setResponseCode(200)));
+
+      try {
+         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
+         ServiceApi api = poppyApi.getServiceApi();
+
+         boolean result = api.deleteAssets("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
+
+         assertThat(server.getRequestCount()).isEqualTo(2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE",
+               BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?all=true");
+
+         assertTrue(result);
+      } finally {
+         server.shutdown();
+      }
+   }
+
+   public void testDeleteAllServiceAssetsFail() throws Exception {
+      MockWebServer server = mockOpenStackServer();
+      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
+      server.enqueue(addCommonHeaders(
+            new MockResponse().setResponseCode(404)));
+
+      try {
+         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
+         ServiceApi api = poppyApi.getServiceApi();
+
+         boolean result = api.deleteAssets("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
+
+         assertThat(server.getRequestCount()).isEqualTo(2);
+         assertAuthentication(server);
+         assertRequest(server.takeRequest(), "DELETE",
+               BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?all=true");
+
+         assertFalse(result);
       } finally {
          server.shutdown();
       }

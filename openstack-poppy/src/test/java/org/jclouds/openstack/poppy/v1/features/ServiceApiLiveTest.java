@@ -80,6 +80,8 @@ public class ServiceApiLiveTest extends BasePoppyApiLiveTest {
          assertNotNull(serviceList);
          Service serviceGet = api.getServiceApi().get(serviceId);
          assertEquals(serviceList, serviceGet);
+         assertTrue(serviceApi.deleteAsset(serviceId, "image/1.jpg"));
+         assertTrue(serviceApi.deleteAssets(serviceId));
       }
       finally {
          if (serviceId != null) {
