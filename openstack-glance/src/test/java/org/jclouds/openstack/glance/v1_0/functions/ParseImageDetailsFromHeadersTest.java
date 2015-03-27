@@ -18,6 +18,7 @@ package org.jclouds.openstack.glance.v1_0.functions;
 
 import static org.testng.Assert.assertEquals;
 
+import com.google.common.collect.ImmutableMap;
 import org.jclouds.date.internal.SimpleDateFormatDateService;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.glance.v1_0.domain.ContainerFormat;
@@ -52,6 +53,7 @@ public class ParseImageDetailsFromHeadersTest {
                                                 .put("X-Image-Meta-Updated_at", "2012-05-18T18:42:58")
                                                 .put("X-Image-Meta-Disk_format", "raw")
                                                 .put("X-Image-Meta-Name", "debian")
+                                                .put("X-Image-Meta-Property-Description", "debian image description")
                                                 .put("Location", "http://HOST/v1/images/fcc451d0-f6e4-4824-ad8f-70ec12326d07")
                                                 .put("Etag", "233afa7b8809d840679b5f0d36d7350a")
                                                 .build())
@@ -65,6 +67,7 @@ public class ParseImageDetailsFromHeadersTest {
       return ImageDetails.builder()
                         .id("fcc451d0-f6e4-4824-ad8f-70ec12326d07")
                         .name("debian")
+                        .properties(ImmutableMap.of("description", "debian image description"))
                         .containerFormat(ContainerFormat.BARE)
                         .diskFormat(DiskFormat.RAW)
                         .checksum("233afa7b8809d840679b5f0d36d7350a")
