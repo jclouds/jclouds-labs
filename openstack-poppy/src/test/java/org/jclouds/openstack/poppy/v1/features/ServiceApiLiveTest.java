@@ -21,6 +21,8 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.jclouds.openstack.poppy.v1.domain.Caching;
 import org.jclouds.openstack.poppy.v1.domain.CreateService;
@@ -29,10 +31,14 @@ import org.jclouds.openstack.poppy.v1.domain.Origin;
 import org.jclouds.openstack.poppy.v1.domain.Restriction;
 import org.jclouds.openstack.poppy.v1.domain.RestrictionRule;
 import org.jclouds.openstack.poppy.v1.domain.Service;
+import org.jclouds.openstack.poppy.v1.domain.ServiceStatus;
+import org.jclouds.openstack.poppy.v1.domain.UpdateService;
 import org.jclouds.openstack.poppy.v1.internal.BasePoppyApiLiveTest;
+import org.jclouds.openstack.poppy.v1.predicates.ServicePredicates;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.Uninterruptibles;
 
 /**
  * Live tests, as should be executed against devstack or a provider
@@ -50,8 +56,8 @@ public class ServiceApiLiveTest extends BasePoppyApiLiveTest {
                      .name("jclouds_test_service")
                      .domains(
                            ImmutableList.of(
-                                 Domain.builder().domain("www.jclouds123456123456.com").build(),
-                                 Domain.builder().domain("www.example123456123456.com").build()))
+                                 Domain.builder().domain("www.jclouds" + UUID.randomUUID() + ".com").build(),
+                                 Domain.builder().domain("www.example" + UUID.randomUUID() + ".com").build()))
                      .origins(ImmutableList.of(
                            Origin.builder()
                                  .origin("jclouds123456123456.com")
@@ -80,6 +86,15 @@ public class ServiceApiLiveTest extends BasePoppyApiLiveTest {
          assertNotNull(serviceList);
          Service serviceGet = api.getServiceApi().get(serviceId);
          assertEquals(serviceList, serviceGet);
+
+         ServicePredicates.awaitDeployed(serviceApi).apply(serviceGet);
+         assertEquals(serviceApi.get(serviceId).getStatus(), ServiceStatus.DEPLOYED);
+
+         UpdateService updated = serviceGet.toUpdatableService().name("updated_name").build();
+         serviceApi.update(serviceId, serviceGet, updated);
+         Uninterruptibles.sleepUninterruptibly(30, TimeUnit.SECONDS);
+         assertEquals(serviceApi.get(serviceId).getName(), "updated_name");
+
          assertTrue(serviceApi.deleteAsset(serviceId, "image/1.jpg"));
          assertTrue(serviceApi.deleteAssets(serviceId));
       }

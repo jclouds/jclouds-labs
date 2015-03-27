@@ -21,25 +21,25 @@ public enum ServiceStatus {
    /**
     * Specifies that the service is currently being created and deployed.
     */
-   CREATE_IN_PROGRESS("create_in_progress "),
+   CREATE_IN_PROGRESS("create_in_progress"),
    /**
     * Specifies that the service has been deployed and is ready to use.
     */
-   DEPLOYED("deployed "),
+   DEPLOYED("deployed"),
    /**
     * Specifies that the service is currently being updated.
     */
-   UPDATE_IN_PROGRESS("update_in_progress "),
+   UPDATE_IN_PROGRESS("update_in_progress"),
    /**
     * Specifies that the service is currently being deleted.
     */
-   DELETE_IN_PROGRESS("delete_in_progress "),
+   DELETE_IN_PROGRESS("delete_in_progress"),
    /**
     * Specifies that the previous operation on the service failed to create, deploy, update, or delete.
     * Looks for the errors for details.
     * @see Service#getErrors()
     */
-   FAILED("failed "),
+   FAILED("failed"),
    /**
     * An unexpected status jclouds could not recognize.
     */
