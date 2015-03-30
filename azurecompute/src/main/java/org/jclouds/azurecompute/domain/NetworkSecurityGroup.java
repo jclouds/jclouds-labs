@@ -16,15 +16,36 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import static com.google.common.collect.ImmutableList.copyOf;
 import java.util.List;
 
 import org.jclouds.javax.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 
 @AutoValue
 public abstract class NetworkSecurityGroup {
+
+   public enum State {
+
+      CREATED,
+      CREATING,
+      UPDATING,
+      DELETING,
+      UNAVAILABLE,
+      UNRECOGNIZED;
+
+      public static State fromString(final String text) {
+         if (text != null) {
+            for (State status : State.values()) {
+               if (text.equalsIgnoreCase(status.name())) {
+                  return status;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
+   }
 
    NetworkSecurityGroup() {
    } // For AutoValue only!
@@ -38,11 +59,23 @@ public abstract class NetworkSecurityGroup {
    public abstract String location();
 
    @Nullable
+   public abstract State state();
+
+   @Nullable
    public abstract List<Rule> rules();
 
-   public static NetworkSecurityGroup create(
-           final String name, final String label, String location, final List<Rule> rules) {
+   public static NetworkSecurityGroup create(final String name) {
+      return new AutoValue_NetworkSecurityGroup(name, null, null, null, null);
+   }
 
-      return new AutoValue_NetworkSecurityGroup(name, label, location, rules == null ? null : copyOf(rules));
+   public static NetworkSecurityGroup create(
+           final String name, final String label, String location, final State state, final List<Rule> rules) {
+
+      return new AutoValue_NetworkSecurityGroup(
+              name,
+              label,
+              location,
+              state,
+              rules == null ? ImmutableList.<Rule>of() : ImmutableList.copyOf(rules));
    }
 }

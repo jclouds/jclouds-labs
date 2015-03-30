@@ -23,13 +23,78 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class Rule {
 
+   public enum Action {
+
+      Allow,
+      Deny,
+      UNRECOGNIZED;
+
+      public static Action fromString(final String text) {
+         if (text != null) {
+            for (Action action : Action.values()) {
+               if (text.equalsIgnoreCase(action.name())) {
+                  return action;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
+   }
+
+   public enum Type {
+
+      Inbound,
+      Outbound,
+      UNRECOGNIZED;
+
+      public static Type fromString(final String text) {
+         if (text != null) {
+            for (Type type : Type.values()) {
+               if (text.equalsIgnoreCase(type.name())) {
+                  return type;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
+   }
+
+   public enum Protocol {
+
+      TCP("TCP"),
+      UDP("UDP"),
+      ALL("*"),
+      UNRECOGNIZED("");
+
+      private final String value;
+
+      Protocol(final String value) {
+         this.value = value;
+      }
+
+      public static Protocol fromString(final String text) {
+         if (text != null) {
+            for (Protocol protocol : Protocol.values()) {
+               if (text.equalsIgnoreCase(protocol.value)) {
+                  return protocol;
+               }
+            }
+         }
+         return UNRECOGNIZED;
+      }
+
+      public String getValue() {
+         return value;
+      }
+   }
+
    public abstract String name();
 
-   public abstract String type();
+   public abstract Type type();
 
    public abstract String priority();
 
-   public abstract String action();
+   public abstract Action action();
 
    public abstract String sourceAddressPrefix();
 
@@ -39,7 +104,7 @@ public abstract class Rule {
 
    public abstract String destinationPortRange();
 
-   public abstract String protocol();
+   public abstract Protocol protocol();
 
    public abstract String state();
 
@@ -49,9 +114,30 @@ public abstract class Rule {
    Rule() {
    } // For AutoValue only!
 
-   public static Rule create(final String name, final String type, final String priority, final String action,
+   /**
+    * Use this method to create a new rule to be added to a network security group.
+    * @param name
+    * @param type
+    * @param priority
+    * @param action
+    * @param sourceAddressPrefix
+    * @param sourcePortRange
+    * @param destinationAddressPrefix
+    * @param destinationPortRange
+    * @param protocol
+    * @return 
+    */
+   public static Rule create(final String name, final Type type, final String priority, final Action action,
            final String sourceAddressPrefix, final String sourcePortRange, final String destinationAddressPrefix,
-           final String destinationPortRange, final String protocol, final String state, final Boolean isDefault) {
+           final String destinationPortRange, final Protocol protocol) {
+
+      return new AutoValue_Rule(name, type, priority, action, sourceAddressPrefix, sourcePortRange,
+              destinationAddressPrefix, destinationPortRange, protocol, "Active", null);
+   }
+
+   public static Rule create(final String name, final Type type, final String priority, final Action action,
+           final String sourceAddressPrefix, final String sourcePortRange, final String destinationAddressPrefix,
+           final String destinationPortRange, final Protocol protocol, final String state, final Boolean isDefault) {
 
       return new AutoValue_Rule(name, type, priority, action, sourceAddressPrefix, sourcePortRange,
               destinationAddressPrefix, destinationPortRange, protocol, state, isDefault);

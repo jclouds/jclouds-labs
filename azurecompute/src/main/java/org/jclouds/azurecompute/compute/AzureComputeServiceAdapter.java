@@ -44,7 +44,6 @@ import org.jclouds.azurecompute.domain.Deployment.RoleInstance;
 import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.azurecompute.compute.functions.OSImageToImage;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
-import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.domain.Template;
@@ -60,6 +59,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 /**
  * Defines the connection between the {@link AzureComputeApi} implementation and the jclouds
@@ -111,8 +111,8 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       final String subnetName = templateOptions.getSubnetName().get();
 
       logger.debug("Creating a cloud service with name '%s', label '%s' in location '%s'", name, name, location);
-      final String createCloudServiceRequestId =
-              api.getCloudServiceApi().createWithLabelInLocation(name, name, location);
+      final String createCloudServiceRequestId
+              = api.getCloudServiceApi().createWithLabelInLocation(name, name, location);
       if (!operationSucceededPredicate.apply(createCloudServiceRequestId)) {
          final String message = generateIllegalStateExceptionMessage(
                  createCloudServiceRequestId, azureComputeConstants.operationTimeout());
@@ -142,13 +142,23 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .build();
 
       logger.debug("Creating a deployment with params '%s' ...", params);
-      retry(new ConflictManagementPredicate() {
 
+      if (!new ConflictManagementPredicate(api) {
          @Override
          protected String operation() {
             return api.getDeploymentApiForService(name).create(params);
          }
-      }, 30 * 60, 1, SECONDS).apply(name);
+      }.apply(name)) {
+         final String message = generateIllegalStateExceptionMessage(
+                 createCloudServiceRequestId, azureComputeConstants.operationTimeout());
+         logger.warn(message);
+         logger.debug("Deleting cloud service (%s) ...", name);
+         deleteCloudService(name);
+         logger.debug("Cloud service (%s) deleted.", name);
+         throw new IllegalStateException(message);
+      }
+
+      logger.info("Deployment created with name: %s", name);
 
       final Set<Deployment> deployments = Sets.newHashSet();
       if (!retry(new Predicate<String>() {
@@ -300,8 +310,8 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
          @Override
          public boolean apply(final CloudService input) {
-            final Deployment deployment =
-                    input.status() == CloudService.Status.DELETING || input.status() == CloudService.Status.DELETED
+            final Deployment deployment
+                    = input.status() == CloudService.Status.DELETING || input.status() == CloudService.Status.DELETED
                             ? null
                             : api.getDeploymentApiForService(input.name()).get(id);
             return deployment != null && deployment.status() != Deployment.Status.DELETING;
@@ -331,13 +341,19 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
          final String cloudServiceName = cloudService.name();
          logger.debug("Deleting deployment(%s) of cloud service (%s)", id, cloudServiceName);
-         retry(new ConflictManagementPredicate(operationSucceededPredicate) {
+
+         if (!new ConflictManagementPredicate(api, operationSucceededPredicate) {
 
             @Override
             protected String operation() {
                return api.getDeploymentApiForService(cloudServiceName).delete(id);
             }
-         }, 30 * 60, 1, SECONDS).apply(id);
+         }.apply(id)) {
+            final String message = generateIllegalStateExceptionMessage(
+                    "Delete deployment", azureComputeConstants.operationTimeout());
+            logger.warn(message);
+            throw new IllegalStateException(message);
+         }
 
          logger.debug("Deleting cloud service (%s) ...", cloudServiceName);
          trackRequest(api.getCloudServiceApi().delete(cloudServiceName));
@@ -347,13 +363,17 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
             for (Role role : deployment.roleList()) {
                final Role.OSVirtualHardDisk disk = role.osVirtualHardDisk();
                if (disk != null) {
-                  retry(new ConflictManagementPredicate(operationSucceededPredicate) {
+                  if (!new ConflictManagementPredicate(api, operationSucceededPredicate) {
 
                      @Override
                      protected String operation() {
                         return api.getDiskApi().delete(disk.diskName());
                      }
-                  }, 30 * 60, 1, SECONDS).apply(id);
+                  }.apply(id)) {
+                     final String message = generateIllegalStateExceptionMessage(
+                             "Delete disk", azureComputeConstants.operationTimeout());
+                     logger.warn(message);
+                  }
                }
             }
          }
@@ -424,5 +444,37 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
    public static URI createMediaLink(final String storageServiceName, final String diskName) {
       return URI.create(
               String.format("https://%s.blob.core.windows.net/vhds/disk-%s.vhd", storageServiceName, diskName));
+   }
+
+   private void deleteCloudService(final String name) {
+      if (!new ConflictManagementPredicate(api) {
+
+         @Override
+         protected String operation() {
+            return api.getCloudServiceApi().delete(name);
+         }
+
+      }.apply(name)) {
+         final String deleteMessage = generateIllegalStateExceptionMessage(
+                 "CloudService delete", azureComputeConstants.operationTimeout());
+         logger.warn(deleteMessage);
+         throw new IllegalStateException(deleteMessage);
+      }
+   }
+
+   private void deleteDeployment(final String id, final String cloudServiceName) {
+      if (!new ConflictManagementPredicate(api) {
+
+         @Override
+         protected String operation() {
+            return api.getDeploymentApiForService(cloudServiceName).delete(id);
+         }
+
+      }.apply(id)) {
+         final String deleteMessage = generateIllegalStateExceptionMessage(
+                 "Deployment delete", azureComputeConstants.operationTimeout());
+         logger.warn(deleteMessage);
+         throw new IllegalStateException(deleteMessage);
+      }
    }
 }

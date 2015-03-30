@@ -122,35 +122,35 @@ public class DeploymentApiLiveTest extends BaseAzureComputeApiLiveTest {
    public void testDelete() {
       final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roleList();
 
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
 
          @Override
          protected String operation() {
             return api().delete(deployment.name());
          }
-      }, 600, 30, 30, SECONDS).apply(deployment.name());
+      }.apply(deployment.name()));
 
       assertTrue(deploymentGone.apply(deployment), deployment.toString());
       Logger.getAnonymousLogger().log(Level.INFO, "deployment deleted: {0}", deployment);
 
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
 
          @Override
          protected String operation() {
             return api.getCloudServiceApi().delete(cloudService.name());
          }
-      }, 600, 30, 30, SECONDS).apply(cloudService.name());
+      }.apply(cloudService.name()));
 
       for (Role r : roles) {
          final Role.OSVirtualHardDisk disk = r.osVirtualHardDisk();
          if (disk != null) {
-            retry(new ConflictManagementPredicate(operationSucceeded) {
+            assertTrue(new ConflictManagementPredicate(api) {
 
                @Override
                protected String operation() {
                   return api.getDiskApi().delete(disk.diskName());
                }
-            }, 600, 30, 30, SECONDS).apply(disk.diskName());
+            }.apply(disk.diskName()));
          }
       }
    }

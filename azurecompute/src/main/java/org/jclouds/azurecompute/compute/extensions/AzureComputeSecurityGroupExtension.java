@@ -17,9 +17,6 @@
 package org.jclouds.azurecompute.compute.extensions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.jclouds.azurecompute.compute.AzureComputeServiceAdapter.generateIllegalStateExceptionMessage;
-import static org.jclouds.util.Predicates2.retry;
 
 import java.util.List;
 import java.util.Set;
@@ -56,6 +53,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
+import static org.jclouds.azurecompute.compute.AzureComputeServiceAdapter.generateIllegalStateExceptionMessage;
 
 /**
  * An extension to compute service to allow for the manipulation of {@link org.jclouds.compute.domain.SecurityGroup}s.
@@ -100,7 +98,7 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
 
    /**
     * @param name it represents both cloudservice and deployment name
-    * @return Set<SecurityGroup>
+    * @return Set&lt;SecurityGroup&gt;
     */
    @Override
    public Set<SecurityGroup> listSecurityGroupsForNode(final String name) {
@@ -152,7 +150,8 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
       checkNotNull(name, "name");
       checkNotNull(location, "location");
 
-      final NetworkSecurityGroup networkSecurityGroup = NetworkSecurityGroup.create(name, name, location.getId(), null);
+      final NetworkSecurityGroup networkSecurityGroup = NetworkSecurityGroup.create(
+              name, name, location.getId(), null, null);
       final String createNSGRequestId = api.getNetworkSecurityGroupApi().create(networkSecurityGroup);
       if (!operationSucceededPredicate.apply(createNSGRequestId)) {
          final String message = generateIllegalStateExceptionMessage(
@@ -183,19 +182,23 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
                if (virtualNetworkName != null && subnetName != null) {
                   final NetworkSecurityGroup networkSecurityGroupAppliedToSubnet = api.getNetworkSecurityGroupApi()
                           .getNetworkSecurityGroupAppliedToSubnet(virtualNetworkName, subnetName);
-                  if (networkSecurityGroupAppliedToSubnet != null) {
-                     if (!networkSecurityGroupAppliedToSubnet.name().equals(id)) {
-                        logger.debug("Removing a networkSecurityGroup %s is already applied to subnet '%s' ...",
-                                id, subnetName);
-                        // remove existing nsg from subnet
-                        String removeFromSubnetRequestId = api.getNetworkSecurityGroupApi().removeFromSubnet(
-                                virtualNetworkName, subnetName, networkSecurityGroupAppliedToSubnet.name());
-                        if (!operationSucceededPredicate.apply(removeFromSubnetRequestId)) {
-                           final String message = generateIllegalStateExceptionMessage(
-                                   removeFromSubnetRequestId, azureComputeConstants.operationTimeout());
-                           logger.warn(message);
-                           throw new IllegalStateException(message);
+                  if (networkSecurityGroupAppliedToSubnet != null
+                          && networkSecurityGroupAppliedToSubnet.name().equals(id)) {
+                     logger.debug("Removing a networkSecurityGroup %s is already applied to subnet '%s' ...",
+                             id, subnetName);
+
+                     // remove existing nsg from subnet
+                     if (!new ConflictManagementPredicate(api, operationSucceededPredicate) {
+                        @Override
+                        protected String operation() {
+                           return api.getNetworkSecurityGroupApi().removeFromSubnet(
+                                   virtualNetworkName, subnetName, id);
                         }
+                     }.apply(id)) {
+                        final String message = generateIllegalStateExceptionMessage(
+                                "Remove security group from subnet", azureComputeConstants.operationTimeout());
+                        logger.warn(message);
+                        throw new IllegalStateException(message);
                      }
                   }
                }
@@ -249,24 +252,27 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
                      }
                   }
 
-                  retry(new ConflictManagementPredicate(
-                          operationSucceededPredicate,
-                          azureComputeConstants.operationTimeout()) {
+                  if (!new ConflictManagementPredicate(api, operationSucceededPredicate) {
 
-                             @Override
-                             protected String operation() {
-                                // Check for deployment validity
-                                final Deployment deployment = api.getDeploymentApiForService(
-                                        service.name()).get(service.name());
-                                if (deployment == null || deployment.status() == Status.DELETING) {
-                                   return null;
-                                } else {
-                                   return api.getVirtualMachineApiForDeploymentInService(
-                                           deployment.name(), deployment.name()).
+                     @Override
+                     protected String operation() {
+                        // Check for deployment validity
+                        final Deployment deployment = api.getDeploymentApiForService(
+                                service.name()).get(service.name());
+                        if (deployment == null || deployment.status() == Status.DELETING) {
+                           return null;
+                        } else {
+                           return api.getVirtualMachineApiForDeploymentInService(
+                                   deployment.name(), deployment.name()).
                                    updateRole(role.roleName(), role);
-                                }
-                             }
-                          }, 600, 30, 30, SECONDS).apply(role.roleName());
+                        }
+                     }
+                  }.apply(role.roleName())) {
+                     final String message = generateIllegalStateExceptionMessage(
+                             "Operation", azureComputeConstants.operationTimeout());
+                     logger.warn(message);
+                     throw new IllegalStateException(message);
+                  }
                }
             }
          }
@@ -329,24 +335,25 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
                      }
                   }
 
-                  retry(new ConflictManagementPredicate(
-                          operationSucceededPredicate,
-                          azureComputeConstants.operationTimeout()) {
-
-                             @Override
-                             protected String operation() {
-                                // Check for deployment validity
-                                final Deployment deployment = api.getDeploymentApiForService(
-                                        service.name()).get(service.name());
-                                if (deployment == null || deployment.status() == Status.DELETING) {
-                                   return null;
-                                } else {
-                                   return api.getVirtualMachineApiForDeploymentInService(
-                                           deployment.name(), deployment.name()).
-                                   updateRole(role.roleName(), role);
-                                }
-                             }
-                          }, 600, 30, 30, SECONDS).apply(role.roleName());
+                  if (!new ConflictManagementPredicate(api, operationSucceededPredicate) {
+                     @Override
+                     protected String operation() {
+                        // Check for deployment validity
+                        final Deployment deployment = api.getDeploymentApiForService(
+                                service.name()).get(service.name());
+                        if (deployment == null || deployment.status() == Status.DELETING) {
+                           return null;
+                        } else {
+                           return api.getVirtualMachineApiForDeploymentInService(
+                                   deployment.name(), deployment.name()).updateRole(role.roleName(), role);
+                        }
+                     }
+                  }.apply(role.roleName())) {
+                     final String message = generateIllegalStateExceptionMessage(
+                             "Operation", azureComputeConstants.operationTimeout());
+                     logger.warn(message);
+                     throw new IllegalStateException(message);
+                  }
                }
             }
          }
@@ -410,7 +417,8 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
             builder.fromPort(extractPort(rule.name(), 0))
                     .toPort(extractPort(rule.name(), 1));
          }
-         builder.ipProtocol(rule.protocol().equals("*") ? IpProtocol.ALL : IpProtocol.valueOf(rule.protocol()));
+         builder.ipProtocol(rule.protocol().equals(Rule.Protocol.ALL)
+                 ? IpProtocol.ALL : IpProtocol.valueOf(rule.protocol().getValue()));
          if (rule.destinationAddressPrefix().equals("*")) {
             builder.cidrBlock("0.0.0.0/0");
          } else {
@@ -450,24 +458,20 @@ public class AzureComputeSecurityGroupExtension implements SecurityGroupExtensio
       final String destinationPortRange = ipPermission.getFromPort() == ipPermission.getToPort()
               ? String.valueOf(ipPermission.getToPort())
               : String.format("%s-%s", ipPermission.getFromPort(), ipPermission.getToPort());
-      final String destinationAddressPrefix =
-              ipPermission.getCidrBlocks().isEmpty()
+      final String destinationAddressPrefix = ipPermission.getCidrBlocks().isEmpty()
               || Iterables.get(ipPermission.getCidrBlocks(), 0).equals("0.0.0.0/0")
                       ? "*"
                       : Iterables.get(ipPermission.getCidrBlocks(), 0);
       final String setRuleToNSGRequestId = api.getNetworkSecurityGroupApi().
               setRule(networkSecurityGroupId, ruleName, Rule.create(ruleName, // name
-                              "Inbound", // type
+                              Rule.Type.Inbound, // type
                               String.valueOf(priority), // priority
-                              "Allow", // action
+                              Rule.Action.Allow, // action
                               "INTERNET", // sourceAddressPrefix
                               "*", // sourcePortRange
                               destinationAddressPrefix, // destinationAddressPrefix
                               destinationPortRange, // destinationPortRange
-                              protocol, // protocol
-                              "Active", // state
-                              true // isDefault
-                      ));
+                              Rule.Protocol.fromString(protocol)));
       if (!operationSucceededPredicate.apply(setRuleToNSGRequestId)) {
          final String message = generateIllegalStateExceptionMessage(
                  setRuleToNSGRequestId, azureComputeConstants.operationTimeout());

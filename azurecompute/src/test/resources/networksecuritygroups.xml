@@ -1,0 +1,12 @@
+<NetworkSecurityGroups xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <NetworkSecurityGroup>
+    <Name>group1</Name>
+    <Label>sec group 1</Label>
+    <Location>West Europe</Location>
+  </NetworkSecurityGroup>
+  <NetworkSecurityGroup>
+    <Name>group2</Name>
+    <Label>sec group 2</Label>
+    <Location>North Europe</Location>
+  </NetworkSecurityGroup>
+</NetworkSecurityGroups>

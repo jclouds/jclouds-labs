@@ -18,7 +18,6 @@ package org.jclouds.azurecompute.features;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jclouds.azurecompute.domain.CreateProfileParams;
@@ -31,7 +30,6 @@ import org.jclouds.azurecompute.domain.UpdateProfileParams;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.LOCATION;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
-import static org.jclouds.util.Predicates2.retry;
 import org.testng.Assert;
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.AfterClass;
@@ -160,19 +158,19 @@ public class TrafficManagerApiLiveTest extends BaseAzureComputeApiLiveTest {
       assertTrue(operationSucceeded.apply(requestId), requestId);
       Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
 
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
          @Override
          protected String operation() {
             return api.getCloudServiceApi().delete(CLOUD1);
          }
-      }, 600, 30, 30, SECONDS).apply(CLOUD1);
+      }.apply(CLOUD1));
 
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
          @Override
          protected String operation() {
             return api.getCloudServiceApi().delete(CLOUD2);
          }
-      }, 600, 30, 30, SECONDS).apply(CLOUD2);
+      }.apply(CLOUD2));
 
       super.tearDown();
    }

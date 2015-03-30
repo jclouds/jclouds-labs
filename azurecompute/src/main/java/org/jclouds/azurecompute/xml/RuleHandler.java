@@ -25,11 +25,11 @@ final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Ru
 
    private String name;
 
-   private String type;
+   private Rule.Type type;
 
    private String priority;
 
-   private String action;
+   private Rule.Action action;
 
    private String sourceAddressPrefix;
 
@@ -39,7 +39,7 @@ final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Ru
 
    private String destinationPortRange;
 
-   private String protocol;
+   private Rule.Protocol protocol;
 
    private String state;
 
@@ -51,8 +51,12 @@ final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Ru
    public Rule getResult() {
       Rule result = Rule.create(name, type, priority, action, sourceAddressPrefix, sourcePortRange,
               destinationAddressPrefix, destinationPortRange, protocol, state, isDefault);
-      name = type = priority = action = sourceAddressPrefix = sourcePortRange = destinationAddressPrefix
-              = destinationPortRange = protocol = state = null; // handler is called in a loop.
+      
+      name = priority = sourceAddressPrefix = sourcePortRange = destinationAddressPrefix
+              = destinationPortRange = state = null; // handler is called in a loop.
+      protocol = null;
+      action = null;
+      type = null;
       isDefault = false;
       return result;
    }
@@ -62,11 +66,11 @@ final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Ru
       if (qName.equals("Name")) {
          name = currentOrNull(currentText);
       } else if (qName.equals("Type")) {
-         type = currentOrNull(currentText);
+         type = Rule.Type.fromString(currentOrNull(currentText));
       } else if (qName.equals("Priority")) {
          priority = currentOrNull(currentText);
       } else if (qName.equals("Action")) {
-         action = currentOrNull(currentText);
+         action = Rule.Action.fromString(currentOrNull(currentText));
       } else if (qName.equals("SourceAddressPrefix")) {
          sourceAddressPrefix = currentOrNull(currentText);
       } else if (qName.equals("SourcePortRange")) {
@@ -76,7 +80,7 @@ final class RuleHandler extends ParseSax.HandlerForGeneratedRequestWithResult<Ru
       } else if (qName.equals("DestinationPortRange")) {
          destinationPortRange = currentOrNull(currentText);
       } else if (qName.equals("Protocol")) {
-         protocol = currentOrNull(currentText);
+         protocol = Rule.Protocol.fromString(currentOrNull(currentText));
       } else if (qName.equals("State")) {
          state = currentOrNull(currentText);
       } else if (qName.equals("IsDefault")) {

@@ -30,100 +30,120 @@ import com.google.common.collect.ImmutableList;
 @Test(groups = "unit", testName = "NetworkSecurityGroupHandlerTest")
 public class NetworkSecurityGroupHandlerTest extends BaseHandlerTest {
 
-   public void test() {
-      InputStream is = getClass().getResourceAsStream("/networksecuritygroup.xml");
-      NetworkSecurityGroup result = factory.create(new NetworkSecurityGroupHandler()).parse(is);
+   public void testFull() {
+      final InputStream is = getClass().getResourceAsStream("/networksecuritygroupfulldetails.xml");
+      final NetworkSecurityGroup result = factory.create(new NetworkSecurityGroupHandler()).parse(is);
+      assertEquals(result, expectedFull());
+   }
 
+   public void test() {
+      final InputStream is = getClass().getResourceAsStream("/networksecuritygroup.xml");
+      final NetworkSecurityGroup result = factory.create(new NetworkSecurityGroupHandler()).parse(is);
       assertEquals(result, expected());
    }
 
+   public void testForSubnet() {
+      final InputStream is = getClass().getResourceAsStream("/networksecuritygroupforsubnet.xml");
+      final NetworkSecurityGroup result = factory.create(new NetworkSecurityGroupHandler()).parse(is);
+      assertEquals(result, expectedForSubnet());
+   }
+
    public static NetworkSecurityGroup expected() {
+      return NetworkSecurityGroup.create("group1", "sec group 1", "West Europe", null, null);
+   }
+
+   public static NetworkSecurityGroup expectedForSubnet() {
+      return NetworkSecurityGroup.create("group1", null, null, NetworkSecurityGroup.State.CREATED, null);
+   }
+
+   public static NetworkSecurityGroup expectedFull() {
       return NetworkSecurityGroup.create( //
               "jclouds-NSG", // name
               "jclouds-NSG", // label
               "West Europe", // location
+              null, // Network Security Group state
               ImmutableList.of(
                       Rule.create("tcp_10-20", // name
-                              "Inbound", // type
+                              Rule.Type.Inbound, // type
                               "100", // priority
-                              "Allow", // action
+                              Rule.Action.Allow, // action
                               "INTERNET", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "10-20", // destinationPortRange
-                              "TCP", // protocol
+                              Rule.Protocol.TCP, // protocol
                               "Active", // state
                               null // isDefault
                       ),
                       Rule.create("ALLOW VNET INBOUND", // name
-                              "Inbound", // type
+                              Rule.Type.Inbound, // type
                               "65000", // priority
-                              "Allow", // action
+                              Rule.Action.Allow, // action
                               "VIRTUAL_NETWORK", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "VIRTUAL_NETWORK", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*", // protocol
+                              Rule.Protocol.ALL, // protocol
                               "Active", // state
                               true // isDefault
                       ),
                       Rule.create("ALLOW VNET OUTBOUND", // name
-                              "Outbound", // type
+                              Rule.Type.Outbound, // type
                               "65000", // priority
-                              "Allow", // action
+                              Rule.Action.Allow, // action
                               "VIRTUAL_NETWORK", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "VIRTUAL_NETWORK", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*", // protocol
+                              Rule.Protocol.ALL, // protocol
                               "Active", // state
                               true // isDefault
                       ),
                       Rule.create("ALLOW AZURE LOAD BALANCER INBOUND", // name
-                              "Inbound", // type
+                              Rule.Type.Inbound, // type
                               "65001", // priority
-                              "Allow", // action
+                              Rule.Action.Allow, // action
                               "AZURE_LOADBALANCER", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*", // protocol
+                              Rule.Protocol.ALL, // protocol
                               "Active", // state
                               true // isDefault
                       ),
                       Rule.create("ALLOW INTERNET OUTBOUND", // name
-                              "Outbound", // type
+                              Rule.Type.Outbound, // type
                               "65001", // priority
-                              "Allow", // action
+                              Rule.Action.Allow, // action
                               "*", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "INTERNET", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*", // protocol
+                              Rule.Protocol.ALL, // protocol
                               "Active", // state
                               true // isDefault
                       ),
                       Rule.create("DENY ALL OUTBOUND", // name
-                              "Outbound", // type
+                              Rule.Type.Outbound, // type
                               "65500", // priority
-                              "Deny", // action
+                              Rule.Action.Deny, // action
                               "*", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*", // protocol
+                              Rule.Protocol.ALL, // protocol
                               "Active", // state
                               true // isDefault
                       ),
                       Rule.create("DENY ALL INBOUND", // name
-                              "Inbound", // type
+                              Rule.Type.Inbound, // type
                               "65500", // priority
-                              "Deny", // action
+                              Rule.Action.Deny, // action
                               "*", // sourceAddressPrefix
                               "*", // sourcePortRange
                               "*", // destinationAddressPrefix
                               "*", // destinationPortRange
-                              "*", // protocol
+                              Rule.Protocol.ALL, // protocol
                               "Active", // state
                               true // isDefault
                       )

@@ -103,7 +103,7 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    public void testUpdate() {
       final Role role = api().getRole(roleName);
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
 
          @Override
          protected String operation() {
@@ -122,14 +122,18 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
                             role.provisionGuestAgent(),
                             role.defaultWinRmCertificateThumbprint()));
          }
-      }, 600, 30, 30, SECONDS).apply(role.roleName());
+      }.apply(role.roleName()));
    }
 
    @Test(dependsOnMethods = "testUpdate")
    public void testShutdown() {
-      String requestId = api().shutdown(roleName);
-      assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
+      assertTrue(new ConflictManagementPredicate(api) {
+
+         @Override
+         protected String operation() {
+            return api().shutdown(roleName);
+         }
+      }.apply(roleName));
 
       RoleInstance roleInstance = getFirstRoleInstanceInDeployment(DEPLOYMENT);
       assertTrue(roleInstanceStopped.apply(DEPLOYMENT), roleInstance.toString());
@@ -138,9 +142,13 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    @Test(dependsOnMethods = "testShutdown")
    public void testStart() {
-      String requestId = api().start(roleName);
-      assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
+      assertTrue(new ConflictManagementPredicate(api) {
+
+         @Override
+         protected String operation() {
+            return api().start(roleName);
+         }
+      }.apply(roleName));
 
       RoleInstance roleInstance = getFirstRoleInstanceInDeployment(DEPLOYMENT);
       assertTrue(roleInstanceReady.apply(DEPLOYMENT), roleInstance.toString());
@@ -149,9 +157,13 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    @Test(dependsOnMethods = "testStart")
    public void testRestart() {
-      final String requestId = api().restart(roleName);
-      assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
+      assertTrue(new ConflictManagementPredicate(api) {
+
+         @Override
+         protected String operation() {
+            return api().restart(roleName);
+         }
+      }.apply(roleName));
 
       final RoleInstance roleInstance = getFirstRoleInstanceInDeployment(DEPLOYMENT);
       assertTrue(roleInstanceReady.apply(DEPLOYMENT), roleInstance.toString());
@@ -163,32 +175,32 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
       if (cloudService != null && api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT) != null) {
          final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roleList();
 
-         retry(new ConflictManagementPredicate(operationSucceeded) {
+         assertTrue(new ConflictManagementPredicate(api) {
 
             @Override
             protected String operation() {
                return api.getDeploymentApiForService(cloudService.name()).delete(DEPLOYMENT);
             }
-         }, 600, 30, 30, SECONDS).apply(DEPLOYMENT);
+         }.apply(DEPLOYMENT));
 
-         retry(new ConflictManagementPredicate(operationSucceeded) {
+         assertTrue(new ConflictManagementPredicate(api) {
 
             @Override
             protected String operation() {
                return api.getCloudServiceApi().delete(cloudService.name());
             }
-         }, 600, 30, 30, SECONDS).apply(cloudService.name());
+         }.apply(cloudService.name()));
 
          for (Role r : roles) {
             final Role.OSVirtualHardDisk disk = r.osVirtualHardDisk();
             if (disk != null) {
-               retry(new ConflictManagementPredicate(operationSucceeded) {
+               assertTrue(new ConflictManagementPredicate(api) {
 
                   @Override
                   protected String operation() {
                      return api.getDiskApi().delete(disk.diskName());
                   }
-               }, 600, 30, 30, SECONDS).apply(disk.diskName());
+               }.apply(disk.diskName()));
             }
          }
       }

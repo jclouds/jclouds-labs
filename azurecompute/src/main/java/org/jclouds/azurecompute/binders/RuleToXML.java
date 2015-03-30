@@ -32,14 +32,14 @@ public final class RuleToXML implements Binder {
       Rule rule = Rule.class.cast(input);
       try {
          String xml = XMLBuilder.create("Rule", "http://schemas.microsoft.com/windowsazure")
-                 .e("Type").t(rule.type()).up()
+                 .e("Type").t(rule.type().name()).up()
                  .e("Priority").t(rule.priority()).up()
-                 .e("Action").t(rule.action()).up()
+                 .e("Action").t(rule.action().name()).up()
                  .e("SourceAddressPrefix").t(rule.sourceAddressPrefix()).up()
                  .e("SourcePortRange").t(rule.sourcePortRange()).up()
                  .e("DestinationAddressPrefix").t(rule.destinationAddressPrefix()).up()
                  .e("DestinationPortRange").t(rule.destinationPortRange()).up()
-                 .e("Protocol").t(rule.protocol()).up().asString();
+                 .e("Protocol").t(rule.protocol().getValue()).up().asString();
          return (R) request.toBuilder().payload(xml).build();
       } catch (Exception e) {
          throw propagate(e);
