@@ -16,26 +16,29 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.VIRTUAL_NETWORK_NAME;
-import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.VIRTUAL_NETWORK_NAME;
 
 import com.google.common.base.Predicates;
+
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import java.util.List;
+
 import org.jclouds.azurecompute.AzureTestUtils;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+
+import java.util.List;
 
 @Test(groups = "live", testName = "VirtualNetworkApiLiveTest", singleThreaded = true)
 public class VirtualNetworkApiLiveTest extends BaseAzureComputeApiLiveTest {
@@ -75,14 +78,14 @@ public class VirtualNetworkApiLiveTest extends BaseAzureComputeApiLiveTest {
               getVirtualNetworkApi().list(),
               Predicates.not(new AzureTestUtils.SameVirtualNetworkSiteNamePredicate(VIRTUAL_NETWORK_NAME))));
 
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
 
          @Override
          protected String operation() {
             return api.getVirtualNetworkApi().set(NetworkConfiguration.create(
                     NetworkConfiguration.VirtualNetworkConfiguration.create(null, virtualNetworkSites)));
          }
-      }, 600, 30, 30, SECONDS).apply(VIRTUAL_NETWORK_NAME);
+      }.apply(VIRTUAL_NETWORK_NAME));
    }
 
    @Test

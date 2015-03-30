@@ -166,7 +166,7 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
          logger.debug("Adding a networkSecurityGroup %s is already applied to subnet '%s' of virtual network %s ...",
                  networkSecurityGroupName, subnetName, virtualNetworkName);
          final String addToSubnetId = api.getNetworkSecurityGroupApi().addToSubnet(virtualNetworkName, subnetName,
-                 NetworkSecurityGroup.create(networkSecurityGroupName, null, null, null));
+                 networkSecurityGroupName);
          if (!operationSucceededPredicate.apply(addToSubnetId)) {
             final String warnMessage = format("Add networkSecurityGroup(%s) to subnet(%s) has not been completed "
                     + "within %sms.", networkSecurityGroupName, subnetName, azureComputeConstants.operationTimeout());

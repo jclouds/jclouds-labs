@@ -18,13 +18,12 @@ package org.jclouds.azurecompute.internal;
 
 import com.google.common.base.Predicate;
 import java.util.Random;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
 import org.testng.annotations.BeforeClass;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.jclouds.util.Predicates2.retry;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 public abstract class AbstractAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi> {
 
@@ -40,8 +39,6 @@ public abstract class AbstractAzureComputeApiLiveTest extends BaseApiLiveTest<Az
    @Override
    public void setup() {
       super.setup();
-
-      operationSucceeded = retry(
-              new AzureComputeServiceContextModule.OperationSucceededPredicate(api), 600, 5, 5, SECONDS);
+      operationSucceeded = new ConflictManagementPredicate(api, 600, 5, 5, SECONDS);
    }
 }

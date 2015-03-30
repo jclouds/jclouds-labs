@@ -16,22 +16,12 @@
  */
 package org.jclouds.azurecompute.compute;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.google.common.net.HostAndPort;
-import com.google.common.net.InetAddresses;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -52,6 +42,16 @@ import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 import org.testng.annotations.AfterGroups;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.net.HostAndPort;
+import com.google.common.net.InetAddresses;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import java.util.Arrays;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.jclouds.util.Predicates2.retry;
+
 @Test(groups = "live", singleThreaded = true, testName = "AzureComputeServiceAdapterLiveTest")
 public class AzureComputeServiceAdapterLiveTest extends BaseAzureComputeApiLiveTest {
 
@@ -60,6 +60,16 @@ public class AzureComputeServiceAdapterLiveTest extends BaseAzureComputeApiLiveT
    private TemplateBuilder templateBuilder;
 
    private Factory sshFactory;
+
+   private String storageServiceName = null;
+
+   @Override
+   protected String getStorageServiceName() {
+      if (storageServiceName == null) {
+         storageServiceName = String.format("%3.20sacsa", System.getProperty("user.name") + RAND).toLowerCase();
+      }
+      return storageServiceName;
+   }
 
    @Override
    protected AzureComputeApi create(final Properties props, final Iterable<Module> modules) {

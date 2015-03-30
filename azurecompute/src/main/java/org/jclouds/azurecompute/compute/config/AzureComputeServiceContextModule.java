@@ -16,7 +16,6 @@
  */
 package org.jclouds.azurecompute.compute.config;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_INITIAL_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
@@ -39,7 +38,6 @@ import org.jclouds.azurecompute.compute.strategy.impl.AzureAdaptingComputeServic
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
-import org.jclouds.azurecompute.domain.Operation;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.compute.ComputeServiceAdapter;
@@ -49,9 +47,8 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.extensions.SecurityGroupExtension;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
-import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
 import org.jclouds.compute.strategy.impl.AdaptingComputeServiceStrategies;
-import org.jclouds.util.Predicates2;
+import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -60,6 +57,9 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+
+import java.util.concurrent.TimeUnit;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 public class AzureComputeServiceContextModule
         extends ComputeServiceAdapterContextModule<Deployment, RoleSize, OSImage, Location> {
@@ -103,37 +103,12 @@ public class AzureComputeServiceContextModule
    @Singleton
    protected Predicate<String> provideOperationSucceededPredicate(
            final AzureComputeApi api, final AzureComputeConstants azureComputeConstants) {
-
-      return Predicates2.retry(new OperationSucceededPredicate(api),
-              azureComputeConstants.operationTimeout(), azureComputeConstants.operationPollInitialPeriod(),
-              azureComputeConstants.operationPollMaxPeriod());
-   }
-
-   public static class OperationSucceededPredicate implements Predicate<String> {
-
-      private final AzureComputeApi api;
-
-      public OperationSucceededPredicate(final AzureComputeApi api) {
-         this.api = checkNotNull(api, "api must not be null");
-      }
-
-      @Override
-      public boolean apply(final String input) {
-         final Operation operation = api.getOperationApi().get(input);
-         switch (operation.status()) {
-            case SUCCEEDED:
-               return true;
-
-            case IN_PROGRESS:
-            case FAILED:
-            case UNRECOGNIZED:
-               return false;
-
-            default:
-               throw new IllegalStateException("Operation is in invalid status: " + operation.status().name());
-         }
-      }
-
+      return new ConflictManagementPredicate(
+              api,
+              azureComputeConstants.operationTimeout(),
+              azureComputeConstants.operationPollInitialPeriod(),
+              azureComputeConstants.operationPollMaxPeriod(),
+              TimeUnit.MILLISECONDS);
    }
 
    @Singleton

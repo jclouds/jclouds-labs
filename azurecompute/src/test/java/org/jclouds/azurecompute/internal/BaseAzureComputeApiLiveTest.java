@@ -20,7 +20,6 @@ import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.tryFind;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;
-import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertTrue;
 
 import com.google.common.base.Optional;
@@ -59,8 +58,8 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
 
    public static final String LOCATION = "West Europe";
 
-   public static final String IMAGE_NAME =
-           "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_1-LTS-amd64-server-20150123-en-us-30GB";
+   public static final String IMAGE_NAME
+           = "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_1-LTS-amd64-server-20150123-en-us-30GB";
 
    protected StorageService storageService;
 
@@ -81,6 +80,7 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
    public void setup() {
       super.setup();
 
+      operationSucceeded = new ConflictManagementPredicate(api, 600, 5, 5, SECONDS);
       virtualNetworkSite = getOrCreateVirtualNetworkSite(VIRTUAL_NETWORK_NAME, LOCATION);
 
       final CreateStorageServiceParams params = CreateStorageServiceParams.builder().
@@ -97,13 +97,13 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
    protected void tearDown() {
       super.tearDown();
 
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
 
          @Override
          protected String operation() {
             return api.getStorageAccountApi().delete(getStorageServiceName());
          }
-      }, 600, 5, 5, SECONDS).apply(getStorageServiceName());
+      }.apply(getStorageServiceName()));
    }
 
    protected CloudService getOrCreateCloudService(final String cloudServiceName, final String location) {
@@ -122,15 +122,20 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
       return cloudService;
    }
 
-   protected Deployment getOrCreateDeployment(String serviceName, DeploymentParams params) {
+   protected Deployment getOrCreateDeployment(final String serviceName, final DeploymentParams params) {
       Deployment deployment = api.getDeploymentApiForService(serviceName).get(params.name());
       if (deployment != null) {
          return deployment;
       }
 
-      String requestId = api.getDeploymentApiForService(serviceName).create(params);
-      assertTrue(operationSucceeded.apply(requestId), requestId);
-      Logger.getAnonymousLogger().log(Level.INFO, "operation succeeded: {0}", requestId);
+      assertTrue(new ConflictManagementPredicate(api) {
+
+         @Override
+         protected String operation() {
+            return api.getDeploymentApiForService(serviceName).create(params);
+         }
+      }.apply(getStorageServiceName()));
+
       deployment = api.getDeploymentApiForService(serviceName).get(params.name());
 
       Logger.getAnonymousLogger().log(Level.INFO, "created deployment: {0}", deployment);
@@ -168,8 +173,8 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
               AddressSpace.create(DEFAULT_ADDRESS_SPACE),
               ImmutableList.of(Subnet.create(DEFAULT_SUBNET_NAME, DEFAULT_SUBNET_ADDRESS_SPACE, null))));
 
-      final NetworkConfiguration networkConfiguration =
-              NetworkConfiguration.create(VirtualNetworkConfiguration.create(null, current));
+      final NetworkConfiguration networkConfiguration
+              = NetworkConfiguration.create(VirtualNetworkConfiguration.create(null, current));
 
       VirtualNetworkSite vns;
       try {
@@ -178,13 +183,13 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
                  virtualNetworkSites(),
                  new SameVirtualNetworkSiteNamePredicate(virtualNetworkSiteName));
       } catch (Exception e) {
-         retry(new ConflictManagementPredicate(operationSucceeded) {
+         assertTrue(new ConflictManagementPredicate(api) {
 
             @Override
             protected String operation() {
                return api.getVirtualNetworkApi().set(networkConfiguration);
             }
-         }, 600, 30, 30, SECONDS).apply(virtualNetworkSiteName);
+         }.apply(virtualNetworkSiteName));
 
          vns = find(
                  api.getVirtualNetworkApi().getNetworkConfiguration().virtualNetworkConfiguration().

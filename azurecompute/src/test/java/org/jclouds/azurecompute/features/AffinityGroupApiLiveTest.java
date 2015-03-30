@@ -21,6 +21,8 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertNotNull;
 
+import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.LOCATION;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -70,7 +72,7 @@ public class AffinityGroupApiLiveTest extends AbstractAzureComputeApiLiveTest {
       final CreateAffinityGroupParams params = CreateAffinityGroupParams.builder().
               name(GROUP_NAME).
               label(GROUP_NAME).
-              location("West Europe").
+              location(LOCATION).
               build();
 
       final String requestId = api().add(params);

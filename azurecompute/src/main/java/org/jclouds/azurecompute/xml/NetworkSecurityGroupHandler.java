@@ -34,6 +34,8 @@ public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedReq
 
    private String location;
 
+   private NetworkSecurityGroup.State state;
+
    private List<Rule> rules = Lists.newArrayList();
 
    private boolean inRule;
@@ -51,8 +53,9 @@ public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedReq
 
    @Override
    public NetworkSecurityGroup getResult() {
-      NetworkSecurityGroup result = NetworkSecurityGroup.create(name, label, location, rules);
+      NetworkSecurityGroup result = NetworkSecurityGroup.create(name, label, location, state, rules);
       name = label = location = null; // handler is called in a loop.
+      this.state = null;
       rules = Lists.newArrayList();
       return result;
    }
@@ -70,6 +73,8 @@ public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedReq
          label = currentOrNull(currentText);
       } else if (qName.equals("Location")) {
          location = currentOrNull(currentText);
+      } else if (qName.equals("State")) {
+         state = NetworkSecurityGroup.State.fromString(currentOrNull(currentText));
       }
       currentText.setLength(0);
    }

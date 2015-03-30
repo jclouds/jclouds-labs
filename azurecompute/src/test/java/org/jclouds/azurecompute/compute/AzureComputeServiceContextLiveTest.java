@@ -16,14 +16,8 @@
  */
 package org.jclouds.azurecompute.compute;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.jclouds.util.Predicates2.retry;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.reflect.TypeToken;
-import com.google.inject.Module;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -31,7 +25,6 @@ import java.util.Set;
 
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.RunNodesException;
@@ -42,6 +35,10 @@ import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.sshj.config.SshjSshClientModule;
+
+import com.google.common.collect.Iterables;
+import com.google.common.reflect.TypeToken;
+import com.google.inject.Module;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -54,14 +51,11 @@ public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContex
 
    private AzureComputeApi api;
 
-   private Predicate<String> operationSucceeded;
-
    private String storageServiceName = null;
 
    protected String getStorageServiceName() {
       if (storageServiceName == null) {
-         storageServiceName = String.format("%3.24s",
-                 System.getProperty("user.name") + RAND + this.getClass().getSimpleName()).toLowerCase();
+         storageServiceName = String.format("%3.20sacsc", System.getProperty("user.name") + RAND).toLowerCase();
       }
       return storageServiceName;
    }
@@ -76,20 +70,17 @@ public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContex
                  private static final long serialVersionUID = 309104475566522958L;
 
               });
-
-      operationSucceeded = retry(
-              new AzureComputeServiceContextModule.OperationSucceededPredicate(api), 600, 5, 5, SECONDS);
    }
 
    @AfterClass(alwaysRun = true)
    public void tearDown() {
-      retry(new ConflictManagementPredicate(operationSucceeded) {
+      assertTrue(new ConflictManagementPredicate(api) {
 
          @Override
          protected String operation() {
             return api.getStorageAccountApi().delete(getStorageServiceName());
          }
-      }, 600, 5, 5, SECONDS).apply(getStorageServiceName());
+      }.apply(getStorageServiceName()));
    }
 
    @Override
