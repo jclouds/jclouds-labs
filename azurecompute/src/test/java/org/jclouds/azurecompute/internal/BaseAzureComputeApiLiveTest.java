@@ -57,7 +57,7 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
 
    public static final String DEFAULT_SUBNET_NAME = "jclouds-1";
 
-   public static final String LOCATION = "South Central US";
+   public static final String LOCATION = "West Europe";
 
    public static final String IMAGE_NAME =
            "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_1-LTS-amd64-server-20150123-en-us-30GB";
