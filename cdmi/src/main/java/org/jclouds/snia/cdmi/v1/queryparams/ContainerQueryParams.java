@@ -85,27 +85,27 @@ public class ContainerQueryParams extends CDMIObjectQueryParams {
    public static class Builder {
       public static ContainerQueryParams field(String fieldname) {
          ContainerQueryParams options = new ContainerQueryParams();
-         return (ContainerQueryParams) options.field(fieldname);
+         return options.field(fieldname);
       }
 
       public static ContainerQueryParams metadata() {
          ContainerQueryParams options = new ContainerQueryParams();
-         return (ContainerQueryParams) options.metadata();
+         return options.metadata();
       }
 
       public static ContainerQueryParams metadata(String prefix) {
          ContainerQueryParams options = new ContainerQueryParams();
-         return (ContainerQueryParams) options.metadata(prefix);
+         return options.metadata(prefix);
       }
 
       public static ContainerQueryParams children() {
          ContainerQueryParams options = new ContainerQueryParams();
-         return (ContainerQueryParams) options.children();
+         return options.children();
       }
 
       public static ContainerQueryParams children(int from, int to) {
          ContainerQueryParams options = new ContainerQueryParams();
-         return (ContainerQueryParams) options.children(from, to);
+         return options.children(from, to);
       }
 
    }

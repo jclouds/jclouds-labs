@@ -29,7 +29,7 @@ public class SubscriptionCalculator {
 
    @ConstructorProperties({"price", "objects"})
    public SubscriptionCalculator(double price, List<CalcSubscription> subscriptions) {
-      this.price = checkNotNull(price, "price");
+      this.price = price;
       this.subscriptions = checkNotNull(subscriptions, "subscriptions");
    }
 

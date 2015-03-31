@@ -162,47 +162,47 @@ public class CreateDataObjectOptions extends CreateCDMIObjectOptions {
    public static class Builder {
       public static CreateDataObjectOptions metadata(Map<String, String> metadata) {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.metadata(metadata);
+         return options.metadata(metadata);
       }
 
       public static CreateDataObjectOptions mimetype(String mimetype) {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.mimetype(mimetype);
+         return options.mimetype(mimetype);
       }
 
       public static CreateDataObjectOptions value() {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value();
+         return options.value();
       }
 
       public static CreateDataObjectOptions value(String value) {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value(value);
+         return options.value(value);
       }
 
       public static CreateDataObjectOptions value(byte[] value) throws IOException {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value(value);
+         return options.value(value);
       }
 
       public static CreateDataObjectOptions value(File value) throws IOException {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value(value);
+         return options.value(value);
       }
 
       public static CreateDataObjectOptions value(File value, Charset charset) throws IOException {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value(value, charset);
+         return options.value(value, charset);
       }
 
       public static CreateDataObjectOptions value(InputStream value) throws IOException {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value(value);
+         return options.value(value);
       }
 
       public static CreateDataObjectOptions value(InputStream value, Charset charset) throws IOException {
          CreateDataObjectOptions options = new CreateDataObjectOptions();
-         return (CreateDataObjectOptions) options.value(value, charset);
+         return options.value(value, charset);
       }
 
    }

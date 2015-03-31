@@ -77,17 +77,17 @@ public class GetCDMIObjectOptions extends BaseHttpRequestOptions {
    public static class Builder {
       public static GetCDMIObjectOptions field(String fieldname) {
          GetCDMIObjectOptions options = new GetCDMIObjectOptions();
-         return (GetCDMIObjectOptions) options.field(fieldname);
+         return options.field(fieldname);
       }
 
       public static GetCDMIObjectOptions metadata() {
          GetCDMIObjectOptions options = new GetCDMIObjectOptions();
-         return (GetCDMIObjectOptions) options.metadata();
+         return options.metadata();
       }
 
       public static GetCDMIObjectOptions metadata(String prefix) {
          GetCDMIObjectOptions options = new GetCDMIObjectOptions();
-         return (GetCDMIObjectOptions) options.metadata(prefix);
+         return options.metadata(prefix);
       }
 
    }

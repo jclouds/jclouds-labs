@@ -83,27 +83,27 @@ public class GetContainerOptions extends GetCDMIObjectOptions {
    public static class Builder {
       public static GetContainerOptions field(String fieldname) {
          GetContainerOptions options = new GetContainerOptions();
-         return (GetContainerOptions) options.field(fieldname);
+         return options.field(fieldname);
       }
 
       public static GetContainerOptions metadata() {
          GetContainerOptions options = new GetContainerOptions();
-         return (GetContainerOptions) options.metadata();
+         return options.metadata();
       }
 
       public static GetContainerOptions metadata(String prefix) {
          GetContainerOptions options = new GetContainerOptions();
-         return (GetContainerOptions) options.metadata(prefix);
+         return options.metadata(prefix);
       }
 
       public static GetContainerOptions children() {
          GetContainerOptions options = new GetContainerOptions();
-         return (GetContainerOptions) options.children();
+         return options.children();
       }
 
       public static GetContainerOptions children(int from, int to) {
          GetContainerOptions options = new GetContainerOptions();
-         return (GetContainerOptions) options.children(from, to);
+         return options.children(from, to);
       }
 
    }
