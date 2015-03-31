@@ -34,7 +34,7 @@ public class ListStorageServicesHandler extends ParseSax.HandlerForGeneratedRequ
    private final ImmutableList.Builder<StorageService> storageAccounts = ImmutableList.builder();
 
    @Inject
-   ListStorageServicesHandler(StorageServiceHandler storageServiceHandler) {
+   ListStorageServicesHandler(final StorageServiceHandler storageServiceHandler) {
       this.storageServiceHandler = storageServiceHandler;
    }
 
@@ -44,8 +44,8 @@ public class ListStorageServicesHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void startElement(String url, String name, String qName, Attributes attributes) {
-      if (qName.equals("StorageService")) {
+   public void startElement(final String url, final String name, final String qName, final Attributes attributes) {
+      if ("StorageService".equals(qName)) {
          inStorageService = true;
       }
       if (inStorageService) {
@@ -54,8 +54,8 @@ public class ListStorageServicesHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void endElement(String uri, String name, String qName) {
-      if (qName.equals("StorageService")) {
+   public void endElement(final String uri, final String name, final String qName) {
+      if ("StorageService".equals(qName)) {
          inStorageService = false;
          storageAccounts.add(storageServiceHandler.getResult());
       } else if (inStorageService) {
@@ -64,7 +64,7 @@ public class ListStorageServicesHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(final char ch[], final int start, final int length) {
       if (inStorageService) {
          storageServiceHandler.characters(ch, start, length);
       }

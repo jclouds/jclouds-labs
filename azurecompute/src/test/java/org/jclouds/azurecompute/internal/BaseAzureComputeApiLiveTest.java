@@ -37,11 +37,11 @@ import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
 import org.jclouds.azurecompute.domain.StorageService;
-import org.jclouds.azurecompute.domain.StorageServiceParams;
-import org.jclouds.azurecompute.AzureTestUtils;
-import org.jclouds.azurecompute.AzureTestUtils.SameVirtualNetworkSiteNamePredicate;
+import org.jclouds.azurecompute.domain.CreateStorageServiceParams;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.AddressSpace;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.Subnet;
+import org.jclouds.azurecompute.AzureTestUtils;
+import org.jclouds.azurecompute.AzureTestUtils.SameVirtualNetworkSiteNamePredicate;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 import org.testng.annotations.AfterClass;
@@ -59,8 +59,8 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
 
    public static final String LOCATION = "West Europe";
 
-   public static final String IMAGE_NAME
-           = "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_1-LTS-amd64-server-20150123-en-us-30GB";
+   public static final String IMAGE_NAME =
+           "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_1-LTS-amd64-server-20150123-en-us-30GB";
 
    protected StorageService storageService;
 
@@ -83,11 +83,11 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
 
       virtualNetworkSite = getOrCreateVirtualNetworkSite(VIRTUAL_NETWORK_NAME, LOCATION);
 
-      final StorageServiceParams params = StorageServiceParams.builder().
-              name(getStorageServiceName()).
+      final CreateStorageServiceParams params = CreateStorageServiceParams.builder().
+              serviceName(getStorageServiceName()).
               label(getStorageServiceName()).
               location(LOCATION).
-              accountType(StorageServiceParams.Type.Standard_LRS).
+              accountType(StorageService.AccountType.Standard_LRS).
               build();
       storageService = getOrCreateStorageService(getStorageServiceName(), params);
    }
@@ -96,7 +96,7 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
    @Override
    protected void tearDown() {
       super.tearDown();
-      
+
       retry(new ConflictManagementPredicate(operationSucceeded) {
 
          @Override
@@ -137,7 +137,7 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
       return deployment;
    }
 
-   protected StorageService getOrCreateStorageService(String storageServiceName, StorageServiceParams params) {
+   protected StorageService getOrCreateStorageService(String storageServiceName, CreateStorageServiceParams params) {
       StorageService ss = api.getStorageAccountApi().get(storageServiceName);
       if (ss != null) {
          return ss;
@@ -168,8 +168,8 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
               AddressSpace.create(DEFAULT_ADDRESS_SPACE),
               ImmutableList.of(Subnet.create(DEFAULT_SUBNET_NAME, DEFAULT_SUBNET_ADDRESS_SPACE, null))));
 
-      final NetworkConfiguration networkConfiguration
-              = NetworkConfiguration.create(VirtualNetworkConfiguration.create(null, current));
+      final NetworkConfiguration networkConfiguration =
+              NetworkConfiguration.create(VirtualNetworkConfiguration.create(null, current));
 
       VirtualNetworkSite vns;
       try {
