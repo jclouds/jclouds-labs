@@ -37,7 +37,7 @@ import org.jclouds.azurecompute.config.AzureComputeProperties;
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkSecurityGroup;
 import org.jclouds.azurecompute.domain.StorageService;
-import org.jclouds.azurecompute.domain.StorageServiceParams;
+import org.jclouds.azurecompute.domain.CreateStorageServiceParams;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.compute.config.CustomizationResponse;
 import org.jclouds.compute.domain.NodeMetadata;
@@ -217,11 +217,12 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
                     + "Please, try by choosing a different `storageAccountName` in templateOptions and try again", name));
          }
          logger.debug("Creating a storage service account '%s' in location '%s' ...", name, location);
-         final String createStorateServiceRequestId = api.getStorageAccountApi().create(StorageServiceParams.builder()
-                 .name(name)
+         final String createStorateServiceRequestId = api.getStorageAccountApi().create(
+                 CreateStorageServiceParams.builder()
+                 .serviceName(name)
                  .label(name)
                  .location(location)
-                 .accountType(StorageServiceParams.Type.valueOf(type))
+                 .accountType(StorageService.AccountType.valueOf(type))
                  .build());
          if (!operationSucceededPredicate.apply(createStorateServiceRequestId)) {
             final String warnMessage = format("Create storage service account has not been completed within %sms.",
@@ -280,7 +281,7 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
    }
 
    private boolean checkAvailability(final String name) {
-      return api.getStorageAccountApi().checkAvailable(name).result();
+      return api.getStorageAccountApi().isAvailable(name).result();
    }
 
    private static String generateStorageServiceName(final String prefix) {

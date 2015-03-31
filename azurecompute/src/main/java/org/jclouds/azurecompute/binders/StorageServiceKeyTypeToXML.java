@@ -16,34 +16,24 @@
  */
 package org.jclouds.azurecompute.binders;
 
-import static com.google.common.base.Throwables.propagate;
-
-import org.jclouds.azurecompute.domain.StorageServiceParams;
+import com.jamesmurty.utils.XMLBuilder;
+import org.jclouds.azurecompute.domain.StorageServiceKeys;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.BaseEncoding;
-import com.jamesmurty.utils.XMLBuilder;
+import static com.google.common.base.Throwables.propagate;
 
-public final class StorageServiceParamsToXML implements Binder {
+public class StorageServiceKeyTypeToXML implements Binder {
 
    @Override
    @SuppressWarnings("unchecked")
-   public <R extends HttpRequest> R bindToRequest(R request, Object input) {
-      StorageServiceParams params = StorageServiceParams.class.cast(input);
+   public <R extends HttpRequest> R bindToRequest(final R request, final Object input) {
+      final StorageServiceKeys.KeyType params = StorageServiceKeys.KeyType.class.cast(input);
 
       try {
-         XMLBuilder builder = XMLBuilder.create(
-                 "CreateStorageServiceInput", "http://schemas.microsoft.com/windowsazure")
-                 .e("ServiceName").t(params.name()).up()
-                 //.e("Description").up()
-                 .e("Label").t(BaseEncoding.base64().encode(params.label().getBytes(Charsets.UTF_8))).up()
-                 .e("Location").t(params.location()).up()
-                 //.e("GeoReplicationEnabled").up()
-                 //.e("ExtendedProperties").up()
-                 //.e("SecondaryReadEnabled").up()
-                 .e("AccountType").t(params.accountType().name()).up();
+         final XMLBuilder builder = XMLBuilder.create(
+                 "RegenerateKeys", "http://schemas.microsoft.com/windowsazure").
+                 e("KeyType").t(params.name()).up();
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
          throw propagate(e);

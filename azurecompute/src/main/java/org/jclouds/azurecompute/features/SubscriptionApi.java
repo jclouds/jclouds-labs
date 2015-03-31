@@ -17,6 +17,7 @@
 package org.jclouds.azurecompute.features;
 
 import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+
 import java.util.List;
 
 import javax.inject.Named;
@@ -34,18 +35,18 @@ import org.jclouds.rest.annotations.XMLResponseParser;
 /**
  * The Service Management API includes operations for retrieving information about a subscription.
  *
- * @see <a href="http://msdn.microsoft.com/en-us/library/gg715315.aspx">docs</a>
+ * @see <a href="http://msdn.microsoft.com/en-us/library/gg715315">docs</a>
  */
 @Headers(keys = "x-ms-version", values = "{jclouds.api-version}")
-@Path("/rolesizes")
 @Consumes(MediaType.APPLICATION_XML)
 public interface SubscriptionApi {
 
    /**
-    * The List Role Sizes request may be specified as follows.
+    * The List Role Sizes operation lists the role sizes that are available under the specified subscription.
     */
    @Named("ListRoleSizes")
    @GET
+   @Path("/rolesizes")
    @XMLResponseParser(ListRoleSizesHandler.class)
    @Fallback(EmptyListOnNotFoundOr404.class)
    List<RoleSize> listRoleSizes();
