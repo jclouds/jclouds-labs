@@ -13,10 +13,7 @@ Although this is a "labs" repository, some of the providers and APIs here are pr
 | openstack-marconi | API | No |
 | openstack-neutron | API | Yes |
 | rackspace-autoscale | API | No |
-| rackspace-cloudfiles | API | No |
 | rackspace-autoscale-us | Provider | No |
-| rackspace-cloudfiles-uk | Provider | Beta |
-| rackspace-cloudfiles-us | Provider | Beta |
 | rackspace-cloudqueues-us | Provider | No |
 
 APIs new to jclouds are marked as Beta. That means we need people to use it and give us feedback. Based on that feedback, minor changes to the interfaces may happen. It is recommended you adopt this code sooner than later.

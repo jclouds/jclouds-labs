@@ -65,10 +65,7 @@
     <module>rackspace-cloudqueues-us</module>
     <module>rackspace-cloudqueues-uk</module>
     <module>rackspace-cloudbigdata</module>
-    <module>rackspace-cloudbigdata-us</module>
-    <module>rackspace-cloudfiles</module>
-    <module>rackspace-cloudfiles-uk</module>
-    <module>rackspace-cloudfiles-us</module>
+    <module>rackspace-cloudbigdata-us</module>    
     <module>rackspace-cloudnetworks-uk</module>
     <module>rackspace-cloudnetworks-us</module>
     <module>rackspace-cdn-uk</module>
