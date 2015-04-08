@@ -32,6 +32,7 @@ import org.jclouds.domain.Credentials;
 import org.jclouds.http.HttpUtils;
 import org.jclouds.http.config.SSLModule.TrustAllCerts;
 import org.jclouds.location.Provider;
+import org.jclouds.rest.AuthorizationException;
 
 /**
  * This supplier handles two different types of authentication: PKCS12 and PEM.
@@ -77,7 +78,7 @@ public class DelegatingSSLContextSupplier implements Supplier<SSLContext> {
               new InMemoryKeyManagersSupplier(crypto, identity).get();
 
       if (keyManagers == null) {
-         throw new IllegalStateException("Could not setup any viable authentication method");
+         throw new AuthorizationException("Could not setup any viable authentication method");
       }
 
       try {

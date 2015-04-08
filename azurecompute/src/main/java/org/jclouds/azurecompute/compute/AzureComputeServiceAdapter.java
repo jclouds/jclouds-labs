@@ -107,6 +107,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
       final String storageAccountName = templateOptions.getStorageAccountName().get();
       final String virtualNetworkName = templateOptions.getVirtualNetworkName().get();
+      final String reservedIPAddress = templateOptions.getReservedIPName().orNull();
       final String subnetName = templateOptions.getSubnetName().get();
 
       logger.debug("Creating a cloud service with name '%s', label '%s' in location '%s'", name, name, location);
@@ -137,6 +138,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .externalEndpoints(externalEndpoints)
               .subnetName(subnetName)
               .virtualNetworkName(virtualNetworkName)
+              .reservedIPName(reservedIPAddress)
               .build();
 
       logger.debug("Creating a deployment with params '%s' ...", params);

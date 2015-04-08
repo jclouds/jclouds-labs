@@ -42,10 +42,10 @@ import org.testng.annotations.Test;
 public class TrafficManagerApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    private static final String CLOUD1 = String.format("%s%d-%s1",
-           System.getProperty("user.name"), RAND, CloudServiceApiLiveTest.class.getSimpleName()).toLowerCase();
+           System.getProperty("user.name"), RAND, TrafficManagerApiLiveTest.class.getSimpleName()).toLowerCase();
 
    private static final String CLOUD2 = String.format("%s%d-%s2",
-           System.getProperty("user.name"), RAND, CloudServiceApiLiveTest.class.getSimpleName()).toLowerCase();
+           System.getProperty("user.name"), RAND, TrafficManagerApiLiveTest.class.getSimpleName()).toLowerCase();
 
    @BeforeClass
    @Override

@@ -114,6 +114,11 @@ public final class DeploymentParamsToXML implements Binder {
                  .up() //Role
                  .up() //RoleList
                  .e("VirtualNetworkName").t(params.virtualNetworkName()).up();
+         
+         if (params.reservedIPName() != null) {
+            builder.up().up().up().e("ReservedIPName").t(params.reservedIPName()).up();
+         }
+         
          // TODO: Undeprecate this method as forcing users to wrap a String in guava's ByteSource is not great.
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {

@@ -53,7 +53,7 @@ public abstract class ServiceCertificateParams {
    public abstract String password();
 
    public Builder toBuilder() {
-      return builder().fromImageParams(this);
+      return builder().fromServiceCertificateParams(this);
    }
 
    public static Builder builder() {
@@ -87,7 +87,7 @@ public abstract class ServiceCertificateParams {
          return ServiceCertificateParams.create(data, format, password);
       }
 
-      public Builder fromImageParams(final ServiceCertificateParams in) {
+      public Builder fromServiceCertificateParams(final ServiceCertificateParams in) {
          return data(in.data())
                  .format(in.format())
                  .password(in.password());

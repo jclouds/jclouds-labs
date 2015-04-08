@@ -50,6 +50,7 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
                  .sourceImageName(OSImage.name()).mediaLink(URI.create("https://mydeployment.blob.core.windows.net/vhds/disk-mydeployment.vhd")).os(OSImage.os())
                  .username("username").password("testpwd")
                  .virtualNetworkName("my-virtualNetworkName")
+                 .reservedIPName("myreservedip")
                  .externalEndpoint(inboundTcpToLocalPort(80, 8080))
                  .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
 
