@@ -1,0 +1,25 @@
+{
+    "template": {
+        "heat_template_version": "2013-05-23",
+
+        "description": "Simple template to deploy a single compute instance",
+
+        "parameters": {
+            "key_name": {
+                "type": "string",
+                "label": "Key Name",
+                "description": "Name of key-pair to be used for compute instance"
+            }
+        },
+
+        "resources": {
+            "my_instance": {
+                "type": "OS::Nova::KeyPair",
+                "properties": {
+                    "name": { "get_param": "key_name" }
+                }
+            }
+
+        }
+    }
+}

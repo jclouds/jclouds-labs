@@ -1,0 +1,23 @@
+{
+    "resource": {
+        "resource_name": "cinder_volume",
+        "description": "",
+        "links": [
+            {
+                "href": "http://10.20.20.11:8004/v1/ed902e7377e340a7a0d78e1dfeb15c62/stacks/StackIT_1424281004155/c749952a-dde7-4aba-83d1-f360217a93e0/resources/cinder_volume",
+                "rel": "self"
+            },
+            {
+                "href": "http://10.20.20.11:8004/v1/ed902e7377e340a7a0d78e1dfeb15c62/stacks/StackIT_1424281004155/c749952a-dde7-4aba-83d1-f360217a93e0",
+                "rel": "stack"
+            }
+        ],
+        "logical_resource_id": "cinder_volume",
+        "resource_status": "CREATE_COMPLETE",
+        "updated_time": "2015-02-18T17:36:45Z",
+        "required_by": [ ],
+        "resource_status_reason": "state changed",
+        "physical_resource_id": "f59b7a86-aee0-4f62-b190-606c4e08da7c",
+        "resource_type": "OS::Cinder::Volume"
+    }
+}

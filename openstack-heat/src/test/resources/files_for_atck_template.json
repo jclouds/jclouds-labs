@@ -1,0 +1,33 @@
+{
+    "VolumeB.template.yaml": {
+        "resources": {
+            "Block-StorageB": {
+                "properties": {
+                    "description": "Used for VM \\/storage partition.",
+                    "name": "voldB",
+                    "size": {
+                        "get_param": "storage_size"
+                    }
+                },
+                "type": "OS::Cinder::Volume"
+            }
+        },
+        "heat_template_version": "2013-05-23",
+        "description": "Template to set up volumes for the initial deployment",
+        "parameters": {
+            "storage_size": {
+                "default": "4",
+                "description": "GBs for block storage",
+                "type": "number"
+            }
+        },
+        "outputs": {
+            "volumeId": {
+                "description": "VolumeId",
+                "value": {
+                    "get_resource": "Block-StorageB"
+                }
+            }
+        }
+    }
+}

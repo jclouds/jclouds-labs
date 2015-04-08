@@ -1,0 +1,21 @@
+{
+    "environment": {
+        "resource_registry": {
+            "ALU::LCP::VolumeB": "VolumeB.template.yaml"
+        }
+    },
+
+    "template": {
+
+        "heat_template_version": "2013-05-23",
+
+        "resources": {
+            "ALU-LCP-OAMB": {
+                "properties": {
+                    "storage_size": 4
+                },
+                "type": "ALU::LCP::VolumeB"
+            }
+        }
+    }
+}

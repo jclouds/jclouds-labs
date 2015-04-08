@@ -22,6 +22,7 @@ import java.util.Set;
 import org.jclouds.location.Region;
 import org.jclouds.location.functions.RegionToEndpoint;
 import org.jclouds.openstack.heat.v1.features.ResourceApi;
+import org.jclouds.openstack.heat.v1.features.StackApi;
 import org.jclouds.rest.annotations.Delegate;
 import org.jclouds.rest.annotations.EndpointParam;
 
@@ -42,4 +43,11 @@ public interface HeatApi extends Closeable {
     */
    @Delegate
    ResourceApi getResourceApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
+
+   /**
+    * Provides access to Stack features.
+    */
+   @Delegate
+   StackApi getStackApi(@EndpointParam(parser = RegionToEndpoint.class) String region);
 }
+
