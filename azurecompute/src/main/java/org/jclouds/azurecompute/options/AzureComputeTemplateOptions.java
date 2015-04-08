@@ -55,6 +55,8 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
 
    private Optional<String> networkSecurityGroupName = Optional.absent();
 
+   private Optional<String> reservedIPName = Optional.absent();
+
    @Override
    public AzureComputeTemplateOptions clone() {
       final AzureComputeTemplateOptions options = new AzureComputeTemplateOptions();
@@ -87,6 +89,9 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
          }
          if (storageAccountType.isPresent()) {
             eTo.storageAccountType(storageAccountType.get());
+         }
+         if (reservedIPName.isPresent()) {
+            eTo.reservedIPName(reservedIPName.get());
          }
       }
    }
@@ -126,6 +131,11 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       return this;
    }
 
+   public TemplateOptions reservedIPName(final String reservedIPName) {
+      this.reservedIPName = Optional.of(reservedIPName);
+      return this;
+   }
+
    public Optional<String> getVirtualNetworkName() {
       return virtualNetworkName;
    }
@@ -152,6 +162,10 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
 
    public Optional<String> getNetworkSecurityGroupName() {
       return networkSecurityGroupName;
+   }
+
+   public Optional<String> getReservedIPName() {
+      return reservedIPName;
    }
 
    public static class Builder {

@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
 public class ServiceCertificatesApiLiveTest extends BaseAzureComputeApiLiveTest {
 
    private static final String CLOUD_SERVICE = String.format("%s%d-%s",
-           System.getProperty("user.name"), RAND, CloudServiceApiLiveTest.class.getSimpleName()).toLowerCase();
+           System.getProperty("user.name"), RAND, ServiceCertificatesApiLiveTest.class.getSimpleName()).toLowerCase();
 
    private static final String FORMAT = "pfx";
    private static final String PASSWORD = "password";

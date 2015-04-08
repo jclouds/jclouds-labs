@@ -28,6 +28,7 @@ import org.jclouds.azurecompute.features.LocationApi;
 import org.jclouds.azurecompute.features.NetworkSecurityGroupApi;
 import org.jclouds.azurecompute.features.OSImageApi;
 import org.jclouds.azurecompute.features.OperationApi;
+import org.jclouds.azurecompute.features.ReservedIPAddressApi;
 import org.jclouds.azurecompute.features.ServiceCertificatesApi;
 import org.jclouds.azurecompute.features.StorageAccountApi;
 import org.jclouds.azurecompute.features.SubscriptionApi;
@@ -51,7 +52,7 @@ public interface AzureComputeApi extends Closeable {
     */
    @Delegate
    AffinityGroupApi getAffinityGroupApi();
-   
+
    /**
     * The Service Management API includes operations for listing the available data center locations for a cloud service
     * in your subscription.
@@ -158,4 +159,12 @@ public interface AzureComputeApi extends Closeable {
     */
    @Delegate
    ServiceCertificatesApi getServiceCertificatesApi();
+
+   /**
+    * The Service Management API includes operations for managing the reserved IP addresses in your subscription.
+    *
+    * @see <a href="https://msdn.microsoft.com/en-us/library/azure/dn722420.aspxx">docs</a>
+    */
+   @Delegate
+   ReservedIPAddressApi getReservedIPAddressApi();
 }

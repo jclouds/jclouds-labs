@@ -1,0 +1,10 @@
+<ReservedIP xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>jclouds_ip1</Name>
+  <Address>23.101.78.155</Address>
+  <Id>582c04d0-b169-4791-a706-f2b2bc36a742</Id>
+  <State>Created</State>
+  <Location>West Europe</Location>
+  <InUse>true</InUse>
+  <ServiceName>jclouds_s</ServiceName>
+  <DeploymentName>jclouds_d</DeploymentName>
+</ReservedIP>

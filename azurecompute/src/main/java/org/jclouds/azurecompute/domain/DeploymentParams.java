@@ -27,6 +27,7 @@ import org.jclouds.javax.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.jclouds.rest.annotations.SinceApiVersion;
 
 /**
  * To create a new deployment/role
@@ -113,6 +114,18 @@ public abstract class DeploymentParams {
    @Nullable
    public abstract String virtualNetworkName();
 
+   /**
+    * Optional. Specifies the name of a reserved IP address that is to be assigned to the deployment. You must run
+    * Create Reserved IP Address before you can assign the address to the deployment using this element.
+    *
+    * The ReservedIPName element is only available using version 2014-05-01 or higher.
+    *
+    * @return reserved IP.
+    */
+   @SinceApiVersion("2014-05-01")
+   @Nullable
+   public abstract String reservedIPName();
+
    public abstract List<String> subnetNames();
 
    public Builder toBuilder() {
@@ -142,6 +155,8 @@ public abstract class DeploymentParams {
       private List<ExternalEndpoint> externalEndpoints = Lists.newArrayList();
 
       private String virtualNetworkName;
+
+      private String reservedIPName;
 
       private List<String> subnetNames = Lists.newArrayList();
 
@@ -195,6 +210,11 @@ public abstract class DeploymentParams {
          return this;
       }
 
+      public Builder reservedIPName(final String reservedIPName) {
+         this.reservedIPName = reservedIPName;
+         return this;
+      }
+
       public Builder subnetName(final String subnetName) {
          subnetNames.add(subnetName);
          return this;
@@ -206,8 +226,18 @@ public abstract class DeploymentParams {
       }
 
       public DeploymentParams build() {
-         return DeploymentParams.create(name, size, username, password, sourceImageName, mediaLink, os,
-                 ImmutableList.copyOf(externalEndpoints), virtualNetworkName, ImmutableList.copyOf(subnetNames));
+         return DeploymentParams.create(
+                 name,
+                 size,
+                 username,
+                 password,
+                 sourceImageName,
+                 mediaLink,
+                 os,
+                 ImmutableList.copyOf(externalEndpoints),
+                 virtualNetworkName,
+                 reservedIPName,
+                 ImmutableList.copyOf(subnetNames));
       }
 
       public Builder fromDeploymentParams(final DeploymentParams deploymentParams) {
@@ -219,16 +249,17 @@ public abstract class DeploymentParams {
                  .mediaLink(deploymentParams.mediaLink())
                  .os(deploymentParams.os())
                  .externalEndpoints(deploymentParams.externalEndpoints())
-                 .subnetNames(deploymentParams.subnetNames());
+                 .subnetNames(deploymentParams.subnetNames())
+                 .reservedIPName(reservedIPName);
       }
    }
 
    private static DeploymentParams create(final String name, final RoleSize.Type size,
            final String username, final String password, final String sourceImageName,
            final URI mediaLink, final OSImage.Type os, final List<ExternalEndpoint> externalEndpoints,
-           final String virtualNetworkName, final List<String> subnetNames) {
+           final String virtualNetworkName, final String reservedIPName, final List<String> subnetNames) {
 
       return new AutoValue_DeploymentParams(name, size, username, password, sourceImageName, mediaLink, os,
-              copyOf(externalEndpoints), virtualNetworkName, copyOf(subnetNames));
+              copyOf(externalEndpoints), virtualNetworkName, reservedIPName, copyOf(subnetNames));
    }
 }
