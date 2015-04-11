@@ -28,6 +28,9 @@ import org.jclouds.shipyard.internal.BaseShipyardApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 @Test(groups = "live", testName = "ServiceKeysApiLiveTest", singleThreaded = true)
 public class ServiceKeysApiLiveTest extends BaseShipyardApiLiveTest {
 
@@ -36,9 +39,7 @@ public class ServiceKeysApiLiveTest extends BaseShipyardApiLiveTest {
    
    @AfterClass (alwaysRun = true)
    protected void tearDown() {
-      assertNotNull(serviceKey, "Expected serviceKey to be set but was not");
-      boolean removed = api().deleteServiceKey(serviceKey);
-      assertTrue(removed);
+      api().deleteServiceKey(serviceKey);
    }
    
    public void testCreateServiceKey() throws Exception {
@@ -53,13 +54,20 @@ public class ServiceKeysApiLiveTest extends BaseShipyardApiLiveTest {
       List<ServiceKey> possibleServiceKeys = api().listServiceKeys();
       assertNotNull(possibleServiceKeys, "possibleServiceKeys was not set");
       assertTrue(possibleServiceKeys.size() > 0, "Expected at least 1 ServiceKey but list was empty");
-      boolean serviceKeyFound = false;
-      for (ServiceKey possibleKey : possibleServiceKeys) {
-         if (possibleKey.key().equals(serviceKey)) {
-            serviceKeyFound = true;
+      ServiceKey possibleServiceKey = Iterables.find(possibleServiceKeys, new Predicate<ServiceKey>() {
+         @Override
+         public boolean apply(ServiceKey arg0) {
+            return arg0.key().equals(serviceKey);
          }
-      }
-      assertTrue(serviceKeyFound, "Expected but could not find ServiceKey amongst " + possibleServiceKeys.size() + " found");
+      }, null);
+      assertNotNull(possibleServiceKey, "Expected but could not find ServiceKey amongst " + possibleServiceKeys.size() + " found");
+   }
+   
+   @Test (dependsOnMethods = "testListServiceKeys")
+   public void testRemoveServiceKey() throws Exception {
+      assertNotNull(serviceKey, "Expected serviceKey to be set but was not");
+      boolean removed = api().deleteServiceKey(serviceKey);
+      assertTrue(removed);
    }
    
    public void testRemoveNonExistentServiceKey() throws Exception {

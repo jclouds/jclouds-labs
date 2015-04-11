@@ -65,12 +65,20 @@ public class ShipyardErrorHandler implements HttpErrorHandler {
                }
                break;
             case 500:
-               if (command.getCurrentRequest().getMethod().equals("POST")) {
+               if (command.getCurrentRequest().getMethod().equals("GET")) {
+                  if (command.getCurrentRequest().getEndpoint().getPath().startsWith("/api/roles") && 
+                        message.contains("role does not exist")) {
+                     exception = new ResourceNotFoundException(message, new HttpResponseException(command, response, message));
+                  }
+               } else if (command.getCurrentRequest().getMethod().equals("POST")) {
                   if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/engines")) 
                      exception = new HttpResponseException("Connection refused registering docker daemon", command, response);
                } else if (command.getCurrentRequest().getMethod().equals("DELETE")) {
                   if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/servicekeys") && 
                         message.contains("service key does not exist")) {
+                     exception = new ResourceNotFoundException(message, new HttpResponseException(command, response, message));
+                  } else if (command.getCurrentRequest().getEndpoint().getPath().endsWith("/roles") && 
+                        message.contains("role does not exist")) {
                      exception = new ResourceNotFoundException(message, new HttpResponseException(command, response, message));
                   }
                }

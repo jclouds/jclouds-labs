@@ -14,31 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.shipyard;
+package org.jclouds.shipyard.domain.roles;
 
-import org.jclouds.rest.annotations.Delegate;
-import org.jclouds.shipyard.features.ContainersApi;
-import org.jclouds.shipyard.features.EnginesApi;
-import org.jclouds.shipyard.features.ImagesApi;
-import org.jclouds.shipyard.features.RolesApi;
-import org.jclouds.shipyard.features.ServiceKeysApi;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-import java.io.Closeable;
+import com.google.auto.value.AutoValue;
 
-public interface ShipyardApi extends Closeable {
+@AutoValue
+public abstract class RoleInfo {
 
-   @Delegate
-   ContainersApi containersApi();
-
-   @Delegate
-   ImagesApi imagesApi();
+   public abstract String name();
    
-   @Delegate
-   EnginesApi enginesApi();
-   
-   @Delegate
-   ServiceKeysApi serviceKeysApi();
-   
-   @Delegate
-   RolesApi rolesApi();
+   @Nullable public abstract String id();
+      
+   RoleInfo() {
+   }
+
+   @SerializedNames({ "name", "id" })
+   public static RoleInfo create(String name, String id) {
+      return new AutoValue_RoleInfo(name, id);
+   }
 }
