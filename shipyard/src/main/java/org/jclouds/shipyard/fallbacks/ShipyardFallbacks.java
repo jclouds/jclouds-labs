@@ -36,4 +36,26 @@ public final class ShipyardFallbacks {
          throw propagate(t);
       }
    }
+   
+   public static final class BooleanOnRoleNotFoundAnd500 implements Fallback<Boolean> {
+      public Boolean createOrPropagate(Throwable t) throws Exception {
+         if (checkNotNull(t, "throwable") != null && 
+               t.getMessage().contains("role does not exist") && 
+               returnValueOnCodeOrNull(t, true, equalTo(500)) != null) {
+            return Boolean.FALSE;
+         }
+         throw propagate(t);
+      }
+   }
+   
+   public static final class NullOnRoleNotFoundAnd500 implements Fallback<Object> {
+      public Object createOrPropagate(Throwable t) throws Exception {
+         if (checkNotNull(t, "throwable") != null && 
+               t.getMessage().contains("role does not exist") && 
+               returnValueOnCodeOrNull(t, true, equalTo(500)) != null) {
+            return null;
+         }
+         throw propagate(t);
+      }
+   }
 }
