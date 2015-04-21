@@ -185,8 +185,8 @@ public abstract class CreateService {
                this.name,
                this.domains,
                this.origins,
-               ImmutableList.copyOf(this.caching),
-               ImmutableList.copyOf(this.restrictions),
+               this.caching == null ? null : ImmutableList.copyOf(this.caching),
+               this.restrictions == null ? null : ImmutableList.copyOf(this.restrictions),
                this.flavorId);
          return result;
       }
