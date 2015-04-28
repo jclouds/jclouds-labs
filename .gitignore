@@ -19,3 +19,4 @@ atlassian-ide-plugin.xml
 .java-version
 *nb-configuration.xml
 *nbactions.xml
+Makefile
