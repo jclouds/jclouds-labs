@@ -68,7 +68,7 @@ public abstract class Service {
     * @return Specifies the CDN provider flavor ID to use. For a list of flavors, see the operation to list the
     * available flavors.
     */
-   public abstract String getFlavorId();
+   @Nullable public abstract String getFlavorId();
 
    /**
     * @return Specifies the current status of the service.
