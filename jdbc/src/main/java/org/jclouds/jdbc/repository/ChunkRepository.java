@@ -14,29 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.jdbc.predicates.validators;
+package org.jclouds.jdbc.repository;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import org.jclouds.predicates.Validator;
+import org.jclouds.jdbc.entity.ChunkEntity;
 
-/**
- * Validates container name for jdbc provider implementation
- *
- * @see org.jclouds.rest.InputParamValidator
- * @see org.jclouds.predicates.Validator
- */
+import javax.persistence.EntityManager;
+
 @Singleton
-public class JdbcContainerNameValidator extends Validator<String> {
+public class ChunkRepository extends GenericRepository<ChunkEntity, Long> {
 
-   @Override
-   public void validate(String name) throws IllegalArgumentException {
-      if (name == null || name.length() < 1) {
-         throw new IllegalArgumentException("Container name can not be null or empty");
-      }
-
-      if (name.contains("/")) {
-         throw new IllegalArgumentException("Container name can not contain character /");
-      }
+   @Inject
+   private ChunkRepository(Provider<EntityManager> entityManager) {
+      super(entityManager);
    }
 
 }

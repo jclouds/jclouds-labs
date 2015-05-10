@@ -22,8 +22,8 @@ import com.google.inject.persist.PersistService;
 public class JPAInitializer {
 
    @Inject
-   private JPAInitializer(PersistService service) {
-      service.start();
+   private JPAInitializer(PersistService persistService) {
+      persistService.start();
    }
 
 }

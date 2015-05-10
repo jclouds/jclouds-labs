@@ -46,16 +46,19 @@ public class JdbcBlobUtils implements BlobUtils {
       return blobBuilders.get();
    }
 
-   @Override public boolean directoryExists(String s, String s1) {
-      return false;
+   @Override
+   public boolean directoryExists(String container, String directory) {
+      return storageStrategy.directoryExists(container, directory);
    }
 
-   @Override public void createDirectory(String s, String s1) {
-
+   @Override
+   public void createDirectory(String container, String directory) {
+      storageStrategy.createDirectory(container, directory);
    }
 
-   @Override public long countBlobs(String s, ListContainerOptions listContainerOptions) {
-      return 0;
+   @Override
+   public long countBlobs(String container, ListContainerOptions listContainerOptions) {
+      return storageStrategy.countBlobs(container, listContainerOptions);
    }
 
    @Override
@@ -63,8 +66,9 @@ public class JdbcBlobUtils implements BlobUtils {
       storageStrategy.clearContainer(container, options);
    }
 
-   @Override public void deleteDirectory(String s, String s1) {
-
+   @Override
+   public void deleteDirectory(String container, String directory) {
+      storageStrategy.deleteDirectory(container, directory);
    }
 
 }

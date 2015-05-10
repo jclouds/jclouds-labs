@@ -14,29 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.jdbc.predicates.validators;
+package org.jclouds.jdbc.integration;
 
-import com.google.inject.Singleton;
-import org.jclouds.predicates.Validator;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
+import com.google.inject.persist.jpa.JpaPersistModule;
+import org.jclouds.blobstore.integration.internal.BaseBlobIntegrationTest;
+import org.testng.annotations.Test;
 
-/**
- * Validates container name for jdbc provider implementation
- *
- * @see org.jclouds.rest.InputParamValidator
- * @see org.jclouds.predicates.Validator
- */
-@Singleton
-public class JdbcContainerNameValidator extends Validator<String> {
-
-   @Override
-   public void validate(String name) throws IllegalArgumentException {
-      if (name == null || name.length() < 1) {
-         throw new IllegalArgumentException("Container name can not be null or empty");
-      }
-
-      if (name.contains("/")) {
-         throw new IllegalArgumentException("Container name can not contain character /");
-      }
+@Test(groups = { "integration" }, singleThreaded = true,  testName = "blobstore.HibernateHsqldbBlobIntegrationTest")
+public class HibernateHsqldbBlobIntegrationTest extends BaseBlobIntegrationTest {
+   public HibernateHsqldbBlobIntegrationTest() {
+      provider = "jdbc";
    }
 
+   @Override
+   protected Iterable<Module> setupModules() {
+      return ImmutableSet.<Module> of(this.getLoggingModule(), new JpaPersistModule("jclouds-test-hsqldb"));
+   }
 }

@@ -29,10 +29,10 @@ import java.util.Date;
 
 @Entity
 @Table
-public class Container {
+public class ContainerEntity {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
    private Long id;
 
    @Column(unique = true)
@@ -42,10 +42,10 @@ public class Container {
 
    private ContainerAccess containerAccess;
 
-   public Container() {
+   public ContainerEntity() {
    }
 
-   public Container(Long id, String name, Date creationDate, ContainerAccess containerAccess) {
+   public ContainerEntity(Long id, String name, Date creationDate, ContainerAccess containerAccess) {
       this.id = id;
       this.name = name;
       this.creationDate = creationDate;
@@ -113,8 +113,8 @@ public class Container {
          return this;
       }
 
-      public Container build() {
-         return new Container(null, name, null, containerAccess);
+      public ContainerEntity build() {
+         return new ContainerEntity(null, name, null, containerAccess);
       }
    }
 }

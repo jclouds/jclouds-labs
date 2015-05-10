@@ -14,29 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.jdbc.predicates.validators;
-
-import com.google.inject.Singleton;
-import org.jclouds.predicates.Validator;
+package org.jclouds.jdbc.reference;
 
 /**
- * Validates container name for jdbc provider implementation
- *
- * @see org.jclouds.rest.InputParamValidator
- * @see org.jclouds.predicates.Validator
+ * Common constants used in jdbc provider
  */
-@Singleton
-public class JdbcContainerNameValidator extends Validator<String> {
+public final class JdbcConstants {
 
-   @Override
-   public void validate(String name) throws IllegalArgumentException {
-      if (name == null || name.length() < 1) {
-         throw new IllegalArgumentException("Container name can not be null or empty");
-      }
+    public static final int DEFAULT_CHUNK_SIZE = 1024 * 1024;
 
-      if (name.contains("/")) {
-         throw new IllegalArgumentException("Container name can not contain character /");
-      }
-   }
-
+    private JdbcConstants() {
+        throw new AssertionError("Intentionally Unimplemented");
+    }
 }

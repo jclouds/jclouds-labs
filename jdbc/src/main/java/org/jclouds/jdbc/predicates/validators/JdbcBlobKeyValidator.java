@@ -28,11 +28,15 @@ import org.jclouds.predicates.Validator;
 @Singleton
 public class JdbcBlobKeyValidator extends Validator<String> {
 
-    @Override
-    public void validate(String name) throws IllegalArgumentException {
-        //blob key cannot be null or empty
-        if (name == null || name.length() < 1)
-            throw new IllegalArgumentException("Blob key can't be null or empty");
-    }
+   @Override
+   public void validate(String name) throws IllegalArgumentException {
+      if (name == null || name.length() < 1) {
+         throw new IllegalArgumentException("Blob key can not be null or empty");
+      }
+
+      if (name.startsWith("/")) {
+         throw new IllegalArgumentException("Blob key can not start with character /");
+      }
+   }
 
 }

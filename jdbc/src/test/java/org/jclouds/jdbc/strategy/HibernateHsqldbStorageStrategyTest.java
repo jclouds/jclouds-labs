@@ -14,29 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.jdbc.predicates.validators;
+package org.jclouds.jdbc.strategy;
 
-import com.google.inject.Singleton;
-import org.jclouds.predicates.Validator;
+import org.testng.annotations.Test;
 
-/**
- * Validates container name for jdbc provider implementation
- *
- * @see org.jclouds.rest.InputParamValidator
- * @see org.jclouds.predicates.Validator
- */
-@Singleton
-public class JdbcContainerNameValidator extends Validator<String> {
+@Test(groups = "unit", testName = "HibernateHsqldbStorageStrategyTest", singleThreaded = true)
+public class HibernateHsqldbStorageStrategyTest extends BaseJdbcStorageStrategyTest {
 
-   @Override
-   public void validate(String name) throws IllegalArgumentException {
-      if (name == null || name.length() < 1) {
-         throw new IllegalArgumentException("Container name can not be null or empty");
-      }
-
-      if (name.contains("/")) {
-         throw new IllegalArgumentException("Container name can not contain character /");
-      }
+   protected HibernateHsqldbStorageStrategyTest() {
+      super("jclouds-test-hsqldb");
    }
+
+   // For some reason testng needs at least a test here
+   public void ohMyTest() {}
 
 }

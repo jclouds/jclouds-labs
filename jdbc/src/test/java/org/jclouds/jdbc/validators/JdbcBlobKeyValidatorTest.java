@@ -14,29 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.jdbc.predicates.validators;
+package org.jclouds.jdbc.validators;
 
-import com.google.inject.Singleton;
-import org.jclouds.predicates.Validator;
+import org.jclouds.jdbc.predicates.validators.JdbcBlobKeyValidator;
+import org.testng.annotations.Test;
+
 
 /**
- * Validates container name for jdbc provider implementation
- *
- * @see org.jclouds.rest.InputParamValidator
- * @see org.jclouds.predicates.Validator
+ * Test class for {@link JdbcBlobKeyValidator } class
  */
-@Singleton
-public class JdbcContainerNameValidator extends Validator<String> {
+@Test(groups = "unit", testName = "jdbc.JdbcBlobKeyValidatorTest")
+public class JdbcBlobKeyValidatorTest {
 
-   @Override
-   public void validate(String name) throws IllegalArgumentException {
-      if (name == null || name.length() < 1) {
-         throw new IllegalArgumentException("Container name can not be null or empty");
-      }
+   private static final JdbcBlobKeyValidator validator = new JdbcBlobKeyValidator();
 
-      if (name.contains("/")) {
-         throw new IllegalArgumentException("Container name can not contain character /");
-      }
+   @Test
+   public void testNamesValidity() {
+      validator.validate("all.img");
+      validator.validate("all/is/ok");
+   }
+
+   @Test(expectedExceptions = IllegalArgumentException.class)
+   public void testEmptyName() {
+      validator.validate("");
+   }
+
+   @Test(expectedExceptions = IllegalArgumentException.class)
+   public void testInvalidName() {
+      validator.validate("/is/not/ok");
    }
 
 }

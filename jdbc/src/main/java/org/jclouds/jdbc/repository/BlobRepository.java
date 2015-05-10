@@ -19,40 +19,36 @@ package org.jclouds.jdbc.repository;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import org.jclouds.jdbc.entity.BlobEntity;
+import org.jclouds.jdbc.entity.BlobEntityPK;
 import org.jclouds.jdbc.entity.ContainerEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.util.List;
 
 @Singleton
-public class ContainerRepository extends GenericRepository<ContainerEntity, Long> {
+public class BlobRepository extends GenericRepository<BlobEntity, BlobEntityPK> {
 
    @Inject
-   private ContainerRepository(Provider<EntityManager> entityManager) {
+   private BlobRepository(Provider<EntityManager> entityManager) {
       super(entityManager);
    }
 
-   public ContainerEntity findContainerByName(String name) {
-      try {
-         return entityManager.get().createQuery("SELECT c FROM " + entityClass.getName() + " c WHERE c.name = :name", entityClass)
-               .setParameter("name", name)
-               .getSingleResult();
-      } catch (NoResultException e) {
-         return null;
-      }
-   }
+    public List<BlobEntity> findBlobsByContainer(ContainerEntity containerEntity) {
+        return entityManager.get().createQuery("SELECT b FROM " + entityClass.getName() + " b "
+              + "WHERE"
+              + " b.containerEntity = :containerEntity", entityClass)
+                .setParameter("containerEntity", containerEntity)
+                .getResultList();
+    }
 
-   public List<ContainerEntity> findAllContainers() {
-      return entityManager.get().createQuery("SELECT c FROM " + entityClass.getName() + " c", entityClass)
+   public List<BlobEntity> findBlobsByDirectory(ContainerEntity containerEntity, String directory) {
+      return entityManager.get().createQuery("SELECT b FROM " + entityClass.getName() + " b "
+            + "WHERE b.containerEntity = :containerEntity AND b.key != :directoryName AND b.key LIKE :directoryLike ", entityClass)
+            .setParameter("containerEntity", containerEntity)
+            .setParameter("directoryName", directory)
+            .setParameter("directoryLike", directory + "%")
             .getResultList();
-   }
-
-   public void deleteContainerByName(String name) {
-      ContainerEntity containerEntity = findContainerByName(name);
-      if (containerEntity != null) {
-         delete(findContainerByName(name));
-      }
    }
 
 }
