@@ -1,0 +1,34 @@
+{
+  "description": "A template implementation of a resource that provides a single MongoDB server instance",
+  "parameters": {
+    "flavor": {
+      "Default": "1GB Standard Instance",
+      "Description": "Rackspace Cloud Server flavor",
+      "Type": "String",
+      "constraints": [
+        {
+          "allowed_values": [
+            "512MB Standard Instance",
+            "1GB Standard Instance",
+            "2GB Standard Instance",
+            "4GB Standard Instance",
+            "8GB Standard Instance",
+            "15GB Standard Instance",
+            "30GB Standard Instance"
+          ],
+          "description": "must be a valid Rackspace Cloud Server flavor."
+        }
+      ]
+    },
+    "key_name": {
+      "Description": "Nova keypair name for ssh access to the server",
+      "Required": true,
+      "Type": "String"
+    },
+    "server_name": {
+      "Default": "MongoDB_One",
+      "Description": "the instance name",
+      "Type": "String"
+    }
+  }
+}

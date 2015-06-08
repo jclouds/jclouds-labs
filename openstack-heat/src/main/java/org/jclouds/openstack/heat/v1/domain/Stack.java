@@ -16,19 +16,19 @@
  */
 package org.jclouds.openstack.heat.v1.domain;
 
-import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 import org.jclouds.openstack.v2_0.domain.Link;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Representation of an OpenStack Heat Stack.
@@ -69,12 +69,12 @@ public abstract class Stack {
    /**
     * @return the parameters of this Stack.
     */
-   @Nullable public abstract Map<String, String> getParameters();
+   public abstract Map<String, String> getParameters();
 
    /**
     * @return the capabilities of this Stack.
     */
-   @Nullable public abstract Set<String> getCapabilities();
+   public abstract Set<String> getCapabilities();
 
    /**
     * @return the outputs of this Stack.
@@ -84,7 +84,7 @@ public abstract class Stack {
    /**
     * @return the notification topics of this Stack.
     */
-   @Nullable public abstract List<String> getNotificationTopics();
+   public abstract List<String> getNotificationTopics();
 
    /**
     * @return the status of this Stack.
@@ -135,10 +135,10 @@ public abstract class Stack {
             description,
             owner,
             project,
-            parameters != null ? ImmutableMap.copyOf(parameters) : null,
-            capabilities != null ? ImmutableSet.copyOf(capabilities) : null,
-            outputs != null ? ImmutableList.copyOf(outputs) : null,
-            notificationTopics != null ? ImmutableList.copyOf(notificationTopics) : null,
+            parameters != null ? ImmutableMap.copyOf(parameters) : ImmutableMap.<String, String>of(),
+            capabilities != null ? ImmutableSet.copyOf(capabilities) : ImmutableSet.<String>of(),
+            outputs != null ? ImmutableList.copyOf(outputs) : ImmutableList.<String>of(),
+            notificationTopics != null ? ImmutableList.copyOf(notificationTopics) : ImmutableList.<String>of(),
             status,
             statusReason,
             created,
@@ -148,4 +148,3 @@ public abstract class Stack {
             ImmutableSet.copyOf(links));
    }
 }
-

@@ -16,8 +16,16 @@
  */
 package org.jclouds.openstack.heat.v1.features;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.jclouds.util.Predicates2.retry;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.jclouds.openstack.heat.v1.domain.Stack;
 import org.jclouds.openstack.heat.v1.domain.StackResource;
 import org.jclouds.openstack.heat.v1.domain.StackResourceStatus;
@@ -33,14 +41,8 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.jclouds.util.Predicates2.retry;
+import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 
 /**
  * Tests parsing and Guice wiring of StackApi
@@ -48,7 +50,7 @@ import static org.jclouds.util.Predicates2.retry;
 @Test(groups = "live", testName = "StackApiLiveTest")
 public class StackApiLiveTest extends BaseHeatApiLiveTest {
 
-   public static final String TEMPLATE_URL = "http://10.5.5.121/Installs/cPaaS/YAML/simple_stack.yaml";
+   public static final String TEMPLATE_URL = "https://raw.githubusercontent.com/rackspace-orchestration-templates/wordpress-single/master/wordpress-single.yaml";
    protected String stackName = System.getProperty("user.name").replace('.', '-').toLowerCase();
 
    public void testList() {
@@ -167,7 +169,7 @@ public class StackApiLiveTest extends BaseHeatApiLiveTest {
                return stackApi.get(stackId).getStatus() == StackStatus.CREATE_COMPLETE;
             }
 
-         }, 60, 1, SECONDS).apply(stackId);
+         }, 600, 60, SECONDS).apply(stackId);
 
          if (!success) {
             Assert.fail("Stack didn't get to status CREATE_COMPLETE in 20m.");
@@ -185,7 +187,7 @@ public class StackApiLiveTest extends BaseHeatApiLiveTest {
       for (String region : api.getConfiguredRegions()) {
          StackApi stackApi = api.getStackApi(region);
          Map<String, Object> parameters = new HashMap<String, Object>();
-         parameters.put("key_name", "myKey");
+         parameters.put("key_name", UUID.randomUUID());
 
          JSONParser parser = new JSONParser();
          Object obj = parser.parse(stringFromResource("/stack_with_parameters.json"));
@@ -239,7 +241,7 @@ public class StackApiLiveTest extends BaseHeatApiLiveTest {
 
          JSONObject jsonObject = (JSONObject) obj;
          Map<String, Object> parameters = new HashMap<String, Object>();
-         parameters.put("key_name", "myKey");
+         parameters.put("key_name", UUID.randomUUID());
 
          String stackName = getName();
          CreateStack createStack = CreateStack.builder().name(stackName).template(String.valueOf(jsonObject.get("template"))).parameters(parameters).build();
@@ -291,20 +293,20 @@ public class StackApiLiveTest extends BaseHeatApiLiveTest {
       }
    }
 
- @AfterClass
- public void cleanup(){
+   @AfterClass
+   public void cleanup() {
 
-    for (String region : api.getConfiguredRegions()) {
-       StackApi stackApi = api.getStackApi(region);
-       List<Stack> stacks = stackApi.list();
-       for (Stack stack : stacks){
-          if (stack.getName().startsWith(stackName)){
-             stackApi.delete(stack.getName(), stack.getId());
-          }
-       }
-    }
+      for (String region : api.getConfiguredRegions()) {
+         StackApi stackApi = api.getStackApi(region);
+         List<Stack> stacks = stackApi.list();
+         for (Stack stack : stacks) {
+            if (stack.getName().startsWith(stackName)) {
+               stackApi.delete(stack.getName(), stack.getId());
+            }
+         }
+      }
 
- }
+   }
 
    private String getName() {
       return stackName + "_" + System.currentTimeMillis();

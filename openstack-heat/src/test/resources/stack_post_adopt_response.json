@@ -1,0 +1,55 @@
+{
+  "status": "COMPLETE",
+  "name": "trove",
+  "template": {
+    "heat-template-version": "2014-10-16",
+    "resources": {
+      "MySqlCloudDatabaseServer": {
+        "type": "OS::Trove::Instance",
+        "properties": {
+          "flavor": "1GB Instance",
+          "databases": [
+            {
+              "name": "testdbonetwo"
+            }
+          ],
+          "users": [
+            {
+              "password": "testpass123",
+              "name": "testuser",
+              "databases": [
+                "testdbonetwo"
+              ]
+            }
+          ],
+          "name": "test-trove-db",
+          "size": 30
+        }
+      }
+    },
+    "description": "MYSQL server cloud database instance running on Rackspace cloud",
+    "parameters": {
+      "instance_name": {
+        "type": "String",
+        "description": "The database instance name"
+      }
+    }
+  },
+  "action": "CREATE",
+  "id": "46c927bb-671a-43db-a29c-16a2610865ca",
+  "resources": {
+    "MySqlCloudDatabaseServer": {
+      "status": "COMPLETE",
+      "name": "MySqlCloudDatabaseServer",
+      "resource_data": {
+
+      },
+      "resource_id": "74c5be7e-3e62-41e7-b455-93d1c32d56e3",
+      "action": "CREATE",
+      "type": "OS::Trove::Instance",
+      "metadata": {
+
+      }
+    }
+  }
+}

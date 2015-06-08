@@ -65,11 +65,13 @@
     <module>rackspace-cloudqueues-us</module>
     <module>rackspace-cloudqueues-uk</module>
     <module>rackspace-cloudbigdata</module>
-    <module>rackspace-cloudbigdata-us</module>    
+    <module>rackspace-cloudbigdata-us</module>
     <module>rackspace-cloudnetworks-uk</module>
     <module>rackspace-cloudnetworks-us</module>
     <module>rackspace-cdn-uk</module>
     <module>rackspace-cdn-us</module>
+    <module>rackspace-orchestration-us</module>
+    <module>rackspace-orchestration-uk</module>
   </modules>
 
   <profiles>

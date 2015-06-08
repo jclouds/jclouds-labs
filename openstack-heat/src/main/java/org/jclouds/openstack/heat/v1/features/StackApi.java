@@ -16,22 +16,8 @@
  */
 package org.jclouds.openstack.heat.v1.features;
 
-import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import org.jclouds.Fallbacks.EmptyMapOnNotFoundOr404;
-import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
-import org.jclouds.Fallbacks.NullOnNotFoundOr404;
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.openstack.heat.v1.domain.Stack;
-import org.jclouds.openstack.heat.v1.domain.StackResource;
-import org.jclouds.openstack.heat.v1.options.CreateStack;
-import org.jclouds.openstack.heat.v1.options.ListStackOptions;
-import org.jclouds.openstack.heat.v1.options.UpdateStack;
-import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
-import org.jclouds.rest.annotations.BinderParam;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.SelectJson;
-import org.jclouds.rest.binders.BindToJsonPayload;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
@@ -42,8 +28,24 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.Map;
+
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import org.jclouds.Fallbacks.EmptyMapOnNotFoundOr404;
+import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.heat.v1.domain.Stack;
+import org.jclouds.openstack.heat.v1.domain.StackResource;
+import org.jclouds.openstack.heat.v1.domain.Template;
+import org.jclouds.openstack.heat.v1.options.CreateStack;
+import org.jclouds.openstack.heat.v1.options.ListStackOptions;
+import org.jclouds.openstack.heat.v1.options.UpdateStack;
+import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.SelectJson;
+import org.jclouds.rest.binders.BindToJsonPayload;
 
 
 /**
@@ -120,4 +122,9 @@ public interface StackApi {
    @Fallback(EmptyMapOnNotFoundOr404.class)
    Map<String, Object> getStackResourceMetadata(@PathParam("stack_name") String stackName, @PathParam("stack_id") String stackId, @PathParam("resource_name") String name);
 
+   @Named("stack:get_template")
+   @GET
+   @Path("/{stack_name}/{stack_id}/template")
+   @Fallback(NullOnNotFoundOr404.class)
+   Template getTemplate(@PathParam("stack_name") String stackName, @PathParam("stack_id") String stackId);
 }

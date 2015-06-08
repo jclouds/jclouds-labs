@@ -1,0 +1,50 @@
+{
+  "description": "Heat Orchestration Template that spins up a single server",
+  "heat_template_version": "2014-10-16",
+  "parameters": {
+    "compute_flavor": {
+      "constraints": [
+        {
+          "allowed_values": [
+            "1 GB General Purpose v1",
+            "2 GB General Purpose v1",
+            "4 GB General Purpose v1",
+            "8 GB General Purpose v1"
+          ],
+          "description": "Must be a valid Rackspace Cloud Server flavor."
+        }
+      ],
+      "default": "2 GB General Purpose v1",
+      "description": "flavor id for the compute instance",
+      "type": "String"
+    },
+    "compute_image": {
+      "constraints": [
+        {
+          "allowed_values": [
+            "Ubuntu 13.10 (Saucy Salamander)",
+            "Ubuntu 12.10 (Quantal Quetzal)"
+          ],
+          "description": "Must be a valid Rackspace Cloud Server image name."
+        }
+      ],
+      "default": "Ubuntu 13.10 (Saucy Salamander)",
+      "description": "The Image to use for the host OS.",
+      "type": "String"
+    }
+  },
+  "resources": {
+    "server_instance": {
+      "type": "OS::Nova::Server",
+      "properties": {
+        "flavor": {
+          "get_param": "compute_flavor"
+        },
+        "image": {
+          "get_param": "compute_image"
+        },
+        "name": "Single Node Compute Instance"
+      }
+    }
+  }
+}

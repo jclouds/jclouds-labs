@@ -16,14 +16,15 @@
  */
 package org.jclouds.openstack.heat.v1.domain;
 
-import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableSet;
+import java.util.Date;
+import java.util.Set;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 import org.jclouds.openstack.v2_0.domain.Link;
 
-import java.util.Date;
-import java.util.Set;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Representation of an OpenStack Heat Stack Resources.
@@ -59,7 +60,7 @@ public abstract class StackResource {
    /**
     * @return the field required_by
     */
-   @Nullable public abstract Set<String> getRequiredBy();
+   public abstract Set<String> getRequiredBy();
 
    /**
     * @return the resource type
@@ -85,7 +86,7 @@ public abstract class StackResource {
             physicalResourceId,
             status,
             statusReason,
-            requiredBy != null ? ImmutableSet.copyOf(requiredBy) : null,
+            requiredBy != null ? ImmutableSet.copyOf(requiredBy) : ImmutableSet.<String>of(),
             resourceType,
             updated,
             ImmutableSet.copyOf(links));

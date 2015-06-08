@@ -16,12 +16,13 @@
  */
 package org.jclouds.openstack.heat.v1.options;
 
-import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
-import java.util.Map;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Representation of create stack  options.
@@ -64,10 +65,6 @@ public abstract class CreateStack {
     */
    @Nullable public abstract String getEnvironment();
 
-   public static Builder builder() {
-      return new AutoValue_CreateStack.Builder().disableRollback(true).files(null).environment(null);
-   }
-
    public Builder toBuilder() {
       return builder()
             .name(getName())
@@ -91,95 +88,29 @@ public abstract class CreateStack {
             .environment(environment).build();
    }
 
-   public static final class Builder {
+   public static Builder builder() {
+      return new AutoValue_CreateStack.Builder().disableRollback(true).files(null).environment(null);
+   }
 
-      private String name;
-      private String template;
-      private String templateUrl;
-      private Map<String, Object> parameters;
-      private boolean disableRollback = true;
-      private Map<String, String> files;
-      private String environment;
+   @AutoValue.Builder
+   public abstract static class Builder {
+      public abstract Builder name(String name);
+      public abstract Builder template(String template);
+      public abstract Builder templateUrl(String templateUrl);
+      public abstract Builder parameters(Map<String, Object> parameters);
+      public abstract Builder disableRollback(boolean disableRollback);
+      public abstract Builder files(Map<String, String> files);
+      public abstract Builder environment(String environment);
 
-      Builder() {
-      }
+      abstract Map<String, Object> getParameters();
+      abstract Map<String, String> getFiles();
 
-      Builder(CreateStack source) {
-         name(source.getName());
-         template(source.getTemplate());
-         templateUrl(source.getTemplateUrl());
-         parameters(source.getParameters());
-         disableRollback(source.isDisableRollback());
-         files(source.getFiles());
-         environment(source.getEnvironment());
-      }
-
-      /**
-       * @param name - The name of the stack
-       */
-      public Builder name(String name) {
-         this.name = name;
-         return this;
-      }
-
-      /**
-       * @param template - The stack template to instantiate.
-       */
-      public Builder template(String template) {
-         this.template = template;
-         return this;
-      }
-
-      /**
-       * @param templateUrl - A URI to the location containing the stack template to instantiate.
-       */
-      public Builder templateUrl(String templateUrl) {
-         this.templateUrl = templateUrl;
-         return this;
-      }
-
-      /**
-       * @param parameters - The properties for the template
-       */
-      public Builder parameters(Map<String, Object> parameters) {
-         this.parameters = parameters;
-         return this;
-      }
-
-      /**
-       * @param disableRollback - Controls whether a failure during stack creation causes deletion of all previously-created resources in that stack. The default is True
-       */
-      public Builder disableRollback(boolean disableRollback) {
-         this.disableRollback = disableRollback;
-         return this;
-      }
-
-      /**
-       * @param files - The properties for the template
-       */
-      public Builder files(Map<String, String> files) {
-         this.files = files;
-         return this;
-      }
-
-      /**
-       * @param environment - used to affect the runtime behaviour of the template
-       */
-      public Builder environment(String environment) {
-         this.environment = environment;
-         return this;
-      }
+      abstract CreateStack autoBuild();
 
       public CreateStack build() {
-         CreateStack result = new AutoValue_CreateStack(
-               this.name,
-               this.template,
-               this.templateUrl,
-               this.parameters != null ? ImmutableMap.copyOf(this.parameters) : null,
-               this.disableRollback,
-               this.files != null ? ImmutableMap.copyOf(this.files) : null,
-               this.environment);
-         return result;
+         parameters(getParameters() != null ? ImmutableMap.copyOf(getParameters()) : null);
+         files(getFiles() != null ? ImmutableMap.copyOf(getFiles()) : null);
+         return autoBuild();
       }
    }
 }

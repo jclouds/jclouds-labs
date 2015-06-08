@@ -16,13 +16,13 @@
  */
 package org.jclouds.openstack.heat.v1.options;
 
-import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
-import java.util.Map;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Representation of updatable options
@@ -46,15 +46,10 @@ public abstract class UpdateStack {
    @Nullable public abstract Map<String, Object> getParameters();
 
    public static Builder builder() {
-      return new AutoValue_UpdateStack.Builder().parameters(null);
+      return new AutoValue_UpdateStack.Builder();
    }
 
-   public Builder toBuilder() {
-      return builder()
-            .template(getTemplate())
-            .templateUrl(getTemplateUrl())
-            .parameters(getParameters());
-   }
+   public abstract Builder toBuilder();
 
    @SerializedNames({"template", "template_url", "parameters"})
    private static UpdateStack create(@Nullable String template, @Nullable String templateUrl, @Nullable Map<String, Object> parameters) {
@@ -65,52 +60,19 @@ public abstract class UpdateStack {
    }
 
 
-   public static final class Builder {
+   @AutoValue.Builder
+   public abstract static class Builder {
+      public abstract Builder template(String template);
+      public abstract Builder templateUrl(String templateUrl);
+      public abstract Builder parameters(Map<String, Object> parameters);
 
-      private String template;
-      private String templateUrl;
-      private Map<String, Object> parameters;
+      abstract Map<String, Object> getParameters();
 
-      Builder() {
-      }
-
-      Builder(CreateStack source) {
-         template(source.getTemplate());
-         templateUrl(source.getTemplateUrl());
-         parameters(source.getParameters());
-      }
-
-      /**
-       * @see UpdateStack#getTemplate()
-       */
-      public Builder template(String template) {
-         this.template = template;
-         return this;
-      }
-
-      /**
-       * @see UpdateStack#getTemplateUrl()
-       */
-      public Builder templateUrl(String templateUrl) {
-         this.templateUrl = templateUrl;
-         return this;
-      }
-
-      /**
-       * @see UpdateStack#getParameters()
-       */
-      public Builder parameters(Map<String, Object> parameters) {
-         this.parameters = parameters;
-         return this;
-      }
+      abstract UpdateStack autoBuild();
 
       public UpdateStack build() {
-         UpdateStack result = new AutoValue_UpdateStack(
-               this.template,
-               this.templateUrl,
-               parameters != null ? ImmutableMap.copyOf(this.parameters) : null);
-         return result;
+         parameters(getParameters() != null ? ImmutableMap.copyOf(getParameters()) : null);
+         return autoBuild();
       }
    }
 }
-

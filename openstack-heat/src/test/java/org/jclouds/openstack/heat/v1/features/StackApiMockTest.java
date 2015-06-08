@@ -16,8 +16,17 @@
  */
 package org.jclouds.openstack.heat.v1.features;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jclouds.openstack.heat.v1.HeatApi;
 import org.jclouds.openstack.heat.v1.domain.Stack;
 import org.jclouds.openstack.heat.v1.domain.StackResource;
@@ -27,16 +36,8 @@ import org.jclouds.openstack.heat.v1.options.ListStackOptions;
 import org.jclouds.openstack.heat.v1.options.UpdateStack;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Tests annotation parsing of {@code StackApi}
@@ -478,7 +479,8 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
           */
          assertEquals(server.getRequestCount(), 2);
          assertAuthentication(server);
-         assertRequest(server.takeRequest(), "PUT", BASE_URI + "/stacks/" + TEST_STACK_NAME + "/" + TEST_STACK_ID);
+         assertRequest(server.takeRequest(), "PUT", BASE_URI + "/stacks/" + TEST_STACK_NAME + "/" + TEST_STACK_ID,
+               "/stack_put_update_request.json");
 
          /*
           * Check response

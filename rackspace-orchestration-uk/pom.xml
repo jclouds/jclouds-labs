@@ -26,55 +26,48 @@
     <relativePath />
   </parent>
 
-  <!-- TODO: when out of labs, switch to org.jclouds.api -->
+  <!-- TODO: when out of labs, switch to org.jclouds.provider -->
   <groupId>org.apache.jclouds.labs</groupId>
-  <artifactId>openstack-heat</artifactId>
+  <artifactId>rackspace-orchestration-uk</artifactId>
   <version>2.0.0-SNAPSHOT</version>
-  <name>Apache jclouds :: OpenStack :: Heat API</name>
-  <description>jclouds components to access an implementation of OpenStack Heat</description>
+  <name>jclouds Rackspace Orchestration UK provider</name>
+  <description>OpenStack Heat implementation targeted to Rackspace Orchestration UK</description>
   <packaging>bundle</packaging>
 
   <properties>
-    <!-- keystone endpoint -->
-    <test.openstack-heat.endpoint>http://localhost:5000/v2.0/</test.openstack-heat.endpoint>
-    <test.openstack-heat.api-version>1</test.openstack-heat.api-version>
-    <test.openstack-heat.build-version />
-    <test.openstack-heat.identity>FIXME_IDENTITY</test.openstack-heat.identity>
-    <test.openstack-heat.credential>FIXME_CREDENTIALS</test.openstack-heat.credential>
-    <test.jclouds.keystone.credential-type>passwordCredentials</test.jclouds.keystone.credential-type>
-    <jclouds.osgi.export>org.jclouds.openstack.heat.v1*;version="${project.version}"</jclouds.osgi.export>
+    <!-- identity endpoint -->
+    <test.rackspace-orchestration-uk.endpoint>https://identity.api.rackspacecloud.com/v2.0/</test.rackspace-orchestration-uk.endpoint>
+    <test.rackspace-orchestration-uk.api-version>1</test.rackspace-orchestration-uk.api-version>
+    <test.rackspace-orchestration-uk.build-version />
+    <test.rackspace-orchestration-uk.identity>${test.rackspace-uk.identity}</test.rackspace-orchestration-uk.identity>
+    <test.rackspace-orchestration-uk.credential>${test.rackspace-uk.credential}</test.rackspace-orchestration-uk.credential>
+    <jclouds.osgi.export>org.jclouds.rackspace.orchestration.uk*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>org.jclouds*;version="${project.version}",*</jclouds.osgi.import>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>apache-snapshots</id>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
-      <groupId>org.apache.jclouds.api</groupId>
-      <artifactId>openstack-keystone</artifactId>
+      <groupId>org.apache.jclouds.labs</groupId>
+      <artifactId>openstack-heat</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.jclouds</groupId>
-      <artifactId>jclouds-core</artifactId>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>rackspace-cloudidentity</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>org.apache.jclouds.labs</groupId>
+      <artifactId>openstack-heat</artifactId>
       <version>${project.parent.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.jclouds.api</groupId>
-      <artifactId>openstack-keystone</artifactId>
+      <groupId>org.apache.jclouds</groupId>
+      <artifactId>jclouds-core</artifactId>
       <version>${project.parent.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
@@ -91,19 +84,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.squareup.okhttp</groupId>
-      <artifactId>mockwebserver</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.google.auto.service</groupId>
       <artifactId>auto-service</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.auto.value</groupId>
-      <artifactId>auto-value</artifactId>
-      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.googlecode.json-simple</groupId>
@@ -130,12 +113,11 @@
                 </goals>
                 <configuration>
                   <systemPropertyVariables>
-                    <test.openstack-heat.endpoint>${test.openstack-heat.endpoint}</test.openstack-heat.endpoint>
-                    <test.openstack-heat.api-version>${test.openstack-heat.api-version}</test.openstack-heat.api-version>
-                    <test.openstack-heat.build-version>${test.openstack-heat.build-version}</test.openstack-heat.build-version>
-                    <test.openstack-heat.identity>${test.openstack-heat.identity}</test.openstack-heat.identity>
-                    <test.openstack-heat.credential>${test.openstack-heat.credential}</test.openstack-heat.credential>
-                    <test.jclouds.keystone.credential-type>${test.jclouds.keystone.credential-type}</test.jclouds.keystone.credential-type>
+                    <test.rackspace-orchestration-uk.endpoint>${test.rackspace-orchestration-uk.endpoint}</test.rackspace-orchestration-uk.endpoint>
+                    <test.rackspace-orchestration-uk.api-version>${test.rackspace-orchestration-uk.api-version}</test.rackspace-orchestration-uk.api-version>
+                    <test.rackspace-orchestration-uk.build-version>${test.rackspace-orchestration-uk.build-version}</test.rackspace-orchestration-uk.build-version>
+                    <test.rackspace-orchestration-uk.identity>${test.rackspace-orchestration-uk.identity}</test.rackspace-orchestration-uk.identity>
+                    <test.rackspace-orchestration-uk.credential>${test.rackspace-orchestration-uk.credential}</test.rackspace-orchestration-uk.credential>
                   </systemPropertyVariables>
                 </configuration>
               </execution>
