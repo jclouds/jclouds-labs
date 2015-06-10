@@ -16,10 +16,11 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import autovalue.shaded.com.google.common.common.collect.ImmutableList;
-import autovalue.shaded.com.google.common.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.jclouds.azurecompute.domain.CloudServiceProperties;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.date.DateService;
@@ -27,6 +28,7 @@ import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 
 import javax.inject.Inject;
+
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
