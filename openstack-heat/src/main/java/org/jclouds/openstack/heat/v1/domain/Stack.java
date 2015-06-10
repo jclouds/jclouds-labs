@@ -16,10 +16,11 @@
  */
 package org.jclouds.openstack.heat.v1.domain;
 
-import autovalue.shaded.com.google.common.common.collect.ImmutableMap;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 import org.jclouds.openstack.v2_0.domain.Link;

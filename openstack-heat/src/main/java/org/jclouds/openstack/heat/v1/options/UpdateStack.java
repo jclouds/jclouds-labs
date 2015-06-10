@@ -16,9 +16,9 @@
  */
 package org.jclouds.openstack.heat.v1.options;
 
-
-import autovalue.shaded.com.google.common.common.collect.ImmutableMap;
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableMap;
+
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
