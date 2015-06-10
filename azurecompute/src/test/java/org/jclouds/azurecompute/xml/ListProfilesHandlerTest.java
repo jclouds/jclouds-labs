@@ -16,7 +16,6 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import autovalue.shaded.com.google.common.common.collect.ImmutableMap;
 import static org.testng.Assert.assertEquals;
 
 import java.io.InputStream;
@@ -26,6 +25,8 @@ import org.jclouds.http.functions.BaseHandlerTest;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import org.jclouds.azurecompute.domain.Profile;
 import org.jclouds.azurecompute.domain.ProfileDefinition;
 
