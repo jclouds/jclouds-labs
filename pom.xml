@@ -72,6 +72,7 @@
     <module>cloudsigma2</module>
     <module>cloudsigma2-hnl</module>
     <module>cloudsigma2-lvs</module>
+    <module>cloudsigma2-mia</module>
     <module>cloudsigma2-sjc</module>
     <module>cloudsigma2-wdc</module>
     <module>cloudsigma2-zrh</module>
