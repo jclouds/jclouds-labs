@@ -48,7 +48,6 @@
     <dependency>
       <groupId>com.jamesmurty.utils</groupId>
       <artifactId>java-xmlbuilder</artifactId>
-      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
@@ -94,10 +93,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
-    </dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <scope>test</scope>
+  </dependency>
     <dependency>
       <groupId>org.apache.jclouds.driver</groupId>
       <artifactId>jclouds-sshj</artifactId>
@@ -121,10 +120,10 @@
   <profiles>
     <profile>
       <id>live</id>
-      
+
       <build>
         <defaultGoal>clean verify</defaultGoal>
-          
+
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
