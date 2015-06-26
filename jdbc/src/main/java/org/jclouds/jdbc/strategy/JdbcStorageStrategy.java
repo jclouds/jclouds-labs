@@ -43,6 +43,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -83,7 +84,7 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
    }
 
    @Override
-   public Iterable<String> getAllContainerNames() {
+   public Collection<String> getAllContainerNames() {
       List<Container> containers = jdbcService.findAllContainers();
       ImmutableList.Builder<String> result = ImmutableList.builder();
       for (Container c : containers) {
