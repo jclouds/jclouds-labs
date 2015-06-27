@@ -23,3 +23,4 @@ velocity.log
 .factorypath
 Makefile
 .apt_generated
+jclouds-db.*
