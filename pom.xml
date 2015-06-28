@@ -75,6 +75,7 @@
     <module>cloudsigma2-wdc</module>
     <module>cloudsigma2-zrh</module>
     <module>digitalocean</module>
+    <module>digitalocean2</module>
     <module>joyent-cloudapi</module>
     <module>joyentcloud</module>
     <module>abiquo</module>
@@ -107,6 +108,7 @@
             <exclude>**/src/test/resources/**/*.xml</exclude>
             <exclude>**/src/test/resources/**/*.html</exclude>
             <exclude>**/src/test/resources/**/*.iso</exclude>
+            <exclude>**/src/test/resources/**/ssh*.pub</exclude>            
             
             <!-- prevent duplicating license -->
             <exclude>**/LICENSE.txt</exclude>
@@ -158,6 +160,8 @@
             <exclude>.java-version</exclude>
             <exclude>nb-configuration.xml</exclude>
             <exclude>nbactions.xml</exclude>
+            <exclude>**/.factorypath</exclude>
+            <exclude>**/.apt_generated/**</exclude>
 
             <!-- Temporary files generated on CloudBees slaves -->
             <exclude>.repository/**</exclude>
