@@ -22,3 +22,4 @@ atlassian-ide-plugin.xml
 velocity.log
 .factorypath
 Makefile
+.apt_generated
