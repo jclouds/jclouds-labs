@@ -19,4 +19,6 @@ atlassian-ide-plugin.xml
 .java-version
 *nb-configuration.xml
 *nbactions.xml
+velocity.log
+.factorypath
 Makefile
