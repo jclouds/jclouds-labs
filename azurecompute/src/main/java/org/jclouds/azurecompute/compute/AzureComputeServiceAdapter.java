@@ -170,7 +170,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
             }
             return !deployments.isEmpty();
          }
-      }, 30 * 60, 1, SECONDS).apply(name)) {
+      }, azureComputeConstants.operationTimeout(), 1, SECONDS).apply(name)) {
          final String message = format("Deployment %s was not created within %sms so it will be destroyed.",
                  name, azureComputeConstants.operationTimeout());
          logger.warn(message);

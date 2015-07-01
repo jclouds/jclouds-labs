@@ -17,15 +17,28 @@
 package org.jclouds.azurecompute.compute;
 
 import static org.assertj.core.api.Assertions.assertThat;
+<<<<<<< HEAD
 import static org.testng.Assert.assertTrue;
 
 import java.util.Arrays;
+=======
+import static org.jclouds.util.Predicates2.retry;
+import java.util.Arrays;
+import java.util.List;
+>>>>>>> 0e31d0a... [azurecompute] fix RoleInstanceHandler when Role is suspended
 import java.util.Random;
 import java.util.Set;
 
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
+import org.jclouds.azurecompute.domain.Role;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+<<<<<<< HEAD
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+=======
+>>>>>>> 0e31d0a... [azurecompute] fix RoleInstanceHandler when Role is suspended
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
@@ -35,14 +48,13 @@ import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.sshj.config.SshjSshClientModule;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
-
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "AzureComputeServiceContextLiveTest")
 public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContextLiveTest {
@@ -102,7 +114,7 @@ public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContex
     */
    @Test
    public void testLaunchNode() throws RunNodesException {
-      final String groupName = String.format("%s%d-group-acsclt",
+       final String groupName = String.format("%s%d-group-acsclt",
               System.getProperty("user.name"),
               new Random(999).nextInt());
 

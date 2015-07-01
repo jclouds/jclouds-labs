@@ -40,9 +40,9 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
 
    private PowerState powerState;
 
-   private Integer instanceUpgradeDomain;
+   private int instanceUpgradeDomain;
 
-   private Integer instanceFaultDomain;
+   private int instanceFaultDomain;
 
    private RoleSize.Type instanceSize;
 
@@ -70,7 +70,7 @@ public class RoleInstanceHandler extends ParseSax.HandlerForGeneratedRequestWith
       roleName = instanceName = ipAddress = hostname = null;
       instanceStatus = null;
       powerState = null;
-      instanceUpgradeDomain = instanceFaultDomain = null;
+      instanceUpgradeDomain = instanceFaultDomain = -1;
       instanceSize = null;
       instanceEndpoints = Lists.newArrayList();
    }

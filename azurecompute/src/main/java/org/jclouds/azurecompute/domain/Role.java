@@ -168,18 +168,17 @@ public abstract class Role {
          }
       }
 
-      public abstract String referenceName();
+      @Nullable public abstract String referenceName();
 
-      public abstract String publisher();
+      @Nullable public abstract String publisher();
 
-      public abstract String name();
+      @Nullable public abstract String name();
 
-      public abstract String version();
+      @Nullable public abstract String version();
 
-      @Nullable
-      public abstract List<ResourceExtensionParameterValue> resourceExtensionParameterValues();
+      @Nullable public abstract List<ResourceExtensionParameterValue> resourceExtensionParameterValues();
 
-      public abstract String state();
+      @Nullable public abstract String state();
 
       ResourceExtensionReference() { // For AutoValue only!
       }
