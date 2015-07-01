@@ -25,14 +25,6 @@ import java.util.Set;
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
@@ -42,14 +34,13 @@ import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.sshj.config.SshjSshClientModule;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
-
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "AzureComputeServiceContextLiveTest")
 public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContextLiveTest {
