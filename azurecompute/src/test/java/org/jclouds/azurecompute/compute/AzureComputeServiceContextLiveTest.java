@@ -19,7 +19,6 @@ package org.jclouds.azurecompute.compute;
 import static org.assertj.core.api.Assertions.assertThat;
 <<<<<<< HEAD
 import static org.testng.Assert.assertTrue;
-
 import java.util.Arrays;
 =======
 import static org.jclouds.util.Predicates2.retry;
@@ -29,6 +28,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+<<<<<<< HEAD
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
 import org.jclouds.azurecompute.domain.Role;
@@ -39,6 +39,11 @@ import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 =======
 >>>>>>> 0e31d0a... [azurecompute] fix RoleInstanceHandler when Role is suspended
+=======
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+>>>>>>> 5ff5bb2... [azurecompute] fix JCLOUDS-952
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
@@ -114,6 +119,7 @@ public class AzureComputeServiceContextLiveTest extends BaseComputeServiceContex
     */
    @Test
    public void testLaunchNode() throws RunNodesException {
+
        final String groupName = String.format("%s%d-group-acsclt",
               System.getProperty("user.name"),
               new Random(999).nextInt());
