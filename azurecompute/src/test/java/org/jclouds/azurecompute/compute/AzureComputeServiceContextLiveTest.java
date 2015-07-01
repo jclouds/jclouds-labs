@@ -22,27 +22,17 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule;
-import org.jclouds.azurecompute.domain.Role;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
->>>>>>> 431f07b... [azurecompute] fix JCLOUDS-952
-import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
-import org.jclouds.azurecompute.AzureComputeApi;
-import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 0e31d0a... [azurecompute] fix RoleInstanceHandler when Role is suspended
-=======
 import org.jclouds.azurecompute.AzureComputeApi;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
->>>>>>> 5ff5bb2... [azurecompute] fix JCLOUDS-952
->>>>>>> 431f07b... [azurecompute] fix JCLOUDS-952
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
+import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
