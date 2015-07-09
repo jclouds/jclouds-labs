@@ -68,8 +68,8 @@ public class ParseImageDetailsFromHeaders implements Function<HttpResponse, Imag
                 .minDisk(Long.parseLong(from.getFirstHeaderOrNull(MIN_DISK.asHeader())))
                 .minRam(Long.parseLong(from.getFirstHeaderOrNull(MIN_RAM.asHeader())))
                 .isPublic(Boolean.parseBoolean(from.getFirstHeaderOrNull(IS_PUBLIC.asHeader())))
-                .createdAt(dateService.iso8601SecondsDateParse(from.getFirstHeaderOrNull(CREATED_AT.asHeader())))
-                .updatedAt(dateService.iso8601SecondsDateParse(from.getFirstHeaderOrNull(UPDATED_AT.asHeader())))
+                .createdAt(dateService.iso8601DateOrSecondsDateParse(from.getFirstHeaderOrNull(CREATED_AT.asHeader())))
+                .updatedAt(dateService.iso8601DateOrSecondsDateParse(from.getFirstHeaderOrNull(UPDATED_AT.asHeader())))
                 .owner(from.getFirstHeaderOrNull(OWNER.asHeader()))
                 .location(from.getFirstHeaderOrNull(LOCATION.asHeader()))
                 .status(Status.fromValue(from.getFirstHeaderOrNull(STATUS.asHeader())));
