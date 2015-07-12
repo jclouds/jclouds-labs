@@ -80,6 +80,7 @@
     <module>abiquo</module>
     <module>profitbricks</module>
     <module>shipyard</module>
+    <module>oauth</module>
   </modules>
 
   <build>
