@@ -60,7 +60,9 @@ final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReque
 
       if (qName.equals("HostCaching")) {
          String hostCachingText = currentOrNull(currentText);
-         hostCaching = DataVirtualHardDisk.Caching.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, hostCachingText));
+         if (hostCachingText != null) {
+            hostCaching = DataVirtualHardDisk.Caching.fromString(UPPER_CAMEL.to(UPPER_UNDERSCORE, hostCachingText));
+         }
       } else if (qName.equals("DiskName") || qName.equals("Name")) {
          diskName = currentOrNull(currentText);
       } else if (qName.equals("Lun")) {
