@@ -81,7 +81,6 @@
     <module>joyentcloud</module>
     <module>abiquo</module>
     <module>profitbricks</module>
-    <module>shipyard</module>
   </modules>
 
   <build>
