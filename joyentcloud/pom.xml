@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.jclouds.labs</groupId>
     <artifactId>jclouds-labs</artifactId>
-    <version>1.9.1</version>
+    <version>1.9.2-SNAPSHOT</version>
   </parent>
 
   <!-- TODO: when out of labs, switch to org.jclouds.provider -->
