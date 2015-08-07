@@ -18,15 +18,23 @@
 package org.jclouds.etcd.config;
 
 import org.jclouds.etcd.EtcdApi;
+import org.jclouds.http.HttpErrorHandler;
+import org.jclouds.http.annotation.ClientError;
+import org.jclouds.http.annotation.Redirection;
+import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
+
+import org.jclouds.etcd.handlers.EtcdErrorHandler;
 
 @ConfiguresHttpApi
 public class EtcdHttpApiModule extends HttpApiModule<EtcdApi> {
 
    @Override
    protected void bindErrorHandlers() {
-
+      bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(EtcdErrorHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(EtcdErrorHandler.class);
+      bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(EtcdErrorHandler.class);
    }
 
    protected void configure() {

@@ -38,7 +38,7 @@ public abstract class Latency {
    }
 
    @SerializedNames({ "average", "current", "maximum", "minimum", "standardDeviation" })
-   public static Latency create(double average, double current, double maximum, double minimum,
+   private static Latency create(double average, double current, double maximum, double minimum,
          double standardDeviation) {
       return new AutoValue_Latency(average, current, maximum, minimum, standardDeviation);
    }

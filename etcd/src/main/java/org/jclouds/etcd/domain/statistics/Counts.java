@@ -32,7 +32,7 @@ public abstract class Counts {
    }
 
    @SerializedNames({ "fail", "success" })
-   public static Counts create(int fail, int success) {
+   private static Counts create(int fail, int success) {
       return new AutoValue_Counts(fail, success);
    }
 }

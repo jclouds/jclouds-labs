@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.jclouds.etcd.fallbacks;
 
-package org.jclouds.etcd.domain.statistics;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.equalTo;
+import static com.google.common.base.Throwables.propagate;
 
-import org.jclouds.json.SerializedNames;
+import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
-import com.google.auto.value.AutoValue;
+import org.jclouds.Fallback;
 
-@AutoValue
-public abstract class Follower {
+public final class EtcdFallbacks {
 
-   public abstract Counts counts();
-
-   public abstract Latency latency();
-
-   Follower() {
-   }
-
-   @SerializedNames({ "counts", "latency" })
-   private static Follower create(Counts counts, Latency latency) {
-      return new AutoValue_Follower(counts, latency);
+   public static final class FalseOn503 implements Fallback<Boolean> {
+      public Boolean createOrPropagate(Throwable t) throws Exception {
+         if (checkNotNull(t, "throwable") != null && t.getMessage().contains("{\"health\": \"false\"}")
+               && returnValueOnCodeOrNull(t, true, equalTo(503)) != null) {
+            return Boolean.FALSE;
+         }
+         throw propagate(t);
+      }
    }
 }

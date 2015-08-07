@@ -56,18 +56,12 @@ public class EtcdApiMetadata extends BaseHttpApiMetadata<EtcdApi> {
 
       protected Builder() {
          super(EtcdApi.class);
-         id("etcd").
-         name("Etcd API").
-         identityName("Optional Username").
-         credentialName("Optional Password").
-         defaultIdentity("N/A").
-         defaultCredential("N/A").
-         documentation(URI.create("https://github.com/coreos/etcd/blob/master/Documentation/api.md")).
-         version(API_VERSION).
-         buildVersion(BUILD_VERSION).
-         defaultEndpoint("http://127.0.0.1:2379").
-         defaultProperties(EtcdApiMetadata.defaultProperties()).
-         defaultModules(ImmutableSet.<Class<? extends Module>> of(EtcdHttpApiModule.class));
+         id("etcd").name("Etcd API").identityName("Optional Username").credentialName("Optional Password")
+               .defaultIdentity("N/A").defaultCredential("N/A")
+               .documentation(URI.create("https://github.com/coreos/etcd/blob/master/Documentation/api.md"))
+               .version(API_VERSION).buildVersion(BUILD_VERSION).defaultEndpoint("http://127.0.0.1:2379")
+               .defaultProperties(EtcdApiMetadata.defaultProperties())
+               .defaultModules(ImmutableSet.<Class<? extends Module>> of(EtcdHttpApiModule.class));
       }
 
       @Override

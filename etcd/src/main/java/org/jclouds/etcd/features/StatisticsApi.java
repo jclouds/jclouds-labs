@@ -31,18 +31,28 @@ import org.jclouds.etcd.domain.statistics.Store;
 @Path("/{jclouds.api-version}/stats")
 public interface StatisticsApi {
 
+   /**
+    * @return information on leader and entire cluster but only if WE are the
+    *         leader
+    */
    @Named("statistics:leader")
-   @GET
    @Path("/leader")
+   @GET
    Leader leader();
 
+   /**
+    * @return information on node we are currently pointing at
+    */
    @Named("statistics:self")
-   @GET
    @Path("/self")
+   @GET
    Self self();
 
+   /**
+    * @return information about operations this node has handled
+    */
    @Named("statistics:store")
-   @GET
    @Path("/store")
+   @GET
    Store store();
 }

@@ -15,24 +15,35 @@
  * limitations under the License.
  */
 
-package org.jclouds.etcd.domain.statistics;
+package org.jclouds.etcd.domain.members;
 
+import java.util.List;
+
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 
 @AutoValue
-public abstract class Follower {
+public abstract class Member {
 
-   public abstract Counts counts();
+   public abstract String id();
 
-   public abstract Latency latency();
+   @Nullable
+   public abstract String name();
 
-   Follower() {
+   public abstract List<String> peerURLs();
+
+   public abstract List<String> clientURLs();
+
+   Member() {
    }
 
-   @SerializedNames({ "counts", "latency" })
-   private static Follower create(Counts counts, Latency latency) {
-      return new AutoValue_Follower(counts, latency);
+   @SerializedNames({ "id", "name", "peerURLs", "clientURLs" })
+   private static Member create(String id, String name, List<String> peerURLs, List<String> clientURLs) {
+      if (clientURLs == null)
+         clientURLs = ImmutableList.of();
+      return new AutoValue_Member(id, name, ImmutableList.copyOf(peerURLs), ImmutableList.copyOf(clientURLs));
    }
 }

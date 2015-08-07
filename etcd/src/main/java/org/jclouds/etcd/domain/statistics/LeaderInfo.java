@@ -34,7 +34,7 @@ public abstract class LeaderInfo {
    }
 
    @SerializedNames({ "leader", "startTime", "uptime" })
-   public static LeaderInfo create(String leader, String startTime, String uptime) {
+   private static LeaderInfo create(String leader, String startTime, String uptime) {
       return new AutoValue_LeaderInfo(leader, startTime, uptime);
    }
 }

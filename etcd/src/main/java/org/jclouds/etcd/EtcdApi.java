@@ -20,14 +20,18 @@ package org.jclouds.etcd;
 import java.io.Closeable;
 
 import org.jclouds.etcd.features.StatisticsApi;
+import org.jclouds.etcd.features.MembersApi;
 import org.jclouds.etcd.features.MiscellaneousApi;
 import org.jclouds.rest.annotations.Delegate;
 
 public interface EtcdApi extends Closeable {
 
    @Delegate
-   StatisticsApi statisticsApi();
+   MembersApi membersApi();
 
    @Delegate
    MiscellaneousApi miscellaneousApi();
+
+   @Delegate
+   StatisticsApi statisticsApi();
 }

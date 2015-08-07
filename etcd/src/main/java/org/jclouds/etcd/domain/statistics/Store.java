@@ -58,7 +58,7 @@ public abstract class Store {
    @SerializedNames({ "compareAndSwapFail", "compareAndSwapSuccess", "createFail", "createSuccess", "deleteFail",
          "deleteSuccess", "expireCount", "getsFail", "getsSuccess", "setsFail", "setsSuccess", "updateFail",
          "updateSuccess", "watchers" })
-   public static Store create(int compareAndSwapFail, int compareAndSwapSuccess, int createFail, int createSuccess,
+   private static Store create(int compareAndSwapFail, int compareAndSwapSuccess, int createFail, int createSuccess,
          int deleteFail, int deleteSuccess, int expireCount, int getsFail, int getsSuccess, int setsFail,
          int setsSuccess, int updateFail, int updateSuccess, int watchers) {
       return new AutoValue_Store(compareAndSwapFail, compareAndSwapSuccess, createFail, createSuccess, deleteFail,

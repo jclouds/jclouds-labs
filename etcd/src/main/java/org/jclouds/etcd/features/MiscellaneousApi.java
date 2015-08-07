@@ -24,6 +24,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.etcd.domain.miscellaneous.Version;
+import org.jclouds.etcd.fallbacks.EtcdFallbacks.FalseOn503;
+import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.SelectJson;
 
 public interface MiscellaneousApi {
@@ -38,6 +40,7 @@ public interface MiscellaneousApi {
    @Consumes(MediaType.APPLICATION_JSON)
    @Path("/health")
    @SelectJson("health")
+   @Fallback(FalseOn503.class)
    @GET
    boolean health();
 

@@ -18,6 +18,7 @@ package org.jclouds.etcd.features;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertFalse;
 
 import org.jclouds.etcd.EtcdApi;
 import org.jclouds.etcd.domain.miscellaneous.Version;
@@ -62,6 +63,22 @@ public class MiscellaneousApiMockTest extends BaseEtcdMockTest {
       try {
          boolean health = api.health();
          assertTrue(health);
+         assertSent(server, "GET", "/health");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetBadHealth() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody(payloadFromResource("/health-bad.json")).setResponseCode(503));
+      EtcdApi etcdJavaApi = api(server.getUrl("/"));
+      MiscellaneousApi api = etcdJavaApi.miscellaneousApi();
+      try {
+         boolean health = api.health();
+         assertFalse(health);
          assertSent(server, "GET", "/health");
       } finally {
          etcdJavaApi.close();

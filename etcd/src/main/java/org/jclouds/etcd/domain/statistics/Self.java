@@ -47,7 +47,7 @@ public abstract class Self {
 
    @SerializedNames({ "id", "leaderInfo", "name", "recvAppendRequestCnt", "sendAppendRequestCnt", "sendBandwidthRate",
          "sendPkgRate", "startTime", "state" })
-   public static Self create(String id, LeaderInfo leaderInfo, String name, double recvAppendRequestCnt,
+   private static Self create(String id, LeaderInfo leaderInfo, String name, double recvAppendRequestCnt,
          double sendAppendRequestCnt, double sendBandwidthRate, double sendPkgRate, String startTime, String state) {
       return new AutoValue_Self(id, leaderInfo, name, recvAppendRequestCnt, sendAppendRequestCnt, sendBandwidthRate,
             sendPkgRate, startTime, state);

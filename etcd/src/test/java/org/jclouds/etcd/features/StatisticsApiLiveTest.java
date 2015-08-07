@@ -17,24 +17,57 @@
 package org.jclouds.etcd.features;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
+import java.util.Properties;
+
+import org.jclouds.Constants;
 import org.jclouds.etcd.BaseEtcdApiLiveTest;
+import org.jclouds.etcd.EtcdApi;
+import org.jclouds.etcd.domain.members.Member;
+import org.jclouds.etcd.domain.statistics.Self;
 import org.testng.annotations.Test;
+
+import com.google.inject.Module;
 
 @Test(groups = "live", testName = "StatisticsApiLiveTest")
 public class StatisticsApiLiveTest extends BaseEtcdApiLiveTest {
 
+   private Self self;
+
    @Test
-   public void testGetLeader() throws Exception {
-      assertNotNull(api().leader());
+   public void testGetSelf() {
+      self = api().self();
+      assertNotNull(self);
+   }
+
+   @Test(dependsOnMethods = "testGetSelf")
+   public void testGetLeader() {
+
+      /*
+       * It's possible the default end-point is not the cluster leader. If true
+       * we will iterate through all members to find the leader and execute the
+       * 'leader' endpoint against its client URL.
+       */
+      if (self.state().equals("StateLeader")) {
+         assertNotNull(api().leader());
+      } else {
+         for (Member possibleLeader : api.membersApi().list()) {
+            if (possibleLeader.id().equals(self.leaderInfo().leader())) {
+               Properties properties = new Properties();
+               properties.setProperty(Constants.PROPERTY_ENDPOINT, possibleLeader.clientURLs().get(0));
+               Iterable<Module> modules = setupModules();
+               EtcdApi etcdApi = super.create(properties, modules);
+               assertNotNull(etcdApi.statisticsApi().leader());
+               return;
+            }
+         }
+         fail("Could not find a leader within cluster");
+      }
    }
 
    @Test
-   public void testGetSelf() throws Exception {
-      assertNotNull(api().self());
-   }
-
-   @Test
-   public void testGetStore() throws Exception {
+   public void testGetStore() {
       assertNotNull(api().store());
    }
 
