@@ -16,18 +16,16 @@
  */
 package org.jclouds.azurecompute.domain;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-
 import java.net.URI;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.SinceApiVersion;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import org.jclouds.rest.annotations.SinceApiVersion;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * To create a new deployment/role
@@ -106,7 +104,7 @@ public abstract class DeploymentParams {
     */
    public abstract OSImage.Type os();
 
-   public abstract List<ExternalEndpoint> externalEndpoints();
+   public abstract Set<ExternalEndpoint> externalEndpoints();
 
    /**
     * {@link org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite#name}
@@ -128,138 +126,49 @@ public abstract class DeploymentParams {
 
    public abstract List<String> subnetNames();
 
-   public Builder toBuilder() {
-      return builder().fromDeploymentParams(this);
-   }
-
    public static Builder builder() {
-      return new Builder();
+      return new AutoValue_DeploymentParams.Builder()
+              .externalEndpoints(ImmutableSet.<ExternalEndpoint> of())
+              .subnetNames(ImmutableList.<String> of());
    }
 
-   public static final class Builder {
+   abstract Builder toBuilder();
 
-      private String name;
+   @AutoValue.Builder
+   public abstract static class Builder {
+      public abstract Builder name(String name);
+      public abstract Builder size(RoleSize.Type roleSize);
+      public abstract Builder username(String username);
+      public abstract Builder password(String password);
+      public abstract Builder sourceImageName(String sourceImageName);
+      public abstract Builder mediaLink(URI mediaLink);
+      public abstract Builder os(OSImage.Type os);
+      public abstract Builder externalEndpoints(Set<ExternalEndpoint> externalEndpoints);
+      public abstract Builder virtualNetworkName(String virtualNetworkName);
+      public abstract Builder reservedIPName(String reservedIPName);
+      public abstract Builder subnetNames(List<String> subnetNames);
 
-      private RoleSize.Type size;
+      abstract Set<ExternalEndpoint> externalEndpoints();
+      abstract List<String> subnetNames();
 
-      private String username;
-
-      private String password;
-
-      private String sourceImageName;
-
-      private URI mediaLink;
-
-      private OSImage.Type os;
-
-      private List<ExternalEndpoint> externalEndpoints = Lists.newArrayList();
-
-      private String virtualNetworkName;
-
-      private String reservedIPName;
-
-      private List<String> subnetNames = Lists.newArrayList();
-
-      public Builder name(final String name) {
-         this.name = name;
-         return this;
-      }
-
-      public Builder size(final RoleSize.Type size) {
-         this.size = size;
-         return this;
-      }
-
-      public Builder username(final String username) {
-         this.username = username;
-         return this;
-      }
-
-      public Builder password(final String password) {
-         this.password = password;
-         return this;
-      }
-
-      public Builder sourceImageName(final String sourceImageName) {
-         this.sourceImageName = sourceImageName;
-         return this;
-      }
-
-      public Builder mediaLink(final URI mediaLink) {
-         this.mediaLink = mediaLink;
-         return this;
-      }
-
-      public Builder os(final OSImage.Type os) {
-         this.os = os;
-         return this;
-      }
-
-      public Builder externalEndpoint(final ExternalEndpoint endpoint) {
-         externalEndpoints.add(endpoint);
-         return this;
-      }
-
-      public Builder externalEndpoints(final Collection<ExternalEndpoint> externalEndpoints) {
-         this.externalEndpoints.addAll(externalEndpoints);
-         return this;
-      }
-
-      public Builder virtualNetworkName(final String virtualNetworkName) {
-         this.virtualNetworkName = virtualNetworkName;
-         return this;
-      }
-
-      public Builder reservedIPName(final String reservedIPName) {
-         this.reservedIPName = reservedIPName;
-         return this;
-      }
-
-      public Builder subnetName(final String subnetName) {
-         subnetNames.add(subnetName);
-         return this;
-      }
-
-      public Builder subnetNames(final Collection<String> subnetNames) {
-         this.subnetNames.addAll(subnetNames);
-         return this;
-      }
+      abstract DeploymentParams autoBuild();
 
       public DeploymentParams build() {
-         return DeploymentParams.create(
-                 name,
-                 size,
-                 username,
-                 password,
-                 sourceImageName,
-                 mediaLink,
-                 os,
-                 ImmutableList.copyOf(externalEndpoints),
-                 virtualNetworkName,
-                 reservedIPName,
-                 ImmutableList.copyOf(subnetNames));
-      }
-
-      public Builder fromDeploymentParams(final DeploymentParams deploymentParams) {
-         return name(deploymentParams.name())
-                 .size(deploymentParams.size())
-                 .username(deploymentParams.username())
-                 .password(deploymentParams.password())
-                 .sourceImageName(deploymentParams.sourceImageName())
-                 .mediaLink(deploymentParams.mediaLink())
-                 .os(deploymentParams.os())
-                 .externalEndpoints(deploymentParams.externalEndpoints())
-                 .subnetNames(deploymentParams.subnetNames())
-                 .reservedIPName(reservedIPName);
+         externalEndpoints(externalEndpoints() != null ? ImmutableSet.copyOf(externalEndpoints()) : null);
+         subnetNames(subnetNames() != null ? ImmutableList.copyOf(subnetNames()) : null);
+         return autoBuild();
       }
    }
 
-   private static DeploymentParams create(final String name, final RoleSize.Type size,
-           final String username, final String password, final String sourceImageName,
-           final URI mediaLink, final OSImage.Type os, final List<ExternalEndpoint> externalEndpoints,
-           final String virtualNetworkName, final String reservedIPName, final List<String> subnetNames) {
-
-      return new AutoValue_DeploymentParams(name, size, username, password, sourceImageName, mediaLink, os,
-              copyOf(externalEndpoints), virtualNetworkName, reservedIPName, copyOf(subnetNames));
+   public static DeploymentParams create(String name, RoleSize.Type size, String username,
+                                         String password, String sourceImageName, URI mediaLink,
+                                         OSImage.Type os, Set<ExternalEndpoint> externalEndpoints,
+                                         String virtualNetworkName, String reservedIPName,
+                                         List<String> subnetNames) {
+      return builder().name(name).size(size).username(username).password(password)
+              .sourceImageName(sourceImageName).mediaLink(mediaLink).os(os)
+              .externalEndpoints(externalEndpoints).virtualNetworkName(virtualNetworkName)
+              .reservedIPName(reservedIPName).subnetNames(subnetNames)
+              .build();
    }
 }

@@ -22,19 +22,19 @@ import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-
-import com.google.common.collect.Iterables;
 import org.jclouds.azurecompute.compute.AzureComputeServiceAdapter;
+import org.jclouds.azurecompute.domain.CaptureVMImageParams;
+import org.jclouds.azurecompute.domain.CloudService;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.DeploymentParams;
-import org.jclouds.azurecompute.domain.VMImage;
-import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.domain.OSImage;
-import org.jclouds.azurecompute.domain.CloudService;
-import org.jclouds.azurecompute.domain.CaptureVMImageParams;
+import org.jclouds.azurecompute.domain.RoleSize;
+import org.jclouds.azurecompute.domain.VMImage;
 import org.jclouds.azurecompute.domain.VMImageParams;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
@@ -42,10 +42,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 
 @Test(groups = "live", testName = "VMImageApiLiveTest")
 public class VMImageApiLiveTest extends BaseAzureComputeApiLiveTest {
@@ -91,9 +90,7 @@ public class VMImageApiLiveTest extends BaseAzureComputeApiLiveTest {
                 .username("test")
                 .password("supersecurePassword1!")
                 .size(RoleSize.Type.BASIC_A2)
-                .subnetName(Iterables.get(virtualNetworkSite.subnets(), 0).name())
-                .virtualNetworkName(virtualNetworkSite.name())
-                .externalEndpoint(DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort(22, 22))
+                .externalEndpoints(ImmutableSet.of(DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort(22, 22)))
                 .build();
         Deployment deployment = getOrCreateDeployment(cloudService.name(), params);
         Deployment.RoleInstance roleInstance = getFirstRoleInstanceInDeployment(DEPLOYMENT);
@@ -201,6 +198,12 @@ public class VMImageApiLiveTest extends BaseAzureComputeApiLiveTest {
                 return api.getDiskApi().delete(diskName);
             }
         }.apply(diskName));
+       assertTrue(new ConflictManagementPredicate(api) {
+          @Override
+          protected String operation() {
+             return api.getCloudServiceApi().delete(cloudService.name());
+          }
+       }.apply(cloudService.name()));
         super.tearDown();
     }
 

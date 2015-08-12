@@ -16,20 +16,27 @@
  */
 package org.jclouds.azurecompute.compute;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
+import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 import org.jclouds.compute.domain.NodeMetadata;
+import org.jclouds.compute.domain.Template;
+import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
-@Test(groups = {"integration", "live"}, singleThreaded = true, testName = "AzureComputeServiceLiveTest")
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
+
+@Test(groups = {"integration", "live"}, singleThreaded = true, testName = "AzureComputeServiceLiveTest", alwaysRun = false)
 public class AzureComputeServiceLiveTest extends BaseComputeServiceLiveTest {
 
    public AzureComputeServiceLiveTest() {
       super();
       provider = "azurecompute";
+      // this is 30 seconds by default, but Azure will take anyway longer because we need to wait for a non-null
+      // Deployment object to be returned: see the end of AzureComputeServiceAdapter#createNodeWithGroupEncodedIntoName
+      nonBlockDurationSeconds = 600;
    }
 
    @Override
@@ -43,15 +50,14 @@ public class AzureComputeServiceLiveTest extends BaseComputeServiceLiveTest {
    }
 
    @Override
-   public void testOptionToNotBlock() throws Exception {
-      // this is 30 seconds by default, but Azure will take anyway longer because we need to wait for a non-null
-      // Deployment object to be returned: see the end of AzureComputeServiceAdapter#createNodeWithGroupEncodedIntoName
-      nonBlockDurationSeconds = 120;
-      super.testOptionToNotBlock();
-   }
-
-   @Override
    protected Module getSshModule() {
       return new SshjSshClientModule();
+   }
+
+   protected Template buildTemplate(TemplateBuilder templateBuilder) {
+      return templateBuilder.imageId(BaseAzureComputeApiLiveTest.IMAGE_NAME)
+              .hardwareId("BASIC_A1")
+              .locationId(BaseAzureComputeApiLiveTest.LOCATION)
+              .build();
    }
 }

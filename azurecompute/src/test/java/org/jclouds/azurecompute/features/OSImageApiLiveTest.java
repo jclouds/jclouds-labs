@@ -22,25 +22,19 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.azurecompute.domain.AffinityGroup;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.internal.AbstractAzureComputeApiLiveTest;
-
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 @Test(groups = "live", testName = "OSImageApiLiveTest")
 public class OSImageApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
    private ImmutableSet<String> locations;
-
-   private ImmutableSet<String> groups;
 
    @BeforeClass(groups = {"integration", "live"})
    @Override
@@ -52,13 +46,6 @@ public class OSImageApiLiveTest extends AbstractAzureComputeApiLiveTest {
          @Override
          public String apply(final Location location) {
             return location.name();
-         }
-      }));
-      groups = ImmutableSet.copyOf(transform(api.getAffinityGroupApi().list(), new Function<AffinityGroup, String>() {
-
-         @Override
-         public String apply(final AffinityGroup group) {
-            return group.name();
          }
       }));
    }
@@ -83,10 +70,6 @@ public class OSImageApiLiveTest extends AbstractAzureComputeApiLiveTest {
          assertTrue(ImmutableSet.of("http", "https").contains(osImage.mediaLink().getScheme()),
                  "MediaLink should be an http(s) url" + osImage);
       }
-
-      ImmutableSet<String> osImageLocations = ImmutableSet.copyOf(Splitter.on(';').splitToList(osImage.location()));
-      assertFalse(Sets.intersection(osImageLocations, locations).isEmpty(),
-              "No shared locations between " + locations + " and " + osImageLocations);
 
       // Ex. Dirty data in RightScale eula field comes out as an empty string.
       assertFalse(osImage.eula().contains(""));

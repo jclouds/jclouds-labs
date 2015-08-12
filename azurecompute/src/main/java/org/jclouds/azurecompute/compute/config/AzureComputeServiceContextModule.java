@@ -21,7 +21,6 @@ import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_P
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
-
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -34,14 +33,13 @@ import org.jclouds.azurecompute.compute.functions.DeploymentToNodeMetadata;
 import org.jclouds.azurecompute.compute.functions.LocationToLocation;
 import org.jclouds.azurecompute.compute.functions.OSImageToImage;
 import org.jclouds.azurecompute.compute.functions.RoleSizeToHardware;
+import org.jclouds.azurecompute.compute.options.AzureComputeTemplateOptions;
 import org.jclouds.azurecompute.compute.strategy.GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes;
 import org.jclouds.azurecompute.compute.strategy.UseNodeCredentialsButOverrideFromTemplate;
-import org.jclouds.azurecompute.compute.strategy.impl.AzureAdaptingComputeServiceStrategies;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.RoleSize;
-import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.config.ComputeServiceAdapterContextModule;
@@ -51,7 +49,6 @@ import org.jclouds.compute.extensions.SecurityGroupExtension;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
-import org.jclouds.compute.strategy.impl.AdaptingComputeServiceStrategies;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -74,8 +71,6 @@ public class AzureComputeServiceContextModule
       }).to(RoleSizeToHardware.class);
       bind(new TypeLiteral<Function<Deployment, NodeMetadata>>() {
       }).to(DeploymentToNodeMetadata.class);
-      bind(new TypeLiteral<AdaptingComputeServiceStrategies<Deployment, RoleSize, OSImage, Location>>() {
-      }).to(AzureAdaptingComputeServiceStrategies.class);
 
       bind(PrioritizeCredentialsFromTemplate.class).to(UseNodeCredentialsButOverrideFromTemplate.class);
       bind(new TypeLiteral<Function<Location, org.jclouds.domain.Location>>() {

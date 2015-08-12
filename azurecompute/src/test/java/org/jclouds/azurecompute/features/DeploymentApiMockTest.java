@@ -19,7 +19,6 @@ package org.jclouds.azurecompute.features;
 import static org.jclouds.azurecompute.domain.DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort;
 import static org.jclouds.azurecompute.domain.DeploymentParams.ExternalEndpoint.inboundUdpToLocalPort;
 import static org.testng.Assert.assertEquals;
-
 import java.net.URI;
 
 import org.jclouds.azurecompute.domain.DeploymentParams;
@@ -30,6 +29,7 @@ import org.jclouds.azurecompute.xml.DeploymentHandlerTest;
 import org.jclouds.azurecompute.xml.ListOSImagesHandlerTest;
 import org.testng.annotations.Test;
 
+import com.google.common.collect.ImmutableSet;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 @Test(groups = "unit", testName = "DeploymentApiMockTest")
@@ -51,8 +51,8 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
                  .username("username").password("testpwd")
                  .virtualNetworkName("my-virtualNetworkName")
                  .reservedIPName("myreservedip")
-                 .externalEndpoint(inboundTcpToLocalPort(80, 8080))
-                 .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
+                 .externalEndpoints(ImmutableSet.of(inboundTcpToLocalPort(80, 8080), inboundUdpToLocalPort(53, 53)))
+                 .build();
 
          assertEquals(api.create(params), "request-1");
 
@@ -77,8 +77,8 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
                  .sourceImageName(OSImage.name()).mediaLink(OSImage.mediaLink()).os(OSImage.os())
                  .username("username").password("testpwd")
                  .virtualNetworkName("my-virtualNetworkName")
-                 .externalEndpoint(inboundTcpToLocalPort(80, 8080))
-                 .externalEndpoint(inboundUdpToLocalPort(53, 53)).build();
+                 .externalEndpoints(ImmutableSet.of(inboundTcpToLocalPort(80, 8080), inboundUdpToLocalPort(53, 53)))
+                 .build();
 
          assertEquals(api.create(params), "request-1");
 
