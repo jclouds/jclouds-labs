@@ -28,9 +28,6 @@ import org.jclouds.azurecompute.domain.NetworkSecurityGroup;
 import org.jclouds.azurecompute.domain.Rule;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest;
 
-import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.DEFAULT_SUBNET_NAME;
-import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.LOCATION;
-import static org.jclouds.azurecompute.internal.BaseAzureComputeApiLiveTest.VIRTUAL_NETWORK_NAME;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 import org.testng.annotations.AfterClass;
@@ -43,14 +40,6 @@ public class NetworkSecurityGroupApiLiveTest extends BaseAzureComputeApiLiveTest
    private static final String GROUP1 = System.getProperty("user.name") + RAND + "-1";
 
    private static final String GROUP2 = System.getProperty("user.name") + RAND + "-2";
-
-   public static final String ADDRESS_SPACE = "10.10.0.0/20";
-
-   public static final String SUBNET_ADDRESS_SPACE = "10.10.0.0/23";
-
-   public static final String NETWORK_NAME = "secgrp-vnetsite";
-
-   public static final String SUBNET_NAME = "secgrp-subnet";
 
    @BeforeClass
    public void groupSetup() {
@@ -108,7 +97,7 @@ public class NetworkSecurityGroupApiLiveTest extends BaseAzureComputeApiLiveTest
       assertEquals(group.name(), GROUP1);
       assertEquals(group.label(), GROUP1 + " security group");
       assertEquals(group.location(), LOCATION);
-      assertNull(group.state());
+      assertTrue(group.state() == NetworkSecurityGroup.State.CREATED);
       assertTrue(group.rules().isEmpty());
    }
 
@@ -118,7 +107,7 @@ public class NetworkSecurityGroupApiLiveTest extends BaseAzureComputeApiLiveTest
       assertEquals(group.name(), GROUP2);
       assertEquals(group.label(), GROUP2 + " security group");
       assertEquals(group.location(), LOCATION);
-      assertNull(group.state());
+      assertTrue(group.state() == NetworkSecurityGroup.State.CREATED);
       assertFalse(group.rules().isEmpty());
    }
 

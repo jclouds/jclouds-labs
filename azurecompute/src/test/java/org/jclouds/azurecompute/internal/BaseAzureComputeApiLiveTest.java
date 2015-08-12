@@ -81,7 +81,6 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
       super.setup();
 
       operationSucceeded = new ConflictManagementPredicate(api, 600, 5, 5, SECONDS);
-      virtualNetworkSite = getOrCreateVirtualNetworkSite(VIRTUAL_NETWORK_NAME, LOCATION);
 
       final CreateStorageServiceParams params = CreateStorageServiceParams.builder().
               serviceName(getStorageServiceName()).
@@ -98,12 +97,14 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
       super.tearDown();
 
       assertTrue(new ConflictManagementPredicate(api) {
-
          @Override
          protected String operation() {
             return api.getStorageAccountApi().delete(getStorageServiceName());
          }
       }.apply(getStorageServiceName()));
+
+
+
    }
 
    protected CloudService getOrCreateCloudService(final String cloudServiceName, final String location) {

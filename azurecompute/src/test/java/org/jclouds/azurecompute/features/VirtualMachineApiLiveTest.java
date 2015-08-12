@@ -20,10 +20,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.jclouds.azurecompute.domain.Deployment.InstanceStatus.READY_ROLE;
 import static org.jclouds.util.Predicates2.retry;
 import static org.testng.Assert.assertTrue;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +37,10 @@ import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 
 /*
  * Note: Live test for CaptureVMImage method is in VMImageApiLiveTest class
@@ -75,7 +75,7 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
             RoleInstance roleInstance = getFirstRoleInstanceInDeployment(input);
             return roleInstance != null && roleInstance.instanceStatus() == READY_ROLE;
          }
-      }, 600, 5, 5, SECONDS);
+      }, 600, 5, 15, SECONDS);
 
       roleInstanceStopped = retry(new Predicate<String>() {
 
@@ -84,7 +84,7 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
             RoleInstance roleInstance = getFirstRoleInstanceInDeployment(input);
             return roleInstance != null && roleInstance.instanceStatus() == Deployment.InstanceStatus.STOPPED_VM;
          }
-      }, 600, 5, 5, SECONDS);
+      }, 600, 5, 15, SECONDS);
 
       final DeploymentParams params = DeploymentParams.builder()
               .name(DEPLOYMENT)
@@ -93,10 +93,8 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
               .mediaLink(AzureComputeServiceAdapter.createMediaLink(storageService.serviceName(), DEPLOYMENT))
               .username("test")
               .password("supersecurePassword1!")
-              .size(RoleSize.Type.BASIC_A2)
-              .subnetName(Iterables.get(virtualNetworkSite.subnets(), 0).name())
-              .virtualNetworkName(virtualNetworkSite.name())
-              .externalEndpoint(DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort(22, 22))
+              .size(RoleSize.Type.BASIC_A0)
+              .externalEndpoints(ImmutableSet.of(DeploymentParams.ExternalEndpoint.inboundTcpToLocalPort(22, 22)))
               .build();
       getOrCreateDeployment(cloudService.name(), params);
       RoleInstance roleInstance = getFirstRoleInstanceInDeployment(DEPLOYMENT);
@@ -173,8 +171,9 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
       Logger.getAnonymousLogger().log(Level.INFO, "roleInstance restarted: {0}", roleInstance);
    }
 
-   @AfterClass(alwaysRun = true)
-   public void cleanup() {
+   @AfterClass
+   @Override
+   protected void tearDown() {
       if (cloudService != null && api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT) != null) {
          final List<Role> roles = api.getDeploymentApiForService(cloudService.name()).get(DEPLOYMENT).roleList();
 
@@ -185,14 +184,6 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
                return api.getDeploymentApiForService(cloudService.name()).delete(DEPLOYMENT);
             }
          }.apply(DEPLOYMENT));
-
-         assertTrue(new ConflictManagementPredicate(api) {
-
-            @Override
-            protected String operation() {
-               return api.getCloudServiceApi().delete(cloudService.name());
-            }
-         }.apply(cloudService.name()));
 
          for (Role r : roles) {
             final Role.OSVirtualHardDisk disk = r.osVirtualHardDisk();
@@ -206,6 +197,16 @@ public class VirtualMachineApiLiveTest extends BaseAzureComputeApiLiveTest {
                }.apply(disk.diskName()));
             }
          }
+
+         assertTrue(new ConflictManagementPredicate(api) {
+
+            @Override
+            protected String operation() {
+               return api.getCloudServiceApi().delete(cloudService.name());
+            }
+         }.apply(cloudService.name()));
+
+         super.tearDown();
       }
    }
 

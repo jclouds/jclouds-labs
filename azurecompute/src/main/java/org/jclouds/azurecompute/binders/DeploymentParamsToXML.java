@@ -29,7 +29,6 @@ import com.jamesmurty.utils.XMLBuilder;
 public final class DeploymentParamsToXML implements Binder {
 
    @Override
-   @SuppressWarnings("unchecked")
    public <R extends HttpRequest> R bindToRequest(R request, Object input) {
       DeploymentParams params = DeploymentParams.class.cast(input);
 
@@ -60,6 +59,12 @@ public final class DeploymentParamsToXML implements Binder {
                     .e("JoinDomain").t(params.name()).up()
                     .up() // Domain Join
                     .e("StoredCertificateSettings").up()
+                    .e("WinRM")
+                    .e("Listeners")
+                    .e("Listener")
+                    .e("Protocol").t("http").up().up().up().up()
+                    .e("AdminUsername").t(params.username()).up()
+                    .e("AdminPassword").t(params.username()).up()
                     .up(); // Windows ConfigurationSet
          } else if (params.os() == OSImage.Type.LINUX) {
             XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Linux
@@ -90,12 +95,13 @@ public final class DeploymentParamsToXML implements Binder {
          }
 
          inputEndpoints.up();
-         //configBuilder.e("SubnetNames").up().up();
 
          XMLBuilder subnetNames = configBuilder.e("SubnetNames");
-         for (String subnetName : params.subnetNames()) {
-            subnetNames.e("SubnetName").t(subnetName).up()
-                    .up(); //subnetName
+         if (!params.subnetNames().isEmpty()) {
+            for (String subnetName : params.subnetNames()) {
+               subnetNames.e("SubnetName").t(subnetName).up()
+                       .up(); //subnetName
+            }
          }
 
          builder.up() //ConfigurationSets
@@ -105,21 +111,21 @@ public final class DeploymentParamsToXML implements Binder {
                  .e("HostCaching").t("ReadWrite").up()
                  .e("MediaLink").t(params.mediaLink().toASCIIString()).up()
                  // TODO
-                 /// If you are using a VM image, it must be specified as VMImageName for the role, 
+                 /// If you are using a VM image, it must be specified as VMImageName for the role,
                  // not as SourceImageNamefor OSVirtualHardDisk.</Message></Error>]
                  .e("SourceImageName").t(params.sourceImageName()).up()
                  .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
                  .up() //OSVirtualHardDisk
                  .e("RoleSize").t(params.size().getText()).up()
                  .up() //Role
-                 .up() //RoleList
-                 .e("VirtualNetworkName").t(params.virtualNetworkName()).up();
-         
+                 .up(); //RoleList
+         if (params.virtualNetworkName() != null) {
+            builder.up().up().up().e("VirtualNetworkName").t(params.virtualNetworkName()).up();
+         }
          if (params.reservedIPName() != null) {
             builder.up().up().up().e("ReservedIPName").t(params.reservedIPName()).up();
          }
-         
-         // TODO: Undeprecate this method as forcing users to wrap a String in guava's ByteSource is not great.
+
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
          throw propagate(e);

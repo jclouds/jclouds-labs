@@ -52,8 +52,10 @@ public class RoleToXML implements Binder {
                           .up(); //InputEndpoint
                }
                XMLBuilder subnetNames = configBuilder.e("SubnetNames");
-               for (Role.ConfigurationSet.SubnetName subnetName : configurationSet.subnetNames()) {
-                  subnetNames.e("SubnetName").t(subnetName.name()).up();
+               if (!configurationSet.subnetNames().isEmpty()) {
+                  for (Role.ConfigurationSet.SubnetName subnetName : configurationSet.subnetNames()) {
+                     subnetNames.e("SubnetName").t(subnetName.name()).up();
+                  }
                }
                if (configurationSet.networkSecurityGroup() != null
                        && !configurationSet.networkSecurityGroup().isEmpty()) {

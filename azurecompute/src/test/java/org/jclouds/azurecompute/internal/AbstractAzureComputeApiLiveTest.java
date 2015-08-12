@@ -16,14 +16,22 @@
  */
 package org.jclouds.azurecompute.internal;
 
-import com.google.common.base.Predicate;
-import java.util.Random;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_INITIAL_PERIOD;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
+import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
+import java.util.Properties;
+import java.util.Random;
+
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
+import org.jclouds.compute.config.ComputeServiceProperties;
 import org.testng.annotations.BeforeClass;
 
-import org.jclouds.azurecompute.util.ConflictManagementPredicate;
+import com.google.common.base.Predicate;
 
 public abstract class AbstractAzureComputeApiLiveTest extends BaseApiLiveTest<AzureComputeApi> {
 
@@ -33,6 +41,18 @@ public abstract class AbstractAzureComputeApiLiveTest extends BaseApiLiveTest<Az
 
    public AbstractAzureComputeApiLiveTest() {
       provider = "azurecompute";
+   }
+
+   @Override protected Properties setupProperties() {
+      Properties properties = super.setupProperties();
+      properties.put(ComputeServiceProperties.POLL_INITIAL_PERIOD, 1000);
+      properties.put(ComputeServiceProperties.POLL_MAX_PERIOD, 10000);
+      properties.setProperty(OPERATION_TIMEOUT, "60000");
+      properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "5");
+      properties.setProperty(OPERATION_POLL_MAX_PERIOD, "15");
+      properties.setProperty(TCP_RULE_FORMAT, "tcp_%s-%s");
+      properties.setProperty(TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
+      return properties;
    }
 
    @BeforeClass

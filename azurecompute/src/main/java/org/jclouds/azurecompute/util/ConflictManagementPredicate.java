@@ -19,9 +19,6 @@ package org.jclouds.azurecompute.util;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.jclouds.azurecompute.domain.Operation.Status.FAILED;
-
-import com.google.common.base.Predicate;
-
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -36,6 +33,8 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.logging.Logger;
 import org.jclouds.util.Predicates2;
+
+import com.google.common.base.Predicate;
 
 /**
  * Conflict errors (409 response status code) management predicate.
@@ -103,7 +102,7 @@ public class ConflictManagementPredicate implements Predicate<String> {
    /**
     * {@inheritDoc }
     *
-    * @param input interested object/operaton descripton or requestId.
+    * @param input interested object/operation description or requestId.
     * @return predicate evaluation.
     */
    @Override

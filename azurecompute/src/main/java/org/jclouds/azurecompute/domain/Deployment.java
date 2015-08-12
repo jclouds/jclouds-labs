@@ -96,6 +96,7 @@ public abstract class Deployment {
       FAILED_STARTING_VM("FailedStartingVM", false),
       UNRESPONSIVE_ROLE("UnresponsiveRole"),
       PROVISIONING("Provisioning"),
+      PROVISIONING_FAILED("ProvisioningFailed", false),
       /**
        * Not parsable into one of the above.
        */

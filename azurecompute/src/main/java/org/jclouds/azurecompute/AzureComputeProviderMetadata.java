@@ -21,8 +21,6 @@ import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_P
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
-import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
-
 import java.net.URI;
 import java.util.Properties;
 
@@ -50,7 +48,6 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
 
    public static Properties defaultProperties() {
       final Properties properties = AzureManagementApiMetadata.defaultProperties();
-      properties.setProperty(TEMPLATE, "osFamily=UBUNTU,loginUser=jclouds");
       properties.setProperty(OPERATION_TIMEOUT, "60000");
       properties.setProperty(OPERATION_POLL_INITIAL_PERIOD, "5");
       properties.setProperty(OPERATION_POLL_MAX_PERIOD, "15");

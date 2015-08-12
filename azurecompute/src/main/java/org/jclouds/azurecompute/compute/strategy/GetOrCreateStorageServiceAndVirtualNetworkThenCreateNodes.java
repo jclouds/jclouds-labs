@@ -16,28 +16,26 @@
  */
 package org.jclouds.azurecompute.compute.strategy;
 
+import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.Iterables.tryFind;
 import static java.lang.String.format;
 import static org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule.AzureComputeConstants;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.compute.options.AzureComputeTemplateOptions;
+import org.jclouds.azurecompute.compute.predicates.StorageServicePredicates;
 import org.jclouds.azurecompute.config.AzureComputeProperties;
-import org.jclouds.azurecompute.domain.NetworkConfiguration;
-import org.jclouds.azurecompute.domain.NetworkSecurityGroup;
-import org.jclouds.azurecompute.domain.StorageService;
 import org.jclouds.azurecompute.domain.CreateStorageServiceParams;
-import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+import org.jclouds.azurecompute.domain.StorageService;
 import org.jclouds.compute.config.CustomizationResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
@@ -49,11 +47,7 @@ import org.jclouds.compute.strategy.impl.CreateNodesWithGroupEncodedIntoNameThen
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.inject.Inject;
@@ -63,21 +57,10 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
         extends CreateNodesWithGroupEncodedIntoNameThenAddToSet {
 
    private static final String DEFAULT_STORAGE_ACCOUNT_PREFIX = "jclouds";
-
    private static final String DEFAULT_STORAGE_SERVICE_TYPE = "Standard_GRS";
 
-   private static final String DEFAULT_VIRTUAL_NETWORK_NAME = "jclouds-virtual-network";
-
-   private static final String DEFAULT_ADDRESS_SPACE_ADDRESS_PREFIX = "10.0.0.0/20";
-
-   private static final String DEFAULT_SUBNET_NAME = "jclouds-1";
-
-   private static final String DEFAULT_SUBNET_ADDRESS_PREFIX = "10.0.0.0/23";
-
    private final AzureComputeApi api;
-
    private final Predicate<String> operationSucceededPredicate;
-
    private final AzureComputeConstants azureComputeConstants;
 
    @Inject
@@ -113,69 +96,29 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
            final Multimap<NodeMetadata, CustomizationResponse> customizationResponses) {
 
       final AzureComputeTemplateOptions templateOptions = template.getOptions().as(AzureComputeTemplateOptions.class);
-      final String storageAccountName = templateOptions.getStorageAccountName().
-              or(generateStorageServiceName(DEFAULT_STORAGE_ACCOUNT_PREFIX));
       final String location = template.getLocation().getId();
-      final String storageAccountType = templateOptions.getStorageAccountType().or(DEFAULT_STORAGE_SERVICE_TYPE);
-      final String virtualNetworkName = templateOptions.getVirtualNetworkName().or(DEFAULT_VIRTUAL_NETWORK_NAME);
-      final String subnetName = templateOptions.getSubnetName().or(DEFAULT_SUBNET_NAME);
-      final String addressSpaceAddressPrefix = templateOptions.getAddressSpaceAddressPrefix().
-              or(DEFAULT_ADDRESS_SPACE_ADDRESS_PREFIX);
-      final String subnetAddressPrefix = templateOptions.getSubnetAddressPrefix().or(DEFAULT_SUBNET_ADDRESS_PREFIX);
-      final Set<String> networkSecurityGroupNames = templateOptions.getGroups().isEmpty() ? Sets.<String>newHashSet() : templateOptions.getGroups();
+      final String storageAccountName = templateOptions.getStorageAccountName();
+      final String storageAccountType = firstNonNull(templateOptions.getStorageAccountType(), DEFAULT_STORAGE_SERVICE_TYPE);
+      final String virtualNetworkName = templateOptions.getVirtualNetworkName();
 
-      // get or create storage service
-      final StorageService storageService = tryFindExistingStorageServiceAccountOrCreate(
-              api, location, storageAccountName, storageAccountType);
-      templateOptions.storageAccountName(storageService.serviceName());
-
-      // check existence or create virtual network
-      checkExistingVirtualNetworkNamedOrCreate(
-              virtualNetworkName, location, subnetName, addressSpaceAddressPrefix, subnetAddressPrefix);
-      templateOptions.virtualNetworkName(virtualNetworkName);
-      templateOptions.subnetName(subnetName);
-
-      // add network security group to the subnet
-      if (!networkSecurityGroupNames.isEmpty()) {
-         String networkSecurityGroupName = Iterables.get(networkSecurityGroupNames, 0);
-         logger.warn("Only network security group '%s' will be applied to subnet '%s'.",
-                 networkSecurityGroupName, subnetName);
-         final NetworkSecurityGroup networkSecurityGroupAppliedToSubnet = api.getNetworkSecurityGroupApi().
-                 getNetworkSecurityGroupAppliedToSubnet(virtualNetworkName, subnetName);
-         if (networkSecurityGroupAppliedToSubnet != null) {
-            if (!networkSecurityGroupAppliedToSubnet.name().equals(networkSecurityGroupName)) {
-               logger.debug("Removing a networkSecurityGroup %s is already applied to subnet '%s' ...",
-                       networkSecurityGroupName, subnetName);
-               // remove existing nsg from subnet
-               String removeFromSubnetRequestId = api.getNetworkSecurityGroupApi().
-                       removeFromSubnet(virtualNetworkName, subnetName, networkSecurityGroupAppliedToSubnet.name());
-               if (!operationSucceededPredicate.apply(removeFromSubnetRequestId)) {
-                  final String warnMessage = format(
-                          "Remove existing networkSecurityGroup(%s) to subnet(%s) has not been completed "
-                          + "within %sms.", networkSecurityGroupName, subnetName,
-                          azureComputeConstants.operationTimeout());
-                  logger.warn(warnMessage);
-                  final String illegalStateExceptionMessage = format(
-                          "%s. Please, try by increasing `%s` and try again",
-                          AzureComputeProperties.OPERATION_TIMEOUT, warnMessage);
-                  throw new IllegalStateException(illegalStateExceptionMessage);
-               }
-            }
+      final StorageService storageService;
+      if (storageAccountName != null) {
+         if (api.getStorageAccountApi().get(storageAccountName) == null) {
+            String message = String.format("storageAccountName %s specified via AzureComputeTemplateOptions doesn't exist", storageAccountName);
+            logger.error(message);
+            throw new IllegalStateException(message);
          }
-         // add nsg to subnet
-         logger.debug("Adding a networkSecurityGroup %s is already applied to subnet '%s' of virtual network %s ...",
-                 networkSecurityGroupName, subnetName, virtualNetworkName);
-         final String addToSubnetId = api.getNetworkSecurityGroupApi().addToSubnet(virtualNetworkName, subnetName,
-                 networkSecurityGroupName);
-         if (!operationSucceededPredicate.apply(addToSubnetId)) {
-            final String warnMessage = format("Add networkSecurityGroup(%s) to subnet(%s) has not been completed "
-                    + "within %sms.", networkSecurityGroupName, subnetName, azureComputeConstants.operationTimeout());
-            logger.warn(warnMessage);
-            final String illegalStateExceptionMessage = format("%s. Please, try by increasing `%s` and try again",
-                    AzureComputeProperties.OPERATION_TIMEOUT, warnMessage);
-            throw new IllegalStateException(illegalStateExceptionMessage);
-         }
+      } else { // get suitable or create storage service
+         storageService = tryFindExistingStorageServiceAccountOrCreate(api, location, generateStorageServiceName(DEFAULT_STORAGE_ACCOUNT_PREFIX), storageAccountType);
+         templateOptions.storageAccountName(storageService.serviceName());
       }
+
+      if (virtualNetworkName != null && templateOptions.getSubnetNames().isEmpty()) {
+         String message = "AzureComputeTemplateOption.subnetNames must not be empty, if AzureComputeTemplateOption.virtualNetworkName is defined.";
+         logger.warn(message);
+         throw new IllegalArgumentException(message);
+      }
+
       return super.execute(group, count, template, goodNodes, badNodes, customizationResponses);
    }
 
@@ -184,19 +127,18 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
     * the location, otherwise it creates a new storage service account with name and type in the location
     */
    private StorageService tryFindExistingStorageServiceAccountOrCreate(
-           final AzureComputeApi api, final String location, final String name, final String type) {
+           final AzureComputeApi api, final String location, final String storageAccountName, final String type) {
 
       final List<StorageService> storageServices = api.getStorageAccountApi().list();
       logger.debug("Looking for a suitable existing storage account ...");
 
-      @SuppressWarnings("unchecked")
-      final Predicate<StorageService> storageServicePredicate = and(notNull(),
-              new SameLocationAndCreatedStorageServicePredicate(location), new Predicate<StorageService>() {
-                 @Override
-                 public boolean apply(final StorageService input) {
-                    return input.serviceName().matches(format("^%s[a-z]{10}$", DEFAULT_STORAGE_ACCOUNT_PREFIX));
-                 }
-              });
+      final Predicate<StorageService> storageServicePredicate = and(
+              notNull(),
+              StorageServicePredicates.sameLocation(location),
+              StorageServicePredicates.status(StorageService.Status.Created),
+              StorageServicePredicates.matchesName(DEFAULT_STORAGE_ACCOUNT_PREFIX)
+      );
+
       final Optional<StorageService> storageServiceOptional = tryFind(storageServices, storageServicePredicate);
       if (storageServiceOptional.isPresent()) {
          final StorageService storageService = storageServiceOptional.get();
@@ -204,20 +146,20 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
          return storageService;
       } else {
          // create
-         if (!checkAvailability(name)) {
-            logger.warn("The storage service account name %s is not available", name);
+         if (!checkAvailability(storageAccountName)) {
+            logger.warn("The storage service account name %s is not available", storageAccountName);
             throw new IllegalStateException(format("Can't create a valid storage account with name %s. "
-                    + "Please, try by choosing a different `storageAccountName` in templateOptions and try again", name));
+                    + "Please, try by choosing a different `storageAccountName` in templateOptions and try again", storageAccountName));
          }
-         logger.debug("Creating a storage service account '%s' in location '%s' ...", name, location);
-         final String createStorateServiceRequestId = api.getStorageAccountApi().create(
+         logger.debug("Creating a storage service account '%s' in location '%s' ...", storageAccountName, location);
+         final String createStorageServiceRequestId = api.getStorageAccountApi().create(
                  CreateStorageServiceParams.builder()
-                 .serviceName(name)
-                 .label(name)
+                 .serviceName(storageAccountName)
+                 .label(storageAccountName)
                  .location(location)
                  .accountType(StorageService.AccountType.valueOf(type))
                  .build());
-         if (!operationSucceededPredicate.apply(createStorateServiceRequestId)) {
+         if (!operationSucceededPredicate.apply(createStorageServiceRequestId)) {
             final String warnMessage = format("Create storage service account has not been completed within %sms.",
                     azureComputeConstants.operationTimeout());
             logger.warn(warnMessage);
@@ -225,52 +167,8 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
                     AzureComputeProperties.OPERATION_TIMEOUT, warnMessage);
             throw new IllegalStateException(illegalStateExceptionMessage);
          }
-         return api.getStorageAccountApi().get(name);
+         return api.getStorageAccountApi().get(storageAccountName);
       }
-   }
-
-   private void checkExistingVirtualNetworkNamedOrCreate(
-           final String virtualNetworkName, final String location, final String subnetName,
-           final String addressSpaceAddressPrefix, final String subnetAddressPrefix) {
-
-      logger.debug("Looking for a virtual network named '%s' ...", virtualNetworkName);
-      final Optional<NetworkConfiguration.VirtualNetworkSite> networkSiteOptional
-              = getVirtualNetworkNamed(virtualNetworkName);
-      if (networkSiteOptional.isPresent()) {
-         return;
-      }
-      final NetworkConfiguration networkConfiguration = NetworkConfiguration.create(
-              NetworkConfiguration.VirtualNetworkConfiguration.create(null,
-                      ImmutableList.of(NetworkConfiguration.VirtualNetworkSite.create(
-                                      UUID.randomUUID().toString(),
-                                      virtualNetworkName,
-                                      location,
-                                      NetworkConfiguration.AddressSpace.create(addressSpaceAddressPrefix),
-                                      ImmutableList.of(NetworkConfiguration.Subnet.create(
-                                                      subnetName, subnetAddressPrefix, null))))
-              )
-      );
-      logger.debug("Creating a virtual network with configuration '%s' ...", networkConfiguration);
-      final String setNetworkConfigurationRequestId = api.getVirtualNetworkApi().set(networkConfiguration);
-      if (!operationSucceededPredicate.apply(setNetworkConfigurationRequestId)) {
-         final String warnMessage = format("Network configuration (%s) has not been completed within %sms.",
-                 networkConfiguration, azureComputeConstants.operationTimeout());
-         logger.warn(warnMessage);
-         final String illegalStateExceptionMessage = format("%s. Please, try by increasing `%s` and try again",
-                 AzureComputeProperties.OPERATION_TIMEOUT, warnMessage);
-         throw new IllegalStateException(illegalStateExceptionMessage);
-      }
-   }
-
-   private Optional<NetworkConfiguration.VirtualNetworkSite> getVirtualNetworkNamed(final String virtualNetworkName) {
-      return FluentIterable.from(api.getVirtualNetworkApi().list())
-              .filter(new Predicate<NetworkConfiguration.VirtualNetworkSite>() {
-                 @Override
-                 public boolean apply(final NetworkConfiguration.VirtualNetworkSite input) {
-                    return input.name().equals(virtualNetworkName);
-                 }
-              })
-              .first();
    }
 
    private boolean checkAvailability(final String name) {
@@ -289,18 +187,4 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
       return builder.toString();
    }
 
-   private static class SameLocationAndCreatedStorageServicePredicate implements Predicate<StorageService> {
-
-      private final String location;
-
-      public SameLocationAndCreatedStorageServicePredicate(final String location) {
-         this.location = location;
-      }
-
-      @Override
-      public boolean apply(final StorageService input) {
-         return input.storageServiceProperties().location().equals(location)
-                 && input.storageServiceProperties().status().equals("Created");
-      }
-   }
 }

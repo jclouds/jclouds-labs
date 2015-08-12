@@ -90,6 +90,19 @@ public interface VirtualMachineApi {
    @Produces(MediaType.APPLICATION_XML)
    @ResponseParser(ParseRequestIdHeader.class)
    @Payload(value = "<ShutdownRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\">"
+           + "<OperationType>ShutdownRoleOperation</OperationType>" +
+           "<PostShutdownAction>{postShutdownAction}</PostShutdownAction></ShutdownRoleOperation>")
+   String shutdown(@PathParam("name") String name, @PayloadParam("postShutdownAction") String postShutdownAction);
+
+   /**
+    * http://msdn.microsoft.com/en-us/library/jj157195
+    */
+   @Named("ShutdownRole")
+   @POST
+   @Path("/roleinstances/{name}/Operations")
+   @Produces(MediaType.APPLICATION_XML)
+   @ResponseParser(ParseRequestIdHeader.class)
+   @Payload(value = "<ShutdownRoleOperation xmlns=\"http://schemas.microsoft.com/windowsazure\">"
            + "<OperationType>ShutdownRoleOperation</OperationType></ShutdownRoleOperation>")
    String shutdown(@PathParam("name") String name);
 
