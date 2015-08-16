@@ -16,7 +16,15 @@
  */
 package org.jclouds.jdbc.strategy;
 
-import com.google.common.collect.ImmutableList;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.persistence.PersistenceException;
+
 import org.jclouds.blobstore.LocalStorageStrategy;
 import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.blobstore.domain.BlobAccess;
@@ -29,6 +37,8 @@ import org.jclouds.blobstore.domain.internal.MutableStorageMetadataImpl;
 import org.jclouds.blobstore.options.CreateContainerOptions;
 import org.jclouds.blobstore.options.ListContainerOptions;
 import org.jclouds.domain.Location;
+import org.jclouds.domain.LocationBuilder;
+import org.jclouds.domain.LocationScope;
 import org.jclouds.io.ContentMetadata;
 import org.jclouds.jdbc.conversion.BlobEntityToBlob;
 import org.jclouds.jdbc.entity.BlobEntity;
@@ -37,13 +47,7 @@ import org.jclouds.jdbc.predicates.validators.JdbcBlobKeyValidator;
 import org.jclouds.jdbc.predicates.validators.JdbcContainerNameValidator;
 import org.jclouds.jdbc.service.JdbcService;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.persistence.PersistenceException;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 /**
  * JdbcStorageStrategy implements a blob store that stores objects
@@ -57,6 +61,7 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
    private final JdbcContainerNameValidator jdbcContainerNameValidator;
    private final JdbcBlobKeyValidator jdbcBlobKeyValidator;
    private final BlobEntityToBlob blobEntityToBlob;
+   private final Location mockLocation;
 
    @Inject
    JdbcStorageStrategy(Provider<BlobBuilder> blobBuilders,
@@ -68,6 +73,11 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
       this.jdbcContainerNameValidator = jdbcContainerNameValidator;
       this.jdbcBlobKeyValidator = jdbcBlobKeyValidator;
       this.blobEntityToBlob = blobEntityToBlob;
+      this.mockLocation = new LocationBuilder()
+            .id("jdbc")
+            .scope(LocationScope.PROVIDER)
+            .description("http://localhost/transient")
+            .build();
    }
 
    /**
@@ -197,7 +207,7 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
          metadata = new MutableStorageMetadataImpl();
          metadata.setName(containerName);
          metadata.setType(StorageType.CONTAINER);
-         metadata.setLocation(null);
+         metadata.setLocation(mockLocation);
          metadata.setCreationDate(containerEntity.getCreationDate());
       }
       return metadata;
@@ -302,7 +312,7 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
     */
    @Override
    public Location getLocation(String container) {
-      return null;
+      return mockLocation;
    }
 
    /**
@@ -382,4 +392,5 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
          jdbcService.deleteBlob(container, directory);
       }
    }
+
 }
