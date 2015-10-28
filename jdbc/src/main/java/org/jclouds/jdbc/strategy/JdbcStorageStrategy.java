@@ -186,7 +186,7 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
    @Override
    public void clearContainer(String container, ListContainerOptions options) {
       if (options.getDir() != null) {
-         jdbcService.deleteBlobsByDirectory(container, options.getDir(), options.isRecursive());
+         jdbcService.deleteBlobsByDirectory(container, options.getDir(), true);
       }
       else {
          clearContainer(container);
