@@ -21,30 +21,28 @@ import static com.google.common.collect.Iterables.tryFind;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;
 import static org.testng.Assert.assertTrue;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.jclouds.azurecompute.AzureTestUtils;
+import org.jclouds.azurecompute.AzureTestUtils.SameVirtualNetworkSiteNamePredicate;
 import org.jclouds.azurecompute.domain.CloudService;
+import org.jclouds.azurecompute.domain.CreateStorageServiceParams;
 import org.jclouds.azurecompute.domain.Deployment;
 import org.jclouds.azurecompute.domain.DeploymentParams;
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
-import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
-import org.jclouds.azurecompute.domain.StorageService;
-import org.jclouds.azurecompute.domain.CreateStorageServiceParams;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.AddressSpace;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.Subnet;
-import org.jclouds.azurecompute.AzureTestUtils;
-import org.jclouds.azurecompute.AzureTestUtils.SameVirtualNetworkSiteNamePredicate;
+import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
+import org.jclouds.azurecompute.domain.StorageService;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest {
 
@@ -52,7 +50,7 @@ public class BaseAzureComputeApiLiveTest extends AbstractAzureComputeApiLiveTest
 
    public static final String DEFAULT_SUBNET_ADDRESS_SPACE = "10.0.0.0/23";
 
-   public static final String VIRTUAL_NETWORK_NAME = "jclouds-virtual-network";
+   public static final String VIRTUAL_NETWORK_NAME = "jclouds-virtual-network-live-test";
 
    public static final String DEFAULT_SUBNET_NAME = "jclouds-1";
 
