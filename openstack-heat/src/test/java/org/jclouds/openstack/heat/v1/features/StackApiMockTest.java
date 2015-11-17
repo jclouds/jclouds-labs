@@ -204,7 +204,7 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
          HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
          StackApi api = heatApi.getStackApi("RegionOne");
 
-         ListStackOptions options = ListStackOptions.Builder.name("simple_stack");
+         ListStackOptions options = ListStackOptions.Builder.name("simple_stack").showNested(true).globalTenant(true);
 
          List<Stack> stacks = api.list(options);
 
@@ -213,7 +213,7 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
           */
          assertThat(server.getRequestCount()).isEqualTo(2);
          assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks?name=simple_stack");
+         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks?name=simple_stack&show_nested=true&global_tenant=true");
 
          /*
           * Check response

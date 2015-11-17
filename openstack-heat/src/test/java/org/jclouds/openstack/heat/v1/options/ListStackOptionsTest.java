@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.openstack.heat.v1.options.ListStackOptions.Builder.globalTenant;
+import static org.jclouds.openstack.heat.v1.options.ListStackOptions.Builder.showNested;
 import static org.jclouds.openstack.heat.v1.options.ListStackOptions.Builder.limit;
 import static org.jclouds.openstack.heat.v1.options.ListStackOptions.Builder.marker;
 import static org.jclouds.openstack.heat.v1.options.ListStackOptions.Builder.name;
@@ -106,4 +107,11 @@ public class ListStackOptionsTest {
       assertThat(options.buildQueryParameters().get("global_tenant"))
             .isEqualTo(ImmutableSet.of("true"));
    }
+
+    public void testShowNested() {
+       ListStackOptions options = showNested(true);
+       assertThat(options.buildQueryParameters().get("show_nested"))
+             .isEqualTo(ImmutableSet.of("true"));
+    }
+
 }

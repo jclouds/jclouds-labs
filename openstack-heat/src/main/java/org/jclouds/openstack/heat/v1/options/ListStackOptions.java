@@ -160,8 +160,8 @@ public class ListStackOptions extends PaginationOptions {
    /**
     * Return all the stack of all the tenant
     */
-   public ListStackOptions globalTenant(Boolean globalTenant) {
-      this.queryParameters.put("global_tenant", globalTenant != null ? Boolean.toString(globalTenant) : "false");
+   public ListStackOptions globalTenant(boolean globalTenant) {
+      this.queryParameters.put("global_tenant", Boolean.toString(globalTenant));
       return this;
    }
 
@@ -181,6 +181,14 @@ public class ListStackOptions extends PaginationOptions {
    public ListStackOptions sortDirection(SortDirection direction) {
       checkState(SortDirection.contains(direction), "direction is either asc or desc");
       this.queryParameters.put("sort_dir", checkNotNull(direction.toString(), "direction"));
+      return this;
+   }
+
+   /**
+    * Include nested stacks in the stack listing.
+    */
+   public ListStackOptions showNested(boolean showNested) {
+      this.queryParameters.put("show_nested",  Boolean.toString(showNested));
       return this;
    }
 
@@ -233,10 +241,17 @@ public class ListStackOptions extends PaginationOptions {
       }
 
       /**
-       * @see ListStackOptions#globalTenant(Boolean
+       * @see ListStackOptions#globalTenant(boolean)
        */
-      public static ListStackOptions globalTenant(Boolean globalTenant) {
+      public static ListStackOptions globalTenant(boolean globalTenant) {
          return new ListStackOptions().globalTenant(globalTenant);
+      }
+
+      /**
+       * @see ListStackOptions#showNested(boolean)
+       */
+      public static ListStackOptions showNested(boolean showNested) {
+         return new ListStackOptions().showNested(showNested);
       }
    }
 
