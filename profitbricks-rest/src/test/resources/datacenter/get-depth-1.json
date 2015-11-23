@@ -1,0 +1,123 @@
+{
+  "id": "b0ac144e-e294-415f-ba39-6737d5a9d419",
+  "type": "datacenter",
+  "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419",
+  "metadata": {
+    "createdDate": "2014-10-20T21:20:46Z",
+    "createdBy": "vendors@stackpointcloud.com",
+    "etag": "9f6fc5de2dc07df011fff0e45a75b8c5",
+    "lastModifiedDate": "2015-05-12T17:21:54Z",
+    "lastModifiedBy": "vendors@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "docker",
+    "description": "Docker environment for generating Docker specific tutorials.",
+    "location": "us/las",
+    "version": 38
+  },
+  "entities": {
+    "servers": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/servers",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers",
+      "items": [
+        {
+          "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2"
+        },
+        {
+          "id": "430ccbff-e67b-43de-bfce-097e068e57ba",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/430ccbff-e67b-43de-bfce-097e068e57ba"
+        },
+        {
+          "id": "97bd33ed-b97e-4312-acc1-96f44c6e4465",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465"
+        },
+        {
+          "id": "93e2efc3-752c-4c08-8997-e688891e53bf",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/93e2efc3-752c-4c08-8997-e688891e53bf"
+        },
+        {
+          "id": "8345c895-727f-496c-80af-1e7224b2f34e",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/8345c895-727f-496c-80af-1e7224b2f34e"
+        }
+      ]
+    },
+    "volumes": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/volumes",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes",
+      "items": [
+        {
+          "id": "5c4d37ca-d620-4546-8b24-f92e3c608c2c",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/5c4d37ca-d620-4546-8b24-f92e3c608c2c"
+        },
+        {
+          "id": "f9217444-4711-477f-83d8-24adea5d9557",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/f9217444-4711-477f-83d8-24adea5d9557"
+        },
+        {
+          "id": "0eea1824-8079-4c80-8e18-4e1e41a80368",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/0eea1824-8079-4c80-8e18-4e1e41a80368"
+        },
+        {
+          "id": "c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1"
+        },
+        {
+          "id": "dc2f35f4-7335-46f2-b30f-96e31c5ba54d",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/dc2f35f4-7335-46f2-b30f-96e31c5ba54d"
+        },
+        {
+          "id": "af473785-b791-4724-bb01-242035bf88ef",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/af473785-b791-4724-bb01-242035bf88ef"
+        }
+      ]
+    },
+    "loadbalancers": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/loadbalancers",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/loadbalancers",
+      "items": []
+    },
+    "lans": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/lans",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans",
+      "items": [
+        {
+          "id": "4",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/4"
+        },
+        {
+          "id": "3",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/3"
+        },
+        {
+          "id": "2",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/2"
+        },
+        {
+          "id": "1",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/1"
+        }
+      ]
+    }
+  }
+}

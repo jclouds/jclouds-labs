@@ -1,0 +1,553 @@
+{
+  "id": "b0ac144e-e294-415f-ba39-6737d5a9d419",
+  "type": "datacenter",
+  "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419",
+  "metadata": {
+    "createdDate": "2014-10-20T21:20:46Z",
+    "createdBy": "vendors@stackpointcloud.com",
+    "etag": "9f6fc5de2dc07df011fff0e45a75b8c5",
+    "lastModifiedDate": "2015-05-12T17:21:54Z",
+    "lastModifiedBy": "vendors@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "docker",
+    "description": "Docker environment for generating Docker specific tutorials.",
+    "location": "us/las",
+    "version": 38
+  },
+  "entities": {
+    "servers": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/servers",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers",
+      "items": [
+        {
+          "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2",
+          "metadata": {
+            "createdDate": "2014-10-20T21:20:46Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "0018832d7a7ba455db74ac41ae9f11fe",
+            "lastModifiedDate": "2015-03-18T21:31:10Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "docker001",
+            "cores": 1,
+            "ram": 1024,
+            "availabilityZone": "AUTO",
+            "vmState": "RUNNING",
+            "bootCdrom": null,
+            "bootVolume": {
+              "id": "c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+              "type": "volume",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1"
+            }
+          },
+          "entities": {
+            "cdroms": {
+              "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/cdroms",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/cdroms"
+            },
+            "volumes": {
+              "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/volumes",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/volumes"
+            },
+            "nics": {
+              "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics"
+            }
+          }
+        },
+        {
+          "id": "430ccbff-e67b-43de-bfce-097e068e57ba",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/430ccbff-e67b-43de-bfce-097e068e57ba",
+          "metadata": {
+            "createdDate": "2015-04-28T13:19:42Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "1c542f43914756144e950e37f1a6f3ad",
+            "lastModifiedDate": "2015-04-28T13:19:42Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "dockerui001",
+            "cores": 1,
+            "ram": 1024,
+            "availabilityZone": "AUTO",
+            "vmState": "RUNNING",
+            "bootCdrom": null,
+            "bootVolume": null
+          },
+          "entities": {
+            "cdroms": {
+              "id": "430ccbff-e67b-43de-bfce-097e068e57ba/cdroms",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/430ccbff-e67b-43de-bfce-097e068e57ba/cdroms"
+            },
+            "volumes": {
+              "id": "430ccbff-e67b-43de-bfce-097e068e57ba/volumes",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/430ccbff-e67b-43de-bfce-097e068e57ba/volumes"
+            },
+            "nics": {
+              "id": "430ccbff-e67b-43de-bfce-097e068e57ba/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/430ccbff-e67b-43de-bfce-097e068e57ba/nics"
+            }
+          }
+        },
+        {
+          "id": "97bd33ed-b97e-4312-acc1-96f44c6e4465",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465",
+          "metadata": {
+            "createdDate": "2015-05-12T17:21:54Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "4e256e4cd927eea2337cf9b1b189c71a",
+            "lastModifiedDate": "2015-05-12T17:21:54Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "dockerui002",
+            "cores": 1,
+            "ram": 1024,
+            "availabilityZone": "AUTO",
+            "vmState": "RUNNING",
+            "bootCdrom": null,
+            "bootVolume": {
+              "id": "dc2f35f4-7335-46f2-b30f-96e31c5ba54d",
+              "type": "volume",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/dc2f35f4-7335-46f2-b30f-96e31c5ba54d"
+            }
+          },
+          "entities": {
+            "cdroms": {
+              "id": "97bd33ed-b97e-4312-acc1-96f44c6e4465/cdroms",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465/cdroms"
+            },
+            "volumes": {
+              "id": "97bd33ed-b97e-4312-acc1-96f44c6e4465/volumes",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465/volumes"
+            },
+            "nics": {
+              "id": "97bd33ed-b97e-4312-acc1-96f44c6e4465/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465/nics"
+            }
+          }
+        },
+        {
+          "id": "93e2efc3-752c-4c08-8997-e688891e53bf",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/93e2efc3-752c-4c08-8997-e688891e53bf",
+          "metadata": {
+            "createdDate": "2015-03-18T19:00:51Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "faa67fbacb1c0e2e02cf9650657251f1",
+            "lastModifiedDate": "2015-03-18T19:00:51Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "master 1 Server",
+            "cores": 2,
+            "ram": 2048,
+            "availabilityZone": "AUTO",
+            "vmState": "RUNNING",
+            "bootCdrom": null,
+            "bootVolume": {
+              "id": "f9217444-4711-477f-83d8-24adea5d9557",
+              "type": "volume",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/f9217444-4711-477f-83d8-24adea5d9557"
+            }
+          },
+          "entities": {
+            "cdroms": {
+              "id": "93e2efc3-752c-4c08-8997-e688891e53bf/cdroms",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/93e2efc3-752c-4c08-8997-e688891e53bf/cdroms"
+            },
+            "volumes": {
+              "id": "93e2efc3-752c-4c08-8997-e688891e53bf/volumes",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/93e2efc3-752c-4c08-8997-e688891e53bf/volumes"
+            },
+            "nics": {
+              "id": "93e2efc3-752c-4c08-8997-e688891e53bf/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/93e2efc3-752c-4c08-8997-e688891e53bf/nics"
+            }
+          }
+        },
+        {
+          "id": "8345c895-727f-496c-80af-1e7224b2f34e",
+          "type": "server",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/8345c895-727f-496c-80af-1e7224b2f34e",
+          "metadata": {
+            "createdDate": "2015-03-18T19:00:51Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "fe5f7398133ba0859b034b8dfe3688f2",
+            "lastModifiedDate": "2015-03-18T19:00:51Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "node Server",
+            "cores": 2,
+            "ram": 2048,
+            "availabilityZone": "AUTO",
+            "vmState": "RUNNING",
+            "bootCdrom": null,
+            "bootVolume": {
+              "id": "0eea1824-8079-4c80-8e18-4e1e41a80368",
+              "type": "volume",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/0eea1824-8079-4c80-8e18-4e1e41a80368"
+            }
+          },
+          "entities": {
+            "cdroms": {
+              "id": "8345c895-727f-496c-80af-1e7224b2f34e/cdroms",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/8345c895-727f-496c-80af-1e7224b2f34e/cdroms"
+            },
+            "volumes": {
+              "id": "8345c895-727f-496c-80af-1e7224b2f34e/volumes",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/8345c895-727f-496c-80af-1e7224b2f34e/volumes"
+            },
+            "nics": {
+              "id": "8345c895-727f-496c-80af-1e7224b2f34e/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/8345c895-727f-496c-80af-1e7224b2f34e/nics"
+            }
+          }
+        }
+      ]
+    },
+    "volumes": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/volumes",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes",
+      "items": [
+        {
+          "id": "5c4d37ca-d620-4546-8b24-f92e3c608c2c",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/5c4d37ca-d620-4546-8b24-f92e3c608c2c",
+          "metadata": {
+            "createdDate": "2015-03-18T21:31:10Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "0018832d7a7ba455db74ac41ae9f11fe",
+            "lastModifiedDate": "2015-03-18T21:31:10Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "Docker Registry Volume",
+            "type": "HDD",
+            "size": 50,
+            "image": null,
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "OTHER",
+            "cpuHotPlug": false,
+            "cpuHotUnplug": false,
+            "ramHotPlug": false,
+            "ramHotUnplug": false,
+            "nicHotPlug": false,
+            "nicHotUnplug": false,
+            "discVirtioHotPlug": false,
+            "discVirtioHotUnplug": false,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 2
+          }
+        },
+        {
+          "id": "f9217444-4711-477f-83d8-24adea5d9557",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/f9217444-4711-477f-83d8-24adea5d9557",
+          "metadata": {
+            "createdDate": "2015-03-18T19:00:51Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "c4a2fde6ba91a038ff953b939cc21efe",
+            "lastModifiedDate": "2015-03-18T19:00:51Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "master 1 Storage",
+            "type": "HDD",
+            "size": 50,
+            "image": "681673e7-bfc2-11e4-850c-52540066fee9",
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "OTHER",
+            "cpuHotPlug": true,
+            "cpuHotUnplug": false,
+            "ramHotPlug": false,
+            "ramHotUnplug": false,
+            "nicHotPlug": true,
+            "nicHotUnplug": true,
+            "discVirtioHotPlug": true,
+            "discVirtioHotUnplug": true,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 1
+          }
+        },
+        {
+          "id": "0eea1824-8079-4c80-8e18-4e1e41a80368",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/0eea1824-8079-4c80-8e18-4e1e41a80368",
+          "metadata": {
+            "createdDate": "2015-03-18T19:00:51Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "c4a2fde6ba91a038ff953b939cc21efe",
+            "lastModifiedDate": "2015-03-18T19:00:51Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "node Storage",
+            "type": "HDD",
+            "size": 50,
+            "image": "681673e7-bfc2-11e4-850c-52540066fee9",
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "OTHER",
+            "cpuHotPlug": true,
+            "cpuHotUnplug": false,
+            "ramHotPlug": false,
+            "ramHotUnplug": false,
+            "nicHotPlug": true,
+            "nicHotUnplug": true,
+            "discVirtioHotPlug": true,
+            "discVirtioHotUnplug": true,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 1
+          }
+        },
+        {
+          "id": "c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+          "metadata": {
+            "createdDate": "2014-10-20T21:20:46Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "7a539b539d8ca9e08c5ac5e63c9c4c8f",
+            "lastModifiedDate": "2014-10-20T21:20:46Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "Storage",
+            "type": "HDD",
+            "size": 50,
+            "image": "4f363db0-4955-11e4-b362-52540066fee9",
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "LINUX",
+            "cpuHotPlug": true,
+            "cpuHotUnplug": false,
+            "ramHotPlug": true,
+            "ramHotUnplug": false,
+            "nicHotPlug": true,
+            "nicHotUnplug": true,
+            "discVirtioHotPlug": true,
+            "discVirtioHotUnplug": true,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 1
+          }
+        },
+        {
+          "id": "dc2f35f4-7335-46f2-b30f-96e31c5ba54d",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/dc2f35f4-7335-46f2-b30f-96e31c5ba54d",
+          "metadata": {
+            "createdDate": "2015-05-12T17:20:21Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "95c6a09c3aa29672c4baf3c52abb2506",
+            "lastModifiedDate": "2015-05-12T17:20:21Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "default-dockerui002-6386",
+            "type": "HDD",
+            "size": 20,
+            "image": "c1fc45a9-efb2-11e4-9660-52540066fee9",
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "LINUX",
+            "cpuHotPlug": true,
+            "cpuHotUnplug": false,
+            "ramHotPlug": true,
+            "ramHotUnplug": false,
+            "nicHotPlug": true,
+            "nicHotUnplug": true,
+            "discVirtioHotPlug": true,
+            "discVirtioHotUnplug": true,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 1
+          }
+        },
+        {
+          "id": "af473785-b791-4724-bb01-242035bf88ef",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/af473785-b791-4724-bb01-242035bf88ef",
+          "metadata": {
+            "createdDate": "2015-04-28T13:19:42Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "1c542f43914756144e950e37f1a6f3ad",
+            "lastModifiedDate": "2015-04-28T13:19:42Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "default-dockerui001-ul0w",
+            "type": "HDD",
+            "size": 10,
+            "image": "4e4e2f60-d81f-11e4-aea4-52540066fee9",
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "LINUX",
+            "cpuHotPlug": true,
+            "cpuHotUnplug": false,
+            "ramHotPlug": true,
+            "ramHotUnplug": false,
+            "nicHotPlug": true,
+            "nicHotUnplug": true,
+            "discVirtioHotPlug": true,
+            "discVirtioHotUnplug": true,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 1
+          }
+        }
+      ]
+    },
+    "loadbalancers": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/loadbalancers",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/loadbalancers",
+      "items": []
+    },
+    "lans": {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/lans",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans",
+      "items": [
+        {
+          "id": "4",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/4",
+          "metadata": {
+            "createdDate": "2015-05-12T17:20:17Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "bd1f0344e29ef82d0c2b0e47e386e6bf",
+            "lastModifiedDate": "2015-05-12T17:20:17Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": null,
+            "public": true
+          },
+          "entities": {
+            "nics": {
+              "id": "4/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/4/nics"
+            }
+          }
+        },
+        {
+          "id": "3",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/3",
+          "metadata": {
+            "createdDate": "2015-04-28T13:19:38Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "666b40a32993814acfce73e897a3075d",
+            "lastModifiedDate": "2015-04-28T13:19:38Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": null,
+            "public": true
+          },
+          "entities": {
+            "nics": {
+              "id": "3/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/3/nics"
+            }
+          }
+        },
+        {
+          "id": "2",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/2",
+          "metadata": {
+            "createdDate": "2015-03-18T19:00:51Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "c4a2fde6ba91a038ff953b939cc21efe",
+            "lastModifiedDate": "2015-03-18T19:00:51Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "Switch for LAN 2",
+            "public": false
+          },
+          "entities": {
+            "nics": {
+              "id": "2/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/2/nics"
+            }
+          }
+        },
+        {
+          "id": "1",
+          "type": "lan",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/1",
+          "metadata": {
+            "createdDate": "2014-10-20T21:20:46Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "7a539b539d8ca9e08c5ac5e63c9c4c8f",
+            "lastModifiedDate": "2014-10-20T21:20:46Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "Switch for LAN 1",
+            "public": true
+          },
+          "entities": {
+            "nics": {
+              "id": "1/nics",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/1/nics"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

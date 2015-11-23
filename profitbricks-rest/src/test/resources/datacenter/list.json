@@ -1,0 +1,130 @@
+{
+  "id": "datacenters",
+  "type": "collection",
+  "href": "https://api.profitbricks.com/rest/datacenters",
+  "items": [
+    {
+      "id": "4fa20e0f-adce-455d-886c-3b13363908e5",
+      "type": "datacenter",
+      "href": "https://api.profitbricks.com/rest/datacenters/4fa20e0f-adce-455d-886c-3b13363908e5",
+      "metadata": {
+        "createdDate": "2015-10-06T00:19:19Z",
+        "createdBy": "[UNKNOWN]",
+        "etag": "b1836e6da5f14c3c7b0bbb7db54b45a1",
+        "lastModifiedDate": "2015-11-02T22:22:24Z",
+        "lastModifiedBy": "vendors@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "vea",
+        "description": null,
+        "location": "us/lasdev",
+        "version": 25
+      },
+      "entities": {
+        "servers": {
+          "id": "4fa20e0f-adce-455d-886c-3b13363908e5/servers",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/4fa20e0f-adce-455d-886c-3b13363908e5/servers"
+        },
+        "volumes": {
+          "id": "4fa20e0f-adce-455d-886c-3b13363908e5/volumes",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/4fa20e0f-adce-455d-886c-3b13363908e5/volumes"
+        },
+        "loadbalancers": {
+          "id": "4fa20e0f-adce-455d-886c-3b13363908e5/loadbalancers",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/4fa20e0f-adce-455d-886c-3b13363908e5/loadbalancers"
+        },
+        "lans": {
+          "id": "4fa20e0f-adce-455d-886c-3b13363908e5/lans",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/4fa20e0f-adce-455d-886c-3b13363908e5/lans"
+        }
+      }
+    },
+    {
+      "id": "825dee89-659a-492f-89b3-2ad5be27edee",
+      "type": "datacenter",
+      "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee",
+      "metadata": {
+        "createdDate": "2014-11-12T20:18:54Z",
+        "createdBy": "vendors@stackpointcloud.com",
+        "etag": "ae91fc3f7f7274b55100e1f905167bf3",
+        "lastModifiedDate": "2015-09-08T11:32:17Z",
+        "lastModifiedBy": "vendors@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "Linux Tutorials",
+        "description": "Test environment for Linux tutorials",
+        "location": "us/las",
+        "version": 218
+      },
+      "entities": {
+        "servers": {
+          "id": "825dee89-659a-492f-89b3-2ad5be27edee/servers",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers"
+        },
+        "volumes": {
+          "id": "825dee89-659a-492f-89b3-2ad5be27edee/volumes",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/volumes"
+        },
+        "loadbalancers": {
+          "id": "825dee89-659a-492f-89b3-2ad5be27edee/loadbalancers",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/loadbalancers"
+        },
+        "lans": {
+          "id": "825dee89-659a-492f-89b3-2ad5be27edee/lans",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/lans"
+        }
+      }
+    },
+    {
+      "id": "b0ac144e-e294-415f-ba39-6737d5a9d419",
+      "type": "datacenter",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419",
+      "metadata": {
+        "createdDate": "2014-10-20T21:20:46Z",
+        "createdBy": "vendors@stackpointcloud.com",
+        "etag": "9f6fc5de2dc07df011fff0e45a75b8c5",
+        "lastModifiedDate": "2015-05-12T17:21:54Z",
+        "lastModifiedBy": "vendors@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "docker",
+        "description": "Docker environment for generating Docker specific tutorials.",
+        "location": "us/las",
+        "version": 38
+      },
+      "entities": {
+        "servers": {
+          "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/servers",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers"
+        },
+        "volumes": {
+          "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/volumes",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes"
+        },
+        "loadbalancers": {
+          "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/loadbalancers",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/loadbalancers"
+        },
+        "lans": {
+          "id": "b0ac144e-e294-415f-ba39-6737d5a9d419/lans",
+          "type": "collection",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans"
+        }
+      }
+    }
+  ]
+}
