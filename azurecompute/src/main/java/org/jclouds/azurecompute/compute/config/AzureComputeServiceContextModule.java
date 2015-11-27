@@ -22,6 +22,8 @@ import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_T
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_FORMAT;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.TCP_RULE_REGEXP;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -40,6 +42,7 @@ import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.RoleSize;
 import org.jclouds.azurecompute.options.AzureComputeTemplateOptions;
+import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.config.ComputeServiceAdapterContextModule;
 import org.jclouds.compute.domain.Hardware;
@@ -47,19 +50,14 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.extensions.SecurityGroupExtension;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
-import org.jclouds.compute.strategy.impl.AdaptingComputeServiceStrategies;
 import org.jclouds.compute.strategy.PrioritizeCredentialsFromTemplate;
+import org.jclouds.compute.strategy.impl.AdaptingComputeServiceStrategies;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
-
-import java.util.concurrent.TimeUnit;
-import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 
 public class AzureComputeServiceContextModule
         extends ComputeServiceAdapterContextModule<Deployment, RoleSize, OSImage, Location> {
@@ -92,11 +90,6 @@ public class AzureComputeServiceContextModule
       // to have the compute service adapter override default locations
       install(new LocationsFromComputeServiceAdapterModule<Deployment, RoleSize, OSImage, Location>() {
       });
-   }
-
-   @Override
-   protected Optional<SecurityGroupExtension> provideSecurityGroupExtension(final Injector injector) {
-      return Optional.of(injector.getInstance(SecurityGroupExtension.class));
    }
 
    @Provides
