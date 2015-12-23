@@ -19,7 +19,12 @@ package org.apache.jclouds.profitbricks.rest;
 import com.google.auto.service.AutoService;
 import java.net.URI;
 import java.util.Properties;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_MAX_PERIOD;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PERIOD;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_TIMEOUT;
+import static org.jclouds.Constants.PROPERTY_CONNECTION_TIMEOUT;
 import static org.jclouds.Constants.PROPERTY_ISO3166_CODES;
+import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
@@ -62,6 +67,14 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
       properties.setProperty(PROPERTY_ZONE + ".FRA." + ISO3166_CODES, "DE-HE");
       properties.setProperty(PROPERTY_ZONE + ".LAS." + ISO3166_CODES, "US-NV");
       properties.setProperty(PROPERTY_ZONE + ".LASDEV." + ISO3166_CODES, "US-NV");
+      
+      long defaultTimeout = 60l * 60l; // 1 hour
+      properties.put(POLL_TIMEOUT, defaultTimeout);
+      properties.put(POLL_PERIOD, 2l);
+      properties.put(POLL_MAX_PERIOD, 2l * 10l);
+
+      properties.put(PROPERTY_SO_TIMEOUT, 60000 * 5);
+      properties.put(PROPERTY_CONNECTION_TIMEOUT, 60000 * 5);
       
       return properties;
    }

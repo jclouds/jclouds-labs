@@ -1,0 +1,33 @@
+{
+    "id": "c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+    "type": "volume",
+    "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+    "metadata": {
+      "createdDate": "2014-10-20T21:20:46Z",
+      "createdBy": "vendors@stackpointcloud.com",
+      "etag": "7a539b539d8ca9e08c5ac5e63c9c4c8f",
+      "lastModifiedDate": "2014-10-20T21:20:46Z",
+      "lastModifiedBy": "vendors@stackpointcloud.com",
+      "state": "AVAILABLE"
+    },
+    "properties": {
+      "name": "Storage",
+      "type": "HDD",
+      "size": 50,
+      "image": "4f363db0-4955-11e4-b362-52540066fee9",
+      "imagePassword": null,
+      "bus": "VIRTIO",
+      "licenceType": "LINUX",
+      "cpuHotPlug": true,
+      "cpuHotUnplug": false,
+      "ramHotPlug": true,
+      "ramHotUnplug": false,
+      "nicHotPlug": true,
+      "nicHotUnplug": true,
+      "discVirtioHotPlug": true,
+      "discVirtioHotUnplug": true,
+      "discScsiHotPlug": false,
+      "discScsiHotUnplug": false,
+      "deviceNumber": 1
+    }
+}

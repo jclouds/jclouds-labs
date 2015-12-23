@@ -1,0 +1,32 @@
+{
+  "id" : "7cb4b3a3-50c3-11e5-b789-52540066fee9",
+  "type" : "image",
+  "href" : "https://api.profitbricks.com/rest/images/7cb4b3a3-50c3-11e5-b789-52540066fee9",
+  "metadata" : {
+    "createdDate" : "2015-09-01T16:07:04Z",
+    "createdBy" : "System",
+    "etag" : "2f1436803e9632b6d43eac5d21c04616",
+    "lastModifiedDate" : "2015-11-11T13:54:02Z",
+    "lastModifiedBy" : "System",
+    "state" : "BUSY"
+  },
+  "properties" : {
+    "name" : "ubuntu-14.04.3-server-amd64.iso",
+    "description" : null,
+    "location" : "us/lasdev",
+    "size" : 0.57,
+    "cpuHotPlug" : true,
+    "cpuHotUnplug" : false,
+    "ramHotPlug" : true,
+    "ramHotUnplug" : false,
+    "nicHotPlug" : true,
+    "nicHotUnplug" : true,
+    "discVirtioHotPlug" : true,
+    "discVirtioHotUnplug" : true,
+    "discScsiHotPlug" : false,
+    "discScsiHotUnplug" : false,
+    "licenceType" : "LINUX",
+    "imageType" : "CDROM",
+    "public" : true
+  }
+}

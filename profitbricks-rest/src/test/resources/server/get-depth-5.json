@@ -1,0 +1,171 @@
+{
+  "id": "5d950ac6-15f5-449f-8705-5b4b6830a45e",
+  "type": "server",
+  "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e",
+  "metadata": {
+    "createdDate": "2015-05-21T12:40:23Z",
+    "createdBy": "vendors@stackpointcloud.com",
+    "etag": "1041e8e699bc4e6285ec0cd41574276a",
+    "lastModifiedDate": "2015-06-01T11:50:07Z",
+    "lastModifiedBy": "vendors@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "kube-lb",
+    "cores": 1,
+    "ram": 2048,
+    "availabilityZone": "AUTO",
+    "vmState": "RUNNING",
+    "bootCdrom": null,
+    "bootVolume": {
+      "id": "18fec1fc-3b09-4b5c-8abe-062901e10082",
+      "type": "volume",
+      "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/volumes/18fec1fc-3b09-4b5c-8abe-062901e10082",
+      "metadata": {
+        "createdDate": "2015-05-21T12:40:23Z",
+        "createdBy": "vendors@stackpointcloud.com",
+        "etag": "f873fbcb66b1635ee53c30994498dbb3",
+        "lastModifiedDate": "2015-06-01T10:22:33Z",
+        "lastModifiedBy": "vendors@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "kube-lb Storage",
+        "type": "HDD",
+        "size": 10,
+        "image": "709e641e-efa8-11e4-9660-52540066fee9",
+        "imagePassword": null,
+        "bus": "VIRTIO",
+        "licenceType": "LINUX",
+        "cpuHotPlug": true,
+        "cpuHotUnplug": false,
+        "ramHotPlug": true,
+        "ramHotUnplug": false,
+        "nicHotPlug": true,
+        "nicHotUnplug": true,
+        "discVirtioHotPlug": true,
+        "discVirtioHotUnplug": true,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "deviceNumber": 1
+      }
+    }
+  },
+  "entities": {
+    "cdroms": {
+      "id": "5d950ac6-15f5-449f-8705-5b4b6830a45e/cdroms",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/cdroms",
+      "items": []
+    },
+    "volumes": {
+      "id": "5d950ac6-15f5-449f-8705-5b4b6830a45e/volumes",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/volumes",
+      "items": [
+        {
+          "id": "18fec1fc-3b09-4b5c-8abe-062901e10082",
+          "type": "volume",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/volumes/18fec1fc-3b09-4b5c-8abe-062901e10082",
+          "metadata": {
+            "createdDate": "2015-05-21T12:40:23Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "f873fbcb66b1635ee53c30994498dbb3",
+            "lastModifiedDate": "2015-06-01T10:22:33Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": "kube-lb Storage",
+            "type": "HDD",
+            "size": 10,
+            "image": "709e641e-efa8-11e4-9660-52540066fee9",
+            "imagePassword": null,
+            "bus": "VIRTIO",
+            "licenceType": "LINUX",
+            "cpuHotPlug": true,
+            "cpuHotUnplug": false,
+            "ramHotPlug": true,
+            "ramHotUnplug": false,
+            "nicHotPlug": true,
+            "nicHotUnplug": true,
+            "discVirtioHotPlug": true,
+            "discVirtioHotUnplug": true,
+            "discScsiHotPlug": false,
+            "discScsiHotUnplug": false,
+            "deviceNumber": 1
+          }
+        }
+      ]
+    },
+    "nics": {
+      "id": "5d950ac6-15f5-449f-8705-5b4b6830a45e/nics",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/nics",
+      "items": [
+        {
+          "id": "83af87bc-ab6c-43cc-84a2-3b3dd8c5f86b",
+          "type": "nic",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/nics/83af87bc-ab6c-43cc-84a2-3b3dd8c5f86b",
+          "metadata": {
+            "createdDate": "2015-06-01T11:50:07Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "7074b84fab742d875bb59eaa2bb2605d",
+            "lastModifiedDate": "2015-08-19T10:58:31Z",
+            "lastModifiedBy": "ethand@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": null,
+            "mac": "02:01:89:56:2a:05",
+            "ips": [
+              "162.254.26.148"
+            ],
+            "dhcp": false,
+            "lan": 1,
+            "firewallActive": false
+          },
+          "entities": {
+            "firewallrules": {
+              "id": "83af87bc-ab6c-43cc-84a2-3b3dd8c5f86b/firewallrules",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/nics/83af87bc-ab6c-43cc-84a2-3b3dd8c5f86b/firewallrules",
+              "items": []
+            }
+          }
+        },
+        {
+          "id": "a64ac7e0-bf07-43de-8cc1-76ce357ca5b3",
+          "type": "nic",
+          "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/nics/a64ac7e0-bf07-43de-8cc1-76ce357ca5b3",
+          "metadata": {
+            "createdDate": "2015-06-01T11:50:07Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "d0848fc15084a83b6be3d8cd00ae9ced",
+            "lastModifiedDate": "2015-06-02T11:36:18Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": null,
+            "mac": "02:01:97:8c:50:c4",
+            "ips": [
+              "10.11.50.13"
+            ],
+            "dhcp": true,
+            "lan": 2,
+            "firewallActive": false
+          },
+          "entities": {
+            "firewallrules": {
+              "id": "a64ac7e0-bf07-43de-8cc1-76ce357ca5b3/firewallrules",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/825dee89-659a-492f-89b3-2ad5be27edee/servers/5d950ac6-15f5-449f-8705-5b4b6830a45e/nics/a64ac7e0-bf07-43de-8cc1-76ce357ca5b3/firewallrules",
+              "items": []
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -14,15 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.domain;
+package org.apache.jclouds.profitbricks.rest.ids;
 
-import com.google.common.base.Enums;
+import com.google.auto.value.AutoValue;
 
-public enum LicenceType {
-
-   WINDOWS, LINUX, OTHER, UNRECOGNIZED;
-
-   public static LicenceType fromValue(String v) {
-      return Enums.getIfPresent(LicenceType.class, v).or(UNRECOGNIZED);
+@AutoValue
+public abstract class ServerRef {
+   
+   public abstract String dataCenterId();
+   public abstract String serverId();
+      
+   public static ServerRef create(String dataCenterId, String serverId) {
+      return new AutoValue_ServerRef(dataCenterId, serverId);
    }
+    
 }

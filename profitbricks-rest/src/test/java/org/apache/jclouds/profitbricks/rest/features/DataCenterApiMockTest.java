@@ -115,15 +115,14 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
    
    @Test
    public void testDelete() throws InterruptedException {
-      server.enqueue(
-         new MockResponse().setBody("")
-      );
+      server.enqueue(response204());
       
       dataCenterApi().delete("some-id");
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "DELETE", "/datacenters/some-id");
    }
    
+   @Test
    public void testDeleteWith404() throws InterruptedException {
       server.enqueue(response404());
 

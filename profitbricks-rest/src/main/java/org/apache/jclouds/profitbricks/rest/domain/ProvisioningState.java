@@ -18,11 +18,11 @@ package org.apache.jclouds.profitbricks.rest.domain;
 
 import com.google.common.base.Enums;
 
-public enum LicenceType {
+public enum ProvisioningState {
 
-   WINDOWS, LINUX, OTHER, UNRECOGNIZED;
+   INACTIVE, INPROCESS, AVAILABLE, DELETED, ERROR, UNRECOGNIZED;
 
-   public static LicenceType fromValue(String v) {
-      return Enums.getIfPresent(LicenceType.class, v).or(UNRECOGNIZED);
+   public static ProvisioningState fromValue(String value) {
+      return Enums.getIfPresent(ProvisioningState.class, value).or(UNRECOGNIZED);
    }
 }

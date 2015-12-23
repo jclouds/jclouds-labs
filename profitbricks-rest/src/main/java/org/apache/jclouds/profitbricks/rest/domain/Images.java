@@ -16,13 +16,27 @@
  */
 package org.apache.jclouds.profitbricks.rest.domain;
 
-import com.google.common.base.Enums;
+import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
+import static com.google.common.collect.ImmutableList.copyOf;
 
-public enum LicenceType {
+@AutoValue
+public abstract class Images {
 
-   WINDOWS, LINUX, OTHER, UNRECOGNIZED;
+   public abstract String id();
 
-   public static LicenceType fromValue(String v) {
-      return Enums.getIfPresent(LicenceType.class, v).or(UNRECOGNIZED);
+   public abstract String type();
+
+   public abstract String href();
+
+   @Nullable
+   public abstract List<Image> items();
+
+   @SerializedNames({"id", "type", "href", "items"})
+   public static Images create(String id, String type, String href, List<Image> items) {
+      return new AutoValue_Images(id, type, href, items == null ? ImmutableList.<Image>of() : copyOf(items));
    }
 }

@@ -1,0 +1,32 @@
+{
+    "id": "daf36f00-9815-11e5-b6a2-52540066fee9",
+    "type": "image",
+    "href": "https://api.profitbricks.com/rest/images/daf36f00-9815-11e5-b6a2-52540066fee9",
+    "metadata": {
+      "createdDate": "2015-12-01T10:25:33Z",
+      "createdBy": "System",
+      "etag": "76ede5da4cd7ae5ab8a1287d810c3e00",
+      "lastModifiedDate": "2015-12-01T10:25:33Z",
+      "lastModifiedBy": "System",
+      "state": "AVAILABLE"
+    },
+    "properties": {
+      "name": "ubuntu-15.10-server-amd64.iso",
+      "description": null,
+      "location": "us/lasdev",
+      "size": 0.62,
+      "cpuHotPlug": true,
+      "cpuHotUnplug": false,
+      "ramHotPlug": true,
+      "ramHotUnplug": false,
+      "nicHotPlug": true,
+      "nicHotUnplug": true,
+      "discVirtioHotPlug": true,
+      "discVirtioHotUnplug": true,
+      "discScsiHotPlug": false,
+      "discScsiHotUnplug": false,
+      "licenceType": "LINUX",
+      "imageType": "CDROM",
+      "public": true
+    }
+}

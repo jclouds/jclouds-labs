@@ -109,7 +109,6 @@ public interface DataCenterApi extends Closeable {
    @Named("datacenter:delete")
    @DELETE
    @Path("/{id}")
-   @ResponseParser(DataCenterParser.class)
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void delete(@PathParam("id") String id);
    

@@ -14,15 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.domain;
+package org.apache.jclouds.profitbricks.rest.features;
 
-import com.google.common.base.Enums;
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
+import java.io.Closeable;
+import javax.ws.rs.Path;
+import org.apache.jclouds.profitbricks.rest.domain.Image;
+import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.http.functions.ParseJson;
+import org.jclouds.json.Json;
+import org.jclouds.rest.annotations.RequestFilters;
 
-public enum LicenceType {
-
-   WINDOWS, LINUX, OTHER, UNRECOGNIZED;
-
-   public static LicenceType fromValue(String v) {
-      return Enums.getIfPresent(LicenceType.class, v).or(UNRECOGNIZED);
+@Path("/images")
+@RequestFilters(BasicAuthentication.class)
+public interface ImageApi extends Closeable {
+   
+   static final class ImageParser extends ParseJson<Image> {
+      @Inject ImageParser(Json json) {
+         super(json, TypeLiteral.get(Image.class));
+      }
    }
+   
 }

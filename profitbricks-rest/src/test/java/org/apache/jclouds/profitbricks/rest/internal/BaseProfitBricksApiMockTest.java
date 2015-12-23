@@ -81,6 +81,10 @@ public class BaseProfitBricksApiMockTest {
    protected String url(String path) {
       return server.getUrl(path).toString();
    }
+   
+   protected MockResponse response204() {
+      return new MockResponse().setStatus("HTTP/1.1 204 No Content");
+   }
 
    protected MockResponse response404() {
       return new MockResponse().setStatus("HTTP/1.1 404 Not Found");
