@@ -222,7 +222,7 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
                     azureComputeConstants.operationTimeout());
             logger.warn(warnMessage);
             final String illegalStateExceptionMessage = format("%s. Please, try by increasing `%s` and try again",
-                    AzureComputeProperties.OPERATION_TIMEOUT, warnMessage);
+                    warnMessage, AzureComputeProperties.OPERATION_TIMEOUT);
             throw new IllegalStateException(illegalStateExceptionMessage);
          }
          return api.getStorageAccountApi().get(name);
