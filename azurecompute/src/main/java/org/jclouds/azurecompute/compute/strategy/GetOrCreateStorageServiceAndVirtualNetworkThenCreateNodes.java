@@ -210,14 +210,14 @@ public class GetOrCreateStorageServiceAndVirtualNetworkThenCreateNodes
                     + "Please, try by choosing a different `storageAccountName` in templateOptions and try again", name));
          }
          logger.debug("Creating a storage service account '%s' in location '%s' ...", name, location);
-         final String createStorateServiceRequestId = api.getStorageAccountApi().create(
+         final String createStorageServiceRequestId = api.getStorageAccountApi().create(
                  CreateStorageServiceParams.builder()
                  .serviceName(name)
                  .label(name)
                  .location(location)
                  .accountType(StorageService.AccountType.valueOf(type))
                  .build());
-         if (!operationSucceededPredicate.apply(createStorateServiceRequestId)) {
+         if (!operationSucceededPredicate.apply(createStorageServiceRequestId)) {
             final String warnMessage = format("Create storage service account has not been completed within %sms.",
                     azureComputeConstants.operationTimeout());
             logger.warn(warnMessage);
