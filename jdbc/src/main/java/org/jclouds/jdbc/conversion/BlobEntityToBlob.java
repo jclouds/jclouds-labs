@@ -65,6 +65,7 @@ public class BlobEntityToBlob implements Function<BlobEntity, Blob> {
       blob.getMetadata().setSize(blobEntity.getSize());
       blob.getMetadata().setUserMetadata(blobEntity.getUserMetadata());
 
+      blob.getMetadata().getContentMetadata().setCacheControl(payload.getCacheControl());
       blob.getMetadata().getContentMetadata().setContentType(payload.getContentType());
       blob.getMetadata().getContentMetadata().setContentDisposition(payload.getContentDisposition());
       blob.getMetadata().getContentMetadata().setContentEncoding(payload.getContentEncoding());

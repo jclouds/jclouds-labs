@@ -37,6 +37,7 @@ public class PayloadEntity {
    @ElementCollection(fetch = FetchType.EAGER)
    private List<Long> chunks;
 
+   private String cacheControl;
    private String contentType;
    private Long contentLength;
    private byte[] contentMD5;
@@ -45,9 +46,10 @@ public class PayloadEntity {
    private String contentEncoding;
    private Date expires;
 
-   public PayloadEntity(List<Long> chunks, String contentType, Long contentLength, byte[] contentMD5,
+   public PayloadEntity(List<Long> chunks, String cacheControl, String contentType, Long contentLength, byte[] contentMD5,
          String contentDisposition, String contentLanguage, String contentEncoding, Date expires) {
       this.chunks = chunks;
+      this.cacheControl = cacheControl;
       this.contentType = contentType;
       this.contentLength = contentLength;
       this.contentMD5 = contentMD5;
@@ -74,6 +76,14 @@ public class PayloadEntity {
 
    public void setChunks(List<Long> chunks) {
       this.chunks = chunks;
+   }
+
+   public String getCacheControl() {
+      return cacheControl;
+   }
+
+   public void setCacheControl(String cacheControl) {
+      this.cacheControl = cacheControl;
    }
 
    public String getContentType() {
@@ -138,6 +148,7 @@ public class PayloadEntity {
 
    public static class Builder {
       private List<Long> chunks;
+      private String cacheControl;
       private String contentType;
       private Long contentLength;
       private byte[] contentMD5;
@@ -152,6 +163,11 @@ public class PayloadEntity {
 
       public Builder chunks(List<Long> chunks) {
          this.chunks = chunks;
+         return this;
+      }
+
+      public Builder cacheControl(String cacheControl) {
+         this.cacheControl = cacheControl;
          return this;
       }
 
@@ -191,7 +207,7 @@ public class PayloadEntity {
       }
 
       public PayloadEntity build() {
-         return new PayloadEntity(chunks, contentType, contentLength, contentMD5, contentDisposition, contentLanguage, contentEncoding, expires);
+         return new PayloadEntity(chunks, cacheControl, contentType, contentLength, contentMD5, contentDisposition, contentLanguage, contentEncoding, expires);
       }
    }
 

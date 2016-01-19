@@ -29,6 +29,7 @@ public class BlobToBlobEntity implements Function<Blob, BlobEntity> {
       MutableBlobMetadata metadata = blob.getMetadata();
       ContentMetadata contentMetadata = metadata.getContentMetadata();
       PayloadEntity payload = PayloadEntity.builder()
+            .cacheControl(contentMetadata.getCacheControl())
             .contentDisposition(contentMetadata.getContentDisposition())
             .contentEncoding(contentMetadata.getContentEncoding())
             .contentLanguage(contentMetadata.getContentLanguage())
