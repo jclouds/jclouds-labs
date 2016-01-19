@@ -21,6 +21,7 @@ import com.google.inject.Module;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import org.jclouds.blobstore.integration.internal.BaseContainerIntegrationTest;
 import org.testng.annotations.Test;
+import org.testng.SkipException;
 
 @Test(groups = { "integration" }, singleThreaded = true,  testName = "blobstore.EclipselinkH2ContainerIntegrationTest")
 public class EclipselinkH2ContainerIntegrationTest extends BaseContainerIntegrationTest {
@@ -31,5 +32,11 @@ public class EclipselinkH2ContainerIntegrationTest extends BaseContainerIntegrat
    @Override
    protected Iterable<Module> setupModules() {
       return ImmutableSet.<Module> of(this.getLoggingModule(), new JpaPersistModule("jclouds-test-h2"));
+   }
+
+   @Override
+   @Test(groups = { "integration", "live" })
+   public void testSetContainerAccess() throws Exception {
+      throw new SkipException("jdbc does not support anonymous access");
    }
 }

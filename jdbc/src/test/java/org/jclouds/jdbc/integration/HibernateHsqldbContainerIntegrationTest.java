@@ -23,6 +23,7 @@ import com.google.inject.Module;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import org.jclouds.blobstore.integration.internal.BaseContainerIntegrationTest;
 import org.testng.annotations.Test;
+import org.testng.SkipException;
 
 @Test(groups = { "integration" }, singleThreaded = true,  testName = "blobstore.HibernateHsqldbContainerIntegrationTest")
 public class HibernateHsqldbContainerIntegrationTest extends BaseContainerIntegrationTest {
@@ -38,5 +39,11 @@ public class HibernateHsqldbContainerIntegrationTest extends BaseContainerIntegr
    @Override
    public void testBlobNameEscaping(Set<String> blobNames) throws InterruptedException {
        //This test fails due to how hibernate ignores trailing whitespaces in keys.
+   }
+
+   @Override
+   @Test(groups = { "integration", "live" })
+   public void testSetContainerAccess() throws Exception {
+      throw new SkipException("jdbc does not support anonymous access");
    }
 }
