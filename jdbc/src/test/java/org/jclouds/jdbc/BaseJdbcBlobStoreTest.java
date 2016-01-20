@@ -22,7 +22,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.ByteSource;
 import com.google.inject.Module;
-import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobRequestSigner;
@@ -88,7 +87,6 @@ public abstract class BaseJdbcBlobStoreTest {
 
    @AfterMethod
    protected void tearDown() throws IOException {
-      context.utils().injector().getInstance(PersistService.class).stop();
       context.close();
    }
 

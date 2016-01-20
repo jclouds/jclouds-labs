@@ -16,14 +16,24 @@
  */
 package org.jclouds.jdbc.config;
 
+import java.io.Closeable;
+
+import org.jclouds.lifecycle.Closer;
+
 import com.google.inject.Inject;
 import com.google.inject.persist.PersistService;
 
 public class JPAInitializer {
 
    @Inject
-   private JPAInitializer(PersistService persistService) {
+   private JPAInitializer(final PersistService persistService, Closer closer) {
       persistService.start();
+      closer.addToClose(new Closeable() {
+         @Override
+         public void close() {
+            persistService.stop();
+         }
+      });
    }
 
 }
