@@ -76,7 +76,6 @@
     <module>cloudsigma2-sjc</module>
     <module>cloudsigma2-wdc</module>
     <module>cloudsigma2-zrh</module>
-    <module>digitalocean2</module>
     <module>jdbc</module>
     <module>joyent-cloudapi</module>
     <module>joyentcloud</module>
