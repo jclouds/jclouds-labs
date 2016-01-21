@@ -77,4 +77,47 @@ public class RoleHandlerTest extends BaseHandlerTest {
               null
       );
    }
+
+   public void test2() {
+      InputStream is = getClass().getResourceAsStream("/role2.xml");
+      Role result = factory.create(new RoleHandler(new ConfigurationSetHandler(new InputEndpointHandler(), new SubnetNameHandler()),
+              new OSVirtualHardDiskHandler(),
+              new DataVirtualHardDiskHandler(),
+              new ResourceExtensionReferenceHandler(new ResourceExtensionParameterValueHandler()))).parse(is);
+
+      assertEquals(result, expected2());
+   }
+
+   public static Role expected2() {
+      return Role.create(
+              "test",
+              "PersistentVMRole",
+              null,
+              null,
+              ImmutableList.of(Role.ConfigurationSet.create(
+                              "NetworkConfiguration",
+                              ImmutableList.of(
+                                      Role.ConfigurationSet.InputEndpoint.create("SSH", "tcp", 22, 22, "168.61.166.228", false, null, null, null)
+                              ),
+                              ImmutableList.of(Role.ConfigurationSet.SubnetName.create("Subnet-1")),
+                              null,
+                              ImmutableList.<Role.ConfigurationSet.PublicIP>of(),
+                              null)
+              ),
+              ImmutableList.<Role.ResourceExtensionReference>of(),
+              null,
+              ImmutableList.<DataVirtualHardDisk>of(),
+              Role.OSVirtualHardDisk.create(
+                      "ReadWrite",
+                      "test-1452267291453",
+                      null,
+                      null,
+                      URI.create("test"),
+                      null,
+                      OSImage.Type.LINUX),
+              RoleSize.Type.BASIC_A1,
+              true,
+              null
+      );
+   }
 }

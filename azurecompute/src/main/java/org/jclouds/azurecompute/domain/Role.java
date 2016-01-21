@@ -207,6 +207,7 @@ public abstract class Role {
 
       public abstract URI mediaLink();
 
+      @Nullable
       public abstract String sourceImageName();
 
       public abstract OSImage.Type os();
