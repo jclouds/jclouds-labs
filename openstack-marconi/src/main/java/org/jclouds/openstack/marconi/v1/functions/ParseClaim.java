@@ -22,6 +22,7 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Claim;
 import org.jclouds.openstack.marconi.v1.domain.Message;
+import org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 
 import javax.inject.Inject;
 import java.beans.ConstructorProperties;
@@ -29,7 +30,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
-import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_ID_FROM_HREF;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
 

@@ -20,11 +20,11 @@ import com.google.common.base.Function;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.openstack.marconi.v1.domain.Message;
+import org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 
 import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.MessageWithHref;
 import static org.jclouds.openstack.marconi.v1.functions.ParseMessagesToStream.TO_MESSAGE;
 
 public class ParseMessage implements Function<HttpResponse, Message> {

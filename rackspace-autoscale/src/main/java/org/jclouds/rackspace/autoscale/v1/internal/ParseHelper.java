@@ -19,16 +19,15 @@ package org.jclouds.rackspace.autoscale.v1.internal;
 import java.util.List;
 import java.util.Map;
 
-import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy;
+import org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
+import org.jclouds.rackspace.autoscale.v1.domain.LaunchConfiguration;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
-
-import static org.jclouds.rackspace.autoscale.v1.domain.CreateScalingPolicy.ScalingPolicyType;
 
 /**
  * 
