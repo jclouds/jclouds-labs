@@ -16,10 +16,6 @@
  */
 package org.jclouds.joyent.cloudapi.v6_5.features;
 
-import static org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-import static org.jclouds.Fallbacks.VoidOnNotFoundOr404;
-
 import java.util.Set;
 
 import javax.inject.Named;
@@ -31,6 +27,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Key;
 import org.jclouds.rest.annotations.BinderParam;

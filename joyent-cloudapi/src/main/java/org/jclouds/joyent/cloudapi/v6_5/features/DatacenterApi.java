@@ -17,7 +17,6 @@
 package org.jclouds.joyent.cloudapi.v6_5.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.jclouds.Fallbacks.EmptyMapOnNotFoundOr404;
 
 import java.net.URI;
 import java.util.Map;
@@ -27,6 +26,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import org.jclouds.Fallbacks.EmptyMapOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;

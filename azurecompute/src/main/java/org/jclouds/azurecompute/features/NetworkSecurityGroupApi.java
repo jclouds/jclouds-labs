@@ -16,7 +16,6 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import java.util.List;
 
 import javax.inject.Named;
@@ -30,6 +29,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.azurecompute.binders.NetworkSecurityGroupToXML;
 import org.jclouds.azurecompute.binders.RuleToXML;

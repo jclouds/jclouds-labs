@@ -16,9 +16,9 @@
  */
 package org.jclouds.azurecompute.xml;
 
-import static org.jclouds.azurecompute.domain.NetworkConfiguration.AddressSpace;
 import static org.jclouds.util.SaxUtils.currentOrNull;
 
+import org.jclouds.azurecompute.domain.NetworkConfiguration.AddressSpace;
 import org.jclouds.http.functions.ParseSax;
 import org.xml.sax.Attributes;
 

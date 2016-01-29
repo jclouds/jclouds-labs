@@ -18,9 +18,6 @@ package org.jclouds.joyent.cloudapi.v6_5.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-import static org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 
 import java.util.Set;
 
@@ -34,6 +31,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.jclouds.Fallbacks.EmptySetOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.joyent.cloudapi.v6_5.domain.Machine;
 import org.jclouds.joyent.cloudapi.v6_5.options.CreateMachineOptions;

@@ -19,8 +19,8 @@ package org.jclouds.azurecompute.internal;
 import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.tryFind;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;
 import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -36,6 +36,7 @@ import org.jclouds.azurecompute.domain.NetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.AddressSpace;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.Subnet;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkConfiguration;
+import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;
 import org.jclouds.azurecompute.domain.StorageService;
 import org.jclouds.azurecompute.util.ConflictManagementPredicate;
 import org.testng.annotations.AfterClass;

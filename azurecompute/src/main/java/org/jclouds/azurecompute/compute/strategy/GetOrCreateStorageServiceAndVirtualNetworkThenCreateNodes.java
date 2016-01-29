@@ -21,7 +21,6 @@ import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.Iterables.tryFind;
 import static java.lang.String.format;
-import static org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule.AzureComputeConstants;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +30,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.azurecompute.AzureComputeApi;
+import org.jclouds.azurecompute.compute.config.AzureComputeServiceContextModule.AzureComputeConstants;
 import org.jclouds.azurecompute.compute.options.AzureComputeTemplateOptions;
 import org.jclouds.azurecompute.compute.predicates.StorageServicePredicates;
 import org.jclouds.azurecompute.config.AzureComputeProperties;

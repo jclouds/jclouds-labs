@@ -16,6 +16,8 @@
  */
 package org.jclouds.azurecompute.features;
 
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.azurecompute.binders.VMImageParamsToXML;
 import org.jclouds.azurecompute.domain.VMImage;
 import org.jclouds.azurecompute.domain.VMImageParams;
@@ -39,8 +41,6 @@ import javax.ws.rs.Produces;
 import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
 /**
  * The Service Management API includes operations for managing the VM Images in your subscription.

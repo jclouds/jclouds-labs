@@ -16,9 +16,6 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-
 import java.util.List;
 
 import javax.inject.Named;
@@ -29,6 +26,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.azurecompute.binders.NetworkConfigurationToXML;
 import org.jclouds.azurecompute.domain.NetworkConfiguration;
 import org.jclouds.azurecompute.domain.NetworkConfiguration.VirtualNetworkSite;

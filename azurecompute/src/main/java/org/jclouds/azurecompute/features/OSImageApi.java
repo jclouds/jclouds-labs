@@ -17,8 +17,6 @@
 package org.jclouds.azurecompute.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
 
 import java.util.List;
 
@@ -32,6 +30,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.azurecompute.binders.OSImageParamsToXML;
 import org.jclouds.azurecompute.domain.OSImage;
 import org.jclouds.azurecompute.domain.OSImageParams;

@@ -16,8 +16,6 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -28,6 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.azurecompute.binders.CaptureVMImageParamsToXML;
 import org.jclouds.azurecompute.binders.RoleToXML;
 import org.jclouds.azurecompute.domain.CaptureVMImageParams;

@@ -16,8 +16,6 @@
  */
 package org.jclouds.azurecompute.features;
 
-import static org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
-
 import java.util.List;
 
 import javax.inject.Named;
@@ -26,6 +24,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.azurecompute.domain.Location;
 import org.jclouds.azurecompute.xml.ListLocationsHandler;
 import org.jclouds.rest.annotations.Fallback;

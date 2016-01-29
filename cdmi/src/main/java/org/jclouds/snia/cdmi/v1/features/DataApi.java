@@ -18,8 +18,6 @@ package org.jclouds.snia.cdmi.v1.features;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-import static org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import static org.jclouds.snia.cdmi.v1.ObjectTypes.DATAOBJECT;
 
 import javax.ws.rs.Consumes;
@@ -30,6 +28,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.jclouds.Fallbacks.NullOnNotFoundOr404;
+import org.jclouds.Fallbacks.VoidOnNotFoundOr404;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
