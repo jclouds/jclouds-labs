@@ -29,7 +29,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.Fallbacks.FalseOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.javax.annotation.Nullable;
@@ -90,7 +89,6 @@ public interface ClaimApi {
    @POST
    @Payload("%7B\"ttl\":{ttl},\"grace\":{grace}%7D")
    @ResponseParser(ParseMessagesToList.class)
-   @Fallback(EmptyListOnNotFoundOr404.class)
    List<Message> claim(@PayloadParam("ttl") int ttl, @PayloadParam("grace") int grace, @QueryParam("limit") int limit);
 
    /**
@@ -121,8 +119,7 @@ public interface ClaimApi {
    @Path("/{claim_id}")
    @Produces(MediaType.APPLICATION_JSON)
    @Payload("%7B\"ttl\":{ttl}%7D")
-   @Fallback(FalseOnNotFoundOr404.class)
-   boolean update(@PathParam("claim_id") String claimId, @PayloadParam("ttl") int ttl);
+   void update(@PathParam("claim_id") String claimId, @PayloadParam("ttl") int ttl);
 
    /**
     * This operation immediately releases a claim, making any remaining, undeleted messages that are associated with

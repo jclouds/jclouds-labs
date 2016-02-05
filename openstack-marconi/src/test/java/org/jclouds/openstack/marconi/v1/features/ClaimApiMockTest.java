@@ -112,9 +112,7 @@ public class ClaimApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
          ClaimApi claimApi = api.getClaimApi("DFW", CLIENT_ID, "jclouds-test");
 
-         boolean success = claimApi.update("52a8d23eb04a584f1bbd4f47", 400);
-
-         assertTrue(success);
+         claimApi.update("52a8d23eb04a584f1bbd4f47", 400);
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

@@ -66,8 +66,7 @@ public interface QueueApi {
    @Named("queue:create")
    @PUT
    @Path("/{name}")
-   @Fallback(FalseOnNotFoundOr404.class)
-   boolean create(@PathParam("name") String name);
+   void create(@PathParam("name") String name);
 
    /**
     * Delete a queue.
@@ -130,8 +129,7 @@ public interface QueueApi {
    @PUT
    @Path("/{name}/metadata")
    @Produces(MediaType.APPLICATION_JSON)
-   @Fallback(FalseOnNotFoundOr404.class)
-   boolean setMetadata(@PathParam("name") String name,
+   void setMetadata(@PathParam("name") String name,
                        @BinderParam(BindToJsonPayload.class) Map<String, String> metadata);
 
    /**

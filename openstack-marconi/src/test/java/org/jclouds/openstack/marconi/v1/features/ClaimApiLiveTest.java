@@ -43,9 +43,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
    public void createQueues() throws Exception {
       for (String regionId : regions) {
          QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
-         boolean success = queueApi.create("jclouds-test");
-
-         assertTrue(success);
+         queueApi.create("jclouds-test");
       }
    }
 
@@ -112,10 +110,7 @@ public class ClaimApiLiveTest extends BaseMarconiApiLiveTest {
    public void updateClaim() throws Exception {
       for (String regionId : regions) {
          ClaimApi claimApi = api.getClaimApi(regionId, CLIENT_ID, "jclouds-test");
-
-         boolean success = claimApi.update(claimIds.get(regionId).get(0), 400);
-
-         assertTrue(success);
+         claimApi.update(claimIds.get(regionId).get(0), 400);
       }
    }
 

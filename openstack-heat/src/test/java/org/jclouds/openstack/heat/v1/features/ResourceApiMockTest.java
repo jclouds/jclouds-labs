@@ -63,30 +63,4 @@ public class ResourceApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   public void testListTypesIsEmpty() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         ResourceApi api = heatApi.getResourceApi("RegionOne");
-
-         List<String> resourceTypes = api.listTypes();
-
-         /*
-          * Check request
-          */
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/resource_types");
-
-         /*
-          * Check response
-          */
-         assertThat(resourceTypes).isEmpty();
-      } finally {
-         server.shutdown();
-      }
-   }
 }

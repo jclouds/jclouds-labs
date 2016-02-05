@@ -18,12 +18,10 @@ package org.jclouds.openstack.heat.v1.features;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNull;
 
 import org.jclouds.openstack.heat.v1.HeatApi;
 import org.jclouds.openstack.heat.v1.domain.Template;
 import org.jclouds.openstack.heat.v1.internal.BaseHeatApiMockTest;
-import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -59,27 +57,6 @@ public class TemplateApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   public void testGetTemplateFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(
-            new MockResponse().setResponseCode(404).setBody(stringFromResource("/template_get_response.json"))));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         TemplateApi api = heatApi.getTemplateApi("RegionOne");
-
-         Template template = api.get("simple_stack", "3095aefc-09fb-4bc7-b1f0-f21a304e864c");
-
-         assertNull(template);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET",
-               BASE_URI + "/stacks/simple_stack/3095aefc-09fb-4bc7-b1f0-f21a304e864c/template");
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testValidateTemplate() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -105,22 +82,5 @@ public class TemplateApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   @Test(expectedExceptions = ResourceNotFoundException.class)
-   public void testValidateTemplateFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(
-            new MockResponse().setResponseCode(404).setBody(stringFromResource("/template_validate_response.json"))));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         TemplateApi api = heatApi.getTemplateApi("RegionOne");
-
-         Template template = api.validate("https://examplevalidateurl.com/exampletemplate.json");
-
-      } finally {
-         server.shutdown();
-      }
-   }
 }
 

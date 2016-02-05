@@ -68,8 +68,6 @@ public interface MessageApi {
    @Named("message:create")
    @POST
    @ResponseParser(ParseMessagesCreated.class)
-   @Fallback(NullOnNotFoundOr404.class)
-   @Nullable
    MessagesCreated create(@BinderParam(BindToJsonPayload.class) List<CreateMessage> messages);
 
    /**

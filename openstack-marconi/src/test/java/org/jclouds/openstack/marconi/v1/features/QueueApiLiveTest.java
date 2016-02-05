@@ -54,9 +54,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
          QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
 
          for (int i = 0; i < 6; i++) {
-            boolean success = queueApi.create("jclouds-test-" + i);
-
-            assertTrue(success);
+            queueApi.create("jclouds-test-" + i);
          }
       }
    }
@@ -82,9 +80,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
          QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
 
          for (int i = 6; i < 12; i++) {
-            boolean success = queueApi.create("jclouds-test-" + i);
-
-            assertTrue(success);
+            queueApi.create("jclouds-test-" + i);
          }
       }
    }
@@ -139,9 +135,7 @@ public class QueueApiLiveTest extends BaseMarconiApiLiveTest {
       for (String regionId : regions) {
          QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
          Map<String, String> metadata = ImmutableMap.of("key1", "value1");
-         boolean success = queueApi.setMetadata("jclouds-test-1", metadata);
-
-         assertTrue(success);
+         queueApi.setMetadata("jclouds-test-1", metadata);
       }
    }
 

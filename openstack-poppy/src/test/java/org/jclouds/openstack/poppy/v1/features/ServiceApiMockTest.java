@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertFalse;
 
 import java.io.IOException;
 import java.net.URI;
@@ -117,28 +116,6 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
       }
    }
 
-   public void testGetServiceFailOn404() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
-         ServiceApi api = poppyApi.getServiceApi();
-
-         Service oneService  = api.get("unknown");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/services/unknown");
-
-         assertThat(oneService).isNull();
-
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testListPagedService() throws IOException, InterruptedException, URISyntaxException {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -174,34 +151,6 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
       }
    }
 
-   public void testListPagedServiceFail() throws IOException, InterruptedException, URISyntaxException {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404).setBody(stringFromResource("/poppy_service_list_response_paged1.json"))));
-
-      try {
-         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
-         ServiceApi api = poppyApi.getServiceApi();
-
-         // Note: Lazy! Have to actually look at the collection.
-         List<Service> services = api.list().concat().toList();
-
-         /*
-          * Check request
-          */
-         assertEquals(server.getRequestCount(), 2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", "/v1.0/123123/services");
-
-         /*
-          * Check response
-          */
-         assertTrue(services.isEmpty());
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testListSpecificPageService() throws IOException, InterruptedException, URISyntaxException {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -224,32 +173,6 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
           */
          assertNotNull(services);
          assertEquals(services.first().get().getId(), "96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void testListSpecificPageServiceFail() throws IOException, InterruptedException, URISyntaxException {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404).setBody(stringFromResource("/poppy_service_list_response_paged1.json"))));
-
-      try {
-         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
-         ServiceApi api = poppyApi.getServiceApi();
-
-         PaginatedCollection<Service> services = api.list(PaginationOptions.Builder.limit(2).marker("abcdefg"));
-
-         /*
-          * Check request
-          */
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", "/v1.0/123123/services?limit=2&marker=abcdefg");
-
-         /*
-          * Check response
-          */
-         assertTrue(services.isEmpty());
       } finally {
          server.shutdown();
       }
@@ -306,28 +229,6 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
       }
    }
 
-   public void testDeleteServiceFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(
-            new MockResponse().setResponseCode(404)));
-
-      try {
-         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
-         ServiceApi api = poppyApi.getServiceApi();
-
-         boolean result = api.delete("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "DELETE", BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
-
-         assertFalse(result);
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testDeleteServiceAsset() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -346,29 +247,6 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
                BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?url=/images/1.jpg");
 
          assertTrue(result);
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void testDeleteServiceAssetFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(
-            new MockResponse().setResponseCode(404)));
-
-      try {
-         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
-         ServiceApi api = poppyApi.getServiceApi();
-
-         boolean result = api.deleteAsset("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0", "/images/1.jpg");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "DELETE",
-               BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?url=/images/1.jpg");
-
-         assertFalse(result);
       } finally {
          server.shutdown();
       }
@@ -397,26 +275,4 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
       }
    }
 
-   public void testDeleteAllServiceAssetsFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(
-            new MockResponse().setResponseCode(404)));
-
-      try {
-         PoppyApi poppyApi = api(server.getUrl("/").toString(), "openstack-poppy", overrides);
-         ServiceApi api = poppyApi.getServiceApi();
-
-         boolean result = api.deleteAssets("96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "DELETE",
-               BASE_URI + "/services/96737ae3-cfc1-4c72-be88-5d0e7cc9a3f0/assets?all=true");
-
-         assertFalse(result);
-      } finally {
-         server.shutdown();
-      }
-   }
 }

@@ -114,7 +114,6 @@ public interface ServiceApi {
    @POST
    @ResponseParser(ParseServiceURIFromHeaders.class)
    @Produces(MediaType.APPLICATION_JSON)
-   @Nullable
    URI create(@BinderParam(BindToJsonPayload.class) CreateService createService);
 
    /**
@@ -144,7 +143,6 @@ public interface ServiceApi {
    @Path("/{id}")
    @ResponseParser(ParseServiceURIFromHeaders.class)
    @MapBinder(JSONPatchUpdate.class)
-   @Nullable
    URI update(@PathParam("id") String id, @PayloadParam("service") Service service, @PayloadParam("updateService") UpdateService updateService);
 
    /**

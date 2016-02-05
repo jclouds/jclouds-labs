@@ -16,17 +16,16 @@
  */
 package org.jclouds.openstack.marconi.v1.features;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
+
 import org.jclouds.openstack.marconi.v1.MarconiApi;
 import org.jclouds.openstack.marconi.v1.domain.Queue;
 import org.jclouds.openstack.marconi.v1.domain.QueueStats;
 import org.jclouds.openstack.marconi.v1.domain.Queues;
-import org.jclouds.openstack.marconi.v1.options.ListQueuesOptions;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.testng.annotations.Test;
 
@@ -53,9 +52,7 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
       try {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
          QueueApi queueApi = api.getQueueApi("DFW", CLIENT_ID);
-         boolean success = queueApi.create("jclouds-test");
-
-         assertTrue(success);
+         queueApi.create("jclouds-test");
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
@@ -108,27 +105,6 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
       }
    }
 
-   public void doesNotExistQueue() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApi("DFW", CLIENT_ID);
-         boolean success = queueApi.exists("jclouds-blerg");
-
-         assertFalse(success);
-
-         assertEquals(server.getRequestCount(), 2);
-         assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
-         assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues/jclouds-blerg HTTP/1.1");
-      }
-      finally {
-         server.shutdown();
-      }
-   }
-
    public void listZeroPagesOfQueues() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(new MockResponse().setBody(accessRackspace));
@@ -171,42 +147,6 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues?detailed=false HTTP/1.1");
          assertEquals(server.takeRequest().getRequestLine(), "GET /v1/123123/queues?detailed=false&marker=jclouds-test HTTP/1.1");
-      }
-      finally {
-         server.shutdown();
-      }
-   }
-
-   public void listOnePageOfQueuesFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApi("DFW", CLIENT_ID);
-
-         FluentIterable<Queue> queues = queueApi.list(false).concat();
-
-         assertTrue(queues.isEmpty(), "Expecting empty queues but was " + queues.toString());
-      }
-      finally {
-         server.shutdown();
-      }
-   }
-
-   public void listPagedIterableCollectionQueuesFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(new MockResponse().setBody(accessRackspace));
-      server.enqueue(new MockResponse().setResponseCode(404));
-
-      try {
-         MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
-         QueueApi queueApi = api.getQueueApi("DFW", CLIENT_ID);
-
-         Queues queues = queueApi.list(ListQueuesOptions.NONE);
-
-         assertTrue(queues.isEmpty(), "Expecting empty queues but was " + queues.toString());
       }
       finally {
          server.shutdown();
@@ -288,9 +228,7 @@ public class QueueApiMockTest extends BaseOpenStackMockTest<MarconiApi> {
          MarconiApi api = api(server.getUrl("/").toString(), "openstack-marconi");
          QueueApi queueApi = api.getQueueApi("DFW", CLIENT_ID);
          Map<String, String> metadata = ImmutableMap.of("key1", "value1");
-         boolean success = queueApi.setMetadata("jclouds-test", metadata);
-
-         assertTrue(success);
+         queueApi.setMetadata("jclouds-test", metadata);
 
          assertEquals(server.getRequestCount(), 2);
          assertEquals(server.takeRequest().getRequestLine(), "POST /tokens HTTP/1.1");

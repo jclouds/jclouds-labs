@@ -18,8 +18,6 @@ package org.jclouds.openstack.heat.v1.features;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.io.IOException;
@@ -74,28 +72,6 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   public void testGetStackFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         Stack stack = api.get("Non_Existing_Stack", "Non-Existing-Stack");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks/Non_Existing_Stack/Non-Existing-Stack");
-
-         assertNull(stack);
-
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testGeStackWithIDOnly() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -118,51 +94,6 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
          server.shutdown();
       }
    }
-
-   public void testGetStackWithIDOnlyFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         Stack stack = api.get("Non-Existing-Stack");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks/Non-Existing-Stack");
-
-         assertNull(stack);
-
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void testGetStackResourceFail() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         StackResource stackResource = api.getStackResource(TEST_STACK_NAME, TEST_STACK_ID, "Non_Existing_Stack_resource");
-
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks/" + TEST_STACK_NAME + "/" + TEST_STACK_ID + "/resources/Non_Existing_Stack_resource");
-
-         assertNull(stackResource);
-
-      } finally {
-         server.shutdown();
-      }
-   }
-
 
    public void testList() throws Exception {
       MockWebServer server = mockOpenStackServer();
@@ -291,88 +222,6 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   public void testListIsEmpty() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         List<Stack> stacks = api.list();
-
-         /*
-          * Check request
-          */
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks");
-
-         /*
-          * Check response
-          */
-         assertThat(stacks).isEmpty();
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void testListWithOptionsIsEmpty() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         ListStackOptions options = ListStackOptions.Builder.name("Stack_dont_exist");
-         List<Stack> stacks = api.list(options);
-
-         /*
-          * Check request
-          */
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks?name=Stack_dont_exist");
-
-         /*
-          * Check response
-          */
-         assertThat(stacks).isEmpty();
-      } finally {
-         server.shutdown();
-      }
-   }
-
-   public void testListStackResourceIsEmpty() throws Exception {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         List<StackResource> stackResources = api.listStackResources("empty_stack", "empty_stack_id");
-
-         /*
-          * Check request
-          */
-         assertThat(server.getRequestCount()).isEqualTo(2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks/empty_stack/empty_stack_id/resources");
-
-         /*
-          * Check response
-          */
-         assertThat(stackResources).isEmpty();
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testCreateWithTemplateUrl() throws Exception {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -434,33 +283,6 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   public void testDeleteReturnFalseOn404Stack() throws IOException, InterruptedException {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         boolean result = api.delete("Non-Existing-Stack-Name", "Non-Existing-Stack-ID");
-
-         /*
-          * Check request
-          */
-         assertEquals(server.getRequestCount(), 2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "DELETE", BASE_URI + "/stacks/Non-Existing-Stack-Name/Non-Existing-Stack-ID");
-
-         /*
-          * Check response
-          */
-         assertFalse(result);
-      } finally {
-         server.shutdown();
-      }
-   }
-
    public void testUpdateStack() throws IOException, InterruptedException {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -516,29 +338,5 @@ public class StackApiMockTest extends BaseHeatApiMockTest {
       }
    }
 
-   public void testResourcesMetadataReturnNullOn404() throws IOException, InterruptedException {
-      MockWebServer server = mockOpenStackServer();
-      server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
-      server.enqueue(addCommonHeaders(new MockResponse().setResponseCode(404)));
-
-      try {
-         HeatApi heatApi = api(server.getUrl("/").toString(), "openstack-heat", overrides);
-         StackApi api = heatApi.getStackApi("RegionOne");
-
-         Map<String, Object> metadata = api.getStackResourceMetadata(TEST_STACK_NAME, TEST_STACK_ID, "Stack_Resource_dont_exist");
-
-         /*
-          * Check request
-          */
-         assertEquals(server.getRequestCount(), 2);
-         assertAuthentication(server);
-         assertRequest(server.takeRequest(), "GET", BASE_URI + "/stacks/" + TEST_STACK_NAME + "/" + TEST_STACK_ID + "/resources/Stack_Resource_dont_exist/metadata");
-         assertThat(metadata).isEmpty();
-
-
-      } finally {
-         server.shutdown();
-      }
-   }
 }
 

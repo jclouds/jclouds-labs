@@ -48,9 +48,7 @@ public class MessageApiLiveTest extends BaseMarconiApiLiveTest {
    public void createQueues() throws Exception {
       for (String regionId : regions) {
          QueueApi queueApi = api.getQueueApi(regionId, CLIENT_ID);
-         boolean success = queueApi.create("jclouds-test");
-
-         assertTrue(success);
+         queueApi.create("jclouds-test");
       }
    }
 
