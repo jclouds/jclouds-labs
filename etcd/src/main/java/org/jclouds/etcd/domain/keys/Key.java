@@ -15,27 +15,28 @@
  * limitations under the License.
  */
 
-package org.jclouds.etcd;
+package org.jclouds.etcd.domain.keys;
 
-import java.io.Closeable;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-import org.jclouds.etcd.features.KeysApi;
-import org.jclouds.etcd.features.MembersApi;
-import org.jclouds.etcd.features.MiscellaneousApi;
-import org.jclouds.etcd.features.StatisticsApi;
-import org.jclouds.rest.annotations.Delegate;
+import com.google.auto.value.AutoValue;
 
-public interface EtcdApi extends Closeable {
+@AutoValue
+public abstract class Key {
 
-   @Delegate
-   KeysApi keysApi();
+   public abstract String action();
 
-   @Delegate
-   MembersApi membersApi();
+   public abstract Node node();
 
-   @Delegate
-   MiscellaneousApi miscellaneousApi();
+   @Nullable
+   public abstract Node prevNode();
 
-   @Delegate
-   StatisticsApi statisticsApi();
+   Key() {
+   }
+
+   @SerializedNames({ "action", "node", "prevNode" })
+   public static Key create(String action, Node node, Node prevNode) {
+      return new AutoValue_Key(action, node, prevNode);
+   }
 }

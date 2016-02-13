@@ -17,6 +17,7 @@
 package org.jclouds.etcd;
 
 import java.util.Properties;
+import java.util.UUID;
 
 import org.jclouds.Constants;
 import org.jclouds.apis.BaseApiLiveTest;
@@ -42,5 +43,9 @@ public class BaseEtcdApiLiveTest extends BaseApiLiveTest<EtcdApi> {
       Properties overrides = super.setupProperties();
       overrides.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
       return overrides;
+   }
+
+   protected String randomString() {
+      return UUID.randomUUID().toString().replaceAll("-", "");
    }
 }

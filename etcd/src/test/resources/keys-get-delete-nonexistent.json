@@ -1,0 +1,6 @@
+{  
+   "errorCode":100,
+   "message":"Key not found",
+   "cause":"/foo",
+   "index":16
+}

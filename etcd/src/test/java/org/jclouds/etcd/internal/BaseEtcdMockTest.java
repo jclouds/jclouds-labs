@@ -17,14 +17,15 @@
 
 package org.jclouds.etcd.internal;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
+
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
@@ -80,6 +81,17 @@ public class BaseEtcdMockTest {
       assertThat(request.getMethod()).isEqualTo(method);
       assertThat(request.getPath()).isEqualTo(path);
       assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(MediaType.APPLICATION_JSON);
+      return request;
+   }
+
+   protected RecordedRequest assertSentWithFormData(MockWebServer server, String method, String path, String body)
+         throws InterruptedException {
+      RecordedRequest request = server.takeRequest();
+      assertThat(request.getMethod()).isEqualTo(method);
+      assertThat(request.getPath()).isEqualTo(path);
+      assertThat(request.getUtf8Body()).isEqualTo(body);
+      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(MediaType.APPLICATION_JSON);
+      assertThat(request.getHeader(HttpHeaders.CONTENT_TYPE)).isEqualTo(MediaType.APPLICATION_FORM_URLENCODED);
       return request;
    }
 

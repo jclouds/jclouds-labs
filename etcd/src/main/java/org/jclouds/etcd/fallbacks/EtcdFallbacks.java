@@ -19,10 +19,10 @@ package org.jclouds.etcd.fallbacks;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Throwables.propagate;
-
 import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
 import org.jclouds.Fallback;
+import org.jclouds.http.HttpUtils;
 
 public final class EtcdFallbacks {
 
@@ -31,6 +31,16 @@ public final class EtcdFallbacks {
          if (checkNotNull(t, "throwable") != null && t.getMessage().contains("{\"health\": \"false\"}")
                && returnValueOnCodeOrNull(t, true, equalTo(503)) != null) {
             return Boolean.FALSE;
+         }
+         throw propagate(t);
+      }
+   }
+
+   public static final class NullOnKeyNonFoundAnd404 implements Fallback<Object> {
+      public Object createOrPropagate(Throwable t) throws Exception {
+         if (checkNotNull(t, "throwable") != null && t.getMessage().contains("Key not found")
+               && HttpUtils.contains404(t)) {
+            return null;
          }
          throw propagate(t);
       }

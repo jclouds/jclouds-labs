@@ -32,7 +32,7 @@ import com.google.inject.Module;
 public class EtcdApiMetadata extends BaseHttpApiMetadata<EtcdApi> {
 
    public static final String API_VERSION = "v2";
-   public static final String BUILD_VERSION = "2.1.1";
+   public static final String BUILD_VERSION = "2.2.5";
 
    @Override
    public Builder toBuilder() {

@@ -1,0 +1,11 @@
+{  
+   "action":"set",
+   "node":{  
+      "createdIndex":5,
+      "expiration":"2016-02-16T13:33:21.970469165Z",
+      "key":"/hello",
+      "modifiedIndex":5,
+      "ttl":5,
+      "value":"world"
+   }
+}

@@ -16,13 +16,12 @@
  */
 package org.jclouds.etcd.features;
 
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.jclouds.etcd.BaseEtcdApiLiveTest;
 import org.jclouds.etcd.domain.members.CreateMember;
@@ -94,7 +93,7 @@ public class MembersApiLiveTest extends BaseEtcdApiLiveTest {
 
    @Test(dependsOnMethods = "testAddMemberWithIllegalFormat")
    public void testDeleteMemberNonExistentMember() {
-      boolean successful = api().delete(UUID.randomUUID().toString().replaceAll("-", ""));
+      boolean successful = api().delete(randomString());
       assertFalse(successful);
    }
 

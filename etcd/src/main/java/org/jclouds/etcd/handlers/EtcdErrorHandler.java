@@ -28,7 +28,6 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceAlreadyExistsException;
-import org.jclouds.rest.ResourceNotFoundException;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
@@ -52,9 +51,6 @@ public class EtcdErrorHandler implements HttpErrorHandler {
          switch (response.getStatusCode()) {
             case 400:
                exception = new IllegalArgumentException(message);
-               break;
-            case 404:
-               exception = new ResourceNotFoundException(message);
                break;
             case 409:
                exception = new ResourceAlreadyExistsException(message);
