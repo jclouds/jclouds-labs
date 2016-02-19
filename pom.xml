@@ -80,7 +80,6 @@
     <module>joyent-cloudapi</module>
     <module>joyentcloud</module>
     <module>abiquo</module>
-    <module>profitbricks</module>
     <module>profitbricks-rest</module>
   </modules>
 
