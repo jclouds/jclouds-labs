@@ -14,30 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.jclouds.profitbricks.rest.util;
 
-package org.apache.jclouds.profitbricks.rest;
+import java.util.regex.Pattern;
 
-import com.google.common.annotations.Beta;
-import java.io.Closeable;
-import org.apache.jclouds.profitbricks.rest.features.DataCenterApi;
-import org.apache.jclouds.profitbricks.rest.features.ServerApi;
-import org.apache.jclouds.profitbricks.rest.features.SnapshotApi;
-import org.apache.jclouds.profitbricks.rest.features.VolumeApi;
-import org.jclouds.rest.annotations.Delegate;
+public class MacAddresses {
 
-@Beta
-public interface ProfitBricksApi extends Closeable {
-   
-   @Delegate
-   DataCenterApi dataCenterApi();
-   
-   @Delegate
-   ServerApi serverApi();
-   
-   @Delegate
-   VolumeApi volumeApi();
-   
-   @Delegate
-   SnapshotApi snapshotApi();
+   private static final String MAC_ADDR_FORMAT = "^([0-9a-f]{2}[:]){5}([0-9a-f]{2})$";
+   private static final Pattern MAC_ADDR_PATTERN = Pattern.compile(MAC_ADDR_FORMAT);
 
+   public static boolean isMacAddress(String in) {
+      return MAC_ADDR_PATTERN.matcher(in).matches();
+   }
 }

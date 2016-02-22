@@ -14,51 +14,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.binder.server;
+package org.apache.jclouds.profitbricks.rest.binder.volume;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
-import org.apache.jclouds.profitbricks.rest.domain.Server;
+import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AttachVolumeRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.AttachVolumePayload> {
+public class UpdateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.UpdatePayload> {
 
-   final Map<String, Object> requestBuilder;
+   protected final Map<String, Object> requestBuilder;
    final Json jsonBinder;
-
-   String dataCenterId;
-   String serverId;
+   
+   private String dataCenterId;
+   private String volumeId;
 
    @Inject
-   AttachVolumeRequestBinder(Json jsonBinder) {
+   UpdateVolumeRequestBinder(Json jsonBinder) {
       super("volume");
       this.jsonBinder = jsonBinder;
       this.requestBuilder = new HashMap<String, Object>();
    }
 
    @Override
-   protected String createPayload(Server.Request.AttachVolumePayload payload) {
-      
-      checkNotNull(payload, "payload");
-      
-      checkNotNull(payload.dataCenterId(), "dataCenterId");
-      checkNotNull(payload.serverId(), "serverId");
-      checkNotNull(payload.volumeId(), "volumeId");
+   protected String createPayload(Volume.Request.UpdatePayload payload) {
 
-      dataCenterId = payload.dataCenterId();
-      serverId = payload.serverId();
+      checkNotNull(payload.dataCenterId(), "dataCenterId");
+      checkNotNull(payload.id(), "volumeId");
       
-      requestBuilder.put("id", payload.volumeId());
+      dataCenterId = payload.dataCenterId();
+      volumeId = payload.id();
+      
+      if (payload.name() != null)
+         requestBuilder.put("name",  payload.name());
+      
+      if (payload.size() != null)
+         requestBuilder.put("size",  payload.size());
+      
+      if (payload.bus() != null)
+         requestBuilder.put("bus",  payload.bus());
+      
       return jsonBinder.toJson(requestBuilder);
    }
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s/volumes", dataCenterId, serverId)).build();
+      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/volumes/%s", dataCenterId, volumeId)).build();
       return super.createRequest(request, payload);
    }
 

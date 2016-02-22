@@ -24,6 +24,7 @@ import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
+import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -142,8 +143,41 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
       List<Volume> volumes = serverApi().listAttachedVolumes(testServer.dataCenterId(), testServer.id());
       assertTrue(volumes.isEmpty());
    }
-      
+   
    @Test(dependsOnMethods = "testListVolumes")
+   public void testAttachVolume() {
+      
+      Volume volume = createVolume(dataCenter);
+      
+      assertVolumeAvailable(VolumeRef.create(dataCenter.id(), volume.id()));
+      
+      attachedVolume = serverApi().attachVolume(
+         Server.Request.attachVolumeBuilder()
+            .dataCenterId(testServer.dataCenterId())
+            .serverId(testServer.id())
+            .volumeId(volume.id())
+            .build()
+      );
+      
+      assertVolumeAttached(testServer, volume.id());
+      
+      List<Volume> volumes = serverApi().listAttachedVolumes(testServer.dataCenterId(), testServer.id());
+      assertEquals(volumes.size(), 1);
+   }
+   
+   @Test(dependsOnMethods = "testAttachVolume")
+   public void testGetVolume() {
+      Volume volume = serverApi().getVolume(testServer.dataCenterId(), testServer.id(), attachedVolume.id());
+      assertEquals(volume.id(), attachedVolume.id());
+   }
+   
+   @Test(dependsOnMethods = "testGetVolume")
+   public void testDetachVolume() {
+      serverApi().detachVolume(testServer.dataCenterId(), testServer.id(), attachedVolume.id());
+      assertVolumeDetached(testServer, attachedVolume.id());
+   }   
+   
+   @Test(dependsOnMethods = "testDetachVolume")
    public void testListCdroms() {
       List<Image> images = serverApi().listAttachedCdroms(testServer.dataCenterId(), testServer.id());
       assertTrue(images.isEmpty());
@@ -210,6 +244,31 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
             return serverApi().getCdrom(params[0], params[1], params[2]) == null;
          }
       }, complexId(server.dataCenterId(), server.id(), cdRomId));
+   }
+   
+   private void assertVolumeAttached(Server server, String volumeId) {
+      assertRandom(new Predicate<String>() {
+         @Override
+         public boolean apply(String args) {
+            String[] params = args.split(",");
+            Volume volume = serverApi().getVolume(params[0], params[1], params[2]);
+            
+            if (volume == null || volume.metadata() == null)
+               return false;
+            
+            return volume.metadata().state() == State.AVAILABLE;
+         }
+      }, complexId(server.dataCenterId(), server.id(), volumeId));
+   }
+
+   private void assertVolumeDetached(Server server, String volumeId) {
+      assertRandom(new Predicate<String>() {
+         @Override
+         public boolean apply(String args) {
+            String[] params = args.split(",");
+            return serverApi().getVolume(params[0], params[1], params[2]) == null;
+         }
+      }, complexId(server.dataCenterId(), server.id(), volumeId));
    }
       
 }

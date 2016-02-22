@@ -24,8 +24,6 @@ import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksApiMockTest;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "DataCenterApiMockTest", singleThreaded = true)
@@ -46,15 +44,6 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters");
    }
-   
-   @Test
-   public void testGetListWith404() throws InterruptedException {
-      server.enqueue(response404());
-      List<DataCenter> list = dataCenterApi().list(new DepthOptions().depth(1));
-      assertTrue(list.isEmpty());
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "/datacenters?depth=1");
-   }
     
    @Test
    public void testGetDataCenter() throws InterruptedException {
@@ -69,17 +58,6 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
       assertNotNull(dataCenter);
       assertEquals(dataCenter.properties().name(), "docker");
       
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "/datacenters/some-id");
-   }
-   
-   public void testGetDataCenterWith404() throws InterruptedException {
-      server.enqueue(response404());
-
-      DataCenter dataCenter = dataCenterApi().getDataCenter("some-id");
-      
-      assertNull(dataCenter);
-
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/some-id");
    }
@@ -118,16 +96,6 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
       server.enqueue(response204());
       
       dataCenterApi().delete("some-id");
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "DELETE", "/datacenters/some-id");
-   }
-   
-   @Test
-   public void testDeleteWith404() throws InterruptedException {
-      server.enqueue(response404());
-
-      dataCenterApi().delete("some-id");
-      
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "DELETE", "/datacenters/some-id");
    }

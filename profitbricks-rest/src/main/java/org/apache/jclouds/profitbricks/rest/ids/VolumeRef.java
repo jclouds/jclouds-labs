@@ -14,30 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.jclouds.profitbricks.rest.ids;
 
-package org.apache.jclouds.profitbricks.rest;
+import com.google.auto.value.AutoValue;
 
-import com.google.common.annotations.Beta;
-import java.io.Closeable;
-import org.apache.jclouds.profitbricks.rest.features.DataCenterApi;
-import org.apache.jclouds.profitbricks.rest.features.ServerApi;
-import org.apache.jclouds.profitbricks.rest.features.SnapshotApi;
-import org.apache.jclouds.profitbricks.rest.features.VolumeApi;
-import org.jclouds.rest.annotations.Delegate;
-
-@Beta
-public interface ProfitBricksApi extends Closeable {
+@AutoValue
+public abstract class VolumeRef {
    
-   @Delegate
-   DataCenterApi dataCenterApi();
-   
-   @Delegate
-   ServerApi serverApi();
-   
-   @Delegate
-   VolumeApi volumeApi();
-   
-   @Delegate
-   SnapshotApi snapshotApi();
-
+   public abstract String dataCenterId();
+   public abstract String volumeId();
+      
+   public static VolumeRef create(String dataCenterId, String volumeId) {
+      return new AutoValue_VolumeRef(dataCenterId, volumeId);
+   }
+    
 }

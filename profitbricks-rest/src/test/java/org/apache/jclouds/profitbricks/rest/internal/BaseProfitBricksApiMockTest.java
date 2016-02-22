@@ -85,17 +85,13 @@ public class BaseProfitBricksApiMockTest {
    protected MockResponse response204() {
       return new MockResponse().setStatus("HTTP/1.1 204 No Content");
    }
-
-   protected MockResponse response404() {
-      return new MockResponse().setStatus("HTTP/1.1 404 Not Found");
-   }
-
+   
    protected String stringFromResource(String resourceName) {
       try {
-	 return Resources.toString(getClass().getResource(resourceName), Charsets.UTF_8)
-		 .replace(DEFAULT_ENDPOINT, url(""));
+         return Resources.toString(getClass().getResource(resourceName), Charsets.UTF_8)
+            .replace(DEFAULT_ENDPOINT, url(""));
       } catch (IOException e) {
-	 throw Throwables.propagate(e);
+         throw Throwables.propagate(e);
       }
    }
 

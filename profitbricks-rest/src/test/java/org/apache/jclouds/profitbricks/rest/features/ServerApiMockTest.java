@@ -25,7 +25,6 @@ import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksApiMockTest;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "ServerApiMockTest", singleThreaded = true)
@@ -62,16 +61,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/datacenter-id/servers?depth=5");
    }
-   
-   @Test
-   public void testGetListWith404() throws InterruptedException {
-      server.enqueue(new MockResponse().setResponseCode(404));
-      List<Server> list = serverApi().getList("datacenter-id", new DepthOptions().depth(1));
-      assertTrue(list.isEmpty());
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "/datacenters/datacenter-id/servers?depth=1");
-   }
-    
+
    @Test
    public void testGetServer() throws InterruptedException {
       MockResponse response = new MockResponse();
@@ -106,17 +96,6 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       assertSent(this.server, "GET", "/datacenters/datacenter-id/servers/some-id?depth=5");
    }
    
-   public void testGetServerWith404() throws InterruptedException {
-      server.enqueue(response404());
-
-      Server server = serverApi().getServer("datacenter-id", "some-id");
-      
-      assertEquals(server, null);
-
-      assertEquals(this.server.getRequestCount(), 1);
-      assertSent(this.server, "GET", "/datacenters/datacenter-id/servers/some-id");
-   }
-   
    @Test
    public void testCreate() throws InterruptedException {
       server.enqueue(
@@ -143,7 +122,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
    @Test
    public void testUpdate() throws InterruptedException {
       server.enqueue(
-         new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
+         new MockResponse().setBody(stringFromResource("/server/get.json"))
       );
       
       api.serverApi().updateServer(
@@ -167,17 +146,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "DELETE", "/datacenters/datacenter-id/servers/some-id");
    }
-   
-   @Test
-   public void testDeleteWith404() throws InterruptedException {
-      server.enqueue(response404());
 
-      serverApi().deleteServer("datacenter-id", "some-id");
-      
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "DELETE", "/datacenters/datacenter-id/servers/some-id");
-   }
-   
    @Test
    public void testStopServer() throws InterruptedException {
       server.enqueue(response204());
@@ -227,14 +196,14 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       Volume volume = serverApi().attachVolume(Server.Request.attachVolumeBuilder()
               .dataCenterId("datacenter-id")
               .serverId("server-id")
-              .imageId("image-id")
+              .volumeId("volume-id")
               .build()
       );
       
       assertEquals(volume.properties().name(), "Storage");
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/servers/server-id/volumes", "{\"id\": \"image-id\"}");
+      assertSent(server, "POST", "/rest/datacenters/datacenter-id/servers/server-id/volumes", "{\"id\": \"volume-id\"}");
    }
    
    @Test

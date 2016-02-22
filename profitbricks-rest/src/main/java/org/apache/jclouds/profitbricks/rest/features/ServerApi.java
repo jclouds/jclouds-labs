@@ -182,8 +182,7 @@ public interface ServerApi extends Closeable {
       @Override
       public <V> V apply(InputStream stream, Type type) throws IOException {
          try {
-            return (V) json.fromJson(this.parseService.parseId(Strings2.toStringAndClose(stream), "datacenters", "dataCenterId"), type
-            );
+            return (V) json.fromJson(this.parseService.parseId(Strings2.toStringAndClose(stream), "datacenters", "dataCenterId"), type);
          } finally {
             if (stream != null)
                stream.close();

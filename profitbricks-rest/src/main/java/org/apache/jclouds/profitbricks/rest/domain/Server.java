@@ -259,14 +259,14 @@ public abstract class Server {
       @AutoValue 
       public abstract static class AttachVolumePayload {
 
-         public abstract String imageId();
+         public abstract String volumeId();
          public abstract String dataCenterId();
          public abstract String serverId();
          
          @AutoValue.Builder
          public abstract static class Builder {
             
-            public abstract Builder imageId(String imageId);
+            public abstract Builder volumeId(String volumeId);
             public abstract Builder dataCenterId(String dataCenterId);
             public abstract Builder serverId(String serverId);
 

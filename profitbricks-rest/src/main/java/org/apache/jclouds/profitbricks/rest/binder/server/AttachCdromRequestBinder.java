@@ -44,6 +44,10 @@ public class AttachCdromRequestBinder extends BaseProfitBricksRequestBinder<Serv
    protected String createPayload(Server.Request.AttachCdromPayload payload) {
       
       checkNotNull(payload, "payload");
+      
+      checkNotNull(payload.dataCenterId(), "dataCenterId");
+      checkNotNull(payload.serverId(), "serverId");
+      checkNotNull(payload.imageId(), "imageId");
 
       dataCenterId = payload.dataCenterId();
       serverId = payload.serverId();

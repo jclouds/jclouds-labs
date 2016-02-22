@@ -1,0 +1,33 @@
+{
+  "id": "5c4d37ca-d620-4546-8b24-f92e3c608c2c",
+  "type": "volume",
+  "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/volumes/5c4d37ca-d620-4546-8b24-f92e3c608c2c",
+  "metadata": {
+    "createdDate": "2015-03-18T21:31:10Z",
+    "createdBy": "vendors@stackpointcloud.com",
+    "etag": "0018832d7a7ba455db74ac41ae9f11fe",
+    "lastModifiedDate": "2015-03-18T21:31:10Z",
+    "lastModifiedBy": "vendors@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "Docker Registry Volume",
+    "type": "HDD",
+    "size": 50,
+    "image": null,
+    "imagePassword": null,
+    "bus": "VIRTIO",
+    "licenceType": "OTHER",
+    "cpuHotPlug": false,
+    "cpuHotUnplug": false,
+    "ramHotPlug": false,
+    "ramHotUnplug": false,
+    "nicHotPlug": false,
+    "nicHotUnplug": false,
+    "discVirtioHotPlug": false,
+    "discVirtioHotUnplug": false,
+    "discScsiHotPlug": false,
+    "discScsiHotUnplug": false,
+    "deviceNumber": 2
+  }
+}

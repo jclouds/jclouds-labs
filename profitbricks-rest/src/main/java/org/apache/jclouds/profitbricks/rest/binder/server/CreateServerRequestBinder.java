@@ -16,6 +16,7 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,8 @@ public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
 
    @Override
    protected String createPayload(Server.Request.CreatePayload payload) {
+
+      checkNotNull(payload.dataCenterId(), "dataCenterId");
 
       dataCenterId = payload.dataCenterId();
       

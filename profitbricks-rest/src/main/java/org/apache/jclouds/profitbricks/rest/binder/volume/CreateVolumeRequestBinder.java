@@ -14,51 +14,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.binder.server;
+package org.apache.jclouds.profitbricks.rest.binder.volume;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
-import org.apache.jclouds.profitbricks.rest.domain.Server;
+import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AttachVolumeRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.AttachVolumePayload> {
+public class CreateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.CreatePayload> {
 
-   final Map<String, Object> requestBuilder;
+   protected final Map<String, Object> requestBuilder;
    final Json jsonBinder;
-
-   String dataCenterId;
-   String serverId;
+   
+   private String dataCenterId;
 
    @Inject
-   AttachVolumeRequestBinder(Json jsonBinder) {
+   CreateVolumeRequestBinder(Json jsonBinder) {
       super("volume");
       this.jsonBinder = jsonBinder;
       this.requestBuilder = new HashMap<String, Object>();
    }
 
    @Override
-   protected String createPayload(Server.Request.AttachVolumePayload payload) {
-      
-      checkNotNull(payload, "payload");
+   protected String createPayload(Volume.Request.CreatePayload payload) {
       
       checkNotNull(payload.dataCenterId(), "dataCenterId");
-      checkNotNull(payload.serverId(), "serverId");
-      checkNotNull(payload.volumeId(), "volumeId");
 
       dataCenterId = payload.dataCenterId();
-      serverId = payload.serverId();
       
-      requestBuilder.put("id", payload.volumeId());
+      Map<String, Object> properties = new HashMap<String, Object>();
+      
+      properties.put("size",  payload.size());
+      
+      if (payload.name() != null)
+         properties.put("name", payload.name());
+      
+      if (payload.bus() != null)
+         properties.put("bus", payload.bus());
+      
+      if (payload.type() != null)
+         properties.put("type", payload.type());
+      
+      if (payload.imagePassword() != null)
+         properties.put("imagePassword", payload.imagePassword());
+      
+      if (payload.image() != null)
+         properties.put("image", payload.image());
+      else if (payload.licenceType() != null)
+         properties.put("licenceType", payload.licenceType());
+      
+      requestBuilder.put("properties", properties);
+      
       return jsonBinder.toJson(requestBuilder);
    }
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s/volumes", dataCenterId, serverId)).build();
+      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/volumes", dataCenterId)).build();
       return super.createRequest(request, payload);
    }
 
