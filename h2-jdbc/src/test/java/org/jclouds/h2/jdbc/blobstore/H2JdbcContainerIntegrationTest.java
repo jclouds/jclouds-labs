@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 import org.jclouds.blobstore.integration.internal.BaseContainerIntegrationTest;
 import org.testng.annotations.Test;
+import org.testng.SkipException;
 
 @Test(groups = { "integration" }, singleThreaded = true, testName = "blobstore.H2JdbcContainerIntegrationTest")
 public class H2JdbcContainerIntegrationTest extends BaseContainerIntegrationTest {
@@ -30,5 +31,10 @@ public class H2JdbcContainerIntegrationTest extends BaseContainerIntegrationTest
    @Override
    protected Iterable<Module> setupModules() {
       return ImmutableSet.<Module> of(this.getLoggingModule());
+   }
+
+   @Override
+   public void testSetContainerAccess() throws Exception {
+       throw new SkipException("jdbc does not support anonymous access");
    }
 }
