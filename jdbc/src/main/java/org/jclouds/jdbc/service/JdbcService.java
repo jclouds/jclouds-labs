@@ -109,7 +109,6 @@ public class JdbcService {
       BlobEntity oldBlobEntity = findBlobById(containerName, key);
       if (oldBlobEntity != null) {
          creationDate = oldBlobEntity.getCreationDate();
-         deleteBlob(containerName, key);
       }
       BlobEntity blobEntity = blobToBlobEntity.apply(blob);
       blobEntity.getPayload().setChunks(storeData(blob.getPayload().openStream()));
@@ -117,12 +116,13 @@ public class JdbcService {
       blobEntity.setKey(key);
       blobEntity.setBlobAccess(blobAccess);
       blobEntity.setCreationDate(creationDate);
+      blobEntity.setLastModified(new Date());
 
       HashCode hash = ByteStreams2.hashAndClose(blob.getPayload().openStream(), Hashing.md5());
       blobEntity.setEtag(base16().lowerCase().encode(hash.asBytes()));
       blobEntity.getPayload().setContentMD5(hash.asBytes());
 
-      BlobEntity result = blobRepository.create(blobEntity);
+      BlobEntity result = blobRepository.save(blobEntity);
       checkIntegrity(blob, result);
       return result;
    }
@@ -138,7 +138,7 @@ public class JdbcService {
       blobEntity.setKey(blob.getMetadata().getName());
       blobEntity.setBlobAccess(blobAccess);
       blobEntity.setEtag(DIRECTORY_MD5);
-      return blobRepository.create(blobEntity);
+      return blobRepository.save(blobEntity);
    }
 
    @Transactional
