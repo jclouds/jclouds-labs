@@ -22,7 +22,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.List;
 public class PayloadEntity {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+   @GeneratedValue
    private Long id;
 
    @ElementCollection(fetch = FetchType.EAGER)
