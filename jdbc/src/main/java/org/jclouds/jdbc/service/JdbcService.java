@@ -26,7 +26,6 @@ import com.google.inject.persist.Transactional;
 import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.blobstore.domain.BlobAccess;
 import org.jclouds.blobstore.domain.ContainerAccess;
-import org.jclouds.io.ByteStreams2;
 import org.jclouds.jdbc.conversion.BlobToBlobEntity;
 import org.jclouds.jdbc.entity.BlobEntity;
 import org.jclouds.jdbc.entity.BlobEntityPK;
@@ -37,7 +36,7 @@ import org.jclouds.jdbc.reference.JdbcConstants;
 import org.jclouds.jdbc.repository.BlobRepository;
 import org.jclouds.jdbc.repository.ChunkRepository;
 import org.jclouds.jdbc.repository.ContainerRepository;
-import org.jclouds.jdbc.util.JdbcInputStream;
+import org.jclouds.util.Closeables2;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,6 +103,20 @@ public class JdbcService {
 
    @Transactional(rollbackOn = IOException.class)
    public BlobEntity createOrModifyBlob(String containerName, Blob blob, BlobAccess blobAccess) throws IOException {
+      List<Long> chunks;
+      HashingInputStream his = new HashingInputStream(Hashing.md5(), blob.getPayload().openStream());
+      try {
+         chunks = storeData(his);
+      } finally {
+         Closeables2.closeQuietly(his);
+      }
+      HashCode actualHashCode = his.hash();
+      HashCode expectedHashCode = blob.getPayload().getContentMetadata().getContentMD5AsHashCode();
+      if (expectedHashCode != null && !actualHashCode.equals(expectedHashCode)) {
+         throw new IOException("MD5 hash code mismatch, actual: " + actualHashCode +
+               " expected: " + expectedHashCode);
+      }
+
       String key = blob.getMetadata().getName();
       Date creationDate = null;
       BlobEntity oldBlobEntity = findBlobById(containerName, key);
@@ -111,19 +124,16 @@ public class JdbcService {
          creationDate = oldBlobEntity.getCreationDate();
       }
       BlobEntity blobEntity = blobToBlobEntity.apply(blob);
-      blobEntity.getPayload().setChunks(storeData(blob.getPayload().openStream()));
+      blobEntity.getPayload().setChunks(chunks);
       blobEntity.setContainerEntity(containerRepository.findContainerByName(containerName));
       blobEntity.setKey(key);
       blobEntity.setBlobAccess(blobAccess);
       blobEntity.setCreationDate(creationDate);
       blobEntity.setLastModified(new Date());
-
-      HashCode hash = ByteStreams2.hashAndClose(blob.getPayload().openStream(), Hashing.md5());
-      blobEntity.setEtag(base16().lowerCase().encode(hash.asBytes()));
-      blobEntity.getPayload().setContentMD5(hash.asBytes());
+      blobEntity.setEtag(base16().lowerCase().encode(actualHashCode.asBytes()));
+      blobEntity.getPayload().setContentMD5(actualHashCode.asBytes());
 
       BlobEntity result = blobRepository.save(blobEntity);
-      checkIntegrity(blob, result);
       return result;
    }
 
@@ -242,16 +252,4 @@ public class JdbcService {
       data.close();
       return chunks.build();
    }
-
-   private void checkIntegrity(Blob blob, BlobEntity entity) throws IOException {
-      HashCode hash = blob.getMetadata().getContentMetadata().getContentMD5AsHashCode();
-      if (hash != null) {
-         HashingInputStream his = new HashingInputStream(Hashing.md5(), new JdbcInputStream(this, entity.getPayload().getChunks()));
-         HashCode actualHash = his.hash();
-         if (hash.equals(actualHash)) {
-            throw new IOException("MD5 hash code mismatch");
-         }
-      }
-   }
-
 }
