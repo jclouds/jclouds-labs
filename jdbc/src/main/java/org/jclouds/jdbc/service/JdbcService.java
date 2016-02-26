@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.hash.HashingInputStream;
+import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
@@ -40,6 +41,7 @@ import org.jclouds.util.Closeables2;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -243,13 +245,16 @@ public class JdbcService {
    @Transactional(rollbackOn = IOException.class)
    private List<Long> storeData(InputStream data) throws IOException {
       ImmutableList.Builder<Long> chunks = ImmutableList.builder();
-      int bytes;
-      byte[] buffer = new byte[JdbcConstants.DEFAULT_CHUNK_SIZE];
-      while ((bytes = data.read(buffer, 0, JdbcConstants.DEFAULT_CHUNK_SIZE)) != -1) {
+      while (true) {
+         byte[] buffer = new byte[JdbcConstants.DEFAULT_CHUNK_SIZE];
+         int bytes = ByteStreams.read(data, buffer, 0, JdbcConstants.DEFAULT_CHUNK_SIZE);
+         if (bytes == 0) {
+            break;
+         } else if (bytes != buffer.length) {
+            buffer = Arrays.copyOf(buffer, bytes);
+         }
          chunks.add(chunkRepository.create(new ChunkEntity(buffer, bytes)).getId());
-         buffer = new byte[JdbcConstants.DEFAULT_CHUNK_SIZE];
       }
-      data.close();
       return chunks.build();
    }
 }
