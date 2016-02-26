@@ -51,7 +51,7 @@ public class ContainerRepository extends GenericRepository<ContainerEntity, Long
    public void deleteContainerByName(String name) {
       ContainerEntity containerEntity = findContainerByName(name);
       if (containerEntity != null) {
-         delete(findContainerByName(name));
+         delete(containerEntity);
       }
    }
 

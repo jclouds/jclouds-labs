@@ -49,7 +49,7 @@ public abstract class GenericRepository<T, PK extends Serializable> {
    }
 
    public void delete(T entity) {
-      entityManager.get().remove(entityManager.get().contains(entity) ? entity : entityManager.get().merge(entity));
+      entityManager.get().remove(entity);
    }
 
 }
