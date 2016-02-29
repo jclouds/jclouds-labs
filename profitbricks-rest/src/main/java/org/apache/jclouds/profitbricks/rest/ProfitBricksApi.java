@@ -20,6 +20,7 @@ package org.apache.jclouds.profitbricks.rest;
 import com.google.common.annotations.Beta;
 import java.io.Closeable;
 import org.apache.jclouds.profitbricks.rest.features.DataCenterApi;
+import org.apache.jclouds.profitbricks.rest.features.ImageApi;
 import org.apache.jclouds.profitbricks.rest.features.ServerApi;
 import org.apache.jclouds.profitbricks.rest.features.SnapshotApi;
 import org.apache.jclouds.profitbricks.rest.features.VolumeApi;
@@ -36,6 +37,9 @@ public interface ProfitBricksApi extends Closeable {
    
    @Delegate
    VolumeApi volumeApi();
+
+   @Delegate
+   ImageApi imageApi();
    
    @Delegate
    SnapshotApi snapshotApi();

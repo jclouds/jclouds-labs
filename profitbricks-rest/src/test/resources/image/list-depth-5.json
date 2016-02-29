@@ -1,0 +1,167 @@
+{
+  "id": "images",
+  "type": "collection",
+  "href": "https://api.profitbricks.com/rest/images",
+  "items": [
+    {
+      "id": "26cd88f2-6765-11e5-bd6e-52540066fee9",
+      "type": "image",
+      "href": "https://api.profitbricks.com/rest/images/26cd88f2-6765-11e5-bd6e-52540066fee9",
+      "metadata": {
+        "createdDate": "2015-09-30T11:19:44Z",
+        "createdBy": "System",
+        "etag": "7c276460c51c8dcbc2ae10642deedd29",
+        "lastModifiedDate": "2015-11-11T13:38:47Z",
+        "lastModifiedBy": "System",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "bacula-client-agent.iso",
+        "description": "",
+        "location": "us/lasdev",
+        "size": 0.12,
+        "cpuHotPlug": false,
+        "cpuHotUnplug": false,
+        "ramHotPlug": false,
+        "ramHotUnplug": false,
+        "nicHotPlug": false,
+        "nicHotUnplug": false,
+        "discVirtioHotPlug": false,
+        "discVirtioHotUnplug": false,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "OTHER",
+        "imageType": "CDROM",
+        "public": true
+      }
+    },
+    {
+      "id": "05cadf29-6c12-11e4-beeb-52540066fee9",
+      "type": "image",
+      "href": "https://api.profitbricks.com/rest/images/05cadf29-6c12-11e4-beeb-52540066fee9",
+      "metadata": {
+        "createdDate": "2014-11-14T15:22:19Z",
+        "createdBy": "System",
+        "etag": "957e0eac7456fa7554e73bf0d18860eb",
+        "lastModifiedDate": "2014-11-14T15:22:19Z",
+        "lastModifiedBy": "System",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "Microsoft-SQL-2012-Full-trial-english.iso",
+        "description": "",
+        "location": "us/las",
+        "size": 4,
+        "cpuHotPlug": false,
+        "cpuHotUnplug": false,
+        "ramHotPlug": false,
+        "ramHotUnplug": false,
+        "nicHotPlug": false,
+        "nicHotUnplug": false,
+        "discVirtioHotPlug": false,
+        "discVirtioHotUnplug": false,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "OTHER",
+        "imageType": "CDROM",
+        "public": true
+      }
+    },
+    {
+      "id": "4c68429f-c8f2-11e5-aa10-52540005ab80",
+      "type": "image",
+      "href": "https://api.profitbricks.com/rest/images/4c68429f-c8f2-11e5-aa10-52540005ab80",
+      "metadata": {
+        "createdDate": "2016-02-01T14:44:29Z",
+        "createdBy": "System",
+        "etag": "01bd7e2f17b8528231f441fe240562f9",
+        "lastModifiedDate": "2016-02-01T14:44:29Z",
+        "lastModifiedBy": "System",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "Ubuntu-14.04-LTS-server-2016-02-01",
+        "description": "",
+        "location": "us/lasdev",
+        "size": 2,
+        "cpuHotPlug": true,
+        "cpuHotUnplug": false,
+        "ramHotPlug": true,
+        "ramHotUnplug": false,
+        "nicHotPlug": true,
+        "nicHotUnplug": true,
+        "discVirtioHotPlug": true,
+        "discVirtioHotUnplug": true,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX",
+        "imageType": "HDD",
+        "public": true
+      }
+    },
+    {
+      "id": "5468d4f1-50bf-11e5-b789-52540066fee9",
+      "type": "image",
+      "href": "https://api.profitbricks.com/rest/images/5468d4f1-50bf-11e5-b789-52540066fee9",
+      "metadata": {
+        "createdDate": "2015-09-01T15:37:18Z",
+        "createdBy": "System",
+        "etag": "deeb6ea22d099ce8cddd1fc84e414fbe",
+        "lastModifiedDate": "2015-09-01T15:37:18Z",
+        "lastModifiedBy": "System",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "CentOS-6.7-x86_64-netinstall.iso",
+        "description": "",
+        "location": "us/las",
+        "size": 0.23,
+        "cpuHotPlug": true,
+        "cpuHotUnplug": false,
+        "ramHotPlug": true,
+        "ramHotUnplug": false,
+        "nicHotPlug": true,
+        "nicHotUnplug": true,
+        "discVirtioHotPlug": true,
+        "discVirtioHotUnplug": true,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX",
+        "imageType": "CDROM",
+        "public": true
+      }
+    },
+    {
+      "id": "dfa08a48-7937-11e4-8053-52540066fee9",
+      "type": "image",
+      "href": "https://api.profitbricks.com/rest/images/dfa08a48-7937-11e4-8053-52540066fee9",
+      "metadata": {
+        "createdDate": "2014-12-01T08:56:00Z",
+        "createdBy": "System",
+        "etag": "66da22f2893f1de8945c27e11bbc7ebf",
+        "lastModifiedDate": "2014-12-01T08:56:00Z",
+        "lastModifiedBy": "System",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "openSUSE-13.2-NET-x86_64.iso",
+        "description": "",
+        "location": "de/fra",
+        "size": 0.08,
+        "cpuHotPlug": true,
+        "cpuHotUnplug": false,
+        "ramHotPlug": true,
+        "ramHotUnplug": false,
+        "nicHotPlug": true,
+        "nicHotUnplug": true,
+        "discVirtioHotPlug": true,
+        "discVirtioHotUnplug": true,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX",
+        "imageType": "CDROM",
+        "public": true
+      }
+    }
+]
+}

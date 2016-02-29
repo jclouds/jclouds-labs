@@ -25,6 +25,7 @@ import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksApiMockTest;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "ServerApiMockTest", singleThreaded = true)
@@ -61,7 +62,16 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/datacenter-id/servers?depth=5");
    }
-
+   
+   @Test
+   public void testGetListWith404() throws InterruptedException {
+      server.enqueue(new MockResponse().setResponseCode(404));
+      List<Server> list = serverApi().getList("datacenter-id", new DepthOptions().depth(1));
+      assertTrue(list.isEmpty());
+      assertEquals(server.getRequestCount(), 1);
+      assertSent(server, "GET", "/datacenters/datacenter-id/servers?depth=1");
+   }
+    
    @Test
    public void testGetServer() throws InterruptedException {
       MockResponse response = new MockResponse();
@@ -94,6 +104,17 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       
       assertEquals(this.server.getRequestCount(), 1);
       assertSent(this.server, "GET", "/datacenters/datacenter-id/servers/some-id?depth=5");
+   }
+   
+   public void testGetServerWith404() throws InterruptedException {
+      server.enqueue(response404());
+
+      Server server = serverApi().getServer("datacenter-id", "some-id");
+      
+      assertEquals(server, null);
+
+      assertEquals(this.server.getRequestCount(), 1);
+      assertSent(this.server, "GET", "/datacenters/datacenter-id/servers/some-id");
    }
    
    @Test

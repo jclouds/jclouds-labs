@@ -1,0 +1,32 @@
+{
+  "id": "26cd88f2-6765-11e5-bd6e-52540066fee9",
+  "type": "image",
+  "href": "https://api.profitbricks.com/rest/images/26cd88f2-6765-11e5-bd6e-52540066fee9",
+  "metadata": {
+    "createdDate": "2015-09-30T11:19:44Z",
+    "createdBy": "System",
+    "etag": "7c276460c51c8dcbc2ae10642deedd29",
+    "lastModifiedDate": "2015-11-11T13:38:47Z",
+    "lastModifiedBy": "System",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "bacula-client-agent.iso",
+    "description": null,
+    "location": "us/lasdev",
+    "size": 0.12,
+    "cpuHotPlug": false,
+    "cpuHotUnplug": false,
+    "ramHotPlug": false,
+    "ramHotUnplug": false,
+    "nicHotPlug": false,
+    "nicHotUnplug": false,
+    "discVirtioHotPlug": false,
+    "discVirtioHotUnplug": false,
+    "discScsiHotPlug": false,
+    "discScsiHotUnplug": false,
+    "licenceType": "OTHER",
+    "imageType": "CDROM",
+    "public": true
+  }
+}

@@ -19,16 +19,53 @@ package org.apache.jclouds.profitbricks.rest.features;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import java.io.Closeable;
+import java.util.List;
+import javax.inject.Named;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
+import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
+import org.jclouds.Fallbacks;
+import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
+import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.SelectJson;
 
 @Path("/images")
 @RequestFilters(BasicAuthentication.class)
 public interface ImageApi extends Closeable {
+   
+
+   @Named("image:list")
+   @GET
+   @SelectJson("items")
+   @Fallback(EmptyListOnNotFoundOr404.class)
+   List<Image> getList();
+
+   @Named("image:list")
+   @GET
+   @SelectJson("items")
+   @Fallback(EmptyListOnNotFoundOr404.class)
+   List<Image> getList(DepthOptions options);
+   
+   @Named("image:get")
+   @GET   
+   @Path("/{imageId}")
+   @ResponseParser(ImageApi.ImageParser.class)
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   Image getImage(@PathParam("imageId") String imageId);
+
+   @Named("image:get")
+   @GET   
+   @Path("/{imageId}")
+   @ResponseParser(ImageApi.ImageParser.class)
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   Image getImage(@PathParam("imageId") String imageId, DepthOptions options);
    
    static final class ImageParser extends ParseJson<Image> {
       @Inject ImageParser(Json json) {

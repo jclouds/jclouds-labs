@@ -20,9 +20,11 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
+import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksApiMockTest;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "VolumeApiMockTest", singleThreaded = true)
@@ -43,6 +45,15 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/datacenter-id/volumes");
    }
+   
+   @Test
+   public void testGetListWith404() throws InterruptedException {
+      server.enqueue(new MockResponse().setResponseCode(404));
+      List<Volume> list = volumeApi().getList("datacenter-id", new DepthOptions().depth(1));
+      assertTrue(list.isEmpty());
+      assertEquals(server.getRequestCount(), 1);
+      assertSent(server, "GET", "/datacenters/datacenter-id/volumes?depth=1");
+   }
     
    @Test
    public void testGetVolume() throws InterruptedException {
@@ -59,6 +70,17 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
       
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/datacenter-id/volumes/some-id");
+   }
+   
+   public void testGetVolumeWith404() throws InterruptedException {
+      server.enqueue(response404());
+
+      Volume volume = volumeApi().getVolume("datacenter-id", "some-id");
+      
+      assertEquals(volume, null);
+
+      assertEquals(this.server.getRequestCount(), 1);
+      assertSent(this.server, "GET", "/datacenters/datacenter-id/volumes/some-id");
    }
       
    @Test

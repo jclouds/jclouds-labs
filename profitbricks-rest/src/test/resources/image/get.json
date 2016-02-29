@@ -1,0 +1,32 @@
+{
+  "id": "5468d4f1-50bf-11e5-b789-52540066fee9",
+  "type": "image",
+  "href": "https://api.profitbricks.com/rest/images/5468d4f1-50bf-11e5-b789-52540066fee9",
+  "metadata": {
+    "createdDate": "2015-09-01T15:37:18Z",
+    "createdBy": "System",
+    "etag": "deeb6ea22d099ce8cddd1fc84e414fbe",
+    "lastModifiedDate": "2015-09-01T15:37:18Z",
+    "lastModifiedBy": "System",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "CentOS-6.7-x86_64-netinstall.iso",
+    "description": null,
+    "location": "us/las",
+    "size": 0.23,
+    "cpuHotPlug": true,
+    "cpuHotUnplug": false,
+    "ramHotPlug": true,
+    "ramHotUnplug": false,
+    "nicHotPlug": true,
+    "nicHotUnplug": true,
+    "discVirtioHotPlug": true,
+    "discVirtioHotUnplug": true,
+    "discScsiHotPlug": false,
+    "discScsiHotUnplug": false,
+    "licenceType": "LINUX",
+    "imageType": "CDROM",
+    "public": true
+  }
+}

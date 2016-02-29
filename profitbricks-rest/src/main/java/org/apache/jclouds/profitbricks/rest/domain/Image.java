@@ -96,7 +96,86 @@ public abstract class Image {
             return new AutoValue_Image_Properties(name, description, location, size, isPublic, licenceType, imageType, cpuHotPlug, cpuHotUnplug, ramHotPlug, ramHotUnplug, nicHotPlug, nicHotUnplug, discVirtioHotPlug, discVirtioHotUnplug, discScsiHotPlug, discScsiHotUnplug);
 
         }
-    }
+   }
+    
+   public static final class Request {
+
+      public static UpdatePayload.Builder updatingBuilder() {
+         return new AutoValue_Image_Request_UpdatePayload.Builder();
+      }
+
+      @AutoValue
+      public abstract static class UpdatePayload {
+
+         public abstract String id();
+
+         @Nullable
+         public abstract String name();
+         
+         @Nullable
+         public abstract String description();
+
+         @Nullable
+         public abstract LicenceType licenceType();
+
+         @Nullable
+         public abstract Boolean cpuHotPlug();
+
+         @Nullable
+         public abstract Boolean cpuHotUnplug();
+
+         @Nullable
+         public abstract Boolean ramHotPlug();
+
+         @Nullable
+         public abstract Boolean ramHotUnplug();
+
+         @Nullable
+         public abstract Boolean nicHotPlug();
+
+         @Nullable
+         public abstract Boolean nicHotUnplug();
+
+         @Nullable
+         public abstract Boolean discVirtioHotPlug();
+
+         @Nullable
+         public abstract Boolean discVirtioHotUnplug();
+
+         @Nullable
+         public abstract Boolean discScsiHotPlug();
+
+         @Nullable
+         public abstract Boolean discScsiHotUnplug();
+
+         @AutoValue.Builder
+         public abstract static class Builder {
+
+            public abstract Builder id(String id);
+            public abstract Builder name(String name);
+            public abstract Builder description(String description);
+            public abstract Builder licenceType(LicenceType licenceType);
+            public abstract Builder cpuHotPlug(Boolean cpuHotPlug);
+            public abstract Builder cpuHotUnplug(Boolean cpuHotUnplug);
+            public abstract Builder ramHotPlug(Boolean ramHotPlug);
+            public abstract Builder ramHotUnplug(Boolean ramHotUnplug);
+            public abstract Builder nicHotPlug(Boolean nicHotPlug);
+            public abstract Builder nicHotUnplug(Boolean nicHotUnplug);
+            public abstract Builder discVirtioHotPlug(Boolean discVirtioHotPlug);
+            public abstract Builder discVirtioHotUnplug(Boolean discVirtioHotUnplug);
+            public abstract Builder discScsiHotPlug(Boolean discScsiHotPlug);
+            public abstract Builder discScsiHotUnplug(Boolean discScsiHotUnplug);
+            
+            abstract UpdatePayload autoBuild();
+
+            public UpdatePayload build() {
+               return autoBuild();
+            }
+         }
+      }
+      
+   }
+ 
     
    public enum Type {
 
