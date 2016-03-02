@@ -117,8 +117,11 @@ public class DeploymentToNodeMetadata implements Function<Deployment, NodeMetada
       // TODO: CloudService name is required (see JCLOUDS-849): waiting for JCLOUDS-853.
       final CloudService cloudService = api.getCloudServiceApi().get(from.name());
       if (cloudService != null) {
+         final String location = cloudService.location() != null
+                 ? cloudService.location()
+                 : api.getAffinityGroupApi().get(cloudService.affinityGroup()).location();
          builder.location(FluentIterable.from(locations.get()).
-                 firstMatch(LocationPredicates.idEquals(cloudService.location())).
+                 firstMatch(LocationPredicates.idEquals(location)).
                  orNull());
       }
 
