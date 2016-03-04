@@ -24,16 +24,24 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.MapBinder;
 
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
+import java.util.HashMap;
 
 import org.jclouds.io.MutableContentMetadata;
 import org.jclouds.io.payloads.BaseMutableContentMetadata;
+import org.jclouds.json.Json;
 
 public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
 
    protected final String paramName;
+   protected final Map<String, Object> requestBuilder;
+   protected final Json jsonBinder;
 
-   protected BaseProfitBricksRequestBinder(String paramName) {
+   @Inject
+   protected BaseProfitBricksRequestBinder(String paramName, Json jsonBinder) {
       this.paramName = checkNotNull(paramName, "Initialize 'paramName' in constructor");
+      this.jsonBinder = jsonBinder;
+      this.requestBuilder = new HashMap<String, Object>();
    }
 
    @Override

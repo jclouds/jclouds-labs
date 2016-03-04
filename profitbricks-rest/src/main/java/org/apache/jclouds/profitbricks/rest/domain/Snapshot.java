@@ -23,69 +23,148 @@ import org.jclouds.json.SerializedNames;
 @AutoValue
 public abstract class Snapshot {
 
-    public abstract String id();
+   public abstract String id();
+
+   public abstract String type();
+
+   public abstract String href();
+
+   @Nullable
+   public abstract Metadata metadata();
+
+   @Nullable
+   public abstract Properties properties();
+
+   @SerializedNames({"id", "type", "href", "metadata", "properties"})
+   public static Snapshot create(String id, String type, String href, Metadata metadata, Properties properties) {
+       return new AutoValue_Snapshot(id, type, href, metadata, properties);
+   }
+
+   @AutoValue
+   public abstract static class Properties {
+
+       @Nullable
+       public abstract String name();
+
+       @Nullable
+       public abstract String description();
+
+       @Nullable
+       public abstract Integer size();
+
+       @Nullable
+       public abstract LicenceType licenceType();
+
+       public abstract Location location();
+
+       public abstract boolean cpuHotPlug();
+
+       public abstract boolean cpuHotUnplug();
+
+       public abstract boolean ramHotPlug();
+
+       public abstract boolean ramHotUnplug();
+
+       public abstract boolean nicHotPlug();
+
+       public abstract boolean nicHotUnplug();
+
+       public abstract boolean discVirtioHotPlug();
+
+       public abstract boolean discVirtioHotUnplug();
+
+       public abstract boolean discScsiHotPlug();
+
+       public abstract boolean discScsiHotUnplug();
+
+       @SerializedNames({"name", "description", "size", "licenceType", "location", "cpuHotPlug", "cpuHotUnplug", "ramHotPlug", "ramHotUnplug", "nicHotPlug", "nicHotUnplug", "discVirtioHotPlug", "discVirtioHotUnplug", "discScsiHotPlug", "discScsiHotUnplug"})
+       public static Snapshot.Properties create(String name, String description, Integer size, LicenceType licenceType, Location location,
+               boolean cpuHotPlug, boolean cpuHotUnplug, boolean ramHotPlug, boolean ramHotUnplug, boolean nicHotPlug, boolean nicHotUnplug, boolean discVirtioHotPlug,
+               boolean discVirtioHotUnplug, boolean discScsiHotPlug, boolean discScsiHotUnplug) {
+
+          return new AutoValue_Snapshot_Properties(name, description, size, licenceType, location, cpuHotPlug, cpuHotUnplug, ramHotPlug, ramHotUnplug, nicHotPlug, nicHotUnplug, discVirtioHotPlug, discVirtioHotUnplug, discScsiHotPlug, discScsiHotUnplug);
+
+
+       }
+   }
     
-    public abstract String type();
+   public static final class Request {
 
-    public abstract String href();
+      public static UpdatePayload.Builder updatingBuilder() {
+         return new AutoValue_Snapshot_Request_UpdatePayload.Builder();
+      }
 
-    @Nullable
-    public abstract Metadata metadata();
+      @AutoValue
+      public abstract static class UpdatePayload {
 
-    @Nullable
-    public abstract Properties properties();
+         public abstract String id();
 
-    @SerializedNames({"id", "type", "href", "metadata", "properties"})
-    public static Snapshot create(String id, String type, String href, Metadata metadata, Properties properties) {
-        return new AutoValue_Snapshot(id, type, href, metadata, properties);
-    }
+         @Nullable
+         public abstract String name();
+         
+         @Nullable
+         public abstract String description();
 
-    @AutoValue
-    public abstract static class Properties {
+         @Nullable
+         public abstract LicenceType licenceType();
 
-        @Nullable
-        public abstract String name();
+         @Nullable
+         public abstract Boolean cpuHotPlug();
 
-        @Nullable
-        public abstract String description();
+         @Nullable
+         public abstract Boolean cpuHotUnplug();
 
-        @Nullable
-        public abstract Integer size();
+         @Nullable
+         public abstract Boolean ramHotPlug();
 
-        @Nullable
-        public abstract LicenceType licenceType();
-        
-        public abstract Location location();
+         @Nullable
+         public abstract Boolean ramHotUnplug();
 
-        public abstract boolean cpuHotPlug();
+         @Nullable
+         public abstract Boolean nicHotPlug();
 
-        public abstract boolean cpuHotUnplug();
+         @Nullable
+         public abstract Boolean nicHotUnplug();
 
-        public abstract boolean ramHotPlug();
+         @Nullable
+         public abstract Boolean discVirtioHotPlug();
 
-        public abstract boolean ramHotUnplug();
+         @Nullable
+         public abstract Boolean discVirtioHotUnplug();
 
-        public abstract boolean nicHotPlug();
+         @Nullable
+         public abstract Boolean discScsiHotPlug();
 
-        public abstract boolean nicHotUnplug();
+         @Nullable
+         public abstract Boolean discScsiHotUnplug();
 
-        public abstract boolean discVirtioHotPlug();
+         @AutoValue.Builder
+         public abstract static class Builder {
 
-        public abstract boolean discVirtioHotUnplug();
+            public abstract Builder id(String id);
+            public abstract Builder name(String name);
+            public abstract Builder description(String description);
+            public abstract Builder licenceType(LicenceType licenceType);
+            public abstract Builder cpuHotPlug(Boolean cpuHotPlug);
+            public abstract Builder cpuHotUnplug(Boolean cpuHotUnplug);
+            public abstract Builder ramHotPlug(Boolean ramHotPlug);
+            public abstract Builder ramHotUnplug(Boolean ramHotUnplug);
+            public abstract Builder nicHotPlug(Boolean nicHotPlug);
+            public abstract Builder nicHotUnplug(Boolean nicHotUnplug);
+            public abstract Builder discVirtioHotPlug(Boolean discVirtioHotPlug);
+            public abstract Builder discVirtioHotUnplug(Boolean discVirtioHotUnplug);
+            public abstract Builder discScsiHotPlug(Boolean discScsiHotPlug);
+            public abstract Builder discScsiHotUnplug(Boolean discScsiHotUnplug);
+            
+            abstract UpdatePayload autoBuild();
 
-        public abstract boolean discScsiHotPlug();
+            public UpdatePayload build() {
+               return autoBuild();
+            }
+         }
+      }
+      
+   }
 
-        public abstract boolean discScsiHotUnplug();
-
-        @SerializedNames({"name", "description", "size", "licenceType", "location", "cpuHotPlug", "cpuHotUnplug", "ramHotPlug", "ramHotUnplug", "nicHotPlug", "nicHotUnplug", "discVirtioHotPlug", "discVirtioHotUnplug", "discScsiHotPlug", "discScsiHotUnplug"})
-        public static Snapshot.Properties create(String name, String description, Integer size, LicenceType licenceType, Location location,
-                boolean cpuHotPlug, boolean cpuHotUnplug, boolean ramHotPlug, boolean ramHotUnplug, boolean nicHotPlug, boolean nicHotUnplug, boolean discVirtioHotPlug,
-                boolean discVirtioHotUnplug, boolean discScsiHotPlug, boolean discScsiHotUnplug) {
-
-           return new AutoValue_Snapshot_Properties(name, description, size, licenceType, location, cpuHotPlug, cpuHotUnplug, ramHotPlug, ramHotUnplug, nicHotPlug, nicHotUnplug, discVirtioHotPlug, discVirtioHotUnplug, discScsiHotPlug, discScsiHotUnplug);
-           
-
-        }
-    }
     
 }

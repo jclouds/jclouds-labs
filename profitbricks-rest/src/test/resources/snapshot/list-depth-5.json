@@ -1,0 +1,97 @@
+{
+  "id": "snapshots",
+  "type": "collection",
+  "href": "https://api.profitbricks.com/rest/snapshots",
+  "items": [
+    {
+      "id": "615458b6-55cc-4907-a700-24b6bc1bf8ae",
+      "type": "snapshot",
+      "href": "https://api.profitbricks.com/rest/snapshots/615458b6-55cc-4907-a700-24b6bc1bf8ae",
+      "metadata": {
+        "createdDate": "2015-12-23T22:03:31Z",
+        "createdBy": "mirza@stackpointcloud.com",
+        "etag": "fbed4e509c2704919ac05f185377a95d",
+        "lastModifiedDate": "2015-12-23T22:03:31Z",
+        "lastModifiedBy": "mirza@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "test snapshot",
+        "description": "Created from \"apache-node\" in Data Center \"test-data-center\"",
+        "location": "us/lasdev",
+        "size": 3,
+        "cpuHotPlug": false,
+        "cpuHotUnplug": false,
+        "ramHotPlug": false,
+        "ramHotUnplug": false,
+        "nicHotPlug": false,
+        "nicHotUnplug": false,
+        "discVirtioHotPlug": false,
+        "discVirtioHotUnplug": false,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX"
+      }
+    },
+    {
+      "id": "a0327de8-65e7-4524-bc22-ad0328bbdb00",
+      "type": "snapshot",
+      "href": "https://api.profitbricks.com/rest/snapshots/a0327de8-65e7-4524-bc22-ad0328bbdb00",
+      "metadata": {
+        "createdDate": "2016-02-10T13:42:52Z",
+        "createdBy": "mirza@stackpointcloud.com",
+        "etag": "3e7408590a6b4093989e4c94d69ef934",
+        "lastModifiedDate": "2016-02-10T13:42:52Z",
+        "lastModifiedBy": "mirza@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "snapshot desc...",
+        "description": "Created from \"apache-volume\" in Data Center \"test-data-center\"",
+        "location": "us/lasdev",
+        "size": 3,
+        "cpuHotPlug": false,
+        "cpuHotUnplug": false,
+        "ramHotPlug": false,
+        "ramHotUnplug": false,
+        "nicHotPlug": false,
+        "nicHotUnplug": false,
+        "discVirtioHotPlug": false,
+        "discVirtioHotUnplug": false,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX"
+      }
+    },
+    {
+      "id": "7e3d133f-227d-41dd-84af-a47d6b6033d9",
+      "type": "snapshot",
+      "href": "https://api.profitbricks.com/rest/snapshots/7e3d133f-227d-41dd-84af-a47d6b6033d9",
+      "metadata": {
+        "createdDate": "2015-12-23T21:05:05Z",
+        "createdBy": "mirza@stackpointcloud.com",
+        "etag": "565e62028d0046a55f38289a8dd87214",
+        "lastModifiedDate": "2015-12-23T21:05:05Z",
+        "lastModifiedBy": "mirza@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "snapshot desc...",
+        "description": "Created from \"apache-node\" in Data Center \"test-data-center\"",
+        "location": "us/lasdev",
+        "size": 3,
+        "cpuHotPlug": false,
+        "cpuHotUnplug": false,
+        "ramHotPlug": false,
+        "ramHotUnplug": false,
+        "nicHotPlug": false,
+        "nicHotUnplug": false,
+        "discVirtioHotPlug": false,
+        "discVirtioHotUnplug": false,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX"
+      }
+    }
+  ]
+}

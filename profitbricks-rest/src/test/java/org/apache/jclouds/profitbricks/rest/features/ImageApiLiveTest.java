@@ -18,9 +18,10 @@ package org.apache.jclouds.profitbricks.rest.features;
 
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
+import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
-import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -28,24 +29,27 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "live", testName = "ImageApiLiveTest")
 public class ImageApiLiveTest extends BaseProfitBricksLiveTest {
    
-   String testImageId = "7cb4b3a3-50c3-11e5-b789-52540066fee9";
+   private String testImageId;
+   private String testImageName;
    
-   @Test
+   @Test(dependsOnMethods = "testList")
    public void testGetImage() {
       Image image = imageApi().getImage(testImageId);
 
       assertNotNull(image);
       assertEquals(image.id(), testImageId);
-      assertEquals(image.properties().name(), "ubuntu-14.04.3-server-amd64.iso");
+      assertEquals(image.properties().name(), testImageName);
    }
    
    @Test
    public void testList() {
-      List<Image> images = imageApi().getList();
+      List<Image> images = imageApi().getList(new DepthOptions().depth(5));
 
       assertNotNull(images);
       assertFalse(images.isEmpty());
       assertTrue(images.size() > 1);
+      testImageId = images.get(0).id();
+      testImageName = images.get(0).properties().name();
    }
    
    private ImageApi imageApi() {

@@ -27,15 +27,11 @@ import org.jclouds.json.Json;
 
 public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.CreatePayload> {
 
-   final Map<String, Object> requestBuilder;
-   final Json jsonBinder;
    String dataCenterId;
 
    @Inject
    CreateServerRequestBinder(Json jsonBinder) {
-      super("server");
-      this.jsonBinder = jsonBinder;
-      this.requestBuilder = new HashMap<String, Object>();
+      super("server", jsonBinder);
    }
 
    @Override

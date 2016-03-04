@@ -1,0 +1,30 @@
+{
+  "id": "a0327de8-65e7-4524-bc22-ad0328bbdb00",
+  "type": "snapshot",
+  "href": "https://api.profitbricks.com/rest/snapshots/a0327de8-65e7-4524-bc22-ad0328bbdb00",
+  "metadata": {
+    "createdDate": "2016-02-10T13:42:52Z",
+    "createdBy": "mirza@stackpointcloud.com",
+    "etag": "3e7408590a6b4093989e4c94d69ef934",
+    "lastModifiedDate": "2016-02-10T13:42:52Z",
+    "lastModifiedBy": "mirza@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "test snapshot 2",
+    "description": "Created from \"apache-volume\" in Data Center \"test-data-center\"",
+    "location": "us/lasdev",
+    "size": 3,
+    "cpuHotPlug": false,
+    "cpuHotUnplug": false,
+    "ramHotPlug": false,
+    "ramHotUnplug": false,
+    "nicHotPlug": false,
+    "nicHotUnplug": false,
+    "discVirtioHotPlug": false,
+    "discVirtioHotUnplug": false,
+    "discScsiHotPlug": false,
+    "discScsiHotUnplug": false,
+    "licenceType": "LINUX"
+  }
+}

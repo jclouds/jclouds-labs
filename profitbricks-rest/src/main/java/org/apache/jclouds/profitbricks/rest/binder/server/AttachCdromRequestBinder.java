@@ -17,8 +17,6 @@
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
 import com.google.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
@@ -27,17 +25,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class AttachCdromRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.AttachCdromPayload> {
 
-   final Map<String, Object> requestBuilder;
-   final Json jsonBinder;
-
    String dataCenterId;
    String serverId;
 
    @Inject
    AttachCdromRequestBinder(Json jsonBinder) {
-      super("cdrom");
-      this.jsonBinder = jsonBinder;
-      this.requestBuilder = new HashMap<String, Object>();
+      super("cdrom", jsonBinder);
    }
 
    @Override

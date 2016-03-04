@@ -120,7 +120,7 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
       return injector.getInstance(ProfitBricksApi.class);
    }
    
-   protected <T> void assertRandom(Predicate<T> check, T arguments) {
+   protected <T> void assertPredicate(Predicate<T> check, T arguments) {
       ComputeConstants c = computeConstants;
       Predicate<T>checkPoll = Predicates2.retry(check, c.pollTimeout(), c.pollPeriod(), c.pollMaxPeriod(), TimeUnit.SECONDS);
       assertTrue(checkPoll.apply(arguments), "Random check failed in the configured timeout");

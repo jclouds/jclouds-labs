@@ -14,31 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.binder.image;
+package org.apache.jclouds.profitbricks.rest.binder.snapshot;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
-import org.apache.jclouds.profitbricks.rest.domain.Image;
+import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
 
-public class UpdateImageRequestBinder extends BaseProfitBricksRequestBinder<Image.Request.UpdatePayload> {
+public class UpdateSnapshotRequestBinder extends BaseProfitBricksRequestBinder<Snapshot.Request.UpdatePayload> {
 
-   private String imageId;
+   private String snapshotId;
 
    @Inject
-   UpdateImageRequestBinder(Json jsonBinder) {
-      super("image", jsonBinder);
+   UpdateSnapshotRequestBinder(Json jsonBinder) {
+      super("snapshot", jsonBinder);
    }
 
    @Override
-   protected String createPayload(Image.Request.UpdatePayload payload) {
+   protected String createPayload(Snapshot.Request.UpdatePayload payload) {
 
-      checkNotNull(payload, "payload");
-      checkNotNull(payload.id(), "imageId");
+      checkNotNull(payload.id(), "snapshotId");
       
-      imageId = payload.id();
+      snapshotId = payload.id();
 
       if (payload.name() != null)
         requestBuilder.put("name", payload.name());
@@ -84,7 +83,7 @@ public class UpdateImageRequestBinder extends BaseProfitBricksRequestBinder<Imag
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/images/%s", imageId)).build();
+      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/snapshots/%s", snapshotId)).build();
       return super.createRequest(request, payload);
    }
 

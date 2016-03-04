@@ -16,25 +16,24 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.volume;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import javax.ws.rs.core.MediaType;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.RestoreSnapshotPayload> {
 
-   protected final Multimap<String, String> requestBuilder;
+   protected final Multimap<String, String> formMap;
 
    private String dataCenterId;
    private String volumeId;
-   private String snapshotId;   
 
    RestoreSnapshotRequestBinder() {
-      super("snapshot");
-      this.requestBuilder = HashMultimap.create();
+      super("snapshot", null);
+      this.formMap = HashMultimap.create();
    }
 
    @Override
@@ -46,9 +45,8 @@ public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<
       
       dataCenterId = payload.dataCenterId();
       volumeId = payload.volumeId();
-      snapshotId = payload.snapshotId();
       
-      requestBuilder.put("snapshotId", payload.snapshotId());
+      formMap.put("snapshotId", payload.snapshotId());
       
       return "";
    }
@@ -60,7 +58,7 @@ public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<
       
       HttpRequest.Builder<?> reqBuilder = fromRequest.toBuilder();
       
-      reqBuilder.addFormParams(requestBuilder);
+      reqBuilder.addFormParams(formMap);
       reqBuilder.replacePath(String.format("/rest/datacenters/%s/volumes/%s/restore-snapshot", dataCenterId, volumeId));
       
       R req = (R) reqBuilder.build();

@@ -37,10 +37,10 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "live", testName = "ServerApiLiveTest")
 public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    
-   DataCenter dataCenter;
-   Server testServer;
-   Image attachedCdrom;
-   Volume attachedVolume;
+   private DataCenter dataCenter;
+   private Server testServer;
+   private Image attachedCdrom;
+   private Volume attachedVolume;
   
    @BeforeClass
    public void setupTest() {
@@ -222,7 +222,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    }
    
    private void assertCdromAvailable(Server server, String cdRomId) {
-      assertRandom(new Predicate<String>() {
+      assertPredicate(new Predicate<String>() {
          @Override
          public boolean apply(String args) {
             String[] params = args.split(",");
@@ -237,7 +237,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    }
 
    private void assertCdromRemoved(Server server, String cdRomId) {
-      assertRandom(new Predicate<String>() {
+      assertPredicate(new Predicate<String>() {
          @Override
          public boolean apply(String args) {
             String[] params = args.split(",");
@@ -247,7 +247,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    }
    
    private void assertVolumeAttached(Server server, String volumeId) {
-      assertRandom(new Predicate<String>() {
+      assertPredicate(new Predicate<String>() {
          @Override
          public boolean apply(String args) {
             String[] params = args.split(",");
@@ -262,7 +262,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    }
 
    private void assertVolumeDetached(Server server, String volumeId) {
-      assertRandom(new Predicate<String>() {
+      assertPredicate(new Predicate<String>() {
          @Override
          public boolean apply(String args) {
             String[] params = args.split(",");

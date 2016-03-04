@@ -27,16 +27,11 @@ import org.jclouds.json.Json;
 
 public class CreateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.CreatePayload> {
 
-   protected final Map<String, Object> requestBuilder;
-   final Json jsonBinder;
-   
    private String dataCenterId;
 
    @Inject
    CreateVolumeRequestBinder(Json jsonBinder) {
-      super("volume");
-      this.jsonBinder = jsonBinder;
-      this.requestBuilder = new HashMap<String, Object>();
+      super("volume", jsonBinder);
    }
 
    @Override

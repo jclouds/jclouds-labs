@@ -18,8 +18,6 @@ package org.apache.jclouds.profitbricks.rest.binder.volume;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
@@ -27,17 +25,12 @@ import org.jclouds.json.Json;
 
 public class UpdateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.UpdatePayload> {
 
-   protected final Map<String, Object> requestBuilder;
-   final Json jsonBinder;
-   
    private String dataCenterId;
    private String volumeId;
 
    @Inject
    UpdateVolumeRequestBinder(Json jsonBinder) {
-      super("volume");
-      this.jsonBinder = jsonBinder;
-      this.requestBuilder = new HashMap<String, Object>();
+      super("volume", jsonBinder);
    }
 
    @Override
