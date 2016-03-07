@@ -18,23 +18,20 @@ package org.apache.jclouds.profitbricks.rest.binder.volume;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import javax.ws.rs.core.MediaType;
+import org.apache.jclouds.profitbricks.rest.binder.BinderTestBase;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.io.payloads.UrlEncodedFormPayload;
-import org.jclouds.json.config.GsonModule;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "CreateSnapshotRequestBinderTest")
-public class CreateSnapshotRequestBinderTest {
+public class CreateSnapshotRequestBinderTest extends BinderTestBase {
 
    @Test
    public void testCreatePayload() {
-      
-      Injector injector = Guice.createInjector(new GsonModule());
+            
       CreateSnapshotRequestBinder binder = injector.getInstance(CreateSnapshotRequestBinder.class);
             
       Volume.Request.CreateSnapshotPayload payload = Volume.Request.createSnapshotBuilder()
@@ -54,7 +51,7 @@ public class CreateSnapshotRequestBinderTest {
       expectedPayload.put("name", "test-snapshot");
       expectedPayload.put("description", "snapshot desc...");
             
-      assertEquals(request.getEndpoint().getPath(), "/rest/datacenters/datacenter-id/volumes/volume-id/create-snapshot");
+      assertEquals(request.getEndpoint().getPath(), "/rest/v2/datacenters/datacenter-id/volumes/volume-id/create-snapshot");
       assertEquals(request.getPayload().getContentMetadata().getContentType(), MediaType.APPLICATION_FORM_URLENCODED);
       assertEquals(request.getPayload().getRawContent(), "&" + (new UrlEncodedFormPayload(expectedPayload)).getRawContent());
 

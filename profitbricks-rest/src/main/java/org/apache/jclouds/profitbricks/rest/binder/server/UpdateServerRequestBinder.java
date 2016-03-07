@@ -16,12 +16,15 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
+import com.google.common.base.Supplier;
+import java.net.URI;
+import org.jclouds.location.Provider;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UpdateServerRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.UpdatePayload> {
 
@@ -29,8 +32,8 @@ public class UpdateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
    String serverId;
 
    @Inject
-   UpdateServerRequestBinder(Json jsonBinder) {
-      super("server", jsonBinder);
+   UpdateServerRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
+      super("server", jsonBinder, endpointSupplier);
    }
 
    @Override
@@ -42,28 +45,27 @@ public class UpdateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
       dataCenterId = payload.dataCenterId();
       serverId = payload.id();
       
-      requestBuilder.put("name",  payload.name());
-      requestBuilder.put("ram",   payload.ram());
-      requestBuilder.put("cores", payload.cores());
+      formMap.put("name",  payload.name());
+      formMap.put("ram",   payload.ram());
+      formMap.put("cores", payload.cores());
       
       if (payload.availabilityZone() != null)
-         requestBuilder.put("availabilityzone", payload.availabilityZone());
+         formMap.put("availabilityzone", payload.availabilityZone());
       
       if (payload.licenceType() != null)
-         requestBuilder.put("licencetype", payload.licenceType());
+         formMap.put("licencetype", payload.licenceType());
       
       if (payload.bootVolume() != null)
-         requestBuilder.put("bootVolume", payload.bootVolume());
+         formMap.put("bootVolume", payload.bootVolume());
       else if (payload.bootCdrom() != null)
-         requestBuilder.put("bootCdrom", payload.bootCdrom());
+         formMap.put("bootCdrom", payload.bootCdrom());
       
-      return jsonBinder.toJson(requestBuilder);
+      return jsonBinder.toJson(formMap);
    }
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s", dataCenterId, serverId)).build();
-      return super.createRequest(request, payload);
+      return super.createRequest(genRequest(String.format("datacenters/%s/servers/%s", dataCenterId, serverId), fromRequest), payload);
    }
 
 }

@@ -22,6 +22,7 @@ import org.apache.jclouds.profitbricks.rest.util.Passwords;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 import static com.google.common.base.Preconditions.checkArgument;
+import java.util.Set;
 
 @AutoValue
 public abstract class Volume {
@@ -62,7 +63,7 @@ public abstract class Volume {
         public abstract String name();
 
         @Nullable
-        public abstract String type();
+        public abstract VolumeType type();
 
         public abstract float size();
 
@@ -75,6 +76,7 @@ public abstract class Volume {
         @Nullable
         public abstract BusType bus();
 
+        @Nullable
         public abstract LicenceType licenceType();
 
         public abstract boolean cpuHotPlug();
@@ -101,7 +103,7 @@ public abstract class Volume {
         public abstract Integer deviceNumber();
 
         @SerializedNames({"name", "type", "size", "image", "imagePassword", "bus", "licenceType", "cpuHotPlug", "cpuHotUnplug", "ramHotPlug", "ramHotUnplug", "nicHotPlug", "nicHotUnplug", "discVirtioHotPlug", "discVirtioHotUnplug", "discScsiHotPlug", "discScsiHotUnplug", "deviceNumber"})
-        public static Volume.Properties create(String name, String type, float size, String image, String imagePassword, BusType bus, LicenceType licenceType,
+        public static Volume.Properties create(String name, VolumeType type, float size, String image, String imagePassword, BusType bus, LicenceType licenceType,
                 boolean cpuHotPlug, boolean cpuHotUnplug, boolean ramHotPlug, boolean ramHotUnplug, boolean nicHotPlug, boolean nicHotUnplug, boolean discVirtioHotPlug,
                 boolean discVirtioHotUnplug, boolean discScsiHotPlug, boolean discScsiHotUnplug, int deviceNumber) {
 
@@ -135,11 +137,13 @@ public abstract class Volume {
          @Nullable
          public abstract String name();
 
-         @Nullable
-         public abstract String type();
-
+         public abstract VolumeType type();
+         
          public abstract int size();
 
+         @Nullable
+         public abstract Set<String> sshKeys();
+         
          @Nullable
          public abstract String image();
 
@@ -158,7 +162,8 @@ public abstract class Volume {
          public abstract static class Builder {
 
             public abstract Builder name(String name);
-            public abstract Builder type(String type);
+            public abstract Builder type(VolumeType type);
+            public abstract Builder sshKeys(Set<String> list);
             public abstract Builder size(int size);
             public abstract Builder image(String image);
             public abstract Builder imagePassword(String imagePassword);

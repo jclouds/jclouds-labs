@@ -16,12 +16,15 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.volume;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
+import com.google.common.base.Supplier;
+import java.net.URI;
+import org.jclouds.location.Provider;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UpdateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.UpdatePayload> {
 
@@ -29,8 +32,8 @@ public class UpdateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Vol
    private String volumeId;
 
    @Inject
-   UpdateVolumeRequestBinder(Json jsonBinder) {
-      super("volume", jsonBinder);
+   UpdateVolumeRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
+      super("volume", jsonBinder, endpointSupplier);
    }
 
    @Override
@@ -43,21 +46,20 @@ public class UpdateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Vol
       volumeId = payload.id();
       
       if (payload.name() != null)
-         requestBuilder.put("name",  payload.name());
+         formMap.put("name",  payload.name());
       
       if (payload.size() != null)
-         requestBuilder.put("size",  payload.size());
+         formMap.put("size",  payload.size());
       
       if (payload.bus() != null)
-         requestBuilder.put("bus",  payload.bus());
+         formMap.put("bus",  payload.bus());
       
-      return jsonBinder.toJson(requestBuilder);
+      return jsonBinder.toJson(formMap);
    }
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/volumes/%s", dataCenterId, volumeId)).build();
-      return super.createRequest(request, payload);
+      return super.createRequest(genRequest(String.format("datacenters/%s/volumes/%s", dataCenterId, volumeId), fromRequest), payload);
    }
 
 }

@@ -16,24 +16,21 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.snapshot;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.HashMap;
+import org.apache.jclouds.profitbricks.rest.binder.BinderTestBase;
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import org.jclouds.json.config.GsonModule;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "UpdateSnapshotRequestBinderTest")
-public class UpdateSnapshotRequestBinderTest {
+public class UpdateSnapshotRequestBinderTest extends BinderTestBase {
 
    @Test
    public void testUpdatePayload() {
       
-      Injector injector = Guice.createInjector(new GsonModule());
       UpdateSnapshotRequestBinder binder = injector.getInstance(UpdateSnapshotRequestBinder.class);
       
       Snapshot.Request.UpdatePayload payload = Snapshot.Request.updatingBuilder()

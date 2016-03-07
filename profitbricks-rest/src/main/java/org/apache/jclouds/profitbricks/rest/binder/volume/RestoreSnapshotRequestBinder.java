@@ -23,6 +23,10 @@ import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
 import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Supplier;
+import com.google.inject.Inject;
+import java.net.URI;
+import org.jclouds.location.Provider;
 
 public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.RestoreSnapshotPayload> {
 
@@ -31,8 +35,9 @@ public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<
    private String dataCenterId;
    private String volumeId;
 
-   RestoreSnapshotRequestBinder() {
-      super("snapshot", null);
+   @Inject
+   RestoreSnapshotRequestBinder(@Provider Supplier<URI> endpointSupplier) {
+      super("snapshot", null, endpointSupplier);
       this.formMap = HashMultimap.create();
    }
 
@@ -50,21 +55,15 @@ public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<
       
       return "";
    }
-
+   
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {
-      
       fromRequest = super.createRequest(fromRequest, payload);
       
-      HttpRequest.Builder<?> reqBuilder = fromRequest.toBuilder();
-      
-      reqBuilder.addFormParams(formMap);
-      reqBuilder.replacePath(String.format("/rest/datacenters/%s/volumes/%s/restore-snapshot", dataCenterId, volumeId));
-      
-      R req = (R) reqBuilder.build();
+      R req = (R) fromRequest.toBuilder().addFormParams(formMap).build();
       req.getPayload().getContentMetadata().setContentType(MediaType.APPLICATION_FORM_URLENCODED);
       
-      return req;
+      return genRequest(String.format("datacenters/%s/volumes/%s/restore-snapshot", dataCenterId, volumeId), req);
    }
 
 }

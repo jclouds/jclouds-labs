@@ -88,7 +88,7 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
             .homepage(URI.create("https://www.profitbricks.com/"))
             .console(URI.create("https://my.profitbricks.com/dashboard/dcdr2"))
             .iso3166Codes("DE-FKB", "DE-FRA", "US-LAS", "US-LASDEV")
-            .endpoint("https://api.profitbricks.com/rest")
+            .endpoint("https://api.profitbricks.com/rest/v2/")
             .defaultProperties(ProfitBricksProviderMetadata.defaultProperties());
       }
 

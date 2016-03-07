@@ -16,32 +16,31 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.volume;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.jclouds.profitbricks.rest.binder.BinderTestBase;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
+import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import org.jclouds.json.config.GsonModule;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "CreateVolumeRequestBinderTest")
-public class CreateVolumeRequestBinderTest {
+public class CreateVolumeRequestBinderTest extends BinderTestBase {
 
    @Test
    public void testCreatePayload() {
       
-      Injector injector = Guice.createInjector(new GsonModule());
       CreateVolumeRequestBinder binder = injector.getInstance(CreateVolumeRequestBinder.class);
             
       Volume.Request.CreatePayload payload = Volume.Request.creatingBuilder()
               .dataCenterId("datacenter-id")
               .name("jclouds-volume")
               .size(3)
+              .type(VolumeType.HDD)
               .licenceType(LicenceType.LINUX)
               .build();
 
@@ -52,7 +51,7 @@ public class CreateVolumeRequestBinderTest {
               actual
       );
       
-      assertEquals(request.getEndpoint().getPath(), "/rest/datacenters/datacenter-id/volumes");
+      assertEquals(request.getEndpoint().getPath(), "/rest/v2/datacenters/datacenter-id/volumes");
       assertNotNull(actual, "Binder returned null payload");
 
       Json json = injector.getInstance(Json.class);
@@ -61,6 +60,7 @@ public class CreateVolumeRequestBinderTest {
       
       properties.put("size", 3);
       properties.put("licenceType", "LINUX");
+      properties.put("type", "HDD");
       properties.put("name", "jclouds-volume");
       
       HashMap<String, Object> expectedPayload = new HashMap<String, Object>();

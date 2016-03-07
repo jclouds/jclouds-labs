@@ -16,7 +16,6 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +23,18 @@ import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
+import com.google.common.base.Supplier;
+import java.net.URI;
+import org.jclouds.location.Provider;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.CreatePayload> {
 
    String dataCenterId;
 
    @Inject
-   CreateServerRequestBinder(Json jsonBinder) {
-      super("server", jsonBinder);
+   CreateServerRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
+      super("server", jsonBinder, endpointSupplier);
    }
 
    @Override
@@ -58,7 +61,7 @@ public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
       else if (payload.bootCdrom() != null)
          properties.put("bootCdrom", payload.bootCdrom());
       
-      requestBuilder.put("properties", properties);
+      formMap.put("properties", properties);
       
       Server.Entities entities = payload.entities();
       
@@ -72,16 +75,15 @@ public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
          if (entities.nics() != null)
             entitiesParams.put("nics", entities.nics());
          
-         requestBuilder.put("entities", entitiesParams);
+         formMap.put("entities", entitiesParams);
       }
 
-      return jsonBinder.toJson(requestBuilder);
+      return jsonBinder.toJson(formMap);
    }
-
+  
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers", dataCenterId)).build();
-      return super.createRequest(request, payload);
+      return super.createRequest(genRequest(String.format("datacenters/%s/servers", dataCenterId), fromRequest), payload);
    }
 
 }

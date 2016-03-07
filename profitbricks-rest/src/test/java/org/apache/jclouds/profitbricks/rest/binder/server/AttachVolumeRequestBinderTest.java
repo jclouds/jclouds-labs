@@ -17,24 +17,21 @@
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
 import com.google.common.reflect.TypeToken;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.Map;
+import org.apache.jclouds.profitbricks.rest.binder.BinderTestBase;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import org.jclouds.json.config.GsonModule;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "AttachVolumeRequestBinderTest")
-public class AttachVolumeRequestBinderTest {
+public class AttachVolumeRequestBinderTest  extends BinderTestBase {
 
    @Test
    public void testCreatePayload() {
       
-      Injector injector = Guice.createInjector(new GsonModule());
       AttachVolumeRequestBinder binder = injector.getInstance(AttachVolumeRequestBinder.class);
             
       Server.Request.AttachVolumePayload payload = Server.Request.attachVolumeBuilder()
@@ -50,7 +47,7 @@ public class AttachVolumeRequestBinderTest {
               actual
       );
       
-      assertEquals(request.getEndpoint().getPath(), "/rest/datacenters/datacenter-id/servers/server-id/volumes");
+      assertEquals(request.getEndpoint().getPath(), "/rest/v2/datacenters/datacenter-id/servers/server-id/volumes");
       assertNotNull(actual, "Binder returned null payload");
       
       Json json = injector.getInstance(Json.class);

@@ -17,9 +17,11 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
+import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksApiMockTest;
 import static org.testng.Assert.assertEquals;
@@ -94,6 +96,7 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
               .dataCenterId("datacenter-id")
               .name("jclouds-volume")
               .size(3)
+              .type(VolumeType.HDD)
               .licenceType(LicenceType.LINUX)
               .build());
 
@@ -101,8 +104,36 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
       assertNotNull(volume.id());
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/volumes", 
-              "{\"properties\": {\"name\": \"jclouds-volume\", \"size\": 3, \"licenceType\": \"LINUX\"}}"
+      assertSent(server, "POST", "/datacenters/datacenter-id/volumes", 
+              "{\"properties\": {\"name\": \"jclouds-volume\", \"size\": 3, \"licenceType\": \"LINUX\", \"type\":\"HDD\"}}"
+      );
+   }
+   
+   @Test
+   public void testCreateWithSsh() throws InterruptedException {
+      server.enqueue(
+         new MockResponse().setBody(stringFromResource("/volume/get.json"))
+      );
+      
+      HashSet<String> sshKeys = new HashSet<String>();
+      sshKeys.add("hQGOEJeFL91EG3+l9TtRbWNjzhDVHeLuL3NWee6bekA=");
+      
+      Volume volume = volumeApi().createVolume(
+              Volume.Request.creatingBuilder()
+              .dataCenterId("datacenter-id")
+              .name("jclouds-volume")
+              .size(3)
+              .type(VolumeType.HDD)
+              .licenceType(LicenceType.LINUX)
+              .sshKeys(sshKeys)
+              .build());
+
+      assertNotNull(volume);
+      assertNotNull(volume.id());
+      
+      assertEquals(server.getRequestCount(), 1);
+      assertSent(server, "POST", "/datacenters/datacenter-id/volumes", 
+              "{\"properties\": {\"name\": \"jclouds-volume\", \"size\": 3, \"licenceType\": \"LINUX\", \"sshKeys\":[\"hQGOEJeFL91EG3+l9TtRbWNjzhDVHeLuL3NWee6bekA=\"], \"type\":\"HDD\"}}"
       );
    }
    
@@ -120,7 +151,7 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
               .build());
             
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "PATCH", "/rest/datacenters/datacenter-id/volumes/some-id", "{\"name\": \"apache-volume\"}");
+      assertSent(server, "PATCH", "/datacenters/datacenter-id/volumes/some-id", "{\"name\": \"apache-volume\"}");
    }
    
    @Test
@@ -149,7 +180,7 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
       );
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/volumes/volume-id/create-snapshot");
+      assertSent(server, "POST", "/datacenters/datacenter-id/volumes/volume-id/create-snapshot");
    }
    
    @Test
@@ -166,7 +197,7 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
       );
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/volumes/volume-id/restore-snapshot");
+      assertSent(server, "POST", "/datacenters/datacenter-id/volumes/volume-id/restore-snapshot");
    }
         
    private VolumeApi volumeApi() {

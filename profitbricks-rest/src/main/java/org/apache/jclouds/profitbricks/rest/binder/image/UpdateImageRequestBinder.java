@@ -16,20 +16,23 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.image;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.inject.Inject;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
+import com.google.common.base.Supplier;
+import java.net.URI;
+import org.jclouds.location.Provider;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UpdateImageRequestBinder extends BaseProfitBricksRequestBinder<Image.Request.UpdatePayload> {
 
    private String imageId;
 
    @Inject
-   UpdateImageRequestBinder(Json jsonBinder) {
-      super("image", jsonBinder);
+   UpdateImageRequestBinder(Json jsonBinder,  @Provider Supplier<URI> endpointSupplier) {
+      super("image", jsonBinder, endpointSupplier);
    }
 
    @Override
@@ -41,51 +44,52 @@ public class UpdateImageRequestBinder extends BaseProfitBricksRequestBinder<Imag
       imageId = payload.id();
 
       if (payload.name() != null)
-        requestBuilder.put("name", payload.name());
+        formMap.put("name", payload.name());
 
       if (payload.description() != null)
-        requestBuilder.put("description", payload.description());
+        formMap.put("description", payload.description());
 
       if (payload.licenceType() != null)
-        requestBuilder.put("licenceType", payload.licenceType());
+        formMap.put("licenceType", payload.licenceType());
 
       if (payload.cpuHotPlug() != null)
-        requestBuilder.put("cpuHotPlug", payload.cpuHotPlug());
+        formMap.put("cpuHotPlug", payload.cpuHotPlug());
 
       if (payload.cpuHotUnplug() != null)
-        requestBuilder.put("cpuHotUnplug", payload.cpuHotUnplug());
+        formMap.put("cpuHotUnplug", payload.cpuHotUnplug());
 
       if (payload.ramHotPlug() != null)
-        requestBuilder.put("ramHotPlug", payload.ramHotPlug());
+        formMap.put("ramHotPlug", payload.ramHotPlug());
 
       if (payload.ramHotUnplug() != null)
-        requestBuilder.put("ramHotUnplug", payload.ramHotUnplug());
+        formMap.put("ramHotUnplug", payload.ramHotUnplug());
 
       if (payload.nicHotPlug() != null)
-        requestBuilder.put("nicHotPlug", payload.nicHotPlug());
+        formMap.put("nicHotPlug", payload.nicHotPlug());
 
       if (payload.nicHotUnplug() != null)
-        requestBuilder.put("nicHotUnplug", payload.nicHotUnplug());
+        formMap.put("nicHotUnplug", payload.nicHotUnplug());
 
       if (payload.discVirtioHotPlug() != null)
-        requestBuilder.put("discVirtioHotPlug", payload.discVirtioHotPlug());
+        formMap.put("discVirtioHotPlug", payload.discVirtioHotPlug());
 
       if (payload.discVirtioHotUnplug() != null)
-        requestBuilder.put("discVirtioHotUnplug", payload.discVirtioHotUnplug());
+        formMap.put("discVirtioHotUnplug", payload.discVirtioHotUnplug());
 
       if (payload.discScsiHotPlug() != null)
-        requestBuilder.put("discScsiHotPlug", payload.discScsiHotPlug());
+        formMap.put("discScsiHotPlug", payload.discScsiHotPlug());
 
       if (payload.discScsiHotUnplug() != null)
-        requestBuilder.put("discScsiHotUnplug", payload.discScsiHotUnplug());
+        formMap.put("discScsiHotUnplug", payload.discScsiHotUnplug());
       
-      return jsonBinder.toJson(requestBuilder);
+      return jsonBinder.toJson(formMap);
    }
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/images/%s", imageId)).build();
-      return super.createRequest(request, payload);
+      return super.createRequest(genRequest(String.format("images/%s", imageId), fromRequest), payload);
    }
+   
+   
 
 }

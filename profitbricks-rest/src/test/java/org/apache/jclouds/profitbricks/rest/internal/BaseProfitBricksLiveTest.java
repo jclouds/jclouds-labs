@@ -36,6 +36,7 @@ import org.apache.jclouds.profitbricks.rest.domain.Location;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
+import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.jclouds.apis.BaseApiLiveTest;
@@ -170,6 +171,7 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
               .dataCenterId(dataCenter.id())
               .name("jclouds-volume")
               .size(3)
+              .type(VolumeType.HDD)
               .licenceType(LicenceType.LINUX)
               .build());
    }

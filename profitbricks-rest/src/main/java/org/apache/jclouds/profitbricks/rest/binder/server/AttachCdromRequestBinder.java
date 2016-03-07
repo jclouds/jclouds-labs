@@ -21,6 +21,9 @@ import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
+import com.google.common.base.Supplier;
+import java.net.URI;
+import org.jclouds.location.Provider;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class AttachCdromRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.AttachCdromPayload> {
@@ -29,8 +32,8 @@ public class AttachCdromRequestBinder extends BaseProfitBricksRequestBinder<Serv
    String serverId;
 
    @Inject
-   AttachCdromRequestBinder(Json jsonBinder) {
-      super("cdrom", jsonBinder);
+   AttachCdromRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
+      super("cdrom", jsonBinder, endpointSupplier);
    }
 
    @Override
@@ -45,14 +48,13 @@ public class AttachCdromRequestBinder extends BaseProfitBricksRequestBinder<Serv
       dataCenterId = payload.dataCenterId();
       serverId = payload.serverId();
       
-      requestBuilder.put("id", payload.imageId());
-      return jsonBinder.toJson(requestBuilder);
+      formMap.put("id", payload.imageId());
+      return jsonBinder.toJson(formMap);
    }
-
+   
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s/cdroms", dataCenterId, serverId)).build();
-      return super.createRequest(request, payload);
+      return super.createRequest(genRequest(String.format("datacenters/%s/servers/%s/cdroms", dataCenterId, serverId), fromRequest), payload);
    }
 
 }

@@ -135,7 +135,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       assertNotNull(server.id());
       
       assertEquals(this.server.getRequestCount(), 1);
-      assertSent(this.server, "POST", "/rest/datacenters/datacenter-id/servers", 
+      assertSent(this.server, "POST", "/datacenters/datacenter-id/servers", 
               "{\"properties\": {\"name\": \"jclouds-node\", \"cores\": 1, \"ram\": 1024}}"
       );
    }
@@ -156,7 +156,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
               .build());
             
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "PATCH", "/rest/datacenters/datacenter-id/servers/some-id", "{\"name\": \"apache-node\", \"ram\": 2048, \"cores\": 2}");
+      assertSent(server, "PATCH", "/datacenters/datacenter-id/servers/some-id", "{\"name\": \"apache-node\", \"ram\": 2048, \"cores\": 2}");
    }
    
    @Test
@@ -224,7 +224,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(volume.properties().name(), "Storage");
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/servers/server-id/volumes", "{\"id\": \"volume-id\"}");
+      assertSent(server, "POST", "/datacenters/datacenter-id/servers/server-id/volumes", "{\"id\": \"volume-id\"}");
    }
    
    @Test
@@ -277,7 +277,7 @@ public class ServerApiMockTest extends BaseProfitBricksApiMockTest {
       );
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/servers/server-id/cdroms", "{\"id\": \"image-id\"}");
+      assertSent(server, "POST", "/datacenters/datacenter-id/servers/server-id/cdroms", "{\"id\": \"image-id\"}");
    }
    
    @Test

@@ -16,25 +16,22 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.jclouds.profitbricks.rest.binder.BinderTestBase;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import org.jclouds.json.config.GsonModule;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "CreateServerRequestBinderTest")
-public class CreateServerRequestBinderTest {
+public class CreateServerRequestBinderTest extends BinderTestBase {
 
    @Test
    public void testCreatePayload() {
-      
-      Injector injector = Guice.createInjector(new GsonModule());
+            
       CreateServerRequestBinder binder = injector.getInstance(CreateServerRequestBinder.class);
             
       Server.Request.CreatePayload payload = Server.Request.creatingBuilder()
@@ -51,7 +48,7 @@ public class CreateServerRequestBinderTest {
               actual
       );
       
-      assertEquals(request.getEndpoint().getPath(), "/rest/datacenters/datacenter-id/servers");
+      assertEquals(request.getEndpoint().getPath(), "/rest/v2/datacenters/datacenter-id/servers");
       assertNotNull(actual, "Binder returned null payload");
       
       Json json = injector.getInstance(Json.class);

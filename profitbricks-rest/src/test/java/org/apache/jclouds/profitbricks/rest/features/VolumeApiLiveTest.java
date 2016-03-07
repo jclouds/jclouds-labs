@@ -17,12 +17,16 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
+import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
+import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
+import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
 import org.testng.annotations.AfterClass;
@@ -53,13 +57,36 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
    @Test
    public void testCreateVolume() {
       assertNotNull(dataCenter);
+      
+      List<Image> images = api.imageApi().getList(new DepthOptions().depth(5));
+      
+      Image testImage = null;
+      
+      for (Image image : images) {
+         if (
+               image.metadata().state() == State.AVAILABLE &&
+               image.properties().isPublic() && 
+               image.properties().imageType() == Image.Type.HDD && 
+               image.properties().location() == TestLocation &&
+               image.properties().licenceType() == LicenceType.LINUX &&
+               ( testImage == null || testImage.properties().size() > image.properties().size() )
+            ) {
+            testImage = image;
+         }
+      }
+      
+      HashSet<String> sshKeys = new HashSet<String>();
+      sshKeys.add("hQGOEJeFL91EG3+l9TtRbWNjzhDVHeLuL3NWee6bekA=");
 
       testVolume = volumeApi().createVolume(
               Volume.Request.creatingBuilder()
               .dataCenterId(dataCenter.id())
               .name("jclouds-volume")
-              .size(3)
+              .size(4)
               .licenceType(LicenceType.LINUX)
+              .type(VolumeType.HDD)
+              .image(testImage.id())
+              .sshKeys(sshKeys)
               .build());
 
       assertNotNull(testVolume);

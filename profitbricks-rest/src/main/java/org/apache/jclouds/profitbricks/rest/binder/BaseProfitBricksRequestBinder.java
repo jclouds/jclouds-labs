@@ -16,32 +16,32 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Map;
-
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.MapBinder;
-
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import java.util.HashMap;
-
+import org.jclouds.json.Json;
 import org.jclouds.io.MutableContentMetadata;
 import org.jclouds.io.payloads.BaseMutableContentMetadata;
-import org.jclouds.json.Json;
+import java.net.URI;
+import com.google.common.base.Supplier;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
 
+   protected final Supplier<URI> endpointSupplier;
    protected final String paramName;
-   protected final Map<String, Object> requestBuilder;
+   protected final Map<String, Object> formMap;
    protected final Json jsonBinder;
 
    @Inject
-   protected BaseProfitBricksRequestBinder(String paramName, Json jsonBinder) {
+   protected BaseProfitBricksRequestBinder(String paramName, Json jsonBinder, Supplier<URI> endpointSupplier) {
       this.paramName = checkNotNull(paramName, "Initialize 'paramName' in constructor");
       this.jsonBinder = jsonBinder;
-      this.requestBuilder = new HashMap<String, Object>();
+      this.formMap = new HashMap<String, Object>();
+      this.endpointSupplier = endpointSupplier;
    }
 
    @Override
@@ -77,5 +77,13 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
       fromRequest.setPayload(payload);
       fromRequest.getPayload().setContentMetadata(metadata);
       return fromRequest;
+   }
+   
+   protected <R extends HttpRequest> R genRequest(String path, R fromRequest) {          
+      R request = (R) fromRequest.toBuilder()
+         .replacePath(endpointSupplier.get().getPath() + path)
+         .build();
+      
+      return request;
    }
 }
