@@ -48,8 +48,8 @@ public class AttachVolumeRequestBinder extends BaseProfitBricksRequestBinder<Ser
       dataCenterId = payload.dataCenterId();
       serverId = payload.serverId();
       
-      formMap.put("id", payload.volumeId());
-      return jsonBinder.toJson(formMap);
+      requestBuilder.put("id", payload.volumeId());
+      return jsonBinder.toJson(requestBuilder);
    }
    
    @Override

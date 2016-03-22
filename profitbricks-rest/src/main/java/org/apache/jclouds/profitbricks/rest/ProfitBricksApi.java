@@ -21,6 +21,7 @@ import com.google.common.annotations.Beta;
 import java.io.Closeable;
 import org.apache.jclouds.profitbricks.rest.features.DataCenterApi;
 import org.apache.jclouds.profitbricks.rest.features.ImageApi;
+import org.apache.jclouds.profitbricks.rest.features.NicApi;
 import org.apache.jclouds.profitbricks.rest.features.ServerApi;
 import org.apache.jclouds.profitbricks.rest.features.SnapshotApi;
 import org.apache.jclouds.profitbricks.rest.features.VolumeApi;
@@ -43,5 +44,8 @@ public interface ProfitBricksApi extends Closeable {
    
    @Delegate
    SnapshotApi snapshotApi();
+   
+   @Delegate
+   NicApi nicApi();
 
 }

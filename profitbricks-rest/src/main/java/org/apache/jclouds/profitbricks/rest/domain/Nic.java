@@ -27,6 +27,12 @@ import org.jclouds.javax.annotation.Nullable;
 public abstract class Nic {
 
    public abstract String id();
+   
+   @Nullable
+   public abstract String dataCenterId();
+   
+   @Nullable
+   public abstract String serverId();   
 
    public abstract String type();
 
@@ -41,9 +47,9 @@ public abstract class Nic {
    @Nullable
    public abstract Entities entities();
 
-   @SerializedNames({"id", "type", "href", "metadata", "properties", "entities"})
-   public static Nic create(String id, String type, String href, Metadata metadata, Properties properties, Entities entities) {
-      return new AutoValue_Nic(id, type, href, metadata, properties, entities);
+   @SerializedNames({"id", "dataCenterId", "serverId", "type", "href", "metadata", "properties", "entities"})
+   public static Nic create(String id, String dataCenterId, String serverId, String type, String href, Metadata metadata, Properties properties, Entities entities) {
+      return new AutoValue_Nic(id, dataCenterId, serverId, type, href, metadata, properties, entities);
    }
 
    @AutoValue
@@ -52,21 +58,24 @@ public abstract class Nic {
       @Nullable
       public abstract String name();
 
+      @Nullable
       public abstract String mac();
 
       public abstract List<String> ips();
 
-      public abstract boolean dhcp();
+      @Nullable
+      public abstract Boolean dhcp();
 
       public abstract int lan();
 
-      public abstract boolean firewallActive();
+      @Nullable
+      public abstract Boolean firewallActive();
 
       @Nullable
       public abstract Entities entities();
 
       @SerializedNames({"name", "mac", "ips", "dhcp", "lan", "firewallActive", "entities"})
-      public static Properties create(String name, String mac, List<String> ips, boolean dhcp, int lan, boolean firewallactive, Entities entities) {
+      public static Properties create(String name, String mac, List<String> ips, Boolean dhcp, int lan, Boolean firewallactive, Entities entities) {
 	 return new AutoValue_Nic_Properties(name, mac, ips == null ? ImmutableList.<String>of() : copyOf(ips), dhcp, lan, firewallactive, entities);
       }
    }
@@ -81,5 +90,99 @@ public abstract class Nic {
 	 return new AutoValue_Nic_Entities(firewallrules);
       }
    }
+   
+   public static final class Request {
+
+      public static CreatePayload.Builder creatingBuilder() {
+         return new AutoValue_Nic_Request_CreatePayload.Builder();
+      }
+
+      public static UpdatePayload.Builder updatingBuilder() {
+         return new AutoValue_Nic_Request_UpdatePayload.Builder();
+      }
+
+      @AutoValue
+      public abstract static class CreatePayload {
+
+         @Nullable
+         public abstract String name();
+
+         @Nullable
+         public abstract List<String> ips();
+
+         @Nullable
+         public abstract Boolean dhcp();
+
+         public abstract int lan();
+         
+         @Nullable
+         public abstract Boolean firewallActive();
+         
+         @Nullable
+         public abstract List<FirewallRule> firewallrules();
+
+         public abstract String dataCenterId();
+         public abstract String serverId();
+
+         @AutoValue.Builder
+         public abstract static class Builder {
+
+            public abstract Builder name(String name);
+            public abstract Builder ips(List<String> ips);
+            public abstract Builder dhcp(Boolean dhcp);
+            public abstract Builder lan(int lan);
+            public abstract Builder firewallActive(Boolean firewallActive);
+            public abstract Builder firewallrules(List<FirewallRule> firewallrules);
+            public abstract Builder dataCenterId(String dataCenterId);
+            public abstract Builder serverId(String serverId);
+           
+            abstract CreatePayload autoBuild();
+
+            public CreatePayload build() {
+               return autoBuild();
+            }
+         }
+      }
+
+      @AutoValue
+      public abstract static class UpdatePayload {
+
+         @Nullable
+         public abstract String name();
+
+         @Nullable
+         public abstract List<String> ips();
+
+         @Nullable
+         public abstract Boolean dhcp();
+
+         @Nullable
+         public abstract Integer lan();
+         
+         public abstract String dataCenterId();
+         public abstract String serverId();
+         public abstract String id();
+
+         @AutoValue.Builder
+         public abstract static class Builder {
+            public abstract Builder name(String name);
+            public abstract Builder ips(List<String> ips);
+            public abstract Builder dhcp(Boolean dhcp);
+            public abstract Builder lan(Integer lan);
+            public abstract Builder dataCenterId(String dataCenterId);
+            public abstract Builder serverId(String serverId);
+            public abstract Builder id(String id);
+           
+            abstract UpdatePayload autoBuild();
+
+            public UpdatePayload build() {
+               return autoBuild();
+            }
+         }
+      }
+      
+   }
+   
 
 }
+

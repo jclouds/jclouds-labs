@@ -33,14 +33,14 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
 
    protected final Supplier<URI> endpointSupplier;
    protected final String paramName;
-   protected final Map<String, Object> formMap;
+   protected final Map<String, Object> requestBuilder;
    protected final Json jsonBinder;
 
    @Inject
    protected BaseProfitBricksRequestBinder(String paramName, Json jsonBinder, Supplier<URI> endpointSupplier) {
       this.paramName = checkNotNull(paramName, "Initialize 'paramName' in constructor");
       this.jsonBinder = jsonBinder;
-      this.formMap = new HashMap<String, Object>();
+      this.requestBuilder = new HashMap<String, Object>();
       this.endpointSupplier = endpointSupplier;
    }
 

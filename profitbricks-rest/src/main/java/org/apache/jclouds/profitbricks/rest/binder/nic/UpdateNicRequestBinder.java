@@ -14,47 +14,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.binder.server;
+package org.apache.jclouds.profitbricks.rest.binder.nic;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Supplier;
 import com.google.inject.Inject;
+import java.net.URI;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
-import org.apache.jclouds.profitbricks.rest.domain.Server;
+import org.apache.jclouds.profitbricks.rest.domain.Nic;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import com.google.common.base.Supplier;
-import java.net.URI;
 import org.jclouds.location.Provider;
-import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AttachCdromRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.AttachCdromPayload> {
+public class UpdateNicRequestBinder extends BaseProfitBricksRequestBinder<Nic.Request.UpdatePayload> {
 
-   String dataCenterId;
-   String serverId;
+   private String dataCenterId;
+   private String serverId;
+   private String nicId;
 
    @Inject
-   AttachCdromRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
-      super("cdrom", jsonBinder, endpointSupplier);
+   UpdateNicRequestBinder(Json jsonBinder,  @Provider Supplier<URI> endpointSupplier) {
+      super("nic", jsonBinder, endpointSupplier);
    }
 
    @Override
-   protected String createPayload(Server.Request.AttachCdromPayload payload) {
-      
+   protected String createPayload(Nic.Request.UpdatePayload payload) {
+            
       checkNotNull(payload, "payload");
-      
       checkNotNull(payload.dataCenterId(), "dataCenterId");
       checkNotNull(payload.serverId(), "serverId");
-      checkNotNull(payload.imageId(), "imageId");
-
+      checkNotNull(payload.id(), "id");
+      
       dataCenterId = payload.dataCenterId();
       serverId = payload.serverId();
+      nicId = payload.id();
+            
+      requestBuilder.put("lan",  payload.lan());
       
-      requestBuilder.put("id", payload.imageId());
+      if (payload.name() != null)
+         requestBuilder.put("name", payload.name());
+      
+      if (payload.ips() != null && !payload.ips().isEmpty())
+         requestBuilder.put("ips", payload.ips());
+      
+      if (payload.dhcp() != null)
+         requestBuilder.put("dhcp", payload.dhcp());
+      
       return jsonBinder.toJson(requestBuilder);
    }
-   
+
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      return super.createRequest(genRequest(String.format("datacenters/%s/servers/%s/cdroms", dataCenterId, serverId), fromRequest), payload);
+      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s/nics/%s", dataCenterId, serverId, nicId)).build();
+      return super.createRequest(request, payload);
    }
 
 }

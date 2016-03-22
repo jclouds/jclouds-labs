@@ -45,22 +45,22 @@ public class UpdateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
       dataCenterId = payload.dataCenterId();
       serverId = payload.id();
       
-      formMap.put("name",  payload.name());
-      formMap.put("ram",   payload.ram());
-      formMap.put("cores", payload.cores());
+      requestBuilder.put("name",  payload.name());
+      requestBuilder.put("ram",   payload.ram());
+      requestBuilder.put("cores", payload.cores());
       
       if (payload.availabilityZone() != null)
-         formMap.put("availabilityzone", payload.availabilityZone());
+         requestBuilder.put("availabilityzone", payload.availabilityZone());
       
       if (payload.licenceType() != null)
-         formMap.put("licencetype", payload.licenceType());
+         requestBuilder.put("licencetype", payload.licenceType());
       
       if (payload.bootVolume() != null)
-         formMap.put("bootVolume", payload.bootVolume());
+         requestBuilder.put("bootVolume", payload.bootVolume());
       else if (payload.bootCdrom() != null)
-         formMap.put("bootCdrom", payload.bootCdrom());
+         requestBuilder.put("bootCdrom", payload.bootCdrom());
       
-      return jsonBinder.toJson(formMap);
+      return jsonBinder.toJson(requestBuilder);
    }
 
    @Override

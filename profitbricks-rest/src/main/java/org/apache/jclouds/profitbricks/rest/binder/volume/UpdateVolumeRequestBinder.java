@@ -46,15 +46,15 @@ public class UpdateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Vol
       volumeId = payload.id();
       
       if (payload.name() != null)
-         formMap.put("name",  payload.name());
+         requestBuilder.put("name",  payload.name());
       
       if (payload.size() != null)
-         formMap.put("size",  payload.size());
+         requestBuilder.put("size",  payload.size());
       
       if (payload.bus() != null)
-         formMap.put("bus",  payload.bus());
+         requestBuilder.put("bus",  payload.bus());
       
-      return jsonBinder.toJson(formMap);
+      return jsonBinder.toJson(requestBuilder);
    }
 
    @Override

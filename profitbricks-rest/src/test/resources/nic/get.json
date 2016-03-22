@@ -1,0 +1,31 @@
+{
+  "id": "01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d",
+  "type": "nic",
+  "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics/01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d",
+  "metadata": {
+    "createdDate": "2015-02-09T22:46:38Z",
+    "createdBy": "vendors@stackpointcloud.com",
+    "etag": "b4854a82738079d2c7f43b5324bd92e3",
+    "lastModifiedDate": "2015-02-09T22:46:38Z",
+    "lastModifiedBy": "vendors@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "test nic",
+    "mac": "02:01:94:9e:f4:a9",
+    "ips": [
+      "208.94.39.76"
+    ],
+    "dhcp": true,
+    "lan": 1,
+    "firewallActive": false
+  },
+  "entities": {
+    "firewallrules": {
+      "id": "01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d/firewallrules",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics/01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d/firewallrules",
+      "items": []
+    }
+  }
+}

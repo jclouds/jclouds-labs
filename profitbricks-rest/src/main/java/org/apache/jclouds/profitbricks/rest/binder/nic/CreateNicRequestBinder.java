@@ -14,59 +14,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.binder.volume;
+package org.apache.jclouds.profitbricks.rest.binder.nic;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Supplier;
 import com.google.inject.Inject;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
-import org.apache.jclouds.profitbricks.rest.domain.Volume;
+import org.apache.jclouds.profitbricks.rest.domain.Nic;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import com.google.common.base.Supplier;
-import java.net.URI;
 import org.jclouds.location.Provider;
-import static com.google.common.base.Preconditions.checkNotNull;
 
-public class CreateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.CreatePayload> {
+public class CreateNicRequestBinder extends BaseProfitBricksRequestBinder<Nic.Request.CreatePayload> {
 
    private String dataCenterId;
+   private String serverId;
 
    @Inject
-   CreateVolumeRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
-      super("volume", jsonBinder, endpointSupplier);
+   CreateNicRequestBinder(Json jsonBinder,  @Provider Supplier<URI> endpointSupplier) {
+      super("nic", jsonBinder, endpointSupplier);
    }
 
    @Override
-   protected String createPayload(Volume.Request.CreatePayload payload) {
+   protected String createPayload(Nic.Request.CreatePayload payload) {
       
+      checkNotNull(payload, "payload");
       checkNotNull(payload.dataCenterId(), "dataCenterId");
-      checkNotNull(payload.type(), "type");
+      checkNotNull(payload.serverId(), "serverId");
 
       dataCenterId = payload.dataCenterId();
-      
+      serverId = payload.serverId();
+            
       Map<String, Object> properties = new HashMap<String, Object>();
       
-      properties.put("type", payload.type());
-      
-      properties.put("size",  payload.size());
+      properties.put("lan",  payload.lan());
       
       if (payload.name() != null)
          properties.put("name", payload.name());
       
-      if (payload.bus() != null)
-         properties.put("bus", payload.bus());
+      if (payload.ips() != null && !payload.ips().isEmpty())
+         properties.put("ips", payload.ips());
       
-      if (payload.sshKeys() != null)
-         properties.put("sshKeys", payload.sshKeys());
+      if (payload.dhcp() != null)
+         properties.put("dhcp", payload.dhcp());
       
-      if (payload.imagePassword() != null)
-         properties.put("imagePassword", payload.imagePassword());
+      if (payload.firewallActive() != null)
+         properties.put("firewallActive", payload.firewallActive());
       
-      if (payload.image() != null)
-         properties.put("image", payload.image());
-      else if (payload.licenceType() != null)
-         properties.put("licenceType", payload.licenceType());
+      if (payload.firewallrules() != null) {
+         Map<String, Object> entities = new HashMap<String, Object>();
+         entities.put("firewallrules", payload.firewallrules());
+         properties.put("entities", entities);
+      }
       
       requestBuilder.put("properties", properties);
       
@@ -75,7 +77,8 @@ public class CreateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Vol
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      return super.createRequest(genRequest(String.format("datacenters/%s/volumes", dataCenterId), fromRequest), payload);
+      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s/nics", dataCenterId, serverId)).build();
+      return super.createRequest(request, payload);
    }
 
 }

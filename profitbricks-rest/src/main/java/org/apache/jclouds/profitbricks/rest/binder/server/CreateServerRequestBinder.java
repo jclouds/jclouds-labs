@@ -61,7 +61,7 @@ public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
       else if (payload.bootCdrom() != null)
          properties.put("bootCdrom", payload.bootCdrom());
       
-      formMap.put("properties", properties);
+      requestBuilder.put("properties", properties);
       
       Server.Entities entities = payload.entities();
       
@@ -75,10 +75,10 @@ public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
          if (entities.nics() != null)
             entitiesParams.put("nics", entities.nics());
          
-         formMap.put("entities", entitiesParams);
+         requestBuilder.put("entities", entitiesParams);
       }
 
-      return jsonBinder.toJson(formMap);
+      return jsonBinder.toJson(requestBuilder);
    }
   
    @Override

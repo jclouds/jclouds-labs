@@ -21,10 +21,10 @@ import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Supplier;
 import java.net.URI;
 import org.jclouds.location.Provider;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UpdateSnapshotRequestBinder extends BaseProfitBricksRequestBinder<Snapshot.Request.UpdatePayload> {
 
@@ -43,45 +43,45 @@ public class UpdateSnapshotRequestBinder extends BaseProfitBricksRequestBinder<S
       snapshotId = payload.id();
 
       if (payload.name() != null)
-        formMap.put("name", payload.name());
+        requestBuilder.put("name", payload.name());
 
       if (payload.description() != null)
-        formMap.put("description", payload.description());
+        requestBuilder.put("description", payload.description());
 
       if (payload.licenceType() != null)
-        formMap.put("licenceType", payload.licenceType());
+        requestBuilder.put("licenceType", payload.licenceType());
 
       if (payload.cpuHotPlug() != null)
-        formMap.put("cpuHotPlug", payload.cpuHotPlug());
+        requestBuilder.put("cpuHotPlug", payload.cpuHotPlug());
 
       if (payload.cpuHotUnplug() != null)
-        formMap.put("cpuHotUnplug", payload.cpuHotUnplug());
+        requestBuilder.put("cpuHotUnplug", payload.cpuHotUnplug());
 
       if (payload.ramHotPlug() != null)
-        formMap.put("ramHotPlug", payload.ramHotPlug());
+        requestBuilder.put("ramHotPlug", payload.ramHotPlug());
 
       if (payload.ramHotUnplug() != null)
-        formMap.put("ramHotUnplug", payload.ramHotUnplug());
+        requestBuilder.put("ramHotUnplug", payload.ramHotUnplug());
 
       if (payload.nicHotPlug() != null)
-        formMap.put("nicHotPlug", payload.nicHotPlug());
+        requestBuilder.put("nicHotPlug", payload.nicHotPlug());
 
       if (payload.nicHotUnplug() != null)
-        formMap.put("nicHotUnplug", payload.nicHotUnplug());
+        requestBuilder.put("nicHotUnplug", payload.nicHotUnplug());
 
       if (payload.discVirtioHotPlug() != null)
-        formMap.put("discVirtioHotPlug", payload.discVirtioHotPlug());
+        requestBuilder.put("discVirtioHotPlug", payload.discVirtioHotPlug());
 
       if (payload.discVirtioHotUnplug() != null)
-        formMap.put("discVirtioHotUnplug", payload.discVirtioHotUnplug());
+        requestBuilder.put("discVirtioHotUnplug", payload.discVirtioHotUnplug());
 
       if (payload.discScsiHotPlug() != null)
-        formMap.put("discScsiHotPlug", payload.discScsiHotPlug());
+        requestBuilder.put("discScsiHotPlug", payload.discScsiHotPlug());
 
       if (payload.discScsiHotUnplug() != null)
-        formMap.put("discScsiHotUnplug", payload.discScsiHotUnplug());
+        requestBuilder.put("discScsiHotUnplug", payload.discScsiHotUnplug());
       
-      return jsonBinder.toJson(formMap);
+      return jsonBinder.toJson(requestBuilder);
    }
 
    @Override
