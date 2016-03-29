@@ -1,0 +1,57 @@
+{
+  "id": "4",
+  "type": "lan",
+  "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/4",
+  "metadata": {
+    "createdDate": "2015-05-12T17:20:17Z",
+    "createdBy": "vendors@stackpointcloud.com",
+    "etag": "bd1f0344e29ef82d0c2b0e47e386e6bf",
+    "lastModifiedDate": "2015-05-12T17:20:17Z",
+    "lastModifiedBy": "vendors@stackpointcloud.com",
+    "state": "AVAILABLE"
+  },
+  "properties": {
+    "name": "Ex lan",
+    "public": true
+  },
+  "entities": {
+    "nics": {
+      "id": "4/nics",
+      "type": "collection",
+      "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/lans/4/nics",
+      "items": [
+        {
+          "id": "bf15f10d-c451-4bd9-b519-62a4bbe02a7b",
+          "type": "nic",
+          "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465/nics/bf15f10d-c451-4bd9-b519-62a4bbe02a7b",
+          "metadata": {
+            "createdDate": "2015-05-12T17:21:54Z",
+            "createdBy": "vendors@stackpointcloud.com",
+            "etag": "4e256e4cd927eea2337cf9b1b189c71a",
+            "lastModifiedDate": "2015-05-12T17:21:54Z",
+            "lastModifiedBy": "vendors@stackpointcloud.com",
+            "state": "AVAILABLE"
+          },
+          "properties": {
+            "name": null,
+            "mac": "02:01:d9:e0:5c:b8",
+            "ips": [
+              "208.94.38.136"
+            ],
+            "dhcp": true,
+            "lan": 4,
+            "firewallActive": false
+          },
+          "entities": {
+            "firewallrules": {
+              "id": "bf15f10d-c451-4bd9-b519-62a4bbe02a7b/firewallrules",
+              "type": "collection",
+              "href": "https://api.profitbricks.com/rest/datacenters/b0ac144e-e294-415f-ba39-6737d5a9d419/servers/97bd33ed-b97e-4312-acc1-96f44c6e4465/nics/bf15f10d-c451-4bd9-b519-62a4bbe02a7b/firewallrules",
+              "items": []
+            }
+          }
+        }
+      ]
+    }
+  }
+}

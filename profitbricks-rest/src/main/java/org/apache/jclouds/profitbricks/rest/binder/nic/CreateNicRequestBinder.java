@@ -76,9 +76,8 @@ public class CreateNicRequestBinder extends BaseProfitBricksRequestBinder<Nic.Re
    }
 
    @Override
-   protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/datacenters/%s/servers/%s/nics", dataCenterId, serverId)).build();
-      return super.createRequest(request, payload);
+   protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {
+      return super.createRequest(genRequest(String.format("datacenters/%s/servers/%s/nics", dataCenterId, serverId), fromRequest), payload);
    }
 
 }

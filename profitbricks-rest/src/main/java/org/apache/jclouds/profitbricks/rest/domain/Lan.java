@@ -17,6 +17,7 @@
 package org.apache.jclouds.profitbricks.rest.domain;
 
 import com.google.auto.value.AutoValue;
+import java.util.List;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
@@ -24,6 +25,9 @@ import org.jclouds.json.SerializedNames;
 public abstract class Lan {
 
    public abstract String id();
+   
+   @Nullable
+   public abstract String dataCenterId();
 
    public abstract String type();
 
@@ -38,9 +42,9 @@ public abstract class Lan {
    @Nullable
    public abstract Entities entities();
 
-   @SerializedNames({"id", "type", "href", "metadata", "properties", "entities"})
-   public static Lan create(String id, String type, String href, Metadata metadata, Properties properties, Entities entities) {
-      return new AutoValue_Lan(id, type, href, metadata, properties, entities);
+   @SerializedNames({"id", "dataCenterId", "type", "href", "metadata", "properties", "entities"})
+   public static Lan create(String id, String dataCenterId, String type, String href, Metadata metadata, Properties properties, Entities entities) {
+      return new AutoValue_Lan(id, dataCenterId, type, href, metadata, properties, entities);
    }
 
    @AutoValue
@@ -67,4 +71,71 @@ public abstract class Lan {
       }
 
    }
+   
+   
+   public static final class Request {
+
+      public static CreatePayload.Builder creatingBuilder() {
+         return new AutoValue_Lan_Request_CreatePayload.Builder();
+      }
+
+      public static UpdatePayload.Builder updatingBuilder() {
+         return new AutoValue_Lan_Request_UpdatePayload.Builder();
+      }
+            
+      @AutoValue
+      public abstract static class CreatePayload {
+
+         @Nullable
+         public abstract String name();
+
+         @Nullable
+         public abstract Boolean isPublic();
+
+         @Nullable
+         public abstract List<Nic> nics();
+         
+         public abstract String dataCenterId();
+
+         @AutoValue.Builder
+         public abstract static class Builder {
+
+            public abstract Builder name(String name);
+            public abstract Builder isPublic(Boolean isPublic);
+            public abstract Builder nics(List<Nic> nics);
+            public abstract Builder dataCenterId(String dataCenterId);
+
+            abstract CreatePayload autoBuild();
+
+            public CreatePayload build() {
+               return autoBuild();
+            }
+         }
+
+      }
+
+      @AutoValue
+      public abstract static class UpdatePayload {
+
+         public abstract Boolean isPublic();
+         public abstract String dataCenterId();
+         public abstract String id();
+
+         @AutoValue.Builder
+         public abstract static class Builder {
+
+            public abstract Builder isPublic(Boolean isPublic);
+            public abstract Builder dataCenterId(String dataCenterId);
+            public abstract Builder id(String id);
+
+            abstract UpdatePayload autoBuild();
+
+            public UpdatePayload build() {
+               return autoBuild();
+            }
+         }
+      }
+      
+   }
+  
 }

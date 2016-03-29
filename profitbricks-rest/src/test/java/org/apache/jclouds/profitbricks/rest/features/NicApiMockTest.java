@@ -100,7 +100,7 @@ public class NicApiMockTest extends BaseProfitBricksApiMockTest {
       assertNotNull(nic.id());
       
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/rest/datacenters/datacenter-id/servers/server-id/nics", 
+      assertSent(server, "POST", "/datacenters/datacenter-id/servers/server-id/nics", 
               "{\"properties\": {\"name\": \"jclouds-nic\", \"lan\": 1}}"
       );
    }
@@ -120,7 +120,7 @@ public class NicApiMockTest extends BaseProfitBricksApiMockTest {
               .build());
             
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "PATCH", "/rest/datacenters/datacenter-id/servers/server-id/nics/some-id", "{\"name\": \"apache-nic\"}");
+      assertSent(server, "PATCH", "/datacenters/datacenter-id/servers/server-id/nics/some-id", "{\"name\": \"apache-nic\"}");
    }
    
    @Test

@@ -14,58 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.binder.nic;
+package org.apache.jclouds.profitbricks.rest.binder.lan;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Supplier;
 import com.google.inject.Inject;
 import java.net.URI;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
-import org.apache.jclouds.profitbricks.rest.domain.Nic;
+import org.apache.jclouds.profitbricks.rest.domain.Lan;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
 import org.jclouds.location.Provider;
 
-public class UpdateNicRequestBinder extends BaseProfitBricksRequestBinder<Nic.Request.UpdatePayload> {
+public class UpdateLanRequestBinder extends BaseProfitBricksRequestBinder<Lan.Request.UpdatePayload> {
 
    private String dataCenterId;
-   private String serverId;
-   private String nicId;
+   private String lanId;
 
    @Inject
-   UpdateNicRequestBinder(Json jsonBinder,  @Provider Supplier<URI> endpointSupplier) {
-      super("nic", jsonBinder, endpointSupplier);
+   UpdateLanRequestBinder(Json jsonBinder,  @Provider Supplier<URI> endpointSupplier) {
+      super("lan", jsonBinder, endpointSupplier);
    }
 
    @Override
-   protected String createPayload(Nic.Request.UpdatePayload payload) {
-            
-      checkNotNull(payload, "payload");
-      checkNotNull(payload.dataCenterId(), "dataCenterId");
-      checkNotNull(payload.serverId(), "serverId");
-      checkNotNull(payload.id(), "id");
-      
+   protected String createPayload(Lan.Request.UpdatePayload payload) {
+
       dataCenterId = payload.dataCenterId();
-      serverId = payload.serverId();
-      nicId = payload.id();
+      lanId = payload.id();
+      
+      if (payload.isPublic() != null)
+         requestBuilder.put("public",  payload.isPublic());
             
-      requestBuilder.put("lan",  payload.lan());
-      
-      if (payload.name() != null)
-         requestBuilder.put("name", payload.name());
-      
-      if (payload.ips() != null && !payload.ips().isEmpty())
-         requestBuilder.put("ips", payload.ips());
-      
-      if (payload.dhcp() != null)
-         requestBuilder.put("dhcp", payload.dhcp());
-      
       return jsonBinder.toJson(requestBuilder);
    }
 
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
-      return super.createRequest(genRequest(String.format("datacenters/%s/servers/%s/nics/%s", dataCenterId, serverId, nicId), fromRequest), payload);
+      return super.createRequest(genRequest(String.format("datacenters/%s/lans/%s", dataCenterId, lanId), fromRequest), payload);
    }
 
 }
