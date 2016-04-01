@@ -145,8 +145,12 @@ public class DockerComputeServiceAdapter implements
 
       if (!templateOptions.getVolumes().isEmpty()) {
          for (Map.Entry<String, String> entry : templateOptions.getVolumes().entrySet()) {
-            hostConfigBuilder.binds(ImmutableList.of(entry.getKey() + ":" + entry.getValue()));
+             hostConfigBuilder.binds(ImmutableList.of(entry.getKey() + ":" + entry.getValue()));
          }
+      }
+
+      if (!templateOptions.getVolumesFrom().isEmpty()) {
+          hostConfigBuilder.volumesFrom(templateOptions.getVolumesFrom());
       }
 
       hostConfigBuilder.networkMode(templateOptions.getNetworkMode());
