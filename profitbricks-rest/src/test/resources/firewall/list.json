@@ -1,0 +1,31 @@
+{
+  "id": "751dec13-b89f-44ff-a1f8-fa6916a98075/firewallrules",
+  "type": "collection",
+  "href": "https://api.profitbricks.com/rest/datacenters/f38043f0-331d-49e7-b2b8-8319b11d3869/servers/158b2fb1-e8d6-4a87-8244-fd4ad36bb5a2/nics/751dec13-b89f-44ff-a1f8-fa6916a98075/firewallrules",
+  "items": [
+    {
+      "id": "e6389079-3dc7-4041-9c97-dfb56ee49925",
+      "type": "firewall-rule",
+      "href": "https://api.profitbricks.com/rest/datacenters/f38043f0-331d-49e7-b2b8-8319b11d3869/servers/158b2fb1-e8d6-4a87-8244-fd4ad36bb5a2/nics/751dec13-b89f-44ff-a1f8-fa6916a98075/firewallrules/e6389079-3dc7-4041-9c97-dfb56ee49925",
+      "metadata": {
+        "createdDate": "2015-12-30T07:45:50Z",
+        "createdBy": "mirza@stackpointcloud.com",
+        "etag": "9790223e2920abfecde0d3a72acf962f",
+        "lastModifiedDate": "2015-12-30T07:46:01Z",
+        "lastModifiedBy": "mirza@stackpointcloud.com",
+        "state": "AVAILABLE"
+      },
+      "properties": {
+        "name": "apache-firewall",
+        "protocol": "TCP",
+        "sourceMac": null,
+        "sourceIp": null,
+        "targetIp": null,
+        "icmpCode": null,
+        "icmpType": null,
+        "portRangeStart": 1,
+        "portRangeEnd": 600
+      }
+    }
+  ]
+}

@@ -86,4 +86,9 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
       
       return request;
    }
+   
+   protected void putIfPresent(Map<String, Object> list, String key, Object value) {
+      if (value != null)
+         list.put(key, value);
+   }
 }

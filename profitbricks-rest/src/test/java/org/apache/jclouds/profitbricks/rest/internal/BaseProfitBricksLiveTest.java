@@ -33,6 +33,7 @@ import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputePro
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Location;
+import org.apache.jclouds.profitbricks.rest.domain.Nic;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
@@ -155,6 +156,20 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
    protected void assertVolumeAvailable(VolumeRef volumeRef) {
       assertTrue(volumeAvailable.apply(volumeRef),
               String.format("Volume %s wasn't available in the configured timeout", volumeRef.volumeId()));
+   }
+   
+   protected void assertNicAvailable(Nic nic) {
+      assertPredicate(new Predicate<Nic>() {
+         @Override
+         public boolean apply(Nic testNic) {
+            Nic nic = api.nicApi().get(testNic.dataCenterId(), testNic.serverId(), testNic.id());
+            
+            if (nic == null || nic.metadata() == null)
+               return false;
+            
+            return nic.metadata().state() == State.AVAILABLE;
+         }
+      }, nic);
    }
    
    protected DataCenter createDataCenter() {

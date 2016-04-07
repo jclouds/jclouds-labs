@@ -19,7 +19,6 @@ package org.apache.jclouds.profitbricks.rest.features;
 import com.google.common.base.Predicate;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Nic;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
@@ -120,21 +119,7 @@ public class NicApiLiveTest extends BaseProfitBricksLiveTest {
       nicApi().delete(testNic.dataCenterId(), testServer.id(), testNic.id());
       assertNicRemoved(testNic);
    } 
-   
-   private void assertNicAvailable(Nic nic) {
-      assertPredicate(new Predicate<Nic>() {
-         @Override
-         public boolean apply(Nic testNic) {
-            Nic nic = nicApi().get(testNic.dataCenterId(), testNic.serverId(), testNic.id());
-            
-            if (nic == null || nic.metadata() == null)
-               return false;
-            
-            return nic.metadata().state() == State.AVAILABLE;
-         }
-      }, nic);
-   }
-   
+      
    private void assertNicRemoved(Nic nic) {
       assertPredicate(new Predicate<Nic>() {
          @Override
