@@ -381,6 +381,23 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       if (cloudService != null) {
          logger.debug("Resuming %s ...", id);
          trackRequest(api.getVirtualMachineApiForDeploymentInService(id, cloudService.name()).start(id));
+
+         // it happens sometimes that even though the trackRequest call above returns successfully,
+         // the node is still in the process of starting and this.getNode(id) returns null
+         //
+         // this is a temporary workaround for JCLOUDS-1092 and should be removed once the issue is resolved properly
+         if (!retry(new Predicate<String>() {
+            @Override
+            public boolean apply(final String id) {
+               return getNode(id) != null;
+            }
+         }, azureComputeConstants.operationTimeout(), 1, SECONDS).apply(id)) {
+            final String message = generateIllegalStateExceptionMessage(
+                    "waiting for node to resume", "", azureComputeConstants.operationTimeout());
+            logger.warn(message);
+            throw new IllegalStateException(message);
+         }
+
          logger.debug("Resumed %s", id);
       }
    }
