@@ -1,9 +1,0 @@
-{  
-   "action":"set",
-   "node":{  
-      "key":"/hello",
-      "value":"world",
-      "modifiedIndex":40,
-      "createdIndex":40
-   }
-}
