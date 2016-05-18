@@ -17,6 +17,7 @@
 package org.jclouds.docker.suppliers;
 
 import com.google.common.base.Supplier;
+
 import org.jclouds.domain.Credentials;
 import org.jclouds.http.config.SSLModule;
 import org.jclouds.location.Provider;
@@ -24,11 +25,13 @@ import org.jclouds.location.Provider;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.net.ssl.SSLContext;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Throwables.propagate;
+import static org.jclouds.docker.suppliers.SSLContextBuilder.isClientKeyAndCertificateData;
 
 @Singleton
 public class DockerUntrustedSSLContextSupplier implements Supplier<SSLContext> {
@@ -47,7 +50,11 @@ public class DockerUntrustedSSLContextSupplier implements Supplier<SSLContext> {
         Credentials currentCreds = checkNotNull(creds.get(), "credential supplier returned null");
         try {
             SSLContextBuilder builder = new SSLContextBuilder();
-            builder.clientKeyAndCertificate(currentCreds.credential, currentCreds.identity);
+            if (isClientKeyAndCertificateData(currentCreds.credential, currentCreds.identity)) {
+                builder.clientKeyAndCertificateData(currentCreds.credential, currentCreds.identity);
+            } else {
+                builder.clientKeyAndCertificatePaths(currentCreds.credential, currentCreds.identity);
+            }
             builder.trustManager(insecureTrustManager);
             return builder.build();
         } catch (GeneralSecurityException e) {
