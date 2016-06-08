@@ -32,5 +32,9 @@
             "ttl": 3600
         }
     ],
-    "flavor_id": "cdn"
+    "flavor_id": "cdn",
+    "log_delivery":
+      {
+        "enabled": false
+      }
 }

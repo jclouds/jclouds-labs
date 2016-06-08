@@ -53,6 +53,10 @@
     }
   ],
   "flavor_id": "cdn",
+  "log_delivery":
+    {
+      "enabled": false
+    },
   "status": "deployed",
   "errors": [],
   "links": [

@@ -59,9 +59,15 @@ public abstract class CreateService {
     */
    public abstract String getFlavorId();
 
+   /**
+    * @see Builder#logDelivery(LogDelivery)
+    */
+   public abstract LogDelivery getLogDelivery();
+
    public static Builder builder() {
       return new AutoValue_CreateService.Builder().caching(null).restrictions(null);
    }
+
    public Builder toBuilder() {
       return builder()
             .name(getName())
@@ -69,19 +75,21 @@ public abstract class CreateService {
             .origins(getOrigins())
             .caching(getCaching())
             .restrictions(getRestrictions())
-            .flavorId(getFlavorId());
+            .flavorId(getFlavorId())
+            .logDelivery(getLogDelivery());
    }
 
-   @SerializedNames({ "name", "domains", "origins", "caching", "restrictions", "flavor_id" })
+   @SerializedNames({ "name", "domains", "origins", "caching", "restrictions", "flavor_id", "log_delivery" })
    private static CreateService create(String name, List<Domain> domains, List<Origin> origins, List<Caching> caching,
-         List<Restriction> restrictions, String flavorId) {
+         List<Restriction> restrictions, String flavorId, LogDelivery logDelivery) {
       return builder()
             .name(name)
             .domains(domains)
             .origins(origins)
             .caching(caching)
             .restrictions(restrictions)
-            .flavorId(flavorId).build();
+            .flavorId(flavorId)
+            .logDelivery(logDelivery).build();
    }
 
    public static final class Builder {
@@ -91,6 +99,7 @@ public abstract class CreateService {
       private List<Caching> caching;
       private List<Restriction> restrictions;
       private String flavorId;
+      private LogDelivery logDelivery;
       Builder() {
       }
       Builder(CreateService source) {
@@ -100,6 +109,7 @@ public abstract class CreateService {
          caching(source.getCaching());
          restrictions(source.getRestrictions());
          flavorId(source.getFlavorId());
+         logDelivery(source.getLogDelivery());
       }
 
       /**
@@ -164,6 +174,17 @@ public abstract class CreateService {
          return this;
       }
 
+      /**
+       * Required.
+       * 
+       * @param logDelivery
+       * @return The CreateService builder.
+       */
+      public Builder logDelivery(LogDelivery logDelivery) {
+         this.logDelivery = logDelivery;
+         return this;
+      }
+
       public CreateService build() {
          String missing = "";
          if (name == null) {
@@ -178,6 +199,9 @@ public abstract class CreateService {
          if (flavorId == null) {
             missing += " flavorId";
          }
+         if (logDelivery == null) {
+            missing += " logDelivery";
+         }
          if (!missing.isEmpty()) {
             throw new IllegalStateException("Missing required properties:" + missing);
          }
@@ -187,7 +211,8 @@ public abstract class CreateService {
                this.origins,
                this.caching == null ? null : ImmutableList.copyOf(this.caching),
                this.restrictions == null ? null : ImmutableList.copyOf(this.restrictions),
-               this.flavorId);
+                     this.flavorId,
+                     this.logDelivery);
          return result;
       }
    }

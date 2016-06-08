@@ -59,6 +59,10 @@
         }
       ],
       "flavor_id": "asia",
+      "log_delivery":
+        {
+          "enabled": false
+        },
       "status": "deployed",
       "errors" : [],
       "links": [
@@ -111,6 +115,10 @@
       "restrictions": [
       ],
       "flavor_id": "europe",
+      "log_delivery":
+        {
+          "enabled": false
+        },
       "status": "deployed",
       "links": [
         {

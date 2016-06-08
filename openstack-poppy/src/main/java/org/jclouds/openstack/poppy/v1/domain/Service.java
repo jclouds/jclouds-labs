@@ -85,11 +85,16 @@ public abstract class Service {
     */
    public abstract Set<Link> getLinks();
 
+   /**
+    * @return Specifies the delivery logging
+    */
+   public abstract LogDelivery getLogDelivery();
+
    @SerializedNames({ "id", "name", "domains", "origins", "caching", "restrictions", "flavor_id",
-      "status", "errors", "links" })
+      "status", "errors", "links", "log_delivery" })
    private static Service create(String id, String name, List<Domain> domains,
          List<Origin> origins, List<Caching> caching, List<Restriction> restrictions,
-         String flavorId, ServiceStatus status, List<Error> errors, Set<Link> links) {
+         String flavorId, ServiceStatus status, List<Error> errors, Set<Link> links, LogDelivery logDelivery) {
       return new AutoValue_Service(
             id,
             name,
@@ -100,7 +105,8 @@ public abstract class Service {
             flavorId,
             status,
             errors != null ? ImmutableList.copyOf(errors) : null,
-            ImmutableSet.copyOf(links));
+            ImmutableSet.copyOf(links),
+            logDelivery);
    }
 
    public UpdateService.Builder toUpdatableService() {
