@@ -16,22 +16,23 @@
  */
 package org.jclouds.docker.suppliers;
 
-import com.google.common.base.Supplier;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Throwables.propagate;
+import static org.jclouds.docker.suppliers.SSLContextBuilder.isClientKeyAndCertificateData;
 
-import org.jclouds.domain.Credentials;
-import org.jclouds.http.config.SSLModule;
-import org.jclouds.location.Provider;
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.net.ssl.SSLContext;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import com.google.common.base.Supplier;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Throwables.propagate;
-import static org.jclouds.docker.suppliers.SSLContextBuilder.isClientKeyAndCertificateData;
+import org.jclouds.domain.Credentials;
+import org.jclouds.http.config.SSLModule;
+import org.jclouds.location.Provider;
 
 @Singleton
 public class DockerUntrustedSSLContextSupplier implements Supplier<SSLContext> {
@@ -52,7 +53,7 @@ public class DockerUntrustedSSLContextSupplier implements Supplier<SSLContext> {
             SSLContextBuilder builder = new SSLContextBuilder();
             if (isClientKeyAndCertificateData(currentCreds.credential, currentCreds.identity)) {
                 builder.clientKeyAndCertificateData(currentCreds.credential, currentCreds.identity);
-            } else {
+            } else if (new File(currentCreds.identity).isFile() && new File(currentCreds.credential).isFile()) {
                 builder.clientKeyAndCertificatePaths(currentCreds.credential, currentCreds.identity);
             }
             builder.trustManager(insecureTrustManager);
