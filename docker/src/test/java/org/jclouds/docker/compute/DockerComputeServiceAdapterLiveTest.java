@@ -19,10 +19,19 @@ package org.jclouds.docker.compute;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+
 import java.util.Properties;
 import java.util.Random;
 
 import org.jclouds.compute.ComputeService;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
 import org.jclouds.compute.ComputeServiceAdapter.NodeAndInitialCredentials;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Template;
@@ -32,18 +41,11 @@ import org.jclouds.docker.compute.options.DockerTemplateOptions;
 import org.jclouds.docker.compute.strategy.DockerComputeServiceAdapter;
 import org.jclouds.docker.domain.Container;
 import org.jclouds.docker.domain.Image;
-import org.jclouds.docker.options.CreateImageOptions;
 import org.jclouds.docker.options.DeleteImageOptions;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 
 @Test(groups = "live", singleThreaded = true, testName = "DockerComputeServiceAdapterLiveTest")
 public class DockerComputeServiceAdapterLiveTest extends BaseDockerApiLiveTest {
@@ -56,17 +58,13 @@ public class DockerComputeServiceAdapterLiveTest extends BaseDockerApiLiveTest {
    private TemplateBuilder templateBuilder;
    private ComputeService computeService;
    private NodeAndInitialCredentials<Container> guest;
+   private static final String CHUANWEN_COWSAY = "chuanwen/cowsay";
 
    @BeforeClass
    protected void init() {
       super.initialize();
       String imageName = SSHABLE_IMAGE + ":" + SSHABLE_IMAGE_TAG;
-      Image image = api.getImageApi().inspectImage(imageName);
-      if (image == null) {
-         CreateImageOptions options = CreateImageOptions.Builder.fromImage(SSHABLE_IMAGE).tag(SSHABLE_IMAGE_TAG);
-         api.getImageApi().createImage(options);
-      }
-      defaultImage = api.getImageApi().inspectImage(imageName);
+      defaultImage = adapter.getImage(imageName);
       assertNotNull(defaultImage);
    }
 
@@ -108,7 +106,36 @@ public class DockerComputeServiceAdapterLiveTest extends BaseDockerApiLiveTest {
       if (defaultImage != null) {
          api.getImageApi().deleteImage(defaultImage.id(), DeleteImageOptions.Builder.force(true));
       }
+      if (api.getImageApi().inspectImage(CHUANWEN_COWSAY) != null) {
+         api.getImageApi().deleteImage(CHUANWEN_COWSAY);
+      }
       super.tearDown();
+   }
+
+   public void testGetImageNotHiddenByCache() {
+
+      //Ensure image to be tested is unknown to jclouds and docker and that cache is warm
+      assertNull(findImageFromListImages(CHUANWEN_COWSAY));
+      assertNull(api.getImageApi().inspectImage(CHUANWEN_COWSAY));
+
+      // Get new image
+      adapter.getImage(CHUANWEN_COWSAY);
+
+      assertNotNull(findImageFromListImages(CHUANWEN_COWSAY), "New image is not available from listImages presumably due to caching");
+   }
+
+   private Image findImageFromListImages(final String image) {
+      return Iterables.find(adapter.listImages(), new Predicate<Image>() {
+        @Override
+        public boolean apply(Image input) {
+           for (String tag : input.repoTags()) {
+              if (tag.equals(image) || tag.equals(CHUANWEN_COWSAY + ":latest")) {
+                 return true;
+              }
+           }
+           return false;
+        }
+     }, null);
    }
 
    @Override
