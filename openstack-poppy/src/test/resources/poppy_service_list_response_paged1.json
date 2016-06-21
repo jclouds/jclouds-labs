@@ -20,6 +20,8 @@
       ],
       "origins": [
         {
+          "hostheadertype": "custom",
+          "hostheadervalue": "yourwebsite.com",
           "origin": "mywebsite.com",
           "port": 80,
           "ssl": false
@@ -94,11 +96,13 @@
       ],
       "origins": [
         {
+          "hostheadertype": "domain",
           "origin": "44.33.22.11",
           "port": 80,
           "ssl": false
         },
         {
+          "hostheadertype": "domain",
           "origin": "77.66.55.44",
           "port": 80,
           "ssl": false,

@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.openstack.poppy.v1.domain.Caching;
 import org.jclouds.openstack.poppy.v1.domain.CreateService;
 import org.jclouds.openstack.poppy.v1.domain.Domain;
+import org.jclouds.openstack.poppy.v1.domain.HostHeaderType;
 import org.jclouds.openstack.poppy.v1.domain.LogDelivery;
 import org.jclouds.openstack.poppy.v1.domain.Origin;
 import org.jclouds.openstack.poppy.v1.domain.Restriction;
@@ -61,6 +62,7 @@ public class ServiceApiLiveTest extends BasePoppyApiLiveTest {
                                  Domain.builder().domain("www.example" + UUID.randomUUID() + ".com").build()))
                      .origins(ImmutableList.of(
                            Origin.builder()
+                                 .hostHeaderType(HostHeaderType.ORIGIN)
                                  .origin("jclouds123456123456.com")
                                  .port(80)
                                  .sslEnabled(false)

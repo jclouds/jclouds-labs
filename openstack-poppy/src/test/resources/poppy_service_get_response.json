@@ -9,6 +9,7 @@
   ],
   "origins": [
     {
+      "hostheadertype": "origin",
       "origin": "mywebsite.com",
       "port": 80,
       "ssl": false,

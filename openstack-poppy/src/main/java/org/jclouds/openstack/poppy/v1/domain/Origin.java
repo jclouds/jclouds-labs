@@ -30,6 +30,16 @@ import com.google.common.collect.ImmutableList;
 @AutoValue
 public abstract class Origin {
    /**
+    * @see Builder#hostHeaderType(HostHeaderType)
+    */
+   public abstract HostHeaderType getHostHeaderType();
+   
+   /**
+    * @see Builder#hostHeaderValue(String)
+    */
+   @Nullable public abstract String getHostHeaderValue();
+   
+   /**
     * @see Builder#origin(String)
     */
    public abstract String getOrigin();
@@ -49,9 +59,9 @@ public abstract class Origin {
     */
    @Nullable public abstract List<CachingRule> getRules();
 
-   @SerializedNames({ "origin", "port", "ssl", "rules" })
-   private static Origin create(String origin, int port, boolean sslEnabled, List<CachingRule> rules) {
-      return builder().origin(origin).port(port).sslEnabled(sslEnabled)
+   @SerializedNames({ "hostheadertype", "hostheadervalue", "origin", "port", "ssl", "rules" })
+   private static Origin create(HostHeaderType hostHeaderType, String hostHeaderValue, String origin, int port, boolean sslEnabled, List<CachingRule> rules) {
+      return builder().hostHeaderType(hostHeaderType).hostHeaderValue(hostHeaderValue).origin(origin).port(port).sslEnabled(sslEnabled)
             .rules(rules).build();
    }
 
@@ -60,6 +70,8 @@ public abstract class Origin {
    }
    public Builder toBuilder() {
       return builder()
+            .hostHeaderType(getHostHeaderType())
+            .hostHeaderValue(getHostHeaderValue())
             .origin(getOrigin())
             .port(getPort())
             .sslEnabled(getSslEnabled())
@@ -67,6 +79,8 @@ public abstract class Origin {
    }
 
    public static final class Builder {
+      private HostHeaderType hostHeaderType;
+      private String hostHeaderValue;
       private String origin;
       private Integer port;
       private Boolean sslEnabled;
@@ -74,12 +88,37 @@ public abstract class Origin {
       Builder() {
       }
       Builder(Origin source) {
+         hostHeaderType(source.getHostHeaderType());
+         hostHeaderValue(source.getHostHeaderValue());
          origin(source.getOrigin());
          port(source.getPort());
          sslEnabled(source.getSslEnabled());
          rules(source.getRules());
       }
 
+      /**
+       * Required.
+       * @param hostHeaderType Specifies the type of Host header type to use. "origin" will set the value of
+       *                       Host header type to the origin URL, "domain" will set the value of Host header
+       *                       type to the domain URL, "custom" will set the value of Host header type to the
+       *                       value of {@link #hostHeaderValue}.
+       * @return The Origin builder.
+       */
+      public Origin.Builder hostHeaderType(HostHeaderType hostHeaderType) {
+         this.hostHeaderType = hostHeaderType;
+         return this;
+      }
+      
+      /**
+       * Optional.
+       * @param hostHeaderValue Specifies the value of Host header to use when type is set to "custom".
+       * @return The Origin builder.
+       */
+      public Origin.Builder hostHeaderValue(String hostHeaderValue) {
+         this.hostHeaderValue = hostHeaderValue;
+         return this;
+      }
+      
       /**
        * Required.
        * @param origin Specifies the URL or IP address from which to pull origin content. The minimum length for
@@ -126,6 +165,14 @@ public abstract class Origin {
 
       public Origin build() {
          String missing = "";
+         if (hostHeaderType == null) {
+            missing += " hostHeaderType";
+         }
+         else {
+            if (HostHeaderType.CUSTOM.equals(hostHeaderType) && hostHeaderValue == null) {
+               missing += " hostHeaderValue";
+            }
+         }
          if (origin == null) {
             missing += " origin";
          }
@@ -133,6 +180,8 @@ public abstract class Origin {
             throw new IllegalStateException("Missing required properties:" + missing);
          }
          Origin result = new AutoValue_Origin(
+               this.hostHeaderType,
+               this.hostHeaderValue,
                this.origin,
                this.port,
                this.sslEnabled,

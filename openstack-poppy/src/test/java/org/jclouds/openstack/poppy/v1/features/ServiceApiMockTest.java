@@ -30,6 +30,7 @@ import org.jclouds.openstack.poppy.v1.PoppyApi;
 import org.jclouds.openstack.poppy.v1.domain.Caching;
 import org.jclouds.openstack.poppy.v1.domain.CreateService;
 import org.jclouds.openstack.poppy.v1.domain.Domain;
+import org.jclouds.openstack.poppy.v1.domain.HostHeaderType;
 import org.jclouds.openstack.poppy.v1.domain.LogDelivery;
 import org.jclouds.openstack.poppy.v1.domain.Origin;
 import org.jclouds.openstack.poppy.v1.domain.Restriction;
@@ -68,7 +69,8 @@ public class ServiceApiMockTest extends BasePoppyApiMockTest {
                      Domain.builder().domain("www.mywebsite.com").build(),
                      Domain.builder().domain("blog.mywebsite.com").build()))
                .origins(ImmutableList.of(
-                     Origin.builder().origin("mywebsite.com").port(80).sslEnabled(false).build()))
+                     Origin.builder().hostHeaderType(HostHeaderType.DOMAIN).origin("mywebsite.com").port(80)
+                           .sslEnabled(false).build()))
                .restrictions(ImmutableList.of(
                      Restriction.builder()
                            .name("website only")
