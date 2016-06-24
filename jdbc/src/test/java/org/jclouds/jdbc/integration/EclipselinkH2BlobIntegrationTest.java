@@ -39,13 +39,4 @@ public class EclipselinkH2BlobIntegrationTest extends BaseBlobIntegrationTest {
    public void testSetBlobAccess() throws Exception {
       throw new SkipException("jdbc does not support anonymous access");
    }
-
-   @Override
-   public void testListMultipartUploads() throws Exception {
-      try {
-         super.testListMultipartUploads();
-      } catch (UnsupportedOperationException uoe) {
-         throw new SkipException("not yet implemented", uoe);
-      }
-   }
 }
