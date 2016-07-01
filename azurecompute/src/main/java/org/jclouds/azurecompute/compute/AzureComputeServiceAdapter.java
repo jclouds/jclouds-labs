@@ -265,24 +265,35 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       return api.getLocationApi().list();
    }
 
+   /** Returns the {@code deployment} argument itself if already settled, otherwise {@code null}. */
+   private Deployment isSettled(Deployment deployment) {
+      return deployment == null || deployment.roleInstanceList().isEmpty()
+              ? null
+              : FluentIterable.from(deployment.roleInstanceList()).allMatch(
+                      new Predicate<RoleInstance>() {
+                         @Override
+                         public boolean apply(final RoleInstance input) {
+                            return input != null && !input.instanceStatus().isTransient();
+                         }
+                      })
+                      ? deployment
+                      : null;
+   }
+
    @Override
    public Deployment getNode(final String id) {
+      // all nodes created by this provider will always have a cloud service name equal to deployment name
+      final Deployment deployment = api.getDeploymentApiForService(id).get(id);
+      if (deployment != null) {
+         return isSettled(deployment);
+      }
+
       return FluentIterable.from(api.getCloudServiceApi().list()).
               transform(new Function<CloudService, Deployment>() {
                  @Override
                  public Deployment apply(final CloudService input) {
                     final Deployment deployment = api.getDeploymentApiForService(input.name()).get(id);
-                    return deployment == null || deployment.roleInstanceList().isEmpty()
-                            ? null
-                            : FluentIterable.from(deployment.roleInstanceList()).allMatch(
-                                    new Predicate<RoleInstance>() {
-                                       @Override
-                                       public boolean apply(final RoleInstance input) {
-                                          return input != null && !input.instanceStatus().isTransient();
-                                       }
-                                    })
-                                    ? deployment
-                                    : null;
+                    return isSettled(deployment);
                  }
               }).
               firstMatch(notNull()).
