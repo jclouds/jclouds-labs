@@ -1,0 +1,15 @@
+{
+    "id": "65929629F35BBFBA63022008F773F3EB",
+    "name": "M",
+    "hardware": {
+        "vcore": 1,
+        "cores_per_processor": 1,
+        "ram": 1,
+        "unit": "GB",
+        "hdds": [{
+                "size": 40,
+                "unit": "GB",
+                "is_main": true
+            }]
+    }
+}

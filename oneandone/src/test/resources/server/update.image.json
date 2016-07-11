@@ -1,0 +1,73 @@
+{
+    "id": "B2C48C21526E16E3FAF59ACD083DC470",
+    "name": "690929B",
+    "public_name": "java test fixed instance 1",
+    "description": "testing with jclouds",
+    "state_id": 0,
+    "state": "DEPLOYING",
+    "vcpu": 2,
+    "cores_per_processor": 1,
+    "ram": 2,
+    "appliance_id": "7C5FA1D21B98DE39D7516333AAB7DA54",
+    "appliance_name": "w2012r2datacenter64std+SQL2012express",
+    "os_name": "Windows2012R2",
+    "dvd_appliance_id": null,
+    "datacenter_id": "908DC2072407C94C8054610AD5A53B8C",
+    "lock_for_action": null,
+    "configuration_id": "591A7FEF641A98B38D1C4F7C99910121",
+    "configuration_name": "VPS_L",
+    "snapshot_id": null,
+    "start_date": "2016-06-26T15:43:43+00:00",
+    "hdds": [{
+            "id": "B6A5488F233BCE8BFA6B7B48886EA025",
+            "technical_id": 2000,
+            "size": 80,
+            "type_id": 1,
+            "is_main": true,
+            "vm_id": "B2C48C21526E16E3FAF59ACD083DC470"
+        }],
+    "hdd": 80,
+    "ips": ["50.21.182.115"],
+    "hw_version": null,
+    "first_password": null,
+    "rsa_key": 0,
+    "alerts": [],
+    "alerts_count": [],
+    "resize_limits": {
+        "vcpu_min": 2,
+        "vcpu_max": "16.00",
+        "vcpu_step": 1,
+        "ram_min": 2,
+        "ram_max": 32,
+        "ram_step": "0.50",
+        "vcpu_restrictions": ["RESIZE_RESTRICTION_HOT_VCPU_DECREASE_NOT_ALLOWED"],
+        "ram_restrictions": ["RESIZE_RESTRICTION_HOT_RAM_DECREASE_NOT_ALLOWED", "RESIZE_RESTRICTION_HOT_RAM_X16"],
+        "hdd_restrictions": ["RESIZE_RESTRICTION_APPLIANCE_MINIMUM_HDD_SIZE"],
+        "hdd_min": 80,
+        "hdd_max": "500.00",
+        "hdd_step": "10.00"
+    },
+    "monitoring_policy": [],
+    "licenses": [{
+            "name": "Windows_2012_Datacenter",
+            "activation_code": "",
+            "resource": "ngcs.licenses.win"
+        }],
+    "private_networks": [],
+    "vmware_tools_state_id": 11,
+    "last_logs": [{
+            "id": "2F7707D35651A70BA7A64B8332D26713",
+            "date": "2016-06-26T15:49:53+00:00",
+            "action": "REINSTALL",
+            "time": 2,
+            "result": "CONFIGURING",
+            "type": "VM"
+        }, {
+            "id": "D244452F7CAC82B82A74484007F17617",
+            "date": "2016-06-26T15:43:43+00:00",
+            "action": "CREATEVM",
+            "time": 261,
+            "result": "OK",
+            "type": "VM"
+        }]
+}

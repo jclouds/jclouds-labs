@@ -1,0 +1,20 @@
+{
+    "id": "40D2C8D5029BF03F7C9D02D54C9F237D",
+    "name": "puppetnet",
+    "description": null,
+    "network_address": "192.168.45.0",
+    "subnet_mask": "255.255.255.0",
+    "state": "CONFIGURING",
+    "datacenter": {
+        "id": "908DC2072407C94C8054610AD5A53B8C",
+        "country_code": "US",
+        "location": "United States of America"
+    },
+    "creation_date": "2016-05-09T13:21:43+00:00",
+    "servers": [{
+            "id": "56EAA98A07C3D1ECE4C3F352938853B4",
+            "name": "jclouds operations test",
+            "lock": 6
+        }],
+    "cloudpanel_id": "pnFF88C_2"
+}

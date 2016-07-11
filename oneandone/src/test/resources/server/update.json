@@ -1,0 +1,51 @@
+{
+    "id": "D2522497990A9FDCB26CE579524E4024",
+    "cloudpanel_id": "01CFD25",
+    "name": "Updatedjava",
+    "description": "Updated desc",
+    "datacenter": {
+        "id": "908DC2072407C94C8054610AD5A53B8C",
+        "country_code": "US",
+        "location": "United States of America"
+    },
+    "creation_date": "2016-05-18T20:42:44+00:00",
+    "first_password": null,
+    "status": {
+        "state": "POWERED_ON",
+        "percent": null
+    },
+    "hardware": {
+        "fixed_instance_size_id": null,
+        "vcore": 4,
+        "cores_per_processor": 2,
+        "ram": 4,
+        "hdds": [{
+                "id": "7840E7C4DFF5972625720E297AAF870E",
+                "size": 30,
+                "is_main": true
+            }]
+    },
+    "image": {
+        "id": "81504C620D98BCEBAA5202D145203B4B",
+        "name": "w2012r2datacenter64iso"
+    },
+    "dvd": {
+        "id": "81504C620D98BCEBAA5202D145203B4B",
+        "name": "w2012r2datacenter64iso"
+    },
+    "snapshot": null,
+    "ips": [{
+            "id": "8C4F2B7115EB90C585EE6FFB6A5904A8",
+            "ip": "70.35.203.100",
+            "type": "IPV4",
+            "reverse_dns": null,
+            "firewall_policy": {
+                "id": "34A7E423DA3253E6D38563ED06F1041F",
+                "name": "Linux"
+            },
+            "load_balancers": []
+        }],
+    "alerts": [],
+    "monitoring_policy": null,
+    "private_networks": null
+}

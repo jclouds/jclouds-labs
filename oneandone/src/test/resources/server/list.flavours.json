@@ -1,0 +1,113 @@
+[{
+        "id": "65929629F35BBFBA63022008F773F3EB",
+        "name": "M",
+        "hardware": {
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 40,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "591A7FEF641A98B38D1C4F7C99910121",
+        "name": "L",
+        "hardware": {
+            "vcore": 2,
+            "cores_per_processor": 1,
+            "ram": 2,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 80,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "E903FA4F907B5AAF17A7E987FFCDCC6B",
+        "name": "XL",
+        "hardware": {
+            "vcore": 2,
+            "cores_per_processor": 1,
+            "ram": 4,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 120,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "57862AE452473D551B1673938DD3DFFE",
+        "name": "XXL",
+        "hardware": {
+            "vcore": 4,
+            "cores_per_processor": 1,
+            "ram": 8,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 160,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "3D4C49EAEDD42FBC23DB58FE3DEF464F",
+        "name": "S",
+        "hardware": {
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 0.5,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 30,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "6A2383038420110058C77057D261A07C",
+        "name": "3XL",
+        "hardware": {
+            "vcore": 8,
+            "cores_per_processor": 1,
+            "ram": 16,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 240,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "EED49B709368C3715382730A604E9F6A",
+        "name": "4XL",
+        "hardware": {
+            "vcore": 12,
+            "cores_per_processor": 1,
+            "ram": 32,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 360,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }, {
+        "id": "EE48ACD55FEFE57E2651862A348D1254",
+        "name": "5XL",
+        "hardware": {
+            "vcore": 16,
+            "cores_per_processor": 1,
+            "ram": 48,
+            "unit": "GB",
+            "hdds": [{
+                    "size": 500,
+                    "unit": "GB",
+                    "is_main": true
+                }]
+        }
+    }]

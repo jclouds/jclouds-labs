@@ -1,0 +1,54 @@
+{
+  "id": "4B86A3ACC4CEB7A89E012E49FC17F312",
+  "cloudpanel_id": "FE7ED7D",
+  "name": "My Server remame",
+  "description": "My server rename description",
+  "datacenter": {
+    "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+    "location": "USA",
+    "country_code": "US"
+  },
+  "creation_date": "2015-05-07T08:25:37+00:00",
+  "first_password": "Nm4gP97xSw",
+  "status": {
+    "state": "CONFIGURING",
+    "percent": 10
+  },
+  "hardware": {
+    "fixed_instance_size_id": 0,
+    "vcore": 2,
+    "cores_per_processor": 1,
+    "ram": 2,
+    "hdds": [
+    {
+      "id": "0DDE06DFA47743DF928E76AE7DC195C1",
+      "size": 40,
+      "is_main": true
+    },
+    {
+      "id": "B6DAEB7FA4D0CABFD8FE878EC467CA7E",
+      "size": 20,
+      "is_main": false
+    }
+    ]
+  },
+  "image": {
+    "id": "07C170D67C8EC776933FCFF1C299C1C5",
+    "name": "w2012r2datacenter64min"
+  },
+  "dvd": null,
+  "snapshot": null,
+  "ips": [
+  {
+    "id": "D609028BC090EE05665072C721EA4A7A",
+    "ip": "10.4.141.43",
+    "type": "IPV4",
+    "reverse_dns": null,
+    "firewall_policy": null,
+    "load_balancers": []
+  }
+  ],
+  "alerts": [],
+  "monitoring_policy": null,
+  "private_networks": null
+}

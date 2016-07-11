@@ -1,0 +1,309 @@
+
+[{
+        "id": "C68F3BB07BCBE6191F0ACE996AE4F4F5",
+        "name": "Docs\/Content Test Server: CentOS 7",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-05-05T08:51:48+00:00",
+        "image": {
+            "id": "B5F778B85C041347BCDCFC3172AB3F3C",
+            "name": "centos7-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "3D4C49EAEDD42FBC23DB58FE3DEF464F",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 0.5,
+            "hdds": [{
+                    "id": "DD4587ABB3433F93F895638054899F91",
+                    "size": 30,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "5B0BB42CBAF62A454B25D21545CD9ACD",
+                "ip": "70.35.199.18"
+            }],
+        "alerts": null
+    }, {
+        "id": "C547B6BFF993428B72448330883B9A9F",
+        "name": "Doc\/Content Test Server: Ubuntu 14.04",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-03-04T22:05:03+00:00",
+        "image": {
+            "id": "72A90ECC29F718404AC3093A3D78327C",
+            "name": "ubuntu1404-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "65929629F35BBFBA63022008F773F3EB",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "hdds": [{
+                    "id": "0BAE1AF79A047D0E903012298142AFD8",
+                    "size": 40,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "8F6D690623443F28E91C770F4D2D2727",
+                "ip": "70.35.202.196"
+            }],
+        "alerts": null
+    }, {
+        "id": "E7D36EC025C73796035BF4F171379025",
+        "name": "Docs\/Content Test Server: CentOS 7 (2)",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-05-05T17:39:50+00:00",
+        "image": {
+            "id": "B5F778B85C041347BCDCFC3172AB3F3C",
+            "name": "centos7-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "65929629F35BBFBA63022008F773F3EB",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "hdds": [{
+                    "id": "F841D521B453B539314D54323AFA6B48",
+                    "size": 40,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "FDBE99EDD57F8596CBF71B6B64BD0A92",
+                "ip": "62.151.179.99"
+            }],
+        "alerts": null
+    }, {
+        "id": "4ADC7A1550FBF4F9A75E16D1BF483273",
+        "name": "Docs\/Content Test Server: Win 2012",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-02-25T20:17:49+00:00",
+        "image": {
+            "id": "540D1FA7A714715FC4F0C8558580D2C1",
+            "name": "w2012r2datacenter64std+SQL2012express+Plesk12unlimited"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "591A7FEF641A98B38D1C4F7C99910121",
+            "vcore": 2,
+            "cores_per_processor": 1,
+            "ram": 2,
+            "hdds": [{
+                    "id": "DF5BBF27FC71462FFDD347BAB331A58C",
+                    "size": 80,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "9C44C6E37937F4C7F0877B45D032D4C6",
+                "ip": "70.35.203.229"
+            }],
+        "alerts": null
+    }, {
+        "id": "8122D014AE7E8B4E5D9337C215F48A19",
+        "name": "Doc\/Content Test Server: Debian 7",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-03-10T21:17:38+00:00",
+        "image": {
+            "id": "D04943D702F82A1FC29B42FD635ACB51",
+            "name": "debian7-64std+Plesk12.5unlimited"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "65929629F35BBFBA63022008F773F3EB",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "hdds": [{
+                    "id": "AC8FEF977EEC56F63C84E78176BD5051",
+                    "size": 40,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "D7D42B5E81F649F83AFAF250317A8F64",
+                "ip": "70.35.203.151"
+            }],
+        "alerts": null
+    }, {
+        "id": "BFA8EBD2BE60D224FA87D9AD952C0E1F",
+        "name": "Docs\/Content Test Server: CentOS 6 (2)",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-05-16T21:29:08+00:00",
+        "image": {
+            "id": "C598EAD5691CDADD1501A2AF29A2E91C",
+            "name": "centos6-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "591A7FEF641A98B38D1C4F7C99910121",
+            "vcore": 2,
+            "cores_per_processor": 1,
+            "ram": 2,
+            "hdds": [{
+                    "id": "C59751A93DB3D41230379292D7977B1F",
+                    "size": 80,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "39158AED402DB608969D9B4F6D7BAC13",
+                "ip": "70.35.198.225"
+            }],
+        "alerts": null
+    }, {
+        "id": "55561BAF1FAFBD65600C61D1008C1AC7",
+        "name": "Doc\/Content Test Server: Ubuntu 12.04",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-04-15T18:23:49+00:00",
+        "image": {
+            "id": "84E3B902821F911BE6B43FA36ADA8199",
+            "name": "ubuntu1204-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "65929629F35BBFBA63022008F773F3EB",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "hdds": [{
+                    "id": "84ACD1CD506439F051A163209967EDAE",
+                    "size": 40,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "734AACB346D6443BDFF3826E720C995F",
+                "ip": "62.151.176.181"
+            }],
+        "alerts": null
+    }, {
+        "id": "79DF0AD5F3B3EC37E9E0B16806081C13",
+        "name": "Doc\/Content Test Server 2: Ubuntu 14.04",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-03-22T20:50:23+00:00",
+        "image": {
+            "id": "72A90ECC29F718404AC3093A3D78327C",
+            "name": "ubuntu1404-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "65929629F35BBFBA63022008F773F3EB",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "hdds": [{
+                    "id": "8B9685555516904EF13D41B76FDBD602",
+                    "size": 40,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "A7E78CC8584D515D0F2F82DCA26701F5",
+                "ip": "62.151.180.105"
+            }],
+        "alerts": null
+    }, {
+        "id": "B7860D2E2015AFFD633435C7A2A7AC28",
+        "name": "testin",
+        "description": "",
+        "status": {
+            "state": "POWERED_ON",
+            "percent": null
+        },
+        "datacenter": {
+            "id": "908DC2072407C94C8054610AD5A53B8C",
+            "country_code": "US",
+            "location": "United States of America"
+        },
+        "creation_date": "2016-05-15T22:42:21+00:00",
+        "image": {
+            "id": "72A90ECC29F718404AC3093A3D78327C",
+            "name": "ubuntu1404-64std"
+        },
+        "hardware": {
+            "fixed_instance_size_id": "65929629F35BBFBA63022008F773F3EB",
+            "vcore": 1,
+            "cores_per_processor": 1,
+            "ram": 1,
+            "hdds": [{
+                    "id": "5B99E4AF5E20106A8226356B1C36ACB6",
+                    "size": 40,
+                    "is_main": true
+                }]
+        },
+        "ips": [{
+                "id": "924B7E76DEF6EFB47D6C416E4BF62013",
+                "ip": "70.35.207.184"
+            }],
+        "alerts": null
+    }]
+
