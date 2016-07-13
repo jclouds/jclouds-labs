@@ -17,6 +17,7 @@
 package org.apache.jclouds.oneandone.rest;
 
 import java.io.Closeable;
+import org.apache.jclouds.oneandone.rest.features.ImageApi;
 import org.apache.jclouds.oneandone.rest.features.ServerApi;
 import org.jclouds.rest.annotations.Delegate;
 
@@ -24,4 +25,8 @@ public interface OneAndOneApi extends Closeable {
 
    @Delegate
    ServerApi serverApi();
+
+   @Delegate
+   ImageApi imageApi();
+
 }

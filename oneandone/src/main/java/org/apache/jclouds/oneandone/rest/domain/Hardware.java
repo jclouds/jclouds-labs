@@ -68,4 +68,5 @@ public abstract class Hardware {
          return new AutoValue_Hardware_UpdateHardware(vcore, coresPerProcessor, ram);
       }
    }
+
 }

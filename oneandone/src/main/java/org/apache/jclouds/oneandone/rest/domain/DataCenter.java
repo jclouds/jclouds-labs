@@ -21,15 +21,14 @@ import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class DataCenter {
+    public abstract String id();
 
-   public abstract String id();
+    public abstract String countryCode();
 
-   public abstract String countryCode();
+    public abstract String location();
 
-   public abstract String location();
-
-   @SerializedNames({"id", "country_code", "location"})
-   public static DataCenter create(String id, String countryCode, String location) {
-      return new AutoValue_DataCenter(id, countryCode, location);
-   }
+    @SerializedNames({"id", "country_code", "location"})
+    public static DataCenter create(String id, String countryCode, String location) {
+        return new AutoValue_DataCenter(id, countryCode, location);
+    }
 }

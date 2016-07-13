@@ -28,4 +28,5 @@ public abstract class FixedInstanceHardware {
    public static FixedInstanceHardware create(String fixedInstanceSizeId) {
       return new AutoValue_FixedInstanceHardware(fixedInstanceSizeId);
    }
+
 }
