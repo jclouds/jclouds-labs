@@ -72,6 +72,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
 
    private static final String DEFAULT_LOGIN_PASSWORD = "Azur3Compute!";
    public static final String POST_SHUTDOWN_ACTION = "StoppedDeallocated";
+   private static final String POST_SHUTDOWN_ACTION_NO_DEALLOCATE = "Stopped";
 
    @Resource
    @Named(ComputeServiceConstants.COMPUTE_LOGGER)
@@ -419,7 +420,9 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
       final CloudService cloudService = api.getCloudServiceApi().get(id);
       if (cloudService != null) {
          logger.debug("Suspending %s ...", id);
-         trackRequest(api.getVirtualMachineApiForDeploymentInService(id, cloudService.name()).shutdown(id, POST_SHUTDOWN_ACTION));
+         String postShutdownAction = azureComputeConstants.deallocateWhenSuspending()
+                 ? POST_SHUTDOWN_ACTION : POST_SHUTDOWN_ACTION_NO_DEALLOCATE;
+         trackRequest(api.getVirtualMachineApiForDeploymentInService(id, cloudService.name()).shutdown(id, postShutdownAction));
          logger.debug("Suspended %s", id);
       }
    }

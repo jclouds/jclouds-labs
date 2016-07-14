@@ -31,4 +31,6 @@ public class AzureComputeProperties {
 
    public static final String TCP_RULE_REGEXP = "jclouds.azurecompute.tcp.rule.regexp";
 
+   public static final String DEALLOCATE_WHEN_SUSPENDING = "jclouds.azurecompute.deallocate.when.suspending";
+
 }

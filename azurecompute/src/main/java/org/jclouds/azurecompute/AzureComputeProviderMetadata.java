@@ -16,6 +16,7 @@
  */
 package org.jclouds.azurecompute;
 
+import static org.jclouds.azurecompute.config.AzureComputeProperties.DEALLOCATE_WHEN_SUSPENDING;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_INITIAL_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
@@ -53,6 +54,7 @@ public class AzureComputeProviderMetadata extends BaseProviderMetadata {
       properties.setProperty(OPERATION_POLL_MAX_PERIOD, "15");
       properties.setProperty(TCP_RULE_FORMAT, "tcp_%s-%s");
       properties.setProperty(TCP_RULE_REGEXP, "tcp_\\d{1,5}-\\d{1,5}");
+      properties.setProperty(DEALLOCATE_WHEN_SUSPENDING, "true");
       return properties;
    }
 

@@ -16,6 +16,7 @@
  */
 package org.jclouds.azurecompute.compute.config;
 
+import static org.jclouds.azurecompute.config.AzureComputeProperties.DEALLOCATE_WHEN_SUSPENDING;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_INITIAL_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_POLL_MAX_PERIOD;
 import static org.jclouds.azurecompute.config.AzureComputeProperties.OPERATION_TIMEOUT;
@@ -122,6 +123,10 @@ public class AzureComputeServiceContextModule
       @Inject
       private String tcpRuleRegexpProperty;
 
+      @Named(DEALLOCATE_WHEN_SUSPENDING)
+      @Inject
+      private String deallocateWhenSuspending;
+
       public Long operationTimeout() {
          return Long.parseLong(operationTimeoutProperty);
       }
@@ -140,6 +145,10 @@ public class AzureComputeServiceContextModule
 
       public String tcpRuleRegexp() {
          return tcpRuleRegexpProperty;
+      }
+
+      public boolean deallocateWhenSuspending() {
+         return Boolean.parseBoolean(deallocateWhenSuspending);
       }
    }
 
