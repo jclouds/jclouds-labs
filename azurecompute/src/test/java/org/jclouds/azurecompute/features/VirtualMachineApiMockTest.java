@@ -18,12 +18,17 @@ package org.jclouds.azurecompute.features;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
+
 import org.jclouds.azurecompute.domain.Role;
 import org.jclouds.azurecompute.internal.BaseAzureComputeApiMockTest;
 import org.jclouds.azurecompute.xml.RoleHandlerTest;
 import org.testng.annotations.Test;
 
+import com.google.common.io.ByteStreams;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 /*
  * Note: Mock test for CaptureVMImage method is in VMImageApiMockTest class
@@ -109,7 +114,14 @@ public class VirtualMachineApiMockTest extends BaseAzureComputeApiMockTest {
          Role role = RoleHandlerTest.expected();
          assertThat(api.updateRole("testvnetsg02", role)).isEqualTo("request-1");
 
-         assertSent(server, "PUT", "/services/hostedservices/my-service/deployments/mydeployment/roles/testvnetsg02");
+         RecordedRequest request = assertSent(server, "PUT", "/services/hostedservices/my-service/deployments/mydeployment/roles/testvnetsg02");
+         
+         final InputStream is = getClass().getResourceAsStream("/role-update-body.xml");
+         try {
+            assertThat(request.getUtf8Body()).isXmlEqualTo(new String(ByteStreams.toByteArray(is), Charset.forName("UTF-8")));
+         } finally {
+            is.close();
+         }
       } finally {
          server.shutdown();
       }

@@ -1,0 +1,36 @@
+<PersistentVMRole xmlns="http://schemas.microsoft.com/windowsazure">
+  <RoleName>testvnetsg02</RoleName>
+  <RoleType>PersistentVMRole</RoleType>
+  <ConfigurationSets>
+    <ConfigurationSet>
+      <ConfigurationSetType>NetworkConfiguration</ConfigurationSetType>
+      <InputEndpoints>
+        <InputEndpoint>
+          <LocalPort>5986</LocalPort>
+          <Name>PowerShell</Name>
+          <Port>5986</Port>
+          <Protocol>tcp</Protocol>
+        </InputEndpoint>
+        <InputEndpoint>
+          <LocalPort>3389</LocalPort>
+          <Name>Remote Desktop</Name>
+          <Port>59440</Port>
+          <Protocol>tcp</Protocol>
+        </InputEndpoint>
+      </InputEndpoints>
+      <SubnetNames>
+        <SubnetName>Subnet-1</SubnetName>
+      </SubnetNames>
+      <NetworkSecurityGroup>vnetnsgsg01</NetworkSecurityGroup>
+    </ConfigurationSet>
+  </ConfigurationSets>
+  <DataVirtualHardDisks />
+  <OSVirtualHardDisk>
+    <HostCaching>ReadWrite</HostCaching>
+    <DiskName>testvnetsg02-testvnetsg02-0-201502180825130518</DiskName>
+    <MediaLink>https://portalvhdsxz8nc6chc32j1.blob.core.windows.net/vhds/testvnetsg02-testvnetsg02-2015-02-18.vhd</MediaLink>
+    <SourceImageName>a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-R2-201412.01-en.us-127GB.vhd</SourceImageName>
+    <OS>WINDOWS</OS>
+  </OSVirtualHardDisk>
+  <RoleSize>Small</RoleSize>
+</PersistentVMRole>

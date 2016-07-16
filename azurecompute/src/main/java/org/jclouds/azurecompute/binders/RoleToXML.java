@@ -24,6 +24,9 @@ import org.jclouds.rest.Binder;
 
 import com.jamesmurty.utils.XMLBuilder;
 
+/**
+ * Generates XML request body for the <a href="https://msdn.microsoft.com/en-us/library/azure/jj157187.aspx">UpdateRole REST request</a>.
+ */
 public class RoleToXML implements Binder {
 
    @Override
@@ -32,14 +35,13 @@ public class RoleToXML implements Binder {
       Role role = Role.class.cast(input);
 
       try {
-         XMLBuilder builder = XMLBuilder.create("PersistentVMRole", "http://schemas.microsoft.com/windowsazure")
-                 .e("RoleName").t(role.roleName()).up()
-                 .e("RoleType").t(role.roleType()).up()
-                 .e("ConfigurationSets");
-
+         XMLBuilder builder = XMLBuilder.create("PersistentVMRole", "http://schemas.microsoft.com/windowsazure");
+         builder.e("RoleName").t(role.roleName()).up()
+                 .e("RoleType").t(role.roleType()).up();
+         XMLBuilder configSetsBuilder = builder.e("ConfigurationSets");
          if (!role.configurationSets().isEmpty()) {
             for (Role.ConfigurationSet configurationSet : role.configurationSets()) {
-               XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Network
+               XMLBuilder configBuilder = configSetsBuilder.e("ConfigurationSet"); // Network
                configBuilder.e("ConfigurationSetType").t(configurationSet.configurationSetType()).up();
 
                XMLBuilder inputEndpoints = configBuilder.e("InputEndpoints");
@@ -63,6 +65,7 @@ public class RoleToXML implements Binder {
                }
             }
          }
+         
          builder.e("DataVirtualHardDisks").up()
                  .e("OSVirtualHardDisk")
                  .e("HostCaching").t(role.osVirtualHardDisk().hostCaching()).up()
@@ -70,7 +73,7 @@ public class RoleToXML implements Binder {
                  .e("MediaLink").t(role.osVirtualHardDisk().mediaLink().toString()).up()
                  .e("SourceImageName").t(role.osVirtualHardDisk().sourceImageName()).up()
                  .e("OS").t(role.osVirtualHardDisk().os().toString()).up()
-                 .up() // DataVirtualHardDisks
+                 .up() // OSVirtualHardDisk
                  .e("RoleSize").t(role.roleSize().getText());
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
