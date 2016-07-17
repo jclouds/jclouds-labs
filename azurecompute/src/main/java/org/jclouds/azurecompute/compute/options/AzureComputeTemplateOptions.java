@@ -53,6 +53,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
    protected String storageAccountType;
    protected String networkSecurityGroupName;
    protected String reservedIPName;
+   protected Boolean provisionGuestAgent;
 
    @Override
    public AzureComputeTemplateOptions clone() {
@@ -73,6 +74,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
          eTo.storageAccountName(storageAccountName);
          eTo.storageAccountType(storageAccountType);
          eTo.reservedIPName(reservedIPName);
+         eTo.provisionGuestAgent(provisionGuestAgent);
       }
    }
 
@@ -91,6 +93,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       if (storageAccountType != null ? !storageAccountType.equals(that.storageAccountType) : that.storageAccountType != null) return false;
       if (subnetNames != null ? !subnetNames.equals(that.subnetNames) : that.subnetNames != null) return false;
       if (virtualNetworkName != null ? !virtualNetworkName.equals(that.virtualNetworkName) : that.virtualNetworkName != null) return false;
+      if (provisionGuestAgent != null ? !provisionGuestAgent.equals(that.provisionGuestAgent) : that.provisionGuestAgent != null) return false;
 
       return true;
    }
@@ -104,6 +107,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       result = 31 * result + (storageAccountType != null ? storageAccountType.hashCode() : 0);
       result = 31 * result + (networkSecurityGroupName != null ? networkSecurityGroupName.hashCode() : 0);
       result = 31 * result + (reservedIPName != null ? reservedIPName.hashCode() : 0);
+      result = 31 * result + (provisionGuestAgent != null ? provisionGuestAgent.hashCode() : 0);
       return result;
    }
 
@@ -116,6 +120,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
               .add("storageAccountType", storageAccountType)
               .add("networkSecurityGroupName", networkSecurityGroupName)
               .add("reservedIPName", reservedIPName)
+              .add("provisionGuestAgent", provisionGuestAgent)
               .toString();
    }
 
@@ -154,6 +159,11 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       return this;
    }
 
+   public AzureComputeTemplateOptions provisionGuestAgent(@Nullable Boolean provisionGuestAgent) {
+      this.provisionGuestAgent = provisionGuestAgent;
+      return this;
+   }
+
    public String getVirtualNetworkName() {
       return virtualNetworkName;
    }
@@ -176,6 +186,10 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
 
    public String getReservedIPName() {
       return reservedIPName;
+   }
+
+   public Boolean getProvisionGuestAgent() {
+      return provisionGuestAgent;
    }
 
    public static class Builder {

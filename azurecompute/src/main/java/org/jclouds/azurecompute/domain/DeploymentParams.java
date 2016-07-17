@@ -126,6 +126,16 @@ public abstract class DeploymentParams {
 
    public abstract List<String> subnetNames();
 
+   /**
+    * Optional. Indicates whether the VM Agent is installed on the Virtual
+    * Machine. To run a resource extension in a Virtual Machine, this agent must
+    * be installed.
+    *
+    * @return provisionGuestAgent true/false flag (or null)
+    */
+   @Nullable
+   public abstract Boolean provisionGuestAgent();
+
    public static Builder builder() {
       return new AutoValue_DeploymentParams.Builder()
               .externalEndpoints(ImmutableSet.<ExternalEndpoint> of())
@@ -147,6 +157,7 @@ public abstract class DeploymentParams {
       public abstract Builder virtualNetworkName(String virtualNetworkName);
       public abstract Builder reservedIPName(String reservedIPName);
       public abstract Builder subnetNames(List<String> subnetNames);
+      public abstract Builder provisionGuestAgent(Boolean provisionGuestAgent);
 
       abstract Set<ExternalEndpoint> externalEndpoints();
       abstract List<String> subnetNames();
@@ -164,11 +175,12 @@ public abstract class DeploymentParams {
                                          String password, String sourceImageName, URI mediaLink,
                                          OSImage.Type os, Set<ExternalEndpoint> externalEndpoints,
                                          String virtualNetworkName, String reservedIPName,
-                                         List<String> subnetNames) {
+                                         List<String> subnetNames, Boolean provisionGuestAgent) {
       return builder().name(name).size(size).username(username).password(password)
               .sourceImageName(sourceImageName).mediaLink(mediaLink).os(os)
               .externalEndpoints(externalEndpoints).virtualNetworkName(virtualNetworkName)
               .reservedIPName(reservedIPName).subnetNames(subnetNames)
+              .provisionGuestAgent(provisionGuestAgent)
               .build();
    }
 }

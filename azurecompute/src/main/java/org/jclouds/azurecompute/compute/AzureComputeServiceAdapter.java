@@ -134,6 +134,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .externalEndpoints(externalEndpoints)
               .virtualNetworkName(templateOptions.getVirtualNetworkName())
               .subnetNames(templateOptions.getSubnetNames())
+              .provisionGuestAgent(templateOptions.getProvisionGuestAgent())
               .build();
 
       message = String.format("Creating a deployment with params '%s' ...", params);

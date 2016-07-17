@@ -75,6 +75,9 @@ public class RoleToXML implements Binder {
                  .e("OS").t(role.osVirtualHardDisk().os().toString()).up()
                  .up() // OSVirtualHardDisk
                  .e("RoleSize").t(role.roleSize().getText());
+         if (role.provisionGuestAgent() != null) {
+            builder.e("ProvisionGuestAgent").t(role.provisionGuestAgent().toString()).up();
+         }
          return (R) request.toBuilder().payload(builder.asString()).build();
       } catch (Exception e) {
          throw propagate(e);

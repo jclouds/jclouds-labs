@@ -26,6 +26,9 @@ import org.jclouds.rest.Binder;
 
 import com.jamesmurty.utils.XMLBuilder;
 
+/**
+ * Generates XML for <a href="https://msdn.microsoft.com/en-us/library/azure/jj157194.aspx">Create Virtual Machine Deployment</a> REST call.
+ */
 public final class DeploymentParamsToXML implements Binder {
 
    @Override
@@ -33,18 +36,19 @@ public final class DeploymentParamsToXML implements Binder {
       DeploymentParams params = DeploymentParams.class.cast(input);
 
       try {
-         XMLBuilder builder = XMLBuilder.create("Deployment", "http://schemas.microsoft.com/windowsazure")
+         XMLBuilder deploymentBuilder = XMLBuilder.create("Deployment", "http://schemas.microsoft.com/windowsazure")
                  .e("Name").t(params.name()).up()
                  .e("DeploymentSlot").t("Production").up()
-                 .e("Label").t(params.name()).up()
+                 .e("Label").t(params.name()).up();
+         XMLBuilder roleBuilder = deploymentBuilder
                  .e("RoleList")
                  .e("Role")
                  .e("RoleName").t(params.name()).up()
-                 .e("RoleType").t("PersistentVMRole").up()
-                 .e("ConfigurationSets");
+                 .e("RoleType").t("PersistentVMRole").up();
+         XMLBuilder configSetsBuilder = roleBuilder.e("ConfigurationSets");
 
          if (params.os() == OSImage.Type.WINDOWS) {
-            XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Windows
+            XMLBuilder configBuilder = configSetsBuilder.e("ConfigurationSet"); // Windows
             configBuilder.e("ConfigurationSetType").t("WindowsProvisioningConfiguration").up()
                     .e("ComputerName").t(params.name()).up()
                     .e("AdminPassword").t(params.password()).up()
@@ -67,7 +71,7 @@ public final class DeploymentParamsToXML implements Binder {
                     .e("AdminPassword").t(params.username()).up()
                     .up(); // Windows ConfigurationSet
          } else if (params.os() == OSImage.Type.LINUX) {
-            XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Linux
+            XMLBuilder configBuilder = configSetsBuilder.e("ConfigurationSet"); // Linux
             configBuilder.e("ConfigurationSetType").t("LinuxProvisioningConfiguration").up()
                     .e("HostName").t(params.name()).up()
                     .e("UserName").t(params.username()).up()
@@ -81,7 +85,7 @@ public final class DeploymentParamsToXML implements Binder {
             throw new IllegalArgumentException("Unrecognized os type " + params);
          }
 
-         XMLBuilder configBuilder = builder.e("ConfigurationSet"); // Network
+         XMLBuilder configBuilder = configSetsBuilder.e("ConfigurationSet"); // Network
          configBuilder.e("ConfigurationSetType").t("NetworkConfiguration").up();
 
          XMLBuilder inputEndpoints = configBuilder.e("InputEndpoints");
@@ -104,7 +108,7 @@ public final class DeploymentParamsToXML implements Binder {
             }
          }
 
-         builder.up() //ConfigurationSets
+         roleBuilder
                  // TODO No Disk should be specified for a Role if using a VMImage
                  .e("DataVirtualHardDisks").up()
                  .e("OSVirtualHardDisk")
@@ -116,17 +120,18 @@ public final class DeploymentParamsToXML implements Binder {
                  .e("SourceImageName").t(params.sourceImageName()).up()
                  .e("OS").t(params.os() == LINUX ? "Linux" : "Windows").up()
                  .up() //OSVirtualHardDisk
-                 .e("RoleSize").t(params.size().getText()).up()
-                 .up() //Role
-                 .up(); //RoleList
+                 .e("RoleSize").t(params.size().getText()).up();
+         if (params.provisionGuestAgent() != null) {
+            roleBuilder.e("ProvisionGuestAgent").t(params.provisionGuestAgent().toString()).up();
+         }
          if (params.virtualNetworkName() != null) {
-            builder.up().up().up().e("VirtualNetworkName").t(params.virtualNetworkName()).up();
+            configSetsBuilder.up().up().up().e("VirtualNetworkName").t(params.virtualNetworkName()).up();
          }
          if (params.reservedIPName() != null) {
-            builder.up().up().up().e("ReservedIPName").t(params.reservedIPName()).up();
+            configSetsBuilder.up().up().up().e("ReservedIPName").t(params.reservedIPName()).up();
          }
 
-         return (R) request.toBuilder().payload(builder.asString()).build();
+         return (R) request.toBuilder().payload(configSetsBuilder.asString()).build();
       } catch (Exception e) {
          throw propagate(e);
       }

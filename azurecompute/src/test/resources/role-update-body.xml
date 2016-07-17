@@ -33,4 +33,5 @@
     <OS>WINDOWS</OS>
   </OSVirtualHardDisk>
   <RoleSize>Small</RoleSize>
+  <ProvisionGuestAgent>true</ProvisionGuestAgent>
 </PersistentVMRole>
