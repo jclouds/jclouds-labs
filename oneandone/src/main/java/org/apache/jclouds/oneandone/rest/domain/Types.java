@@ -136,6 +136,15 @@ public class Types {
       public static IPType fromValue(String v) {
          return Enums.getIfPresent(IPType.class, v).or(UNRECOGNIZED);
       }
+   }
 
+   public enum StorageServerRights {
+      R,
+      RW,
+      UNRECOGNIZED;
+
+      public static StorageServerRights fromValue(String v) {
+         return Enums.getIfPresent(StorageServerRights.class, v).or(UNRECOGNIZED);
+      }
    }
 }

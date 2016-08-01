@@ -21,12 +21,13 @@ import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Dvd {
-    public abstract String id();
 
-    public abstract String name();
+   public abstract String id();
 
-    @SerializedNames({"id", "name"})
-    public static Dvd create(String id, String name) {
-        return new AutoValue_Dvd(id, name);
-    }
+   public abstract String name();
+
+   @SerializedNames({"id", "name"})
+   public static Dvd create(String id, String name) {
+      return new AutoValue_Dvd(id, name);
+   }
 }

@@ -107,6 +107,21 @@ public abstract class Server {
    }
 
    @AutoValue
+   public abstract static class WarningAlert {
+
+      public abstract String type();
+
+      public abstract String description();
+
+      public abstract Date date();
+
+      @SerializedNames({"type", "description", "date"})
+      public static WarningAlert create(String type, String description, Date date) {
+         return new AutoValue_Server_WarningAlert(type, description, date);
+      }
+   }
+
+   @AutoValue
    public abstract static class UpdateServerResponse {
 
       public abstract String id();

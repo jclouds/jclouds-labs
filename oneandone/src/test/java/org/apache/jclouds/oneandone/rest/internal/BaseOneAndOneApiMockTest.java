@@ -44,9 +44,7 @@ public class BaseOneAndOneApiMockTest {
    protected static final String AUTH_HEADER = "token";
 
    private static final String DEFAULT_ENDPOINT = METADATA.getEndpoint();
-
    private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
-
    protected MockWebServer server;
    protected OneAndOneApi api;
    private Json json;
