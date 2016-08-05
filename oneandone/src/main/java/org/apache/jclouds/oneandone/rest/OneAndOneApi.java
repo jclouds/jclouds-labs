@@ -17,6 +17,7 @@
 package org.apache.jclouds.oneandone.rest;
 
 import java.io.Closeable;
+import org.apache.jclouds.oneandone.rest.features.FirewallPolicyApi;
 import org.apache.jclouds.oneandone.rest.features.ImageApi;
 import org.apache.jclouds.oneandone.rest.features.ServerApi;
 import org.apache.jclouds.oneandone.rest.features.SharedStorageApi;
@@ -32,4 +33,7 @@ public interface OneAndOneApi extends Closeable {
 
    @Delegate
    SharedStorageApi sharedStorageApi();
+
+   @Delegate
+   FirewallPolicyApi firewallPolicyApi();
 }

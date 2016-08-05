@@ -147,4 +147,18 @@ public class Types {
          return Enums.getIfPresent(StorageServerRights.class, v).or(UNRECOGNIZED);
       }
    }
+
+   public enum RuleProtocol {
+      TCP,
+      UDP,
+      ICMP,
+      AH,
+      ESP,
+      GRE,
+      UNRECOGNIZED;
+
+      public static RuleProtocol fromValue(String v) {
+         return Enums.getIfPresent(RuleProtocol.class, v).or(UNRECOGNIZED);
+      }
+   }
 }

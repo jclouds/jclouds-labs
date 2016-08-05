@@ -1,0 +1,16 @@
+[
+    {
+        "id": "DA5CC179ED00079AE7DE595F0073D86E",
+        "protocol": "TCP",
+        "port_from": 80,
+        "port_to": 80,
+        "source": "0.0.0.0"
+    },
+    {
+        "id": "0766EC674A0CD9D4EC0FA0B07978A649",
+        "protocol": "TCP",
+        "port_from": 443,
+        "port_to": 443,
+        "source": "0.0.0.0"
+    }
+]

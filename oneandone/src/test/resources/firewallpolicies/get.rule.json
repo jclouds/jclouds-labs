@@ -1,0 +1,7 @@
+{
+    "id": "353E9F751630074CF7219747436A8D71",
+    "protocol": "TCP",
+    "port_from": 4567,
+    "port_to": 4567,
+    "source": "0.0.0.0"
+}

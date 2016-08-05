@@ -102,6 +102,12 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
               .powerOn(Boolean.TRUE).build());
    }
 
+   protected Server updateServerStatus(Server server) {
+      assertNodeAvailable(server);
+      return api.serverApi().get(server.id());
+
+   }
+
    protected void assertNodeAvailable(Server server) {
       assertTrue(waitUntilServerReady.apply(server), String.format("Server %s is not Ready", server));
    }
