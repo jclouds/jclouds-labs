@@ -161,4 +161,20 @@ public class Types {
          return Enums.getIfPresent(RuleProtocol.class, v).or(UNRECOGNIZED);
       }
    }
+
+   public enum LoadBalancerMethod {
+      ROUND_ROBIN, LEAST_CONNECTIONS, UNRECOGNIZED;
+
+      public static LoadBalancerMethod fromValue(String v) {
+         return Enums.getIfPresent(LoadBalancerMethod.class, v).or(UNRECOGNIZED);
+      }
+   }
+
+   public enum HealthCheckTestTypes {
+      TCP, HTTP, NONE, UNRECOGNIZED;
+
+      public static HealthCheckTestTypes fromValue(String v) {
+         return Enums.getIfPresent(HealthCheckTestTypes.class, v).or(UNRECOGNIZED);
+      }
+   }
 }
