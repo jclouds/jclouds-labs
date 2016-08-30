@@ -67,7 +67,6 @@
     <module>azurecompute-arm</module>
     <module>azurecompute</module>
     <module>b2</module>
-    <module>docker</module>
     <module>cdmi</module>
     <module>cloudsigma2</module>
     <module>cloudsigma2-hnl</module>
