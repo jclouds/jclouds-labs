@@ -1,0 +1,15 @@
+{
+    "id": "F77CC589EBC120905B4F4719217BFF6D",
+    "ip": "10.5.132.106",
+    "type": "IPV4",
+    "datacenter": {
+        "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+        "location": "USA",
+        "country_code": "US"
+    },
+    "assigned_to": null,
+    "reverse_dns": null,
+    "is_dhcp": false,
+    "state": "ACTIVE",
+    "creation_date": "2015-04-30T09:44:28+00:00"
+}

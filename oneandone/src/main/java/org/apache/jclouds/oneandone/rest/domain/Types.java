@@ -177,4 +177,14 @@ public class Types {
          return Enums.getIfPresent(HealthCheckTestTypes.class, v).or(UNRECOGNIZED);
       }
    }
+
+   public enum IPOwner {
+
+      SERVER, LOAD_BALANCER, UNRECOGNIZED;
+
+      public static IPOwner fromValue(String v) {
+         return Enums.getIfPresent(IPOwner.class, v).or(UNRECOGNIZED);
+      }
+
+   }
 }
