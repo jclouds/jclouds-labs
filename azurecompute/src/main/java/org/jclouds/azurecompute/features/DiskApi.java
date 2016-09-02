@@ -33,6 +33,7 @@ import org.jclouds.azurecompute.functions.ParseRequestIdHeader;
 import org.jclouds.azurecompute.xml.ListDisksHandler;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Headers;
+import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.XMLResponseParser;
 
@@ -63,6 +64,7 @@ public interface DiskApi {
    @Named("DeleteDisk")
    @DELETE
    @Path("/{diskName}")
+   @QueryParams(keys = "comp", values = "media")
    @Fallback(NullOnNotFoundOr404.class)
    @ResponseParser(ParseRequestIdHeader.class)
    String delete(@PathParam("diskName") String diskName);

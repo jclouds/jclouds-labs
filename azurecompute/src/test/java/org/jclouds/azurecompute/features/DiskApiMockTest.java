@@ -51,7 +51,7 @@ public class DiskApiMockTest extends BaseAzureComputeApiMockTest {
 
          assertEquals(api.delete("my-disk"), "request-1");
 
-         assertSent(server, "DELETE", "/services/disks/my-disk");
+         assertSent(server, "DELETE", "/services/disks/my-disk?comp=media");
       } finally {
          server.shutdown();
       }
