@@ -1,0 +1,34 @@
+[
+    {
+        "id": "6058B5DAF8182D20E1C68C3CED78EE22",
+        "name": "My private network",
+        "description": "My private network description",
+        "datacenter": {
+            "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+            "location": "USA",
+            "country_code": "US"
+        },
+        "network_address": "192.168.1.0",
+        "subnet_mask": "255.255.255.0",
+        "state": "ACTIVE",
+        "creation_date": "2015-04-28T10:21:19+00:00",
+        "servers": [],
+        "cloudpanel_id": "pn99AA4_1"
+    },
+    {
+        "id": "6058B5DAF8182D20E1C68C3CED78EE23",
+        "name": "My private network 2",
+        "description": "My private network description",
+        "datacenter": {
+            "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+            "location": "USA",
+            "country_code": "US"
+        },
+        "network_address": null,
+        "subnet_mask": null,
+        "state": "ACTIVE",
+        "creation_date": "2015-04-28T10:21:19+00:00",
+        "servers": [],
+        "cloudpanel_id": "pn99AA4_1"
+    }
+]
