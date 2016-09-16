@@ -20,7 +20,7 @@ import com.google.common.base.Enums;
 
 public enum VolumeType {
 
-   HDD, UNRECOGNIZED;
+   HDD, SSD, UNRECOGNIZED;
 
    public static VolumeType fromValue(String v) {
       return Enums.getIfPresent(VolumeType.class, v).or(UNRECOGNIZED);

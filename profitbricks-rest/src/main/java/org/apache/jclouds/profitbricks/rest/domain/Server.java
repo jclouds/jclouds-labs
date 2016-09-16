@@ -24,16 +24,16 @@ import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Server {
-   
+
    public abstract String id();
-   
+
    @Nullable
    public abstract String dataCenterId();
 
    public abstract String type();
 
    public abstract String href();
-   
+
    @Nullable
    public abstract Metadata metadata();
 
@@ -59,10 +59,10 @@ public abstract class Server {
 
       @Nullable
       public abstract AvailabilityZone availabilityZone();
-      
+
       @Nullable
       public abstract Server.Status vmState();
-      
+
       @Nullable
       public abstract LicenceType licenceType();
 
@@ -72,9 +72,12 @@ public abstract class Server {
       @Nullable
       public abstract Volume bootCdrom();
 
-      @SerializedNames({"name", "cores", "ram", "availabilityZone", "vmState", "licenceType", "bootVolume", "bootCdrom"})
-      public static Properties create(String name, int cores, int ram, AvailabilityZone availabilityZone, Server.Status vmState, LicenceType licenceType, Volume bootVolume, Volume bootCdrom) {
-         return new AutoValue_Server_Properties(name, cores, ram, availabilityZone, vmState, licenceType, bootVolume, bootCdrom);
+      @Nullable
+      public abstract CpuFamily cpuFamily();
+
+      @SerializedNames({"name", "cores", "ram", "availabilityZone", "vmState", "licenceType", "bootVolume", "bootCdrom", "cpuFamily"})
+      public static Properties create(String name, int cores, int ram, AvailabilityZone availabilityZone, Server.Status vmState, LicenceType licenceType, Volume bootVolume, Volume bootCdrom, CpuFamily cpuFamily) {
+         return new AutoValue_Server_Properties(name, cores, ram, availabilityZone, vmState, licenceType, bootVolume, bootCdrom, cpuFamily);
       }
 
    }
@@ -84,7 +87,7 @@ public abstract class Server {
 
       @Nullable
       public abstract Images cdroms();
-      
+
       @Nullable
       public abstract Volumes volumes();
 
@@ -97,7 +100,19 @@ public abstract class Server {
       }
 
    }
-   
+
+   @AutoValue
+   public abstract static class BootVolume {
+
+      public abstract String id();
+
+      @SerializedNames({"id"})
+      public static BootVolume create(String id) {
+         return new AutoValue_Server_BootVolume(id);
+      }
+
+   }
+
    public static final class Request {
 
       public static CreatePayload.Builder creatingBuilder() {
@@ -107,11 +122,11 @@ public abstract class Server {
       public static UpdatePayload.Builder updatingBuilder() {
          return new AutoValue_Server_Request_UpdatePayload.Builder();
       }
-      
+
       public static AttachCdromPayload.Builder attachCdromBuilder() {
          return new AutoValue_Server_Request_AttachCdromPayload.Builder();
       }
-      
+
       public static AttachVolumePayload.Builder attachVolumeBuilder() {
          return new AutoValue_Server_Request_AttachVolumePayload.Builder();
       }
@@ -120,7 +135,7 @@ public abstract class Server {
       public abstract static class CreatePayload {
 
          public abstract String name();
-         
+
          public abstract int cores();
 
          public abstract int ram();
@@ -128,20 +143,23 @@ public abstract class Server {
          public abstract String dataCenterId();
 
          @Nullable
-         public abstract Volume bootVolume();
+         public abstract BootVolume bootVolume();
 
          @Nullable
-         public abstract Volume bootCdrom();
+         public abstract String bootCdrom();
+
+         @Nullable
+         public abstract CpuFamily cpuFamily();
 
          @Nullable
          public abstract AvailabilityZone availabilityZone();
-         
+
          @Nullable
          public abstract LicenceType licenceType();
-        
+
          @Nullable
          public abstract Entities entities();
-                  
+
          @AutoValue.Builder
          public abstract static class Builder {
 
@@ -153,16 +171,18 @@ public abstract class Server {
 
             public abstract Builder dataCenterId(String dataCenterId);
 
-            public abstract Builder bootVolume(Volume bootVolume);
+            public abstract Builder bootVolume(BootVolume bootVolume);
 
-            public abstract Builder bootCdrom(Volume bootCdrom);
+            public abstract Builder bootCdrom(String bootCdrom);
+
+            public abstract Builder cpuFamily(CpuFamily cpuFamily);
 
             public abstract Builder availabilityZone(AvailabilityZone availabilityZone);
-            
+
             public abstract Builder licenceType(LicenceType licenceType);
-           
+
             public abstract Builder entities(Entities entities);
-            
+
             abstract CreatePayload autoBuild();
 
             public CreatePayload build() {
@@ -178,12 +198,12 @@ public abstract class Server {
       public abstract static class UpdatePayload {
 
          public abstract String id();
-         
+
          public abstract String dataCenterId();
 
          @Nullable
          public abstract String name();
-         
+
          @Nullable
          public abstract Integer cores();
 
@@ -191,14 +211,14 @@ public abstract class Server {
          public abstract Integer ram();
 
          @Nullable
-         public abstract Volume bootVolume();
+         public abstract BootVolume bootVolume();
 
          @Nullable
          public abstract Volume bootCdrom();
 
          @Nullable
          public abstract AvailabilityZone availabilityZone();
-         
+
          @Nullable
          public abstract LicenceType licenceType();
 
@@ -206,46 +226,51 @@ public abstract class Server {
          public abstract static class Builder {
 
             public abstract Builder id(String id);
-            
+
             public abstract Builder dataCenterId(String dataCenterId);
-            
+
             public abstract Builder name(String name);
 
             public abstract Builder cores(Integer cores);
 
             public abstract Builder ram(Integer ram);
 
-            public abstract Builder bootVolume(Volume bootVolume);
+            public abstract Builder bootVolume(BootVolume bootVolume);
 
             public abstract Builder bootCdrom(Volume bootCdrom);
 
             public abstract Builder availabilityZone(AvailabilityZone availabilityZone);
-            
+
             public abstract Builder licenceType(LicenceType licenceType);
 
             abstract UpdatePayload autoBuild();
 
             public UpdatePayload build() {
                UpdatePayload payload = autoBuild();
-               if (payload.cores() != null)
+               if (payload.cores() != null) {
                   checkCores(payload.cores());
+               }
                return payload;
             }
          }
       }
-      
+
       @AutoValue
       public abstract static class AttachCdromPayload {
 
          public abstract String imageId();
+
          public abstract String dataCenterId();
+
          public abstract String serverId();
-         
+
          @AutoValue.Builder
          public abstract static class Builder {
-            
+
             public abstract Builder imageId(String imageId);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder serverId(String serverId);
 
             abstract AttachCdromPayload autoBuild();
@@ -255,19 +280,23 @@ public abstract class Server {
             }
          }
       }
-      
-      @AutoValue 
+
+      @AutoValue
       public abstract static class AttachVolumePayload {
 
          public abstract String volumeId();
+
          public abstract String dataCenterId();
+
          public abstract String serverId();
-         
+
          @AutoValue.Builder
          public abstract static class Builder {
-            
+
             public abstract Builder volumeId(String volumeId);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder serverId(String serverId);
 
             abstract AttachVolumePayload autoBuild();
@@ -278,7 +307,7 @@ public abstract class Server {
          }
       }
    }
-   
+
    public enum Status {
 
       NOSTATE, RUNNING, BLOCKED, PAUSED, SHUTDOWN, SHUTOFF, CRASHED, UNRECOGNIZED;

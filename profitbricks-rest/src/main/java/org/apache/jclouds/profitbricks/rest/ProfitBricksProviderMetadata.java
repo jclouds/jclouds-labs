@@ -55,19 +55,22 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
 
    public static Properties defaultProperties() {
       Properties properties = ProfitBricksApiMetadata.defaultProperties();
-            
-      properties.setProperty(PROPERTY_ISO3166_CODES, "US-NV,DE-HE,DE-BW");
 
-      properties.setProperty(PROPERTY_REGIONS, "DE,US");
-      properties.setProperty(PROPERTY_REGION + ".DE.zones", "FKB,FRA");
-      properties.setProperty(PROPERTY_REGION + ".US.zones", "LAS,LASDEV");
+      properties.setProperty(PROPERTY_REGIONS, "de,us");
+      properties.setProperty(PROPERTY_REGION + ".de.zones", "de/fkb,de/fra");
+      properties.setProperty(PROPERTY_REGION + ".us.zones", "us/las,us/lasdev");
+      properties.setProperty(PROPERTY_ZONES, "de/fkb,de/fra,us/las,us/lasdev");
+      properties.setProperty(PROPERTY_ISO3166_CODES, "DE-BW,DE-HE,US_NV");
+      properties.setProperty(PROPERTY_REGION + ".de." + ISO3166_CODES, "DE-BW,DE-HE");
+      properties.setProperty(PROPERTY_REGION + ".us." + ISO3166_CODES, "US-NV");
+      properties.setProperty(PROPERTY_ZONE + ".de/fkb." + ISO3166_CODES, "DE-BW");
+      properties.setProperty(PROPERTY_ZONE + ".de/fra." + ISO3166_CODES, "DE-HE");
+      properties.setProperty(PROPERTY_ZONE + ".us/las." + ISO3166_CODES, "US-NV");
+      properties.setProperty(PROPERTY_ZONE + ".us/lasdev." + ISO3166_CODES, "US-NV");
 
-      properties.setProperty(PROPERTY_ZONES, "FKB,FRA,LAS,LASDEV");
-      properties.setProperty(PROPERTY_ZONE + ".FKB." + ISO3166_CODES, "DE-BW");
-      properties.setProperty(PROPERTY_ZONE + ".FRA." + ISO3166_CODES, "DE-HE");
-      properties.setProperty(PROPERTY_ZONE + ".LAS." + ISO3166_CODES, "US-NV");
-      properties.setProperty(PROPERTY_ZONE + ".LASDEV." + ISO3166_CODES, "US-NV");
-      
+      properties.put("jclouds.ssh.max-retries", "7");
+      properties.put("jclouds.ssh.retry-auth", "true");
+
       long defaultTimeout = 60l * 60l; // 1 hour
       properties.put(POLL_TIMEOUT, defaultTimeout);
       properties.put(POLL_PERIOD, 2l);
@@ -75,7 +78,7 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
 
       properties.put(PROPERTY_SO_TIMEOUT, 60000 * 5);
       properties.put(PROPERTY_CONNECTION_TIMEOUT, 60000 * 5);
-      
+
       return properties;
    }
 
@@ -83,13 +86,13 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
 
       protected Builder() {
          id("profitbricks-rest")
-            .name("ProfitBricks REST Compute")
-            .apiMetadata(new ProfitBricksApiMetadata())
-            .homepage(URI.create("https://www.profitbricks.com/"))
-            .console(URI.create("https://my.profitbricks.com/dashboard/dcdr2"))
-            .iso3166Codes("DE-FKB", "DE-FRA", "US-LAS", "US-LASDEV")
-            .endpoint("https://api.profitbricks.com/rest/v2/")
-            .defaultProperties(ProfitBricksProviderMetadata.defaultProperties());
+                 .name("ProfitBricks REST Compute")
+                 .apiMetadata(new ProfitBricksApiMetadata())
+                 .homepage(URI.create("https://www.profitbricks.com/"))
+                 .console(URI.create("https://my.profitbricks.com/dashboard/dcdr2"))
+                 .iso3166Codes("DE-BW", "DE-HE", "US-NV")
+                 .endpoint("https://api.profitbricks.com/rest/v2/")
+                 .defaultProperties(ProfitBricksProviderMetadata.defaultProperties());
       }
 
       @Override

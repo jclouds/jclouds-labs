@@ -29,8 +29,10 @@ public abstract class DataCenter {
 
    public abstract String href();
 
+   @Nullable
    public abstract Metadata metadata();
 
+   @Nullable
    public abstract Properties properties();
 
    @Nullable

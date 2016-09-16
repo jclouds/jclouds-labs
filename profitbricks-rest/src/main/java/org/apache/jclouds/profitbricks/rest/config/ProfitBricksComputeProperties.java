@@ -18,15 +18,14 @@ package org.apache.jclouds.profitbricks.rest.config;
 
 public class ProfitBricksComputeProperties {
 
+   public static final String POLL_PREDICATE_SERVER = "jclouds.profitbricks.rest.predicate.server";
    public static final String POLL_PREDICATE_DATACENTER = "jclouds.profitbricks.rest.predicate.datacenter";
    public static final String POLL_PREDICATE_SNAPSHOT = "jclouds.profitbricks.rest.predicate.snapshot";
+   public static final String POLL_PREDICATE_NIC = "jclouds.profitbricks.rest.predicate.nic";
 
    public static final String POLL_TIMEOUT = "jclouds.profitbricks.rest.poll.timeout";
    public static final String POLL_PERIOD = "jclouds.profitbricks.rest.operation.poll.initial-period";
    public static final String POLL_MAX_PERIOD = "jclouds.profitbricks.rest.operation.poll.max-period";
-   
-   public static final String TIMEOUT_NODE_RUNNING = "jclouds.profitbricks.rest.operation.poll.node.running";
-   public static final String TIMEOUT_NODE_SUSPENDED = "jclouds.profitbricks.rest.operation.poll.node.suspended";
 
    private ProfitBricksComputeProperties() {
       throw new AssertionError("Intentionally unimplemented");

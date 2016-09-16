@@ -1,0 +1,140 @@
+{
+    "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2",
+    "type": "server",
+    "href": "https://api.profitbricks.com/rest/datacenters/mock/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2",
+    "metadata": {
+        "createdDate": "2014-10-20T21:20:46Z",
+        "createdBy": "vendors@stackpointcloud.com",
+        "etag": "0018832d7a7ba455db74ac41ae9f11fe",
+        "lastModifiedDate": "2015-03-18T21:31:10Z",
+        "lastModifiedBy": "vendors@stackpointcloud.com",
+        "state": "AVAILABLE"
+    },
+    "properties": {
+        "name": "docker001",
+        "cores": 4,
+        "ram": 4096,
+        "availabilityZone": "AUTO",
+        "vmState": "RUNNING",
+        "bootCdrom": null,
+        "bootVolume": {
+            "id": "c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+            "type": "volume",
+            "href": "https://api.profitbricks.com/rest/datacenters/mock/volumes/c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+            "metadata": {
+                "createdDate": "2014-10-20T21:20:46Z",
+                "createdBy": "vendors@stackpointcloud.com",
+                "etag": "7a539b539d8ca9e08c5ac5e63c9c4c8f",
+                "lastModifiedDate": "2014-10-20T21:20:46Z",
+                "lastModifiedBy": "vendors@stackpointcloud.com",
+                "state": "AVAILABLE"
+            },
+            "properties": {
+                "name": "Storage",
+                "type": "HDD",
+                "size": 100,
+                "image": "4f363db0-4955-11e4-b362-52540066fee9",
+                "imagePassword": null,
+                "bus": "VIRTIO",
+                "licenceType": "LINUX",
+                "cpuHotPlug": true,
+                "cpuHotUnplug": false,
+                "ramHotPlug": true,
+                "ramHotUnplug": false,
+                "nicHotPlug": true,
+                "nicHotUnplug": true,
+                "discVirtioHotPlug": true,
+                "discVirtioHotUnplug": true,
+                "discScsiHotPlug": false,
+                "discScsiHotUnplug": false,
+                "deviceNumber": 1
+            }
+        }
+    },
+    "entities": {
+        "cdroms": {
+            "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/cdroms",
+            "type": "collection",
+            "href": "https://api.profitbricks.com/rest/datacenters/mock/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/cdroms",
+            "items": []
+        },
+        "volumes": {
+            "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/volumes",
+            "type": "collection",
+            "href": "https://api.profitbricks.com/rest/datacenters/mock/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/volumes",
+            "items": [
+                {
+                    "id": "c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+                    "type": "volume",
+                    "href": "https://api.profitbricks.com/rest/datacenters/mock/volumes/c04a2198-7e60-4bc0-b869-6e9c9dbcb8e1",
+                    "metadata": {
+                        "createdDate": "2014-10-20T21:20:46Z",
+                        "createdBy": "vendors@stackpointcloud.com",
+                        "etag": "7a539b539d8ca9e08c5ac5e63c9c4c8f",
+                        "lastModifiedDate": "2014-10-20T21:20:46Z",
+                        "lastModifiedBy": "vendors@stackpointcloud.com",
+                        "state": "AVAILABLE"
+                    },
+                    "properties": {
+                        "name": "Storage",
+                        "type": "HDD",
+                        "size": 40,
+                        "image": "4f363db0-4955-11e4-b362-52540066fee9",
+                        "imagePassword": null,
+                        "bus": "VIRTIO",
+                        "licenceType": "LINUX",
+                        "cpuHotPlug": true,
+                        "cpuHotUnplug": false,
+                        "ramHotPlug": true,
+                        "ramHotUnplug": false,
+                        "nicHotPlug": true,
+                        "nicHotUnplug": true,
+                        "discVirtioHotPlug": true,
+                        "discVirtioHotUnplug": true,
+                        "discScsiHotPlug": false,
+                        "discScsiHotUnplug": false,
+                        "deviceNumber": 1
+                    }
+                }
+            ]
+        },
+        "nics": {
+            "id": "364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics",
+            "type": "collection",
+            "href": "https://api.profitbricks.com/rest/datacenters/mock/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics",
+            "items": [
+                {
+                    "id": "01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d",
+                    "type": "nic",
+                    "href": "https://api.profitbricks.com/rest/datacenters/mock/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics/01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d",
+                    "metadata": {
+                        "createdDate": "2015-02-09T22:46:38Z",
+                        "createdBy": "vendors@stackpointcloud.com",
+                        "etag": "b4854a82738079d2c7f43b5324bd92e3",
+                        "lastModifiedDate": "2015-02-09T22:46:38Z",
+                        "lastModifiedBy": "vendors@stackpointcloud.com",
+                        "state": "AVAILABLE"
+                    },
+                    "properties": {
+                        "name": null,
+                        "mac": "02:01:94:9e:f4:a9",
+                        "ips": [
+                            "173.252.120.6"
+                        ],
+                        "dhcp": true,
+                        "lan": 1,
+                        "firewallActive": false
+                    },
+                    "entities": {
+                        "firewallrules": {
+                            "id": "01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d/firewallrules",
+                            "type": "collection",
+                            "href": "https://api.profitbricks.com/rest/datacenters/mock/servers/364f0f1c-7384-462b-8f0c-cfc4c3f6e2b2/nics/01ea3bd9-047c-4941-85cf-ed6b7a2d1d7d/firewallrules",
+                            "items": []
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

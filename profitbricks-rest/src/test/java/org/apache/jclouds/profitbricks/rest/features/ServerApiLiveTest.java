@@ -18,6 +18,7 @@ package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
 import java.util.List;
+import org.apache.jclouds.profitbricks.rest.domain.CpuFamily;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
@@ -26,13 +27,13 @@ import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "ServerApiLiveTest")
 public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
@@ -41,7 +42,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    private Server testServer;
    private Image attachedCdrom;
    private Volume attachedVolume;
-  
+   
    @BeforeClass
    public void setupTest() {
       dataCenter = createDataCenter();
@@ -49,40 +50,41 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    
    @AfterClass(alwaysRun = true)
    public void teardownTest() {
-      if (dataCenter != null)
+      if (dataCenter != null) {
          deleteDataCenter(dataCenter.id());
+      }
    }
-     
+   
    @Test
    public void testCreateServer() {
       assertNotNull(dataCenter);
-            
+      
       testServer = serverApi().createServer(
               Server.Request.creatingBuilder()
               .dataCenterId(dataCenter.id())
               .name("jclouds-node")
+              .cpuFamily(CpuFamily.INTEL_XEON)
               .cores(1)
               .ram(1024)
               .build());
-
+      
       assertNotNull(testServer);
       assertEquals(testServer.properties().name(), "jclouds-node");
       assertNodeRunning(ServerRef.create(dataCenter.id(), testServer.id()));
    }
    
-
    @Test(dependsOnMethods = "testCreateServer")
    public void testGetServer() {
       Server server = serverApi().getServer(dataCenter.id(), testServer.id());
-
+      
       assertNotNull(server);
       assertEquals(server.id(), testServer.id());
    }
-
+   
    @Test(dependsOnMethods = "testCreateServer")
    public void testList() {
       List<Server> servers = serverApi().getList(dataCenter.id());
-
+      
       assertNotNull(servers);
       assertFalse(servers.isEmpty());
       assertEquals(servers.size(), 1);
@@ -100,10 +102,9 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
               .ram(1024 * 2)
               .cores(2)
               .build());
-
-      assertDataCenterAvailable(dataCenter);
-
+      
       assertNodeAvailable(ServerRef.create(dataCenter.id(), testServer.id()));
+      assertDataCenterAvailable(dataCenter);
       assertNodeRunning(ServerRef.create(dataCenter.id(), testServer.id()));
       
       Server server = serverApi().getServer(dataCenter.id(), testServer.id());
@@ -115,16 +116,16 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    public void testStopServer() {
       serverApi().stopServer(testServer.dataCenterId(), testServer.id());
       assertNodeSuspended(ServerRef.create(dataCenter.id(), testServer.id()));
-
+      
       Server server = serverApi().getServer(testServer.dataCenterId(), testServer.id());
       assertEquals(server.properties().vmState(), Server.Status.SHUTOFF);
    }
-
+   
    @Test(dependsOnMethods = "testStopServer")
    public void testStartServer() {
       serverApi().startServer(testServer.dataCenterId(), testServer.id());
       assertNodeRunning(ServerRef.create(dataCenter.id(), testServer.id()));
-
+      
       Server server = serverApi().getServer(testServer.dataCenterId(), testServer.id());
       assertEquals(server.properties().vmState(), Server.Status.RUNNING);
    }
@@ -133,7 +134,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    public void testRebootServer() {
       serverApi().rebootServer(testServer.dataCenterId(), testServer.id());
       assertNodeRunning(ServerRef.create(dataCenter.id(), testServer.id()));
-
+      
       Server server = serverApi().getServer(testServer.dataCenterId(), testServer.id());
       assertEquals(server.properties().vmState(), Server.Status.RUNNING);
    }
@@ -152,11 +153,11 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
       assertVolumeAvailable(VolumeRef.create(dataCenter.id(), volume.id()));
       
       attachedVolume = serverApi().attachVolume(
-         Server.Request.attachVolumeBuilder()
-            .dataCenterId(testServer.dataCenterId())
-            .serverId(testServer.id())
-            .volumeId(volume.id())
-            .build()
+              Server.Request.attachVolumeBuilder()
+              .dataCenterId(testServer.dataCenterId())
+              .serverId(testServer.id())
+              .volumeId(volume.id())
+              .build()
       );
       
       assertVolumeAttached(testServer, volume.id());
@@ -175,7 +176,7 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    public void testDetachVolume() {
       serverApi().detachVolume(testServer.dataCenterId(), testServer.id(), attachedVolume.id());
       assertVolumeDetached(testServer, attachedVolume.id());
-   }   
+   }
    
    @Test(dependsOnMethods = "testDetachVolume")
    public void testListCdroms() {
@@ -186,11 +187,11 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
    @Test(dependsOnMethods = "testListCdroms")
    public void testAttachCdrom() {
       attachedCdrom = serverApi().attachCdrom(
-         Server.Request.attachCdromBuilder()
-            .dataCenterId(testServer.dataCenterId())
-            .serverId(testServer.id())
-            .imageId("7cb4b3a3-50c3-11e5-b789-52540066fee9")
-            .build()
+              Server.Request.attachCdromBuilder()
+              .dataCenterId(testServer.dataCenterId())
+              .serverId(testServer.id())
+              .imageId("7cb4b3a3-50c3-11e5-b789-52540066fee9")
+              .build()
       );
       assertEquals(attachedCdrom.properties().name(), "ubuntu-14.04.3-server-amd64.iso");
       assertCdromAvailable(testServer, attachedCdrom.id());
@@ -228,14 +229,15 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
             String[] params = args.split(",");
             Image cdrom = serverApi().getCdrom(params[0], params[1], params[2]);
             
-            if (cdrom == null || cdrom.metadata() == null)
+            if (cdrom == null || cdrom.metadata() == null) {
                return false;
+            }
             
             return cdrom.metadata().state() == State.AVAILABLE;
          }
       }, complexId(server.dataCenterId(), server.id(), cdRomId));
    }
-
+   
    private void assertCdromRemoved(Server server, String cdRomId) {
       assertPredicate(new Predicate<String>() {
          @Override
@@ -253,14 +255,15 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
             String[] params = args.split(",");
             Volume volume = serverApi().getVolume(params[0], params[1], params[2]);
             
-            if (volume == null || volume.metadata() == null)
+            if (volume == null || volume.metadata() == null) {
                return false;
+            }
             
             return volume.metadata().state() == State.AVAILABLE;
          }
       }, complexId(server.dataCenterId(), server.id(), volumeId));
    }
-
+   
    private void assertVolumeDetached(Server server, String volumeId) {
       assertPredicate(new Predicate<String>() {
          @Override
@@ -270,5 +273,5 @@ public class ServerApiLiveTest extends BaseProfitBricksLiveTest {
          }
       }, complexId(server.dataCenterId(), server.id(), volumeId));
    }
-      
+   
 }

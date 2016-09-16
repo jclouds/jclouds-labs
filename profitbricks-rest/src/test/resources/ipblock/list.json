@@ -1,0 +1,14 @@
+{
+    "id": "ipblocks",
+    "type": "collection",
+    "href": "https://api.profitbricks.com/rest/v2/ipblocks",
+    "items": [{
+            "id": "6c53515b-8557-44a8-9339-ea34e7e5baa2",
+            "type": "ipblock",
+            "href": "https://api.profitbricks.com/rest/v2/ipblocks/6c53515b-8557-44a8-9339-ea34e7e5baa2"
+        }, {
+            "id": "b6f3be55-d7e1-4a62-835a-0c4a64dda433",
+            "type": "ipblock",
+            "href": "https://api.profitbricks.com/rest/v2/ipblocks/b6f3be55-d7e1-4a62-835a-0c4a64dda433"
+        }]
+}

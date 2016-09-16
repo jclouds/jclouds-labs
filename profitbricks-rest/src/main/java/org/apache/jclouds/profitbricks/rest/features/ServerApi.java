@@ -56,7 +56,7 @@ import org.jclouds.util.Strings2;
 @Path("/datacenters/{dataCenterId}/servers")
 @RequestFilters(BasicAuthentication.class)
 public interface ServerApi extends Closeable {
-   
+
    @Named("server:list")
    @GET
    @SelectJson("items")
@@ -68,27 +68,27 @@ public interface ServerApi extends Closeable {
    @SelectJson("items")
    @Fallback(EmptyListOnNotFoundOr404.class)
    List<Server> getList(@PathParam("dataCenterId") String dataCenterId, DepthOptions options);
-   
+
    @Named("server:get")
-   @GET   
+   @GET
    @Path("/{serverId}")
    @ResponseParser(ServerApi.ServerParser.class)
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    Server getServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
 
    @Named("server:get")
-   @GET   
+   @GET
    @Path("/{serverId}")
    @ResponseParser(ServerApi.ServerParser.class)
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    Server getServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, DepthOptions options);
-   
+
    @Named("server:create")
    @POST
    @MapBinder(CreateServerRequestBinder.class)
    @ResponseParser(ServerApi.ServerParser.class)
    Server createServer(@PayloadParam("server") Server.Request.CreatePayload payload);
-   
+
    @Named("server:update")
    @PATCH
    @Path("/{serverId}")
@@ -96,85 +96,86 @@ public interface ServerApi extends Closeable {
    @ResponseParser(ServerApi.ServerParser.class)
    @Produces("application/vnd.profitbricks.partial-properties+json")
    Server updateServer(@PayloadParam("server") Server.Request.UpdatePayload payload);
-   
+
    @Named("server:delete")
    @DELETE
    @Path("/{serverId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void deleteServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
-   
+
    @Named("server:volume:list")
    @GET
    @Path("/{serverId}/volumes")
    @Fallback(EmptyListOnNotFoundOr404.class)
    @SelectJson("items")
    List<Volume> listAttachedVolumes(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
-   
+
    @Named("server:volume:attach")
    @POST
    @MapBinder(AttachVolumeRequestBinder.class)
    @ResponseParser(VolumeApi.VolumeParser.class)
    Volume attachVolume(@PayloadParam("volume") Server.Request.AttachVolumePayload payload);
-   
+
    @Named("server:volume:delete")
    @DELETE
    @Path("/{serverId}/volumes/{volumeId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void detachVolume(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("volumeId") String volumeId);
-   
+
    @Named("server:volume:get")
    @GET
    @Path("/{serverId}/volumes/{volumeId}")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    @ResponseParser(VolumeApi.VolumeParser.class)
    Volume getVolume(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("volumeId") String volumeId);
-   
+
    @Named("server:cdrom:list")
    @GET
    @Path("/{serverId}/cdroms")
    @Fallback(EmptyListOnNotFoundOr404.class)
    @SelectJson("items")
    List<Image> listAttachedCdroms(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
-   
+
    @Named("server:cdrom:attach")
    @POST
    @MapBinder(AttachCdromRequestBinder.class)
    @ResponseParser(ImageApi.ImageParser.class)
    Image attachCdrom(@PayloadParam("cdrom") Server.Request.AttachCdromPayload payload);
-   
+
    @Named("server:cdrom:delete")
    @DELETE
    @Path("/{serverId}/cdroms/{cdRomId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void detachCdrom(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("cdRomId") String cdRomId);
-   
+
    @Named("server:cdrom:get")
    @GET
    @Path("/{serverId}/cdroms/{cdRomId}")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    @ResponseParser(ImageApi.ImageParser.class)
    Image getCdrom(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("cdRomId") String cdRomId);
-   
+
    @Named("server:reboot")
    @POST
    @Path("/{serverId}/reboot")
    void rebootServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
-   
+
    @Named("server:start")
    @POST
    @Path("/{serverId}/start")
    void startServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
-   
+
    @Named("server:stop")
    @POST
    @Path("/{serverId}/stop")
    void stopServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
-   
+
    static final class ServerParser extends ParseJson<Server> {
-      
+
       final ParseId parseService;
-      
-      @Inject ServerParser(Json json, ParseId parseId) {
+
+      @Inject
+      ServerParser(Json json, ParseId parseId) {
          super(json, TypeLiteral.get(Server.class));
          this.parseService = parseId;
       }
@@ -184,10 +185,11 @@ public interface ServerApi extends Closeable {
          try {
             return (V) json.fromJson(this.parseService.parseId(Strings2.toStringAndClose(stream), "datacenters", "dataCenterId"), type);
          } finally {
-            if (stream != null)
+            if (stream != null) {
                stream.close();
+            }
          }
       }
    }
-   
+
 }

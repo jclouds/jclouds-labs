@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
+import static org.apache.jclouds.profitbricks.rest.domain.Location.US_LAS;
+import org.apache.jclouds.profitbricks.rest.domain.ProvisioningState;
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
@@ -29,12 +31,12 @@ import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "VolumeApiLiveTest")
 public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
@@ -50,31 +52,30 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
 
    @AfterClass(alwaysRun = true)
    public void teardownTest() {
-      if (dataCenter != null)
+      if (dataCenter != null) {
          deleteDataCenter(dataCenter.id());
+      }
    }
 
    @Test
    public void testCreateVolume() {
       assertNotNull(dataCenter);
-      
+
       List<Image> images = api.imageApi().getList(new DepthOptions().depth(5));
-      
+
       Image testImage = null;
-      
+
       for (Image image : images) {
-         if (
-               image.metadata().state() == State.AVAILABLE &&
-               image.properties().isPublic() && 
-               image.properties().imageType() == Image.Type.HDD && 
-               image.properties().location() == TestLocation &&
-               image.properties().licenceType() == LicenceType.LINUX &&
-               ( testImage == null || testImage.properties().size() > image.properties().size() )
-            ) {
+         if (image.metadata().state() == State.AVAILABLE
+                 && image.properties().isPublic()
+                 && image.properties().imageType() == Image.Type.HDD
+                 && image.properties().location() == US_LAS
+                 && image.properties().licenceType() == LicenceType.LINUX
+                 && (testImage == null || testImage.properties().size() > image.properties().size())) {
             testImage = image;
          }
       }
-      
+
       HashSet<String> sshKeys = new HashSet<String>();
       sshKeys.add("hQGOEJeFL91EG3+l9TtRbWNjzhDVHeLuL3NWee6bekA=");
 
@@ -84,7 +85,7 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
               .name("jclouds-volume")
               .size(4)
               .licenceType(LicenceType.LINUX)
-              .type(VolumeType.HDD)
+              .type(VolumeType.SSD)
               .image(testImage.id())
               .sshKeys(sshKeys)
               .build());
@@ -93,7 +94,6 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
       assertEquals(testVolume.properties().name(), "jclouds-volume");
       assertVolumeAvailable(testVolume);
    }
-
 
    @Test(dependsOnMethods = "testCreateVolume")
    public void testGetVolume() {
@@ -130,12 +130,12 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
    @Test(dependsOnMethods = "testUpdateVolume")
    public void testCreateSnapshot() {
       testSnapshot = volumeApi().createSnapshot(
-         Volume.Request.createSnapshotBuilder()
-            .dataCenterId(testVolume.dataCenterId())
-            .volumeId(testVolume.id())
-            .name("test-snapshot")
-            .description("snapshot desc...")
-            .build());
+              Volume.Request.createSnapshotBuilder()
+              .dataCenterId(testVolume.dataCenterId())
+              .volumeId(testVolume.id())
+              .name("test-snapshot")
+              .description("snapshot desc...")
+              .build());
 
       assertSnapshotAvailable(testSnapshot);
    }
@@ -143,11 +143,11 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
    @Test(dependsOnMethods = "testCreateSnapshot")
    public void testRestoreSnapshot() {
       volumeApi().restoreSnapshot(
-         Volume.Request.restoreSnapshotBuilder()
-            .dataCenterId(testVolume.dataCenterId())
-            .volumeId(testVolume.id())
-            .snapshotId(testSnapshot.id())
-            .build()
+              Volume.Request.restoreSnapshotBuilder()
+              .dataCenterId(testVolume.dataCenterId())
+              .volumeId(testVolume.id())
+              .snapshotId(testSnapshot.id())
+              .build()
       );
       assertVolumeAvailable(testVolume);
    }
@@ -165,8 +165,9 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
          public boolean apply(VolumeRef volumeRef) {
             Volume volume = volumeApi().getVolume(volumeRef.dataCenterId(), volumeRef.volumeId());
 
-            if (volume == null || volume.metadata() == null)
+            if (volume == null || volume.metadata() == null) {
                return false;
+            }
 
             return volume.metadata().state() == State.AVAILABLE;
          }
@@ -188,10 +189,11 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
          public boolean apply(String id) {
             Snapshot snapshot = api.snapshotApi().get(id);
 
-            if (snapshot == null || snapshot.metadata() == null)
+            if (snapshot == null || snapshot.metadata() == null) {
                return false;
+            }
 
-            return snapshot.metadata().state() == State.AVAILABLE;
+            return snapshot.metadata().state() == ProvisioningState.AVAILABLE;
          }
       }, snapshot.id());
    }

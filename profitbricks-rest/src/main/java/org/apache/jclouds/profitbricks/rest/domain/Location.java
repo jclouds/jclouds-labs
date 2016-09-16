@@ -17,12 +17,13 @@
 package org.apache.jclouds.profitbricks.rest.domain;
 
 public enum Location {
-   
+
    DE_FKB("de/fkb", "Germany, Karlsruhe"),
    DE_FRA("de/fra", "Germany, Frankfurt (M)"),
    US_LAS("us/las", "USA, Las Vegas"),
    US_LASDEV("us/lasdev", "USA Developer cluster"),
-   UNRECOGNIZED("unrecognized", "Unrecognized location");
+   UNRECOGNIZED("unrecognized", "Unrecognized location"),
+   MOCK("mock", "Mock");
 
    private final String id;
    private final String description;
@@ -30,10 +31,6 @@ public enum Location {
    Location(String id, String description) {
       this.id = id;
       this.description = description;
-   }
-   
-   public String value() {
-      return id;
    }
 
    public String getId() {
@@ -49,9 +46,16 @@ public enum Location {
    }
 
    public static Location fromId(String id) {
-      for (Location location : values())
-         if (location.id.equals(id))
+      for (Location location : values()) {
+         if (location.id.equals(id)) {
             return location;
+         }
+      }
       return UNRECOGNIZED;
+   }
+
+   @Override
+   public String toString() {
+      return id;
    }
 }

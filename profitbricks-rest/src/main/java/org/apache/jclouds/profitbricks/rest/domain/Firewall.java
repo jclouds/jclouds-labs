@@ -16,13 +16,11 @@
  */
 package org.apache.jclouds.profitbricks.rest.domain;
 
-import java.util.List;
-
-import org.jclouds.javax.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Enums;
 import com.google.common.collect.ImmutableList;
+import java.util.List;
+import org.jclouds.javax.annotation.Nullable;
 
 @AutoValue
 public abstract class Firewall {
@@ -46,7 +44,7 @@ public abstract class Firewall {
    public abstract Boolean active();
 
    @Nullable
-   public abstract ProvisioningState state();
+   public abstract State state();
 
    @Nullable
    public abstract List<Rule> rules();
@@ -67,15 +65,15 @@ public abstract class Firewall {
 
       public abstract Builder active(Boolean active);
 
-      public abstract Builder state(ProvisioningState state);
+      public abstract Builder state(State state);
 
       public abstract Builder rules(List<Rule> rules);
 
       abstract Firewall autoBuild();
-      
-      public Firewall build(){
+
+      public Firewall build() {
          Firewall built = autoBuild();
-         
+
          return built.toBuilder()
                  .rules(ImmutableList.copyOf(built.rules()))
                  .autoBuild();

@@ -1,0 +1,30 @@
+{
+    "id": "d80bf9c0-ce6e-4283-9ea4-2906635f6137",
+    "type": "snapshot",
+    "href": "https://api.profitbricks.com/rest/snapshots/615458b6-55cc-4907-a700-24b6bc1bf8ae",
+    "metadata": {
+        "createdDate": "2015-12-23T22:03:31Z",
+        "createdBy": "mirza@stackpointcloud.com",
+        "etag": "fbed4e509c2704919ac05f185377a95d",
+        "lastModifiedDate": "2015-12-23T22:03:31Z",
+        "lastModifiedBy": "mirza@stackpointcloud.com",
+        "state": "BUSY"
+    },
+    "properties": {
+        "name": "jclouds-ubuntu14.10-template",
+        "description": "Created from \"jclouds-ubuntu14.10 Storage\" in Data Center \"jclouds-computeservice\"",
+        "location": "us/las",
+        "size": 3,
+        "cpuHotPlug": true,
+        "cpuHotUnplug": false,
+        "ramHotPlug": true,
+        "ramHotUnplug": false,
+        "nicHotPlug": true,
+        "nicHotUnplug": true,
+        "discVirtioHotPlug": true,
+        "discVirtioHotUnplug": true,
+        "discScsiHotPlug": false,
+        "discScsiHotUnplug": false,
+        "licenceType": "LINUX"
+    }
+}

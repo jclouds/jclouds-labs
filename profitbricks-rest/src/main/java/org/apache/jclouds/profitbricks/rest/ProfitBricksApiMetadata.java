@@ -20,8 +20,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 import java.net.URI;
 import java.util.Properties;
-import org.apache.jclouds.profitbricks.rest.util.ApiPredicatesModule;
+import org.apache.jclouds.profitbricks.rest.compute.config.ProfitBricksComputeServiceContextModule;
 import org.apache.jclouds.profitbricks.rest.config.ProfitBricksHttpApiModule;
+import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
@@ -49,17 +50,18 @@ public class ProfitBricksApiMetadata extends BaseHttpApiMetadata<ProfitBricksApi
 
       protected Builder() {
          id("profitbricks-rest")
-            .name("ProfitBricks REST API")
-            .identityName("API Username")
-            .credentialName("API Password")
-            .documentation(URI.create("https://devops.profitbricks.com/api/rest/"))
-            .defaultEndpoint("https://api.profitbricks.com/rest/v2/")
-            .defaultProperties(ProfitBricksApiMetadata.defaultProperties())
-            .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-               .add(OkHttpCommandExecutorServiceModule.class)
-               .add(ProfitBricksHttpApiModule.class)
-               .add(ApiPredicatesModule.class)
-               .build());
+                 .name("ProfitBricks REST API")
+                 .identityName("API Username")
+                 .credentialName("API Password")
+                 .documentation(URI.create("https://devops.profitbricks.com/api/rest/"))
+                 .defaultEndpoint("https://api.profitbricks.com/rest/v2/")
+                 .view(ComputeServiceContext.class)
+                 .defaultProperties(ProfitBricksApiMetadata.defaultProperties())
+                 .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
+                         .add(OkHttpCommandExecutorServiceModule.class)
+                         .add(ProfitBricksHttpApiModule.class)
+                         .add(ProfitBricksComputeServiceContextModule.class)
+                         .build());
       }
 
       @Override

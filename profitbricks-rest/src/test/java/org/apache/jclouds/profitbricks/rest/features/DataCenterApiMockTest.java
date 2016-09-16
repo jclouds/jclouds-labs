@@ -30,23 +30,23 @@ import org.testng.annotations.Test;
 
 @Test(groups = "unit", testName = "DataCenterApiMockTest", singleThreaded = true)
 public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
-   
+
    @Test
    public void testGetList() throws InterruptedException {
       server.enqueue(
-         new MockResponse().setBody(stringFromResource("/datacenter/list.json"))
+              new MockResponse().setBody(stringFromResource("/datacenter/list.json"))
       );
-      
+
       List<DataCenter> list = dataCenterApi().list();
-      
+
       assertNotNull(list);
       assertEquals(list.size(), 3);
       assertEquals(list.get(0).properties().name(), "vea");
-      
+
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters");
    }
-   
+
    @Test
    public void testGetListWith404() throws InterruptedException {
       server.enqueue(response404());
@@ -55,81 +55,82 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters?depth=1");
    }
-    
+
    @Test
    public void testGetDataCenter() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/datacenter/get.json"));
       response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
-      
+
       server.enqueue(response);
-      
+
       DataCenter dataCenter = dataCenterApi().getDataCenter("some-id");
-      
+
       assertNotNull(dataCenter);
       assertEquals(dataCenter.properties().name(), "docker");
-      
+      assertEquals(dataCenter.properties().location(), Location.US_LAS);
+
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/some-id");
    }
-   
+
    public void testGetDataCenterWith404() throws InterruptedException {
       server.enqueue(response404());
 
       DataCenter dataCenter = dataCenterApi().getDataCenter("some-id");
-      
+
       assertNull(dataCenter);
 
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "/datacenters/some-id");
    }
-   
+
    @Test
    public void testCreate() throws InterruptedException {
       server.enqueue(
-         new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
+              new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
       );
-      
-      DataCenter dataCenter = dataCenterApi().create("test-data-center", "example description", Location.US_LAS.value());
-      
+
+      DataCenter dataCenter = dataCenterApi().create("test-data-center", "example description", Location.US_LAS.getId());
+
       assertNotNull(dataCenter);
       assertNotNull(dataCenter.id());
-      
+
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "POST", "/datacenters", 
+      assertSent(server, "POST", "/datacenters",
               "{\"properties\": {\"name\": \"test-data-center\", \"description\": \"example description\",\"location\": \"us/las\"}}"
       );
    }
-   
+
    @Test
    public void testUpdate() throws InterruptedException {
       server.enqueue(
-         new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
+              new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
       );
-      
+
       DataCenter dataCenter = dataCenterApi().update("some-id", "new name");
-      
+
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "PATCH", "/datacenters/some-id", "{\"name\": \"new name\"}");
    }
-   
+
    @Test
    public void testDelete() throws InterruptedException {
       server.enqueue(response204());
-      
+
       dataCenterApi().delete("some-id");
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "DELETE", "/datacenters/some-id");
    }
-   
+
    @Test
    public void testDepth() throws InterruptedException {
-      
+
       for (int i = 1; i <= 5; ++i) {
          server.enqueue(
-            new MockResponse().setBody(
-               stringFromResource(String.format("/datacenter/get-depth-%d.json", i))
-            )
+                 new MockResponse().setBody(
+                         stringFromResource(String.format("/datacenter/get-depth-%d.json", i))
+                 )
          );
          DataCenter dataCenter = dataCenterApi().getDataCenter("some-id", new DepthOptions().depth(i));
          assertNotNull(dataCenter);
@@ -137,9 +138,9 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
          assertSent(server, "GET", "/datacenters/some-id?depth=" + i);
       }
    }
-     
+
    private DataCenterApi dataCenterApi() {
       return api.dataCenterApi();
    }
-   
+
 }
