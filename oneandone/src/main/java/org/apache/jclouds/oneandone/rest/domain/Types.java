@@ -185,6 +185,21 @@ public class Types {
       public static IPOwner fromValue(String v) {
          return Enums.getIfPresent(IPOwner.class, v).or(UNRECOGNIZED);
       }
+   }
 
+   public enum VPNState {
+      ACTIVE, UNRECOGNIZED;
+
+      public static VPNState fromValue(String v) {
+         return Enums.getIfPresent(VPNState.class, v).or(UNRECOGNIZED);
+      }
+   }
+
+   public enum VPNType {
+      SSL, UNRECOGNIZED;
+
+      public static VPNType fromValue(String v) {
+         return Enums.getIfPresent(VPNType.class, v).or(UNRECOGNIZED);
+      }
    }
 }

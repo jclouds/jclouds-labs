@@ -32,6 +32,7 @@ import org.apache.jclouds.oneandone.rest.domain.Hdd;
 import org.apache.jclouds.oneandone.rest.domain.PrivateNetwork;
 import org.apache.jclouds.oneandone.rest.domain.Server;
 import org.apache.jclouds.oneandone.rest.domain.Types;
+import org.apache.jclouds.oneandone.rest.domain.Vpn;
 import org.apache.jclouds.oneandone.rest.ids.ServerPrivateNetworkRef;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.util.Predicates2;
@@ -41,6 +42,7 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
 
    Predicate<Server> waitUntilServerReady;
    Predicate<ServerPrivateNetworkRef> waitUntilPrivateNetworkReady;
+   Predicate<Vpn> waitUntilVPNReady;
    private static final OneAndOneProviderMetadata METADATA = new OneAndOneProviderMetadata();
    OneAndOneConstants constants;
 
@@ -81,8 +83,18 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
             return server.state() != Types.GenericState.ACTIVE;
          }
       };
+
+      Predicate<Vpn> vpnAvailableCheck = new Predicate<Vpn>() {
+         @Override
+         public boolean apply(Vpn vpn) {
+            Vpn result = api.vpnApi().get(vpn.id());
+            return result.state() == Types.GenericState.ACTIVE;
+         }
+      };
+      waitUntilVPNReady = Predicates2.retry(vpnAvailableCheck, constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
       waitUntilPrivateNetworkReady = Predicates2.retry(privateNetworkAvailableCheck, constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
       waitUntilServerReady = Predicates2.retry(serverAvailableCheck, constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
+
       return injector.getInstance(OneAndOneApi.class);
    }
 
@@ -115,6 +127,10 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
    protected void assertPrivateNetworkAvailable(ServerPrivateNetworkRef ref) {
       assertTrue(waitUntilPrivateNetworkReady.apply(ref), String.format("ServerPrivateNetworkRef %s is not Ready", ref));
    }
+   
+   protected void assertVPNAvailable(Vpn vpn) {
+      assertTrue(waitUntilVPNReady.apply(vpn), String.format("VPN %s is not Ready", vpn));
+   }
 
    protected Server deleteServer(String serverId) {
       return api.serverApi().delete(serverId);
@@ -123,7 +139,8 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
    protected Server turnOnServer(String serverId) {
       return api.serverApi().updateStatus(serverId, Server.UpdateStatus.create(Types.ServerAction.POWER_ON, Types.ServerActionMethod.SOFTWARE));
    }
+
    protected Server turnOFFServer(String serverId) {
       return api.serverApi().updateStatus(serverId, Server.UpdateStatus.create(Types.ServerAction.POWER_OFF, Types.ServerActionMethod.SOFTWARE));
-}
+   }
 }

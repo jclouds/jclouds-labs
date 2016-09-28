@@ -1,0 +1,38 @@
+[
+{
+  "id": "39AA65F5D5B02FA02D58173094EBAF95",
+  "name": "My VPN 1",
+  "description": "My VPN 1 description",
+  "state": "ACTIVE",
+  "datacenter": {
+    "id": "D0F6D8C8ED29D3036F94C27BBB789536",
+    "location": "Spain",
+    "country_code": "ES"
+  },
+  "type": "SSL",
+  "ips": [
+  "10.131.1.233",
+  "10.131.0.233"
+  ],
+  "cloudpanel_id": "FW99AA4_7",
+  "creation_date": "30-06-2015T 14:52:35+00.00"
+},
+{
+  "id": "987565F5D5B02FA02D58173094EBAF96",
+  "name": "My VPN",
+  "description": null,
+  "state": "ACTIVE",
+  "datacenter": {
+    "id": "D0F6D8C8ED29D3036F94C27BBB789536",
+    "location": "Spain",
+    "country_code": "ES"
+  },
+  "type": "SSL",
+  "ips": [
+  "10.131.1.45",
+  "10.131.0.45"
+  ],
+  "cloudpanel_id": "FW99AA4_8",
+  "creation_date": "30-06-2015T 14:52:35+00.00"
+}
+]

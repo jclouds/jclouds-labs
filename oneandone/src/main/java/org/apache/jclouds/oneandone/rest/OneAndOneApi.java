@@ -24,6 +24,7 @@ import org.apache.jclouds.oneandone.rest.features.PrivateNetworkApi;
 import org.apache.jclouds.oneandone.rest.features.PublicIpApi;
 import org.apache.jclouds.oneandone.rest.features.ServerApi;
 import org.apache.jclouds.oneandone.rest.features.SharedStorageApi;
+import org.apache.jclouds.oneandone.rest.features.VpnApi;
 import org.jclouds.rest.annotations.Delegate;
 
 public interface OneAndOneApi extends Closeable {
@@ -48,4 +49,7 @@ public interface OneAndOneApi extends Closeable {
 
    @Delegate
    PrivateNetworkApi privateNetworkApi();
+
+   @Delegate
+   VpnApi vpnApi();
 }
