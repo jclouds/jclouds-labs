@@ -100,7 +100,7 @@ public class ParseImageDetailsFromHeadersTest {
                         .containerFormat(ContainerFormat.BARE)
                         .diskFormat(DiskFormat.RAW)
                         .checksum("233afa7b8809d840679b5f0d36d7350a")
-                        .size(65645798l)
+                        .size(65645798L)
                         .status(Image.Status.ACTIVE)
                         .owner("5821675")
                         .isPublic(true)
