@@ -49,10 +49,10 @@ public class OneAndOneProviderMetadata extends BaseProviderMetadata {
 
    public static Properties defaultProperties() {
       Properties properties = OneAndOneApiMetadata.defaultProperties();
-      long defaultTimeout = 60l * 60l; // 1 hour
+      long defaultTimeout = 60L * 60L; // 1 hour
       properties.put(POLL_TIMEOUT, defaultTimeout);
-      properties.put(POLL_PERIOD, 1l);
-      properties.put(POLL_MAX_PERIOD, 1l * 9l);
+      properties.put(POLL_PERIOD, 1L);
+      properties.put(POLL_MAX_PERIOD, 1L * 9L);
       properties.put(PROPERTY_SO_TIMEOUT, 60000 * 5);
       properties.put(PROPERTY_CONNECTION_TIMEOUT, 60000 * 5);
 

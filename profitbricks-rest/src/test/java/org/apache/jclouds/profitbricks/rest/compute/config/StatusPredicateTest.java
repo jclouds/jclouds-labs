@@ -55,7 +55,7 @@ public class StatusPredicateTest extends BaseProfitBricksApiMockTest {
 
       Predicate<String> waitUntilAvailable = Predicates2.retry(
               new DataCenterProvisioningStatePredicate(api, State.AVAILABLE),
-              30l, 1l, TimeUnit.SECONDS);
+              30L, 1L, TimeUnit.SECONDS);
 
       String id = "datacenter-id,aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
@@ -83,7 +83,7 @@ public class StatusPredicateTest extends BaseProfitBricksApiMockTest {
 
       Predicate<ServerRef> waitUntilAvailable = Predicates2.retry(
               new ServerStatusPredicate(api, Server.Status.RUNNING),
-              30l, 1l, TimeUnit.SECONDS);
+              30L, 1L, TimeUnit.SECONDS);
 
       waitUntilAvailable.apply(ServerRef.create("datacenter-id", "server-id"));
       Server remoteServer = api.serverApi().getServer("datacenter-id", "server-id");
@@ -107,7 +107,7 @@ public class StatusPredicateTest extends BaseProfitBricksApiMockTest {
 
       Predicate<String> waitUntilAvailable = Predicates2.retry(
               new SnapshotProvisioningStatePredicate(api, State.AVAILABLE),
-              30l, 1l, TimeUnit.SECONDS);
+              30L, 1L, TimeUnit.SECONDS);
 
       String id = "qswdefrg-qaws-qaws-defe-rgrgdsvcxbrh";
 

@@ -1666,23 +1666,23 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
             new CalcSubscription.Builder()
                   .amount(1)
                   .resource(SubscriptionResource.IP)
-                  .endTime(new Date(1388145600000l))
+                  .endTime(new Date(1388145600000L))
                   .price(5.5)
-                  .startTime(new Date(1385547361440l))
+                  .startTime(new Date(1385547361440L))
                   .build(),
             new CalcSubscription.Builder()
                   .amount(1)
                   .resource(SubscriptionResource.VLAN)
-                  .endTime(new Date(1388145600000l))
+                  .endTime(new Date(1388145600000L))
                   .price(11)
-                  .startTime(new Date(1385547361440l))
+                  .startTime(new Date(1385547361440L))
                   .build(),
             new CalcSubscription.Builder()
                   .amount(250)
                   .resource(SubscriptionResource.CPU)
-                  .endTime(new Date(1388145600000l))
+                  .endTime(new Date(1388145600000L))
                   .price(3.366)
-                  .startTime(new Date(1385547361440l))
+                  .startTime(new Date(1385547361440L))
                   .build());
 
       CloudSigma2Api api = requestSendsResponse(
