@@ -62,7 +62,7 @@ public final class ListLocationsHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inLocation) {
          locationHandler.characters(ch, start, length);
       }

@@ -62,7 +62,7 @@ public final class ListVMImagesHandler extends ParseSax.HandlerForGeneratedReque
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inVMImage) {
          VMImageHandler.characters(ch, start, length);
       }

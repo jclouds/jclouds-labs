@@ -61,7 +61,7 @@ public final class ListRoleSizesHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inRoleSize) {
          roleSizeHandler.characters(ch, start, length);
       }

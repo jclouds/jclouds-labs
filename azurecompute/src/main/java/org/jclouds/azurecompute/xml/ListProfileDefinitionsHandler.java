@@ -71,7 +71,7 @@ public final class ListProfileDefinitionsHandler extends
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inDefinition) {
          profileDefinitionHandler.characters(ch, start, length);
       }

@@ -97,7 +97,7 @@ public class ResourceExtensionReferenceHandler extends ParseSax.HandlerForGenera
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inResourceExtensionParameterValue) {
          resourceExtensionParameterValueHandler.characters(ch, start, length);
       } else {

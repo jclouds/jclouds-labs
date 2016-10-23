@@ -68,7 +68,7 @@ public final class ListAffinityGroupsHandler
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inAffinityGroup) {
          affinityGroupHandler.characters(ch, start, length);
       }

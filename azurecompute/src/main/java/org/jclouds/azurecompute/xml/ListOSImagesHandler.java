@@ -62,7 +62,7 @@ public final class ListOSImagesHandler extends ParseSax.HandlerForGeneratedReque
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inOSImage) {
          osImageHandler.characters(ch, start, length);
       }

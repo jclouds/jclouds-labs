@@ -64,7 +64,7 @@ public class NetworkConfigurationHandler extends ParseSax.HandlerForGeneratedReq
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inVirtualNetworkConfiguration) {
          virtualNetworkConfigurationHandler.characters(ch, start, length);
       } else {

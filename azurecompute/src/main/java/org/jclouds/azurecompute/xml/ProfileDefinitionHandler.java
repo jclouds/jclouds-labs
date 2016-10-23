@@ -136,7 +136,7 @@ public final class ProfileDefinitionHandler extends ParseSax.HandlerForGenerated
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inMonitor) {
          monitorHandler.characters(ch, start, length);
       } else if (inEndpoint) {

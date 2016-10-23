@@ -64,7 +64,7 @@ public class ListStorageServicesHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inStorageService) {
          storageServiceHandler.characters(ch, start, length);
       }

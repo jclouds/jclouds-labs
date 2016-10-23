@@ -187,7 +187,7 @@ final class VMImageHandler extends ParseSax.HandlerForGeneratedRequestWithResult
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override public void characters(char[] ch, int start, int length) {
       if (inDataConfig) {
          dataVirtualHardDiskHandler.characters(ch, start, length);
       } else if (inOSConfig) {

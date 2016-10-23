@@ -80,7 +80,7 @@ public class NetworkSecurityGroupHandler extends ParseSax.HandlerForGeneratedReq
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inRule) {
          ruleHandler.characters(ch, start, length);
       } else {

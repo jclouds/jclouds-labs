@@ -125,7 +125,7 @@ public final class AffinityGroupHandler extends ParseSax.HandlerForGeneratedRequ
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inComputeCapabilities) {
          computeCapabilitiesHandler.characters(ch, start, length);
       } else {

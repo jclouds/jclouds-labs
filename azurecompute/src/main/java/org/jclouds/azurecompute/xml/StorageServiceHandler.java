@@ -116,7 +116,7 @@ public class StorageServiceHandler extends ParseSax.HandlerForGeneratedRequestWi
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inStorageServiceProperties) {
          storageServicePropertiesHandler.characters(ch, start, length);
       } else if (inExtendedProperties) {

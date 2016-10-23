@@ -149,7 +149,7 @@ public final class DeploymentHandler extends ParseSax.HandlerForGeneratedRequest
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inListVirtualIPs) {
          virtualIPHandler.characters(ch, start, length);
       } else if (inRoleInstanceList) {

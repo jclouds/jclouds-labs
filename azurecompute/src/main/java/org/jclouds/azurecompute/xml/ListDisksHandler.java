@@ -65,7 +65,7 @@ public final class ListDisksHandler extends ParseSax.HandlerForGeneratedRequestW
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inDisk) {
          diskHandler.characters(ch, start, length);
       }

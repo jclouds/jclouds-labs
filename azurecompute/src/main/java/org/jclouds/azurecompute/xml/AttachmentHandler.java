@@ -54,7 +54,7 @@ final class AttachmentHandler extends ParseSax.HandlerForGeneratedRequestWithRes
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       currentText.append(ch, start, length);
    }
 }

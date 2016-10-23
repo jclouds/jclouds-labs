@@ -70,7 +70,7 @@ public final class ListReservedIPAddressHandler extends
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inReservedIP) {
          reservedIPAddressHandler.characters(ch, start, length);
       }

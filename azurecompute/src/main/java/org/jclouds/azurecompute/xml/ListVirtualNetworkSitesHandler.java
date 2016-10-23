@@ -64,7 +64,7 @@ public class ListVirtualNetworkSitesHandler extends ParseSax.HandlerForGenerated
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inVirtualNetworkSite) {
          virtualNetworkSiteHandler.characters(ch, start, length);
       }

@@ -60,7 +60,7 @@ public final class ResourceExtensionParameterValueHandler extends ParseSax.Handl
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       currentText.append(ch, start, length);
    }
 

@@ -139,7 +139,7 @@ public final class CloudServicePropertiesHandler
       currentText.setLength(0);
    }
 
-   @Override public void characters(char ch[], int start, int length) {
+   @Override public void characters(char[] ch, int start, int length) {
       if (inDeployment) {
          deploymentHandler.characters(ch, start, length);
       } else {

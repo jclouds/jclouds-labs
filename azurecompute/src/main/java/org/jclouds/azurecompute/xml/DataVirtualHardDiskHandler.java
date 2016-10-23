@@ -86,7 +86,7 @@ final class DataVirtualHardDiskHandler extends ParseSax.HandlerForGeneratedReque
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       currentText.append(ch, start, length);
    }
 }

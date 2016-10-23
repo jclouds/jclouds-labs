@@ -70,7 +70,7 @@ public final class ListServiceCertificatesHandler extends
    }
 
    @Override
-   public void characters(final char ch[], final int start, final int length) {
+   public void characters(final char[] ch, final int start, final int length) {
       if (inCertificate) {
          serviceCertificateHandler.characters(ch, start, length);
       }

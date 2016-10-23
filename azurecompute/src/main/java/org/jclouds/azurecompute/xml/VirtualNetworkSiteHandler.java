@@ -105,7 +105,7 @@ public class VirtualNetworkSiteHandler extends ParseSax.HandlerForGeneratedReque
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inAddressSpace) {
          addressSpaceHandler.characters(ch, start, length);
       } else if (inSubnet) {

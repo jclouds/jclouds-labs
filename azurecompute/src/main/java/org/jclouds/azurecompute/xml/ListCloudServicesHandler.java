@@ -69,7 +69,7 @@ public final class ListCloudServicesHandler extends ParseSax.HandlerForGenerated
    }
 
    @Override
-   public void characters(char ch[], int start, int length) {
+   public void characters(char[] ch, int start, int length) {
       if (inHostedService) {
          cloudServiceHandler.characters(ch, start, length);
       }
