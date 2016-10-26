@@ -18,6 +18,7 @@ package org.apache.jclouds.profitbricks.rest.internal;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
@@ -27,6 +28,8 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
 import org.apache.jclouds.profitbricks.rest.compute.config.ProfitBricksComputeServiceContextModule.ComputeConstants;
+import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
+
 import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
@@ -60,6 +63,11 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
 
    public BaseProfitBricksLiveTest() {
       provider = "profitbricks-rest";
+   }
+   
+   @Override
+   protected Iterable<Module> setupModules() {
+      return ImmutableSet.<Module> of(getLoggingModule(), new ProfitBricksRateLimitModule());
    }
 
    @Override

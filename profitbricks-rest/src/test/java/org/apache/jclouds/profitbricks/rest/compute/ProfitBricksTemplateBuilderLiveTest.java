@@ -17,7 +17,11 @@
 package org.apache.jclouds.profitbricks.rest.compute;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
+
 import java.util.Set;
+
+import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
 import org.jclouds.compute.internal.BaseTemplateBuilderLiveTest;
 import org.testng.annotations.Test;
 
@@ -33,4 +37,11 @@ public class ProfitBricksTemplateBuilderLiveTest extends BaseTemplateBuilderLive
       return ImmutableSet.of("DE-BW", "DE-HE", "US-NV");
    }
 
+   @Override
+   protected Iterable<Module> setupModules() {
+      ImmutableSet.Builder<Module> modules = ImmutableSet.builder();
+      modules.addAll(super.setupModules());
+      modules.add(new ProfitBricksRateLimitModule());
+      return modules.build();
+   }
 }

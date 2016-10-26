@@ -16,10 +16,9 @@
  */
 package org.apache.jclouds.profitbricks.rest.handlers;
 
-import static org.jclouds.util.Closeables2.closeQuietly;
-
 import javax.inject.Singleton;
 
+import org.apache.jclouds.profitbricks.rest.exceptions.ProfitBricksRateLimitExceededException;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
@@ -58,6 +57,9 @@ public class ProfitBricksHttpErrorHandler implements HttpErrorHandler {
                if (!command.getCurrentRequest().getMethod().equals("DELETE"))
                   exception = new ResourceNotFoundException(response.getMessage(), exception);
                break;
+            case 429:
+               exception = new ProfitBricksRateLimitExceededException(response);
+               break;
             case 413:
             case 503:
                // if nothing (default message was OK) was parsed from command executor, assume it was an 503 (Maintenance) html response.
@@ -68,7 +70,6 @@ public class ProfitBricksHttpErrorHandler implements HttpErrorHandler {
                break;
          }
       } finally {
-         closeQuietly(response.getPayload());
          command.setException(exception);
       }
    }

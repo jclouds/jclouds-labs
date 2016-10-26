@@ -26,6 +26,8 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
 import static org.jclouds.compute.predicates.NodePredicates.inGroup;
+
+import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
 import org.jclouds.logging.config.LoggingModule;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.sshj.config.SshjSshClientModule;
@@ -46,6 +48,14 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
    @Override
    protected LoggingModule getLoggingModule() {
       return new SLF4JLoggingModule();
+   }
+   
+   @Override
+   protected Iterable<Module> setupModules() {
+      ImmutableSet.Builder<Module> modules = ImmutableSet.builder();
+      modules.addAll(super.setupModules());
+      modules.add(new ProfitBricksRateLimitModule());
+      return modules.build();
    }
 
    @Override
