@@ -16,29 +16,31 @@
  */
 package org.apache.jclouds.profitbricks.rest.internal;
 
+import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static org.testng.Assert.assertEquals;
+
+import java.io.IOException;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
+import org.apache.jclouds.profitbricks.rest.ProfitBricksProviderMetadata;
+import org.jclouds.ContextBuilder;
+import org.jclouds.concurrent.config.ExecutorServiceModule;
+import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.rest.ApiContext;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Resources;
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
 import com.google.gson.JsonParser;
 import com.google.inject.Module;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.Set;
-import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
-import org.apache.jclouds.profitbricks.rest.ProfitBricksProviderMetadata;
-import org.jclouds.ContextBuilder;
-import org.jclouds.concurrent.config.ExecutorServiceModule;
-import org.jclouds.json.Json;
-import org.jclouds.rest.ApiContext;
-import static org.testng.Assert.assertEquals;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.jclouds.http.filters.BasicAuthentication;
 
 public class BaseProfitBricksApiMockTest {
 
@@ -49,7 +51,6 @@ public class BaseProfitBricksApiMockTest {
 
    protected MockWebServer server;
    protected ProfitBricksApi api;
-   private Json json;
 
    // So that we can ignore formatting.
    private final JsonParser parser = new JsonParser();
@@ -64,7 +65,6 @@ public class BaseProfitBricksApiMockTest {
 	      .modules(modules)
 	      .overrides(overrides())
 	      .build();
-      json = ctx.utils().injector().getInstance(Json.class);
       api = ctx.getApi();
    }
 

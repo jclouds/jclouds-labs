@@ -24,7 +24,7 @@ import static com.google.common.collect.ImmutableList.copyOf;
 import org.jclouds.javax.annotation.Nullable;
 
 @AutoValue
-public abstract class Nic {
+public abstract class Nic extends Trackable {
 
    public abstract String id();
    

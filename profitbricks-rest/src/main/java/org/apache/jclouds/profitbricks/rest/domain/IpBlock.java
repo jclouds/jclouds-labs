@@ -22,7 +22,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
-public abstract class IpBlock {
+public abstract class IpBlock extends Trackable {
 
    public abstract String id();
 

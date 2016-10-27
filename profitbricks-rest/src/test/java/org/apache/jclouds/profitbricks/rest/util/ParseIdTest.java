@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 @Test(groups = "unit", testName = "ParseIdTest")
 public class ParseIdTest {
 
+   @SuppressWarnings("serial")
    @Test
    public void testIdExtraction() throws IOException {
       String serverResult = Resources.toString(getClass().getResource("/server/get.json"), Charsets.UTF_8);

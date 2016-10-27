@@ -17,6 +17,8 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
+
+import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.Nic;
@@ -50,6 +52,7 @@ public class NicApiLiveTest extends BaseProfitBricksLiveTest {
             .ram(1024)
             .build());
       
+      assertRequestCompleted(testServer);
       assertNodeAvailable(ServerRef.create(dataCenter.id(), testServer.id()));
    }
    
@@ -71,6 +74,7 @@ public class NicApiLiveTest extends BaseProfitBricksLiveTest {
               .lan(1)
               .build());
 
+      assertRequestCompleted(testNic);
       assertNotNull(testNic);
       assertEquals(testNic.properties().name(), "jclouds-nic");
       assertNicAvailable(testNic);
@@ -98,7 +102,7 @@ public class NicApiLiveTest extends BaseProfitBricksLiveTest {
    public void testUpdateNic() {
       assertDataCenterAvailable(dataCenter);
       
-      nicApi().update(
+      Nic updated = nicApi().update(
               Nic.Request.updatingBuilder()
               .dataCenterId(testNic.dataCenterId())
               .serverId(testServer.id())
@@ -106,7 +110,8 @@ public class NicApiLiveTest extends BaseProfitBricksLiveTest {
               .name("apache-nic")
               .build());
 
-      assertNicAvailable(testNic);
+      assertRequestCompleted(updated);
+      assertNicAvailable(updated);
       
       Nic nic = nicApi().get(dataCenter.id(), testServer.id(), testNic.id());
       
@@ -116,7 +121,8 @@ public class NicApiLiveTest extends BaseProfitBricksLiveTest {
 
    @Test(dependsOnMethods = "testUpdateNic", alwaysRun = true)
    public void testDeleteNic() {
-      nicApi().delete(testNic.dataCenterId(), testServer.id(), testNic.id());
+      URI uri = nicApi().delete(testNic.dataCenterId(), testServer.id(), testNic.id());
+      assertRequestCompleted(uri);
       assertNicRemoved(testNic);
    } 
       

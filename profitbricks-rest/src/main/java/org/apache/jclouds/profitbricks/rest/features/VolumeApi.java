@@ -16,13 +16,13 @@
  */
 package org.apache.jclouds.profitbricks.rest.features;
 
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,6 +30,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import org.apache.jclouds.profitbricks.rest.binder.volume.CreateSnapshotRequestBinder;
 import org.apache.jclouds.profitbricks.rest.binder.volume.CreateVolumeRequestBinder;
 import org.apache.jclouds.profitbricks.rest.binder.volume.RestoreSnapshotRequestBinder;
@@ -37,11 +38,12 @@ import org.apache.jclouds.profitbricks.rest.binder.volume.UpdateVolumeRequestBin
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
+import org.apache.jclouds.profitbricks.rest.functions.ParseRequestStatusURI;
+import org.apache.jclouds.profitbricks.rest.functions.RequestStatusURIParser;
 import org.apache.jclouds.profitbricks.rest.util.ParseId;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -51,6 +53,9 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.util.Strings2;
+
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 
 @Path("/datacenters/{dataCenterId}/volumes")
 @RequestFilters(BasicAuthentication.class)
@@ -100,7 +105,8 @@ public interface VolumeApi extends Closeable {
    @DELETE
    @Path("/{volumeId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   void deleteVolume(@PathParam("dataCenterId") String dataCenterId, @PathParam("volumeId") String volumeId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI deleteVolume(@PathParam("dataCenterId") String dataCenterId, @PathParam("volumeId") String volumeId);
    
    @Named("volume:snapshot:create")
    @POST
@@ -111,17 +117,19 @@ public interface VolumeApi extends Closeable {
    @Named("volume:snapshot:restore")
    @POST
    @MapBinder(RestoreSnapshotRequestBinder.class)
-   void restoreSnapshot(@PayloadParam("snapshot") Volume.Request.RestoreSnapshotPayload payload);   
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI restoreSnapshot(@PayloadParam("snapshot") Volume.Request.RestoreSnapshotPayload payload);   
    
-   static final class VolumeParser extends ParseJson<Volume> {
+   static final class VolumeParser extends RequestStatusURIParser<Volume> {
       
       final ParseId parseService;
       
-      @Inject VolumeParser(Json json, ParseId parseId) {
-         super(json, TypeLiteral.get(Volume.class));
+      @Inject VolumeParser(Json json, ParseId parseId, ParseRequestStatusURI parseRequestStatusURI) {
+         super(json, TypeLiteral.get(Volume.class), parseRequestStatusURI);
          this.parseService = parseId;
       }
       
+      @SuppressWarnings("unchecked")
       @Override
       public <V> V apply(InputStream stream, Type type) throws IOException {
          try {

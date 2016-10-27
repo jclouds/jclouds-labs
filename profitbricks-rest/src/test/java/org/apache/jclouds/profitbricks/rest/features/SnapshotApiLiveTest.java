@@ -18,9 +18,10 @@ package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+
+import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.ProvisioningState;
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.apache.jclouds.profitbricks.rest.domain.State;
@@ -47,15 +48,7 @@ public class SnapshotApiLiveTest extends BaseProfitBricksLiveTest {
       dataCenter = createDataCenter();
       assertDataCenterAvailable(dataCenter);
 
-      testVolume = api.volumeApi().createVolume(
-              Volume.Request.creatingBuilder()
-              .dataCenterId(dataCenter.id())
-              .name("jclouds-volume")
-              .size(3)
-              .licenceType(LicenceType.LINUX)
-              .build()
-      );
-
+      testVolume = createVolume(dataCenter);
       assertNotNull(testVolume);
       assertVolumeAvailable(testVolume);
 
@@ -67,6 +60,7 @@ public class SnapshotApiLiveTest extends BaseProfitBricksLiveTest {
               .description("snapshot desc...")
               .build());
 
+      assertRequestCompleted(testSnapshot);
       assertSnapshotAvailable(testSnapshot);
    }
 
@@ -110,13 +104,15 @@ public class SnapshotApiLiveTest extends BaseProfitBricksLiveTest {
               .build()
       );
 
+      assertRequestCompleted(snapshot);
       assertVolumeAvailable(testVolume);
       assertEquals(snapshot.properties().name(), "test-snapshot new name");
    }
 
    @Test(dependsOnMethods = "testUpdateSnapshot")
    public void testDeleteSnapshot() {
-      api.volumeApi().deleteVolume(testVolume.dataCenterId(), testVolume.id());
+      URI uri = api.volumeApi().deleteVolume(testVolume.dataCenterId(), testVolume.id());
+      assertRequestCompleted(uri);
       assertVolumeRemoved(testVolume);
       snapshotApi().delete(testSnapshot.id());
       assertSnapshotRemoved(testSnapshot);

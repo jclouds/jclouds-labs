@@ -16,25 +16,29 @@
  */
 package org.apache.jclouds.profitbricks.rest.features;
 
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 import java.io.Closeable;
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+
 import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
+import org.apache.jclouds.profitbricks.rest.functions.ParseRequestStatusURI;
+import org.apache.jclouds.profitbricks.rest.functions.RequestStatusURIParser;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
+
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 
 @Path("/images")
 @RequestFilters(BasicAuthentication.class)
@@ -67,9 +71,9 @@ public interface ImageApi extends Closeable {
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    Image getImage(@PathParam("imageId") String imageId, DepthOptions options);
    
-   static final class ImageParser extends ParseJson<Image> {
-      @Inject ImageParser(Json json) {
-         super(json, TypeLiteral.get(Image.class));
+   static final class ImageParser extends RequestStatusURIParser<Image> {
+      @Inject ImageParser(Json json, ParseRequestStatusURI parseRequestStatusURI) {
+         super(json, TypeLiteral.get(Image.class), parseRequestStatusURI);
       }
    }
    

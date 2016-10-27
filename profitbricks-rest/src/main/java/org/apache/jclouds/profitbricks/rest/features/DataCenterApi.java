@@ -17,14 +17,13 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
-import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.rest.annotations.RequestFilters;
+
 import java.io.Closeable;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Named;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -32,22 +31,28 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
-import org.apache.jclouds.profitbricks.rest.features.DataCenterApi.DataCenterParser;
+import org.apache.jclouds.profitbricks.rest.functions.ParseRequestStatusURI;
+import org.apache.jclouds.profitbricks.rest.functions.RequestStatusURIParser;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.functions.ParseJson;
+import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
 import org.jclouds.rest.annotations.PATCH;
 import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.rest.binders.BindToJsonPayload;
+
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 
 @Path("/datacenters")
 @RequestFilters(BasicAuthentication.class)
@@ -110,11 +115,12 @@ public interface DataCenterApi extends Closeable {
    @DELETE
    @Path("/{id}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   void delete(@PathParam("id") String id);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI delete(@PathParam("id") String id);
    
-   static final class DataCenterParser extends ParseJson<DataCenter> {
-      @Inject DataCenterParser(Json json) {
-         super(json, TypeLiteral.get(DataCenter.class));
+   static final class DataCenterParser extends RequestStatusURIParser<DataCenter> {
+      @Inject DataCenterParser(Json json, ParseRequestStatusURI parseRequestStatusURI) {
+         super(json, TypeLiteral.get(DataCenter.class), parseRequestStatusURI);
       }
    }
    
@@ -134,7 +140,6 @@ public interface DataCenterApi extends Closeable {
 
       @Override
       public <R extends HttpRequest> R bindToRequest(R request, Object payload) {
-         
          Map<String, Object> params = new HashMap<String, Object>();
          params.put("properties", payload);
          

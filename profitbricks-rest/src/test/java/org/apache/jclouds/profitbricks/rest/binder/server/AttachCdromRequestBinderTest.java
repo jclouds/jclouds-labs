@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 @Test(groups = "unit", testName = "AttachCdromRequestBinderTest")
 public class AttachCdromRequestBinderTest extends BinderTestBase {
 
+   @SuppressWarnings("serial")
    @Test
    public void testCreatePayload() {
 

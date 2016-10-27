@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 @Test(groups = "unit", testName = "CreateSnapshotRequestBinderTest")
 public class CreateSnapshotRequestBinderTest extends BinderTestBase {
 
+   @SuppressWarnings("resource")
    @Test
    public void testCreatePayload() {
             

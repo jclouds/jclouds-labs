@@ -84,6 +84,7 @@ public class UpdateSnapshotRequestBinder extends BaseProfitBricksRequestBinder<S
       return jsonBinder.toJson(requestBuilder);
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
       R request = (R) fromRequest.toBuilder().replacePath(String.format("/rest/snapshots/%s", snapshotId)).build();

@@ -16,22 +16,21 @@
  */
 package org.apache.jclouds.profitbricks.rest.compute.strategy;
 
-import com.google.common.annotations.Beta;
-import com.google.common.base.Predicate;
 import static com.google.common.collect.Iterables.find;
-import com.google.common.collect.Multimap;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
+import static org.jclouds.Constants.PROPERTY_USER_THREADS;
+
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
 import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import static org.jclouds.Constants.PROPERTY_USER_THREADS;
+import org.apache.jclouds.profitbricks.rest.util.Trackables;
 import org.jclouds.compute.config.CustomizationResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
@@ -43,6 +42,12 @@ import org.jclouds.compute.strategy.ListNodesStrategy;
 import org.jclouds.compute.strategy.impl.CreateNodesWithGroupEncodedIntoNameThenAddToSet;
 import org.jclouds.logging.Logger;
 
+import com.google.common.annotations.Beta;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Multimap;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+
 @Beta
 @Singleton
 public class AssignDataCenterToTemplate extends CreateNodesWithGroupEncodedIntoNameThenAddToSet {
@@ -53,6 +58,7 @@ public class AssignDataCenterToTemplate extends CreateNodesWithGroupEncodedIntoN
 
    private final ProfitBricksApi api;
    private final Predicate<String> waitDcUntilAvailable;
+   private final Trackables trackables;
 
    @Inject
    protected AssignDataCenterToTemplate(
@@ -61,11 +67,13 @@ public class AssignDataCenterToTemplate extends CreateNodesWithGroupEncodedIntoN
            GroupNamingConvention.Factory namingConvention,
            @Named(PROPERTY_USER_THREADS) ListeningExecutorService userExecutor,
            CustomizeNodeAndAddToGoodMapOrPutExceptionIntoBadMap.Factory customizeNodeAndAddToGoodMapOrPutExceptionIntoBadMapFactory,
-           ProfitBricksApi api, @Named(POLL_PREDICATE_DATACENTER) Predicate<String> waitDcUntilAvailable) {
+           ProfitBricksApi api, @Named(POLL_PREDICATE_DATACENTER) Predicate<String> waitDcUntilAvailable,
+           Trackables trackables) {
       super(addNodeWithGroupStrategy, listNodesStrategy, namingConvention, userExecutor,
               customizeNodeAndAddToGoodMapOrPutExceptionIntoBadMapFactory);
       this.api = api;
       this.waitDcUntilAvailable = waitDcUntilAvailable;
+      this.trackables = trackables;
    }
 
    @Override
@@ -89,7 +97,11 @@ public class AssignDataCenterToTemplate extends CreateNodesWithGroupEncodedIntoN
          String name = namingConvention.create().sharedNameForGroup(group);
          logger.info(">> no datacenter was found. Creating a new one named %s in %s...", name, template.getLocation()
                  .getId());
+         
          dataCenter = api.dataCenterApi().create(name, "desc,,,", template.getLocation().getId());
+         trackables.waitUntilRequestCompleted(dataCenter);
+
+         dataCenter = api.dataCenterApi().getDataCenter(dataCenter.id());
          waitDcUntilAvailable.apply(dataCenter.id());
       }
 

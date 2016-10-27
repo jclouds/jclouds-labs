@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.util.Set;
 
 @AutoValue
-public abstract class Volume {
+public abstract class Volume extends Trackable {
 
     public abstract String id();
     

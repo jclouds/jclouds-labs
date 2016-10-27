@@ -18,6 +18,8 @@ package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+
+import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.State;
@@ -55,6 +57,7 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
             .ram(1024)
             .build());
       
+      assertRequestCompleted(testServer);
       assertNodeAvailable(ServerRef.create(dataCenter.id(), testServer.id()));
             
       testNic = nicApi().create(
@@ -65,6 +68,7 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
               .lan(1)
               .build());
 
+      assertRequestCompleted(testNic);
       assertNicAvailable(testNic);
    }
    
@@ -89,6 +93,7 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
               .portRangeEnd(600)
               .build());
 
+      assertRequestCompleted(testFirewallRule);
       assertNotNull(testFirewallRule);
       assertEquals(testFirewallRule.properties().name(), "jclouds-firewall");
       assertFirewallRuleAvailable(testFirewallRule);
@@ -120,7 +125,7 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
    public void testUpdateFirewallRule() {
       assertDataCenterAvailable(dataCenter);
       
-      firewallApi().update(FirewallRule.Request.updatingBuilder()
+      FirewallRule updated = firewallApi().update(FirewallRule.Request.updatingBuilder()
               .dataCenterId(testFirewallRule.dataCenterId())
               .serverId(testServer.id())
               .nicId(testNic.id())
@@ -128,7 +133,7 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
               .name("apache-firewall")
               .build());
 
-      assertFirewallRuleAvailable(testFirewallRule);
+      assertFirewallRuleAvailable(updated);
       
       FirewallRule firewallRule = firewallApi().get(dataCenter.id(), testServer.id(), testNic.id(), testFirewallRule.id());
       
@@ -138,7 +143,8 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
 
    @Test(dependsOnMethods = "testUpdateFirewallRule")
    public void testDeleteFirewallRule() {
-      firewallApi().delete(testFirewallRule.dataCenterId(), testServer.id(), testNic.id(), testFirewallRule.id());
+      URI uri = firewallApi().delete(testFirewallRule.dataCenterId(), testServer.id(), testNic.id(), testFirewallRule.id());
+      assertRequestCompleted(uri);
       assertFirewallRuleRemoved(testFirewallRule);
    } 
    

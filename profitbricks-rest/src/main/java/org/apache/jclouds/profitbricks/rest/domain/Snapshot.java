@@ -22,7 +22,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
-public abstract class Snapshot implements Provisionable {
+public abstract class Snapshot extends Trackable implements Provisionable {
 
    public abstract String id();
 

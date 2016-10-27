@@ -70,7 +70,7 @@ public class ProvisioningManagerTest {
       private final AtomicInteger completedJobs;
 
       public MockJob(long delay, String group, AtomicInteger completedJobs) {
-         super(sleepPredicate(delay), group, Suppliers.ofInstance((Object) 0));
+         super(sleepPredicate(delay), null, group, Suppliers.ofInstance((Object) 0));
          this.delay = delay;
          this.completedJobs = completedJobs;
       }
@@ -92,7 +92,7 @@ public class ProvisioningManagerTest {
    private static class ShutdownExecutorJob extends ProvisioningJob {
 
       public ShutdownExecutorJob(final ProvisioningManager manager, final AtomicInteger completedJobs) {
-         super(Predicates.<String>alwaysTrue(), "shutdown", new Supplier<Object>() {
+         super(Predicates.<String>alwaysTrue(), null, "shutdown", new Supplier<Object>() {
             @Override
             public Integer get() {
                try {

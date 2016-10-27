@@ -16,13 +16,13 @@
  */
 package org.apache.jclouds.profitbricks.rest.features;
 
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,6 +30,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import org.apache.jclouds.profitbricks.rest.binder.server.AttachCdromRequestBinder;
 import org.apache.jclouds.profitbricks.rest.binder.server.AttachVolumeRequestBinder;
 import org.apache.jclouds.profitbricks.rest.binder.server.CreateServerRequestBinder;
@@ -38,11 +39,12 @@ import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
+import org.apache.jclouds.profitbricks.rest.functions.ParseRequestStatusURI;
+import org.apache.jclouds.profitbricks.rest.functions.RequestStatusURIParser;
 import org.apache.jclouds.profitbricks.rest.util.ParseId;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -52,6 +54,9 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.util.Strings2;
+
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 
 @Path("/datacenters/{dataCenterId}/servers")
 @RequestFilters(BasicAuthentication.class)
@@ -101,7 +106,8 @@ public interface ServerApi extends Closeable {
    @DELETE
    @Path("/{serverId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   void deleteServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI deleteServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
 
    @Named("server:volume:list")
    @GET
@@ -120,7 +126,8 @@ public interface ServerApi extends Closeable {
    @DELETE
    @Path("/{serverId}/volumes/{volumeId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   void detachVolume(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("volumeId") String volumeId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI detachVolume(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("volumeId") String volumeId);
 
    @Named("server:volume:get")
    @GET
@@ -146,7 +153,8 @@ public interface ServerApi extends Closeable {
    @DELETE
    @Path("/{serverId}/cdroms/{cdRomId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   void detachCdrom(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("cdRomId") String cdRomId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI detachCdrom(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("cdRomId") String cdRomId);
 
    @Named("server:cdrom:get")
    @GET
@@ -158,28 +166,32 @@ public interface ServerApi extends Closeable {
    @Named("server:reboot")
    @POST
    @Path("/{serverId}/reboot")
-   void rebootServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI rebootServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
 
    @Named("server:start")
    @POST
    @Path("/{serverId}/start")
-   void startServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI startServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
 
    @Named("server:stop")
    @POST
    @Path("/{serverId}/stop")
-   void stopServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI stopServer(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId);
 
-   static final class ServerParser extends ParseJson<Server> {
+   static final class ServerParser extends RequestStatusURIParser<Server> {
 
       final ParseId parseService;
 
       @Inject
-      ServerParser(Json json, ParseId parseId) {
-         super(json, TypeLiteral.get(Server.class));
+      ServerParser(Json json, ParseId parseId, ParseRequestStatusURI parseRequestStatusURI) {
+         super(json, TypeLiteral.get(Server.class), parseRequestStatusURI);
          this.parseService = parseId;
       }
 
+      @SuppressWarnings("unchecked")
       @Override
       public <V> V apply(InputStream stream, Type type) throws IOException {
          try {

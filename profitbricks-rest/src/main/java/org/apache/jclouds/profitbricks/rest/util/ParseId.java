@@ -35,6 +35,7 @@ public class ParseId {
       this.jsonBinder = checkNotNull(jsonBinder, "jsonBinder");
    }
    
+   @SuppressWarnings("serial")
    public String parseId (String json, String prefix, String key) {
          
       Type mapType = new TypeToken<Map<String, Object>>(){}.getType();

@@ -73,6 +73,7 @@ import static org.jclouds.util.Predicates2.retry;
 public class ProfitBricksComputeServiceContextModule extends
         ComputeServiceAdapterContextModule<ServerInDataCenter, Hardware, Provisionable, Location> {
 
+   @SuppressWarnings("unchecked")
    @Override
    protected void configure() {
       super.configure();

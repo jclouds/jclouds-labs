@@ -17,6 +17,8 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
+
+import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
@@ -90,6 +92,7 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
               .sshKeys(sshKeys)
               .build());
 
+      assertRequestCompleted(testVolume);
       assertNotNull(testVolume);
       assertEquals(testVolume.properties().name(), "jclouds-volume");
       assertVolumeAvailable(testVolume);
@@ -123,7 +126,8 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
               .name("apache-volume")
               .build());
 
-      assertVolumeAvailable(testVolume);
+      assertRequestCompleted(volume);
+      assertVolumeAvailable(volume);
       assertEquals(volume.properties().name(), "apache-volume");
    }
 
@@ -137,24 +141,27 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
               .description("snapshot desc...")
               .build());
 
+      assertRequestCompleted(testSnapshot);
       assertSnapshotAvailable(testSnapshot);
    }
 
    @Test(dependsOnMethods = "testCreateSnapshot")
    public void testRestoreSnapshot() {
-      volumeApi().restoreSnapshot(
+      URI uri = volumeApi().restoreSnapshot(
               Volume.Request.restoreSnapshotBuilder()
               .dataCenterId(testVolume.dataCenterId())
               .volumeId(testVolume.id())
               .snapshotId(testSnapshot.id())
               .build()
       );
+      assertRequestCompleted(uri);
       assertVolumeAvailable(testVolume);
    }
 
    @Test(dependsOnMethods = "testRestoreSnapshot")
    public void testDeleteVolume() {
-      volumeApi().deleteVolume(testVolume.dataCenterId(), testVolume.id());
+      URI uri = volumeApi().deleteVolume(testVolume.dataCenterId(), testVolume.id());
+      assertRequestCompleted(uri);
       assertVolumeRemoved(testVolume);
       api.snapshotApi().delete(testSnapshot.id());
    }

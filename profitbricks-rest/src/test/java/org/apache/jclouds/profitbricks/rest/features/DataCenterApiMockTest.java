@@ -17,6 +17,8 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
+
+import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.Location;
@@ -89,12 +91,14 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
    public void testCreate() throws InterruptedException {
       server.enqueue(
               new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
+                 .addHeader("Location", "http://foo/bar")
       );
 
       DataCenter dataCenter = dataCenterApi().create("test-data-center", "example description", Location.US_LAS.getId());
 
       assertNotNull(dataCenter);
       assertNotNull(dataCenter.id());
+      assertEquals(dataCenter.requestStatusUri().get(), URI.create("http://foo/bar"));
 
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "POST", "/datacenters",
@@ -105,10 +109,10 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
    @Test
    public void testUpdate() throws InterruptedException {
       server.enqueue(
-              new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
+            new MockResponse().setBody(stringFromResource("/datacenter/get.json"))
       );
 
-      DataCenter dataCenter = dataCenterApi().update("some-id", "new name");
+      dataCenterApi().update("some-id", "new name");
 
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "PATCH", "/datacenters/some-id", "{\"name\": \"new name\"}");
@@ -116,9 +120,11 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
 
    @Test
    public void testDelete() throws InterruptedException {
-      server.enqueue(response204());
+      server.enqueue(response204().addHeader("Location", "http://foo/bar"));
 
-      dataCenterApi().delete("some-id");
+      URI statusURI = dataCenterApi().delete("some-id");
+      
+      assertEquals(statusURI, URI.create("http://foo/bar"));
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "DELETE", "/datacenters/some-id");
    }

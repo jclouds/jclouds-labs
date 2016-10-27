@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 @Test(groups = "unit", testName = "AttachVolumeRequestBinderTest")
 public class AttachVolumeRequestBinderTest  extends BinderTestBase {
 
+   @SuppressWarnings("serial")
    @Test
    public void testCreatePayload() {
       

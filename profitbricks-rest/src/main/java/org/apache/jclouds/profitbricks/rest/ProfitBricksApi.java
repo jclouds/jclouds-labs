@@ -16,8 +16,14 @@
  */
 package org.apache.jclouds.profitbricks.rest;
 
-import com.google.common.annotations.Beta;
 import java.io.Closeable;
+import java.net.URI;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.GET;
+
+import org.apache.jclouds.profitbricks.rest.domain.RequestStatus;
 import org.apache.jclouds.profitbricks.rest.features.DataCenterApi;
 import org.apache.jclouds.profitbricks.rest.features.FirewallApi;
 import org.apache.jclouds.profitbricks.rest.features.ImageApi;
@@ -27,7 +33,18 @@ import org.apache.jclouds.profitbricks.rest.features.NicApi;
 import org.apache.jclouds.profitbricks.rest.features.ServerApi;
 import org.apache.jclouds.profitbricks.rest.features.SnapshotApi;
 import org.apache.jclouds.profitbricks.rest.features.VolumeApi;
+import org.jclouds.Fallbacks;
+import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.http.functions.ParseJson;
+import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Delegate;
+import org.jclouds.rest.annotations.EndpointParam;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
+
+import com.google.common.annotations.Beta;
+import com.google.inject.TypeLiteral;
 
 @Beta
 public interface ProfitBricksApi extends Closeable {
@@ -58,5 +75,18 @@ public interface ProfitBricksApi extends Closeable {
 
    @Delegate
    IpBlockApi ipBlockApi();
+   
+   @Named("request:status")
+   @GET
+   @RequestFilters(BasicAuthentication.class)
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @ResponseParser(RequestStatusParser.class)
+   RequestStatus getRequestStatus(@EndpointParam URI requestStatusURI);
+   
+   static final class RequestStatusParser extends ParseJson<RequestStatus> {
+      @Inject RequestStatusParser(Json json) {
+         super(json, TypeLiteral.get(RequestStatus.class));
+      }
+   }
 
 }

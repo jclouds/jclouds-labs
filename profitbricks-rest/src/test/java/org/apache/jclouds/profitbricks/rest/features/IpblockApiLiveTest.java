@@ -17,6 +17,8 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
+
+import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.IpBlock;
 import org.apache.jclouds.profitbricks.rest.domain.Location;
@@ -42,13 +44,15 @@ public class IpblockApiLiveTest extends BaseProfitBricksLiveTest {
    public void setupTest() {
       testIpBlock = ipBlockApi().create(IpBlock.Request.creatingBuilder()
               .properties(IpBlock.PropertiesRequest.create("jclouds ipBlock", Location.US_LAS.getId(), 1)).build());
+      assertRequestCompleted(testIpBlock);
       assertIpBlockAvailable(testIpBlock);
    }
 
    @AfterClass(alwaysRun = true)
    public void teardownTest() {
       if (testIpBlock != null) {
-         ipBlockApi().delete(testIpBlock.id());
+         URI uri = ipBlockApi().delete(testIpBlock.id());
+         assertRequestCompleted(uri);
          assertIpBlockRemoved(testIpBlock);
 
       }

@@ -44,14 +44,12 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
       this.endpointSupplier = endpointSupplier;
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    public <R extends HttpRequest> R bindToRequest(R request, Map<String, Object> postParams) {
       checkNotNull(request, "request");
-
       Object obj = checkNotNull(postParams.get(paramName), "Param '%s' cannot be null.", paramName);
-      T payload = (T) obj;
-
-      return createRequest(request, createPayload(payload));
+      return createRequest(request, createPayload((T) obj));
    }
 
    @Override
@@ -79,6 +77,7 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
       return fromRequest;
    }
    
+   @SuppressWarnings("unchecked")
    protected <R extends HttpRequest> R genRequest(String path, R fromRequest) {          
       R request = (R) fromRequest.toBuilder()
          .replacePath(endpointSupplier.get().getPath() + path)

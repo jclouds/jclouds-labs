@@ -16,13 +16,13 @@
  */
 package org.apache.jclouds.profitbricks.rest.features;
 
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.List;
+
 import javax.inject.Named;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,15 +30,17 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import org.apache.jclouds.profitbricks.rest.binder.firewall.CreateFirewallRuleRequestBinder;
 import org.apache.jclouds.profitbricks.rest.binder.firewall.UpdateFirewallRuleRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.FirewallRule;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
+import org.apache.jclouds.profitbricks.rest.functions.ParseRequestStatusURI;
+import org.apache.jclouds.profitbricks.rest.functions.RequestStatusURIParser;
 import org.apache.jclouds.profitbricks.rest.util.ParseId;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.EmptyListOnNotFoundOr404;
 import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.MapBinder;
@@ -48,6 +50,9 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.util.Strings2;
+
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 
 @Path("/datacenters/{dataCenterId}/servers/{serverId}/nics/{nicId}/firewallrules")
 @RequestFilters(BasicAuthentication.class)
@@ -96,17 +101,19 @@ public interface FirewallApi extends Closeable {
    @DELETE
    @Path("/{firewallRuleId}")
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   void delete(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("nicId") String nicId, @PathParam("firewallRuleId") String firewallRuleId);
+   @ResponseParser(ParseRequestStatusURI.class)
+   URI delete(@PathParam("dataCenterId") String dataCenterId, @PathParam("serverId") String serverId, @PathParam("nicId") String nicId, @PathParam("firewallRuleId") String firewallRuleId);
    
-   static final class FirewallRuleParser extends ParseJson<FirewallRule> {
+   static final class FirewallRuleParser extends RequestStatusURIParser<FirewallRule> {
       
       private final ParseId parseService;
             
-      @Inject FirewallRuleParser(Json json, ParseId parseId) {
-         super(json, TypeLiteral.get(FirewallRule.class));
+      @Inject FirewallRuleParser(Json json, ParseId parseId, ParseRequestStatusURI parseRequestStatusURI) {
+         super(json, TypeLiteral.get(FirewallRule.class), parseRequestStatusURI);
          this.parseService = parseId;
       }
-      
+
+      @SuppressWarnings("unchecked")
       @Override      
       public <V> V apply(InputStream stream, Type type) throws IOException {
          try {

@@ -22,7 +22,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
-public abstract class FirewallRule {
+public abstract class FirewallRule extends Trackable {
 
     public abstract String id();
     

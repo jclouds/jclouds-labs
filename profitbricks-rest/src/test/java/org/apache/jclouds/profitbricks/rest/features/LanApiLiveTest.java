@@ -16,28 +16,30 @@
  */
 package org.apache.jclouds.profitbricks.rest.features;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import java.util.List;
-import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
-import org.apache.jclouds.profitbricks.rest.domain.State;
-import org.apache.jclouds.profitbricks.rest.domain.Lan;
-import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+
+import java.net.URI;
+import java.util.List;
+
+import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
+import org.apache.jclouds.profitbricks.rest.domain.Lan;
+import org.apache.jclouds.profitbricks.rest.domain.State;
+import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 @Test(groups = "live", testName = "LanApiLiveTest")
 public class LanApiLiveTest extends BaseProfitBricksLiveTest {
    
    private DataCenter dataCenter;
    private Lan testLan;
-   private Snapshot testSnapshot;
   
    @BeforeClass
    public void setupTest() {
@@ -60,6 +62,7 @@ public class LanApiLiveTest extends BaseProfitBricksLiveTest {
               .name("jclouds-lan")
               .build());
 
+      assertRequestCompleted(testLan);
       assertNotNull(testLan);
       assertEquals(testLan.properties().name(), "jclouds-lan");
       assertLanAvailable(testLan);
@@ -91,14 +94,15 @@ public class LanApiLiveTest extends BaseProfitBricksLiveTest {
    public void testUpdateLan() {
       assertDataCenterAvailable(dataCenter);
       
-      api.lanApi().update(
+      Lan updated = api.lanApi().update(
               Lan.Request.updatingBuilder()
               .dataCenterId(testLan.dataCenterId())
               .id(testLan.id())
               .isPublic(false)
               .build());
 
-      assertLanAvailable(testLan);
+      assertRequestCompleted(updated);
+      assertLanAvailable(updated);
       
       Lan lan = lanApi().get(dataCenter.id(), testLan.id());
       
@@ -107,7 +111,8 @@ public class LanApiLiveTest extends BaseProfitBricksLiveTest {
    
    @Test(dependsOnMethods = "testUpdateLan")
    public void testDeleteLan() {
-      lanApi().delete(testLan.dataCenterId(), testLan.id());
+      URI uri = lanApi().delete(testLan.dataCenterId(), testLan.id());
+      assertRequestCompleted(uri);
       assertLanRemoved(testLan);
    }
    

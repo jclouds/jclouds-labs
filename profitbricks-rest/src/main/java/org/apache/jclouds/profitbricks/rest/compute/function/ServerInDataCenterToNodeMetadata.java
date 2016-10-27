@@ -163,6 +163,8 @@ public class ServerInDataCenterToNodeMetadata implements Function<ServerInDataCe
                        .description(OsFamily.LINUX.value())
                        .family(OsFamily.LINUX)
                        .build();
+            default:
+               break;
          }
       }
       return OperatingSystem.builder()

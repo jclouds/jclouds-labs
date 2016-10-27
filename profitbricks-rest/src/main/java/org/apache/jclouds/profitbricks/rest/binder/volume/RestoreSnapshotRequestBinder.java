@@ -56,6 +56,7 @@ public class RestoreSnapshotRequestBinder extends BaseProfitBricksRequestBinder<
       return "";
    }
    
+   @SuppressWarnings("unchecked")
    @Override
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {
       fromRequest = super.createRequest(fromRequest, payload);

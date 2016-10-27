@@ -17,35 +17,32 @@
 package org.apache.jclouds.profitbricks.rest.compute;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import com.google.common.base.Predicate;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
-import com.google.common.collect.Lists;
 import static com.google.common.util.concurrent.Futures.getUnchecked;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.inject.Inject;
 import static java.lang.String.format;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_NIC;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_SERVER;
+import static org.jclouds.Constants.PROPERTY_USER_THREADS;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+
 import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
 import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
 import org.apache.jclouds.profitbricks.rest.compute.concurrent.ProvisioningJob;
 import org.apache.jclouds.profitbricks.rest.compute.concurrent.ProvisioningManager;
 import org.apache.jclouds.profitbricks.rest.compute.function.ProvisionableToImage;
 import org.apache.jclouds.profitbricks.rest.compute.strategy.TemplateWithDataCenter;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_NIC;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_SERVER;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.Lan;
@@ -62,10 +59,8 @@ import org.apache.jclouds.profitbricks.rest.ids.NicRef;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.util.Passwords;
-import static org.jclouds.Constants.PROPERTY_USER_THREADS;
+import org.apache.jclouds.profitbricks.rest.util.Trackables;
 import org.jclouds.compute.ComputeServiceAdapter;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.HardwareBuilder;
 import org.jclouds.compute.domain.Processor;
@@ -81,6 +76,17 @@ import org.jclouds.domain.LoginCredentials;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceNotFoundException;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.inject.Inject;
+
 @Singleton
 public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<ServerInDataCenter, Hardware, Provisionable, Location> {
 
@@ -95,6 +101,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
    private final Predicate<ServerRef> waitServerUntilRunning;
    private final Predicate<ServerRef> waitServerUntilSuspended;
    private final Predicate<NicRef> waitNICUntilAvailable;
+   private final Trackables trackables;
    private final ListeningExecutorService executorService;
    private final ProvisioningJob.Factory jobFactory;
    private final ProvisioningManager provisioningManager;
@@ -111,6 +118,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
            @Named(TIMEOUT_NODE_RUNNING) Predicate<ServerRef> waitServerUntilRunning,
            @Named(TIMEOUT_NODE_SUSPENDED) Predicate<ServerRef> waitServerUntilSuspended,
            @Named(POLL_PREDICATE_NIC) Predicate<NicRef> waitNICUntilAvailable,
+           Trackables trackables,
            ProvisioningJob.Factory jobFactory,
            ProvisioningManager provisioningManager) {
       this.api = api;
@@ -120,6 +128,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       this.waitNICUntilAvailable = waitNICUntilAvailable;
       this.waitServerUntilSuspended = waitServerUntilSuspended;
       this.waitServerUntilRunning = waitServerUntilRunning;
+      this.trackables = trackables;
       this.executorService = executorService;
       this.jobFactory = jobFactory;
       this.provisioningManager = provisioningManager;
@@ -165,16 +174,16 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
                     size(volume.getSize().intValue()).
                     type(VolumeType.HDD);
 
-            String volumeId = (String) provisioningManager.provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
-
+            org.apache.jclouds.profitbricks.rest.domain.Volume vol = (org.apache.jclouds.profitbricks.rest.domain.Volume) provisioningManager
+                  .provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
                @Override
                public Object get() {
-                  return api.volumeApi().createVolume(request.build()).id();
+                  return api.volumeApi().createVolume(request.build());
                }
             }));
 
-            volumeIds.add(volumeId);
-            logger.trace(">> provisioning complete for volume. returned id='%s'", volumeId);
+            volumeIds.add(vol.id());
+            logger.trace(">> provisioning complete for volume. returned id='%s'", vol.id());
          } catch (Exception ex) {
             if (i - 1 == 1) // if first volume (one with image) provisioning fails; stop method
             {
@@ -188,7 +197,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       waitVolumeUntilAvailable.apply(VolumeRef.create(dataCenterId, volumeBootDeviceId));
 
       // provision server
-      final String serverId;
+      final Server server;
       Double cores = ComputeServiceUtils.getCores(hardware);
 
       Server.BootVolume bootVolume = Server.BootVolume.create(volumeBootDeviceId);
@@ -204,14 +213,14 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
 
          logger.trace("<< provisioning server '%s'", serverRequest);
 
-         serverId = (String) provisioningManager.provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
+         server = (Server) provisioningManager.provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
 
             @Override
             public Object get() {
-               return api.serverApi().createServer(serverRequest).id();
+               return api.serverApi().createServer(serverRequest);
             }
          }));
-         logger.trace(">> provisioning complete for server. returned id='%s'", serverId);
+         logger.trace(">> provisioning complete for server. returned id='%s'", server.id());
 
       } catch (Exception ex) {
          logger.error(ex, ">> failed to provision server. rollbacking..");
@@ -219,17 +228,18 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
          throw Throwables.propagate(ex);
       }
 
-      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, serverId));
+      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, server.id()));
       waitDcUntilAvailable.apply(dataCenterId);
 
       //attach bootVolume to Server
-      api.serverApi().attachVolume(Server.Request.attachVolumeBuilder()
+      org.apache.jclouds.profitbricks.rest.domain.Volume volume = api.serverApi().attachVolume(Server.Request.attachVolumeBuilder()
               .dataCenterId(dataCenterId)
-              .serverId(serverId)
+              .serverId(server.id())
               .volumeId(bootVolume.id())
               .build());
 
-      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, serverId));
+      trackables.waitUntilRequestCompleted(volume);
+      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, server.id()));
       waitDcUntilAvailable.apply(dataCenterId);
 
       //fetch an existing lan and creat if non was found
@@ -252,6 +262,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
                  .isPublic(Boolean.TRUE)
                  .name("lan " + name)
                  .build());
+         trackables.waitUntilRequestCompleted(lan);
       }
 
       //add a NIC to the server
@@ -271,19 +282,20 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
               .dhcp(Boolean.TRUE)
               .lan(lanId)
               .firewallActive(Boolean.FALSE)
-              .serverId(serverId).
+              .serverId(server.id()).
               build());
-
-      waitNICUntilAvailable.apply(NicRef.create(dataCenterId, serverId, nic.id()));
+      
+      trackables.waitUntilRequestCompleted(nic);
+      waitNICUntilAvailable.apply(NicRef.create(dataCenterId, server.id(), nic.id()));
       waitDcUntilAvailable.apply(dataCenterId);
-      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, serverId));
+      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, server.id()));
 
       //connect the rest of volumes to server;delete if fails
       final int volumeCount = volumeIds.size();
       for (int j = 1; j < volumeCount; j++) { // skip first; already connected
          final String volumeId = volumeIds.get(j);
          try {
-            logger.trace("<< connecting volume '%s' to server '%s'", volumeId, serverId);
+            logger.trace("<< connecting volume '%s' to server '%s'", volumeId, server.id());
             provisioningManager.provision(jobFactory.create(group, new Supplier<Object>() {
 
                @Override
@@ -291,7 +303,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
                   return api.serverApi().attachVolume(
                           Server.Request.attachVolumeBuilder()
                           .dataCenterId(dataCenterId)
-                          .serverId(serverId)
+                          .serverId(server.id())
                           .volumeId(volumeId)
                           .build()
                   );
@@ -304,8 +316,8 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
                // delete unconnected volume
                logger.warn(ex, ">> failed to connect volume '%s'. deleting..", volumeId);
                destroyVolume(volumeId, dataCenterId);
-               logger.warn(ex, ">> rolling back server..", serverId);
-               destroyServer(serverId, dataCenterId);
+               logger.warn(ex, ">> rolling back server..", server.id());
+               destroyServer(server.id(), dataCenterId);
                throw ex;
             } catch (Exception ex1) {
                logger.error(ex, ">> failed to rollback");
@@ -313,17 +325,17 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
          }
       }
       waitDcUntilAvailable.apply(dataCenterId);
-      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, serverId));
+      waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, server.id()));
 
       LoginCredentials serverCredentials = LoginCredentials.builder()
               .user(loginUser)
               .password(password)
               .build();
 
-      String serverInDataCenterId = DataCenterAndId.fromDataCenterAndId(dataCenterId, serverId).slashEncode();
-      ServerInDataCenter server = getNode(serverInDataCenterId);
+      String serverInDataCenterId = DataCenterAndId.fromDataCenterAndId(dataCenterId, server.id()).slashEncode();
+      ServerInDataCenter serverInDatacenter = getNode(serverInDataCenterId);
 
-      return new NodeAndInitialCredentials<ServerInDataCenter>(server, serverInDataCenterId, serverCredentials);
+      return new NodeAndInitialCredentials<ServerInDataCenter>(serverInDatacenter, serverInDataCenterId, serverCredentials);
    }
 
    @Override
@@ -385,7 +397,11 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
 
       });
 
-      return Iterables.concat(getUnchecked(images), getUnchecked(snapshots));
+      ImmutableList.Builder<Provisionable> provisionables = ImmutableList.builder();
+      provisionables.addAll(getUnchecked(images));
+      provisionables.addAll(getUnchecked(snapshots));
+      
+      return provisionables.build();
    }
 
    @Override
@@ -449,10 +465,10 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       // Fail pre-emptively if not found
       final ServerInDataCenter node = getRequiredNode(id);
       provisioningManager.provision(jobFactory.create(datacenterAndId.getDataCenter(), new Supplier<Object>() {
-
          @Override
          public Object get() {
-            api.serverApi().rebootServer(datacenterAndId.getDataCenter(), datacenterAndId.getId());
+            URI requestStatusURI = api.serverApi().rebootServer(datacenterAndId.getDataCenter(), datacenterAndId.getId());
+            trackables.waitUntilRequestCompleted(requestStatusURI);
             waitServerUntilRunning.apply(ServerRef.create(datacenterAndId.getDataCenter(), datacenterAndId.getId()));
             return node;
          }
@@ -468,10 +484,10 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       }
 
       provisioningManager.provision(jobFactory.create(datacenterAndId.getDataCenter(), new Supplier<Object>() {
-
          @Override
          public Object get() {
-            api.serverApi().startServer(datacenterAndId.getDataCenter(), datacenterAndId.getId());
+            URI requestStatusURI = api.serverApi().startServer(datacenterAndId.getDataCenter(), datacenterAndId.getId());
+            trackables.waitUntilRequestCompleted(requestStatusURI);
             waitServerUntilRunning.apply(ServerRef.create(datacenterAndId.getDataCenter(), datacenterAndId.getId()));
             return node;
          }
@@ -490,7 +506,8 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       provisioningManager.provision(jobFactory.create(datacenterAndId.getDataCenter(), new Supplier<Object>() {
          @Override
          public Object get() {
-            api.serverApi().stopServer(datacenterAndId.getDataCenter(), datacenterAndId.getId());
+            URI requestStatusURI = api.serverApi().stopServer(datacenterAndId.getDataCenter(), datacenterAndId.getId());
+            trackables.waitUntilRequestCompleted(requestStatusURI);
             waitServerUntilSuspended.apply(ServerRef.create(datacenterAndId.getDataCenter(), datacenterAndId.getId()));
             return node;
          }
@@ -527,11 +544,10 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       try {
          logger.trace("<< deleting server with id=%s", serverId);
          provisioningManager.provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
-
             @Override
             public Object get() {
-               api.serverApi().deleteServer(dataCenterId, serverId);
-
+               URI requestStatusURI = api.serverApi().deleteServer(dataCenterId, serverId);
+               trackables.waitUntilRequestCompleted(requestStatusURI);
                return serverId;
             }
          }));
@@ -554,8 +570,8 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
 
             @Override
             public Object get() {
-               api.volumeApi().deleteVolume(dataCenterId, volumeId);
-
+               URI requestStatusURI = api.volumeApi().deleteVolume(dataCenterId, volumeId);
+               trackables.waitUntilRequestCompleted(requestStatusURI);
                return volumeId;
             }
          }));

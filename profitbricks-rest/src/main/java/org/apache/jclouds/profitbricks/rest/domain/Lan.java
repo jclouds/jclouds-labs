@@ -22,7 +22,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
-public abstract class Lan {
+public abstract class Lan extends Trackable {
 
    public abstract String id();
    

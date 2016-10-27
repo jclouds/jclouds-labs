@@ -16,17 +16,14 @@
  */
 package org.apache.jclouds.profitbricks.rest.compute.function;
 
-import com.google.common.base.Function;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.base.Strings;
-import com.google.common.base.Supplier;
-import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.find;
-import com.google.inject.Inject;
+import static org.jclouds.location.predicates.LocationPredicates.idEquals;
+
 import java.util.Set;
 import java.util.regex.Pattern;
-import static org.apache.jclouds.profitbricks.rest.domain.Image.Type.CDROM;
+
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Provisionable;
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
@@ -36,7 +33,12 @@ import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.domain.Location;
-import static org.jclouds.location.predicates.LocationPredicates.idEquals;
+
+import com.google.common.base.Function;
+import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
 
 public class ProvisionableToImage implements Function<Provisionable, Image> {
 
