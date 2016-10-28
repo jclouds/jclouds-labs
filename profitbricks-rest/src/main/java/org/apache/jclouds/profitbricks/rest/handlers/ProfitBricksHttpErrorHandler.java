@@ -43,6 +43,7 @@ public class ProfitBricksHttpErrorHandler implements HttpErrorHandler {
          switch (response.getStatusCode()) {
             case 400:
             case 405:
+            case 422:
                exception = new IllegalArgumentException(response.getMessage(), exception);
                break;
             case 401:
