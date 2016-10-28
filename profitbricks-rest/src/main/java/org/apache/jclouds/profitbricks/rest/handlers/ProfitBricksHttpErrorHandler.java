@@ -16,6 +16,8 @@
  */
 package org.apache.jclouds.profitbricks.rest.handlers;
 
+import java.io.IOException;
+
 import javax.inject.Singleton;
 
 import org.apache.jclouds.profitbricks.rest.exceptions.ProfitBricksRateLimitExceededException;
@@ -26,6 +28,7 @@ import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.InsufficientResourcesException;
 import org.jclouds.rest.ResourceNotFoundException;
+import org.jclouds.util.Strings2;
 
 /**
  * Parse ProfitBricks API errors and set the appropriate exception.
@@ -69,9 +72,26 @@ public class ProfitBricksHttpErrorHandler implements HttpErrorHandler {
                else
                   exception = new InsufficientResourcesException(response.getMessage(), exception);
                break;
+            default:
+               String message = parseMessage(response);
+               exception = message == null ? new HttpResponseException(command, response) : new HttpResponseException(
+                     command, response, message);
+               break;
+               
          }
       } finally {
          command.setException(exception);
+      }
+   }
+   
+   public String parseMessage(final HttpResponse response) {
+      if (response.getPayload() == null) {
+         return null;
+      }
+      try {
+         return Strings2.toStringAndClose(response.getPayload().openStream());
+      } catch (IOException e) {
+         throw new RuntimeException(e);
       }
    }
 }
