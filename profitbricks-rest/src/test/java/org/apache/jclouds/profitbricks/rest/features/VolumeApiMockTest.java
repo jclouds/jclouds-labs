@@ -61,7 +61,7 @@ public class VolumeApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetVolume() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/volume/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       

@@ -84,7 +84,7 @@ public class LanApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetLan() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/lan/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       
@@ -112,7 +112,7 @@ public class LanApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetLanWithDepth() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/lan/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       

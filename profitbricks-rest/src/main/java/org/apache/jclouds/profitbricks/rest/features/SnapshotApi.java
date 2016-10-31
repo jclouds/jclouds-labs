@@ -82,7 +82,7 @@ public interface SnapshotApi extends Closeable {
    @Path("/{snapshotId}")
    @MapBinder(UpdateSnapshotRequestBinder.class)
    @ResponseParser(SnapshotApi.SnapshotParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    Snapshot update(@PayloadParam("snapshot") Snapshot.Request.UpdatePayload payload);
    
    @Named("snapshot:delete")

@@ -95,7 +95,7 @@ public interface LanApi extends Closeable {
    @Path("/{lanId}")
    @MapBinder(UpdateLanRequestBinder.class)
    @ResponseParser(LanApi.LanParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    Lan update(@PayloadParam("lan") Lan.Request.UpdatePayload payload);
    
    @Named("lan:delete")

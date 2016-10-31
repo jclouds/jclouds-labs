@@ -62,7 +62,7 @@ public class DataCenterApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetDataCenter() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/datacenter/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
 
       server.enqueue(response);
 

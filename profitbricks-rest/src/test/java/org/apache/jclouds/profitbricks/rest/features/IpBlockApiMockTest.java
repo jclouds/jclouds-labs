@@ -87,7 +87,7 @@ public class IpBlockApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetIpBlock() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/ipblock/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
 
       server.enqueue(response);
 

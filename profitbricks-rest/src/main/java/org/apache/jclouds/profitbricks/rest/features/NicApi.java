@@ -95,7 +95,7 @@ public interface NicApi extends Closeable {
    @Path("/{nicId}")
    @MapBinder(UpdateNicRequestBinder.class)
    @ResponseParser(NicApi.NicParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    Nic update(@PayloadParam("nic") Nic.Request.UpdatePayload payload);
    
    @Named("nic:delete")

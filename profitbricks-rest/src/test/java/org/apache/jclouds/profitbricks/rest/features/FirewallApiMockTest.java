@@ -83,7 +83,7 @@ public class FirewallApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetFirewallRule() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/firewall/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       
@@ -99,7 +99,7 @@ public class FirewallApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetFirewallRuleWithDepth() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/firewall/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       

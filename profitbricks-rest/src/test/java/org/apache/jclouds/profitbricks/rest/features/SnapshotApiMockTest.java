@@ -83,7 +83,7 @@ public class SnapshotApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetSnapshot() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/snapshot/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
 
       server.enqueue(response);
 
@@ -100,7 +100,7 @@ public class SnapshotApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetSnapshotWithDepth() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/snapshot/get-depth-5.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
 
       server.enqueue(response);
 

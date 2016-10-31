@@ -113,10 +113,10 @@ public class BaseProfitBricksApiMockTest {
 	   throws InterruptedException {
       RecordedRequest request = assertSent(server, method, path);
       
-      String expectedContentType = "application/vnd.profitbricks.resource+json";
+      String expectedContentType = "application/json";
       
       if (request.getMethod().equals("PATCH"))
-         expectedContentType = "application/vnd.profitbricks.partial-properties+json";
+         expectedContentType = "application/json";
       
       assertEquals(request.getHeader("Content-Type"), expectedContentType);
       assertEquals(parser.parse(new String(request.getBody(), Charsets.UTF_8)), parser.parse(json));

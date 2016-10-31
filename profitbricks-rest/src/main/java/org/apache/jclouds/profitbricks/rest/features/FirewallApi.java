@@ -94,7 +94,7 @@ public interface FirewallApi extends Closeable {
    @PATCH
    @MapBinder(UpdateFirewallRuleRequestBinder.class)
    @ResponseParser(FirewallApi.FirewallRuleParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    FirewallRule update(@PayloadParam("firewallRule") FirewallRule.Request.UpdatePayload payload);
    
    @Named("firewallRule:delete")

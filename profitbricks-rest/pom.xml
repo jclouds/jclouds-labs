@@ -32,7 +32,7 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <test.profitbricks-rest.endpoint>https://api.profitbricks.com/rest/v2/</test.profitbricks-rest.endpoint>
+        <test.profitbricks-rest.endpoint>https://api.profitbricks.com/cloudapi/v3/</test.profitbricks-rest.endpoint>
         <test.profitbricks-rest.identity>FIXME</test.profitbricks-rest.identity>
         <test.profitbricks-rest.credential>FIXME</test.profitbricks-rest.credential>
         <test.profitbricks-rest.api-version>1.3</test.profitbricks-rest.api-version>

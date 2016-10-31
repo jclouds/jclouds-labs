@@ -16,18 +16,18 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
+import com.google.inject.Inject;
+import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.MapBinder;
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
-import java.util.HashMap;
-import org.jclouds.json.Json;
 import org.jclouds.io.MutableContentMetadata;
 import org.jclouds.io.payloads.BaseMutableContentMetadata;
-import java.net.URI;
-import com.google.common.base.Supplier;
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.jclouds.json.Json;
+import org.jclouds.rest.MapBinder;
 
 public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
 
@@ -69,7 +69,7 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
 
    protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {
       MutableContentMetadata metadata = new BaseMutableContentMetadata();
-      metadata.setContentType("application/vnd.profitbricks.resource+json");
+      metadata.setContentType("application/json");
       metadata.setContentLength(Long.valueOf(payload.getBytes().length));
 
       fromRequest.setPayload(payload);
@@ -80,14 +80,15 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
    @SuppressWarnings("unchecked")
    protected <R extends HttpRequest> R genRequest(String path, R fromRequest) {          
       R request = (R) fromRequest.toBuilder()
-         .replacePath(endpointSupplier.get().getPath() + path)
-         .build();
-      
+              .replacePath(endpointSupplier.get().getPath() + path)
+              .build();
+
       return request;
    }
-   
+
    protected void putIfPresent(Map<String, Object> list, String key, Object value) {
-      if (value != null)
+      if (value != null) {
          list.put(key, value);
+      }
    }
 }

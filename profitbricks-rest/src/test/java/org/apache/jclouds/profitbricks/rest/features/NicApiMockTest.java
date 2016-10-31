@@ -58,7 +58,7 @@ public class NicApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetNic() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/nic/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       

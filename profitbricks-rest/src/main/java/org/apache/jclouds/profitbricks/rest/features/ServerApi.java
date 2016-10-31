@@ -99,7 +99,7 @@ public interface ServerApi extends Closeable {
    @Path("/{serverId}")
    @MapBinder(UpdateServerRequestBinder.class)
    @ResponseParser(ServerApi.ServerParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    Server updateServer(@PayloadParam("server") Server.Request.UpdatePayload payload);
 
    @Named("server:delete")

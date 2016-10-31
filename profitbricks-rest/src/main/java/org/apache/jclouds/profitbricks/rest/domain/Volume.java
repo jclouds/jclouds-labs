@@ -18,101 +18,103 @@ package org.apache.jclouds.profitbricks.rest.domain;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Enums;
+import static com.google.common.base.Preconditions.checkArgument;
+import java.util.Set;
 import org.apache.jclouds.profitbricks.rest.util.Passwords;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
-import static com.google.common.base.Preconditions.checkArgument;
-import java.util.Set;
 
 @AutoValue
 public abstract class Volume extends Trackable {
 
-    public abstract String id();
-    
-    @Nullable
-    public abstract String dataCenterId();
+   public abstract String id();
 
-    public abstract String type();
+   @Nullable
+   public abstract String dataCenterId();
 
-    public abstract String href();
+   public abstract String type();
 
-    @Nullable
-    public abstract Metadata metadata();
+   public abstract String href();
 
-    @Nullable
-    public abstract Properties properties();
+   @Nullable
+   public abstract Metadata metadata();
 
-    @SerializedNames({"id", "dataCenterId", "type", "href", "metadata", "properties"})
-    public static Volume create(String id, String dataCenterId, String type, String href, Metadata metadata, Properties properties) {
-        return new AutoValue_Volume(id, dataCenterId, type, href, metadata, properties);
-    }
+   @Nullable
+   public abstract Properties properties();
 
-    @AutoValue
-    public abstract static class Properties {
+   @SerializedNames({"id", "dataCenterId", "type", "href", "metadata", "properties"})
+   public static Volume create(String id, String dataCenterId, String type, String href, Metadata metadata, Properties properties) {
+      return new AutoValue_Volume(id, dataCenterId, type, href, metadata, properties);
+   }
 
-        public enum BusType {
+   @AutoValue
+   public abstract static class Properties {
 
-            IDE, SCSI, VIRTIO, UNRECOGNIZED;
+      public enum BusType {
 
-            public static BusType fromValue(String value) {
-                return Enums.getIfPresent(BusType.class, value).or(UNRECOGNIZED);
-            }
-        }
+         IDE, SCSI, VIRTIO, UNRECOGNIZED;
 
-        @Nullable
-        public abstract String name();
+         public static BusType fromValue(String value) {
+            return Enums.getIfPresent(BusType.class, value).or(UNRECOGNIZED);
+         }
+      }
 
-        @Nullable
-        public abstract VolumeType type();
+      @Nullable
+      public abstract String name();
 
-        public abstract float size();
+      @Nullable
+      public abstract VolumeType type();
 
-        @Nullable
-        public abstract String image();
+      public abstract float size();
 
-        @Nullable
-        public abstract String imagePassword();
-        
-        @Nullable
-        public abstract BusType bus();
+      @Nullable
+      public abstract AvailabilityZone availabilityZone();
 
-        @Nullable
-        public abstract LicenceType licenceType();
+      @Nullable
+      public abstract String image();
 
-        public abstract boolean cpuHotPlug();
+      @Nullable
+      public abstract String imagePassword();
 
-        public abstract boolean cpuHotUnplug();
+      @Nullable
+      public abstract BusType bus();
 
-        public abstract boolean ramHotPlug();
+      @Nullable
+      public abstract LicenceType licenceType();
 
-        public abstract boolean ramHotUnplug();
+      public abstract boolean cpuHotPlug();
 
-        public abstract boolean nicHotPlug();
+      public abstract boolean cpuHotUnplug();
 
-        public abstract boolean nicHotUnplug();
+      public abstract boolean ramHotPlug();
 
-        public abstract boolean discVirtioHotPlug();
+      public abstract boolean ramHotUnplug();
 
-        public abstract boolean discVirtioHotUnplug();
+      public abstract boolean nicHotPlug();
 
-        public abstract boolean discScsiHotPlug();
+      public abstract boolean nicHotUnplug();
 
-        public abstract boolean discScsiHotUnplug();
+      public abstract boolean discVirtioHotPlug();
 
-        @Nullable
-        public abstract Integer deviceNumber();
+      public abstract boolean discVirtioHotUnplug();
 
-        @SerializedNames({"name", "type", "size", "image", "imagePassword", "bus", "licenceType", "cpuHotPlug", "cpuHotUnplug", "ramHotPlug", "ramHotUnplug", "nicHotPlug", "nicHotUnplug", "discVirtioHotPlug", "discVirtioHotUnplug", "discScsiHotPlug", "discScsiHotUnplug", "deviceNumber"})
-        public static Volume.Properties create(String name, VolumeType type, float size, String image, String imagePassword, BusType bus, LicenceType licenceType,
-                boolean cpuHotPlug, boolean cpuHotUnplug, boolean ramHotPlug, boolean ramHotUnplug, boolean nicHotPlug, boolean nicHotUnplug, boolean discVirtioHotPlug,
-                boolean discVirtioHotUnplug, boolean discScsiHotPlug, boolean discScsiHotUnplug, int deviceNumber) {
+      public abstract boolean discScsiHotPlug();
 
-            return new AutoValue_Volume_Properties(name, type, size, image, imagePassword, bus, licenceType, cpuHotPlug, cpuHotUnplug, ramHotPlug, ramHotUnplug, nicHotPlug, nicHotUnplug, discVirtioHotPlug, discVirtioHotUnplug, discScsiHotPlug, discScsiHotUnplug, deviceNumber);
+      public abstract boolean discScsiHotUnplug();
 
-        }
-    }
+      @Nullable
+      public abstract Integer deviceNumber();
 
-   
+      @SerializedNames({"name", "type", "size", "availabilityZone", "image", "imagePassword", "bus", "licenceType", "cpuHotPlug", "cpuHotUnplug", "ramHotPlug", "ramHotUnplug", "nicHotPlug", "nicHotUnplug", "discVirtioHotPlug", "discVirtioHotUnplug", "discScsiHotPlug", "discScsiHotUnplug", "deviceNumber"})
+      public static Volume.Properties create(String name, VolumeType type, float size, AvailabilityZone availabilityZone, String image, String imagePassword, BusType bus, LicenceType licenceType,
+              boolean cpuHotPlug, boolean cpuHotUnplug, boolean ramHotPlug, boolean ramHotUnplug, boolean nicHotPlug, boolean nicHotUnplug, boolean discVirtioHotPlug,
+              boolean discVirtioHotUnplug, boolean discScsiHotPlug, boolean discScsiHotUnplug, int deviceNumber) {
+
+         return new AutoValue_Volume_Properties(name, type, size, availabilityZone, image, imagePassword, bus, licenceType, cpuHotPlug, cpuHotUnplug, ramHotPlug, ramHotUnplug, nicHotPlug, nicHotUnplug, discVirtioHotPlug, discVirtioHotUnplug, discScsiHotPlug, discScsiHotUnplug, deviceNumber);
+
+      }
+   }
+
    public static final class Request {
 
       public static CreatePayload.Builder creatingBuilder() {
@@ -122,15 +124,15 @@ public abstract class Volume extends Trackable {
       public static UpdatePayload.Builder updatingBuilder() {
          return new AutoValue_Volume_Request_UpdatePayload.Builder();
       }
-      
+
       public static CreateSnapshotPayload.Builder createSnapshotBuilder() {
          return new AutoValue_Volume_Request_CreateSnapshotPayload.Builder();
       }
-      
+
       public static RestoreSnapshotPayload.Builder restoreSnapshotBuilder() {
          return new AutoValue_Volume_Request_RestoreSnapshotPayload.Builder();
       }
-      
+
       @AutoValue
       public abstract static class CreatePayload {
 
@@ -138,14 +140,17 @@ public abstract class Volume extends Trackable {
          public abstract String name();
 
          public abstract VolumeType type();
-         
+
          public abstract int size();
 
          @Nullable
          public abstract Set<String> sshKeys();
-         
+
          @Nullable
          public abstract String image();
+
+         @Nullable
+         public abstract AvailabilityZone availabilityZone();
 
          @Nullable
          public abstract String imagePassword();
@@ -155,35 +160,46 @@ public abstract class Volume extends Trackable {
 
          @Nullable
          public abstract LicenceType licenceType();
-         
+
          public abstract String dataCenterId();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder name(String name);
+
             public abstract Builder type(VolumeType type);
+
             public abstract Builder sshKeys(Set<String> list);
+
             public abstract Builder size(int size);
+
+            public abstract Builder availabilityZone(AvailabilityZone size);
+
             public abstract Builder image(String image);
+
             public abstract Builder imagePassword(String imagePassword);
+
             public abstract Builder bus(Properties.BusType bus);
+
             public abstract Builder licenceType(LicenceType licenceType);
+
             public abstract Builder dataCenterId(String dataCenterId);
 
             abstract CreatePayload autoBuild();
 
             public CreatePayload build() {
                CreatePayload payload = autoBuild();
-               
-               if (payload.imagePassword() != null)
+
+               if (payload.imagePassword() != null) {
                   checkArgument(Passwords.isValidPassword(payload.imagePassword()), "Password's format is not valid");
-               
+               }
+
                checkArgument(
-                  payload.image() != null || payload.licenceType() != null,
-                  "Either image or licenceType need to be present"
+                       payload.image() != null || payload.licenceType() != null,
+                       "Either image or licenceType need to be present"
                );
-               
+
                return payload;
             }
          }
@@ -201,17 +217,27 @@ public abstract class Volume extends Trackable {
 
          @Nullable
          public abstract Properties.BusType bus();
-         
+
+         @Nullable
+         public abstract AvailabilityZone availabilityZone();
+
          public abstract String dataCenterId();
+
          public abstract String id();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder name(String name);
+
             public abstract Builder size(Integer size);
+
             public abstract Builder bus(Properties.BusType bus);
+
+            public abstract Builder availabilityZone(AvailabilityZone size);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder id(String id);
 
             abstract UpdatePayload autoBuild();
@@ -221,7 +247,7 @@ public abstract class Volume extends Trackable {
             }
          }
       }
-      
+
       @AutoValue
       public abstract static class CreateSnapshotPayload {
 
@@ -230,16 +256,20 @@ public abstract class Volume extends Trackable {
 
          @Nullable
          public abstract String description();
-         
+
          public abstract String dataCenterId();
+
          public abstract String volumeId();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder name(String name);
+
             public abstract Builder description(String description);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder volumeId(String volumeId);
 
             abstract CreateSnapshotPayload autoBuild();
@@ -250,19 +280,23 @@ public abstract class Volume extends Trackable {
          }
 
       }
-      
+
       @AutoValue
       public abstract static class RestoreSnapshotPayload {
 
          public abstract String snapshotId();
+
          public abstract String dataCenterId();
+
          public abstract String volumeId();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder snapshotId(String snapshotId);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder volumeId(String volumeId);
 
             abstract RestoreSnapshotPayload autoBuild();
@@ -273,8 +307,7 @@ public abstract class Volume extends Trackable {
          }
 
       }
-      
+
    }
-   
-    
+
 }

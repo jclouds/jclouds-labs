@@ -98,7 +98,7 @@ public interface VolumeApi extends Closeable {
    @Path("/{volumeId}")
    @MapBinder(UpdateVolumeRequestBinder.class)
    @ResponseParser(VolumeApi.VolumeParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    Volume updateVolume(@PayloadParam("volume") Volume.Request.UpdatePayload payload);
    
    @Named("volume:delete")

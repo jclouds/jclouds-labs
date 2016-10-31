@@ -74,7 +74,7 @@ public class ImageApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetImage() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/image/get.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       
@@ -91,7 +91,7 @@ public class ImageApiMockTest extends BaseProfitBricksApiMockTest {
    public void testGetImageWithDepth() throws InterruptedException {
       MockResponse response = new MockResponse();
       response.setBody(stringFromResource("/image/get-depth-5.json"));
-      response.setHeader("Content-Type", "application/vnd.profitbricks.resource+json");
+      response.setHeader("Content-Type", "application/json");
       
       server.enqueue(response);
       

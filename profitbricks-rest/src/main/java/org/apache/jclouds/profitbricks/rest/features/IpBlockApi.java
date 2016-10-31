@@ -71,7 +71,7 @@ public interface IpBlockApi extends Closeable {
 
    @Named("IpBlock:create")
    @POST
-   @Produces("application/vnd.profitbricks.resource+json")
+   @Produces("application/json")
    @ResponseParser(IpBlockApi.IpBlockParser.class)
    IpBlock create(@BinderParam(BindToJsonPayload.class) IpBlock.Request.CreatePayload payload);
 

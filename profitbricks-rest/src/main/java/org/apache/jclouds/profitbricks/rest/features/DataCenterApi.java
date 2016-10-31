@@ -17,13 +17,13 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 import java.io.Closeable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Named;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,7 +31,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.functions.ParseRequestStatusURI;
@@ -50,9 +49,6 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.SelectJson;
 import org.jclouds.rest.binders.BindToJsonPayload;
-
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 
 @Path("/datacenters")
 @RequestFilters(BasicAuthentication.class)
@@ -92,7 +88,7 @@ public interface DataCenterApi extends Closeable {
    @Named("datacenter:create")
    @POST
    @ResponseParser(DataCenterParser.class)
-   @Produces("application/vnd.profitbricks.resource+json")
+   @Produces("application/json")
    @MapBinder(DataCenterCreateMapBinder.class)
    DataCenter create(
       @PayloadParam("name") String name, 
@@ -104,7 +100,7 @@ public interface DataCenterApi extends Closeable {
    @PATCH
    @Path("/{id}")
    @ResponseParser(DataCenterParser.class)
-   @Produces("application/vnd.profitbricks.partial-properties+json")
+   @Produces("application/json")
    @MapBinder(BindToJsonPayload.class)
    DataCenter update(
       @PathParam("id") String id, 

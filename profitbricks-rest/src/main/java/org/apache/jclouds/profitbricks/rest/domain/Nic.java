@@ -17,22 +17,22 @@
 package org.apache.jclouds.profitbricks.rest.domain;
 
 import com.google.auto.value.AutoValue;
-import java.util.List;
-import org.jclouds.json.SerializedNames;
 import com.google.common.collect.ImmutableList;
 import static com.google.common.collect.ImmutableList.copyOf;
+import java.util.List;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Nic extends Trackable {
 
    public abstract String id();
-   
+
    @Nullable
    public abstract String dataCenterId();
-   
+
    @Nullable
-   public abstract String serverId();   
+   public abstract String serverId();
 
    public abstract String type();
 
@@ -69,14 +69,17 @@ public abstract class Nic extends Trackable {
       public abstract int lan();
 
       @Nullable
+      public abstract Boolean nat();
+
+      @Nullable
       public abstract Boolean firewallActive();
 
       @Nullable
       public abstract Entities entities();
 
-      @SerializedNames({"name", "mac", "ips", "dhcp", "lan", "firewallActive", "entities"})
-      public static Properties create(String name, String mac, List<String> ips, Boolean dhcp, int lan, Boolean firewallactive, Entities entities) {
-	 return new AutoValue_Nic_Properties(name, mac, ips == null ? ImmutableList.<String>of() : copyOf(ips), dhcp, lan, firewallactive, entities);
+      @SerializedNames({"name", "mac", "ips", "dhcp", "lan", "nat", "firewallActive", "entities"})
+      public static Properties create(String name, String mac, List<String> ips, Boolean dhcp, int lan, Boolean nat, Boolean firewallactive, Entities entities) {
+         return new AutoValue_Nic_Properties(name, mac, ips == null ? ImmutableList.<String>of() : copyOf(ips), dhcp, lan, nat, firewallactive, entities);
       }
    }
 
@@ -87,10 +90,10 @@ public abstract class Nic extends Trackable {
 
       @SerializedNames({"firewallrules"})
       public static Entities create(FirewallRules firewallrules) {
-	 return new AutoValue_Nic_Entities(firewallrules);
+         return new AutoValue_Nic_Entities(firewallrules);
       }
    }
-   
+
    public static final class Request {
 
       public static CreatePayload.Builder creatingBuilder() {
@@ -114,28 +117,41 @@ public abstract class Nic extends Trackable {
          public abstract Boolean dhcp();
 
          public abstract int lan();
-         
+
+         @Nullable
+         public abstract Boolean nat();
+
          @Nullable
          public abstract Boolean firewallActive();
-         
+
          @Nullable
          public abstract List<FirewallRule> firewallrules();
 
          public abstract String dataCenterId();
+
          public abstract String serverId();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder name(String name);
+
             public abstract Builder ips(List<String> ips);
+
             public abstract Builder dhcp(Boolean dhcp);
+
             public abstract Builder lan(int lan);
+
+            public abstract Builder nat(Boolean nat);
+
             public abstract Builder firewallActive(Boolean firewallActive);
+
             public abstract Builder firewallrules(List<FirewallRule> firewallrules);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder serverId(String serverId);
-           
+
             abstract CreatePayload autoBuild();
 
             public CreatePayload build() {
@@ -158,21 +174,35 @@ public abstract class Nic extends Trackable {
 
          @Nullable
          public abstract Integer lan();
-         
+
+         @Nullable
+         public abstract Boolean nat();
+
          public abstract String dataCenterId();
+
          public abstract String serverId();
+
          public abstract String id();
 
          @AutoValue.Builder
          public abstract static class Builder {
+
             public abstract Builder name(String name);
+
             public abstract Builder ips(List<String> ips);
+
             public abstract Builder dhcp(Boolean dhcp);
+
             public abstract Builder lan(Integer lan);
+            
+            public abstract Builder nat(Boolean nat);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder serverId(String serverId);
+
             public abstract Builder id(String id);
-           
+
             abstract UpdatePayload autoBuild();
 
             public UpdatePayload build() {
@@ -180,9 +210,7 @@ public abstract class Nic extends Trackable {
             }
          }
       }
-      
+
    }
-   
 
 }
-

@@ -18,23 +18,22 @@ package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-
 import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.FirewallRule;
 import org.apache.jclouds.profitbricks.rest.domain.Nic;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
+import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "FirewallApiLiveTest")
 public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
@@ -122,7 +121,7 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
    }
    
    @Test(dependsOnMethods = "testCreateFirewallRule")
-   public void testUpdateFirewallRule() {
+   public void testUpdateFirewallRule() throws InterruptedException {
       assertDataCenterAvailable(dataCenter);
       
       FirewallRule updated = firewallApi().update(FirewallRule.Request.updatingBuilder()
@@ -134,7 +133,10 @@ public class FirewallApiLiveTest extends BaseProfitBricksLiveTest {
               .build());
 
       assertFirewallRuleAvailable(updated);
-      
+      assertRequestCompleted(testFirewallRule);
+      //thread sleep added becuase the API would not give back the updated name value unless you wait
+      //
+      Thread.sleep(3000);
       FirewallRule firewallRule = firewallApi().get(dataCenter.id(), testServer.id(), testNic.id(), testFirewallRule.id());
       
       assertEquals(firewallRule.properties().name(), "apache-firewall");
