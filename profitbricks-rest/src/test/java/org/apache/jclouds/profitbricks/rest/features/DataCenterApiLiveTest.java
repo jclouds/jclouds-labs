@@ -73,7 +73,6 @@ public class DataCenterApiLiveTest extends BaseProfitBricksLiveTest {
       DataCenter dataCenter = createDataCenter();      
       dataCenterApi().delete(dataCenter.id());      
       dataCenter = getDataCenter(dataCenter.id());      
-      //assertEquals(dataCenter, null);
    }
    
    @Test

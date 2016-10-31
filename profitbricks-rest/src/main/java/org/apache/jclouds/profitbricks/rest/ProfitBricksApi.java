@@ -33,6 +33,7 @@ import org.apache.jclouds.profitbricks.rest.features.NicApi;
 import org.apache.jclouds.profitbricks.rest.features.ServerApi;
 import org.apache.jclouds.profitbricks.rest.features.SnapshotApi;
 import org.apache.jclouds.profitbricks.rest.features.VolumeApi;
+import org.apache.jclouds.profitbricks.rest.util.Trackables;
 import org.jclouds.Fallbacks;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.http.functions.ParseJson;
@@ -44,11 +45,15 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.google.common.annotations.Beta;
+import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 
 @Beta
 public interface ProfitBricksApi extends Closeable {
 
+   @Provides
+   Trackables trackables();
+   
    @Delegate
    DataCenterApi dataCenterApi();
 

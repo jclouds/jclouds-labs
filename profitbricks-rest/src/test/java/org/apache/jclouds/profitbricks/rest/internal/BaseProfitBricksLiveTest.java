@@ -16,25 +16,22 @@
  */
 package org.apache.jclouds.profitbricks.rest.internal;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
+import static org.apache.jclouds.profitbricks.rest.domain.Location.US_LAS;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
+import static org.testng.Assert.assertTrue;
+
 import java.net.URI;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
 import org.apache.jclouds.profitbricks.rest.compute.config.ProfitBricksComputeServiceContextModule.ComputeConstants;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
 import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
 import org.apache.jclouds.profitbricks.rest.domain.Location;
-import static org.apache.jclouds.profitbricks.rest.domain.Location.US_LAS;
 import org.apache.jclouds.profitbricks.rest.domain.Nic;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.apache.jclouds.profitbricks.rest.domain.State;
@@ -43,12 +40,17 @@ import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
-import org.apache.jclouds.profitbricks.rest.util.Trackables;
 import org.jclouds.apis.BaseApiLiveTest;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
 import org.jclouds.util.Predicates2;
-import static org.testng.Assert.assertTrue;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 
 public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
 
@@ -60,7 +62,6 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
    private Predicate<ServerRef> serverAvailable;
    private Predicate<ServerRef> serverRemoved;
    private Predicate<VolumeRef> volumeAvailable;
-   private Trackables trackables;
 
    ComputeConstants computeConstants;
 
@@ -78,7 +79,6 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
       Injector injector = newBuilder().modules(modules).overrides(props).buildInjector();
 
       computeConstants = injector.getInstance(ComputeConstants.class);
-      trackables = injector.getInstance(Trackables.class);
 
       dataCenterAvailable = injector.getInstance(
               Key.get(new TypeLiteral<Predicate<String>>() {
@@ -176,11 +176,11 @@ public class BaseProfitBricksLiveTest extends BaseApiLiveTest<ProfitBricksApi> {
    }
    
    protected void assertRequestCompleted(URI uri) {
-      trackables.waitUntilRequestCompleted(uri);
+      api.trackables().waitUntilRequestCompleted(uri);
    }
    
    protected void assertRequestCompleted(Trackable trackable) {
-      trackables.waitUntilRequestCompleted(trackable);
+      api.trackables().waitUntilRequestCompleted(trackable);
    }
 
    protected void assertNicAvailable(Nic nic) {
