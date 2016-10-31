@@ -1,0 +1,98 @@
+[
+    {
+        "id": "ABA6F4C16FE9893B09B354A4CF6321DF",
+        "name": "My Server remame",
+        "status": {
+            "state": "POWERED_ON",
+            "cpu": {
+                "state": "CPU usage: OK - CPU_Total 0% used: CPU0 0% used"
+            },
+            "ram": {
+                "state": "RAM usage: OK 789MB (39%) used"
+            },
+            "disk": {
+                "state": "Disk usage: OK C: 12.04GB (30%) used"
+            },
+            "transfer": {
+                "state": "Network traffic: OK - 0 Kbps received: 0 Kbps transmitted:"
+            },
+            "internal_ping": {
+                "state": "OK - 10.4.141.242: rta 0.671ms, lost 0%"
+            }
+        },
+        "datacenter": {
+            "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+            "name": "United States"
+        },
+        "alerts": {
+            "resources": {
+                "critical": 1,
+                "warning": 0,
+                "ok": 3
+            },
+            "ports": {
+                "critical": 0,
+                "warning": 0,
+                "ok": 0
+            },
+            "process": {
+                "critical": 0,
+                "warning": 0,
+                "ok": 0
+            }
+        },
+        "agent": {
+            "agent_installed": false,
+            "monitoring_needs_agent": false,
+            "missing_agent_alert": false
+        }
+    },
+    {
+        "id": "BDAF0EC6A36E9E554B80B7E7365821F5",
+        "name": "My Server 1",
+        "status": {
+            "state": "POWERED_ON",
+            "cpu": {
+                "state": "CPU usage: OK - CPU_Total 0% used: CPU0 0% used"
+            },
+            "ram": {
+                "state": "RAM usage: OK 789MB (39%) used"
+            },
+            "disk": {
+                "state": "Disk usage: OK C: 12.04GB (30%) used"
+            },
+            "transfer": {
+                "state": "Network traffic: OK - 0 Kbps received: 0 Kbps transmitted:"
+            },
+            "internal_ping": {
+                "state": "OK - 10.4.141.242: rta 0.671ms, lost 0%"
+            }
+        },
+        "region": {
+            "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+            "name": "United States"
+        },
+        "alerts_count": {
+            "resources": {
+                "critical": 0,
+                "warning": 0,
+                "ok": 4
+            },
+            "ports": {
+                "critical": 0,
+                "warning": 0,
+                "ok": 0
+            },
+            "process": {
+                "critical": 0,
+                "warning": 0,
+                "ok": 0
+            }
+        },
+        "agent": {
+            "agent_installed": false,
+            "monitoring_needs_agent": false,
+            "missing_agent_alert": false
+        }
+    }
+]

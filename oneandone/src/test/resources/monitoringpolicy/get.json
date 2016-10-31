@@ -1,0 +1,83 @@
+{
+    "id": "6027B730256C9585B269DAA8B1788DEC",
+    "name": "Default Policy",
+    "description": "Default Policy Description",
+    "default": 1,
+    "state": "ACTIVE",
+    "creation_date": "2015-10-16T11:19:12+00:00",
+    "email": "",
+    "agent": false,
+    "servers": [{
+            "id": "213573A87AC01FF70ACDFC2A18643D36",
+            "name": "Docs\/Content Test Server: CentOS 7-1"
+        }, {
+            "id": "C547B6BFF993428B72448330883B9A9F",
+            "name": "Doc\/Content Test Server: Ubuntu 14.04-1"
+        }, {
+            "id": "E7D36EC025C73796035BF4F171379025",
+            "name": "Docs\/Content Test Server: CentOS 7-2"
+        }, {
+            "id": "4ADC7A1550FBF4F9A75E16D1BF483273",
+            "name": "Docs\/Content Test Server: Win 2012"
+        }, {
+            "id": "DDDC4CCA34AAB08132FA1E40F9FEAC25",
+            "name": "App Dev Server 5"
+        }, {
+            "id": "8122D014AE7E8B4E5D9337C215F48A19",
+            "name": "Doc\/Content Test Server: Debian 7"
+        }, {
+            "id": "BFA8EBD2BE60D224FA87D9AD952C0E1F",
+            "name": "Docs\/Content Test Server: CentOS 6 (2)"
+        }, {
+            "id": "55561BAF1FAFBD65600C61D1008C1AC7",
+            "name": "Doc\/Content Test Server: Ubuntu 12.04"
+        }, {
+            "id": "79DF0AD5F3B3EC37E9E0B16806081C13",
+            "name": "Doc\/Content Test Server: Ubuntu 14.04-2"
+        }],
+    "thresholds": {
+        "cpu": {
+            "warning": {
+                "value": 90,
+                "alert": false
+            },
+            "critical": {
+                "value": 95,
+                "alert": false
+            }
+        },
+        "ram": {
+            "warning": {
+                "value": 90,
+                "alert": false
+            },
+            "critical": {
+                "value": 95,
+                "alert": false
+            }
+        },
+        "transfer": {
+            "warning": {
+                "value": 1000,
+                "alert": false
+            },
+            "critical": {
+                "value": 2000,
+                "alert": false
+            }
+        },
+        "internal_ping": {
+            "warning": {
+                "value": 50,
+                "alert": false
+            },
+            "critical": {
+                "value": 100,
+                "alert": false
+            }
+        }
+    },
+    "ports": [],
+    "processes": [],
+    "cloudpanel_id": "moFF88C_1"
+}

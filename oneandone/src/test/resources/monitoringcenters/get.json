@@ -1,0 +1,165 @@
+{
+    "id": "BDAF0EC6A36E9E554B80B7E7365821F5",
+    "name": "My Server 1",
+    "status": {
+        "state": "POWERED_ON"
+    },
+    "datacenter": {
+        "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+        "name": "United States"
+    },
+    "alerts_count": {
+        "resources": {
+            "critical": 0,
+            "warning": 0,
+            "ok": 4
+        },
+        "ports": {
+            "critical": 0,
+            "warning": 0,
+            "ok": 0
+        },
+        "process": {
+            "critical": 0,
+            "warning": 0,
+            "ok": 0
+        }
+    },
+    "agent": {
+        "agent_installed": false,
+        "monitoring_needs_agent": false,
+        "missing_agent_alert": false
+    },
+    "cpu": {
+        "warning": 90,
+        "critical": 95,
+        "data": [
+            {
+                "date": "2015-19-05T00:05:00Z",
+                "used_percent": 0.4011
+            },
+            {
+                "date": "2015-19-05T00:10:00Z",
+                "used_percent": 1.0435
+            },
+            {
+                "date": "2015-19-05T00:15:00Z",
+                "used_percent": 0.4065
+            },
+            {
+                "date": "2015-19-05T00:20:00Z",
+                "used_percent": 0.49866666666667
+            },
+            {
+                "date": "2015-19-05T00:25:00Z",
+                "used_percent": 0.30266666666667
+            }
+        ],
+        "unit": {
+            "used_percent": "%"
+        },
+        "status": "CPU usage: OK - CPU_Total 0% used: CPU0 0% used"
+    },
+    "ram": {
+        "warning": 90,
+        "critical": 95,
+        "data": [
+            {
+                "date": "2015-19-05T00:05:00Z",
+                "used_percent": 1.99
+            },
+            {
+                "date": "2015-19-05T00:10:00Z",
+                "used_percent": 1
+            },
+            {
+                "date": "2015-19-05T00:15:00Z",
+                "used_percent": 3.96
+            },
+            {
+                "date": "2015-19-05T00:20:00Z",
+                "used_percent": 5.9633333333333
+            },
+            {
+                "date": "2015-19-05T00:25:00Z",
+                "used_percent": 2.0433333333333
+            }
+        ],
+        "unit": {
+            "used_percent": "%"
+        },
+        "status": "RAM usage: OK 789MB (39%) used"
+    },
+    "transfer": {
+        "warning": 1000,
+        "critical": 2000,
+        "data": [
+            {
+                "date": "2015-19-05T00:05:00Z",
+                "downstream": 0,
+                "upstream": 0
+            },
+            {
+                "date": "2015-19-05T00:10:00Z",
+                "downstream": 0,
+                "upstream": 0
+            },
+            {
+                "date": "2015-19-05T00:15:00Z",
+                "downstream": 0,
+                "upstream": 0
+            },
+            {
+                "date": "2015-19-05T00:20:00Z",
+                "downstream": 0,
+                "upstream": 0
+            },
+            {
+                "date": "2015-19-05T00:25:00Z",
+                "downstream": 0,
+                "upstream": 0
+            }
+        ],
+        "unit": {
+            "downstream": "bps",
+            "upstream": "bps"
+        },
+        "status": "Network traffic: OK - 0 Kbps received: 0 Kbps transmitted:"
+    },
+    "internal_ping": {
+        "warning": 50,
+        "critical": 100,
+        "data": [
+            {
+                "date": "2015-19-05T00:05:00Z",
+                "pl": 100,
+                "rta": 0
+            },
+            {
+                "date": "2015-19-05T00:10:00Z",
+                "pl": 100,
+                "rta": 0
+            },
+            {
+                "date": "2015-19-05T00:15:00Z",
+                "pl": 100,
+                "rta": 0
+            },
+            {
+                "date": "2015-19-05T00:20:00Z",
+                "pl": 100,
+                "rta": 0
+            },
+            {
+                "date": "2015-19-05T00:25:00Z",
+                "pl": 100,
+                "rta": 0
+            }
+        ],
+        "unit": {
+            "pl": "%",
+            "rta": "ms"
+        },
+        "status": "OK - 10.4.141.242: rta 0.657ms, lost 0%"
+    }
+}

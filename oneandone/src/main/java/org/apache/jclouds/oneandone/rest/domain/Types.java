@@ -202,4 +202,44 @@ public class Types {
          return Enums.getIfPresent(VPNType.class, v).or(UNRECOGNIZED);
       }
    }
+
+   public enum PeriodType {
+      LAST_HOUR, LAST_24H, LAST_7D, LAST_30D, LAST_365D, UNRECOGNIZED;
+
+      public static PeriodType fromValue(String v) {
+         return Enums.getIfPresent(PeriodType.class, v).or(UNRECOGNIZED);
+}
+   }
+
+   public enum CustomPeriodType {
+      CUSTOM, UNRECOGNIZED;
+
+      public static CustomPeriodType fromValue(String v) {
+         return Enums.getIfPresent(CustomPeriodType.class, v).or(UNRECOGNIZED);
+      }
+   }
+
+   public enum ProtocolType {
+      TCP, UDP, UNRECOGNIZED;
+
+      public static ProtocolType fromValue(String v) {
+         return Enums.getIfPresent(ProtocolType.class, v).or(UNRECOGNIZED);
+      }
+   }
+
+   public enum AlertIfType {
+      RESPONDING, NOT_RESPONDING, UNRECOGNIZED;
+
+      public static AlertIfType fromValue(String v) {
+         return Enums.getIfPresent(AlertIfType.class, v).or(UNRECOGNIZED);
+      }
+   }
+
+   public enum ProcessAlertType {
+      RUNNING, NOT_RUNNING, UNRECOGNIZED;
+
+      public static ProcessAlertType fromValue(String v) {
+         return Enums.getIfPresent(ProcessAlertType.class, v).or(UNRECOGNIZED);
+      }
+   }
 }
