@@ -127,7 +127,7 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
    protected void assertPrivateNetworkAvailable(ServerPrivateNetworkRef ref) {
       assertTrue(waitUntilPrivateNetworkReady.apply(ref), String.format("ServerPrivateNetworkRef %s is not Ready", ref));
    }
-   
+
    protected void assertVPNAvailable(Vpn vpn) {
       assertTrue(waitUntilVPNReady.apply(vpn), String.format("VPN %s is not Ready", vpn));
    }

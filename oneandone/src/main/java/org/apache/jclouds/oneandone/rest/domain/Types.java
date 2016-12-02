@@ -208,7 +208,7 @@ public class Types {
 
       public static PeriodType fromValue(String v) {
          return Enums.getIfPresent(PeriodType.class, v).or(UNRECOGNIZED);
-}
+      }
    }
 
    public enum CustomPeriodType {

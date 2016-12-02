@@ -16,10 +16,13 @@
  */
 package org.apache.jclouds.oneandone.rest.features;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import org.apache.jclouds.oneandone.rest.domain.MonitoringCenter;
+import org.apache.jclouds.oneandone.rest.domain.MonitoringPolicy;
 import org.apache.jclouds.oneandone.rest.domain.Server;
 import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.apache.jclouds.oneandone.rest.domain.options.GenericDateQueryOptions;
@@ -35,6 +38,7 @@ import org.testng.annotations.Test;
 public class MonitoringCenterApiLiveTest extends BaseOneAndOneLiveTest {
 
    private Server currentServer;
+   private MonitoringPolicy currentPolicy;
 
    private MonitoringCenterApi monitoringCenterApi() {
 
@@ -43,8 +47,56 @@ public class MonitoringCenterApiLiveTest extends BaseOneAndOneLiveTest {
 
    @BeforeClass
    public void setupTest() throws InterruptedException {
-      currentServer = createServer("Monitoring Center jclouds server");
+      Random rand = new Random();
+      int randomName = rand.nextInt(100);
+
+      currentServer = createServer("Monitoring Center jclouds server" + randomName);
       assertNodeAvailable(currentServer);
+
+      List<MonitoringPolicy.Port.AddPort> ports = new ArrayList<MonitoringPolicy.Port.AddPort>();
+      MonitoringPolicy.Port.AddPort port = MonitoringPolicy.Port.AddPort.create(80, Types.AlertIfType.RESPONDING, true, Types.ProtocolType.TCP);
+      ports.add(port);
+
+      List<org.apache.jclouds.oneandone.rest.domain.MonitoringPolicy.Process.AddProcess> processes = new ArrayList<org.apache.jclouds.oneandone.rest.domain.MonitoringPolicy.Process.AddProcess>();
+      org.apache.jclouds.oneandone.rest.domain.MonitoringPolicy.Process.AddProcess process = org.apache.jclouds.oneandone.rest.domain.MonitoringPolicy.Process.AddProcess.create("", Types.AlertIfType.RESPONDING, true);
+      processes.add(process);
+
+      MonitoringPolicy.Threshold.Cpu.Warning warning = MonitoringPolicy.Threshold.Cpu.Warning.create(90, true);
+      MonitoringPolicy.Threshold.Cpu.Critical critical = MonitoringPolicy.Threshold.Cpu.Critical.create(95, true);
+      MonitoringPolicy.Threshold.Cpu cpu = MonitoringPolicy.Threshold.Cpu.create(warning, critical);
+
+      MonitoringPolicy.Threshold.Ram.Warning ramWarning = MonitoringPolicy.Threshold.Ram.Warning.create(90, true);
+      MonitoringPolicy.Threshold.Ram.Critical ramCritical = MonitoringPolicy.Threshold.Ram.Critical.create(95, true);
+      MonitoringPolicy.Threshold.Ram ram = MonitoringPolicy.Threshold.Ram.create(ramWarning, ramCritical);
+
+      MonitoringPolicy.Threshold.Disk.Warning diskWarning = MonitoringPolicy.Threshold.Disk.Warning.create(90, true);
+      MonitoringPolicy.Threshold.Disk.Critical diskCritical = MonitoringPolicy.Threshold.Disk.Critical.create(95, true);
+      MonitoringPolicy.Threshold.Disk disk = MonitoringPolicy.Threshold.Disk.create(diskWarning, diskCritical);
+
+      MonitoringPolicy.Threshold.InternalPing.Warning pingWarning = MonitoringPolicy.Threshold.InternalPing.Warning.create(50, true);
+      MonitoringPolicy.Threshold.InternalPing.Critical pingCritical = MonitoringPolicy.Threshold.InternalPing.Critical.create(100, true);
+      MonitoringPolicy.Threshold.InternalPing ping = MonitoringPolicy.Threshold.InternalPing.create(pingWarning, pingCritical);
+
+      MonitoringPolicy.Threshold.Transfer.Warning tranWarning = MonitoringPolicy.Threshold.Transfer.Warning.create(1000, true);
+      MonitoringPolicy.Threshold.Transfer.Critical tranCritical = MonitoringPolicy.Threshold.Transfer.Critical.create(2000, true);
+      MonitoringPolicy.Threshold.Transfer transfer = MonitoringPolicy.Threshold.Transfer.create(tranWarning, tranCritical);
+
+      MonitoringPolicy.Threshold threshold = MonitoringPolicy.Threshold.create(cpu, ram, disk, transfer, ping);
+      MonitoringPolicy.CreatePolicy payload = MonitoringPolicy.CreatePolicy.builder()
+              .name("jclouds policy" + randomName)
+              .agent(true)
+              .email("j@clouds.com")
+              .ports(ports)
+              .processes(processes)
+              .description("dsec")
+              .thresholds(threshold)
+              .build();
+      currentPolicy = api.monitoringPolicyApi().create(payload);
+
+      List<String> servers = new ArrayList<String>();
+      servers.add(currentServer.id());
+      MonitoringPolicy response = api.monitoringPolicyApi().attachServer(currentPolicy.id(), MonitoringPolicy.Server.CreateServer.create(servers));
+      assertNotNull(response);
    }
 
    @Test
@@ -84,10 +136,9 @@ public class MonitoringCenterApiLiveTest extends BaseOneAndOneLiveTest {
       MonitoringCenter result = monitoringCenterApi().get(currentServer.id(), options);
       assertNotNull(result);
    }
-   
-    @AfterClass(alwaysRun = true)
+
+   @AfterClass(alwaysRun = true)
    public void teardownTest() throws InterruptedException {
-      assertNodeAvailable(currentServer);
       deleteServer(currentServer.id());
    }
 }
