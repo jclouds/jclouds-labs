@@ -52,8 +52,8 @@ public interface OneAndOneApi extends Closeable {
    @Delegate
    PrivateNetworkApi privateNetworkApi();
 
-   @Delegate
-   VpnApi vpnApi();
+    @Delegate
+    VpnApi vpnApi();
 
    @Delegate
    MonitoringCenterApi monitoringCenterApi();
