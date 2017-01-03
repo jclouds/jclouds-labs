@@ -82,6 +82,7 @@
     <module>abiquo</module>
     <module>profitbricks-rest</module>
     <module>oneandone</module>
+    <module>packet</module>
   </modules>
 
   <build>
