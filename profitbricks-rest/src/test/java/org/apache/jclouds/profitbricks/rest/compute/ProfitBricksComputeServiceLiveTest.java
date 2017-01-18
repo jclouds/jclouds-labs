@@ -18,23 +18,33 @@ package org.apache.jclouds.profitbricks.rest.compute;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import static com.google.common.collect.Iterables.getOnlyElement;
 import com.google.inject.Module;
+import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
+import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
+import org.apache.jclouds.profitbricks.rest.domain.FirewallRule;
+import org.apache.jclouds.profitbricks.rest.domain.Server;
+import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
+import org.apache.jclouds.profitbricks.rest.domain.zonescoped.DataCenterAndId;
 import static org.assertj.core.api.Assertions.assertThat;
+import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
+import org.jclouds.compute.predicates.NodePredicates;
 import static org.jclouds.compute.predicates.NodePredicates.inGroup;
-
-import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
 import org.jclouds.logging.config.LoggingModule;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.sshj.config.SshjSshClientModule;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Test(groups = "live", singleThreaded = true, testName = "ProfitBricksComputeServiceLiveTest")
 public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTest {
+
+   static ProfitBricksApi pbApi;
 
    public ProfitBricksComputeServiceLiveTest() {
       provider = "profitbricks-rest";
@@ -49,7 +59,7 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
    protected LoggingModule getLoggingModule() {
       return new SLF4JLoggingModule();
    }
-   
+
    @Override
    protected Iterable<Module> setupModules() {
       ImmutableSet.Builder<Module> modules = ImmutableSet.builder();
@@ -84,6 +94,23 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
    }
 
    @Override
+   protected void createAndRunAServiceInGroup(String group) throws RunNodesException {
+      super.createAndRunAServiceInGroup(group);
+      pbApi = client.getContext().unwrapApi(ProfitBricksApi.class);
+
+      int matches = 0;
+      NodeMetadata node = Iterables.getOnlyElement(client.listNodesDetailsMatching(NodePredicates.inGroup(group)));
+      DataCenterAndId datacenterAndId = DataCenterAndId.fromSlashEncoded(node.getId());
+      Server server = pbApi.serverApi().getServer(datacenterAndId.getDataCenter(), datacenterAndId.getId(), new DepthOptions().depth(5));
+      for (FirewallRule rule : server.entities().nics().items().get(0).entities().firewallrules().items()) {
+         if (rule.properties().portRangeStart() == 22 || rule.properties().portRangeStart() == 8080) {
+            matches++;
+         }
+      }
+      Assert.assertEquals(2, matches);
+   }
+
+   @Override
    @Test
    public void testCreateNodeWithCustomHardware() throws Exception {
       Template template = buildTemplate(templateBuilder()
@@ -113,4 +140,5 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
          client.destroyNodesMatching(inGroup(group + "custom"));
       }
    }
+
 }

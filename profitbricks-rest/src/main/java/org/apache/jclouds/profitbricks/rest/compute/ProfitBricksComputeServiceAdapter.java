@@ -17,33 +17,39 @@
 package org.apache.jclouds.profitbricks.rest.compute;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.base.Predicate;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import static com.google.common.collect.Iterables.contains;
 import static com.google.common.collect.Iterables.filter;
+import com.google.common.collect.Lists;
 import static com.google.common.util.concurrent.Futures.getUnchecked;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.inject.Inject;
 import static java.lang.String.format;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_NIC;
-import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_SERVER;
-import static org.jclouds.Constants.PROPERTY_USER_THREADS;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
-
 import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
-
 import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
 import org.apache.jclouds.profitbricks.rest.compute.concurrent.ProvisioningJob;
 import org.apache.jclouds.profitbricks.rest.compute.concurrent.ProvisioningManager;
 import org.apache.jclouds.profitbricks.rest.compute.function.ProvisionableToImage;
 import org.apache.jclouds.profitbricks.rest.compute.strategy.TemplateWithDataCenter;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_DATACENTER;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_NIC;
+import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputeProperties.POLL_PREDICATE_SERVER;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
+import org.apache.jclouds.profitbricks.rest.domain.FirewallRule;
 import org.apache.jclouds.profitbricks.rest.domain.Image;
 import org.apache.jclouds.profitbricks.rest.domain.Lan;
 import org.apache.jclouds.profitbricks.rest.domain.Nic;
@@ -60,7 +66,10 @@ import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.util.Passwords;
 import org.apache.jclouds.profitbricks.rest.util.Trackables;
+import static org.jclouds.Constants.PROPERTY_USER_THREADS;
 import org.jclouds.compute.ComputeServiceAdapter;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.HardwareBuilder;
 import org.jclouds.compute.domain.Processor;
@@ -70,22 +79,12 @@ import org.jclouds.compute.domain.internal.VolumeImpl;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.compute.util.ComputeServiceUtils;
+import static org.jclouds.compute.util.ComputeServiceUtils.getPortRangesFromList;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationScope;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceNotFoundException;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.inject.Inject;
 
 @Singleton
 public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<ServerInDataCenter, Hardware, Provisionable, Location> {
@@ -149,6 +148,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       final String loginUser = isNullOrEmpty(options.getLoginUser()) ? "root" : options.getLoginUser();
       final String password = options.hasLoginPassword() ? options.getLoginPassword() : Passwords.generate();
       final org.jclouds.compute.domain.Image image = template.getImage();
+      final int[] inboundPorts = template.getOptions().getInboundPorts();
 
       // provision all volumes based on hardware
       List<? extends Volume> volumes = hardware.getVolumes();
@@ -175,12 +175,12 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
                     type(VolumeType.HDD);
 
             org.apache.jclouds.profitbricks.rest.domain.Volume vol = (org.apache.jclouds.profitbricks.rest.domain.Volume) provisioningManager
-                  .provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
-               @Override
-               public Object get() {
-                  return api.volumeApi().createVolume(request.build());
-               }
-            }));
+                    .provision(jobFactory.create(dataCenterId, new Supplier<Object>() {
+                       @Override
+                       public Object get() {
+                          return api.volumeApi().createVolume(request.build());
+                       }
+                    }));
 
             volumeIds.add(vol.id());
             logger.trace(">> provisioning complete for volume. returned id='%s'", vol.id());
@@ -281,14 +281,32 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
               .name("jclouds" + name)
               .dhcp(Boolean.TRUE)
               .lan(lanId)
-              .firewallActive(Boolean.FALSE)
+              .firewallActive(inboundPorts.length > 0)
               .serverId(server.id()).
               build());
-      
+
       trackables.waitUntilRequestCompleted(nic);
       waitNICUntilAvailable.apply(NicRef.create(dataCenterId, server.id(), nic.id()));
       waitDcUntilAvailable.apply(dataCenterId);
       waitServerUntilAvailable.apply(ServerRef.create(dataCenterId, server.id()));
+
+      Map<Integer, Integer> portsRange = getPortRangesFromList(inboundPorts);
+
+      for (Map.Entry<Integer, Integer> range : portsRange.entrySet()) {
+         FirewallRule rule = api.firewallApi().create(
+                 FirewallRule.Request.creatingBuilder()
+                 .dataCenterId(dataCenterId)
+                 .serverId(server.id())
+                 .nicId(nic.id())
+                 .name(server.properties().name() + " jclouds-firewall")
+                 .protocol(FirewallRule.Protocol.TCP)
+                 .portRangeStart(range.getKey())
+                 .portRangeEnd(range.getValue())
+                 .build()
+         );
+         trackables.waitUntilRequestCompleted(rule);
+
+      }
 
       //connect the rest of volumes to server;delete if fails
       final int volumeCount = volumeIds.size();
@@ -400,7 +418,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       ImmutableList.Builder<Provisionable> provisionables = ImmutableList.builder();
       provisionables.addAll(getUnchecked(images));
       provisionables.addAll(getUnchecked(snapshots));
-      
+
       return provisionables.build();
    }
 
