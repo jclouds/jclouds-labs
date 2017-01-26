@@ -41,7 +41,7 @@
     <dependency>
       <groupId>name.neykov</groupId>
       <artifactId>vagrant-java-bindings</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jclouds</groupId>
