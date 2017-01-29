@@ -16,8 +16,6 @@
  */
 package org.jclouds.vagrant.config;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -59,10 +57,10 @@ public class PersistVagrantCredentialsModule extends AbstractModule {
             Map<String, Credentials> credentialStore,
             @Nullable @Assisted Statement statement,
             MachineConfig.Factory machineConfigFactory) {
-         this.vagrantNodeRegistry = checkNotNull(vagrantNodeRegistry, "vagrantNodeRegistry");
-         this.credentialStore = checkNotNull(credentialStore, "credentialStore");
+         this.vagrantNodeRegistry = vagrantNodeRegistry;
+         this.credentialStore = credentialStore;
          this.statement = statement;
-         this.machineConfigFactory = checkNotNull(machineConfigFactory, "machineConfigFactory");
+         this.machineConfigFactory = machineConfigFactory;
       }
 
       @Override

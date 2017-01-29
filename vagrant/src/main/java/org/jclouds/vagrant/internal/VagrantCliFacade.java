@@ -16,22 +16,20 @@
  */
 package org.jclouds.vagrant.internal;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.vagrant.api.VagrantApiFacade;
+import org.jclouds.vagrant.api.VagrantBoxApiFacade;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 
 import vagrant.Vagrant;
 import vagrant.api.CommandIOListener;
@@ -39,14 +37,20 @@ import vagrant.api.VagrantApi;
 import vagrant.api.domain.Box;
 import vagrant.api.domain.SshConfig;
 
-public class VagrantCliFacade implements VagrantApiFacade<Box> {
+public class VagrantCliFacade implements VagrantApiFacade, VagrantBoxApiFacade<Box> {
    private final VagrantApi vagrant;
    private final VagrantOutputRecorder outputRecorder;
 
-   @Inject
+   @AssistedInject
    VagrantCliFacade(CommandIOListener wireLogger, @Assisted File path) {
-      this.outputRecorder = new VagrantOutputRecorder(checkNotNull(wireLogger, "wireLogger"));
+      this.outputRecorder = new VagrantOutputRecorder(wireLogger);
       this.vagrant = Vagrant.forPath(path, outputRecorder);
+   }
+
+   @AssistedInject
+   VagrantCliFacade(CommandIOListener wireLogger) {
+      this.outputRecorder = new VagrantOutputRecorder(wireLogger);
+      this.vagrant = Vagrant.forPath(new File("."), outputRecorder);
    }
 
    @Override
