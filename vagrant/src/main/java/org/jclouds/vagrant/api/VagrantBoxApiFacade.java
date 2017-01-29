@@ -16,24 +16,13 @@
  */
 package org.jclouds.vagrant.api;
 
-import java.io.File;
+import java.util.Collection;
 
-import org.jclouds.domain.LoginCredentials;
-
-public interface VagrantApiFacade {
-   interface Factory {
-      VagrantApiFacade create(File path);
+public interface VagrantBoxApiFacade<B> {
+   interface Factory<B> {
+      VagrantBoxApiFacade<B> create();
    }
 
-   /**
-    * Start the named machine
-    * 
-    * @return the raw output of the configured provisioners
-    */
-   String up(String machineName);
-   void halt(String machineName);
-   void destroy(String machineName);
-   LoginCredentials sshConfig(String machineName);
-   void haltForced(String name);
-   boolean exists();
+   Collection<B> listBoxes();
+   B getBox(String boxName);
 }

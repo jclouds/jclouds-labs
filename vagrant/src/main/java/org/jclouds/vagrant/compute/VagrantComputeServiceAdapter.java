@@ -16,12 +16,9 @@
  */
 package org.jclouds.vagrant.compute;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +56,11 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
-public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<VagrantNode, Hardware, B, Location> {
+public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<VagrantNode, Hardware, Image, Location> {
    private static final Pattern PATTERN_IP_ADDR = Pattern.compile("inet ([0-9\\.]+)/(\\d+)");
    private static final Pattern PATTERN_IPCONFIG = Pattern.compile("IPv4 Address[ .]+: ([0-9\\.]+)");
 
@@ -75,25 +71,28 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
    private final JustProvider locationSupplier;
    private final VagrantNodeRegistry nodeRegistry;
    private final MachineConfig.Factory machineConfigFactory;
-   private final Function<Collection<B>, Collection<B>> outdatedBoxesFilter;
-   private final VagrantApiFacade.Factory<B> cliFactory;
+   private final VagrantApiFacade.Factory cliFactory;
    private final Supplier<? extends Map<String, Hardware>> hardwareSupplier;
+   private final Supplier<Collection<Image>> imageListSupplier;
+   private final Function<String, Image> imageIdToImage;
 
    @Inject
    VagrantComputeServiceAdapter(@Named(VagrantConstants.JCLOUDS_VAGRANT_HOME) String home,
          JustProvider locationSupplier,
          VagrantNodeRegistry nodeRegistry,
          MachineConfig.Factory machineConfigFactory,
-         Function<Collection<B>, Collection<B>> outdatedBoxesFilter,
-         VagrantApiFacade.Factory<B> cliFactory,
-         Supplier<? extends Map<String, Hardware>> hardwareSupplier) {
-      this.home = new File(checkNotNull(home, "home"));
-      this.locationSupplier = checkNotNull(locationSupplier, "locationSupplier");
-      this.nodeRegistry = checkNotNull(nodeRegistry, "nodeRegistry");
-      this.machineConfigFactory = checkNotNull(machineConfigFactory, "machineConfigFactory");
-      this.outdatedBoxesFilter = checkNotNull(outdatedBoxesFilter, "outdatedBoxesFilter");
-      this.cliFactory = checkNotNull(cliFactory, "cliFactory");
-      this.hardwareSupplier = checkNotNull(hardwareSupplier, "hardwareSupplier");
+         VagrantApiFacade.Factory cliFactory,
+         Supplier<? extends Map<String, Hardware>> hardwareSupplier,
+         Supplier<Collection<Image>> imageListSupplier,
+         Function<String, Image> imageIdToImage) {
+      this.home = new File(home);
+      this.locationSupplier = locationSupplier;
+      this.nodeRegistry = nodeRegistry;
+      this.machineConfigFactory = machineConfigFactory;
+      this.cliFactory = cliFactory;
+      this.hardwareSupplier = hardwareSupplier;
+      this.imageListSupplier = imageListSupplier;
+      this.imageIdToImage = imageIdToImage;
       this.home.mkdirs();
    }
 
@@ -104,14 +103,15 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
 
       init(nodePath, machineName, template);
 
-      NodeAndInitialCredentials<VagrantNode> node = startMachine(nodePath, group, machineName, template.getImage());
+      NodeAndInitialCredentials<VagrantNode> node = startMachine(nodePath, group, machineName,
+            template.getImage(), template.getHardware());
       nodeRegistry.add(node.getNode());
       return node;
    }
 
-   private NodeAndInitialCredentials<VagrantNode> startMachine(File path, String group, String name, Image image) {
+   private NodeAndInitialCredentials<VagrantNode> startMachine(File path, String group, String name, Image image, Hardware hardware) {
 
-      VagrantApiFacade<B> vagrant = cliFactory.create(path);
+      VagrantApiFacade vagrant = cliFactory.create(path);
       String rawOutput = vagrant.up(name);
       String output = normalizeOutput(name, rawOutput);
 
@@ -123,6 +123,7 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
             .setGroup(group)
             .setName(name)
             .setImage(image)
+            .setHardware(hardware)
             .setNetworks(getNetworks(output, getOsInterfacePattern(osFamily)))
             .setHostname(getHostname(output))
             .build();
@@ -250,14 +251,13 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
    }
 
    @Override
-   public Iterable<B> listImages() {
-      Collection<B> allBoxes = cliFactory.create(new File(".")).listBoxes();
-      return outdatedBoxesFilter.apply(allBoxes);
+   public Iterable<Image> listImages() {
+      return imageListSupplier.get();
    }
 
    @Override
-   public B getImage(String id) {
-      return cliFactory.create(new File(".")).getBox(id);
+   public Image getImage(String id) {
+      return imageIdToImage.apply(id);
    }
 
    @Override
@@ -309,14 +309,14 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
 
       VagrantNode node = nodeRegistry.get(id);
       String name = node.name();
-      VagrantApiFacade<B> vagrant = getMachine(node);
+      VagrantApiFacade vagrant = getMachine(node);
       vagrant.up(name);
    }
 
    private void halt(String id) {
       VagrantNode node = nodeRegistry.get(id);
       String name = node.name();
-      VagrantApiFacade<B> vagrant = getMachine(node);
+      VagrantApiFacade vagrant = getMachine(node);
 
       try {
          vagrant.halt(name);
@@ -330,7 +330,7 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
    public void resumeNode(String id) {
       VagrantNode node = nodeRegistry.get(id);
       String name = node.name();
-      VagrantApiFacade<B> vagrant = getMachine(node);
+      VagrantApiFacade vagrant = getMachine(node);
       vagrant.up(name);
       node.setMachineState(Status.RUNNING);
    }
@@ -344,29 +344,7 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
 
    @Override
    public Iterable<VagrantNode> listNodes() {
-      return FluentIterable.from(Arrays.asList(home.listFiles()))
-            .transformAndConcat(new Function<File, Collection<VagrantNode>>() {
-               @Override
-               public Collection<VagrantNode> apply(File input) {
-                  File machines = new File(input, VagrantConstants.MACHINES_CONFIG_SUBFOLDER);
-                  VagrantApiFacade<B> vagrant = cliFactory.create(input);
-                  if (input.isDirectory() && machines.exists() && vagrant.exists()) {
-                     Collection<VagrantNode> nodes = new ArrayList<VagrantNode>();
-                     for (File machine : machines.listFiles()) {
-                        if (machine.getName().endsWith(VagrantConstants.MACHINES_CONFIG_EXTENSION)) {
-                           String id = input.getName() + "/" + machine.getName().replace(VagrantConstants.MACHINES_CONFIG_EXTENSION, "");
-                           VagrantNode n = nodeRegistry.get(id);
-                           if (n != null) {
-                              nodes.add(n);
-                           }
-                        }
-                     }
-                     return nodes;
-                  } else {
-                     return ImmutableList.of();
-                  }
-               }
-            });
+      return nodeRegistry.list();
    }
 
    @Override
@@ -379,7 +357,7 @@ public class VagrantComputeServiceAdapter<B> implements ComputeServiceAdapter<Va
       });
    }
 
-   private VagrantApiFacade<B> getMachine(VagrantNode node) {
+   private VagrantApiFacade getMachine(VagrantNode node) {
       File nodePath = node.path();
       return cliFactory.create(nodePath);
    }

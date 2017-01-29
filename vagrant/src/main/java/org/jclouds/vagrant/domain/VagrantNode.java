@@ -19,6 +19,7 @@ package org.jclouds.vagrant.domain;
 import java.io.File;
 import java.util.Collection;
 
+import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata.Status;
 
@@ -39,6 +40,8 @@ public abstract class VagrantNode {
 
    public abstract Image image();
 
+   public abstract Hardware hardware();
+
    public abstract Collection<String> networks();
 
    public abstract String hostname();
@@ -54,6 +57,7 @@ public abstract class VagrantNode {
       public abstract Builder setGroup(String group);
       public abstract Builder setName(String name);
       public abstract Builder setImage(Image image);
+      public abstract Builder setHardware(Hardware hardware);
       public abstract Builder setNetworks(Collection<String> networks);
       public abstract Builder setHostname(String hostname);
       public abstract VagrantNode build();

@@ -22,10 +22,14 @@ import static org.testng.Assert.assertNull;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import org.easymock.EasyMock;
+import org.jclouds.compute.domain.Hardware;
+import org.jclouds.compute.domain.HardwareBuilder;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
+import org.jclouds.compute.domain.Processor;
 import org.jclouds.vagrant.domain.VagrantNode;
 import org.testng.annotations.Test;
 
@@ -49,14 +53,19 @@ public class VagrantNodeRegistryTest {
 
    @Test
    public void testNodeRegistry() {
+      VagrantExistingMachines loader = EasyMock.createMock(VagrantExistingMachines.class);
+      EasyMock.expect(loader.get()).andReturn(ImmutableList.<VagrantNode>of());
+      EasyMock.replay(loader);
+
       TestTimeSupplier timeSupplier = new TestTimeSupplier();
-      VagrantNodeRegistry registry = new VagrantNodeRegistry(timeSupplier);
+      VagrantNodeRegistry registry = new VagrantNodeRegistry(timeSupplier, loader);
       OperatingSystem os = new OperatingSystem(OsFamily.UNRECOGNIZED, "Jclouds OS", "10", "x64", "Jclouds Test Image", true);
       Image image = new ImageBuilder()
             .ids("jclouds/box")
             .operatingSystem(os)
             .status(Image.Status.AVAILABLE)
             .build();
+      Hardware hardware = new HardwareBuilder().ids("mini").ram(100).processor(new Processor(1.0, 1)).build();
 
       ImmutableList<String> networks = ImmutableList.of("172.28.128.3");
       VagrantNode node = VagrantNode.builder()
@@ -66,6 +75,7 @@ public class VagrantNodeRegistryTest {
             .setName("node")
             .setImage(image)
             .setNetworks(networks)
+            .setHardware(hardware)
             .setHostname("vagrant-node")
             .build();
 

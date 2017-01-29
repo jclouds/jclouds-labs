@@ -41,8 +41,8 @@ import com.google.common.collect.Maps;
 
 public class MachineConfig {
    public static class Factory {
-      public MachineConfig newInstance(File path, String name) {
-         return new MachineConfig(path, name);
+      public MachineConfig newInstance(File group, String machineName) {
+         return new MachineConfig(group, machineName);
       }
 
       public MachineConfig newInstance(VagrantNode node) {
@@ -52,8 +52,9 @@ public class MachineConfig {
 
    private File configPath;
 
-   protected MachineConfig(File path, String name) {
-      this.configPath = new File(new File(path, VagrantConstants.MACHINES_CONFIG_SUBFOLDER), name + ".yaml");
+   protected MachineConfig(File group, String machineName) {
+      this.configPath = new File(new File(group, VagrantConstants.MACHINES_CONFIG_SUBFOLDER),
+            machineName + VagrantConstants.MACHINES_CONFIG_EXTENSION);
    }
 
    public Map<String, Object> load() {

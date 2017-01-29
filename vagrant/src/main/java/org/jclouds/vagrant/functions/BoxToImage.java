@@ -16,8 +16,6 @@
  */
 package org.jclouds.vagrant.functions;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.Image.Status;
 import org.jclouds.compute.domain.ImageBuilder;
@@ -38,7 +36,7 @@ public class BoxToImage implements Function<Box, Image> {
 
    @Inject
    BoxToImage(BoxConfig.Factory boxConfigFactory) {
-      this.boxConfigFactory = checkNotNull(boxConfigFactory, "boxConfigFactory");
+      this.boxConfigFactory = boxConfigFactory;
    }
 
    @Override

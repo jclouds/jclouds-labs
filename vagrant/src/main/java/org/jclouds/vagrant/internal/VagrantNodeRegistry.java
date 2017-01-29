@@ -16,6 +16,7 @@
  */
 package org.jclouds.vagrant.internal;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
@@ -26,6 +27,7 @@ import org.jclouds.date.TimeStamp;
 import org.jclouds.vagrant.domain.VagrantNode;
 
 import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -33,6 +35,24 @@ import com.google.inject.Singleton;
 public class VagrantNodeRegistry {
    private static final long TERMINATED_NODES_EXPIRY_MS = TimeUnit.MINUTES.toMillis(5);
    private static final long VACUUM_PERIOD_MS = TimeUnit.SECONDS.toMillis(15);
+
+   private static class ConcurrentWrapperSupplier implements Supplier<Map<String, VagrantNode>> {
+      private Supplier<Collection<VagrantNode>> existingMachines;
+
+      public ConcurrentWrapperSupplier(Supplier<Collection<VagrantNode>> existingMachines) {
+         this.existingMachines = existingMachines;
+      }
+
+      @Override
+      public Map<String, VagrantNode> get() {
+         Map<String, VagrantNode> nodes = new ConcurrentHashMap<String, VagrantNode>();
+         for (VagrantNode node : existingMachines.get()) {
+            nodes.put(node.id(), node);
+         }
+         return nodes;
+      }
+
+   }
 
    private static class TerminatedNode implements Delayed {
       Supplier<Long> timeSupplier;
@@ -73,21 +93,22 @@ public class VagrantNodeRegistry {
          return unit.convert(expiryTime - timeSupplier.get(), TimeUnit.MILLISECONDS);
       }
    }
-   private Map<String, VagrantNode> nodes = new ConcurrentHashMap<String, VagrantNode>();
-   private DelayQueue<TerminatedNode> terminatedNodes = new DelayQueue<TerminatedNode>();
+
+   private final DelayQueue<TerminatedNode> terminatedNodes = new DelayQueue<TerminatedNode>();
+   private final Supplier<Map<String, VagrantNode>> nodes;
 
    private volatile long lastVacuumMs;
-   private Supplier<Long> timeSupplier;
+   private final Supplier<Long> timeSupplier;
 
    @Inject
-   VagrantNodeRegistry(@TimeStamp Supplier<Long> timeSupplier) {
+   VagrantNodeRegistry(@TimeStamp Supplier<Long> timeSupplier, Supplier<Collection<VagrantNode>> existingMachines) {
       this.timeSupplier = timeSupplier;
+      this.nodes = Suppliers.memoize(new ConcurrentWrapperSupplier(existingMachines));
    }
-
 
    public VagrantNode get(String id) {
       vacuum();
-      return nodes.get(id);
+      return nodes.get().get(id);
    }
 
    protected void vacuum() {
@@ -95,14 +116,18 @@ public class VagrantNodeRegistry {
       if (timeSupplier.get() - lastVacuumMs > VACUUM_PERIOD_MS) {
          TerminatedNode terminated;
          while ((terminated = terminatedNodes.poll()) != null) {
-            nodes.remove(terminated.node.id());
+            nodes.get().remove(terminated.node.id());
          }
          lastVacuumMs = timeSupplier.get();
       }
    }
 
    public void add(VagrantNode node) {
-      nodes.put(node.id(), node);
+      nodes.get().put(node.id(), node);
+   }
+
+   public Collection<VagrantNode> list() {
+      return nodes.get().values();
    }
 
    public void onTerminated(VagrantNode node) {

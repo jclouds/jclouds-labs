@@ -16,7 +16,6 @@
  */
 package org.jclouds.vagrant.strategy;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.io.File;
@@ -59,8 +58,8 @@ public class VagrantDefaultImageCredentials implements PopulateDefaultLoginCrede
          Map<String, Credentials> credentialStore,
          BoxConfig.Factory boxConfigFactory) {
       this.creds = creds;
-      this.credentialStore = checkNotNull(credentialStore, "credentialStore");
-      this.boxConfigFactory = checkNotNull(boxConfigFactory, "boxConfigFactory");
+      this.credentialStore = credentialStore;
+      this.boxConfigFactory = boxConfigFactory;
    }
 
    @Override

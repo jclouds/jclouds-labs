@@ -19,7 +19,6 @@ package org.jclouds.vagrant.functions;
 import static org.testng.Assert.assertEquals;
 
 import java.io.File;
-import java.util.Map;
 import java.util.Set;
 
 import org.easymock.EasyMock;
@@ -36,7 +35,6 @@ import org.jclouds.compute.domain.Processor;
 import org.jclouds.domain.Location;
 import org.jclouds.vagrant.domain.VagrantNode;
 import org.jclouds.vagrant.internal.BoxConfig;
-import org.jclouds.vagrant.internal.MachineConfig;
 import org.jclouds.vagrant.reference.VagrantConstants;
 import org.testng.annotations.Test;
 
@@ -44,7 +42,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import vagrant.api.domain.Box;
@@ -59,14 +56,16 @@ public class MachineToNodeMetadataTest {
                .operatingSystem(os)
                .status(org.jclouds.compute.domain.Image.Status.AVAILABLE)
                .build();
-
+         Hardware hardware = new HardwareBuilder().ids("mini").ram(100).processor(new Processor(1.0, 1)).build();
          ImmutableList<String> networks = ImmutableList.of("172.28.128.3");
+
          VagrantNode node = VagrantNode.builder()
                .setPath(new File("/path/to/machine"))
                .setId("vagrant/node")
                .setGroup("vagrant")
                .setName("node")
                .setImage(image)
+               .setHardware(hardware)
                .setNetworks(networks)
                .setHostname("vagrant-node")
                .build();
@@ -81,26 +80,14 @@ public class MachineToNodeMetadataTest {
          BoxConfig.Factory boxConfigFactory = EasyMock.createMock(BoxConfig.Factory.class);
          EasyMock.expect(boxConfigFactory.newInstance((Image)EasyMock.<Box>anyObject())).andReturn(boxConfig);
 
-         MachineConfig machineConfig = EasyMock.createMock(MachineConfig.class);
-         EasyMock.expect(machineConfig.load()).andReturn(getMachineConfig());
-
-         MachineConfig.Factory machineConfigFactory = EasyMock.createMock(MachineConfig.Factory.class);
-         EasyMock.expect(machineConfigFactory.newInstance(node)).andReturn(machineConfig);
-
-         Hardware hardware = new HardwareBuilder().ids(getHardwareId()).ram(100).processor(new Processor(1.0, 1)).build();
-         Supplier<? extends Map<String, Hardware>> hardwareSupplier = Suppliers.ofInstance(ImmutableMap.of(getHardwareId(), hardware));
-
-         EasyMock.replay(location, boxConfig, boxConfigFactory,
-               machineConfig, machineConfigFactory);
+         EasyMock.replay(location, boxConfig, boxConfigFactory);
 
          @SuppressWarnings({ "unchecked", "rawtypes" })
          Supplier<Set<? extends Location>> locations = (Supplier<Set<? extends Location>>)(Supplier)Suppliers.ofInstance(ImmutableSet.of(location));
 
          MachineToNodeMetadata machineToNodeMetadata = new MachineToNodeMetadata(
                locations,
-               boxConfigFactory,
-               machineConfigFactory,
-               hardwareSupplier);
+               boxConfigFactory);
 
          NodeMetadata nodeMetadataActual = machineToNodeMetadata.apply(node);
 
@@ -122,12 +109,7 @@ public class MachineToNodeMetadataTest {
          assertEquals(nodeMetadataActual.toString(), nodeMetadataExpected.toString());
       }
 
-      protected Map<String, Object> getMachineConfig() {
-         return ImmutableMap.<String, Object>of(VagrantConstants.CONFIG_HARDWARE_ID, getHardwareId());
-      }
-
       protected abstract void customizeBuilder(NodeMetadataBuilder nodeMetadataBuilder);
-      protected abstract String getHardwareId();
       protected abstract OsFamily getOsFamily();
       protected abstract void expectBoxConfig(BoxConfig boxConfig);
    }
@@ -137,10 +119,6 @@ public class MachineToNodeMetadataTest {
       class MachineToNodeMetadataLinuxMini extends MachineToNodeMetadataFixture {
          protected void customizeBuilder(NodeMetadataBuilder nodeMetadataBuilder) {
             nodeMetadataBuilder.loginPort(2222);
-         }
-
-         protected String getHardwareId() {
-            return "mini";
          }
 
          protected OsFamily getOsFamily() {
@@ -169,10 +147,6 @@ public class MachineToNodeMetadataTest {
          protected void customizeBuilder(NodeMetadataBuilder nodeMetadataBuilder) {
             nodeMetadataBuilder.loginPort(22);
          }
-
-         protected String getHardwareId() {
-            return "mini";
-         }
       }
       new MachineToNodeMetadataLinuxMini().doTest();
    }
@@ -189,25 +163,9 @@ public class MachineToNodeMetadataTest {
          }
 
          protected void customizeBuilder(NodeMetadataBuilder nodeMetadataBuilder) {
-            nodeMetadataBuilder.loginPort(2222)
-               .hardware(new HardwareBuilder()
-                  .ids("automatic:cores=2.0;ram=1000")
-                  .processor(new Processor(2.0, 1))
-                  .ram(1000)
-                  .build());
+            nodeMetadataBuilder.loginPort(2222);
          }
 
-         @Override
-         protected Map<String, Object> getMachineConfig() {
-            return ImmutableMap.<String, Object>of(
-                  VagrantConstants.CONFIG_HARDWARE_ID, getHardwareId(),
-                  VagrantConstants.CONFIG_CPUS, "2.0",
-                  VagrantConstants.CONFIG_MEMORY, "1000");
-         }
-
-         protected String getHardwareId() {
-            return "automatic";
-         }
       }
       new MachineToNodeMetadataLinuxMini().doTest();
    }
@@ -217,10 +175,6 @@ public class MachineToNodeMetadataTest {
       class MachineToNodeMetadataLinuxMini extends MachineToNodeMetadataFixture {
          protected void customizeBuilder(NodeMetadataBuilder nodeMetadataBuilder) {
             nodeMetadataBuilder.loginPort(8899);
-         }
-
-         protected String getHardwareId() {
-            return "mini";
          }
 
          protected OsFamily getOsFamily() {
@@ -250,9 +204,6 @@ public class MachineToNodeMetadataTest {
             nodeMetadataBuilder.loginPort(5985);
          }
 
-         protected String getHardwareId() {
-            return "mini";
-         }
       }
       new MachineToNodeMetadataLinuxMini().doTest();
    }
@@ -269,25 +220,9 @@ public class MachineToNodeMetadataTest {
          }
 
          protected void customizeBuilder(NodeMetadataBuilder nodeMetadataBuilder) {
-            nodeMetadataBuilder.loginPort(8899)
-               .hardware(new HardwareBuilder()
-                  .ids("automatic:cores=2.0;ram=1000")
-                  .processor(new Processor(2.0, 1))
-                  .ram(1000)
-                  .build());
+            nodeMetadataBuilder.loginPort(8899);
          }
 
-         @Override
-         protected Map<String, Object> getMachineConfig() {
-            return ImmutableMap.<String, Object>of(
-                  VagrantConstants.CONFIG_HARDWARE_ID, getHardwareId(),
-                  VagrantConstants.CONFIG_CPUS, "2.0",
-                  VagrantConstants.CONFIG_MEMORY, "1000");
-         }
-
-         protected String getHardwareId() {
-            return "automatic";
-         }
       }
       new MachineToNodeMetadataLinuxMini().doTest();
    }

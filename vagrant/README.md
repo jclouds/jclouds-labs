@@ -119,4 +119,3 @@ Limitations
 -----------
 
 * Machines are created sequentially, no support for parallel execution from virtualbox provider
-* Something prevents using vagrant at the same time with other jclouds providers - they try to login with vagrant user.
