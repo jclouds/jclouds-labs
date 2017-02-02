@@ -20,7 +20,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 import org.easymock.EasyMock;
 import org.jclouds.compute.domain.Hardware;
@@ -33,23 +32,9 @@ import org.jclouds.compute.domain.Processor;
 import org.jclouds.vagrant.domain.VagrantNode;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 
 public class VagrantNodeRegistryTest {
-   private static class TestTimeSupplier implements Supplier<Long> {
-      long time = System.currentTimeMillis();
-
-      @Override
-      public Long get() {
-         return time;
-      }
-
-      public void advanceTime(long add) {
-         time += add;
-      }
-
-   }
 
    @Test
    public void testNodeRegistry() {
@@ -57,8 +42,7 @@ public class VagrantNodeRegistryTest {
       EasyMock.expect(loader.get()).andReturn(ImmutableList.<VagrantNode>of());
       EasyMock.replay(loader);
 
-      TestTimeSupplier timeSupplier = new TestTimeSupplier();
-      VagrantNodeRegistry registry = new VagrantNodeRegistry(timeSupplier, loader);
+      VagrantNodeRegistry registry = new VagrantNodeRegistry(loader);
       OperatingSystem os = new OperatingSystem(OsFamily.UNRECOGNIZED, "Jclouds OS", "10", "x64", "Jclouds Test Image", true);
       Image image = new ImageBuilder()
             .ids("jclouds/box")
@@ -83,8 +67,6 @@ public class VagrantNodeRegistryTest {
       registry.add(node);
       assertEquals(registry.get(node.id()), node);
       registry.onTerminated(node);
-      assertEquals(registry.get(node.id()), node);
-      timeSupplier.advanceTime(TimeUnit.MINUTES.toMillis(10));
       assertNull(registry.get(node.id()));
    }
 }
