@@ -28,7 +28,6 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.internal.ArbitraryCpuRamTemplateBuilderImpl;
 import org.jclouds.compute.domain.internal.TemplateBuilderImpl;
 import org.jclouds.compute.strategy.PopulateDefaultLoginCredentialsForImageStrategy;
-import org.jclouds.date.TimeStamp;
 import org.jclouds.domain.Location;
 import org.jclouds.functions.IdentityFunction;
 import org.jclouds.vagrant.api.VagrantApiFacade;
@@ -48,7 +47,6 @@ import org.jclouds.vagrant.suppliers.VagrantHardwareSupplier;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.inject.Module;
-import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
@@ -92,17 +90,6 @@ public class VagrantComputeServiceContextModule extends ComputeServiceAdapterCon
       bind(PopulateDefaultLoginCredentialsForImageStrategy.class).to(VagrantDefaultImageCredentials.class);
       bind(TemplateBuilderImpl.class).to(ArbitraryCpuRamTemplateBuilderImpl.class);
       bind(CommandIOListener.class).to(VagrantWireLogger.class).in(Singleton.class);
-   }
-
-   @Provides
-   @TimeStamp
-   public Supplier<Long> timeSupplier() {
-      return new Supplier<Long>() {
-         @Override
-         public Long get() {
-            return System.currentTimeMillis();
-         }
-      };
    }
 
    @Override

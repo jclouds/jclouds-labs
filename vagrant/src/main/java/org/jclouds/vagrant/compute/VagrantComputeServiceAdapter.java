@@ -311,6 +311,7 @@ public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<Vagra
       String name = node.name();
       VagrantApiFacade vagrant = getMachine(node);
       vagrant.up(name);
+      node.setMachineState(Status.RUNNING);
    }
 
    private void halt(String id) {
@@ -320,6 +321,7 @@ public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<Vagra
 
       try {
          vagrant.halt(name);
+         node.setMachineState(Status.SUSPENDED);
       } catch (IllegalStateException e) {
          logger.warn(e, "Failed graceful shutdown of machine " + id + ". Will try to halt it forcefully instead.");
          vagrant.haltForced(name);
