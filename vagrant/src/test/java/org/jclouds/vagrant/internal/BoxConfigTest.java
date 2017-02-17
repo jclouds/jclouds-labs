@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jclouds.vagrant.reference.VagrantConstants;
-import org.testng.annotations.BeforeMethod;
+import org.jclouds.vagrant.util.VagrantUtils;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Optional;
@@ -33,20 +33,14 @@ import vagrant.api.domain.Box;
 
 public class BoxConfigTest {
 
-   private File vagrantHome;
-
-   @BeforeMethod
-   public void setUp() {
-      vagrantHome = new File(System.getProperty("java.io.tmpdir"), "jclouds/vagrant");
-   }
-
    @Test
    public void testKeys() throws IOException {
+      File vagrantHome = new File(Files.createTempDir(), "jclouds/vagrant");
       File boxFolder = new File(vagrantHome, "boxes/jclouds-VAGRANTSLASH-vagrant/0/virtualbox");
       boxFolder.mkdirs();
       File boxPath = new File(boxFolder, VagrantConstants.VAGRANTFILE);
       Resources.asByteSource(getClass().getResource("/Vagrantfile.boxconfig")).copyTo(Files.asByteSink(boxPath));
-      
+
       BoxConfig boxConfig = new BoxConfig.Factory().newInstance(vagrantHome, new Box("jclouds/vagrant", "0", "virtualbox"));
       assertEquals(boxConfig.getKey(".non.existent"), Optional.absent());
       assertEquals(boxConfig.getStringKey(".non.existent"), Optional.absent());
@@ -60,7 +54,7 @@ public class BoxConfigTest {
       assertEquals(boxConfig.getStringKey(VagrantConstants.KEY_SSH_PRIVATE_KEY_PATH), Optional.of("/path/to/private.key"));
       assertEquals(boxConfig.getStringKey(VagrantConstants.KEY_SSH_PORT), Optional.of("2222"));
 
-      boxPath.delete();
+      VagrantUtils.deleteFolder(vagrantHome);
    }
 
 }
