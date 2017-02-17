@@ -25,8 +25,7 @@ import java.util.Map;
 
 import org.jclouds.JcloudsVersion;
 import org.jclouds.vagrant.reference.VagrantConstants;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.jclouds.vagrant.util.VagrantUtils;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Charsets;
@@ -44,36 +43,26 @@ public class MachineConfigTest {
          .put("cpus", "1")
          .build();
 
-   private File machineFolder;
-   private MachineConfig machineConfig;
-   private File configPath;
-
-   @BeforeMethod
-   public void setUp() throws IOException {
-      File vagrantHome = new File(System.getProperty("java.io.tmpdir"), "jclouds/vagrant");
-      machineFolder = new File(vagrantHome, "jclouds");
-      File configFolder = new File(machineFolder, VagrantConstants.MACHINES_CONFIG_SUBFOLDER);
-      configFolder.mkdirs();
-      configPath = new File(configFolder, "vagrant" + VagrantConstants.MACHINES_CONFIG_EXTENSION);
-      machineConfig = new MachineConfig.Factory().newInstance(machineFolder, "vagrant");
-   }
-
-   @AfterMethod
-   public void tearDown() {
-      configPath.delete();
-   }
-
    @Test
    public void testRead() throws IOException {
-      Resources.asByteSource(getClass().getResource("/machine-config.yaml")).copyTo(Files.asByteSink(configPath));
+      File machineFolder = Files.createTempDir();
+      File configFile = getConifgFile(machineFolder);
+      MachineConfig machineConfig = getMachineConfig(configFile);
+
+      Resources.asByteSource(getClass().getResource("/machine-config.yaml")).copyTo(Files.asByteSink(configFile));
       assertEquals(machineConfig.load(), CONFIG);
+      VagrantUtils.deleteFolder(machineFolder);
    }
 
    @Test
    public void testWrite() throws IOException {
+      File machineFolder = Files.createTempDir();
+      File configFile = getConifgFile(machineFolder);
+      MachineConfig machineConfig = getMachineConfig(configFile);
+
       machineConfig.save(CONFIG);
       ByteArrayOutputStream actualBytes = new ByteArrayOutputStream();
-      Files.asByteSource(configPath).copyTo(actualBytes);
+      Files.asByteSource(configFile).copyTo(actualBytes);
 
       ByteArrayOutputStream expectedBytes = new ByteArrayOutputStream();
       Resources.asByteSource(getClass().getResource("/machine-config.yaml")).copyTo(expectedBytes);
@@ -85,13 +74,31 @@ public class MachineConfigTest {
             // Strip license headers
             .replaceAll("(?m)^#.*", "")
             .trim());
+      VagrantUtils.deleteFolder(machineFolder);
    }
 
    @Test
    public void testUpdatesVersion() throws IOException {
+      File machineFolder = Files.createTempDir();
+      File configFile = getConifgFile(machineFolder);
+      MachineConfig machineConfig = getMachineConfig(configFile);
+
       machineConfig.save(CONFIG);
       Map<String, Object> newConfig = machineConfig.load();
       assertEquals(newConfig.get(VagrantConstants.CONFIG_JCLOUDS_VERSION), JcloudsVersion.get().toString());
+      VagrantUtils.deleteFolder(machineFolder);
+   }
+
+   private MachineConfig getMachineConfig(File configFile) {
+      String machineName = configFile.getName().replaceAll(VagrantConstants.MACHINES_CONFIG_EXTENSION, "");
+      return new MachineConfig.Factory().newInstance(configFile.getParentFile().getParentFile(), machineName);
+   }
+
+   private File getConifgFile(File machineFolder) {
+      File configFolder = new File(machineFolder, VagrantConstants.MACHINES_CONFIG_SUBFOLDER);
+      configFolder.mkdirs();
+      File machineFile = new File(configFolder, "vagrant" + VagrantConstants.MACHINES_CONFIG_EXTENSION);
+      return machineFile;
    }
 
 }
