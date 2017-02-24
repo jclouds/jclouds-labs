@@ -1,0 +1,30 @@
+{
+    "id": "81504C620D98BCEBAA5202D145203B4C",
+    "name": "Windows 2008R2 - 64 bits (Standard) + SQL Server 2012 (Standard)",
+    "available_datacenters":
+            [{
+                    "id": "81DEF28500FBC2A973FC0C620DF5B721",
+                    "name": "La Portalada"
+                }, {
+                    "id": "908DC2072407C94C8054610AD5A53B8C",
+                    "name": "Lenexa (US)"
+                }, {
+                    "id": "4EFAD5836CE43ACA502FD5B99BEE44EF",
+                    "name": "BAP"
+                }, {
+                    "id": "5091F6D8CBFEF9C26ACE957C652D5D49",
+                    "name": "GLO"
+                }],
+    "os_image_type": "Standard",
+    "os_family": "Windows",
+    "os": "Windows",
+    "os_version": "Windows 2008R2",
+    "min_hdd_size": 40,
+    "os_architecture": 64,
+    "licenses": [
+        "Windows",
+        "SQL Server"
+    ],
+    "automatic_installation": true,
+    "type": "IMAGE"
+}

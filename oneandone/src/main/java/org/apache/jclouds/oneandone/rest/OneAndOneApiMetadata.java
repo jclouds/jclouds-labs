@@ -20,7 +20,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 import java.net.URI;
 import java.util.Properties;
+import org.apache.jclouds.oneandone.rest.compute.config.OneAndOneComputeServiceContextModule;
 import org.apache.jclouds.oneandone.rest.config.OneAndOneHttpApiModule;
+import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
@@ -50,12 +52,15 @@ public class OneAndOneApiMetadata extends BaseHttpApiMetadata<OneAndOneApi> {
          id("oneandone")
                  .name("OneAndOne REST API")
                  .identityName("API Username")
+                 .credentialName("token")
                  .documentation(URI.create("https://cloudpanel-api.1and1.com/documentation/1and1/v1/en/documentation.html"))
                  .defaultEndpoint("https://cloudpanel-api.1and1.com/v1")
+                 .view(ComputeServiceContext.class)
                  .defaultProperties(OneAndOneApiMetadata.defaultProperties())
                  .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                          .add(OkHttpCommandExecutorServiceModule.class)
                          .add(OneAndOneHttpApiModule.class)
+                         .add(OneAndOneComputeServiceContextModule.class)
                          .build());
       }
 

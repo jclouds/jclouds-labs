@@ -14,25 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.oneandone.rest.domain;
+package org.apache.jclouds.oneandone.rest.compute.config;
 
-import com.google.auto.value.AutoValue;
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
+import com.google.inject.AbstractModule;
+import org.apache.jclouds.oneandone.rest.handlers.OneAndOneRateLimitRetryHandler;
+import org.jclouds.http.HttpRetryHandler;
+import org.jclouds.http.annotation.ClientError;
 
-@AutoValue
-public abstract class DataCenter {
-
-   public abstract String id();
-
-   @Nullable
-   public abstract String countryCode();
-
-   @Nullable
-   public abstract String location();
-
-   @SerializedNames({"id", "country_code", "location"})
-   public static DataCenter create(String id, String countryCode, String location) {
-      return new AutoValue_DataCenter(id, countryCode, location);
+public class OneAndOneRateLimitModule extends AbstractModule {
+   @Override
+   protected void configure() {
+      bind(HttpRetryHandler.class).annotatedWith(ClientError.class).to(OneAndOneRateLimitRetryHandler.class);
    }
 }
+

@@ -205,10 +205,13 @@ public abstract class Server {
       @Nullable
       public abstract String monitoringPolicyId();
 
-      @SerializedNames({"name", "description", "hardware", "appliance_id", "datacenter_id", "password", "region_id", "power_on", "firewall_policy_id", "ip_id", "loadr_balancer_id", "monitoring_policy_id"})
+      @Nullable
+      public abstract String rsaKey();
+
+      @SerializedNames({"name", "description", "hardware", "appliance_id", "datacenter_id", "password", "region_id", "power_on", "firewall_policy_id", "ip_id", "loadr_balancer_id", "monitoring_policy_id", "rsa_key"})
       public static CreateServer create(final String name, final String description, final Hardware.CreateHardware hardware, final String applianceId,
               final String dataCenterId, final String password, final String regionId, final Boolean powerOn, final String firewallPolicyId,
-              final String ipId, final String loadrBalancerId, final String monitoringPolicyId) {
+              final String ipId, final String loadrBalancerId, final String monitoringPolicyId, final String rsaKey) {
          return builder()
                  .name(name)
                  .description(description)
@@ -220,6 +223,7 @@ public abstract class Server {
                  .powerOn(powerOn)
                  .firewallPolicyId(firewallPolicyId)
                  .ipId(ipId)
+                 .rsaKey(rsaKey)
                  .loadrBalancerId(loadrBalancerId)
                  .monitoringPolicyId(monitoringPolicyId)
                  .build();
@@ -255,6 +259,8 @@ public abstract class Server {
          public abstract Builder loadrBalancerId(String loadrBalancerId);
 
          public abstract Builder monitoringPolicyId(String monitoringPolicyId);
+
+         public abstract Builder rsaKey(String rsaKey);
 
          public abstract CreateServer build();
       }

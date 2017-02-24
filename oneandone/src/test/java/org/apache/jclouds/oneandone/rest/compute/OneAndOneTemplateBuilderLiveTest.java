@@ -14,25 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.oneandone.rest.domain;
+package org.apache.jclouds.oneandone.rest.compute;
 
-import com.google.auto.value.AutoValue;
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
+import org.jclouds.compute.internal.BaseTemplateBuilderLiveTest;
+import org.testng.annotations.Test;
 
-@AutoValue
-public abstract class DataCenter {
+@Test(groups = "live", testName = "OneAndOneTemplateBuilderLiveTest", singleThreaded = true)
+public class OneAndOneTemplateBuilderLiveTest extends BaseTemplateBuilderLiveTest {
 
-   public abstract String id();
+   public OneAndOneTemplateBuilderLiveTest() {
+      this.provider = "oneandone";
+   }
 
-   @Nullable
-   public abstract String countryCode();
-
-   @Nullable
-   public abstract String location();
-
-   @SerializedNames({"id", "country_code", "location"})
-   public static DataCenter create(String id, String countryCode, String location) {
-      return new AutoValue_DataCenter(id, countryCode, location);
+   @Override
+   protected Set<String> getIso3166Codes() {
+      return ImmutableSet.of();
    }
 }

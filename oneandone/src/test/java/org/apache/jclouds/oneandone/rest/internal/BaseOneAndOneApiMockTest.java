@@ -55,7 +55,7 @@ public class BaseOneAndOneApiMockTest {
       server = new MockWebServer();
       server.play();
       ApiContext<OneAndOneApi> ctx = ContextBuilder.newBuilder("oneandone")
-              .credentials("token", "password")
+              .credentials("token", "token")
               .endpoint(url(""))
               .modules(modules)
               .overrides(overrides())

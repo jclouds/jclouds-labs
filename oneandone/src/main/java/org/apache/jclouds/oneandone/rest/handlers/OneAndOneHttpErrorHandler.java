@@ -16,7 +16,9 @@
  */
 package org.apache.jclouds.oneandone.rest.handlers;
 
+import java.io.IOException;
 import javax.inject.Singleton;
+import org.apache.jclouds.oneandone.rest.exceptions.OneAndOneRateLimitExceededException;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
@@ -25,6 +27,7 @@ import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.InsufficientResourcesException;
 import org.jclouds.rest.ResourceNotFoundException;
 import static org.jclouds.util.Closeables2.closeQuietly;
+import org.jclouds.util.Strings2;
 
 @Singleton
 public class OneAndOneHttpErrorHandler implements HttpErrorHandler {
@@ -52,6 +55,9 @@ public class OneAndOneHttpErrorHandler implements HttpErrorHandler {
                }
                break;
             case 413:
+            case 429:
+               exception = new OneAndOneRateLimitExceededException(response);
+               break;
             case 503:
                // if nothing (default message was OK) was parsed from command executor, assume it was an 503 (Maintenance) html response.
                if (response.getMessage().equals("OK")) {
@@ -61,12 +67,25 @@ public class OneAndOneHttpErrorHandler implements HttpErrorHandler {
                }
                break;
             default:
-               exception = new HttpResponseException("A generic error occured.", command, response);
+               String message = parseMessage(response);
+               exception = message == null ? new HttpResponseException(command, response) : new HttpResponseException(
+                       command, response, message);
                break;
          }
       } finally {
          closeQuietly(response.getPayload());
          command.setException(exception);
+      }
+   }
+
+   public String parseMessage(final HttpResponse response) {
+      if (response.getPayload() == null) {
+         return null;
+      }
+      try {
+         return Strings2.toStringAndClose(response.getPayload().openStream());
+      } catch (IOException e) {
+         throw new RuntimeException(e);
       }
    }
 }
