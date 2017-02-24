@@ -19,9 +19,8 @@ package org.apache.jclouds.oneandone.rest.config;
 public final class OneAndOneProperties {
 
    public static final String POLL_PREDICATE_SERVER = "jclouds.oneandone.rest.predicate.server";
+   public static final String POLL_PREDICATE_SERVER_RUNNING = "jclouds.oneandone.rest.predicate.serveron";
    public static final String POLL_PREDICATE_PRIVATE_NETWORK = "jclouds.oneandone.rest.predicate.privatenetwork";
-   public static final String AUTH_TOKEN = "oneandone.identity";
+   public static final String POLL_PREDICATE_SNAPSHOT = "jclouds.oneandone.rest.predicate.snapshot";
    public static final String POLL_TIMEOUT = "jclouds.oneandone.rest.poll.timeout";
-   public static final String POLL_PERIOD = "jclouds.oneandone.rest.operation.poll.initial-period";
-   public static final String POLL_MAX_PERIOD = "jclouds.oneandone.rest.operation.poll.max-period";
 }

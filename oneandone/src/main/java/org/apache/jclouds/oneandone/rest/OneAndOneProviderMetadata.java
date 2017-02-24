@@ -19,11 +19,12 @@ package org.apache.jclouds.oneandone.rest;
 import com.google.auto.service.AutoService;
 import java.net.URI;
 import java.util.Properties;
-import static org.apache.jclouds.oneandone.rest.config.OneAndOneProperties.POLL_MAX_PERIOD;
-import static org.apache.jclouds.oneandone.rest.config.OneAndOneProperties.POLL_PERIOD;
 import static org.apache.jclouds.oneandone.rest.config.OneAndOneProperties.POLL_TIMEOUT;
 import static org.jclouds.Constants.PROPERTY_CONNECTION_TIMEOUT;
+import static org.jclouds.Constants.PROPERTY_MAX_RATE_LIMIT_WAIT;
 import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
+import static org.jclouds.compute.config.ComputeServiceProperties.POLL_INITIAL_PERIOD;
+import static org.jclouds.compute.config.ComputeServiceProperties.POLL_MAX_PERIOD;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 
@@ -49,12 +50,18 @@ public class OneAndOneProviderMetadata extends BaseProviderMetadata {
 
    public static Properties defaultProperties() {
       Properties properties = OneAndOneApiMetadata.defaultProperties();
+
+//      properties.setProperty(PROPERTY_REGIONS, "de,us,es,gb");
+      properties.put("jclouds.ssh.max-retries", "7");
+      properties.put("jclouds.ssh.retry-auth", "true");
+
       long defaultTimeout = 60L * 60L; // 1 hour
       properties.put(POLL_TIMEOUT, defaultTimeout);
-      properties.put(POLL_PERIOD, 1L);
-      properties.put(POLL_MAX_PERIOD, 1L * 9L);
-      properties.put(PROPERTY_SO_TIMEOUT, 60000 * 5);
+      properties.put(POLL_INITIAL_PERIOD, 5L * 10);
+      properties.put(POLL_MAX_PERIOD, 7L * 10L);
+      properties.put(PROPERTY_SO_TIMEOUT, 6000 * 5);
       properties.put(PROPERTY_CONNECTION_TIMEOUT, 60000 * 5);
+      properties.put(PROPERTY_MAX_RATE_LIMIT_WAIT, 330000);
 
       return properties;
    }
@@ -67,7 +74,7 @@ public class OneAndOneProviderMetadata extends BaseProviderMetadata {
                  .apiMetadata(new OneAndOneApiMetadata())
                  .homepage(URI.create("https://cloudpanel-api.1and1.com"))
                  .console(URI.create("https://account.1and1.com"))
-                 .endpoint("https://cloudpanel-api.1and1.com/v1")
+                 .endpoint("https://cloudpanel-api.1and1.com/v1/")
                  .defaultProperties(OneAndOneProviderMetadata.defaultProperties());
       }
 

@@ -34,6 +34,9 @@ public abstract class Image {
    public abstract String name();
 
    @Nullable
+   public abstract DataCenter datacenter();
+
+   @Nullable
    public abstract OSFamliyType osFamily();
 
    @Nullable
@@ -77,9 +80,9 @@ public abstract class Image {
 
    public abstract String creationDate();
 
-   @SerializedNames({"id", "name", "os_family", "os", "os_version", "availableSites", "architecture", "os_image_type", "type", "min_hdd_size", "licenses", "state", "description", "hdds", "server_id", "frequency", "numImages", "creation_date"})
-   public static Image create(String id, String name, OSFamliyType osFamily, OSType os, String osVersion, List<String> availableSites, int architecture, String osImageType, ImageType type, int minHddSize, List<Licenses> licenses, String state, String description, List<Hdd> hdds, String serverId, ImageFrequency frequency, int numImages, String creationDate) {
-      return new AutoValue_Image(id, name, osFamily, os, osVersion, availableSites == null ? ImmutableList.<String>of() : availableSites,
+   @SerializedNames({"id", "name", "datacenter", "os_family", "os", "os_version", "availableSites", "architecture", "os_image_type", "type", "min_hdd_size", "licenses", "state", "description", "hdds", "server_id", "frequency", "numImages", "creation_date"})
+   public static Image create(String id, String name, DataCenter datacenter, OSFamliyType osFamily, OSType os, String osVersion, List<String> availableSites, int architecture, String osImageType, ImageType type, int minHddSize, List<Licenses> licenses, String state, String description, List<Hdd> hdds, String serverId, ImageFrequency frequency, int numImages, String creationDate) {
+      return new AutoValue_Image(id, name, datacenter, osFamily, os, osVersion, availableSites == null ? ImmutableList.<String>of() : availableSites,
               architecture, osImageType, type, minHddSize, licenses == null ? ImmutableList.<Licenses>of() : licenses, state,
               description, hdds == null ? ImmutableList.<Hdd>of() : hdds, serverId, frequency, numImages, creationDate);
    }

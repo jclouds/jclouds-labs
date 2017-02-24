@@ -25,8 +25,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.apache.jclouds.oneandone.rest.OneAndOneApi;
 import org.apache.jclouds.oneandone.rest.OneAndOneProviderMetadata;
-import org.apache.jclouds.oneandone.rest.config.OneAndOneConstants;
-import org.apache.jclouds.oneandone.rest.config.OneAndOneProperties;
 import org.apache.jclouds.oneandone.rest.domain.Hardware;
 import org.apache.jclouds.oneandone.rest.domain.Hdd;
 import org.apache.jclouds.oneandone.rest.domain.PrivateNetwork;
@@ -35,6 +33,8 @@ import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.apache.jclouds.oneandone.rest.domain.Vpn;
 import org.apache.jclouds.oneandone.rest.ids.ServerPrivateNetworkRef;
 import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.compute.reference.ComputeServiceConstants.PollPeriod;
+import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
 import org.jclouds.util.Predicates2;
 import static org.testng.Assert.assertTrue;
 
@@ -43,24 +43,19 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
    Predicate<Server> waitUntilServerReady;
    Predicate<ServerPrivateNetworkRef> waitUntilPrivateNetworkReady;
    Predicate<Vpn> waitUntilVPNReady;
+   Timeouts timeouts;
+   PollPeriod pollPeriod;
    private static final OneAndOneProviderMetadata METADATA = new OneAndOneProviderMetadata();
-   OneAndOneConstants constants;
 
    public BaseOneAndOneLiveTest() {
       provider = "oneandone";
    }
 
    @Override
-   protected Properties setupProperties() {
-      Properties props = super.setupProperties();
-      setIfTestSystemPropertyPresent(props, OneAndOneProperties.AUTH_TOKEN);
-      return props;
-   }
-
-   @Override
    protected OneAndOneApi create(Properties props, Iterable<Module> modules) {
       Injector injector = newBuilder().modules(modules).overrides(props).buildInjector();
-      constants = injector.getInstance(OneAndOneConstants.class);
+      timeouts = injector.getInstance(Timeouts.class);
+      pollPeriod = injector.getInstance(PollPeriod.class);
       Predicate<Server> serverAvailableCheck = new Predicate<Server>() {
          @Override
          public boolean apply(Server currentServer) {
@@ -91,9 +86,9 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
             return result.state() == Types.GenericState.ACTIVE;
          }
       };
-      waitUntilVPNReady = Predicates2.retry(vpnAvailableCheck, constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
-      waitUntilPrivateNetworkReady = Predicates2.retry(privateNetworkAvailableCheck, constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
-      waitUntilServerReady = Predicates2.retry(serverAvailableCheck, constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
+      waitUntilVPNReady = Predicates2.retry(vpnAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
+      waitUntilPrivateNetworkReady = Predicates2.retry(privateNetworkAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
+      waitUntilServerReady = Predicates2.retry(serverAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
 
       return injector.getInstance(OneAndOneApi.class);
    }

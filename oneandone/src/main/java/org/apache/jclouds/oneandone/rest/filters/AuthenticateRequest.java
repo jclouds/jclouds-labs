@@ -35,12 +35,12 @@ public class AuthenticateRequest implements HttpRequestFilter {
    @Inject
    AuthenticateRequest(@Provider Supplier<Credentials> splr) {
       authToken = splr.get();
-      checkNotNull(authToken.identity, "credential returned null");
+      checkNotNull(authToken.credential, "credential returned null");
 
    }
 
    @Override
    public HttpRequest filter(HttpRequest request) throws HttpException {
-      return request.toBuilder().replaceHeader(AuthHeaders.AUTH_TOKEN, authToken.identity).build();
+      return request.toBuilder().replaceHeader(AuthHeaders.AUTH_TOKEN, authToken.credential).build();
    }
 }

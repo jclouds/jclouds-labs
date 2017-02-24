@@ -1,0 +1,48 @@
+{
+    "id": "C68F3BB07BCBE6191F0ACE996AE4F4F5",
+    "cloudpanel_id": "14DD4DD",
+    "name": "Docs\/Content Test Server: CentOS 7",
+    "description": "",
+    "datacenter": {
+        "id": "908DC2072407C94C8054610AD5A53B8C",
+        "country_code": "usa",
+        "location": "us"
+    },
+    "creation_date": "2016-05-05T08:51:48+00:00",
+    "first_password": "Wb3MvEJHOv",
+    "status": {
+        "state": "POWERED_ON",
+        "percent": null
+    },
+    "hardware": {
+        "fixed_instance_size_id": "3D4C49EAEDD42FBC23DB58FE3DEF464F",
+        "vcore": 1,
+        "cores_per_processor": 1,
+        "ram": 0.5,
+        "hdds": [{
+                "id": "DD4587ABB3433F93F895638054899F91",
+                "size": 30,
+                "is_main": true
+            }]
+    },
+    "image": {
+        "id": "B5F778B85C041347BCDCFC3172AB3F3C",
+        "name": "centos7-64std"
+    },
+    "dvd": null,
+    "snapshot": null,
+    "ips": [{
+            "id": "5B0BB42CBAF62A454B25D21545CD9ACD",
+            "ip": "70.35.199.18",
+            "type": "IPV4",
+            "reverse_dns": null,
+            "firewall_policy": null,
+            "load_balancers": [{
+                    "id": "13C3F75BA55AF28B8B2B4E508786F48B",
+                    "name": "My Load Balancer 1"
+                }]
+        }],
+    "alerts": [],
+    "monitoring_policy": null,
+    "private_networks": null
+}

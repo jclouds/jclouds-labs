@@ -23,12 +23,11 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Named;
 import org.apache.jclouds.oneandone.rest.OneAndOneApi;
 import static org.apache.jclouds.oneandone.rest.config.OneAndOneProperties.POLL_PREDICATE_PRIVATE_NETWORK;
-import static org.apache.jclouds.oneandone.rest.config.OneAndOneProperties.POLL_PREDICATE_SERVER;
 import org.apache.jclouds.oneandone.rest.domain.PrivateNetwork;
-import org.apache.jclouds.oneandone.rest.domain.Server;
 import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.apache.jclouds.oneandone.rest.handlers.OneAndOneHttpErrorHandler;
 import org.apache.jclouds.oneandone.rest.ids.ServerPrivateNetworkRef;
+import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
@@ -57,40 +56,10 @@ public class OneAndOneHttpApiModule extends HttpApiModule<OneAndOneApi> {
 
    @Provides
    @Named(POLL_PREDICATE_PRIVATE_NETWORK)
-   Predicate<ServerPrivateNetworkRef> providePrivateNetworkReadyPredicate(final OneAndOneApi api, OneAndOneConstants constants) {
+   Predicate<ServerPrivateNetworkRef> providePrivateNetworkReadyPredicate(final OneAndOneApi api, ComputeServiceConstants.Timeouts timeouts, ComputeServiceConstants.PollPeriod pollPeriod) {
       return retry(new PrivateNetworkReadyPredicate(
               api),
-              constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
-   }
-
-   @Provides
-   @Named(POLL_PREDICATE_SERVER)
-   Predicate<Server> provideServerReadyPredicate(final OneAndOneApi api, OneAndOneConstants constants) {
-      return retry(new ServerReadyPredicate(
-              api),
-              constants.pollTimeout(), constants.pollPeriod(), constants.pollMaxPeriod(), TimeUnit.SECONDS);
-   }
-
-   static class ServerReadyPredicate implements Predicate<Server> {
-
-      private final OneAndOneApi api;
-
-      public ServerReadyPredicate(OneAndOneApi api) {
-         this.api = checkNotNull(api, "api must not be null");
-      }
-
-      @Override
-      public boolean apply(Server server) {
-         checkNotNull(server, "Server");
-         server = api.serverApi().get(server.id());
-         if ((server.status().state() != Types.ServerState.POWERED_OFF
-                 && server.status().state() != Types.ServerState.POWERED_ON)
-                 || server.status().percent() != 0) {
-            return false;
-         } else {
-            return true;
-         }
-      }
+              timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
    }
 
    static class PrivateNetworkReadyPredicate implements Predicate<ServerPrivateNetworkRef> {

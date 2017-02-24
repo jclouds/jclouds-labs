@@ -14,25 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.oneandone.rest.domain;
+package org.apache.jclouds.oneandone.rest.compute.function;
 
-import com.google.auto.value.AutoValue;
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
+import com.google.common.base.Function;
+import static com.google.common.base.Preconditions.checkNotNull;
+import org.apache.jclouds.oneandone.rest.domain.Hdd;
+import org.jclouds.compute.domain.Volume;
+import org.jclouds.compute.domain.VolumeBuilder;
 
-@AutoValue
-public abstract class DataCenter {
-
-   public abstract String id();
-
-   @Nullable
-   public abstract String countryCode();
-
-   @Nullable
-   public abstract String location();
-
-   @SerializedNames({"id", "country_code", "location"})
-   public static DataCenter create(String id, String countryCode, String location) {
-      return new AutoValue_DataCenter(id, countryCode, location);
+public class HddToVolume implements Function<Hdd, Volume> {
+   
+   @Override
+   public Volume apply(Hdd volume) {
+      checkNotNull(volume, "Null storage");
+      
+      return new VolumeBuilder()
+              .id(volume.id())
+              .size((float) volume.size())
+              .durable(true)
+              .bootDevice(volume.isMain())
+              .type(Volume.Type.LOCAL)
+              .build();
+      
    }
 }

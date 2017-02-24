@@ -242,4 +242,22 @@ public class Types {
          return Enums.getIfPresent(ProcessAlertType.class, v).or(UNRECOGNIZED);
       }
    }
+
+   public enum ApplianceType {
+
+      IMAGE, MY_IMAGE, ISO, Null, UNRECOGNIZED;
+
+      public static ApplianceType fromValue(String v) {
+         return Enums.getIfPresent(ApplianceType.class, v).or(UNRECOGNIZED);
+      }
+   }
+
+   public enum OSImageType {
+      Standard, Minimal, Personal, ISO_OS, ISO_TOOL, NULL, UNRECOGNIZED;
+
+      public static OSImageType fromValue(String v) {
+         return Enums.getIfPresent(OSImageType.class, v).or(UNRECOGNIZED);
+      }
+
+   }
 }

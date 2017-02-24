@@ -19,10 +19,14 @@ package org.apache.jclouds.oneandone.rest.domain;
 import com.google.auto.value.AutoValue;
 import java.util.List;
 import org.apache.jclouds.oneandone.rest.domain.Hdd.CreateHdd;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Hardware {
+
+   @Nullable
+   public abstract String fixedInstanceSizeId();
 
    public abstract double vcore();
 
@@ -32,9 +36,9 @@ public abstract class Hardware {
 
    public abstract List<Hdd> hdds();
 
-   @SerializedNames({"vcore", "cores_per_processor", "ram", "hdds"})
-   public static Hardware create(double vcore, double coresPerProcessor, double ram, List<Hdd> hdds) {
-      return new AutoValue_Hardware(vcore, coresPerProcessor, ram, hdds);
+   @SerializedNames({"fixed_instance_size_id", "vcore", "cores_per_processor", "ram", "hdds"})
+   public static Hardware create(String fixedInstanceSizeId, double vcore, double coresPerProcessor, double ram, List<Hdd> hdds) {
+      return new AutoValue_Hardware(fixedInstanceSizeId, vcore, coresPerProcessor, ram, hdds);
    }
 
    @AutoValue

@@ -742,6 +742,7 @@ public class ServerApiMockTest extends BaseOneAndOneApiMockTest {
               null,
               null,
               null,
+              null,
               null));
 
       assertNotNull(response);
