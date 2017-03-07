@@ -14,25 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jclouds.profitbricks.rest.compute;
+package org.apache.jclouds.profitbricks.rest.compute.extensions;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
-import java.util.Set;
 import org.apache.jclouds.profitbricks.rest.config.ProfitBricksRateLimitModule;
-import org.jclouds.compute.internal.BaseTemplateBuilderLiveTest;
+import org.jclouds.compute.extensions.internal.BaseImageExtensionLiveTest;
+import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
-@Test(groups = "live", testName = "ProfitBricksTemplateBuilderLiveTest", singleThreaded = true)
-public class ProfitBricksTemplateBuilderLiveTest extends BaseTemplateBuilderLiveTest {
+@Test(groups = "live", singleThreaded = true, testName = "ProfitBricksImageExtensionLiveTest")
+public class ProfitBricksImageExtensionLiveTest extends BaseImageExtensionLiveTest {
 
-   public ProfitBricksTemplateBuilderLiveTest() {
-      this.provider = "profitbricks-rest";
-   }
-
-   @Override
-   protected Set<String> getIso3166Codes() {
-      return ImmutableSet.of("DE-BW", "DE-HE", "US-NV");
+   public ProfitBricksImageExtensionLiveTest() {
+      provider = "profitbricks-rest";
    }
 
    @Override
@@ -42,4 +37,10 @@ public class ProfitBricksTemplateBuilderLiveTest extends BaseTemplateBuilderLive
       modules.add(new ProfitBricksRateLimitModule());
       return modules.build();
    }
+
+   @Override
+   protected Module getSshModule() {
+      return new SshjSshClientModule();
+   }
+
 }

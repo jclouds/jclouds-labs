@@ -438,7 +438,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
          logger.trace(">> found snapshot [%s]", snapshot.properties().name());
          return snapshot;
       }
-      throw new ResourceNotFoundException("No image/snapshot with id '" + id + "' was found");
+      return null;
    }
 
    @Override

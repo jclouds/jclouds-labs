@@ -17,7 +17,6 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
-
 import java.net.URI;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.IpBlock;
@@ -59,7 +58,7 @@ public class IpblockApiLiveTest extends BaseProfitBricksLiveTest {
    }
 
    @Test
-   public void testGetNic() {
+   public void testGet() {
       IpBlock ipBlock = ipBlockApi().get(testIpBlock.id());
 
       assertNotNull(ipBlock);
