@@ -32,6 +32,7 @@ import org.apache.jclouds.profitbricks.rest.ProfitBricksApi;
 import org.apache.jclouds.profitbricks.rest.compute.ProfitBricksComputeServiceAdapter;
 import org.apache.jclouds.profitbricks.rest.compute.concurrent.ProvisioningJob;
 import org.apache.jclouds.profitbricks.rest.compute.concurrent.ProvisioningManager;
+import org.apache.jclouds.profitbricks.rest.compute.extensions.ProfitBricksImageExtension;
 import org.apache.jclouds.profitbricks.rest.compute.function.ProvisionableToImage;
 import org.apache.jclouds.profitbricks.rest.compute.function.ServerInDataCenterToNodeMetadata;
 import org.apache.jclouds.profitbricks.rest.compute.function.VolumeToVolume;
@@ -62,6 +63,7 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Volume;
 import org.jclouds.compute.domain.internal.ArbitraryCpuRamTemplateBuilderImpl;
 import org.jclouds.compute.domain.internal.TemplateBuilderImpl;
+import org.jclouds.compute.extensions.ImageExtension;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.domain.Location;
 import org.jclouds.functions.IdentityFunction;
@@ -86,9 +88,9 @@ public class ProfitBricksComputeServiceContextModule extends
 
       bind(new TypeLiteral<ComputeServiceAdapter<ServerInDataCenter, Hardware, Provisionable, Location>>() {
       }).to(ProfitBricksComputeServiceAdapter.class);
-      
+
       bind(TemplateBuilderImpl.class).to(ArbitraryCpuRamTemplateBuilderImpl.class);
-      
+
       bind(new TypeLiteral<Function<ServerInDataCenter, NodeMetadata>>() {
       }).to(ServerInDataCenterToNodeMetadata.class);
 
@@ -100,6 +102,9 @@ public class ProfitBricksComputeServiceContextModule extends
 
       bind(new TypeLiteral<Function<Hardware, Hardware>>() {
       }).to(Class.class.cast(IdentityFunction.class));
+
+      bind(new TypeLiteral<ImageExtension>() {
+      }).to(ProfitBricksImageExtension.class);
    }
 
    @Provides
