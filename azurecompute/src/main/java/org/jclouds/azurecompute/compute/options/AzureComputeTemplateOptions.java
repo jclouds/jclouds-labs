@@ -54,6 +54,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
    protected String networkSecurityGroupName;
    protected String reservedIPName;
    protected Boolean provisionGuestAgent;
+   protected Boolean winrmUseHttps;
 
    @Override
    public AzureComputeTemplateOptions clone() {
@@ -75,6 +76,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
          eTo.storageAccountType(storageAccountType);
          eTo.reservedIPName(reservedIPName);
          eTo.provisionGuestAgent(provisionGuestAgent);
+         eTo.winrmUseHttps(winrmUseHttps);
       }
    }
 
@@ -94,7 +96,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       if (subnetNames != null ? !subnetNames.equals(that.subnetNames) : that.subnetNames != null) return false;
       if (virtualNetworkName != null ? !virtualNetworkName.equals(that.virtualNetworkName) : that.virtualNetworkName != null) return false;
       if (provisionGuestAgent != null ? !provisionGuestAgent.equals(that.provisionGuestAgent) : that.provisionGuestAgent != null) return false;
-
+      if (winrmUseHttps != null ? !winrmUseHttps.equals(that.winrmUseHttps) : that.winrmUseHttps != null) return false;
       return true;
    }
 
@@ -164,6 +166,11 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
       return this;
    }
 
+   public AzureComputeTemplateOptions winrmUseHttps(@Nullable Boolean winrmUseHttps) {
+      this.winrmUseHttps = winrmUseHttps;
+      return this;
+   }
+
    public String getVirtualNetworkName() {
       return virtualNetworkName;
    }
@@ -190,6 +197,10 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
 
    public Boolean getProvisionGuestAgent() {
       return provisionGuestAgent;
+   }
+
+   public Boolean getWinrmUseHttps() {
+      return winrmUseHttps;
    }
 
    public static class Builder {

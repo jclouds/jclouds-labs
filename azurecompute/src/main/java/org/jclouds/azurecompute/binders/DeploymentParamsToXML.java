@@ -49,6 +49,7 @@ public final class DeploymentParamsToXML implements Binder {
 
          if (params.os() == OSImage.Type.WINDOWS) {
             XMLBuilder configBuilder = configSetsBuilder.e("ConfigurationSet"); // Windows
+            final String listenerProtocol = params.winrmUseHttps() != null && params.winrmUseHttps() ? "Https" : "Http";
             configBuilder.e("ConfigurationSetType").t("WindowsProvisioningConfiguration").up()
                     .e("ComputerName").t(params.name()).up()
                     .e("AdminPassword").t(params.password()).up()
@@ -66,7 +67,7 @@ public final class DeploymentParamsToXML implements Binder {
                     .e("WinRM")
                     .e("Listeners")
                     .e("Listener")
-                    .e("Protocol").t("http").up().up().up().up()
+                    .e("Protocol").t(listenerProtocol).up().up().up().up()
                     .e("AdminUsername").t(params.username()).up()
                     .e("AdminPassword").t(params.username()).up()
                     .up(); // Windows ConfigurationSet
