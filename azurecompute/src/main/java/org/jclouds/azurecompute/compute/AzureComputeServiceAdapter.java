@@ -124,7 +124,7 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
          externalEndpoints.add(ExternalEndpoint.inboundTcpToLocalPort(inboundPort, inboundPort));
       }
 
-      final DeploymentParams params = DeploymentParams.builder()
+      final DeploymentParams.Builder paramsBuilder = DeploymentParams.builder()
               .name(name)
               .os(os)
               .username(loginUser)
@@ -135,8 +135,11 @@ public class AzureComputeServiceAdapter implements ComputeServiceAdapter<Deploym
               .externalEndpoints(externalEndpoints)
               .virtualNetworkName(templateOptions.getVirtualNetworkName())
               .subnetNames(templateOptions.getSubnetNames())
-              .provisionGuestAgent(templateOptions.getProvisionGuestAgent())
-              .build();
+              .provisionGuestAgent(templateOptions.getProvisionGuestAgent());
+      if (os.equals(OSImage.Type.WINDOWS)) {
+         paramsBuilder.winrmUseHttps(templateOptions.getWinrmUseHttps());
+      }
+      final DeploymentParams params = paramsBuilder.build();
 
       message = String.format("Creating a deployment with params '%s' ...", params);
       logger.debug(message);

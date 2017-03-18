@@ -136,6 +136,13 @@ public abstract class DeploymentParams {
    @Nullable
    public abstract Boolean provisionGuestAgent();
 
+   /**
+    * Optional. Indicates whether Windows VM should be provisioned with Https WinRm listener.
+    * By default it will use http listener.
+    */
+   @Nullable
+   public abstract Boolean winrmUseHttps();
+
    public static Builder builder() {
       return new AutoValue_DeploymentParams.Builder()
               .externalEndpoints(ImmutableSet.<ExternalEndpoint> of())
@@ -150,6 +157,7 @@ public abstract class DeploymentParams {
       public abstract Builder size(RoleSize.Type roleSize);
       public abstract Builder username(String username);
       public abstract Builder password(String password);
+      public abstract Builder winrmUseHttps(Boolean useHttps);
       public abstract Builder sourceImageName(String sourceImageName);
       public abstract Builder mediaLink(URI mediaLink);
       public abstract Builder os(OSImage.Type os);
