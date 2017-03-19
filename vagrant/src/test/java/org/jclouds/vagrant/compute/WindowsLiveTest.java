@@ -20,6 +20,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.jclouds.compute.ComputeService;
@@ -33,6 +34,7 @@ import org.jclouds.compute.internal.BaseComputeServiceContextLiveTest;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.vagrant.internal.BoxConfig;
 import org.jclouds.vagrant.reference.VagrantConstants;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Optional;
@@ -70,7 +72,7 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
    }
 
    private String getImageId() {
-      return "boxcutter/eval-win7x86-enterprise";
+      return "boxcutter/eval-win2012r2-standard";
    }
 
    protected Template buildTemplate(TemplateBuilder templateBuilder) {
@@ -79,6 +81,8 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
 
    @Test
    public void testGet() throws Exception {
+      skipIfImageNotPresent();
+
       Set<? extends NodeMetadata> nodes = client.createNodesInGroup("vagrant-win", 1, buildTemplate(templateBuilder()));
       NodeMetadata node = Iterables.getOnlyElement(nodes);
       OperatingSystem os = node.getOperatingSystem();
@@ -95,6 +99,8 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
 
    @Test
    public void testBoxConfig() {
+      skipIfImageNotPresent();
+
       Image image = view.getComputeService().getImage(getImageId());
 
       BoxConfig.Factory boxConfigFactory = new BoxConfig.Factory();
@@ -102,5 +108,12 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
 
       assertEquals(boxConfig.getStringKey(".vm.communicator"), Optional.of("winrm"));
       assertEquals(boxConfig.getKey(VagrantConstants.KEY_VM_GUEST), Optional.of(VagrantConstants.VM_GUEST_WINDOWS));
+   }
+
+   private void skipIfImageNotPresent() {
+      Image image = view.getComputeService().getImage(getImageId());
+      if (image == null) {
+         throw new SkipException("Image " + getImageId() + " not available. Skipping windows tests.");
+      }
    }
 }

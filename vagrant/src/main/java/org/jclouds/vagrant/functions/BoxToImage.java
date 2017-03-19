@@ -41,6 +41,10 @@ public class BoxToImage implements Function<Box, Image> {
 
    @Override
    public Image apply(Box input) {
+      if (input == null) {
+         return null;
+      }
+
       OperatingSystem os = new OperatingSystem(inferOsFamily(input), input.getName(), input.getVersion(), null, input.getName(), true);
       return new ImageBuilder()
             .ids(input.getName())
