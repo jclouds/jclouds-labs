@@ -89,7 +89,24 @@ Testing
 -----------
 
 ```
+vagrant box add ubuntu/xenial64
+vagrant box add ubuntu/trusty64
+# Refer to the "Windows boxes" section below on how to create the "boxcutter/eval-win7x86-enterprise" image (optional)
 mvn clean install -Plive
+```
+
+Windows boxes
+-----------
+
+The easiest way to create a Windows Vagrant test image is using the [boxcutter-windows](https://github.com/boxcutter/windows)
+packer templates.
+
+```
+brew install packer # or the corresponding alternative for your distribution
+git clone https://github.com/boxcutter/windows.git boxcutter-windows
+cd boxcutter-windows
+make virtualbox/eval-win2012r2-standard
+vagrant box add boxcutter/eval-win2012r2-standard ./box/virtualbox/eval-win2012r2-standard-nocm-1.0.4.box
 ```
 
 Cleaning up

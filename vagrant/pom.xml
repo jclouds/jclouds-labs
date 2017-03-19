@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>vagrant</artifactId>
-  <name>Vagrant provider</name>
+  <name>jclouds Vagrant provider</name>
   <packaging>bundle</packaging>
 
   <properties>

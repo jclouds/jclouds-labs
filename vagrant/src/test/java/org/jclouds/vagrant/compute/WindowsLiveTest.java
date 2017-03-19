@@ -20,7 +20,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.jclouds.compute.ComputeService;
@@ -44,8 +43,8 @@ import com.google.common.collect.Iterables;
  * Building the image:
  *   $ git clone https://github.com/boxcutter/windows.git boxcutter-windows
  *   $ cd boxcutter-windows
- *   $ make virtualbox/eval-win7x86-enterprise
- *   $ vagrant box add boxcutter/eval-win7x86-enterprise box/virtualbox/eval-win7x86-enterprise-nocm-1.0.4.box
+ *   $ make virtualbox/eval-win2012r2-standard
+ *   $ vagrant box add boxcutter/eval-win2012r2-standard ./box/virtualbox/eval-win2012r2-standard-nocm-1.0.4.box
  */
 @Test(groups = "live", singleThreaded = true, enabled = true, testName = "WindowsLiveTest")
 public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
@@ -60,6 +59,7 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
    protected void initializeContext() {
       super.initializeContext();
       client = view.getComputeService();
+      skipIfImageNotPresent();
    }
 
    protected TemplateBuilder templateBuilder() {
@@ -81,8 +81,6 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
 
    @Test
    public void testGet() throws Exception {
-      skipIfImageNotPresent();
-
       Set<? extends NodeMetadata> nodes = client.createNodesInGroup("vagrant-win", 1, buildTemplate(templateBuilder()));
       NodeMetadata node = Iterables.getOnlyElement(nodes);
       OperatingSystem os = node.getOperatingSystem();
@@ -99,8 +97,6 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
 
    @Test
    public void testBoxConfig() {
-      skipIfImageNotPresent();
-
       Image image = view.getComputeService().getImage(getImageId());
 
       BoxConfig.Factory boxConfigFactory = new BoxConfig.Factory();
@@ -111,7 +107,7 @@ public class WindowsLiveTest extends BaseComputeServiceContextLiveTest {
    }
 
    private void skipIfImageNotPresent() {
-      Image image = view.getComputeService().getImage(getImageId());
+      Image image = client.getImage(getImageId());
       if (image == null) {
          throw new SkipException("Image " + getImageId() + " not available. Skipping windows tests.");
       }
