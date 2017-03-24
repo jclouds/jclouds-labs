@@ -14,36 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.dimensiondata.cloudcontrol.domain;
+package org.jclouds.dimensiondata.cloudcontrol.internal;
 
-import com.google.auto.value.AutoValue;
-import org.jclouds.json.SerializedNames;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
+import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApiMetadata;
+import org.testng.annotations.Test;
 
-@AutoValue
-public abstract class RoleType {
-   public abstract String name();
+@Test(groups = "live")
+public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<DimensionDataCloudControlApi> {
 
-   RoleType() {
+   public BaseDimensionDataCloudControlApiLiveTest() {
+      provider = "dimensiondata-cloudcontrol";
    }
 
-   public static Builder builder() {
-      return new AutoValue_RoleType.Builder();
+   @Override
+   protected ApiMetadata createApiMetadata() {
+      return new DimensionDataCloudControlApiMetadata();
    }
-
-   @SerializedNames({ "role" })
-   public static RoleType create(String name) {
-      return builder().name(name).build();
-   }
-
-   public abstract Builder toBuilder();
-
-   @AutoValue.Builder
-   public abstract static class Builder {
-
-      public abstract Builder name(String name);
-
-      public abstract RoleType build();
-   }
-
 }
-

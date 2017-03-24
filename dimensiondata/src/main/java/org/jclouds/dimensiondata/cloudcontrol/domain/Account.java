@@ -17,15 +17,16 @@
 package org.jclouds.dimensiondata.cloudcontrol.domain;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
+import java.util.List;
+
 @AutoValue
 public abstract class Account {
-   public abstract String userName();
 
-   @Nullable
-   public abstract String password();
+   public abstract String userName();
 
    public abstract String fullName();
 
@@ -36,6 +37,12 @@ public abstract class Account {
    public abstract String emailAddress();
 
    @Nullable
+   public abstract List<RoleType> roles();
+
+   @Nullable
+   public abstract AccountPhoneNumber phone();
+
+   @Nullable
    public abstract String department();
 
    @Nullable
@@ -44,36 +51,31 @@ public abstract class Account {
    @Nullable
    public abstract String customDefined2();
 
-   public abstract String orgId();
+   public abstract AccountOrganization organization();
 
    @Nullable
-   public abstract Roles roles();
+   public abstract String state();
 
    Account() {
+   }
+
+   @SerializedNames({ "userName", "fullName", "firstName", "lastName", "emailAddress", "roles", "phone", "department",
+         "customDefined1", "customDefined2", "organization", "state" })
+   public static Account create(String userName, String fullName, String firstName, String lastName,
+         String emailAddress, List<RoleType> roles, AccountPhoneNumber phone, String department, String customDefined1,
+         String customDefined2, AccountOrganization organization, String state) {
+      return builder().userName(userName).fullName(fullName).firstName(firstName).lastName(lastName)
+            .emailAddress(emailAddress).roles(roles).phone(phone).department(department).customDefined1(customDefined1)
+            .customDefined2(customDefined2).organization(organization).state(state).build();
    }
 
    public static Builder builder() {
       return new AutoValue_Account.Builder();
    }
 
-   @SerializedNames({ "userName", "password", "fullName", "firstName", "lastName", "emailAddress", "department",
-         "customDefined1", "customDefined2", "orgId", "roles" })
-   public static Account create(String userName, String password, String fullName, String firstName, String lastName,
-         String emailAddress, String department, String customDefined1, String customDefined2, String orgId,
-         Roles roles) {
-      return builder().userName(userName).password(password).fullName(fullName).firstName(firstName).lastName(lastName)
-            .emailAddress(emailAddress).department(department).customDefined1(customDefined1)
-            .customDefined2(customDefined2).orgId(orgId).roles(roles).build();
-   }
-
-   public abstract Builder toBuilder();
-
    @AutoValue.Builder
    public abstract static class Builder {
-
-      public abstract Builder userName(String userName);
-
-      public abstract Builder password(String password);
+      public abstract Builder userName(String username);
 
       public abstract Builder fullName(String fullName);
 
@@ -83,17 +85,117 @@ public abstract class Account {
 
       public abstract Builder emailAddress(String emailAddress);
 
+      public abstract Builder roles(List<RoleType> roles);
+
+      public abstract Builder phone(AccountPhoneNumber phone);
+
       public abstract Builder department(String department);
 
       public abstract Builder customDefined1(String customDefined1);
 
       public abstract Builder customDefined2(String customDefined2);
 
-      public abstract Builder orgId(String orgId);
+      public abstract Builder organization(AccountOrganization organization);
 
-      public abstract Builder roles(Roles roles);
+      public abstract Builder state(String state);
 
-      public abstract Account build();
+      abstract Account autoBuild();
+
+      abstract List<RoleType> roles();
+
+      public Account build() {
+         roles(roles() != null ? ImmutableList.copyOf(roles()) : null);
+         return autoBuild();
+      }
+
    }
 
+   @AutoValue
+   public abstract static class AccountOrganization {
+
+      public abstract String id();
+
+      public abstract String name();
+
+      public abstract String homeGeoName();
+
+      public abstract String homeGeoApiHost();
+
+      public abstract String homeGeoId();
+
+      @SerializedNames({ "id", "name", "homeGeoName", "homeGeoApiHost", "homeGeoId" })
+      public static AccountOrganization create(String id, String name, String homeGeoName, String homeGeoApiHost,
+            String homeGeoId) {
+         return builder().id(id).name(name).homeGeoName(homeGeoName).homeGeoApiHost(homeGeoApiHost).homeGeoId(homeGeoId)
+               .build();
+      }
+
+      public static Builder builder() {
+         return new AutoValue_Account_AccountOrganization.Builder();
+      }
+
+      @AutoValue.Builder
+      public abstract static class Builder {
+         public abstract Builder id(String id);
+
+         public abstract Builder name(String name);
+
+         public abstract Builder homeGeoName(String homeGeoName);
+
+         public abstract Builder homeGeoApiHost(String homeGeoApiHost);
+
+         public abstract Builder homeGeoId(String homeGeoId);
+
+         public abstract AccountOrganization build();
+      }
+   }
+
+   @AutoValue
+   public abstract static class AccountPhoneNumber {
+
+      public abstract String countryCode();
+
+      public abstract String number();
+
+      @SerializedNames({ "countryCode", "number" })
+      public static AccountPhoneNumber create(String countryCode, String number) {
+         return builder().countryCode(countryCode).number(number).build();
+      }
+
+      public static Builder builder() {
+         return new AutoValue_Account_AccountPhoneNumber.Builder();
+      }
+
+      @AutoValue.Builder
+      public abstract static class Builder {
+         public abstract Builder countryCode(String countryCode);
+
+         public abstract Builder number(String number);
+
+         public abstract AccountPhoneNumber build();
+      }
+
+   }
+
+   @AutoValue
+   public abstract static class RoleType {
+
+      public abstract String name();
+
+      @SerializedNames({ "role" })
+      public static RoleType create(String name) {
+         return builder().name(name).build();
+      }
+
+      public static Builder builder() {
+         return new AutoValue_Account_RoleType.Builder();
+      }
+
+      @AutoValue.Builder
+      public abstract static class Builder {
+         public abstract Builder name(String name);
+
+         public abstract RoleType build();
+      }
+   }
 }

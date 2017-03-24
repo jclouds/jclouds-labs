@@ -1,0 +1,26 @@
+{
+  "userName": "devlab1-online-vendor-devuser1",
+  "fullName": "Donal Lunny",
+  "firstName": "Donal",
+  "lastName": "Lunny",
+  "emailAddress": "devlab1-online-vendor-devuser1@opsource.net",
+  "role": [
+    "storage",
+    "primary administrator"
+  ],
+  "phone": {
+    "countryCode": "1",
+    "number": "1234567"
+  },
+  "department": "Marketing",
+  "customDefined1": "custom defined 1",
+  "customDefined2": "custom defined 2",
+  "organization": {
+    "name": "Eng Customer of DevLab1-homed online sign-up Vendor",
+    "homeGeoName": "DevLab1Geo1",
+    "homeGeoApiHost": "apidevlab1.opsourcecloud.net",
+    "homeGeoId": "DEVLAB1GEO1",
+    "id": "6ac1e746-b1ea-4da5-a24e-caf1a978789d"
+  },
+  "state": "NORMAL"
+}
