@@ -14,46 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.dimensiondata.cloudcontrol.domain;
+package org.jclouds.dimensiondata.cloudcontrol.domain.internal;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableList;
+import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
-import java.util.List;
-
 @AutoValue
-public abstract class Roles {
-   public abstract List<RoleType> role();
+public abstract class ServerWithExternalIp {
 
-   Roles() {
+   ServerWithExternalIp() {
    }
 
    public static Builder builder() {
-      return new AutoValue_Roles.Builder();
+      return new AutoValue_ServerWithExternalIp.Builder();
    }
 
-   @SerializedNames({ "role" })
-   public static Roles create(List<RoleType> role) {
-      return builder().role(role).build();
+   public abstract Server server();
+
+   @Nullable
+   public abstract String externalIp();
+
+   @SerializedNames({ "server", "externalIp" })
+   public static ServerWithExternalIp create(Server server, String externalIp) {
+      return builder().server(server).externalIp(externalIp).build();
    }
 
    public abstract Builder toBuilder();
 
    @AutoValue.Builder
    public abstract static class Builder {
+      public abstract Builder server(Server server);
 
-      public abstract Builder role(List<RoleType> role);
+      public abstract Builder externalIp(String externalIp);
 
-      abstract Roles autoBuild();
-
-      abstract List<RoleType> role();
-
-      public Roles build() {
-         role(role() != null ? ImmutableList.copyOf(role()) : ImmutableList.<RoleType>of());
-         return autoBuild();
-      }
+      public abstract ServerWithExternalIp build();
    }
-
 }
-

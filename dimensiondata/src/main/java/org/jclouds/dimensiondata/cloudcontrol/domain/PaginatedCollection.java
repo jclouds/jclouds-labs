@@ -87,8 +87,9 @@ public class PaginatedCollection<T> extends IterableWithMarker<T> {
 
    @Override
    public Optional<Object> nextMarker() {
-      if (totalCount < pageSize)
+      if (totalCount < pageSize) {
          return Optional.absent();
+      }
 
       if ((float) pageNumber < ((float) totalCount / (float) pageSize)) {
          return Optional.of(toPaginationOptions(pageNumber + 1));
