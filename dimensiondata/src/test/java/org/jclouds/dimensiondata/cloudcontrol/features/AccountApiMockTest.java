@@ -16,7 +16,6 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol.features;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Account;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlMockTest;
 import org.testng.annotations.Test;
@@ -34,12 +33,12 @@ public class AccountApiMockTest extends BaseDimensionDataCloudControlMockTest {
       server.enqueue(jsonResponse("/account.json"));
       Account account = api.getAccountApi().getMyAccount();
       assertNotNull(account);
-      assertSent("GET", "/caas/2.4/user/myUser");
+      assertSent(HttpMethod.GET, "/caas/2.4/user/myUser");
    }
 
    @Test
    public void testGetAccount_404() throws Exception {
-      server.enqueue(new MockResponse().setStatus("HTTP/1.1 404 Not Found"));
+      server.enqueue(response404());
       Account account = api.getAccountApi().getMyAccount();
       assertNull(account);
       assertSent(HttpMethod.GET, "/caas/2.4/user/myUser");

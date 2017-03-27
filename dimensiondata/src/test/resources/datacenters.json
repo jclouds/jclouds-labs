@@ -1,0 +1,247 @@
+{
+  "datacenter": [
+    {
+      "displayName": "US - West",
+      "city": "Santa Clara",
+      "state": "California",
+      "country": "US",
+      "vpnUrl": "https://na3.cloud-vpn.net",
+      "ftpsHost": "ftps-na.cloud-vpn.net",
+      "networking": {
+        "property": [
+          {
+            "name": "MAX_SERVER_TO_VIP_CONNECTIONS",
+            "value": "20"
+          }
+        ],
+        "type": "1",
+        "maintenanceStatus": "NORMAL"
+      },
+      "hypervisor": {
+        "diskSpeed": [
+          {
+            "displayName": "Standard",
+            "abbreviation": "STD",
+            "description": "Standard Disk Speed",
+            "id": "STANDARD",
+            "available": true,
+            "default": true
+          },
+          {
+            "displayName": "High Performance",
+            "abbreviation": "HPF",
+            "description": "Faster than Standard. Uses 15000 RPM disk with Fast Cache.",
+            "id": "HIGHPERFORMANCE",
+            "available": true,
+            "default": false
+          },
+          {
+            "displayName": "Economy",
+            "abbreviation": "ECN",
+            "description": "Slower than Standard. Uses 7200 RPM disk without Fast Cache.",
+            "id": "ECONOMY",
+            "available": true,
+            "default": false
+          }
+        ],
+        "cpuSpeed": [
+          {
+            "displayName": "Standard",
+            "description": "Standard CPU Speed",
+            "id": "STANDARD",
+            "available": true,
+            "default": true
+          }
+        ],
+        "property": [
+          {
+            "name": "MIN_DISK_SIZE_GB",
+            "value": "10"
+          },
+          {
+            "name": "MAX_DISK_SIZE_GB",
+            "value": "1000"
+          },
+          {
+            "name": "MAX_TOTAL_ADDITIONAL_STORAGE_GB",
+            "value": "10000"
+          },
+          {
+            "name": "MAX_TOTAL_IMAGE_STORAGE_GB",
+            "value": "2600"
+          },
+          {
+            "name": "MAX_CPU_COUNT",
+            "value": "16"
+          },
+          {
+            "name": "MIN_MEMORY_GB",
+            "value": "1"
+          },
+          {
+            "name": "MAX_MEMORY_GB",
+            "value": "128"
+          },
+          {
+            "name": "VMWARE_HARDWARE_VERSION",
+            "value": "vmx-10"
+          },
+          {
+            "name": "VLAN_SECURITY_GROUPS_ENABLED",
+            "value": "false"
+          }
+        ],
+        "type": "VMWARE",
+        "maintenanceStatus": "NORMAL"
+      },
+      "backup": {
+        "property": [],
+        "type": "COMMVAULT",
+        "maintenanceStatus": "NORMAL"
+      },
+      "consoleAccess": {
+        "property": [],
+        "maintenanceStatus": "NORMAL"
+      },
+      "monitoring": {
+        "property": [],
+        "maintenanceStatus": "NORMAL"
+      },
+      "id": "NA3",
+      "type": "MCP 1.0"
+    },
+    {
+      "displayName": "US - East 3 - MCP 2.0",
+      "city": "Ashburn",
+      "state": "Virginia",
+      "country": "US",
+      "vpnUrl": "https://na9.cloud-vpn.net",
+      "ftpsHost": "ftps-na.cloud-vpn.net",
+      "networking": {
+        "property": [
+          {
+            "name": "MAX_NODE_CONNECTION_LIMIT",
+            "value": "100000"
+          },
+          {
+            "name": "MAX_NODE_CONNECTION_RATE_LIMIT",
+            "value": "4000"
+          },
+          {
+            "name": "MAX_VIRTUAL_LISTENER_CONNECTION_LIMIT",
+            "value": "100000"
+          },
+          {
+            "name": "MAX_VIRTUAL_LISTENER_CONNECTION_RATE_LIMIT",
+            "value": "4000"
+          }
+        ],
+        "type": "2",
+        "maintenanceStatus": "NORMAL"
+      },
+      "hypervisor": {
+        "diskSpeed": [
+          {
+            "displayName": "Standard",
+            "abbreviation": "STD",
+            "description": "Standard Disk Speed",
+            "id": "STANDARD",
+            "available": true,
+            "default": true
+          },
+          {
+            "displayName": "High Performance",
+            "abbreviation": "HPF",
+            "description": "Faster than Standard. Uses 15000 RPM disk with Fast Cache.",
+            "id": "HIGHPERFORMANCE",
+            "available": true,
+            "default": false
+          },
+          {
+            "displayName": "Economy",
+            "abbreviation": "ECN",
+            "description": "Slower than Standard. Uses 7200 RPM disk without Fast Cache.",
+            "id": "ECONOMY",
+            "available": true,
+            "default": false
+          }
+        ],
+        "cpuSpeed": [
+          {
+            "displayName": "Standard",
+            "description": "Standard CPU Speed",
+            "id": "STANDARD",
+            "available": true,
+            "default": true
+          },
+          {
+            "displayName": "High Performance",
+            "description": "Faster and more consistent than Standard. Suitable for applications that are more CPU intensive.",
+            "id": "HIGHPERFORMANCE",
+            "available": true,
+            "default": false
+          }
+        ],
+        "property": [
+          {
+            "name": "MIN_DISK_SIZE_GB",
+            "value": "10"
+          },
+          {
+            "name": "MAX_DISK_SIZE_GB",
+            "value": "1000"
+          },
+          {
+            "name": "MAX_TOTAL_ADDITIONAL_STORAGE_GB",
+            "value": "14000"
+          },
+          {
+            "name": "MAX_TOTAL_IMAGE_STORAGE_GB",
+            "value": "2600"
+          },
+          {
+            "name": "MAX_CPU_COUNT",
+            "value": "32"
+          },
+          {
+            "name": "MIN_MEMORY_GB",
+            "value": "1"
+          },
+          {
+            "name": "MAX_MEMORY_GB",
+            "value": "256"
+          },
+          {
+            "name": "VMWARE_HARDWARE_VERSION",
+            "value": "vmx-10"
+          },
+          {
+            "name": "VLAN_SECURITY_GROUPS_ENABLED",
+            "value": "false"
+          }
+        ],
+        "type": "VMWARE",
+        "maintenanceStatus": "NORMAL"
+      },
+      "backup": {
+        "property": [],
+        "type": "COMMVAULT",
+        "maintenanceStatus": "NORMAL"
+      },
+      "consoleAccess": {
+        "property": [],
+        "maintenanceStatus": "NORMAL"
+      },
+      "monitoring": {
+        "property": [],
+        "maintenanceStatus": "NORMAL"
+      },
+      "id": "NA9",
+      "type": "MCP 2.0"
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 2,
+  "totalCount": 2,
+  "pageSize": 250
+}

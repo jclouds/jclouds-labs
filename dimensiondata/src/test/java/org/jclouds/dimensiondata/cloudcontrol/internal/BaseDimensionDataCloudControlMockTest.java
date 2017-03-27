@@ -29,8 +29,12 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlProviderMetadata;
+import org.jclouds.http.Uris;
 import org.jclouds.json.Json;
 import org.jclouds.rest.ApiContext;
+import org.testng.IHookCallBack;
+import org.testng.IHookable;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -40,13 +44,16 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
+import static com.google.common.collect.Iterables.size;
 import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 /**
  * Base class for all DimensionDataCloudController mock tests.
  */
-public class BaseDimensionDataCloudControlMockTest {
+public class BaseDimensionDataCloudControlMockTest implements IHookable {
 
    private static final String DEFAULT_ENDPOINT = new DimensionDataCloudControlProviderMetadata().getEndpoint();
 
@@ -56,6 +63,7 @@ public class BaseDimensionDataCloudControlMockTest {
    protected DimensionDataCloudControlApi api;
    protected ApiContext<DimensionDataCloudControlApi> ctx;
    private Json json;
+   private int assertedRequestCount;
 
    // So that we can ignore formatting.
    private final JsonParser parser = new JsonParser();
@@ -68,6 +76,38 @@ public class BaseDimensionDataCloudControlMockTest {
             .endpoint(url("")).modules(modules).overrides(overrides()).build();
       json = ctx.utils().injector().getInstance(Json.class);
       api = ctx.getApi();
+      applyAdditionalServerConfig();
+      assertedRequestCount = 0;
+   }
+
+   /**
+    * Applies any additional configuration required by test classes to the mock web server.
+    */
+   protected void applyAdditionalServerConfig() {
+   }
+
+   @Override
+   public void run(IHookCallBack callBack, ITestResult testResult) {
+      callBack.runTestMethod(testResult);
+      ensureAllRequestsWereAsserted();
+   }
+
+   private void ensureAllRequestsWereAsserted() {
+      int unAssertedRequestCount = server.getRequestCount() - assertedRequestCount;
+      if (unAssertedRequestCount > 0) {
+         StringBuilder messageBuilder = new StringBuilder(
+               String.format("There were %s un-asserted requests: ", unAssertedRequestCount));
+         while (unAssertedRequestCount > 0) {
+            try {
+               messageBuilder.append('\n').append(server.takeRequest().toString());
+            } catch (InterruptedException e) {
+               messageBuilder.append('\n').append("Error obtaining request from mock web server: ")
+                     .append(e.toString());
+            }
+            unAssertedRequestCount--;
+         }
+         fail(messageBuilder.toString());
+      }
    }
 
    @AfterMethod(alwaysRun = true)
@@ -108,6 +148,10 @@ public class BaseDimensionDataCloudControlMockTest {
             .setBody("content: [{\"operation\":\"OPERATION\",\"responseCode\":\"RESOURCE_NOT_FOUND\"}]");
    }
 
+   protected MockResponse response404() {
+      return new MockResponse().setStatus("HTTP/1.1 404 Not Found");
+   }
+
    /**
     * Mocked OK 200 Response
     *
@@ -128,6 +172,7 @@ public class BaseDimensionDataCloudControlMockTest {
 
    protected RecordedRequest assertSent(String method, String path) throws InterruptedException {
       RecordedRequest request = server.takeRequest();
+      assertedRequestCount++;
       assertThat(request.getMethod()).isEqualTo(method);
       assertThat(request.getPath()).isEqualTo(path);
       assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(MediaType.APPLICATION_JSON);
@@ -137,5 +182,26 @@ public class BaseDimensionDataCloudControlMockTest {
 
    protected void assertBodyContains(RecordedRequest recordedRequest, String expectedText) {
       assertThat(recordedRequest.getUtf8Body()).contains(expectedText);
+   }
+
+   /**
+    * Consumes the supplied iterable, checking that it contained the expected number of items, and that the expected
+    * number of additional page requests were made in doing so.
+    *
+    * @param iterable                         the iterable to be consumed.
+    * @param expectedSize                     the number of items expected in the iterable.
+    * @param expectedAdditionalPagesRequested the number of additional page requests that should be made.
+    * @param <T>                              the type of item contained in the iterable.
+    */
+   protected <T> void consumeIterableAndAssertAdditionalPagesRequested(Iterable<T> iterable, int expectedSize,
+         int expectedAdditionalPagesRequested) {
+      int initialRequestCount = server.getRequestCount();
+      assertEquals(size(iterable), expectedSize);
+      assertEquals(server.getRequestCount() - initialRequestCount, expectedAdditionalPagesRequested);
+   }
+
+   protected Uris.UriBuilder addPageNumberToUriBuilder(Uris.UriBuilder uriBuilder, int pageNumber) {
+      uriBuilder.addQuery("pageNumber", Integer.toString(pageNumber));
+      return uriBuilder;
    }
 }
