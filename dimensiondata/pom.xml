@@ -30,6 +30,7 @@
 
     <!-- TODO: when out of labs, switch to org.jclouds.provider -->
     <artifactId>dimensiondata-cloudcontrol</artifactId>
+    <name>jclouds Dimension Data CloudControl API</name>
     <description>jclouds components to access an implementation of Dimension Data CloudControl</description>
     <packaging>bundle</packaging>
 
