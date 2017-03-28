@@ -35,7 +35,7 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <test.dimensiondata-cloudcontrol.api-version>2.1</test.dimensiondata-cloudcontrol.api-version>
+        <test.dimensiondata-cloudcontrol.api-version>2.4</test.dimensiondata-cloudcontrol.api-version>
         <test.dimensiondata-cloudcontrol.endpoint>FIXME</test.dimensiondata-cloudcontrol.endpoint>
         <test.dimensiondata-cloudcontrol.identity>FIXME</test.dimensiondata-cloudcontrol.identity>
         <test.dimensiondata-cloudcontrol.credential>FIXME</test.dimensiondata-cloudcontrol.credential>
