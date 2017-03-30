@@ -35,24 +35,24 @@ public class OrganisationIdFilterTest {
 
    @Test
    public void testCaasUrl() {
-      String expectedPath = "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/0896551e-4fe3-4450-a627-ad5548e7e83a?clone=trevor-test2&desc=trevor-description2";
+      String expectedPath = "/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/0896551e-4fe3-4450-a627-ad5548e7e83a?clone=trevor-test2&desc=trevor-description2";
       String updatedPath = new OrganisationIdFilter(orgIdSupplier).injectOrganisationId(
-            "/caas/2.4/server/0896551e-4fe3-4450-a627-ad5548e7e83a?clone=trevor-test2&desc=trevor-description2");
+            "/2.4/server/0896551e-4fe3-4450-a627-ad5548e7e83a?clone=trevor-test2&desc=trevor-description2");
       assertEquals(updatedPath, expectedPath);
    }
 
    @Test
    public void testDontAddIfAlreadyPresent() {
-      String expectedPath = "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/0896551e-4fe3-4450-a627-ad5548e7e83a";
+      String expectedPath = "/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/0896551e-4fe3-4450-a627-ad5548e7e83a";
       String updatedPath = new OrganisationIdFilter(orgIdSupplier).injectOrganisationId(
-            "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/0896551e-4fe3-4450-a627-ad5548e7e83a");
+            "/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/0896551e-4fe3-4450-a627-ad5548e7e83a");
       assertEquals(updatedPath, expectedPath);
    }
 
    @Test
-   public void testPathSegmentsLessThan3() {
-      String expectedPath = "/caas/2.4";
-      String updatedPath = new OrganisationIdFilter(orgIdSupplier).injectOrganisationId("/caas/2.4");
+   public void testPathSegmentsLessThan2() {
+      String expectedPath = "/2.4";
+      String updatedPath = new OrganisationIdFilter(orgIdSupplier).injectOrganisationId("/2.4");
       assertEquals(updatedPath, expectedPath);
    }
 

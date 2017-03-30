@@ -50,7 +50,7 @@ import javax.ws.rs.core.MediaType;
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/caas/{jclouds.api-version}/infrastructure")
+@Path("/{jclouds.api-version}/infrastructure")
 public interface InfrastructureApi {
 
    @Named("infrastructure:datacenter")

@@ -30,7 +30,7 @@ import java.io.Closeable;
 
 @RequestFilters({ BasicAuthentication.class })
 @Consumes("application/json")
-@Path("/caas/{jclouds.api-version}/user")
+@Path("/{jclouds.api-version}/user")
 public interface AccountApi extends Closeable {
    @Named("myuser:get")
    @Path("/myUser")

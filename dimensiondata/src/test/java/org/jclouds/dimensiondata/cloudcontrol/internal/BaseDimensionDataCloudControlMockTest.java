@@ -55,7 +55,9 @@ import static org.testng.Assert.fail;
  */
 public class BaseDimensionDataCloudControlMockTest implements IHookable {
 
-   private static final String DEFAULT_ENDPOINT = new DimensionDataCloudControlProviderMetadata().getEndpoint();
+   private static final DimensionDataCloudControlProviderMetadata PROVIDER_METADATA = new DimensionDataCloudControlProviderMetadata();
+   private static final String DEFAULT_ENDPOINT = PROVIDER_METADATA.getEndpoint();
+   protected static final String VERSION = PROVIDER_METADATA.getApiMetadata().getVersion();
 
    private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
 
