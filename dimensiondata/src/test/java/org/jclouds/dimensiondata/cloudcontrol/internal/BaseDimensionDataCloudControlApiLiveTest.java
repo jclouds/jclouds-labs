@@ -20,6 +20,8 @@ import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApiMetadata;
+import org.jclouds.logging.config.LoggingModule;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.annotations.Test;
 
 @Test(groups = "live")
@@ -33,4 +35,10 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
    protected ApiMetadata createApiMetadata() {
       return new DimensionDataCloudControlApiMetadata();
    }
+
+   @Override
+   protected LoggingModule getLoggingModule() {
+      return new SLF4JLoggingModule();
+   }
+
 }
