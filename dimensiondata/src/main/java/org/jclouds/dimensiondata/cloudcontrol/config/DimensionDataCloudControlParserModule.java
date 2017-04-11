@@ -17,11 +17,13 @@
 package org.jclouds.dimensiondata.cloudcontrol.config;
 
 import com.google.inject.AbstractModule;
+import org.jclouds.json.config.GsonModule;
 
 public class DimensionDataCloudControlParserModule extends AbstractModule {
 
    @Override
    protected void configure() {
+      bind(GsonModule.DateAdapter.class).to(GsonModule.Iso8601DateAdapter.class);
    }
 
 }

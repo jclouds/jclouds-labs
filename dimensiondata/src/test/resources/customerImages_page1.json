@@ -1,0 +1,333 @@
+{
+  "customerImage": [
+    {
+      "name": "CloneForDrs",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 2,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 4,
+      "disk": [
+        {
+          "id": "1bddd4ed-67dc-4e5e-a0d5-b5a6c012ec14",
+          "scsiId": 0,
+          "sizeGb": 50,
+          "speed": "HIGHPERFORMANCE"
+        }
+      ],
+      "nic": [],
+      "softwareLabel": [],
+      "createTime": "2016-07-17T23:53:48.000Z",
+      "id": "f27b7ead-9cdc-4cee-be50-8f8e6cec8534",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "FAILED_ADD",
+      "guest": {
+        "operatingSystem": {
+          "id": "WIN2012DC64",
+          "displayName": "WIN2012DC/64",
+          "family": "WINDOWS"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": true
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "cb4b8674-09a4-4194-9593-9cdc81489de1"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": [
+        {
+          "tagKeyName": "DdTest3",
+          "tagKeyId": "ee58176e-305b-4ec2-85e0-330a33729a94"
+        },
+        {
+          "tagKeyName": "Lukas11",
+          "value": "j",
+          "tagKeyId": "c5480364-d3cd-4391-9536-5c1af683a8f1"
+        },
+        {
+          "tagKeyName": "Lukas5",
+          "tagKeyId": "a3e869df-6427-404f-99c2-b50f526369aa"
+        }
+      ]
+    },
+    {
+      "name": "atestCloneServer3",
+      "description": "This is a description",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 5,
+        "speed": "HIGHPERFORMANCE",
+        "coresPerSocket": 5
+      },
+      "memoryGb": 6,
+      "disk": [
+        {
+          "id": "ac7f0180-ec20-46b8-8f89-534a67c97551",
+          "scsiId": 0,
+          "sizeGb": 52,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "VMXNET3",
+          "key": 4000
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-10-27T23:31:30.000Z",
+      "id": "12b1a94b-d126-4a93-8d87-c19df263fac8",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "PENDING_DELETE",
+      "guest": {
+        "operatingSystem": {
+          "id": "REDHAT664",
+          "displayName": "REDHAT6/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "OPEN_VM_TOOLS",
+          "versionStatus": "UNMANAGED",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 2147483647
+        },
+        "osCustomization": true
+      },
+      "virtualHardware": {
+        "version": "vmx-09",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "b3a86189-3901-4ec6-b03f-8921d26b6128"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": [
+        {
+          "tagKeyName": "CAAS3985_Test",
+          "value": "VLANs",
+          "tagKeyId": "cc552b40-3058-4834-b5c7-02b8803db249"
+        },
+        {
+          "tagKeyName": "DDTEst",
+          "value": "Test",
+          "tagKeyId": "37c0c90c-b74f-4062-8d29-3c1c051ea0a7"
+        },
+        {
+          "tagKeyName": "Lukas3",
+          "value": "Test",
+          "tagKeyId": "669879d5-26bc-42fb-bcff-761e817187a7"
+        }
+      ],
+      "progress": {
+        "action": "DELETE_SERVER_IMAGE",
+        "requestTime": "2017-03-15T07:47:26.000Z",
+        "userName": "QA1Tester",
+        "failureReason": "Failed to delete the virtual machine, '/vmfs/volumes/57fdddc0-5d9a80e5-2b30-1005ca0a6c1a/atestCloneServer3/atestCloneServer3.vmx'.An error occurred while deleting the virtual machine: Error.: Failed to delete the virtual machine, '/vmfs/volumes/57fdddc0-5d9a80e5-2b30-1005ca0a6c1a/atestCloneServer3/atestCloneServer3.vmx'."
+      }
+    },
+    {
+      "name": "postManGocToNGoc",
+      "description": "This is a description",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 4,
+        "speed": "HIGHPERFORMANCE",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 2,
+      "disk": [
+        {
+          "id": "1e41aa5f-d393-4b35-b5a8-c9af6cde5b87",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "STANDARD"
+        },
+        {
+          "id": "9bcdbd4e-c1e1-49f2-afd1-9984e0c7f60f",
+          "scsiId": 1,
+          "sizeGb": 20,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "E1000",
+          "key": 4000
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-10-30T22:30:03.000Z",
+      "id": "87bfab7b-088a-44f9-aef1-a5f5e53026a9",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "NORMAL",
+      "guest": {
+        "operatingSystem": {
+          "id": "SUSE1164",
+          "displayName": "SUSE11/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": true
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "4eb1a1ae-2836-4850-981e-ab9603c83e33"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": []
+    },
+    {
+      "name": "gocTestImage",
+      "description": "",
+      "cpu": {
+        "count": 5,
+        "speed": "HIGHPERFORMANCE",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 8,
+      "disk": [
+        {
+          "id": "422bf38e-b639-4203-b14f-3a9eac56768d",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "STANDARD"
+        },
+        {
+          "id": "42da7303-a5c8-4cf0-b1f8-56fe27b4a895",
+          "scsiId": 1,
+          "sizeGb": 20,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [],
+      "softwareLabel": [],
+      "createTime": "2016-10-31T04:08:26.000Z",
+      "id": "7c6afe65-03b8-4d13-b273-527079840390",
+      "datacenterId": "QA1_N2_VF5",
+      "state": "REQUIRES_SUPPORT",
+      "guest": {
+        "operatingSystem": {
+          "id": "SUSE1164",
+          "displayName": "SUSE11/64",
+          "family": "UNIX"
+        },
+        "osCustomization": true
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "IMAGE_ID",
+            "value": "32de886a-9754-4494-8e4c-1e6d72102078"
+          }
+        ],
+        "type": "COPY"
+      },
+      "tag": [],
+      "progress": {
+        "action": "CLEAN_SERVER_IMAGE",
+        "requestTime": "2016-10-31T04:09:09.000Z",
+        "userName": "NR_test1",
+        "failureReason": "Unable to find the target VM - this will need to be checked by support.Could not locate the folder for the VM"
+      }
+    },
+    {
+      "name": "NGOC_Image",
+      "description": "test image",
+      "cpu": {
+        "count": 3,
+        "speed": "HIGHPERFORMANCE",
+        "coresPerSocket": 3
+      },
+      "memoryGb": 3,
+      "disk": [
+        {
+          "id": "4060cda4-e02e-454f-a8d0-912aa81c345d",
+          "scsiId": 0,
+          "sizeGb": 52,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [],
+      "softwareLabel": [],
+      "createTime": "2016-10-31T22:41:57.000Z",
+      "id": "5c15d056-7d73-42ff-8959-e2e7a019fdd9",
+      "datacenterId": "QA1_N2_VF5",
+      "state": "REQUIRES_SUPPORT",
+      "guest": {
+        "operatingSystem": {
+          "id": "REDHAT664",
+          "displayName": "REDHAT6/64",
+          "family": "UNIX"
+        },
+        "osCustomization": true
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "IMAGE_ID",
+            "value": "ca811be3-d70b-4ea9-af72-3a95e7249298"
+          },
+          {
+            "type": "OVF_PACKAGE_PREFIX",
+            "value": "Test_NGOC_Image"
+          }
+        ],
+        "type": "COPY"
+      },
+      "tag": [],
+      "progress": {
+        "action": "CLEAN_SERVER_IMAGE",
+        "requestTime": "2016-11-24T09:44:08.000Z",
+        "userName": "QA1Tester",
+        "failureReason": "Unable to find the target VM - this will need to be checked by support.Could not locate the folder for the VM"
+      }
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 5,
+  "totalCount": 10,
+  "pageSize": 5
+}

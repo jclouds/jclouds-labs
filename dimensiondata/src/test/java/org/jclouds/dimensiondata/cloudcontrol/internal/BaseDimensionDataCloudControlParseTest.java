@@ -14,23 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.dimensiondata.cloudcontrol;
+package org.jclouds.dimensiondata.cloudcontrol.internal;
 
-import org.jclouds.dimensiondata.cloudcontrol.features.AccountApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.InfrastructureApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.ServerImageApi;
-import org.jclouds.rest.annotations.Delegate;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlParserModule;
+import org.jclouds.json.BaseItemParserTest;
+import org.jclouds.json.config.GsonModule;
 
-import java.io.Closeable;
+import javax.xml.bind.DatatypeConverter;
+import java.util.Date;
 
-public interface DimensionDataCloudControlApi extends Closeable {
+public abstract class BaseDimensionDataCloudControlParseTest<T> extends BaseItemParserTest<T> {
 
-   @Delegate
-   AccountApi getAccountApi();
+   @Override
+   protected Injector injector() {
+      return Guice.createInjector(new GsonModule(), new DimensionDataCloudControlParserModule());
+   }
 
-   @Delegate
-   InfrastructureApi getInfrastructureApi();
+   protected Date parseDate(final String dateString) {
+      return DatatypeConverter.parseDateTime(dateString).getTime();
+   }
 
-   @Delegate
-   ServerImageApi getServerImageApi();
 }

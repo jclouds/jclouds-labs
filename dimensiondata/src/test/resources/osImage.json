@@ -1,0 +1,61 @@
+{
+  "name": "SB Dummy RedHat 6 64-bit 1 CPU-test in Prod",
+  "description": "SB latest RH 6-tested-jol in Prod",
+  "cluster": {
+    "id": "QA1_N2_VMWARE_1-01",
+    "name": "QA1_N2_VMWARE_1-01"
+  },
+  "cpu": {
+    "count": 4,
+    "speed": "STANDARD",
+    "coresPerSocket": 1
+  },
+  "memoryGb": 8,
+  "disk": [
+    {
+      "id": "e7ba6dda-434c-464b-a052-3364dff936f7",
+      "scsiId": 0,
+      "sizeGb": 70,
+      "speed": "STANDARD"
+    },
+    {
+      "id": "eb29716e-d41d-4f61-ab5b-22903ada9f75",
+      "scsiId": 1,
+      "sizeGb": 10,
+      "speed": "STANDARD"
+    },
+    {
+      "id": "70d4c71a-82e8-408f-8656-6d01a0665fa0",
+      "scsiId": 2,
+      "sizeGb": 10,
+      "speed": "STANDARD"
+    }
+  ],
+  "nic": [
+    {
+      "networkAdapter": "E1000",
+      "key": 4000
+    },
+    {
+      "networkAdapter": "E1000",
+      "key": 4001
+    }
+  ],
+  "softwareLabel": [
+    "MSSQL2008R2E",
+    "MSSQL2012S"
+  ],
+  "createTime": "2017-01-16T12:56:57.000Z",
+  "id": "9cb7024d-250c-49d3-bb5d-7727cab4ad70",
+  "datacenterId": "QA1_N2_VMWARE_1",
+  "osImageKey": "T-CENT-5-32-1-2-10",
+  "sortOrder": 5,
+  "guest": {
+    "operatingSystem": {
+      "id": "REDHAT664",
+      "displayName": "REDHAT6/64",
+      "family": "UNIX"
+    },
+    "osCustomization": false
+  }
+}

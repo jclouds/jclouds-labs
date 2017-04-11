@@ -24,48 +24,30 @@ import java.util.Date;
 import java.util.List;
 
 @AutoValue
-public abstract class OsImage {
+public abstract class OsImage extends BaseImage {
+   public static final String TYPE = "OS_IMAGE";
 
    OsImage() {
+      type = TYPE;
    }
+
+   public abstract String osImageKey();
+
+   @SerializedNames({ "id", "name", "description", "cluster", "guest", "datacenterId", "cpu", "memoryGb", "nic", "disk",
+         "softwareLabel", "createTime", "osImageKey" })
+   public static OsImage create(String id, String name, String description, Cluster cluster, Guest guest,
+         String datacenterId, CPU cpu, int memoryGb, List<ImageNic> nics, List<Disk> disks, List<String> softwareLabels,
+         Date createTime, String osImageKey) {
+      return builder().id(id).name(name).description(description).cluster(cluster).guest(guest)
+            .datacenterId(datacenterId).osImageKey(osImageKey).createTime(createTime).cpu(cpu).memoryGb(memoryGb)
+            .nics(nics).disks(disks).softwareLabels(softwareLabels).build();
+   }
+
+   public abstract Builder toBuilder();
 
    public static Builder builder() {
       return new AutoValue_OsImage.Builder();
    }
-
-   public abstract String id();
-
-   public abstract String name();
-
-   public abstract String description();
-
-   public abstract String datacenterId();
-
-   public abstract String osImageKey();
-
-   public abstract Date createTime();
-
-   public abstract OperatingSystem operatingSystem();
-
-   public abstract CPU cpu();
-
-   public abstract int memoryGb();
-
-   public abstract List<Disk> disks();
-
-   public abstract List<Object> softwareLabels();
-
-   @SerializedNames({ "id", "name", "description", "datacenterId", "osImageKey", "createTime", "operatingSystem", "cpu",
-         "memoryGb", "disk", "softwareLabel" })
-   public static OsImage create(String id, String name, String description, String datacenterId, String osImageKey,
-         Date createTime, OperatingSystem operatingSystem, CPU cpu, int memoryGb, List<Disk> disks,
-         List<Object> softwareLabels) {
-      return builder().id(id).name(name).datacenterId(datacenterId).description(description).osImageKey(osImageKey)
-            .createTime(createTime).operatingSystem(operatingSystem).cpu(cpu).memoryGb(memoryGb).disks(disks)
-            .softwareLabels(softwareLabels).build();
-   }
-
-   public abstract Builder toBuilder();
 
    @AutoValue.Builder
    public abstract static class Builder {
@@ -75,31 +57,38 @@ public abstract class OsImage {
 
       public abstract Builder description(String description);
 
+      public abstract Builder cluster(Cluster cluster);
+
+      public abstract Builder guest(Guest guest);
+
       public abstract Builder datacenterId(String datacenterId);
 
       public abstract Builder osImageKey(String osImageKey);
 
       public abstract Builder createTime(Date createTime);
 
-      public abstract Builder operatingSystem(OperatingSystem operatingSystem);
-
       public abstract Builder cpu(CPU cpu);
 
       public abstract Builder memoryGb(int memoryGb);
 
+      public abstract Builder nics(List<ImageNic> nics);
+
       public abstract Builder disks(List<Disk> disks);
 
-      public abstract Builder softwareLabels(List<Object> softwareLabels);
+      public abstract Builder softwareLabels(List<String> softwareLabels);
 
       abstract OsImage autoBuild();
 
       abstract List<Disk> disks();
 
-      abstract List<Object> softwareLabels();
+      abstract List<String> softwareLabels();
+
+      abstract List<ImageNic> nics();
 
       public OsImage build() {
          disks(disks() != null ? ImmutableList.copyOf(disks()) : ImmutableList.<Disk>of());
-         softwareLabels(softwareLabels() != null ? ImmutableList.copyOf(softwareLabels()) : ImmutableList.of());
+         softwareLabels(softwareLabels() != null ? ImmutableList.copyOf(softwareLabels()) : ImmutableList.<String>of());
+         nics(nics() != null ? ImmutableList.copyOf(nics()) : ImmutableList.<ImageNic>of());
          return autoBuild();
       }
    }

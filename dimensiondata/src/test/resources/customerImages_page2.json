@@ -1,0 +1,402 @@
+{
+  "customerImage": [
+    {
+      "name": "Test CloneServer",
+      "description": "Clone NGOC Server",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 2,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 4,
+      "disk": [
+        {
+          "id": "a5082db8-781f-4394-bbfc-20a532b7170f",
+          "scsiId": 0,
+          "sizeGb": 52,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "VMXNET3",
+          "key": 4000
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-11-02T02:49:38.000Z",
+      "id": "1bd0debf-c86a-4b3b-a575-03e6b1f16982",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "FAILED_ADD",
+      "guest": {
+        "operatingSystem": {
+          "id": "REDHAT664",
+          "displayName": "REDHAT6/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "OPEN_VM_TOOLS",
+          "versionStatus": "UNMANAGED",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 2147483647
+        },
+        "osCustomization": true
+      },
+      "virtualHardware": {
+        "version": "vmx-09",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "95227913-b048-4908-a626-26025f74c61a"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": [],
+      "progress": {
+        "action": "COPY_CUSTOMER_IMAGE",
+        "requestTime": "2016-11-10T08:41:41.000Z",
+        "userName": "NR_test1",
+        "failureReason": "Clone failed, please try again."
+      }
+    },
+    {
+      "name": "atestGocToNGoc",
+      "description": "This is a description",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 4,
+        "speed": "HIGHPERFORMANCE",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 2,
+      "disk": [
+        {
+          "id": "ff7adbe6-ec14-48f8-8da8-4a7e4579aaca",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "STANDARD"
+        },
+        {
+          "id": "28a996c1-695e-484b-b1cd-af7836d1981e",
+          "scsiId": 1,
+          "sizeGb": 20,
+          "speed": "HIGHPERFORMANCE"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "E1000",
+          "key": 4000
+        },
+        {
+          "networkAdapter": "E1000",
+          "key": 4002
+        },
+        {
+          "networkAdapter": "E1000",
+          "key": 4001
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-11-07T21:54:16.000Z",
+      "id": "3673712c-2ffb-4a46-9a46-ce000c380e21",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "NORMAL",
+      "guest": {
+        "operatingSystem": {
+          "id": "DEBIAN632",
+          "displayName": "DEBIAN6/32",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": false
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "4eb1a1ae-2836-4850-981e-ab9603c83e33"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": []
+    },
+    {
+      "name": "NGOC_Multiple_NIC",
+      "description": "",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 3,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 2,
+      "disk": [
+        {
+          "id": "ce4d3d4b-1505-4037-bea7-5cc512853467",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "HIGHPERFORMANCE"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "VMXNET3",
+          "key": 4000
+        },
+        {
+          "networkAdapter": "E1000",
+          "key": 4001
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-11-09T00:47:33.000Z",
+      "id": "b991b733-d1cb-43da-93c4-7d51e811ff1d",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "NORMAL",
+      "guest": {
+        "operatingSystem": {
+          "id": "UBUNTU1064",
+          "displayName": "UBUNTU10/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": false
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "9c5ea62d-9750-4130-a955-039c5ac9762c"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": [
+        {
+          "tagKeyName": "CAAS3985_Test",
+          "value": "NGOC Client",
+          "tagKeyId": "cc552b40-3058-4834-b5c7-02b8803db249"
+        }
+      ]
+    },
+    {
+      "name": "BBB - Test Clone Image - 5",
+      "description": "This is a test",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 3,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 2,
+      "disk": [
+        {
+          "id": "9984d8a5-b90a-4ce2-8b2c-93f6e5933eaf",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [],
+      "softwareLabel": [],
+      "createTime": "2016-11-11T00:52:21.000Z",
+      "id": "d338d2bc-f864-4ebd-8715-12ad84e8dab1",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "FAILED_ADD",
+      "guest": {
+        "operatingSystem": {
+          "id": "UBUNTU1264",
+          "displayName": "UBUNTU12/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": false
+      },
+      "virtualHardware": {
+        "version": "vmx-10",
+        "upToDate": true
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "fe2e74c0-55c6-4a0b-8ab4-2b8342d997b5"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": [
+        {
+          "tagKeyName": "DDTEst",
+          "value": "Libcloud Test",
+          "tagKeyId": "37c0c90c-b74f-4062-8d29-3c1c051ea0a7"
+        }
+      ],
+      "progress": {
+        "action": "CLONE_SERVER",
+        "requestTime": "2016-11-11T00:52:21.000Z",
+        "userName": "NR_test1",
+        "failureReason": "Clone failed, please try again."
+      }
+    },
+    {
+      "name": "Libcloud NGOCImage_New 2",
+      "description": "test",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-02",
+        "name": "QA1_N2_VMWARE_1-02"
+      },
+      "cpu": {
+        "count": 4,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 2,
+      "disk": [
+        {
+          "id": "d2ea4779-b816-45df-a42e-6045c69c0de8",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "STANDARD"
+        },
+        {
+          "id": "b5832c43-ce39-4043-bbee-0ed923bae18a",
+          "scsiId": 1,
+          "sizeGb": 20,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "E1000",
+          "key": 4000
+        },
+        {
+          "networkAdapter": "E1000",
+          "key": 4001
+        },
+        {
+          "networkAdapter": "E1000",
+          "key": 4002
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-11-14T04:03:38.000Z",
+      "id": "4423dadc-a207-40d5-8f7f-208d1b8ccb8d",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "FAILED_CHANGE",
+      "guest": {
+        "operatingSystem": {
+          "id": "REDHAT664",
+          "displayName": "REDHAT6/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING"
+        },
+        "osCustomization": false
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "MF",
+            "value": "aTestGocToNGoc2_export2.mf",
+            "date": "2016-11-08T08:02:34.000Z"
+          },
+          {
+            "type": "OVF",
+            "value": "aTestGocToNGoc2_export2.ovf",
+            "date": "2016-11-08T08:02:34.000Z"
+          },
+          {
+            "type": "VMDK",
+            "value": "aTestGocToNGoc2_export2-disk1.vmdk",
+            "date": "2016-11-08T08:02:34.000Z"
+          },
+          {
+            "type": "VMDK",
+            "value": "aTestGocToNGoc2_export2-disk2.vmdk",
+            "date": "2016-11-08T08:02:34.000Z"
+          }
+        ],
+        "type": "IMPORT"
+      },
+      "tag": [
+        {
+          "tagKeyName": "DDTEst",
+          "value": "dev test",
+          "tagKeyId": "37c0c90c-b74f-4062-8d29-3c1c051ea0a7"
+        },
+        {
+          "tagKeyName": "DdTest3",
+          "tagKeyId": "ee58176e-305b-4ec2-85e0-330a33729a94"
+        }
+      ],
+      "progress": {
+        "action": "MOVE_CUSTOMER_IMAGE",
+        "requestTime": "2017-03-16T14:10:24.000Z",
+        "userName": "QA1Tester",
+        "numberOfSteps": 4,
+        "updateTime": "2017-03-16T14:10:38.000Z",
+        "step": {
+          "name": "WAIT_FOR_RELOCATE_VM",
+          "number": 4,
+          "percentComplete": 13
+        },
+        "failureReason": "File /vmfs/volumes/57fdddc0-5d9a80e5-2b30-1005ca0a6c1a/Libcloud NGOCImage_New 2/Libcloud NGOCImage_New 2.vmdk was not found"
+      }
+    }
+  ],
+  "pageNumber": 2,
+  "pageCount": 5,
+  "totalCount": 10,
+  "pageSize": 250
+}
