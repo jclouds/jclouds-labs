@@ -16,49 +16,38 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol.domain;
 
+import com.google.auto.value.AutoValue;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-import java.util.Date;
-import java.util.List;
+@AutoValue
+public abstract class ImageNic {
 
+   ImageNic() {
+   }
 
-public abstract class BaseImage {
-   public static final String IMAGE_TYPE_METADATA_KEY = "IMAGE_TYPE";
-   public static final String OS_FAMILY_METADATA_KEY = "OS_FAMILY";
-
-   public static final String OS_FAMILY_UNIX = "UNIX";
-   public static final String OS_FAMILY_WINDOWS = "WINDOWS";
-
-   public String type;
-
-   public abstract String id();
-
-   public abstract String name();
+   public abstract String networkAdapter();
 
    @Nullable
-   public abstract String description();
+   public abstract Integer key();
 
-   @Nullable
-   public abstract Cluster cluster();
+   @SerializedNames({ "networkAdapter", "key" })
+   public static ImageNic create(String networkAdapter, Integer key) {
+      return builder().networkAdapter(networkAdapter).key(key).build();
+   }
 
-   /**
-    * optional on CustomerImage, mandatory on OsImage
-    */
-   @Nullable
-   public abstract Guest guest();
+   public abstract Builder toBuilder();
 
-   public abstract String datacenterId();
+   public static Builder builder() {
+      return new AutoValue_ImageNic.Builder();
+   }
 
-   public abstract CPU cpu();
+   @AutoValue.Builder
+   public abstract static class Builder {
+      public abstract Builder networkAdapter(String networkAdapter);
 
-   public abstract int memoryGb();
+      public abstract Builder key(Integer key);
 
-   public abstract List<ImageNic> nics();
-
-   public abstract List<Disk> disks();
-
-   public abstract List<String> softwareLabels();
-
-   public abstract Date createTime();
-
+      public abstract ImageNic build();
+   }
 }

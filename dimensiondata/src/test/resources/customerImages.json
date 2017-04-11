@@ -1,0 +1,77 @@
+{
+  "customerImage": [
+    {
+      "name": "CloneForDrs",
+      "cluster": {
+        "id": "QA1_N2_VMWARE_1-01",
+        "name": "QA1_N2_VMWARE_1-01"
+      },
+      "cpu": {
+        "count": 2,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 4,
+      "disk": [
+        {
+          "id": "1bddd4ed-67dc-4e5e-a0d5-b5a6c012ec14",
+          "scsiId": 0,
+          "sizeGb": 50,
+          "speed": "HIGHPERFORMANCE"
+        }
+      ],
+      "nic": [],
+      "softwareLabel": [],
+      "createTime": "2016-07-17T23:53:48.000Z",
+      "id": "f27b7ead-9cdc-4cee-be50-8f8e6cec8534",
+      "datacenterId": "QA1_N2_VMWARE_1",
+      "state": "FAILED_ADD",
+      "guest": {
+        "operatingSystem": {
+          "id": "WIN2012DC64",
+          "displayName": "WIN2012DC/64",
+          "family": "WINDOWS"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "CURRENT",
+          "runningStatus": "NOT_RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": true
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "source": {
+        "artifact": [
+          {
+            "type": "SERVER_ID",
+            "value": "cb4b8674-09a4-4194-9593-9cdc81489de1"
+          }
+        ],
+        "type": "CLONE"
+      },
+      "tag": [
+        {
+          "tagKeyName": "DdTest3",
+          "tagKeyId": "ee58176e-305b-4ec2-85e0-330a33729a94"
+        },
+        {
+          "tagKeyName": "Lukas11",
+          "value": "j",
+          "tagKeyId": "c5480364-d3cd-4391-9536-5c1af683a8f1"
+        },
+        {
+          "tagKeyName": "Lukas5",
+          "tagKeyId": "a3e869df-6427-404f-99c2-b50f526369aa"
+        }
+      ]
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 1,
+  "totalCount": 1,
+  "pageSize": 1
+}

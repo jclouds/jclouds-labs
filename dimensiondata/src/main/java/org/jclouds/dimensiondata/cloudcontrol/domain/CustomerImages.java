@@ -14,23 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.dimensiondata.cloudcontrol;
+package org.jclouds.dimensiondata.cloudcontrol.domain;
 
-import org.jclouds.dimensiondata.cloudcontrol.features.AccountApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.InfrastructureApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.ServerImageApi;
-import org.jclouds.rest.annotations.Delegate;
+import java.beans.ConstructorProperties;
+import java.util.List;
 
-import java.io.Closeable;
+/**
+ * A collection of CustomerImage
+ */
+public class CustomerImages extends PaginatedCollection<CustomerImage> {
 
-public interface DimensionDataCloudControlApi extends Closeable {
-
-   @Delegate
-   AccountApi getAccountApi();
-
-   @Delegate
-   InfrastructureApi getInfrastructureApi();
-
-   @Delegate
-   ServerImageApi getServerImageApi();
+   @ConstructorProperties({ "customerImage", "pageNumber", "pageCount", "totalCount", "pageSize" })
+   public CustomerImages(List<CustomerImage> content, Integer pageNumber, Integer pageCount, Integer totalCount,
+         Integer pageSize) {
+      super(content, pageNumber, pageCount, totalCount, pageSize);
+   }
 }

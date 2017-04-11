@@ -69,6 +69,8 @@ public abstract class Account {
             .customDefined2(customDefined2).organization(organization).state(state).build();
    }
 
+   public abstract Builder toBuilder();
+
    public static Builder builder() {
       return new AutoValue_Account.Builder();
    }
@@ -113,6 +115,9 @@ public abstract class Account {
    @AutoValue
    public abstract static class AccountOrganization {
 
+      AccountOrganization() {
+      }
+
       public abstract String id();
 
       public abstract String name();
@@ -129,6 +134,8 @@ public abstract class Account {
          return builder().id(id).name(name).homeGeoName(homeGeoName).homeGeoApiHost(homeGeoApiHost).homeGeoId(homeGeoId)
                .build();
       }
+
+      public abstract Builder toBuilder();
 
       public static Builder builder() {
          return new AutoValue_Account_AccountOrganization.Builder();
@@ -153,6 +160,9 @@ public abstract class Account {
    @AutoValue
    public abstract static class AccountPhoneNumber {
 
+      AccountPhoneNumber() {
+      }
+
       public abstract String countryCode();
 
       public abstract String number();
@@ -161,6 +171,8 @@ public abstract class Account {
       public static AccountPhoneNumber create(String countryCode, String number) {
          return builder().countryCode(countryCode).number(number).build();
       }
+
+      public abstract Builder toBuilder();
 
       public static Builder builder() {
          return new AutoValue_Account_AccountPhoneNumber.Builder();
@@ -180,12 +192,17 @@ public abstract class Account {
    @AutoValue
    public abstract static class RoleType {
 
+      RoleType() {
+      }
+
       public abstract String name();
 
       @SerializedNames({ "role" })
       public static RoleType create(String name) {
          return builder().name(name).build();
       }
+
+      public abstract Builder toBuilder();
 
       public static Builder builder() {
          return new AutoValue_Account_RoleType.Builder();

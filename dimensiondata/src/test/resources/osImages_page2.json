@@ -1,0 +1,50 @@
+{
+  "osImage": [
+    {
+      "name": "CentOS 5 64-bit",
+      "description": "DRaaS CentOS Release 5.9 64-bit",
+      "cluster": {
+        "id": "NA12-01",
+        "name": "my cluster name"
+      },
+      "cpu": {
+        "count": 2,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 4,
+      "disk": [
+        {
+          "id": "98299851-37a3-4ebe-9cf1-090da9ae42a0",
+          "scsiId": 0,
+          "sizeGb": 20,
+          "speed": "STANDARD"
+        }
+      ],
+      "nic": [
+        {
+          "networkAdapter": "E1000",
+          "key": "4040"
+        }
+      ],
+      "softwareLabel": [],
+      "createTime": "2016-06-09T17:36:31.000Z",
+      "id": "12ea8472-6e4e-4068-b2cb-f04ecacd3962",
+      "datacenterId": "NA1",
+      "osImageKey": "T-CENT-5-64-2-4-10",
+      "sortOrder": "10",
+      "guest": {
+        "osCustomization": "false",
+        "operatingSystem": {
+          "id": "CENTOS564",
+          "displayName": "CENTOS5/64",
+          "family": "UNIX"
+        }
+      }
+    }
+  ],
+  "pageNumber": 2,
+  "pageCount": 1,
+  "totalCount": 2,
+  "pageSize": 1
+}

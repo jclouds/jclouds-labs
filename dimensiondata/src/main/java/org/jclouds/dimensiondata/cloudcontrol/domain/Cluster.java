@@ -16,49 +16,36 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol.domain;
 
-import org.jclouds.javax.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 
-import java.util.Date;
-import java.util.List;
+@AutoValue
+public abstract class Cluster {
 
-
-public abstract class BaseImage {
-   public static final String IMAGE_TYPE_METADATA_KEY = "IMAGE_TYPE";
-   public static final String OS_FAMILY_METADATA_KEY = "OS_FAMILY";
-
-   public static final String OS_FAMILY_UNIX = "UNIX";
-   public static final String OS_FAMILY_WINDOWS = "WINDOWS";
-
-   public String type;
+   Cluster() {
+   }
 
    public abstract String id();
 
    public abstract String name();
 
-   @Nullable
-   public abstract String description();
+   @SerializedNames({ "id", "name" })
+   public static Cluster create(String id, String name) {
+      return builder().id(id).name(name).build();
+   }
 
-   @Nullable
-   public abstract Cluster cluster();
+   public abstract Builder toBuilder();
 
-   /**
-    * optional on CustomerImage, mandatory on OsImage
-    */
-   @Nullable
-   public abstract Guest guest();
+   public static Builder builder() {
+      return new AutoValue_Cluster.Builder();
+   }
 
-   public abstract String datacenterId();
+   @AutoValue.Builder
+   public abstract static class Builder {
+      public abstract Builder id(String id);
 
-   public abstract CPU cpu();
+      public abstract Builder name(String name);
 
-   public abstract int memoryGb();
-
-   public abstract List<ImageNic> nics();
-
-   public abstract List<Disk> disks();
-
-   public abstract List<String> softwareLabels();
-
-   public abstract Date createTime();
-
+      public abstract Cluster build();
+   }
 }
