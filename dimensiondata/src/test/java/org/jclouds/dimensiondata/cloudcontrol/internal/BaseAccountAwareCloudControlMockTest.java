@@ -44,7 +44,7 @@ public class BaseAccountAwareCloudControlMockTest extends BaseDimensionDataCloud
    @Override
    protected RecordedRequest assertSent(String method, String path) throws InterruptedException {
       if (!accountRetrieved) {
-         super.assertSent(HttpMethod.GET, "/" + VERSION + "/user/myUser");
+         super.assertSent(HttpMethod.GET, "/caas/" + VERSION + "/user/myUser");
          accountRetrieved = true;
       }
       return super.assertSent(method, path);

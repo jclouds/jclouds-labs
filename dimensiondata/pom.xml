@@ -144,6 +144,7 @@
                                         <test.dimensiondata-cloudcontrol.credential>
                                             ${test.dimensiondata-cloudcontrol.credential}
                                         </test.dimensiondata-cloudcontrol.credential>
+                                        <jclouds.zones>LAB04_N2_VMWARE_1</jclouds.zones>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>

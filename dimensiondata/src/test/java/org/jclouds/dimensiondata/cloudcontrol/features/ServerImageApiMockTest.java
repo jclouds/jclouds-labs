@@ -83,7 +83,7 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       Uris.UriBuilder uriBuilder = getOsImageUrl();
       Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
       for (String zone : zones) {
-         uriBuilder.addQuery("datacanterId", zone);
+         uriBuilder.addQuery("datacenterId", zone);
       }
       return uriBuilder;
    }
@@ -134,20 +134,20 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       Uris.UriBuilder uriBuilder = getCustomerImageUrl();
       Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
       for (String zone : zones) {
-         uriBuilder.addQuery("datacanterId", zone);
+         uriBuilder.addQuery("datacenterId", zone);
       }
       return uriBuilder;
    }
 
    private Uris.UriBuilder getOsImageUrl() {
       Uris.UriBuilder uriBuilder = Uris
-            .uriBuilder("/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/image/osImage");
+            .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/image/osImage");
       return uriBuilder;
    }
 
    private Uris.UriBuilder getCustomerImageUrl() {
       Uris.UriBuilder uriBuilder = Uris
-            .uriBuilder("/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/image/customerImage");
+            .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/image/customerImage");
       return uriBuilder;
    }
 

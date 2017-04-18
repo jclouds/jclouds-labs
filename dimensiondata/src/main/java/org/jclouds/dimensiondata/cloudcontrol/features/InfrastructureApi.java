@@ -57,6 +57,7 @@ public interface InfrastructureApi {
    @GET
    @Path("/datacenter")
    @ResponseParser(ParseDatacenters.class)
+   @RequestFilters(DatacenterIdListDatacentersFilter.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
    PaginatedCollection<Datacenter> listDatacenters(PaginationOptions options);
 

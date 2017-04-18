@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class DatacenterIdFilter implements HttpRequestFilter {
 
-   protected final Supplier<Set<String>> datacenterIdsSupplier;
+   private final Supplier<Set<String>> datacenterIdsSupplier;
 
    @Inject
    DatacenterIdFilter(@Zone Supplier<Set<String>> datacenterIdsSupplier) {

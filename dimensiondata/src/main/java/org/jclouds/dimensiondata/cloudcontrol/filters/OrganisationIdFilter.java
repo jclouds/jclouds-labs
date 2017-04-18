@@ -37,7 +37,7 @@ import java.util.List;
 @Singleton
 public class OrganisationIdFilter implements HttpRequestFilter {
 
-   private static final int ORGANIZATION_ID_INDEX = 2;
+   private static final int ORGANIZATION_ID_INDEX = 3;
    private final Supplier<String> organisationIdSupplier;
 
    @Inject

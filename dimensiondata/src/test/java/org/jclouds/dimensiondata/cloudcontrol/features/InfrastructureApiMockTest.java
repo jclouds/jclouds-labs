@@ -65,7 +65,7 @@ public class InfrastructureApiMockTest extends BaseAccountAwareCloudControlMockT
 
    private Uris.UriBuilder expectedListDatacentersUriBuilder() {
       Uris.UriBuilder uriBuilder = Uris
-            .uriBuilder("/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/datacenter");
+            .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/datacenter");
       Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
       for (String zone : zones) {
          uriBuilder.addQuery("id", zone);
@@ -103,7 +103,7 @@ public class InfrastructureApiMockTest extends BaseAccountAwareCloudControlMockT
 
    private Uris.UriBuilder expectedListOperatingSystemsUriBuilder() {
       Uris.UriBuilder uriBuilder = Uris
-            .uriBuilder("/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/operatingSystem");
+            .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/operatingSystem");
       uriBuilder.addQuery("datacenterId", "NA9");
       return uriBuilder;
    }

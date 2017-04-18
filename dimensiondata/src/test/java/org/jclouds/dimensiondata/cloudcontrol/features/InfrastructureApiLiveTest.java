@@ -23,23 +23,33 @@ import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudCon
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "InfrastructureApiLiveTest", singleThreaded = true)
 public class InfrastructureApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest {
 
    @Test
    public void testListDatacenters() {
-      FluentIterable<Datacenter> datacenters = api().listDatacenters().concat();
-      assertNotNull(datacenters);
+      FluentIterable<Datacenter> datacenters = getDatacenters();
+      assertTrue(!datacenters.isEmpty());
       for (Datacenter datacenter : datacenters) {
          assertNotNull(datacenter);
       }
    }
 
+   private FluentIterable<Datacenter> getDatacenters() {
+      FluentIterable<Datacenter> datacenters = api().listDatacenters().concat();
+      assertNotNull(datacenters);
+      return datacenters;
+   }
+
    @Test
    public void testListOperatingSystems() {
-      FluentIterable<OperatingSystem> operatingSystems = api().listOperatingSystems("NA9").concat();
+      FluentIterable<Datacenter> datacenters = getDatacenters();
+      FluentIterable<OperatingSystem> operatingSystems = api().listOperatingSystems(datacenters.first().get().id())
+            .concat();
       assertNotNull(operatingSystems);
+      assertTrue(!operatingSystems.isEmpty());
       for (OperatingSystem operatingSystem : operatingSystems) {
          assertNotNull(operatingSystem);
       }

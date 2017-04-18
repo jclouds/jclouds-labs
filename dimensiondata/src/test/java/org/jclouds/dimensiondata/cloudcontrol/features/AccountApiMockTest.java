@@ -33,7 +33,7 @@ public class AccountApiMockTest extends BaseDimensionDataCloudControlMockTest {
       server.enqueue(jsonResponse("/account.json"));
       Account account = api.getAccountApi().getMyAccount();
       assertNotNull(account);
-      assertSent(HttpMethod.GET, "/" + VERSION + "/user/myUser");
+      assertSent(HttpMethod.GET, "/caas/" + VERSION + "/user/myUser");
    }
 
    @Test
@@ -41,7 +41,7 @@ public class AccountApiMockTest extends BaseDimensionDataCloudControlMockTest {
       server.enqueue(response404());
       Account account = api.getAccountApi().getMyAccount();
       assertNull(account);
-      assertSent(HttpMethod.GET, "/" + VERSION + "/user/myUser");
+      assertSent(HttpMethod.GET, "/caas/" + VERSION + "/user/myUser");
    }
 
 }
