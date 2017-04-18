@@ -17,32 +17,53 @@
 package org.jclouds.dimensiondata.cloudcontrol.features;
 
 import com.google.common.collect.FluentIterable;
+import org.jclouds.collect.PagedIterable;
 import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImage;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "ServerImageApiLiveTest", singleThreaded = true)
 public class ServerImageApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest {
 
    @Test
    public void testListOsImages() {
-      FluentIterable<OsImage> osImages = api().listOsImages().concat();
-      assertNotNull(osImages);
+      FluentIterable<OsImage> osImages = getOsImages().concat();
+      assertTrue(!osImages.isEmpty());
       for (OsImage osImage : osImages) {
          assertNotNull(osImage);
       }
    }
 
+   private PagedIterable<OsImage> getOsImages() {
+      PagedIterable<OsImage> osImages = api().listOsImages();
+      assertNotNull(osImages);
+      return osImages;
+   }
+
+   @Test
+   public void testGetOsImage() {
+      FluentIterable<OsImage> osImages = getOsImages().concat();
+      final OsImage osImage = api().getOsImage(osImages.iterator().next().id());
+      assertNotNull(osImage);
+   }
+
    @Test
    public void testListCustomerImages() {
-      FluentIterable<CustomerImage> customerImages = api().listCustomerImages().concat();
+      FluentIterable<CustomerImage> customerImages = getCustomerImages();
       assertNotNull(customerImages);
       for (CustomerImage customerImage : customerImages) {
          assertNotNull(customerImage);
       }
+   }
+
+   private FluentIterable<CustomerImage> getCustomerImages() {
+      FluentIterable<CustomerImage> customerImages = api().listCustomerImages().concat();
+      assertNotNull(customerImages);
+      return customerImages;
    }
 
    private ServerImageApi api() {

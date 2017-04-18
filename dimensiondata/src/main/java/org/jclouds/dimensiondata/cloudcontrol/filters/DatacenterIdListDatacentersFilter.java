@@ -29,9 +29,13 @@ import java.util.Set;
  * Adds set of Datacenter IDs as set in jclouds.zones JVM property.
  */
 public class DatacenterIdListDatacentersFilter implements HttpRequestFilter {
+
+   private final Supplier<Set<String>> datacenterIdsSupplier;
+
    @Inject
-   @Zone
-   protected Supplier<Set<String>> datacenterIdsSupplier;
+   DatacenterIdListDatacentersFilter(@Zone Supplier<Set<String>> datacenterIdsSupplier) {
+      this.datacenterIdsSupplier = datacenterIdsSupplier;
+   }
 
    @Override
    public HttpRequest filter(HttpRequest request) throws HttpException {

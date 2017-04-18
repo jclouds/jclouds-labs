@@ -17,11 +17,12 @@
 package org.jclouds.dimensiondata.cloudcontrol.features;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.inject.TypeLiteral;
 import org.jclouds.Fallbacks;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
-import org.jclouds.collect.internal.ArgsToPagedIterable;
+import org.jclouds.collect.internal.Arg0ToPagedIterable;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImages;
@@ -46,7 +47,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
@@ -106,7 +106,7 @@ public interface ServerImageApi {
          super(json, TypeLiteral.get(OsImages.class));
       }
 
-      private static class ToPagedIterable extends ArgsToPagedIterable<OsImage, ToPagedIterable> {
+      private static class ToPagedIterable extends Arg0ToPagedIterable<OsImage, ToPagedIterable> {
 
          private DimensionDataCloudControlApi api;
 
@@ -116,7 +116,7 @@ public interface ServerImageApi {
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<OsImage>> markerToNextForArgs(List<Object> args) {
+         protected Function<Object, IterableWithMarker<OsImage>> markerToNextForArg0(Optional<Object> arg0) {
             return new Function<Object, IterableWithMarker<OsImage>>() {
                @Override
                public IterableWithMarker<OsImage> apply(Object input) {
@@ -135,7 +135,7 @@ public interface ServerImageApi {
          super(json, TypeLiteral.get(CustomerImages.class));
       }
 
-      private static class ToPagedIterable extends ArgsToPagedIterable<CustomerImage, ToPagedIterable> {
+      private static class ToPagedIterable extends Arg0ToPagedIterable<CustomerImage, ToPagedIterable> {
 
          private DimensionDataCloudControlApi api;
 
@@ -145,7 +145,7 @@ public interface ServerImageApi {
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<CustomerImage>> markerToNextForArgs(List<Object> args) {
+         protected Function<Object, IterableWithMarker<CustomerImage>> markerToNextForArg0(Optional<Object> arg0) {
             return new Function<Object, IterableWithMarker<CustomerImage>>() {
                @Override
                public IterableWithMarker<CustomerImage> apply(Object input) {
