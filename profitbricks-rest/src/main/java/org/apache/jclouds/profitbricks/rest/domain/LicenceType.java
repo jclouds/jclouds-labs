@@ -20,7 +20,7 @@ import com.google.common.base.Enums;
 
 public enum LicenceType {
 
-   WINDOWS, LINUX, OTHER, UNRECOGNIZED;
+   WINDOWS, LINUX, OTHER, WINDOWS2016, UNRECOGNIZED;
 
    public static LicenceType fromValue(String v) {
       return Enums.getIfPresent(LicenceType.class, v).or(UNRECOGNIZED);
