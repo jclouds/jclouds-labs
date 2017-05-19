@@ -16,15 +16,15 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.server;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Supplier;
 import com.google.inject.Inject;
+import java.net.URI;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import com.google.common.base.Supplier;
-import java.net.URI;
 import org.jclouds.location.Provider;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UpdateServerRequestBinder extends BaseProfitBricksRequestBinder<Server.Request.UpdatePayload> {
 
@@ -59,6 +59,9 @@ public class UpdateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
          requestBuilder.put("bootVolume", payload.bootVolume());
       else if (payload.bootCdrom() != null)
          requestBuilder.put("bootCdrom", payload.bootCdrom());
+      
+      if (payload.cpuFamily() != null)
+         requestBuilder.put("cpuFamily", payload.cpuFamily());
       
       return jsonBinder.toJson(requestBuilder);
    }

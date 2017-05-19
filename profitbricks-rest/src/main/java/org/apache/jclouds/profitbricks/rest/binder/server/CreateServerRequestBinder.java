@@ -61,6 +61,9 @@ public class CreateServerRequestBinder extends BaseProfitBricksRequestBinder<Ser
       else if (payload.bootCdrom() != null)
          properties.put("bootCdrom", payload.bootCdrom());
       
+      if (payload.cpuFamily() != null)
+         properties.put("cpuFamily", payload.cpuFamily());
+      
       requestBuilder.put("properties", properties);
       
       Server.Entities entities = payload.entities();

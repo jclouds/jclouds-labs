@@ -60,6 +60,9 @@ public class UpdateNicRequestBinder extends BaseProfitBricksRequestBinder<Nic.Re
       if (payload.dhcp() != null)
          requestBuilder.put("dhcp", payload.dhcp());
       
+      if (payload.nat() != null)
+         requestBuilder.put("nat", payload.nat());
+      
       return jsonBinder.toJson(requestBuilder);
    }
 

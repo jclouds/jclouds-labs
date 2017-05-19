@@ -215,6 +215,9 @@ public abstract class Server extends Trackable {
 
          @Nullable
          public abstract Volume bootCdrom();
+         
+         @Nullable
+         public abstract CpuFamily cpuFamily();
 
          @Nullable
          public abstract AvailabilityZone availabilityZone();
@@ -238,6 +241,8 @@ public abstract class Server extends Trackable {
             public abstract Builder bootVolume(BootVolume bootVolume);
 
             public abstract Builder bootCdrom(Volume bootCdrom);
+            
+            public abstract Builder cpuFamily(CpuFamily cpuFamily);
 
             public abstract Builder availabilityZone(AvailabilityZone availabilityZone);
 

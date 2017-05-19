@@ -64,6 +64,9 @@ public class CreateNicRequestBinder extends BaseProfitBricksRequestBinder<Nic.Re
       if (payload.firewallActive() != null)
          properties.put("firewallActive", payload.firewallActive());
       
+      if (payload.nat() != null)
+         properties.put("nat", payload.nat());
+      
       if (payload.firewallrules() != null) {
          Map<String, Object> entities = new HashMap<String, Object>();
          entities.put("firewallrules", payload.firewallrules());

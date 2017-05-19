@@ -20,9 +20,9 @@ import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
 import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "DataCenterApiLiveTest")
 public class DataCenterApiLiveTest extends BaseProfitBricksLiveTest {
