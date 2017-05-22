@@ -20,6 +20,7 @@ public enum Location {
 
    DE_FKB("de/fkb", "Germany, Karlsruhe"),
    DE_FRA("de/fra", "Germany, Frankfurt (M)"),
+   US_EWR("us/ewr", "USA, Newark"),
    US_LAS("us/las", "USA, Las Vegas"),
    US_LASDEV("us/lasdev", "USA Developer cluster"),
    UNRECOGNIZED("unrecognized", "Unrecognized location"),
