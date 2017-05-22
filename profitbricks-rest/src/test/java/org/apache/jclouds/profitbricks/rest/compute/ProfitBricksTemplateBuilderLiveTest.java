@@ -32,7 +32,7 @@ public class ProfitBricksTemplateBuilderLiveTest extends BaseTemplateBuilderLive
 
    @Override
    protected Set<String> getIso3166Codes() {
-      return ImmutableSet.of("DE-BW", "DE-HE", "US-NV");
+      return ImmutableSet.of("DE-BW", "DE-HE", "US-NJ", "US-NV");
    }
 
    @Override

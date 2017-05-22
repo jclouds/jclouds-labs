@@ -58,13 +58,14 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
 
       properties.setProperty(PROPERTY_REGIONS, "de,us");
       properties.setProperty(PROPERTY_REGION + ".de.zones", "de/fkb,de/fra");
-      properties.setProperty(PROPERTY_REGION + ".us.zones", "us/las,us/lasdev");
-      properties.setProperty(PROPERTY_ZONES, "de/fkb,de/fra,us/las,us/lasdev");
-      properties.setProperty(PROPERTY_ISO3166_CODES, "DE-BW,DE-HE,US_NV");
+      properties.setProperty(PROPERTY_REGION + ".us.zones", "us/ewr,us/las,us/lasdev");
+      properties.setProperty(PROPERTY_ZONES, "de/fkb,de/fra,us/ewr,us/las,us/lasdev");
+      properties.setProperty(PROPERTY_ISO3166_CODES, "DE-BW,DE-HE,US-NJ,US_NV");
       properties.setProperty(PROPERTY_REGION + ".de." + ISO3166_CODES, "DE-BW,DE-HE");
-      properties.setProperty(PROPERTY_REGION + ".us." + ISO3166_CODES, "US-NV");
+      properties.setProperty(PROPERTY_REGION + ".us." + ISO3166_CODES, "US-NJ,US-NV");
       properties.setProperty(PROPERTY_ZONE + ".de/fkb." + ISO3166_CODES, "DE-BW");
       properties.setProperty(PROPERTY_ZONE + ".de/fra." + ISO3166_CODES, "DE-HE");
+      properties.setProperty(PROPERTY_ZONE + ".us/ewr." + ISO3166_CODES, "US-NJ");
       properties.setProperty(PROPERTY_ZONE + ".us/las." + ISO3166_CODES, "US-NV");
       properties.setProperty(PROPERTY_ZONE + ".us/lasdev." + ISO3166_CODES, "US-NV");
 
@@ -90,7 +91,7 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
                  .apiMetadata(new ProfitBricksApiMetadata())
                  .homepage(URI.create("https://www.profitbricks.com/"))
                  .console(URI.create("https://my.profitbricks.com/dashboard/dcdr2"))
-                 .iso3166Codes("DE-BW", "DE-HE", "US-NV")
+                 .iso3166Codes("DE-BW", "DE-HE", "US-NJ", "US-NV")
                  .endpoint("https://api.profitbricks.com/cloudapi/v3/")
                  .defaultProperties(ProfitBricksProviderMetadata.defaultProperties());
       }
