@@ -71,6 +71,9 @@ public class SingleServerApplianceToImage implements Function<SingleServerApplia
    }
 
    private static Optional<OsFamily> findInStandardFamilies(final String osFamily) {
+      if (osFamily == null) {
+         return Optional.absent();
+      }
       return tryFind(asList(OsFamily.values()), new Predicate<OsFamily>() {
          @Override
          public boolean apply(OsFamily input) {
@@ -80,6 +83,9 @@ public class SingleServerApplianceToImage implements Function<SingleServerApplia
    }
 
    private static Optional<OsFamily> findInOtherOSMap(final String label) {
+      if (label == null) {
+         return Optional.absent();
+      }
       return tryFind(OTHER_OS_MAP.keySet(), new Predicate<String>() {
          @Override
          public boolean apply(String input) {
