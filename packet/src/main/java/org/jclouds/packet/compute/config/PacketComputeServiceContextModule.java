@@ -16,11 +16,19 @@
  */
 package org.jclouds.packet.compute.config;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_TERMINATED;
+import static org.jclouds.util.Predicates2.retry;
+
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.config.ComputeServiceAdapterContextModule;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
+import org.jclouds.compute.functions.NodeAndTemplateOptionsToStatement;
+import org.jclouds.compute.functions.NodeAndTemplateOptionsToStatementWithoutPublicKey;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
@@ -49,16 +57,9 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
-import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_TERMINATED;
-import static org.jclouds.util.Predicates2.retry;
-
 public class PacketComputeServiceContextModule extends
         ComputeServiceAdapterContextModule<Device, Plan, OperatingSystem, Facility> {
 
-   @SuppressWarnings("unchecked")
    @Override
    protected void configure() {
       super.configure();
@@ -80,6 +81,7 @@ public class PacketComputeServiceContextModule extends
       });
       bind(TemplateOptions.class).to(PacketTemplateOptions.class);
       bind(CreateNodesInGroupThenAddToSet.class).to(CreateSshKeysThenCreateNodes.class);
+      bind(NodeAndTemplateOptionsToStatement.class).to(NodeAndTemplateOptionsToStatementWithoutPublicKey.class);
    }
 
    @Provides
