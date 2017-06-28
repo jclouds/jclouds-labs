@@ -17,7 +17,6 @@
 package org.jclouds.dimensiondata.cloudcontrol.domain;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableList;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
@@ -25,31 +24,8 @@ import org.jclouds.json.SerializedNames;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 @AutoValue
 public abstract class Server {
-
-   public enum State {
-      NORMAL, FAILED_ADD, FAILED_CHANGE, FAILED_DELETE, PENDING_DELETE, DELETED, UNRECOGNIZED;
-
-      @Override
-      public String toString() {
-         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
-      }
-
-      public static State fromValue(String state) {
-         try {
-            return valueOf(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, checkNotNull(state, "state")));
-         } catch (IllegalArgumentException e) {
-            return UNRECOGNIZED;
-         }
-      }
-
-      public boolean isFailed() {
-         return this == FAILED_ADD || this == FAILED_CHANGE || this == FAILED_DELETE;
-      }
-   }
 
    Server() {
    }

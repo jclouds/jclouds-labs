@@ -14,27 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.dimensiondata.cloudcontrol;
+package org.jclouds.dimensiondata.cloudcontrol.domain;
 
-import org.jclouds.dimensiondata.cloudcontrol.features.AccountApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.InfrastructureApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.NetworkApi;
-import org.jclouds.dimensiondata.cloudcontrol.features.ServerImageApi;
-import org.jclouds.rest.annotations.Delegate;
+import com.google.common.base.CaseFormat;
 
-import java.io.Closeable;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-public interface DimensionDataCloudControlApi extends Closeable {
+public enum State {
 
-   @Delegate
-   AccountApi getAccountApi();
+   NORMAL, FAILED_ADD, FAILED_CHANGE, FAILED_DELETE, PENDING_DELETE, DELETED, UNRECOGNIZED;
 
-   @Delegate
-   InfrastructureApi getInfrastructureApi();
+   @Override
+   public String toString() {
+      return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+   }
 
-   @Delegate
-   ServerImageApi getServerImageApi();
+   public static State fromValue(String state) {
+      try {
+         return valueOf(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, checkNotNull(state, "state")));
+      } catch (IllegalArgumentException e) {
+         return UNRECOGNIZED;
+      }
+   }
 
-   @Delegate
-   NetworkApi getNetworkApi();
+   public boolean isFailed() {
+      return this == FAILED_ADD || this == FAILED_CHANGE || this == FAILED_DELETE;
+   }
 }

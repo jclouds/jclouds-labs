@@ -47,7 +47,7 @@ public abstract class NetworkDomain {
    public abstract String description();
 
    @Nullable
-   public abstract String state();
+   public abstract State state();
 
    @Nullable
    public abstract Type type();
@@ -59,7 +59,7 @@ public abstract class NetworkDomain {
    public abstract Date createTime();
 
    @SerializedNames({ "id", "datacenterId", "name", "description", "state", "type", "snatIpv4Address", "createTime" })
-   public static NetworkDomain create(String id, String datacenterId, String name, String description, String state,
+   public static NetworkDomain create(String id, String datacenterId, String name, String description, State state,
          Type type, String snatIpv4Address, Date createTime) {
       return builder().id(id).datacenterId(datacenterId).name(name).description(description).state(state).type(type)
             .snatIpv4Address(snatIpv4Address).createTime(createTime).build();
@@ -77,7 +77,7 @@ public abstract class NetworkDomain {
 
       public abstract Builder description(String description);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Builder type(Type type);
 

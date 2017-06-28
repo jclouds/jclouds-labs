@@ -1,0 +1,30 @@
+{
+  "operation": "ADD_DISK",
+  "responseCode": "IN_PROGRESS",
+  "message": "Request to add a 3 GB Standard Speed Disk on Server 'Green-SCSI-SATA-IDE-Server2' has been accepted and is being processed.",
+  "info": [
+    {
+      "name": "diskId",
+      "value": "270a0d5d-f9c9-4aa5-94f5-123333cffb3c"
+    },
+    {
+      "name": "scsiId",
+      "value": "11"
+    },
+    {
+      "name": "scsiControllerId",
+      "value": "e461c085-fa98-4f19-818a-65d557182f46"
+    },
+    {
+      "name": "busNumber",
+      "value": "0"
+    },
+    {
+      "name": "speed",
+      "value": "STANDARD"
+    }
+  ],
+  "warning": [],
+  "error": [],
+  "requestId": "devlab1_20170512T065031117-0400_49fd964f-0c2c-44bc-95e3-edd112d98cc9"
+}

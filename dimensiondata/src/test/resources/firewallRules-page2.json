@@ -1,0 +1,108 @@
+{
+  "firewallRule": [
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-br32rb23",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-3h33",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-htrhtr",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-g312yg53",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    }
+  ],
+  "pageNumber": 2,
+  "pageCount": 4,
+  "totalCount": 15,
+  "pageSize": 11
+}
