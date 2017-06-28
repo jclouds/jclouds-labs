@@ -1,0 +1,16 @@
+{
+  "id": "c8c92ea3-2da8-4d51-8153-f39bec794d69",
+  "name": "name",
+  "description": "description",
+  "port": [
+    {
+      "begin": 100,
+      "end": 2000
+    },
+    {
+      "begin": 443
+    }
+  ],
+  "state": "NORMAL",
+  "createTime": "2008-09-29T02:49:45"
+}

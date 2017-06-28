@@ -1,0 +1,30 @@
+{
+  "vlan": [
+    {
+      "networkDomain": {
+        "id": "690de302-bb80-49c6-b401-8c02bbefb945",
+        "name": "test"
+      },
+      "name": "vlan1",
+      "description": "",
+      "privateIpv4Range": {
+        "address": "10.0.0.0",
+        "prefixSize": 24
+      },
+      "ipv4GatewayAddress": "10.0.0.1",
+      "ipv6Range": {
+        "address": "2607:f480:111:1575:0:0:0:0",
+        "prefixSize": 64
+      },
+      "ipv6GatewayAddress": "2607:f480:111:1575:0:0:0:1",
+      "createTime": "2016-03-11T10:41:19.000Z",
+      "state": "NORMAL",
+      "id": "6b25b02e-d3a2-4e69-8ca7-9bab605deebd",
+      "datacenterId": "NA9"
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 1,
+  "totalCount": 1,
+  "pageSize": 250
+}

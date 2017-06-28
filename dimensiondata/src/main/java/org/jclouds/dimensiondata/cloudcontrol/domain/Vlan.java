@@ -39,7 +39,7 @@ public abstract class Vlan {
 
    public abstract String datacenterId();
 
-   public abstract String state();
+   public abstract State state();
 
    public abstract Date createTime();
 
@@ -55,7 +55,7 @@ public abstract class Vlan {
 
    @SerializedNames({ "id", "name", "description", "datacenterId", "state", "createTime", "ipv4GatewayAddress",
          "ipv6GatewayAddress", "networkDomain", "privateIpv4Range", "ipv6Range" })
-   public static Vlan create(String id, String name, String description, String datacenterId, String state,
+   public static Vlan create(String id, String name, String description, String datacenterId, State state,
          Date createTime, String ipv4GatewayAddress, String ipv6GatewayAddress, NetworkDomain networkDomain,
          IpRange privateIpv4Range, IpRange ipv6Range) {
       return builder().id(id).name(name).description(description).datacenterId(datacenterId).state(state)
@@ -75,7 +75,7 @@ public abstract class Vlan {
 
       public abstract Builder datacenterId(String datacenterId);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Builder createTime(Date createTime);
 

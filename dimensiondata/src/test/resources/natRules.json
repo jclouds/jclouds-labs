@@ -1,0 +1,26 @@
+{
+  "natRule": [
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "internalIp": "10.0.0.15",
+      "externalIp": "165.180.12.18",
+      "createTime": "2015-03-06T13:43:45.000Z",
+      "state": "NORMAL",
+      "id": "2187a636-7ebb-49a1-a2ff-5d617f496dce",
+      "datacenterId": "NA9"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "internalIp": "10.0.0.16",
+      "externalIp": "165.180.12.19",
+      "createTime": "2015-03-06T13:45:10.000Z",
+      "state": "NORMAL",
+      "id": "2169a38e-5692-497e-a22a-701a838a6539",
+      "datacenterId": "NA9"
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 2,
+  "totalCount": 2,
+  "pageSize": 250
+}

@@ -1,0 +1,283 @@
+{
+  "firewallRule": [
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-xe21wswq",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-xe1sw1x",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-ne21e1c",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-xe21xe2",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-ce12ce2",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-xe21xe21v",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-xe21x1e2",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-xr32rx2",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-b23br32",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-dhtrhr",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    },
+    {
+      "networkDomainId": "484174a2-ae74-4658-9e56-50fc90e086cf",
+      "name": "CCDEFAULT.BlockOutboundMailIPv6Secure",
+      "action": "DROP",
+      "ipVersion": "IPV6",
+      "protocol": "TCP",
+      "source": {
+        "ip": {
+          "address": "ANY"
+        }
+      },
+      "destination": {
+        "ip": {
+          "address": "ANY"
+        },
+        "port": {
+          "begin": 587
+        }
+      },
+      "enabled": true,
+      "state": "NORMAL",
+      "id": "1aa3d0ce-d95d-4296-8338-d1d121221",
+      "datacenterId": "NA9",
+      "ruleType": "DEFAULT_RULE"
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 11,
+  "totalCount": 15,
+  "pageSize": 11
+}

@@ -47,6 +47,7 @@ import java.util.Set;
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.jclouds.util.Strings2.toStringAndClose;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
@@ -207,5 +208,13 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
    protected Uris.UriBuilder addPageNumberToUriBuilder(Uris.UriBuilder uriBuilder, int pageNumber) {
       uriBuilder.addQuery("pageNumber", Integer.toString(pageNumber));
       return uriBuilder;
+   }
+
+   public byte[] payloadFromResource(String resource) {
+      try {
+         return toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8);
+      } catch (IOException e) {
+         throw Throwables.propagate(e);
+      }
    }
 }
