@@ -61,13 +61,13 @@ public abstract class Hardware {
    @AutoValue
    public abstract static class UpdateHardware {
 
-      public abstract double ram();
+      public abstract double vcore();
 
       public abstract double coresPerProcessor();
 
-      public abstract double vcore();
+      public abstract double ram();
 
-      @SerializedNames({"ram", "cores_per_processor", "vcore"})
+      @SerializedNames({"vcore", "cores_per_processor", "ram"})
       public static UpdateHardware create(double vcore, double coresPerProcessor, double ram) {
          return new AutoValue_Hardware_UpdateHardware(vcore, coresPerProcessor, ram);
       }

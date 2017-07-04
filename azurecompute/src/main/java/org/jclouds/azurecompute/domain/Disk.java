@@ -40,14 +40,14 @@ public abstract class Disk {
       } // For AutoValue only!
 
       /**
-       * The deployment in which the disk is being used.
-       */
-      public abstract String deployment();
-
-      /**
        * The cloud service in which the disk is being used.
        */
       public abstract String hostedService();
+
+      /**
+       * The deployment in which the disk is being used.
+       */
+      public abstract String deployment();
 
       /**
        * The virtual machine that the disk is attached to.
