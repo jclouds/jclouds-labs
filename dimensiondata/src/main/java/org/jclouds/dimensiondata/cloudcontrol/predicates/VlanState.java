@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class VlanStatus implements Predicate<String> {
+public class VlanState implements Predicate<String> {
 
    @Resource
    protected Logger logger = Logger.NULL;
@@ -34,7 +34,7 @@ public class VlanStatus implements Predicate<String> {
    private final State state;
    private final NetworkApi networkApi;
 
-   public VlanStatus(NetworkApi networkApi, State state) {
+   public VlanState(NetworkApi networkApi, State state) {
       this.networkApi = networkApi;
       this.state = state;
    }

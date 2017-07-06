@@ -27,6 +27,12 @@ import org.testng.annotations.Test;
 @Test(groups = "live")
 public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<DimensionDataCloudControlApi> {
 
+   protected static final String NETWORK_DOMAIN_ID = System
+         .getProperty("networkDomainId", "690de302-bb80-49c6-b401-8c02bbefb945");
+   protected static final String VLAN_ID = System.getProperty("vlanId", "6b25b02e-d3a2-4e69-8ca7-9bab605deebd");
+   protected static final String IMAGE_ID = System.getProperty("imageId", "4c02126c-32fc-4b4c-9466-9824c1b5aa0f");
+   protected static final String DATACENTER = System.getProperty("datacenter", "NW20-EPC-LAB04");
+
    public BaseDimensionDataCloudControlApiLiveTest() {
       provider = "dimensiondata-cloudcontrol";
    }

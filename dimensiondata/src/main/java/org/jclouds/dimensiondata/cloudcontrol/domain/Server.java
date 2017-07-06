@@ -53,7 +53,7 @@ public abstract class Server {
 
    public abstract Boolean deployed();
 
-   public abstract OperatingSystem operatingSystem();
+   public abstract Guest guest();
 
    public abstract CPU cpu();
 
@@ -69,26 +69,22 @@ public abstract class Server {
    public abstract List<Object> softwareLabels();
 
    @Nullable
-   public abstract VMwareTools vmwareTools();
-
-   @Nullable
    public abstract Progress progress();
 
    @Nullable
    public abstract VirtualHardware virtualHardware();
 
    @SerializedNames({ "id", "name", "description", "datacenterId", "state", "sourceImageId", "createTime", "started",
-         "deployed", "operatingSystem", "cpu", "memoryGb", "disk", "networkInfo", "softwareLabel", "vmwareTools",
-         "progress", "virtualHardware" })
+         "deployed", "guest", "cpu", "memoryGb", "disk", "networkInfo", "softwareLabel", "progress",
+         "virtualHardware" })
    public static Server create(String id, String name, String description, String datacenterId, State state,
-         String sourceImageId, Date createTime, Boolean started, Boolean deployed, OperatingSystem operatingSystem,
-         CPU cpu, int memoryGb, List<Disk> disks, NetworkInfo networkInfo, List<Object> softwareLabels,
-         VMwareTools vmwareTools, Progress progress, VirtualHardware virtualHardware) {
+         String sourceImageId, Date createTime, Boolean started, Boolean deployed, Guest guest, CPU cpu, int memoryGb,
+         List<Disk> disks, NetworkInfo networkInfo, List<Object> softwareLabels, Progress progress,
+         VirtualHardware virtualHardware) {
       return builder().id(id).name(name).datacenterId(datacenterId).description(description).state(state)
-            .sourceImageId(sourceImageId).createTime(createTime).started(started).deployed(deployed)
-            .operatingSystem(operatingSystem).cpu(cpu).memoryGb(memoryGb).disks(disks).networkInfo(networkInfo)
-            .softwareLabels(softwareLabels).vmwareTools(vmwareTools).progress(progress).virtualHardware(virtualHardware)
-            .build();
+            .sourceImageId(sourceImageId).createTime(createTime).started(started).deployed(deployed).guest(guest)
+            .cpu(cpu).memoryGb(memoryGb).disks(disks).networkInfo(networkInfo).softwareLabels(softwareLabels)
+            .progress(progress).virtualHardware(virtualHardware).build();
    }
 
    public abstract Builder toBuilder();
@@ -113,7 +109,7 @@ public abstract class Server {
 
       public abstract Builder deployed(Boolean deployed);
 
-      public abstract Builder operatingSystem(OperatingSystem operatingSystem);
+      public abstract Builder guest(Guest guest);
 
       public abstract Builder cpu(CPU cpu);
 
@@ -124,8 +120,6 @@ public abstract class Server {
       public abstract Builder networkInfo(NetworkInfo networkInfo);
 
       public abstract Builder softwareLabels(List<Object> softwareLabels);
-
-      public abstract Builder vmwareTools(VMwareTools vmwareTools);
 
       public abstract Builder progress(Progress progress);
 

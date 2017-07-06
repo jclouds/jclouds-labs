@@ -29,9 +29,11 @@ public abstract class Disk {
    @Nullable
    public abstract String id();
 
-   public abstract int scsiId();
+   @Nullable
+   public abstract Integer scsiId();
 
-   public abstract int sizeGb();
+   @Nullable
+   public abstract Integer sizeGb();
 
    public abstract String speed();
 
@@ -39,7 +41,7 @@ public abstract class Disk {
    public abstract String state();
 
    @SerializedNames({ "id", "scsiId", "sizeGb", "speed", "state" })
-   public static Disk create(String id, int scsiId, int sizeGb, String speed, String state) {
+   public static Disk create(String id, Integer scsiId, Integer sizeGb, String speed, String state) {
       return builder().id(id).scsiId(scsiId).sizeGb(sizeGb).speed(speed).state(state).build();
    }
 
@@ -49,9 +51,9 @@ public abstract class Disk {
    public abstract static class Builder {
       public abstract Builder id(String id);
 
-      public abstract Builder scsiId(int scsiId);
+      public abstract Builder scsiId(Integer scsiId);
 
-      public abstract Builder sizeGb(int sizeGb);
+      public abstract Builder sizeGb(Integer sizeGb);
 
       public abstract Builder speed(String speed);
 

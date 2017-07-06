@@ -17,34 +17,42 @@
 package org.jclouds.dimensiondata.cloudcontrol.predicates;
 
 import com.google.common.base.Predicate;
-import org.jclouds.dimensiondata.cloudcontrol.domain.NetworkDomain;
+import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
 import org.jclouds.dimensiondata.cloudcontrol.domain.State;
-import org.jclouds.dimensiondata.cloudcontrol.features.NetworkApi;
+import org.jclouds.dimensiondata.cloudcontrol.features.ServerApi;
 import org.jclouds.logging.Logger;
 
 import javax.annotation.Resource;
+import java.text.MessageFormat;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class NetworkDomainStatus implements Predicate<String> {
+public class ServerState implements Predicate<String> {
 
    @Resource
    protected Logger logger = Logger.NULL;
-
+   private final ServerApi api;
    private final State state;
-   private final NetworkApi networkApi;
 
-   public NetworkDomainStatus(NetworkApi networkApi, State state) {
-      this.networkApi = networkApi;
+   public ServerState(ServerApi api, State state) {
+      this.api = api;
       this.state = state;
    }
 
    @Override
-   public boolean apply(String networkDomainId) {
-      checkNotNull(networkDomainId, "networkDomainId");
-      logger.trace("looking for state on network domain %s", networkDomainId);
-      final NetworkDomain networkDomain = networkApi.getNetworkDomain(networkDomainId);
-      final boolean isDeleted = networkDomain == null && state == State.DELETED;
-      return isDeleted || (networkDomain != null && networkDomain.state() == state);
+   public boolean apply(String serverId) {
+      checkNotNull(serverId, "serverId");
+      logger.trace("looking for state on Server %s", serverId);
+      final Server server = api.getServer(serverId);
+
+      if (server == null && state == State.DELETED) {
+         return true;
+      }
+
+      if (server.state().isFailed()) {
+         throw new IllegalStateException(MessageFormat.format("Server {0} is in FAILED state", server.id()));
+      } else {
+         return server.state().equals(state);
+      }
    }
 }

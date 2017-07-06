@@ -1,0 +1,14 @@
+{
+  "operation": "DEPLOY_SERVER",
+  "responseCode": "IN_PROGRESS",
+  "message": "Request to deploy Server 'Production FTPS Server' has been accepted and is being processed.",
+  "info": [
+    {
+      "name": "serverId",
+      "value": "7b62aae5-bdbe-4595-b58d-c78f95db2a7f"
+    }
+  ],
+  "warning": [],
+  "error": [],
+  "requestId": "na9_20160321T074626030-0400_7e9fffe7-190b-46f2-9107-9d52fe57d0ad"
+}
