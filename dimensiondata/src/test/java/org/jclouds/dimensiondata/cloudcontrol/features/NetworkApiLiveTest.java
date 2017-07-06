@@ -33,14 +33,12 @@ import java.util.List;
 import static org.jclouds.dimensiondata.cloudcontrol.features.NetworkApiMockTest.DEFAULT_ACTION;
 import static org.jclouds.dimensiondata.cloudcontrol.features.NetworkApiMockTest.DEFAULT_IP_VERSION;
 import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.generateFirewallRuleName;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForNetworkDomainStatus;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForVlanStatus;
+import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForNetworkDomainState;
+import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForVlanState;
 import static org.testng.Assert.assertNotNull;
 
 @Test(groups = "live", testName = "NetworkApiLiveTest", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest {
-
-   private static final String DATACENTER = "NW20-EPC-LAB04";
 
    private static final String DEFAULT_PRIVATE_IPV4_BASE_ADDRESS = "10.0.0.0";
    private static final Integer DEFAULT_PRIVATE_IPV4_PREFIX_SIZE = 24;
@@ -79,7 +77,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
             NetworkApiLiveTest.class.getSimpleName(), DEFAULT_PRIVATE_IPV4_BASE_ADDRESS,
             DEFAULT_PRIVATE_IPV4_PREFIX_SIZE);
       assertNotNull(vlanId);
-      waitForVlanStatus(api(), vlanId, State.NORMAL, 30 * 60 * 1000, "Error - unable to deploy vlan");
+      waitForVlanState(api(), vlanId, State.NORMAL, 30 * 60 * 1000, "Error - unable to deploy vlan");
    }
 
    @Test
@@ -88,7 +86,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
       networkDomainId = api()
             .deployNetworkDomain(DATACENTER, networkDomainName, NetworkApiLiveTest.class.getSimpleName(), "ESSENTIALS");
       assertNotNull(networkDomainId);
-      waitForNetworkDomainStatus(api(), networkDomainId, State.NORMAL, 30 * 60 * 1000,
+      waitForNetworkDomainState(api(), networkDomainId, State.NORMAL, 30 * 60 * 1000,
             "Error - unable to deploy network domain");
    }
 
@@ -110,11 +108,11 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
       }
       if (vlanId != null) {
          api().deleteVlan(vlanId);
-         waitForVlanStatus(api(), vlanId, State.DELETED, 30 * 60 * 1000, "Error deleting vlan");
+         waitForVlanState(api(), vlanId, State.DELETED, 30 * 60 * 1000, "Error deleting vlan");
       }
       if (networkDomainId != null) {
          api().deleteNetworkDomain(networkDomainId);
-         waitForNetworkDomainStatus(api(), networkDomainId, State.DELETED, 30 * 60 * 1000,
+         waitForNetworkDomainState(api(), networkDomainId, State.DELETED, 30 * 60 * 1000,
                "Error deleting network domain");
       }
    }

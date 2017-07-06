@@ -1,0 +1,60 @@
+{
+  "name": "ServerApiLiveTest",
+  "cpu": {
+    "count": 2,
+    "speed": "STANDARD",
+    "coresPerSocket": 1
+  },
+  "memoryGb": 4,
+  "disk": [
+    {
+      "id": "918f12ba-5e5e-4cd6-87bd-60c18293c24d",
+      "scsiId": 0,
+      "sizeGb": 20,
+      "speed": "STANDARD",
+      "state": "NORMAL"
+    }
+  ],
+  "networkInfo": {
+    "primaryNic": {
+      "id": "f0c00cab-bfa3-4c51-8c0a-c52fdac1ae4b",
+      "privateIpv4": "10.0.0.7",
+      "ipv6": "2a00:47c0: 111: 1131: 5851: 1950:411c: 3dd8",
+      "vlanId": "7bd12a4d-4e83-4254-a266-174aa5f55187",
+      "vlanName": "jclouds vlan",
+      "networkAdapter": "E1000",
+      "macAddress": "00: 50: 56: bb: 53: 1e",
+      "key": 4000,
+      "state": "NORMAL"
+    },
+    "additionalNic": [],
+    "networkDomainId": "d122949b-8990-46d6-98f0-91c8676fc720"
+  },
+  "softwareLabel": [],
+  "sourceImageId": "56eb0b7c-15a7-4b63-b373-05b962e37554",
+  "createTime": "2017-07-03T16: 29: 33.000Z",
+  "deployed": true,
+  "started": true,
+  "state": "NORMAL",
+  "guest": {
+    "operatingSystem": {
+      "id": "REDHAT764",
+      "displayName": "REDHAT7/64",
+      "family": "UNIX"
+    },
+    "vmTools": {
+      "type": "VMWARE_TOOLS",
+      "versionStatus": "CURRENT",
+      "runningStatus": "NOT_RUNNING",
+      "apiVersion": 9356
+    },
+    "osCustomization": true
+  },
+  "virtualHardware": {
+    "version": "vmx-10",
+    "upToDate": true
+  },
+  "tag": [],
+  "id": "cb08c7ba-7a51-4e32-8d39-05d2270f8f8b",
+  "datacenterId": "EU6"
+}

@@ -1,0 +1,9 @@
+{
+  "operation": "DELETE_SERVER",
+  "responseCode": "IN_PROGRESS",
+  "message": "Request to Delete Server (Id:5b00a2ab-c665-4cd6-8291-0b931374fb3d) has been accepted and is being processed",
+  "info": [],
+  "warning": [],
+  "error": [],
+  "requestId": "NA9/2015-03-08T05:47:02.731-04:00/22303753-7e22-4741-9e80-9da944a1f116"
+}

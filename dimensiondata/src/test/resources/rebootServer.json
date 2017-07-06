@@ -1,0 +1,9 @@
+{
+  "operation": "REBOOT_SERVER",
+  "responseCode": "IN_PROGRESS",
+  "message": "Request reconfigure Server 'Production Server' has been and is being processed.",
+  "info": [],
+  "warning": [],
+  "error": [],
+  "requestId": "na9_20160321T074626030-0400_7e9fffe7-190b-46f2-9107-9d52fe57d0ad"
+}

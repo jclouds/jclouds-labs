@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public enum State {
 
-   NORMAL, FAILED_ADD, FAILED_CHANGE, FAILED_DELETE, PENDING_DELETE, DELETED, UNRECOGNIZED;
+   NORMAL, FAILED_ADD, FAILED_CHANGE, FAILED_DELETE, PENDING_DELETE, DELETED, UNRECOGNIZED, PENDING_CHANGE;
 
    @Override
    public String toString() {

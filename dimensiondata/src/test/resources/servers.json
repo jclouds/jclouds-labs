@@ -1,0 +1,85 @@
+{
+  "server": [
+    {
+      "name": "parser-test-server-name",
+      "description": "parser-test-server-description",
+      "cluster": {
+        "id": "NA9-01",
+        "name": "SAP Cluster"
+      },
+      "cpu": {
+        "count": 2,
+        "speed": "STANDARD",
+        "coresPerSocket": 1
+      },
+      "memoryGb": 4,
+      "disk": [
+        {
+          "id": "0ba67812-d7b7-4c3f-b114-870fbea24d42",
+          "scsiId": 0,
+          "sizeGb": 10,
+          "speed": "STANDARD",
+          "state": "NORMAL"
+        }
+      ],
+      "networkInfo": {
+        "primaryNic": {
+          "id": "980a9fdd-4ea2-478b-85b4-f016349f1738",
+          "privateIpv4": "10.0.0.8",
+          "ipv6": "2607:f480:111:1575:c47:7479:2af8:3f1a",
+          "vlanId": "6b25b02e-d3a2-4e69-8ca7-9bab605deebd",
+          "vlanName": "vlan1",
+          "networkAdapter": "E1000",
+          "macAddress": "11-2A-3B-C4-E5-66",
+          "key": "4000",
+          "state": "NORMAL"
+        },
+        "additionalNic": [],
+        "networkDomainId": "690de302-bb80-49c6-b401-8c02bbefb945"
+      },
+      "softwareLabel": [],
+      "sourceImageId": "1e44ab3f-2426-45ec-a1b5-827b2ce58836",
+      "createTime": "2016-03-10T13:05:21.000Z",
+      "deployed": true,
+      "started": true,
+      "state": "NORMAL",
+      "guest": {
+        "operatingSystem": {
+          "id": "CENTOS564",
+          "displayName": "CENTOS5/64",
+          "family": "UNIX"
+        },
+        "vmTools": {
+          "type": "VMWARE_TOOLS",
+          "versionStatus": "NEED_UPGRADE",
+          "runningStatus": "RUNNING",
+          "apiVersion": 9354
+        },
+        "osCustomization": true
+      },
+      "virtualHardware": {
+        "version": "vmx-08",
+        "upToDate": false
+      },
+      "consistencyGroup": {
+        "id": "1234ef-1238933-2344adce-1098",
+        "name": "Test Consistency Group",
+        "status": "DRS_MODE",
+        "serverRole": "TARGET"
+      },
+      "tag": [
+        {
+          "tagKeyId": "883b91b3-702f-11e6-81fa-acaf67f59a21",
+          "tagKeyName": "Department",
+          "value": "IT"
+        }
+      ],
+      "id": "b8246ba4-847d-475b-b296-f76787a69ca8",
+      "datacenterId": "NA9"
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 1,
+  "totalCount": 1,
+  "pageSize": 250
+}
