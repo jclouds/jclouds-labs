@@ -40,7 +40,7 @@ public class InfrastructureApiMockTest extends BaseAccountAwareCloudControlMockT
       server.enqueue(jsonResponse("/datacenters.json"));
       Iterable<Datacenter> datacenters = api.getInfrastructureApi().listDatacenters().concat();
 
-      assertEquals(size(datacenters), 2); // Force the PagedIterable to advance
+      assertEquals(size(datacenters), 1); // Force the PagedIterable to advance
       assertEquals(server.getRequestCount(), 2);
 
       assertSent(HttpMethod.GET, expectedListDatacentersUriBuilder().toString());
