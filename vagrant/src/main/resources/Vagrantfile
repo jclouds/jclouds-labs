@@ -18,6 +18,26 @@ require 'yaml'
 # Because of linked_clone. 1.9+ recommended for Ubuntu Xenial
 Vagrant.require_version ">= 1.8"
 
+module CustomProviders
+  @@providers = []
+  def register(&fn)
+    @@providers << fn
+  end
+  def configure(config, machine_config)
+    @@providers.each do |provider|
+      provider.call(config, machine_config)
+    end
+  end
+
+  module_function :register
+  module_function :configure
+end
+
+
+Dir[Dir.home() + '/.jclouds/vagrant/providers/*.rb'].each do |file|
+  require File.dirname(file) + "/" + File.basename(file, '.rb')
+end
+
 Vagrant.configure(2) do |config|
   Dir.glob('machines/*.yaml') do |machine_file|
     machine_config = YAML.load_file(machine_file)
@@ -69,12 +89,18 @@ Vagrant.configure(2) do |config|
         v.memory = machine_config["memory"] if machine_config.key?("memory")
         v.cpus = machine_config["cpus"] if machine_config.key?("cpus")
         v.linked_clone = true
-        # Windows needs additional drivers for virtio
+        # Windows needs additional drivers for virtio and the default one is dreadfully slow on linux
         if !isWindows
           v.customize ["modifyvm", :id, "--nictype1", "virtio"]
           v.customize ["modifyvm", :id, "--nictype2", "virtio"]
         end
       end
+      config.vm.provider "libvirt" do |v|
+        v.memory = machine_config["memory"] if machine_config.key?("memory")
+        v.cpus = machine_config["cpus"] if machine_config.key?("cpus")
+      end
+
+      CustomProviders.configure(config, machine_config)
     end
   end
 end

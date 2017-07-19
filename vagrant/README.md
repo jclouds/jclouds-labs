@@ -109,6 +109,31 @@ make virtualbox/eval-win2012r2-standard
 vagrant box add boxcutter/eval-win2012r2-standard ./box/virtualbox/eval-win2012r2-standard-nocm-1.0.4.box
 ```
 
+Vagrant providers
+-----------
+
+jclouds supports the virtualbox an libvirt providers out of the box. To use additional providers users need to let
+jclouds know how to configure them. For example how to turn configuration like number of cpus or amount of memory to
+the provider specific configuration. Additional configuration might be needed as well. This is not required, but not
+providing it will lead to VMs which ignore configuration passed in from jclouds.
+
+To let jclouds configure additional providers create a Ruby file in ~/.jclouds/vagrant/providers. In the file
+register a block to do the configuration, by calling into `CustomProviders.register`. The block will be passed
+two arguments - `config` which is the Vagrant provided machine config and `machine_config` which is the configuration
+coming from jclouds. Here's an example file for `libvirt`.
+
+```
+CustomProviders.register do |config, machine_config|
+  config.vm.provider "libvirt" do |v|
+    v.memory = machine_config["memory"] if machine_config.key?("memory")
+    v.cpus = machine_config["cpus"] if machine_config.key?("cpus")
+  end
+end
+```
+
+jclouds selects the provider to use based on the selected box. Each box lists the provider it's been created for.
+The current implementation supports just a single provider per box name.
+
 Cleaning up
 -----------
 

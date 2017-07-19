@@ -30,7 +30,7 @@ public interface VagrantApiFacade {
     * 
     * @return the raw output of the configured provisioners
     */
-   String up(String machineName);
+   String up(String machineName, String provider);
    void halt(String machineName);
    void destroy(String machineName);
    LoginCredentials sshConfig(String machineName);

@@ -23,9 +23,16 @@
             <Pattern>%d %-5p [%c] [%thread] %m%n</Pattern>
         </encoder>
     </appender>
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>target/test-data/jclouds.log</file>
+        <encoder>
+            <Pattern>%d %-5p [%c] [%thread] %m%n</Pattern>
+        </encoder>
+    </appender>
 
     <root level="INFO">
         <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
     </root>
 
     <logger name="org.jclouds" level="INFO" />

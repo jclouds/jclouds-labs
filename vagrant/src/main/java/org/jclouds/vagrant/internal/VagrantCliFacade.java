@@ -54,9 +54,9 @@ public class VagrantCliFacade implements VagrantApiFacade, VagrantBoxApiFacade<B
    }
 
    @Override
-   public String up(String machineName) {
+   public String up(String machineName, String provider) {
       outputRecorder.record();
-      vagrant.up(machineName);
+      vagrant.up(machineName, provider);
       return outputRecorder.stopRecording();
    }
 
