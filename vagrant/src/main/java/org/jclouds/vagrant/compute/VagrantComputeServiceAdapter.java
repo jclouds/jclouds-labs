@@ -165,8 +165,6 @@ public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<Vagra
       Collection<String> ips = new ArrayList<String>();
       while (m.find()) {
          String network = m.group(1);
-         // TODO figure out a more generic approach to ignore unreachable networkds (this one is the NAT'd address).
-         if (network.startsWith("10.")) continue;
          ips.add(network);
       }
       return ips;
