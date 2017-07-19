@@ -110,9 +110,10 @@ public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<Vagra
    }
 
    private NodeAndInitialCredentials<VagrantNode> startMachine(File path, String group, String name, Image image, Hardware hardware) {
+      String provider = image.getUserMetadata().get(VagrantConstants.USER_META_PROVIDER);
 
       VagrantApiFacade vagrant = cliFactory.create(path);
-      String rawOutput = vagrant.up(name);
+      String rawOutput = vagrant.up(name, provider);
       String output = normalizeOutput(name, rawOutput);
 
       OsFamily osFamily = image.getOperatingSystem().getFamily();
@@ -308,9 +309,10 @@ public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<Vagra
       halt(id);
 
       VagrantNode node = nodeRegistry.get(id);
+      String provider = node.image().getUserMetadata().get(VagrantConstants.USER_META_PROVIDER);
       String name = node.name();
       VagrantApiFacade vagrant = getMachine(node);
-      vagrant.up(name);
+      vagrant.up(name, provider);
       node.setMachineState(Status.RUNNING);
    }
 
@@ -331,9 +333,10 @@ public class VagrantComputeServiceAdapter implements ComputeServiceAdapter<Vagra
    @Override
    public void resumeNode(String id) {
       VagrantNode node = nodeRegistry.get(id);
+      String provider = node.image().getUserMetadata().get(VagrantConstants.USER_META_PROVIDER);
       String name = node.name();
       VagrantApiFacade vagrant = getMachine(node);
-      vagrant.up(name);
+      vagrant.up(name, provider);
       node.setMachineState(Status.RUNNING);
    }
 
