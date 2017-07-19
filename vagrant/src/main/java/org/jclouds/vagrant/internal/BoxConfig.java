@@ -37,10 +37,6 @@ public class BoxConfig {
          return new BoxConfig(getVagrantHome(), image.getName(), image.getVersion(), provider);
       }
 
-      public BoxConfig newInstance(File vagrantHome, Image image) {
-         return this.newInstance(getVagrantHome(), image);
-      }
-
       public BoxConfig newInstance(Box box) {
          return this.newInstance(getVagrantHome(), box);
       }
