@@ -64,7 +64,6 @@ import org.apache.jclouds.profitbricks.rest.features.ServerApi;
 import org.apache.jclouds.profitbricks.rest.ids.NicRef;
 import org.apache.jclouds.profitbricks.rest.ids.ServerRef;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
-import org.apache.jclouds.profitbricks.rest.util.Passwords;
 import org.apache.jclouds.profitbricks.rest.util.Trackables;
 import static org.jclouds.Constants.PROPERTY_USER_THREADS;
 import org.jclouds.compute.ComputeServiceAdapter;
@@ -85,6 +84,7 @@ import org.jclouds.domain.LocationScope;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceNotFoundException;
+import org.jclouds.util.Passwords;
 
 @Singleton
 public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<ServerInDataCenter, Hardware, Provisionable, Location> {

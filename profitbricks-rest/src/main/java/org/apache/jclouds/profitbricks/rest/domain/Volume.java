@@ -20,9 +20,9 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Enums;
 import static com.google.common.base.Preconditions.checkArgument;
 import java.util.Set;
-import org.apache.jclouds.profitbricks.rest.util.Passwords;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
+import org.jclouds.util.Passwords;
 
 @AutoValue
 public abstract class Volume extends Trackable {

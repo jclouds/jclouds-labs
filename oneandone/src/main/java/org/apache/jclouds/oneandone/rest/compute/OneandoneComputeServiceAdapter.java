@@ -41,7 +41,6 @@ import org.apache.jclouds.oneandone.rest.domain.ServerAppliance;
 import org.apache.jclouds.oneandone.rest.domain.SingleServerAppliance;
 import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.apache.jclouds.oneandone.rest.domain.options.GenericQueryOptions;
-import org.apache.jclouds.oneandone.rest.util.Passwords;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Processor;
@@ -54,6 +53,7 @@ import static org.jclouds.compute.util.ComputeServiceUtils.getPortRangesFromList
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceNotFoundException;
+import org.jclouds.util.Passwords;
 
 @Singleton
 public class OneandoneComputeServiceAdapter implements ComputeServiceAdapter<Server, HardwareFlavour, SingleServerAppliance, DataCenter> {
