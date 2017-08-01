@@ -50,7 +50,7 @@ public class DimensionDataCloudControlErrorHandler implements HttpErrorHandler {
             if (message.contains("RESOURCE_NOT_FOUND") || message.contains("OPERATION_NOT_SUPPORTED")) {
                exception = new ResourceNotFoundException(message, exception);
             } else if (message.contains("INVALID_INPUT_DATA") || message.contains("ORGANIZATION_NOT_VERIFIED")
-                  || message.contains("SYSTEM_ERROR") && !message.contains("RETRYABLE_SYSTEM_ERROR") || message
+                  || (message.contains("SYSTEM_ERROR") && !message.contains("RETRYABLE_SYSTEM_ERROR")) || message
                   .contains("CPU_SPEED_NOT_AVAILABLE") || message.contains("CONFIGURATION_NOT_SUPPORTED")) {
                exception = new IllegalStateException(message, exception);
             } else if (message.contains("RESOURCE_BUSY") || message.contains("UNEXPECTED_ERROR")) {
