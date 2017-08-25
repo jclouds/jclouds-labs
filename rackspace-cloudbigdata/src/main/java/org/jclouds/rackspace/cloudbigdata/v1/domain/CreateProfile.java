@@ -22,8 +22,9 @@ import java.beans.ConstructorProperties;
 
 import javax.inject.Named;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -107,7 +108,7 @@ public class CreateProfile implements Comparable<CreateProfile> {
    }
 
    protected ToStringHelper string() {
-      return Objects.toStringHelper(this)
+      return MoreObjects.toStringHelper(this)
             .add("username", username)
             .add("password", password)
             .add("credentialsUsername", cloudCredentials.username)

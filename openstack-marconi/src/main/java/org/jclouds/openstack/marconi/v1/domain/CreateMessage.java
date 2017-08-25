@@ -17,6 +17,7 @@
 
 package org.jclouds.openstack.marconi.v1.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import org.jclouds.domain.JsonBall;
 
@@ -62,8 +63,8 @@ public class CreateMessage {
       return Objects.equal(this.ttl, that.ttl) && Objects.equal(this.body, that.body);
    }
 
-   protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper(this)
+   protected MoreObjects.ToStringHelper string() {
+      return MoreObjects.toStringHelper(this)
          .add("ttl", ttl).add("body", body);
    }
 
