@@ -16,7 +16,7 @@
  */
 package org.jclouds.azurecompute.compute.strategy;
 
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.Iterables.tryFind;

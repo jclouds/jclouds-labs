@@ -16,6 +16,7 @@
  */
 package org.apache.jclouds.profitbricks.rest.domain.zonescoped;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -78,8 +79,8 @@ public class DataCenterAndId {
       return Objects.equal(dataCenterId, other.dataCenterId) && Objects.equal(id, other.id);
    }
 
-   protected Objects.ToStringHelper string() {
-      return Objects.toStringHelper(this).add("dataCenterId", dataCenterId).add("id", id);
+   protected MoreObjects.ToStringHelper string() {
+      return MoreObjects.toStringHelper(this).add("dataCenterId", dataCenterId).add("id", id);
    }
 
    @Override

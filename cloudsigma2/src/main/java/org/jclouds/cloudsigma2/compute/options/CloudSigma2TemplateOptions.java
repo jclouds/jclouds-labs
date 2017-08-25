@@ -16,7 +16,7 @@
  */
 package org.jclouds.cloudsigma2.compute.options;
 
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import org.jclouds.cloudsigma2.domain.DeviceEmulationType;
 import org.jclouds.cloudsigma2.domain.Model;
 import org.jclouds.compute.options.TemplateOptions;

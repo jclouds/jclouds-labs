@@ -25,7 +25,7 @@ import org.jclouds.domain.LoginCredentials;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.scriptbuilder.domain.Statement;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -115,7 +115,7 @@ public class AzureComputeTemplateOptions extends TemplateOptions implements Clon
 
    @Override
    public String toString() {
-      return Objects.toStringHelper(this)
+      return MoreObjects.toStringHelper(this)
               .add("virtualNetworkName", virtualNetworkName)
               .add("subnetNames", subnetNames)
               .add("storageAccountName", storageAccountName)

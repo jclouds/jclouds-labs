@@ -16,7 +16,7 @@
  */
 package org.apache.jclouds.profitbricks.rest.domain.zonescoped;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import static com.google.common.base.Preconditions.checkNotNull;
 import org.apache.jclouds.profitbricks.rest.domain.Server;
 
@@ -34,7 +34,7 @@ public class ServerInDataCenter extends DataCenterAndId {
    }
 
    @Override
-   protected Objects.ToStringHelper string() {
+   protected MoreObjects.ToStringHelper string() {
       return super.string().add("server", server);
    }
 
