@@ -54,7 +54,7 @@ public class ProfitBricksApiMetadata extends BaseHttpApiMetadata<ProfitBricksApi
                  .identityName("API Username")
                  .credentialName("API Password")
                  .documentation(URI.create("https://devops.profitbricks.com/api/rest/"))
-                 .defaultEndpoint("https://api.profitbricks.com/cloudapi/v3/")
+                 .defaultEndpoint("https://api.profitbricks.com/cloudapi/v4/")
                  .view(ComputeServiceContext.class)
                  .defaultProperties(ProfitBricksApiMetadata.defaultProperties())
                  .defaultModules(ImmutableSet.<Class<? extends Module>>builder()

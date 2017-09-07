@@ -46,7 +46,7 @@ public class CreateLanRequestBinderTest extends BinderTestBase {
               actual
       );
       
-      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v3/datacenters/datacenter-id/lans");
+      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v4/datacenters/datacenter-id/lans");
       assertNotNull(actual, "Binder returned null payload");
       
       Json json = injector.getInstance(Json.class);

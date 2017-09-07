@@ -32,7 +32,7 @@ public class UpdateLanRequestBinder extends BaseProfitBricksRequestBinder<Lan.Re
    private String lanId;
 
    @Inject
-   UpdateLanRequestBinder(Json jsonBinder,  @Provider Supplier<URI> endpointSupplier) {
+   UpdateLanRequestBinder(Json jsonBinder, @Provider Supplier<URI> endpointSupplier) {
       super("lan", jsonBinder, endpointSupplier);
    }
 
@@ -42,18 +42,22 @@ public class UpdateLanRequestBinder extends BaseProfitBricksRequestBinder<Lan.Re
       checkNotNull(payload, "payload");
       checkNotNull(payload.dataCenterId(), "dataCenterId");
       checkNotNull(payload.id(), "id");
-      
+
       dataCenterId = payload.dataCenterId();
       lanId = payload.id();
-      
-      if (payload.isPublic() != null)
-         requestBuilder.put("public",  payload.isPublic());
-            
+
+      if (payload.isPublic() != null) {
+         requestBuilder.put("public", payload.isPublic());
+      }
+      if (payload.ipFailover() != null) {
+         requestBuilder.put("ipFailover", payload.ipFailover());
+      }
+
       return jsonBinder.toJson(requestBuilder);
    }
 
    @Override
-   protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {              
+   protected <R extends HttpRequest> R createRequest(R fromRequest, String payload) {
       return super.createRequest(genRequest(String.format("datacenters/%s/lans/%s", dataCenterId, lanId), fromRequest), payload);
    }
 

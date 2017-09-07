@@ -148,6 +148,9 @@ public abstract class Volume extends Trackable {
 
          @Nullable
          public abstract String image();
+         
+         @Nullable
+         public abstract String imageAlias();
 
          @Nullable
          public abstract AvailabilityZone availabilityZone();
@@ -177,7 +180,9 @@ public abstract class Volume extends Trackable {
             public abstract Builder availabilityZone(AvailabilityZone size);
 
             public abstract Builder image(String image);
-
+            
+            public abstract Builder imageAlias(String imageAlias);
+            
             public abstract Builder imagePassword(String imagePassword);
 
             public abstract Builder bus(Properties.BusType bus);
@@ -196,8 +201,8 @@ public abstract class Volume extends Trackable {
                }
 
                checkArgument(
-                       payload.image() != null || payload.licenceType() != null,
-                       "Either image or licenceType need to be present"
+                       payload.image() != null || payload.licenceType() != null || payload.imageAlias() != null,
+                       "Either image, imageAlias or licenceType need to be present"
                );
 
                return payload;

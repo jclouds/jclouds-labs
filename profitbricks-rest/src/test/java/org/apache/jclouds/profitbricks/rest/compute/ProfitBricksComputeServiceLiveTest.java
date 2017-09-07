@@ -32,7 +32,9 @@ import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ExecResponse;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
+import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
+import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.compute.predicates.NodePredicates;
 import static org.jclouds.compute.predicates.NodePredicates.inGroup;
 import org.jclouds.logging.config.LoggingModule;
@@ -48,6 +50,14 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
 
    public ProfitBricksComputeServiceLiveTest() {
       provider = "profitbricks-rest";
+   }
+
+   @Override
+   protected TemplateBuilder templateBuilder() {
+      TemplateOptions authOptions = TemplateOptions.Builder
+              .authorizePublicKey(keyPair.get("public"))
+              .overrideLoginPrivateKey(keyPair.get("private"));
+      return super.templateBuilder().options(authOptions);
    }
 
    @Override
@@ -113,7 +123,7 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
    @Override
    @Test
    public void testCreateNodeWithCustomHardware() throws Exception {
-      Template template = buildTemplate(templateBuilder()
+      Template template = buildTemplate(templateBuilder().imageNameMatches("Ubuntu").osVersionMatches("1[467]\\.04")
               .hardwareId("automatic:cores=2;ram=2048;disk=20"));
       try {
          NodeMetadata node = getOnlyElement(client.createNodesInGroup(group + "custom", 1, template));
@@ -128,7 +138,7 @@ public class ProfitBricksComputeServiceLiveTest extends BaseComputeServiceLiveTe
 
    @Test
    public void testCreateNodeWithCustomHardwareUsingMins() throws Exception {
-      Template template = buildTemplate(templateBuilder()
+      Template template = buildTemplate(templateBuilder().imageNameMatches("Ubuntu").osVersionMatches("1[467]\\.04")
               .minCores(2).minRam(2048).minDisk(20));
       try {
          NodeMetadata node = getOnlyElement(client.createNodesInGroup(group + "custom", 1, template));

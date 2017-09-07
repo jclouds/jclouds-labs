@@ -17,20 +17,15 @@
 package org.apache.jclouds.profitbricks.rest.features;
 
 import com.google.common.base.Predicate;
-
 import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import org.apache.jclouds.profitbricks.rest.domain.Image;
-import org.apache.jclouds.profitbricks.rest.domain.LicenceType;
-import static org.apache.jclouds.profitbricks.rest.domain.Location.US_LAS;
 import org.apache.jclouds.profitbricks.rest.domain.ProvisioningState;
 import org.apache.jclouds.profitbricks.rest.domain.Snapshot;
 import org.apache.jclouds.profitbricks.rest.domain.State;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.apache.jclouds.profitbricks.rest.domain.VolumeType;
-import org.apache.jclouds.profitbricks.rest.domain.options.DepthOptions;
 import org.apache.jclouds.profitbricks.rest.ids.VolumeRef;
 import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
 import static org.testng.Assert.assertEquals;
@@ -62,22 +57,6 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
    @Test
    public void testCreateVolume() {
       assertNotNull(dataCenter);
-
-      List<Image> images = api.imageApi().getList(new DepthOptions().depth(5));
-
-      Image testImage = null;
-
-      for (Image image : images) {
-         if (image.metadata().state() == State.AVAILABLE
-                 && image.properties().isPublic()
-                 && image.properties().imageType() == Image.Type.HDD
-                 && image.properties().location() == US_LAS
-                 && image.properties().licenceType() == LicenceType.LINUX
-                 && (testImage == null || testImage.properties().size() > image.properties().size())) {
-            testImage = image;
-         }
-      }
-
       HashSet<String> sshKeys = new HashSet<String>();
       sshKeys.add("hQGOEJeFL91EG3+l9TtRbWNjzhDVHeLuL3NWee6bekA=");
 
@@ -86,9 +65,8 @@ public class VolumeApiLiveTest extends BaseProfitBricksLiveTest {
               .dataCenterId(dataCenter.id())
               .name("jclouds-volume")
               .size(4)
-              .licenceType(LicenceType.LINUX)
+              .imageAlias("ubuntu:latest")
               .type(VolumeType.SSD)
-              .image(testImage.id())
               .sshKeys(sshKeys)
               .build());
 

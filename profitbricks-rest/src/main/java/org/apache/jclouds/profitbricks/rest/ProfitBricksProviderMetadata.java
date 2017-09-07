@@ -25,6 +25,7 @@ import static org.apache.jclouds.profitbricks.rest.config.ProfitBricksComputePro
 import static org.jclouds.Constants.PROPERTY_CONNECTION_TIMEOUT;
 import static org.jclouds.Constants.PROPERTY_ISO3166_CODES;
 import static org.jclouds.Constants.PROPERTY_SO_TIMEOUT;
+import static org.jclouds.compute.config.ComputeServiceProperties.TEMPLATE;
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
@@ -68,6 +69,7 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
       properties.setProperty(PROPERTY_ZONE + ".us/ewr." + ISO3166_CODES, "US-NJ");
       properties.setProperty(PROPERTY_ZONE + ".us/las." + ISO3166_CODES, "US-NV");
       properties.setProperty(PROPERTY_ZONE + ".us/lasdev." + ISO3166_CODES, "US-NV");
+      properties.put(TEMPLATE, "imageNameMatches=Ubuntu,osVersionMatches=1[467]\\.04");
 
       properties.put("jclouds.ssh.max-retries", "7");
       properties.put("jclouds.ssh.retry-auth", "true");
@@ -92,7 +94,7 @@ public class ProfitBricksProviderMetadata extends BaseProviderMetadata {
                  .homepage(URI.create("https://www.profitbricks.com/"))
                  .console(URI.create("https://my.profitbricks.com/dashboard/dcdr2"))
                  .iso3166Codes("DE-BW", "DE-HE", "US-NJ", "US-NV")
-                 .endpoint("https://api.profitbricks.com/cloudapi/v3/")
+                 .endpoint("https://api.profitbricks.com/cloudapi/v4/")
                  .defaultProperties(ProfitBricksProviderMetadata.defaultProperties());
       }
 
