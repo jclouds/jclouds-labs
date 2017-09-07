@@ -46,7 +46,7 @@ public class UpdateImageRequestBinderTest extends BinderTestBase {
               actual
       );
       
-      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v3/images/some-id");
+      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v4/images/some-id");
       assertNotNull(actual, "Binder returned null payload");
       
       Json json = injector.getInstance(Json.class);

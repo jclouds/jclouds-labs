@@ -52,7 +52,7 @@ public class CreateSnapshotRequestBinderTest extends BinderTestBase {
       expectedPayload.put("name", "test-snapshot");
       expectedPayload.put("description", "snapshot desc...");
             
-      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v3/datacenters/datacenter-id/volumes/volume-id/create-snapshot");
+      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v4/datacenters/datacenter-id/volumes/volume-id/create-snapshot");
       assertEquals(request.getPayload().getContentMetadata().getContentType(), MediaType.APPLICATION_FORM_URLENCODED);
       assertEquals(request.getPayload().getRawContent(), "&" + (new UrlEncodedFormPayload(expectedPayload)).getRawContent());
 

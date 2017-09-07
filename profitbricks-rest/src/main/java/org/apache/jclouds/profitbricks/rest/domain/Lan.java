@@ -17,6 +17,8 @@
 package org.apache.jclouds.profitbricks.rest.domain;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import static com.google.common.collect.ImmutableList.copyOf;
 import java.util.List;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
@@ -25,7 +27,7 @@ import org.jclouds.json.SerializedNames;
 public abstract class Lan extends Trackable {
 
    public abstract String id();
-   
+
    @Nullable
    public abstract String dataCenterId();
 
@@ -49,14 +51,32 @@ public abstract class Lan extends Trackable {
 
    @AutoValue
    public abstract static class Properties {
+
       @Nullable
       public abstract String name();
-      
+
       public abstract boolean isPublic();
-      
-      @SerializedNames({"name", "public"})
-      public static Properties create(String name, boolean isPublic) {
-         return new AutoValue_Lan_Properties(name, isPublic);
+
+      @Nullable
+      public abstract List<IpFailover> ipFailover();
+
+      @SerializedNames({"name", "public", "ipFailover"})
+      public static Properties create(String name, boolean isPublic, List<IpFailover> ipFailover) {
+         return new AutoValue_Lan_Properties(name, isPublic, ipFailover == null ? ImmutableList.<IpFailover>of() : copyOf(ipFailover));
+      }
+   }
+
+   @AutoValue
+   public abstract static class IpFailover {
+
+      @Nullable
+      public abstract String ip();
+
+      public abstract String nicUuid();
+
+      @SerializedNames({"ip", "nicUuid"})
+      public static IpFailover create(String ip, String nicUuid) {
+         return new AutoValue_Lan_IpFailover(ip, nicUuid);
       }
    }
 
@@ -71,8 +91,7 @@ public abstract class Lan extends Trackable {
       }
 
    }
-   
-   
+
    public static final class Request {
 
       public static CreatePayload.Builder creatingBuilder() {
@@ -82,7 +101,7 @@ public abstract class Lan extends Trackable {
       public static UpdatePayload.Builder updatingBuilder() {
          return new AutoValue_Lan_Request_UpdatePayload.Builder();
       }
-            
+
       @AutoValue
       public abstract static class CreatePayload {
 
@@ -94,15 +113,18 @@ public abstract class Lan extends Trackable {
 
          @Nullable
          public abstract List<Nic> nics();
-         
+
          public abstract String dataCenterId();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder name(String name);
+
             public abstract Builder isPublic(Boolean isPublic);
+
             public abstract Builder nics(List<Nic> nics);
+
             public abstract Builder dataCenterId(String dataCenterId);
 
             abstract CreatePayload autoBuild();
@@ -118,15 +140,24 @@ public abstract class Lan extends Trackable {
       public abstract static class UpdatePayload {
 
          public abstract Boolean isPublic();
+
          public abstract String dataCenterId();
+
          public abstract String id();
+
+         @Nullable
+         public abstract List<IpFailover> ipFailover();
 
          @AutoValue.Builder
          public abstract static class Builder {
 
             public abstract Builder isPublic(Boolean isPublic);
+
             public abstract Builder dataCenterId(String dataCenterId);
+
             public abstract Builder id(String id);
+
+            public abstract Builder ipFailover(List<IpFailover> ipFailover);
 
             abstract UpdatePayload autoBuild();
 
@@ -135,7 +166,7 @@ public abstract class Lan extends Trackable {
             }
          }
       }
-      
+
    }
-  
+
 }

@@ -34,6 +34,8 @@ import com.google.inject.Inject;
 import static java.lang.String.format;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -146,6 +148,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
       Hardware hardware = template.getHardware();
       TemplateOptions options = template.getOptions();
       final String loginUser = isNullOrEmpty(options.getLoginUser()) ? "root" : options.getLoginUser();
+      final String pubKey = options.getPublicKey();
       final String password = options.hasLoginPassword() ? options.getLoginPassword() : Passwords.generate();
       final org.jclouds.compute.domain.Image image = template.getImage();
       final int[] inboundPorts = template.getOptions().getInboundPorts();
@@ -165,7 +168,11 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
                Provisionable.Type provisionableType = Provisionable.Type.fromValue(
                        image.getUserMetadata().get(ProvisionableToImage.KEY_PROVISIONABLE_TYPE));
                if (provisionableType == Provisionable.Type.IMAGE) {
-                  request.imagePassword(password);
+                  if (pubKey != null) {
+                     request.sshKeys(new HashSet<String>(Arrays.asList(pubKey)));
+                  } else {
+                     request.imagePassword(password);
+                  }
                }
 
             }
@@ -347,6 +354,7 @@ public class ProfitBricksComputeServiceAdapter implements ComputeServiceAdapter<
 
       LoginCredentials serverCredentials = LoginCredentials.builder()
               .user(loginUser)
+              .privateKey(pubKey)
               .password(password)
               .build();
 

@@ -42,7 +42,7 @@ public class RestoreSnapshotRequestBinderTest extends BinderTestBase {
               binder.createPayload(payload)
       );
       
-      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v3/datacenters/datacenter-id/volumes/volume-id/restore-snapshot");
+      assertEquals(request.getEndpoint().getPath(), "/cloudapi/v4/datacenters/datacenter-id/volumes/volume-id/restore-snapshot");
       assertEquals(request.getPayload().getContentMetadata().getContentType(), MediaType.APPLICATION_FORM_URLENCODED);
       assertEquals(request.getPayload().getRawContent(), "&snapshotId=snapshot-id");
 

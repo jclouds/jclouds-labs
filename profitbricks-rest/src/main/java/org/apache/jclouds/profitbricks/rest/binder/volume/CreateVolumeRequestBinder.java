@@ -16,17 +16,17 @@
  */
 package org.apache.jclouds.profitbricks.rest.binder.volume;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Supplier;
 import com.google.inject.Inject;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.jclouds.profitbricks.rest.binder.BaseProfitBricksRequestBinder;
 import org.apache.jclouds.profitbricks.rest.domain.Volume;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.json.Json;
-import com.google.common.base.Supplier;
-import java.net.URI;
 import org.jclouds.location.Provider;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CreateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Volume.Request.CreatePayload> {
 
@@ -62,6 +62,9 @@ public class CreateVolumeRequestBinder extends BaseProfitBricksRequestBinder<Vol
       
       if (payload.imagePassword() != null)
          properties.put("imagePassword", payload.imagePassword());
+      
+      if (payload.imageAlias() != null)
+         properties.put("imageAlias", payload.imageAlias());
       
       if (payload.image() != null)
          properties.put("image", payload.image());

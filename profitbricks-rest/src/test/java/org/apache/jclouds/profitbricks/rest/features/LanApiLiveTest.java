@@ -16,46 +16,55 @@
  */
 package org.apache.jclouds.profitbricks.rest.features;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.jclouds.profitbricks.rest.domain.CpuFamily;
+import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
+import org.apache.jclouds.profitbricks.rest.domain.IpBlock;
+import org.apache.jclouds.profitbricks.rest.domain.Lan;
+import org.apache.jclouds.profitbricks.rest.domain.Lan.IpFailover;
+import org.apache.jclouds.profitbricks.rest.domain.Location;
+import org.apache.jclouds.profitbricks.rest.domain.Nic;
+import org.apache.jclouds.profitbricks.rest.domain.Server;
+import org.apache.jclouds.profitbricks.rest.domain.State;
+import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
-
-import java.net.URI;
-import java.util.List;
-
-import org.apache.jclouds.profitbricks.rest.domain.DataCenter;
-import org.apache.jclouds.profitbricks.rest.domain.Lan;
-import org.apache.jclouds.profitbricks.rest.domain.State;
-import org.apache.jclouds.profitbricks.rest.internal.BaseProfitBricksLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 @Test(groups = "live", testName = "LanApiLiveTest")
 public class LanApiLiveTest extends BaseProfitBricksLiveTest {
-   
+
    private DataCenter dataCenter;
    private Lan testLan;
-  
+   private Server testServer;
+   private IpBlock testIpBlock;
+   private Nic testNic;
+
    @BeforeClass
    public void setupTest() {
       dataCenter = createDataCenter();
    }
-   
+
    @AfterClass(alwaysRun = true)
    public void teardownTest() {
-      if (dataCenter != null)
+      if (dataCenter != null) {
          deleteDataCenter(dataCenter.id());
+         api.ipBlockApi().delete(testIpBlock.id());
+      }
    }
-     
+
    @Test
    public void testCreateLan() {
       assertNotNull(dataCenter);
-            
+
       testLan = lanApi().create(
               Lan.Request.creatingBuilder()
               .dataCenterId(dataCenter.id())
@@ -65,9 +74,7 @@ public class LanApiLiveTest extends BaseProfitBricksLiveTest {
       assertRequestCompleted(testLan);
       assertNotNull(testLan);
       assertEquals(testLan.properties().name(), "jclouds-lan");
-      assertLanAvailable(testLan);
    }
-   
 
    @Test(dependsOnMethods = "testCreateLan")
    public void testGetLan() {
@@ -84,52 +91,98 @@ public class LanApiLiveTest extends BaseProfitBricksLiveTest {
       assertNotNull(lans);
       assertFalse(lans.isEmpty());
       assertTrue(Iterables.any(lans, new Predicate<Lan>() {
-         @Override public boolean apply(Lan input) {
+         @Override
+         public boolean apply(Lan input) {
             return input.id().equals(testLan.id());
          }
       }));
    }
-   
+
    @Test(dependsOnMethods = "testCreateLan")
    public void testUpdateLan() {
       assertDataCenterAvailable(dataCenter);
-      
+
+      //reserve an ip for the failover group
+      testIpBlock = api.ipBlockApi().create(IpBlock.Request.creatingBuilder()
+              .properties(IpBlock.PropertiesRequest.create("jclouds ipBlock", Location.US_LAS.getId(), 1)).build());
+      assertRequestCompleted(testIpBlock);
+
+      //create the failover lan
+      Lan failoverLan = lanApi().create(
+              Lan.Request.creatingBuilder()
+              .dataCenterId(dataCenter.id())
+              .name("failover-lan")
+              .build());
+      //creating the server
+      testServer = api.serverApi().createServer(
+              Server.Request.creatingBuilder()
+              .dataCenterId(dataCenter.id())
+              .name("jclouds-node")
+              .cpuFamily(CpuFamily.INTEL_XEON)
+              .cores(1)
+              .ram(1024)
+              .build());
+
+      assertRequestCompleted(testServer);
+
+      List<String> ips = new ArrayList<String>();
+      ips.add(testIpBlock.properties().ips().get(0));
+
+      //creating the NIC
+      testNic = api.nicApi().create(
+              Nic.Request.creatingBuilder()
+              .dataCenterId(dataCenter.id())
+              .serverId(testServer.id())
+              .name("failover-nic")
+              .ips(ips)
+              .lan(Integer.parseInt(failoverLan.id()))
+              .build());
+
+      assertRequestCompleted(testNic);
+
+      List<IpFailover> failovers = new ArrayList<IpFailover>();
+      failovers.add(IpFailover.create(testIpBlock.properties().ips().get(0), testNic.id()));
+
+      //update lan with failover group
       Lan updated = api.lanApi().update(
               Lan.Request.updatingBuilder()
-              .dataCenterId(testLan.dataCenterId())
-              .id(testLan.id())
-              .isPublic(false)
+              .dataCenterId(failoverLan.dataCenterId())
+              .id(failoverLan.id())
+              .isPublic(true)
+              .ipFailover(failovers)
               .build());
 
       assertRequestCompleted(updated);
       assertLanAvailable(updated);
-      
-      Lan lan = lanApi().get(dataCenter.id(), testLan.id());
-      
-      assertEquals(lan.properties().isPublic(), false);
+
+      Lan lan = lanApi().get(dataCenter.id(), failoverLan.id());
+
+      assertTrue(lan.properties().isPublic());
+      assertNotNull(lan.properties().ipFailover());
    }
-   
+
    @Test(dependsOnMethods = "testUpdateLan")
    public void testDeleteLan() {
       URI uri = lanApi().delete(testLan.dataCenterId(), testLan.id());
       assertRequestCompleted(uri);
       assertLanRemoved(testLan);
    }
-   
+
    private void assertLanAvailable(Lan lan) {
       assertPredicate(new Predicate<Lan>() {
          @Override
          public boolean apply(Lan testLan) {
             Lan lan = lanApi().get(testLan.dataCenterId(), testLan.id());
-            
-            if (lan == null || lan.metadata() == null)
+
+            if (lan == null || lan.metadata() == null) {
                return false;
-            
+            }
+
             return lan.metadata().state() == State.AVAILABLE;
          }
       }, lan);
    }
-   
+
    private void assertLanRemoved(Lan lan) {
       assertPredicate(new Predicate<Lan>() {
          @Override
@@ -138,9 +191,9 @@ public class LanApiLiveTest extends BaseProfitBricksLiveTest {
          }
       }, lan);
    }
-     
+
    private LanApi lanApi() {
       return api.lanApi();
    }
-   
+
 }
