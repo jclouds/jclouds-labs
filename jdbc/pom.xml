@@ -31,9 +31,6 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <!-- This api has been written in a manner which requires Java language level 7. -->
-    <maven.compile.source>1.6</maven.compile.source>
-    <maven.compile.target>1.6</maven.compile.target>
     <jclouds.osgi.export>org.jclouds.jdbc*;version="${project.version}"</jclouds.osgi.export>
     <jclouds.osgi.import>org.jclouds*;version="${project.version}",*</jclouds.osgi.import>
   </properties>
