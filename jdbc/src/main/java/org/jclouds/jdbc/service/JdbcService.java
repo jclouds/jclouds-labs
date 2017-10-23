@@ -130,6 +130,7 @@ public class JdbcService {
       blobEntity.setContainerEntity(containerRepository.findContainerByName(containerName));
       blobEntity.setKey(key);
       blobEntity.setBlobAccess(blobAccess);
+      blobEntity.setTier(blob.getMetadata().getTier());
       blobEntity.setCreationDate(creationDate);
       blobEntity.setLastModified(new Date());
       blobEntity.setEtag(base16().lowerCase().encode(actualHashCode.asBytes()));

@@ -76,6 +76,7 @@ public class BlobEntityToBlob implements Function<BlobEntity, Blob> {
             HashCode.fromBytes(payload.getContentMD5()));
       blob.getMetadata().setETag(blobEntity.getEtag());
       blob.getMetadata().getContentMetadata().setExpires(payload.getExpires());
+      blob.getMetadata().setTier(blobEntity.getTier());
       return blob;
    }
 

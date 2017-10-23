@@ -17,6 +17,7 @@
 package org.jclouds.jdbc.entity;
 
 import org.jclouds.blobstore.domain.BlobAccess;
+import org.jclouds.blobstore.domain.Tier;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
@@ -54,6 +55,7 @@ public class BlobEntity {
    private Date creationDate;
    private Date lastModified;
    private BlobAccess blobAccess;
+   private Tier tier;
    private Long size;
    private String etag;
    private boolean directory;
@@ -73,13 +75,14 @@ public class BlobEntity {
    }
 
    public BlobEntity(ContainerEntity containerEntity, String key, PayloadEntity payload, Date creationDate, Date lastModified,
-         BlobAccess blobAccess, Map<String, String> userMetadata, Long size, String etag, boolean directory) {
+         BlobAccess blobAccess, Tier tier, Map<String, String> userMetadata, Long size, String etag, boolean directory) {
       this.containerEntity = containerEntity;
       this.key = key;
       this.creationDate = creationDate;
       this.lastModified = lastModified;
       this.payload = payload;
       this.blobAccess = blobAccess;
+      this.tier = tier;
       this.userMetadata = userMetadata;
       this.size = size;
       this.etag = etag;
@@ -142,6 +145,14 @@ public class BlobEntity {
       this.blobAccess = blobAccess;
    }
 
+   public Tier getTier() {
+      return tier;
+   }
+
+   public void setTier(Tier tier) {
+      this.tier = tier;
+   }
+
    public Map<String, String> getUserMetadata() {
       return userMetadata;
    }
@@ -175,6 +186,7 @@ public class BlobEntity {
       private String key;
       private PayloadEntity payload;
       private BlobAccess blobAccess;
+      private Tier tier;
       private Long size;
       private String etag;
       private Map<String, String> userMetadata;
@@ -188,6 +200,11 @@ public class BlobEntity {
 
       public Builder blobAccess(BlobAccess blobAccess) {
          this.blobAccess = blobAccess;
+         return this;
+      }
+
+      public Builder tier(Tier tier) {
+         this.tier = tier;
          return this;
       }
 
@@ -217,7 +234,7 @@ public class BlobEntity {
       }
 
       public BlobEntity build() {
-         return new BlobEntity(containerEntity, key, payload, null, null, blobAccess, userMetadata, size, etag, directory);
+         return new BlobEntity(containerEntity, key, payload, null, null, blobAccess, tier, userMetadata, size, etag, directory);
       }
    }
 
