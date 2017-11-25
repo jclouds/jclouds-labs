@@ -21,11 +21,11 @@
   <parent>
     <groupId>org.apache.jclouds</groupId>
     <artifactId>jclouds-project</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.3</version>
   </parent>
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>jclouds-labs</artifactId>
-  <version>2.0.3-SNAPSHOT</version>
+  <version>2.0.3</version>
   <packaging>pom</packaging>
   <name>Apache jclouds labs</name>
 
@@ -33,11 +33,11 @@
     <connection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs.git</connection>
     <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs.git</developerConnection>
     <url>https://git-wip-us.apache.org/repos/asf?p=jclouds-labs.git</url>
-    <tag>HEAD</tag>
+    <tag>rel/jclouds-labs-2.0.3-rc1</tag>
   </scm>
 
   <properties>
-    <jclouds.version>2.0.3-SNAPSHOT</jclouds.version>
+    <jclouds.version>2.0.3</jclouds.version>
   </properties>
 
   <repositories>
