@@ -38,7 +38,7 @@ public abstract class FirewallRule {
 
    public abstract String networkDomainId();
 
-   public abstract String state();
+   public abstract State state();
 
    public abstract String action();
 
@@ -59,7 +59,7 @@ public abstract class FirewallRule {
 
    @SerializedNames({ "id", "name", "ruleType", "networkDomainId", "state", "action", "ipVersion", "protocol",
          "datacenterId", "source", "destination", "enabled", "placement" })
-   public static FirewallRule create(String id, String name, String ruleType, String networkDomainId, String state,
+   public static FirewallRule create(String id, String name, String ruleType, String networkDomainId, State state,
          String action, String ipVersion, String protocol, String datacenterId, FirewallRuleTarget source,
          FirewallRuleTarget destination, Boolean enabled, Placement placement) {
       return builder().id(id).name(name).ruleType(ruleType).networkDomainId(networkDomainId).state(state).action(action)
@@ -79,7 +79,7 @@ public abstract class FirewallRule {
 
       public abstract Builder networkDomainId(String networkDomainId);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Builder action(String action);
 

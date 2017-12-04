@@ -21,6 +21,7 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRuleTarget;
 import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRules;
 import org.jclouds.dimensiondata.cloudcontrol.domain.IpRange;
+import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlParseTest;
 import org.testng.annotations.Test;
 
@@ -41,7 +42,7 @@ public class FirewallRulesParseTest extends BaseDimensionDataCloudControlParseTe
    public FirewallRules expected() {
       List<FirewallRule> firewallRules = ImmutableList
             .of(FirewallRule.builder().id("1aa3d0ce-d95d-4296-8338-9717e0d37ff9")
-                  .name("CCDEFAULT.BlockOutboundMailIPv6Secure").state("NORMAL").action("DROP").ipVersion("IPV6")
+                  .name("CCDEFAULT.BlockOutboundMailIPv6Secure").state(State.NORMAL).action("DROP").ipVersion("IPV6")
                   .protocol("TCP").source(FirewallRuleTarget.builder().ip(IpRange.create("ANY", null)).build())
                   .destination(FirewallRuleTarget.builder().ip(IpRange.create("ANY", null))
                         .port(FirewallRuleTarget.Port.create(587, null)).build()).ruleType("DEFAULT_RULE")

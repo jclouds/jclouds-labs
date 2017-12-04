@@ -35,7 +35,7 @@ public abstract class PublicIpBlock {
 
    public abstract String datacenterId();
 
-   public abstract String state();
+   public abstract State state();
 
    public abstract Date createTime();
 
@@ -46,7 +46,7 @@ public abstract class PublicIpBlock {
    public abstract String networkDomainId();
 
    @SerializedNames({ "id", "datacenterId", "state", "createTime", "baseIp", "size", "networkDomainId" })
-   public static PublicIpBlock create(String id, String datacenterId, String state, Date createTime, String baseIp,
+   public static PublicIpBlock create(String id, String datacenterId, State state, Date createTime, String baseIp,
          int size, String networkDomainId) {
       return builder().id(id).datacenterId(datacenterId).state(state).createTime(createTime).baseIp(baseIp).size(size)
             .networkDomainId(networkDomainId).build();
@@ -60,7 +60,7 @@ public abstract class PublicIpBlock {
 
       public abstract Builder datacenterId(String datacenterId);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Builder createTime(Date createTime);
 

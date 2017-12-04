@@ -19,6 +19,7 @@ package org.jclouds.dimensiondata.cloudcontrol.parse;
 import com.google.common.collect.ImmutableList;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PublicIpBlock;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PublicIpBlocks;
+import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlParseTest;
 import org.testng.annotations.Test;
 
@@ -40,7 +41,7 @@ public class PublicIpBlocksParseTest extends BaseDimensionDataCloudControlParseT
       List<PublicIpBlock> publicIpBlocks = ImmutableList
             .of(PublicIpBlock.builder().networkDomainId("690de302-bb80-49c6-b401-8c02bbefb945")
                   .id("9993e5fc-bdce-11e4-8c14-b8ca3a5d9ef8").createTime(parseDate("2016-03-14T11:49:33.000Z"))
-                  .state("NORMAL").datacenterId("NA9").size(2).baseIp("168.128.6.216").build());
+                  .state(State.NORMAL).datacenterId("NA9").size(2).baseIp("168.128.6.216").build());
       return new PublicIpBlocks(publicIpBlocks, 1, 5, 5, 250);
    }
 }
