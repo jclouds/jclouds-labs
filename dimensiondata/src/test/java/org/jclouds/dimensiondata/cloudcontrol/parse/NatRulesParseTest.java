@@ -19,6 +19,7 @@ package org.jclouds.dimensiondata.cloudcontrol.parse;
 import com.google.common.collect.ImmutableList;
 import org.jclouds.dimensiondata.cloudcontrol.domain.NatRule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.NatRules;
+import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlParseTest;
 import org.testng.annotations.Test;
 
@@ -38,10 +39,10 @@ public class NatRulesParseTest extends BaseDimensionDataCloudControlParseTest<Na
    @Consumes(MediaType.APPLICATION_JSON)
    public NatRules expected() {
       List<NatRule> natRules = ImmutableList.of(NatRule.builder().id("2187a636-7ebb-49a1-a2ff-5d617f496dce")
-            .createTime(parseDate("2015-03-06T13:43:45.000Z")).state("NORMAL").externalIp("165.180.12.18")
+            .createTime(parseDate("2015-03-06T13:43:45.000Z")).state(State.NORMAL).externalIp("165.180.12.18")
             .internalIp("10.0.0.15").networkDomainId("484174a2-ae74-4658-9e56-50fc90e086cf").datacenterId("NA9")
             .build(), NatRule.builder().id("2169a38e-5692-497e-a22a-701a838a6539")
-            .createTime(parseDate("2015-03-06T13:45:10.000Z")).state("NORMAL").externalIp("165.180.12.19")
+            .createTime(parseDate("2015-03-06T13:45:10.000Z")).state(State.NORMAL).externalIp("165.180.12.19")
             .internalIp("10.0.0.16").networkDomainId("484174a2-ae74-4658-9e56-50fc90e086cf").datacenterId("NA9")
             .build());
       return new NatRules(natRules, 1, 2, 2, 250);

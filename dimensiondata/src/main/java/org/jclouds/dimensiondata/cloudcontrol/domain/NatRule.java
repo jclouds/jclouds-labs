@@ -35,7 +35,7 @@ public abstract class NatRule {
 
    public abstract String datacenterId();
 
-   public abstract String state();
+   public abstract State state();
 
    public abstract Date createTime();
 
@@ -46,7 +46,7 @@ public abstract class NatRule {
    public abstract String networkDomainId();
 
    @SerializedNames({ "id", "datacenterId", "state", "createTime", "externalIp", "internalIp", "networkDomainId" })
-   public static NatRule create(String id, String datacenterId, String state, Date createTime, String externalIp,
+   public static NatRule create(String id, String datacenterId, State state, Date createTime, String externalIp,
          String internalIp, String networkDomainId) {
       return builder().id(id).datacenterId(datacenterId).datacenterId(datacenterId).state(state).createTime(createTime)
             .externalIp(externalIp).internalIp(internalIp).networkDomainId(networkDomainId).build();
@@ -60,7 +60,7 @@ public abstract class NatRule {
 
       public abstract Builder datacenterId(String datacenterId);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Builder createTime(Date createTime);
 

@@ -40,4 +40,8 @@ public enum State {
    public boolean isFailed() {
       return this == FAILED_ADD || this == FAILED_CHANGE || this == FAILED_DELETE;
    }
+
+   public boolean isNormal() {
+      return this == NORMAL;
+   }
 }
