@@ -18,7 +18,6 @@ package org.jclouds.dimensiondata.cloudcontrol.compute.functions;
 
 import com.google.common.collect.Lists;
 import org.easymock.EasyMock;
-import org.easymock.EasyMockSupport;
 import org.jclouds.collect.IterableWithMarkers;
 import org.jclouds.collect.PagedIterables;
 import org.jclouds.compute.reference.ComputeServiceConstants;
@@ -94,10 +93,6 @@ public class CleanupServerTest {
             .datacenterId(datacenterId).ruleType("ruleType").action("action").ipVersion("ipVersion")
             .source(FirewallRuleTarget.builder().build()).enabled(false)
             .name(DimensionDataCloudControlResponseUtils.generateFirewallRuleName(serverId)).protocol("protocol");
-
-      EasyMockSupport.injectMocks(api);
-      EasyMockSupport.injectMocks(serverApi);
-      EasyMockSupport.injectMocks(networkApi);
    }
 
    @Test
