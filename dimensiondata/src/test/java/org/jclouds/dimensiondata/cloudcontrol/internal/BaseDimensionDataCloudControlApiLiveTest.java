@@ -32,6 +32,7 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
    protected static final String VLAN_ID = System.getProperty("vlanId", "6b25b02e-d3a2-4e69-8ca7-9bab605deebd");
    protected static final String IMAGE_ID = System.getProperty("imageId", "4c02126c-32fc-4b4c-9466-9824c1b5aa0f");
    protected static final String DATACENTER = System.getProperty("datacenter", "NW20-EPC-LAB04");
+   protected static final String SERVER_ID = System.getProperty("serverId", "b1c537bb-018c-49ba-beef-e0600e948149");
 
    public BaseDimensionDataCloudControlApiLiveTest() {
       provider = "dimensiondata-cloudcontrol";

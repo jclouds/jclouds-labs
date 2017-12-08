@@ -1,0 +1,70 @@
+{
+  "tagKey": [
+    {
+      "name": "jcloudsTagKeyName",
+      "description": "jcloudsTagKeyDescription",
+      "valueRequired": true,
+      "displayOnReport": false,
+      "id": "f3e5cf41-92e9-444e-9696-95a487b38259"
+    },
+    {
+      "name": "jcloudsTagKeyName1481197378077",
+      "description": "jcloudsTagKeyDescription",
+      "valueRequired": true,
+      "displayOnReport": false,
+      "id": "5e15b5ca-77dd-4c9b-9878-67efbaa081f2"
+    },
+    {
+      "name": "jcloudsTagKeyName1481198980963",
+      "description": "jcloudsTagKeyDescription",
+      "valueRequired": true,
+      "displayOnReport": false,
+      "id": "496d12da-5811-4fdb-9732-ca9d13c39a75"
+    },
+    {
+      "name": "jcloudsTagKeyName1481200035419",
+      "description": "jcloudsTagKeyDescription",
+      "valueRequired": true,
+      "displayOnReport": false,
+      "id": "9e22629c-7cd0-4d6b-a437-6559dfadc31b"
+    },
+    {
+      "name": "TestC1",
+      "valueRequired": false,
+      "displayOnReport": false,
+      "id": "d64281a6-1198-4e18-8f8f-27346a846931"
+    },
+    {
+      "name": "testIrene44",
+      "description": "",
+      "valueRequired": false,
+      "displayOnReport": false,
+      "id": "d1196e0e-79a4-42e4-acbf-b90be82940d4"
+    },
+    {
+      "name": "testMilan2",
+      "description": "",
+      "valueRequired": false,
+      "displayOnReport": false,
+      "id": "82e799f0-6297-4ec0-804d-3cdbca3e12d5"
+    },
+    {
+      "name": "testMilan3",
+      "description": "",
+      "valueRequired": false,
+      "displayOnReport": false,
+      "id": "e96dd00f-8c3a-4a96-b04d-393fb905b1f8"
+    },
+    {
+      "name": "testMilan4",
+      "description": "",
+      "valueRequired": true,
+      "displayOnReport": false,
+      "id": "4e5dc255-4e9f-4eb7-9901-9baae742b8d8"
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 1,
+  "totalCount": 9,
+  "pageSize": 100
+}

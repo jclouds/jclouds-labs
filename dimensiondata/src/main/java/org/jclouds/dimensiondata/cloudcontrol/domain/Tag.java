@@ -30,6 +30,7 @@ public abstract class Tag {
 
    public abstract String assetId();
 
+   @Nullable
    public abstract String datacenterId();
 
    public abstract String tagKeyId();
