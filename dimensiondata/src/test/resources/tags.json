@@ -1,0 +1,48 @@
+{
+  "tag": [
+    {
+      "assetType": "SERVER",
+      "assetId": "0542b218-6ff0-4170-93f0-666da5666cb7",
+      "datacenterId": "DEV_LAB1_N2_VMWARE_1",
+      "tagKeyId": "dfccc753-1b70-4533-86be-d893ca92e452",
+      "tagKeyName": "Owner",
+      "value": "Goran",
+      "displayOnReport": true,
+      "valueRequired": true
+    },
+    {
+      "assetType": "SERVER",
+      "assetId": "0809679b-0f10-478f-bd5b-c76f2d3c2238",
+      "datacenterId": "DEV_LAB1_N2_VMWARE_1",
+      "tagKeyId": "1b424566-2857-48cf-b04d-df69a3c9b8d4",
+      "tagKeyName": "Location",
+      "value": "HR",
+      "displayOnReport": true,
+      "valueRequired": true
+    },
+    {
+      "assetType": "NETWORK_DOMAIN",
+      "assetId": "232ce50a-7e18-47cd-8b40-61e34a7f43b6",
+      "assetName": "ab_non_vcmp_nd_1",
+      "datacenterId": "DEVLAB1_N2P_VMWARE_2",
+      "tagKeyId": "4f9cbcc8-a1b3-4621-ac5a-5ce8d4723e23",
+      "tagKeyName": "JohnTestingError",
+      "value": "",
+      "displayOnReport": false,
+      "valueRequired": true
+    },
+    {
+      "assetType": "ACCOUNT",
+      "assetId": "taggy",
+      "assetName": "taggy",
+      "tagKeyId": "cf2808c0-d337-4e30-a139-5d0322ab0372",
+      "tagKeyName": "Needs Cleaning",
+      "displayOnReport": true,
+      "valueRequired": false
+    }
+  ],
+  "pageNumber": 1,
+  "pageCount": 1,
+  "totalCount": 4,
+  "pageSize": 100
+}

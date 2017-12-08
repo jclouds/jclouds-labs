@@ -1,0 +1,7 @@
+{
+  "name": "jcloudsTagKeyName",
+  "description": "jcloudsTagKeyDescription",
+  "valueRequired": true,
+  "displayOnReport": false,
+  "id": "f3e5cf41-92e9-444e-9696-95a487b38259"
+}

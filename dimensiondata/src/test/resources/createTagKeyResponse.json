@@ -1,0 +1,14 @@
+{
+  "operation": "CREATE_TAG_KEY",
+  "responseCode": "OK",
+  "message": "Tag Key 'Department' has been created.",
+  "info": [
+    {
+      "name": "tagKeyId",
+      "value": "c452ceac-8627-423f-a8d2-5bb4a03c01d3"
+    }
+  ],
+  "warning": [],
+  "error": [],
+  "requestId": "devlab1/2016-02-18T10:22:58.423-05:00/a9402625-ca41-4f79-8383-e64981e5b574"
+}
