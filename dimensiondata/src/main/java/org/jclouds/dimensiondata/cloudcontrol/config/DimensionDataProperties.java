@@ -14,15 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.dimensiondata.cloudcontrol.utils;
+package org.jclouds.dimensiondata.cloudcontrol.config;
 
-public class DimensionDataCloudControlResponseUtils {
+/**
+ * Configuration properties and constants used in Dimension Data Cloud Control connections.
+ */
+public class DimensionDataProperties {
 
-   private static String convertServerId(String serverId) {
-      return serverId.replaceAll("-", "_");
-   }
-
-   public static String generateFirewallRuleName(String serverId) {
-      return String.format("fw.%s", convertServerId(serverId));
-   }
+   public static final String OPERATION_TIMEOUT = "jclouds.dimensiondata.cloudcontrol.operation.timeout";
 }
+

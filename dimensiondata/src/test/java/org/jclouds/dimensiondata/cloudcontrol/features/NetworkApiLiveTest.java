@@ -21,7 +21,6 @@ import com.google.common.collect.Lists;
 import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRuleTarget;
 import org.jclouds.dimensiondata.cloudcontrol.domain.IpRange;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Placement;
-import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.jclouds.rest.ResourceAlreadyExistsException;
 import org.testng.annotations.AfterClass;
@@ -33,9 +32,8 @@ import java.util.List;
 import static org.jclouds.dimensiondata.cloudcontrol.features.NetworkApiMockTest.DEFAULT_ACTION;
 import static org.jclouds.dimensiondata.cloudcontrol.features.NetworkApiMockTest.DEFAULT_IP_VERSION;
 import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.generateFirewallRuleName;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForNetworkDomainState;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForVlanState;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "NetworkApiLiveTest", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest {
@@ -77,7 +75,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
             NetworkApiLiveTest.class.getSimpleName(), DEFAULT_PRIVATE_IPV4_BASE_ADDRESS,
             DEFAULT_PRIVATE_IPV4_PREFIX_SIZE);
       assertNotNull(vlanId);
-      waitForVlanState(api(), vlanId, State.NORMAL, 30 * 60 * 1000, "Error - unable to deploy vlan");
+      assertTrue(vlanNormalPredicate.apply(vlanId), "vlan is not in a NORMAL state after timeout");
    }
 
    @Test
@@ -86,8 +84,8 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
       networkDomainId = api()
             .deployNetworkDomain(DATACENTER, networkDomainName, NetworkApiLiveTest.class.getSimpleName(), "ESSENTIALS");
       assertNotNull(networkDomainId);
-      waitForNetworkDomainState(api(), networkDomainId, State.NORMAL, 30 * 60 * 1000,
-            "Error - unable to deploy network domain");
+      assertTrue(networkDomainNormalPredicate.apply(networkDomainId),
+            "network domain is not in a NORMAL state after timeout");
    }
 
    @Test(expectedExceptions = ResourceAlreadyExistsException.class)
@@ -108,12 +106,12 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
       }
       if (vlanId != null) {
          api().deleteVlan(vlanId);
-         waitForVlanState(api(), vlanId, State.DELETED, 30 * 60 * 1000, "Error deleting vlan");
+         assertTrue(vlanDeletedPredicate.apply(vlanId), "vlan is not in a DELETED state after timeout");
       }
       if (networkDomainId != null) {
          api().deleteNetworkDomain(networkDomainId);
-         waitForNetworkDomainState(api(), networkDomainId, State.DELETED, 30 * 60 * 1000,
-               "Error deleting network domain");
+         assertTrue(networkDomainDeletedPredicate.apply(networkDomainId),
+               "network domain is not in a DELETED state after timeout");
       }
    }
 
