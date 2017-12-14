@@ -23,7 +23,6 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.Disk;
 import org.jclouds.dimensiondata.cloudcontrol.domain.NIC;
 import org.jclouds.dimensiondata.cloudcontrol.domain.NetworkInfo;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
-import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.domain.options.CloneServerOptions;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.testng.annotations.AfterClass;
@@ -31,9 +30,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForServerState;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForServerStatus;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForVmToolsRunning;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -66,40 +62,40 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
       List<Disk> disks = ImmutableList.of(Disk.builder().scsiId(0).speed("STANDARD").build());
       serverId = api().deployServer(deployedServerName, IMAGE_ID, started, networkInfo, "P$$ssWwrrdGoDd!", disks, null);
       assertNotNull(serverId);
-      waitForServerStatus(api(), serverId, true, true, 30 * 60 * 1000, "Error");
-      waitForServerState(api(), serverId, State.NORMAL, 30 * 60 * 1000, "Error");
+      assertTrue(serverStartedPredicate.apply(serverId), "server did not start after timeout");
+      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
    }
 
    @Test(dependsOnMethods = "testDeployAndStartServer")
    public void testReconfigureServer() {
       api().reconfigureServer(serverId, 4, CpuSpeed.HIGHPERFORMANCE.name(), 1);
-      waitForServerState(api(), serverId, State.NORMAL, 30 * 60 * 1000, "Error");
+      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
    }
 
    @Test(dependsOnMethods = "testDeployAndStartServer")
    public void testRebootServer() {
       api().rebootServer(serverId);
-      waitForServerState(api(), serverId, State.NORMAL, 30 * 60 * 1000, "Error");
-      waitForVmToolsRunning(api(), serverId, 30 * 60 * 1000, "Error");
+      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
+      assertTrue(vmtoolsRunningPredicate.apply(serverId), "server vm tools not running after timeout");
    }
 
    @Test(dependsOnMethods = "testRebootServer")
    public void testPowerOffServer() {
       api().powerOffServer(serverId);
-      waitForServerStatus(api(), serverId, false, true, 30 * 60 * 1000, "Error");
+      assertTrue(serverStoppedPredicate.apply(serverId), "server did not power off after timeout");
    }
 
    @Test(dependsOnMethods = "testPowerOffServer")
    public void testStartServer() {
       api().startServer(serverId);
-      waitForServerStatus(api(), serverId, true, true, 30 * 60 * 1000, "Error");
-      waitForVmToolsRunning(api(), serverId, 30 * 60 * 1000, "Error");
+      assertTrue(serverStartedPredicate.apply(serverId), "server did not start after timeout");
+      assertTrue(vmtoolsRunningPredicate.apply(serverId), "server vm tools not running after timeout");
    }
 
    @Test(dependsOnMethods = "testStartServer")
    public void testShutdownServer() {
       api().shutdownServer(serverId);
-      waitForServerStatus(api(), serverId, false, true, 30 * 60 * 1000, "Error");
+      assertTrue(serverStoppedPredicate.apply(serverId), "server did not shutdown after timeout");
    }
 
    @Test(dependsOnMethods = "testShutdownServer")
@@ -108,14 +104,14 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
             .guestOsCustomization(false).build();
       cloneImageId = api().cloneServer(serverId, "ServerApiLiveTest-" + System.currentTimeMillis(), options);
       assertNotNull(cloneImageId);
-      waitForServerState(api(), serverId, State.NORMAL, 30 * 60 * 1000, "Error");
+      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
    }
 
    @AfterClass(alwaysRun = true)
    public void testDeleteServer() {
       if (serverId != null) {
          api().deleteServer(serverId);
-         waitForServerState(api(), serverId, State.DELETED, 30 * 60 * 1000, "Error");
+         assertTrue(serverDeletedPredicate.apply(serverId), "server was not DELETED after timeout");
       }
    }
 

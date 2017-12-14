@@ -26,10 +26,8 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.NatRule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PublicIpBlock;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
-import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.features.NetworkApi;
 import org.jclouds.dimensiondata.cloudcontrol.features.ServerApi;
-import org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils;
 import org.jclouds.logging.Logger;
 
 import javax.annotation.Resource;
@@ -39,8 +37,9 @@ import javax.inject.Singleton;
 import java.util.List;
 
 import static java.lang.String.format;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STOPPED_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.generateFirewallRuleName;
-import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.waitForServerState;
 
 @Singleton
 public class CleanupServer implements Function<String, Boolean> {
@@ -51,11 +50,17 @@ public class CleanupServer implements Function<String, Boolean> {
 
    private final DimensionDataCloudControlApi api;
    private final Timeouts timeouts;
+   private Predicate<String> serverStoppedPredicate;
+   private Predicate<String> serverDeletedPredicate;
 
    @Inject
-   CleanupServer(final DimensionDataCloudControlApi api, final Timeouts timeouts) {
+   CleanupServer(final DimensionDataCloudControlApi api, final Timeouts timeouts,
+         @Named(SERVER_STOPPED_PREDICATE) final Predicate<String> serverStoppedPredicate,
+         @Named(SERVER_DELETED_PREDICATE) final Predicate<String> serverDeletedPredicate) {
       this.api = api;
       this.timeouts = timeouts;
+      this.serverStoppedPredicate = serverStoppedPredicate;
+      this.serverDeletedPredicate = serverDeletedPredicate;
    }
 
    @Override
@@ -118,11 +123,15 @@ public class CleanupServer implements Function<String, Boolean> {
 
       serverApi.powerOffServer(serverId);
       String message = format("Server(%s) not terminated within %d ms.", serverId, timeouts.nodeTerminated);
-      DimensionDataCloudControlResponseUtils
-            .waitForServerStatus(serverApi, serverId, false, true, timeouts.nodeTerminated, message);
+      if (!serverStoppedPredicate.apply(serverId)) {
+         throw new IllegalStateException(message);
+      }
       serverApi.deleteServer(serverId);
       String deleteFailureMessage = format("Server(%s) not deleted within %d ms.", serverId, timeouts.nodeTerminated);
-      waitForServerState(serverApi, serverId, State.DELETED, timeouts.nodeTerminated, deleteFailureMessage);
+
+      if (!serverDeletedPredicate.apply(serverId)) {
+         throw new IllegalStateException(deleteFailureMessage);
+      }
       return true;
    }
 

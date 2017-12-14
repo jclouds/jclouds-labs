@@ -16,12 +16,14 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol.compute.functions;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import org.easymock.EasyMock;
 import org.jclouds.collect.IterableWithMarkers;
 import org.jclouds.collect.PagedIterables;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
+import org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.CPU;
 import org.jclouds.dimensiondata.cloudcontrol.domain.CpuSpeed;
 import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRule;
@@ -63,12 +65,17 @@ public class CleanupServerTest {
    private NatRule.Builder natRuleBuilder;
    private PublicIpBlock.Builder publicIpBlockBuilder;
    private FirewallRule.Builder firewallRuleBuilder;
+   private DimensionDataCloudControlComputeServiceContextModule contextModule;
 
    @BeforeMethod
+
    public void setUp() throws Exception {
       serverApi = EasyMock.createMock(ServerApi.class);
       networkApi = EasyMock.createMock(NetworkApi.class);
+
       api = EasyMock.createMock(DimensionDataCloudControlApi.class);
+
+      contextModule = new DimensionDataCloudControlComputeServiceContextModule();
 
       internalIp = "172.0.0.1";
       final String datacenterId = "EU10";
@@ -119,7 +126,14 @@ public class CleanupServerTest {
 
    private void applyAndAssertDeleted() {
       replay(serverApi, networkApi, api);
-      cleanupServer = new CleanupServer(api, new ComputeServiceConstants.Timeouts());
+      Predicate<String> serverStoppedPredicate = contextModule
+            .provideServerStoppedPredicate(api, new ComputeServiceConstants.Timeouts(),
+                  new ComputeServiceConstants.PollPeriod());
+      Predicate<String> serverDeletedPredicate = contextModule
+            .provideServerDeletedPredicate(api, new ComputeServiceConstants.Timeouts(),
+                  new ComputeServiceConstants.PollPeriod());
+      cleanupServer = new CleanupServer(api, new ComputeServiceConstants.Timeouts(), serverStoppedPredicate,
+            serverDeletedPredicate);
       assertTrue(cleanupServer.apply(serverId));
    }
 
@@ -128,7 +142,14 @@ public class CleanupServerTest {
       final Server server = serverBuilder.state(State.FAILED_ADD).build();
       loadServerExpectations(server);
       replay(api, serverApi, networkApi);
-      cleanupServer = new CleanupServer(api, new ComputeServiceConstants.Timeouts());
+      Predicate<String> serverStoppedPredicate = contextModule
+            .provideServerStoppedPredicate(api, new ComputeServiceConstants.Timeouts(),
+                  new ComputeServiceConstants.PollPeriod());
+      Predicate<String> serverDeletedPredicate = contextModule
+            .provideServerDeletedPredicate(api, new ComputeServiceConstants.Timeouts(),
+                  new ComputeServiceConstants.PollPeriod());
+      cleanupServer = new CleanupServer(api, new ComputeServiceConstants.Timeouts(), serverStoppedPredicate,
+            serverDeletedPredicate);
       applyWithExpectedErrorMessage("Server(serverId) not deleted as it is in state(FailedAdd).");
    }
 
@@ -210,7 +231,7 @@ public class CleanupServerTest {
    }
 
    private void loadServerExpectations(Server server) {
-      expect(api.getServerApi()).andReturn(serverApi);
+      expect(api.getServerApi()).andReturn(serverApi).anyTimes();
       expect(serverApi.getServer(serverId)).andReturn(server);
    }
 

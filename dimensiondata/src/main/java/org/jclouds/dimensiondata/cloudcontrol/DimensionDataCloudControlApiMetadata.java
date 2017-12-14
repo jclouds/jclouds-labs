@@ -20,12 +20,15 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.ComputeServiceContext;
+import org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule;
 import org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlHttpApiModule;
 import org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlParserModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import java.net.URI;
+import java.util.Properties;
 
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataProperties.OPERATION_TIMEOUT;
 import static org.jclouds.reflect.Reflection2.typeToken;
 
 public class DimensionDataCloudControlApiMetadata extends BaseHttpApiMetadata<DimensionDataCloudControlApi> {
@@ -46,14 +49,16 @@ public class DimensionDataCloudControlApiMetadata extends BaseHttpApiMetadata<Di
    public static class Builder extends BaseHttpApiMetadata.Builder<DimensionDataCloudControlApi, Builder> {
 
       protected Builder() {
+         final Properties defaultProperties = DimensionDataCloudControlApiMetadata.defaultProperties();
+         defaultProperties.put(OPERATION_TIMEOUT, 30 * 60 * 1000);
          id("dimensiondata-cloudcontrol").name("DimensionData CloudControl API").identityName("user name")
                .credentialName("user password")
                .documentation(URI.create("http://www.dimensiondata.com/en-US/Solutions/Cloud"))
                .defaultEndpoint("https://api-REGION.dimensiondata.com/caas").version("2.4")
-               .defaultProperties(DimensionDataCloudControlApiMetadata.defaultProperties())
-               .view(typeToken(ComputeServiceContext.class)).defaultModules(
+               .defaultProperties(defaultProperties).view(typeToken(ComputeServiceContext.class)).defaultModules(
                ImmutableSet.<Class<? extends Module>>builder().add(DimensionDataCloudControlHttpApiModule.class)
-                     .add(DimensionDataCloudControlParserModule.class).build());
+                     .add(DimensionDataCloudControlParserModule.class)
+                     .add(DimensionDataCloudControlComputeServiceContextModule.class).build());
       }
 
       @Override
