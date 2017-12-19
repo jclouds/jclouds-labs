@@ -47,6 +47,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.Set;
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
@@ -75,7 +76,7 @@ public interface InfrastructureApi {
    @Path("/operatingSystem")
    @ResponseParser(ParseOperatingSystems.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
-   PaginatedCollection<OperatingSystem> listOperatingSystems(@QueryParam("datacenterId") String datacenterId,
+   PaginatedCollection<OperatingSystem> listOperatingSystems(@QueryParam("datacenterId") Set<String> datacenterId,
          PaginationOptions options);
 
    @Named("infrastructure:operatingSystem")
@@ -84,7 +85,7 @@ public interface InfrastructureApi {
    @Transform(ParseOperatingSystems.ToPagedIterable.class)
    @ResponseParser(ParseOperatingSystems.class)
    @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
-   PagedIterable<OperatingSystem> listOperatingSystems(@QueryParam("datacenterId") String datacenterId);
+   PagedIterable<OperatingSystem> listOperatingSystems(@QueryParam("datacenterId") Set<String> datacenterId);
 
    final class ParseDatacenters extends ParseJson<Datacenters> {
 
@@ -138,7 +139,7 @@ public interface InfrastructureApi {
                @Override
                public IterableWithMarker<OperatingSystem> apply(Object input) {
                   PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                  return api.getInfrastructureApi().listOperatingSystems(arg.get().toString(), paginationOptions);
+                  return api.getInfrastructureApi().listOperatingSystems((Set<String>) arg.get(), paginationOptions);
                }
             };
          }

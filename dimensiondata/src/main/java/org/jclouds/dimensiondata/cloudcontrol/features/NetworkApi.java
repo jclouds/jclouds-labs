@@ -37,7 +37,6 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.PaginatedCollection;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Placement;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PublicIpBlock;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PublicIpBlocks;
-import org.jclouds.dimensiondata.cloudcontrol.domain.Response;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Vlan;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Vlans;
 import org.jclouds.dimensiondata.cloudcontrol.filters.OrganisationIdFilter;
@@ -165,7 +164,8 @@ public interface NetworkApi {
    @Path("/addPublicIpBlock")
    @Produces(MediaType.APPLICATION_JSON)
    @MapBinder(BindToJsonPayload.class)
-   Response addPublicIpBlock(@PayloadParam("networkDomainId") String networkDomainId);
+   @ResponseParser(ParsePublicIpBlockId.class)
+   String addPublicIpBlock(@PayloadParam("networkDomainId") String networkDomainId);
 
    @Named("networkDomain:listPublicIPv4AddressBlocks")
    @GET
@@ -203,7 +203,8 @@ public interface NetworkApi {
    @Produces(MediaType.APPLICATION_JSON)
    @MapBinder(BindToJsonPayload.class)
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
-   Response createNatRule(@PayloadParam("networkDomainId") String networkDomainId,
+   @ResponseParser(ParseNatRuleId.class)
+   String createNatRule(@PayloadParam("networkDomainId") String networkDomainId,
          @PayloadParam("internalIp") String internalIp, @PayloadParam("externalIp") String externalIp);
 
    @Named("networkDomain:listNatRules")
@@ -483,5 +484,24 @@ public interface NetworkApi {
          super(json, "firewallRuleId");
       }
    }
+
+   @Singleton
+   final class ParsePublicIpBlockId extends ParseResponse {
+
+      @Inject
+      ParsePublicIpBlockId(Json json) {
+         super(json, "ipBlockId");
+      }
+   }
+
+   @Singleton
+   final class ParseNatRuleId extends ParseResponse {
+
+      @Inject
+      ParseNatRuleId(Json json) {
+         super(json, "natRuleId");
+      }
+   }
+
 }
 

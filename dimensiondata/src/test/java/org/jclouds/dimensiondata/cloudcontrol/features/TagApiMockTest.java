@@ -100,7 +100,7 @@ public class TagApiMockTest extends BaseAccountAwareCloudControlMockTest {
       consumeIterableAndAssertAdditionalPagesRequested(tags, 8, 0);
 
       assertSent(GET, expectedListTagsUriBuilder().toString());
-      assertSent(GET, addPageNumberToUriBuilder(expectedListTagsUriBuilder(), 2).toString());
+      assertSent(GET, addPageNumberToUriBuilder(expectedListTagsUriBuilder(), 2, true).toString());
    }
 
    @Test
@@ -128,7 +128,7 @@ public class TagApiMockTest extends BaseAccountAwareCloudControlMockTest {
       consumeIterableAndAssertAdditionalPagesRequested(tagKeys, 18, 0);
 
       assertSent(GET, expectedListTagKeysUriBuilder().toString());
-      assertSent(GET, addPageNumberToUriBuilder(expectedListTagKeysUriBuilder(), 2).toString());
+      assertSent(GET, addPageNumberToUriBuilder(expectedListTagKeysUriBuilder(), 2, true).toString());
    }
 
    private Uris.UriBuilder expectedListTagKeysUriBuilder() {

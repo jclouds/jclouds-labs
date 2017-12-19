@@ -31,6 +31,7 @@ import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlProviderMetadata;
 import org.jclouds.http.Uris;
 import org.jclouds.json.Json;
+import org.jclouds.location.suppliers.ZoneIdsSupplier;
 import org.jclouds.rest.ApiContext;
 import org.testng.IHookCallBack;
 import org.testng.IHookable;
@@ -205,8 +206,18 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
       assertEquals(server.getRequestCount() - initialRequestCount, expectedAdditionalPagesRequested);
    }
 
-   protected Uris.UriBuilder addPageNumberToUriBuilder(Uris.UriBuilder uriBuilder, int pageNumber) {
-      uriBuilder.addQuery("pageNumber", Integer.toString(pageNumber));
+   protected Uris.UriBuilder addPageNumberToUriBuilder(Uris.UriBuilder uriBuilder, int pageNumber, boolean clearQuery) {
+      if (clearQuery){
+         uriBuilder.clearQuery();
+      }
+      return uriBuilder.addQuery("pageNumber", Integer.toString(pageNumber));
+   }
+
+   protected Uris.UriBuilder addZonesToUriBuilder(Uris.UriBuilder uriBuilder) {
+      Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
+      for (String zone : zones) {
+         uriBuilder.addQuery("datacenterId", zone);
+      }
       return uriBuilder;
    }
 

@@ -17,21 +17,30 @@
 package org.jclouds.dimensiondata.cloudcontrol.internal;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
+import org.jclouds.ContextBuilder;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.BaseApiLiveTest;
+import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApiMetadata;
+import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlProviderMetadata;
+import org.jclouds.location.suppliers.ZoneIdsSupplier;
 import org.jclouds.logging.config.LoggingModule;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
+import org.jclouds.rest.ApiContext;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Properties;
+import java.util.Set;
 
+import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_DELETED_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_NORMAL_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
@@ -45,11 +54,27 @@ import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudCo
 @Test(groups = "live")
 public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<DimensionDataCloudControlApi> {
 
+   private static final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+
+   protected static final String PREPARED_CUSTOMER_IMAGE_ID = "fb438e00-10f8-47ac-a434-f3f9461c3a76";
+
    protected static final String NETWORK_DOMAIN_ID = System
          .getProperty("networkDomainId", "690de302-bb80-49c6-b401-8c02bbefb945");
    protected static final String VLAN_ID = System.getProperty("vlanId", "6b25b02e-d3a2-4e69-8ca7-9bab605deebd");
    protected static final String IMAGE_ID = System.getProperty("imageId", "4c02126c-32fc-4b4c-9466-9824c1b5aa0f");
-   protected static final String DATACENTER = System.getProperty("datacenter", "NW20-EPC-LAB04");
+
+   protected static final String PREPARED_NETWORK_DOMAIN_ID = System
+         .getProperty("networkDomainId", "d122949b-8990-46d6-98f0-91c8676fc720");
+   protected static final String PREPARED_PRIVATE_IPV4_ADDRESS = "10.0.0.6";
+   protected static ApiContext<DimensionDataCloudControlApi> ctx;
+   protected static Set<String> DATACENTERS;
+
+   @BeforeClass
+   public static void setUp() {
+      ctx = ContextBuilder.newBuilder(DimensionDataCloudControlProviderMetadata.builder().build()).credentials("", "")
+            .modules(modules).overrides(new Properties()).build();
+      DATACENTERS = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
+   }
    protected static final String SERVER_ID = System.getProperty("serverId", "b1c537bb-018c-49ba-beef-e0600e948149");
 
    protected Predicate<String> vlanDeletedPredicate;

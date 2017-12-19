@@ -16,15 +16,14 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol.features;
 
+import com.google.common.collect.Sets;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Datacenter;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystem;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseAccountAwareCloudControlMockTest;
 import org.jclouds.http.Uris;
-import org.jclouds.location.suppliers.ZoneIdsSupplier;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.HttpMethod;
-import java.util.Set;
 
 import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
@@ -43,7 +42,7 @@ public class InfrastructureApiMockTest extends BaseAccountAwareCloudControlMockT
       assertEquals(size(datacenters), 1); // Force the PagedIterable to advance
       assertEquals(server.getRequestCount(), 2);
 
-      assertSent(HttpMethod.GET, expectedListDatacentersUriBuilder().toString());
+      assertSent(HttpMethod.GET, addZonesToUriBuilder(expectedListDatacentersUriBuilder()).toString());
    }
 
    public void testListDatacentersWithPagination() throws Exception {
@@ -53,29 +52,32 @@ public class InfrastructureApiMockTest extends BaseAccountAwareCloudControlMockT
 
       consumeIterableAndAssertAdditionalPagesRequested(datacenters, 2, 1);
 
-      assertSent(HttpMethod.GET, expectedListDatacentersUriBuilder().toString());
-      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(expectedListDatacentersUriBuilder(), 2).toString());
+      assertSent(HttpMethod.GET, addZonesToUriBuilder(expectedListDatacentersUriBuilder()).toString());
+      assertSent(HttpMethod.GET, addZonesToUriBuilder(expectedListDatacentersWithPaginationUriBuilder(2)).toString());
    }
 
    public void testListDatacenters404() throws Exception {
       server.enqueue(response404());
       assertTrue(api.getInfrastructureApi().listDatacenters().concat().isEmpty());
-      assertSent(HttpMethod.GET, expectedListDatacentersUriBuilder().toString());
+      assertSent(HttpMethod.GET, addZonesToUriBuilder(expectedListDatacentersUriBuilder()).toString());
    }
 
    private Uris.UriBuilder expectedListDatacentersUriBuilder() {
       Uris.UriBuilder uriBuilder = Uris
             .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/datacenter");
-      Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
-      for (String zone : zones) {
-         uriBuilder.addQuery("id", zone);
-      }
-      return uriBuilder;
+      return addZonesToUriBuilder(uriBuilder);
+   }
+
+   private Uris.UriBuilder expectedListDatacentersWithPaginationUriBuilder(int pageNumber) {
+      Uris.UriBuilder uriBuilder = Uris
+            .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/datacenter");
+      return addZonesToUriBuilder(addPageNumberToUriBuilder(uriBuilder, pageNumber, true));
    }
 
    public void testListOperatingSystems() throws Exception {
       server.enqueue(jsonResponse("/operatingSystems.json"));
-      Iterable<OperatingSystem> operatingSystems = api.getInfrastructureApi().listOperatingSystems("NA9").concat();
+      Iterable<OperatingSystem> operatingSystems = api.getInfrastructureApi()
+            .listOperatingSystems(Sets.newHashSet("NA1", "NA9")).concat();
 
       assertEquals(size(operatingSystems), 33);
       assertEquals(server.getRequestCount(), 2);
@@ -86,26 +88,32 @@ public class InfrastructureApiMockTest extends BaseAccountAwareCloudControlMockT
    public void testListOperatingSystemsWithPagination() throws Exception {
       server.enqueue(jsonResponse("/operatingSystems-page1.json"));
       server.enqueue(jsonResponse("/operatingSystems-page2.json"));
-      Iterable<OperatingSystem> operatingSystems = api.getInfrastructureApi().listOperatingSystems("NA9").concat();
+      Iterable<OperatingSystem> operatingSystems = api.getInfrastructureApi()
+            .listOperatingSystems(Sets.newHashSet("NA1", "NA9")).concat();
 
       consumeIterableAndAssertAdditionalPagesRequested(operatingSystems, 33, 1);
 
       assertSent(HttpMethod.GET, expectedListOperatingSystemsUriBuilder().toString());
-      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(expectedListOperatingSystemsUriBuilder(), 2).toString());
+      assertSent(HttpMethod.GET, expectedListOperatingSystemsWithPaginationUriBuilder(2).toString());
 
    }
 
    public void testListOperatingSystems404() throws Exception {
       server.enqueue(response404());
-      assertTrue(api.getInfrastructureApi().listOperatingSystems("NA9").concat().isEmpty());
+      assertTrue(api.getInfrastructureApi().listOperatingSystems(Sets.newHashSet("NA1", "NA9")).concat().isEmpty());
       assertSent(HttpMethod.GET, expectedListOperatingSystemsUriBuilder().toString());
    }
 
    private Uris.UriBuilder expectedListOperatingSystemsUriBuilder() {
       Uris.UriBuilder uriBuilder = Uris
             .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/operatingSystem");
-      uriBuilder.addQuery("datacenterId", "NA9");
+      uriBuilder.addQuery("datacenterId", "NA1", "NA9");
       return uriBuilder;
    }
 
+   private Uris.UriBuilder expectedListOperatingSystemsWithPaginationUriBuilder(int pageNumber) {
+      Uris.UriBuilder uriBuilder = Uris
+            .uriBuilder("/caas/" + VERSION + "/6ac1e746-b1ea-4da5-a24e-caf1a978789d/infrastructure/operatingSystem");
+      return addPageNumberToUriBuilder(uriBuilder.addQuery("datacenterId", "NA1", "NA9"), pageNumber, false);
+   }
 }
