@@ -70,7 +70,7 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
 
       Uris.UriBuilder uriBuilder = getListOsImageUrl();
       assertSent(HttpMethod.GET, uriBuilder.toString());
-      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(uriBuilder, 2).toString());
+      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(uriBuilder, 2, false).toString());
    }
 
    public void testListOsImage_404() throws Exception {
@@ -121,7 +121,7 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       Uris.UriBuilder uriBuilder = getListCustomerImageUrl();
 
       assertSent(HttpMethod.GET, uriBuilder.toString());
-      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(uriBuilder, 2).toString());
+      assertSent(HttpMethod.GET, addZonesToUriBuilder(addPageNumberToUriBuilder(uriBuilder, 2, true)).toString());
    }
 
    public void testListCustomerImage_404() throws Exception {

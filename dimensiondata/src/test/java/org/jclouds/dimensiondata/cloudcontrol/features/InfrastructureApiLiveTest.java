@@ -22,6 +22,9 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystem;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.testng.annotations.Test;
 
+import java.util.Set;
+import java.util.HashSet;
+
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -45,9 +48,11 @@ public class InfrastructureApiLiveTest extends BaseDimensionDataCloudControlApiL
 
    @Test
    public void testListOperatingSystems() {
-      FluentIterable<Datacenter> datacenters = getDatacenters();
-      FluentIterable<OperatingSystem> operatingSystems = api().listOperatingSystems(datacenters.first().get().id())
-            .concat();
+      Set<String> datacenterIds = new HashSet<String>();
+      for (Datacenter dc : getDatacenters()) {
+         datacenterIds.add(dc.id());
+      }
+      FluentIterable<OperatingSystem> operatingSystems = api().listOperatingSystems(datacenterIds).concat();
       assertNotNull(operatingSystems);
       assertTrue(!operatingSystems.isEmpty());
       for (OperatingSystem operatingSystem : operatingSystems) {

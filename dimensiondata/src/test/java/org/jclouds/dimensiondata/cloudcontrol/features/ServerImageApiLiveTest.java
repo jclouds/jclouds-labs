@@ -60,6 +60,13 @@ public class ServerImageApiLiveTest extends BaseDimensionDataCloudControlApiLive
       }
    }
 
+   @Test
+   public void testGetCustomerImage() {
+      CustomerImage customerImage = api().getCustomerImage(PREPARED_CUSTOMER_IMAGE_ID);
+      assertNotNull(customerImage);
+      assertTrue(customerImage.datacenterId().equals("NA9"));
+   }
+
    private FluentIterable<CustomerImage> getCustomerImages() {
       FluentIterable<CustomerImage> customerImages = api().listCustomerImages().concat();
       assertNotNull(customerImages);
