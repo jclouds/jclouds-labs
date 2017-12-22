@@ -49,7 +49,6 @@ import java.util.Date;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMockSupport.injectMocks;
 import static org.jclouds.dimensiondata.cloudcontrol.compute.options.DimensionDataCloudControlTemplateOptions.DEFAULT_NETWORK_DOMAIN_NAME;
 import static org.jclouds.dimensiondata.cloudcontrol.compute.options.DimensionDataCloudControlTemplateOptions.DEFAULT_PRIVATE_IPV4_BASE_ADDRESS;
 import static org.jclouds.dimensiondata.cloudcontrol.compute.options.DimensionDataCloudControlTemplateOptions.DEFAULT_PRIVATE_IPV4_PREFIX_SIZE;
@@ -112,9 +111,6 @@ public class GetOrCreateNetworkDomainThenCreateNodesTest {
             .ipv6GatewayAddress("2607:f480:111:1575:0:0:0:1").createTime(new Date()).state(State.NORMAL)
             .datacenterId("NA9").build();
 
-      injectMocks(api);
-      injectMocks(template);
-      injectMocks(networkApi);
       expect(template.getOptions()).andReturn(templateOptions).anyTimes();
       expect(template.getLocation()).andReturn(location);
       expect(location.getId()).andReturn(datacenterId);

@@ -42,7 +42,7 @@ import javax.inject.Singleton;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
+import static com.google.common.base.Objects.firstNonNull;
 import static java.lang.String.format;
 import static org.jclouds.dimensiondata.cloudcontrol.compute.options.DimensionDataCloudControlTemplateOptions.DEFAULT_NETWORK_DOMAIN_NAME;
 import static org.jclouds.dimensiondata.cloudcontrol.compute.options.DimensionDataCloudControlTemplateOptions.DEFAULT_VLAN_NAME;
