@@ -51,12 +51,13 @@ import org.jclouds.compute.functions.NodeAndTemplateOptionsToStatementWithoutPub
 import org.jclouds.compute.reference.ComputeServiceConstants.PollPeriod;
 import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
 import org.jclouds.domain.Location;
+import org.jclouds.util.PasswordGenerator;
+
 import static org.jclouds.util.Predicates2.retry;
 
 public class OneAndOneComputeServiceContextModule extends
         ComputeServiceAdapterContextModule<Server, HardwareFlavour, SingleServerAppliance, DataCenter> {
 
-   @SuppressWarnings("unchecked")
    @Override
    protected void configure() {
       super.configure();
@@ -85,7 +86,18 @@ public class OneAndOneComputeServiceContextModule extends
 
       bind(new TypeLiteral<Function<DataCenter, Location>>() {
       }).to(DataCenterToLocation.class);
-
+   }
+   
+   @Provides
+   @Singleton
+   protected PasswordGenerator.Config providePasswordGenerator() {
+      // Guest passwords must contain more than 8 characters using upper case letters,
+      // numbers and other special symbols.
+      return new PasswordGenerator()
+            .lower().min(2).max(5)
+            .upper().min(2).max(5)
+            .numbers().min(2).max(5)
+            .symbols().min(2).max(5);
    }
 
    @Provides

@@ -87,4 +87,14 @@ public final class Preconditions {
       checkArgument(size > 1, "Storage size must be > 1GB");
    }
 
+   private static final int VALID_PASSWORD_MIN_LENGTH = 8;
+   private static final int VALID_PASSWORD_MAX_LENGTH = 50;
+   private static final String PASSWORD_FORMAT = String.format(
+           "[a-zA-Z0-9][^iIloOwWyYzZ10]{%d,%d}", VALID_PASSWORD_MIN_LENGTH - 1, VALID_PASSWORD_MAX_LENGTH);
+   private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_FORMAT);
+
+   public static void checkPassword(String password) {
+      checkArgument(PASSWORD_PATTERN.matcher(password).matches(), "Password must be between 8 and 50 characters, "
+              + "only a-z, A-Z, 0-9 without  characters i, I, l, o, O, w, W, y, Y, z, Z and 1, 0");
+   }
 }

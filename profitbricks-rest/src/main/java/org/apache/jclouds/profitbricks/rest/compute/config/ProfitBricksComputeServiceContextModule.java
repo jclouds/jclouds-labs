@@ -70,6 +70,8 @@ import org.jclouds.functions.IdentityFunction;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
 import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
+import org.jclouds.util.PasswordGenerator;
+
 import static org.jclouds.util.Predicates2.retry;
 
 public class ProfitBricksComputeServiceContextModule extends
@@ -105,6 +107,16 @@ public class ProfitBricksComputeServiceContextModule extends
 
       bind(new TypeLiteral<ImageExtension>() {
       }).to(ProfitBricksImageExtension.class);
+   }
+   
+   @Provides
+   @Singleton
+   protected PasswordGenerator.Config providePasswordGenerator() {
+      return new PasswordGenerator()
+            .lower().min(2).max(10).exclude("ilowyz".toCharArray())
+            .upper().min(2).max(10).exclude("IOWYZ".toCharArray())
+            .numbers().min(2).max(10).exclude("10".toCharArray())
+            .symbols().count(0);
    }
 
    @Provides

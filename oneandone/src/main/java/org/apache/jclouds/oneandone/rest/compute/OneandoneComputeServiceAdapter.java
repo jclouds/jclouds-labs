@@ -41,10 +41,8 @@ import org.apache.jclouds.oneandone.rest.domain.ServerAppliance;
 import org.apache.jclouds.oneandone.rest.domain.SingleServerAppliance;
 import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.apache.jclouds.oneandone.rest.domain.options.GenericQueryOptions;
-import org.apache.jclouds.oneandone.rest.util.Passwords;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.Hardware;
-import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.domain.Volume;
 import org.jclouds.compute.options.TemplateOptions;
@@ -54,6 +52,7 @@ import static org.jclouds.compute.util.ComputeServiceUtils.getPortRangesFromList
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceNotFoundException;
+import org.jclouds.util.PasswordGenerator;
 
 @Singleton
 public class OneandoneComputeServiceAdapter implements ComputeServiceAdapter<Server, HardwareFlavour, SingleServerAppliance, DataCenter> {
@@ -65,13 +64,16 @@ public class OneandoneComputeServiceAdapter implements ComputeServiceAdapter<Ser
    private final CleanupResources cleanupResources;
    private final OneAndOneApi api;
    private final Predicate<Server> waitServerUntilAvailable;
+   private final PasswordGenerator.Config passwordGenerator;
 
    @Inject
    OneandoneComputeServiceAdapter(OneAndOneApi api, CleanupResources cleanupResources,
-           @Named(POLL_PREDICATE_SERVER) Predicate<Server> waitServerUntilAvailable) {
+           @Named(POLL_PREDICATE_SERVER) Predicate<Server> waitServerUntilAvailable,
+           PasswordGenerator.Config passwordGenerator) {
       this.api = api;
       this.cleanupResources = cleanupResources;
       this.waitServerUntilAvailable = waitServerUntilAvailable;
+      this.passwordGenerator = passwordGenerator;
    }
 
    @Override
@@ -83,7 +85,7 @@ public class OneandoneComputeServiceAdapter implements ComputeServiceAdapter<Ser
       Server updateServer = null;
 
       final String loginUser = isNullOrEmpty(options.getLoginUser()) ? "root" : options.getLoginUser();
-      final String password = options.hasLoginPassword() ? options.getLoginPassword() : Passwords.generate();
+      final String password = options.hasLoginPassword() ? options.getLoginPassword() : passwordGenerator.generate();
       final String privateKey = options.hasLoginPrivateKey() ? options.getPrivateKey() : null;
       final org.jclouds.compute.domain.Image image = template.getImage();
       final int[] inboundPorts = template.getOptions().getInboundPorts();
@@ -92,7 +94,6 @@ public class OneandoneComputeServiceAdapter implements ComputeServiceAdapter<Ser
       List<? extends Volume> volumes = hardware.getVolumes();
       List<Hdd.CreateHdd> hdds = new ArrayList<Hdd.CreateHdd>();
 
-      int i = 1;
       for (final Volume volume : volumes) {
          try {
             //check if the bootable device has enough size to run the appliance(image).
@@ -122,7 +123,6 @@ public class OneandoneComputeServiceAdapter implements ComputeServiceAdapter<Ser
       }
 
       try {
-         List<? extends Processor> processors = hardware.getProcessors();
          org.apache.jclouds.oneandone.rest.domain.Hardware.CreateHardware hardwareRequest
                  = org.apache.jclouds.oneandone.rest.domain.Hardware.CreateHardware.create(cores, 1, ram, hdds);
          final Server.CreateServer serverRequest = Server.CreateServer.builder()

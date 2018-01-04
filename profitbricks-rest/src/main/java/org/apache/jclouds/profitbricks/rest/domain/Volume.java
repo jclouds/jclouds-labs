@@ -20,7 +20,8 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Enums;
 import static com.google.common.base.Preconditions.checkArgument;
 import java.util.Set;
-import org.apache.jclouds.profitbricks.rest.util.Passwords;
+
+import org.apache.jclouds.profitbricks.rest.util.Preconditions;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
@@ -197,7 +198,7 @@ public abstract class Volume extends Trackable {
                CreatePayload payload = autoBuild();
 
                if (payload.imagePassword() != null) {
-                  checkArgument(Passwords.isValidPassword(payload.imagePassword()), "Password's format is not valid");
+                  Preconditions.checkPassword(payload.imagePassword());
                }
 
                checkArgument(
