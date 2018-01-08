@@ -1,7 +1,0 @@
-{
-  "attributes": {
-    "enabled": true
-  },
-  "key_size": 2048,
-  "kty": "RSA"
-}

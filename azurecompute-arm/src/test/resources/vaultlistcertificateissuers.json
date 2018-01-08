@@ -1,7 +1,0 @@
-{
-	"value": [{
-		"id": "https://kvvaultapilivetest.vault.azure.net/certificates/issuers/globalsign01",
-		"provider": "GlobalSign"
-	}],
-	"nextLink": null
-}

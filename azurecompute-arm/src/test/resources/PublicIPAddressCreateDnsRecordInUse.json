@@ -1,7 +1,0 @@
-{
-  "error": {
-    "code": "DnsRecordInUse",
-    "message": "DNS record foobar.northeurope.cloudapp.azure.com is already used by another public IP.",
-    "details": []
-  }
-}

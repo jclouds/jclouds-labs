@@ -1,9 +1,0 @@
-{
-  "location": "westus",
-  "tags": {
-    "property_name": "property_value"
-  },
-  "properties": {
-    "accountType": "Premium_LRS"
-  }
-}

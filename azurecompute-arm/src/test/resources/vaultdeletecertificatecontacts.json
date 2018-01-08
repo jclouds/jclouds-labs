@@ -1,8 +1,0 @@
-{
-	"id": "https://kvvaultapilivetest.vault.azure.net/certificates/contacts",
-	"contacts": [{
-		"email": "foo@bar.com",
-		"name": "Foo bar",
-		"phone": "867-5309"
-	}]
-}

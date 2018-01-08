@@ -1,9 +1,0 @@
-{
-  "id": "/subscriptions/SUBSCRIPTIONID/resourceGroups/jcloudstest",
-  "name": "jcloudstest",
-  "location": "westus",
-  "tags": {},
-  "properties": {
-    "provisioningState": "Succeeded"
-  }
-}

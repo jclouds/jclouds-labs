@@ -54,7 +54,6 @@
   </repositories>
 
   <modules>
-    <module>azurecompute-arm</module>
     <module>azurecompute</module>
     <module>cdmi</module>
     <module>cloudsigma2</module>
