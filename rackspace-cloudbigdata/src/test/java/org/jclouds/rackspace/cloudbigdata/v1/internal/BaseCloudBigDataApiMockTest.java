@@ -16,15 +16,15 @@
  */
 package org.jclouds.rackspace.cloudbigdata.v1.internal;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.jclouds.rackspace.cloudbigdata.v1.CloudBigDataApi;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
+import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
 /**
  * Base class for writing Cloud Big Data Expect tests
@@ -36,7 +36,7 @@ public class BaseCloudBigDataApiMockTest extends BaseOpenStackMockTest<CloudBigD
     */
    public BaseCloudBigDataApiMockTest() {
       overrides = new Properties();
-      overrides.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
+      overrides.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
       overrides.setProperty(SERVICE_TYPE, ServiceType.BIG_DATA);
    }
 }

@@ -20,7 +20,7 @@ import java.util.Properties;
 
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.openstack.glance.v1_0.GlanceApi;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
+import org.jclouds.openstack.keystone.config.KeystoneProperties;
 import org.testng.annotations.Test;
 
 /**

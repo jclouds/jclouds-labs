@@ -19,19 +19,20 @@ package org.jclouds.rackspace.orchestration.uk;
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.KEYSTONE_VERSION;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.openstack.heat.v1.HeatApiMetadata;
 import org.jclouds.openstack.heat.v1.config.HeatHttpApiModule;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule.RegionModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
@@ -73,6 +74,7 @@ public class OrchestrationUKProviderMetadata extends BaseProviderMetadata {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
       properties.setProperty(SERVICE_TYPE, ServiceType.ORCHESTRATION);
+      properties.setProperty(KEYSTONE_VERSION, "2");
 
       properties.setProperty(PROPERTY_REGIONS, "LON");
       properties.setProperty(PROPERTY_REGION + ".LON." + ISO3166_CODES, "GB-SLG");
@@ -93,8 +95,8 @@ public class OrchestrationUKProviderMetadata extends BaseProviderMetadata {
                .endpointName("Rackspace Cloud Identity service URL ending in /v2.0/")
                .version("1")
                .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                     .add(CloudIdentityAuthenticationApiModule.class)
                      .add(CloudIdentityAuthenticationModule.class)
+                     .add(ServiceCatalogModule.class)
                      .add(RegionModule.class)
                      .add(HeatHttpApiModule.class)
                      .build())

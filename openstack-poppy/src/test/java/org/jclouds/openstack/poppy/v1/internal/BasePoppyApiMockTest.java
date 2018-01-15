@@ -16,11 +16,11 @@
  */
 package org.jclouds.openstack.poppy.v1.internal;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
 
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
+import org.jclouds.openstack.keystone.auth.config.CredentialTypes;
 import org.jclouds.openstack.poppy.v1.PoppyApi;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 

@@ -16,20 +16,21 @@
  */
 package org.jclouds.rackspace.cloudbigdata.v1;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.KEYSTONE_VERSION;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule.RegionModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataHttpApiModule;
 import org.jclouds.rackspace.cloudbigdata.v1.config.CloudBigDataParserModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
+import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.auto.service.AutoService;
@@ -63,7 +64,8 @@ public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi
    public static Properties defaultProperties() {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
       properties.setProperty(SERVICE_TYPE, ServiceType.BIG_DATA);
-      properties.setProperty(CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
+      properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
+      properties.setProperty(KEYSTONE_VERSION, "2");
       return properties;
    }
 
@@ -83,8 +85,8 @@ public class CloudBigDataApiMetadata extends BaseHttpApiMetadata<CloudBigDataApi
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(CloudBigDataApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-               .add(CloudIdentityAuthenticationApiModule.class)
                .add(CloudIdentityAuthenticationModule.class)
+               .add(ServiceCatalogModule.class)
                .add(RegionModule.class)
                .add(CloudBigDataParserModule.class)
                .add(CloudBigDataHttpApiModule.class)

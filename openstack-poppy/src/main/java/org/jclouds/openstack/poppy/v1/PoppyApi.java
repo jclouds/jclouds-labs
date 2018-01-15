@@ -24,7 +24,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.openstack.keystone.auth.filters.AuthenticateRequest;
 import org.jclouds.openstack.poppy.v1.config.CDN;
 import org.jclouds.openstack.poppy.v1.fallbacks.PoppyFallbacks.FalseOn500or503;
 import org.jclouds.openstack.poppy.v1.features.FlavorApi;

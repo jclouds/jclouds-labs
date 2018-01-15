@@ -40,7 +40,7 @@ import org.jclouds.openstack.heat.v1.domain.Template;
 import org.jclouds.openstack.heat.v1.options.CreateStack;
 import org.jclouds.openstack.heat.v1.options.ListStackOptions;
 import org.jclouds.openstack.heat.v1.options.UpdateStack;
-import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.openstack.keystone.auth.filters.AuthenticateRequest;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;

@@ -19,7 +19,7 @@ package org.jclouds.rackspace.autoscale.v1.internal;
 import java.util.Properties;
 
 import org.jclouds.apis.BaseApiLiveTest;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties;
+import org.jclouds.openstack.keystone.config.KeystoneProperties;
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
 
 /**

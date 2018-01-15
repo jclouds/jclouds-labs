@@ -17,6 +17,7 @@
 package org.jclouds.rackspace.autoscale.v1.internal;
 
 import javax.ws.rs.core.MediaType;
+
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.keystone.v2_0.internal.KeystoneFixture;

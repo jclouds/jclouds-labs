@@ -19,19 +19,20 @@ package org.jclouds.rackspace.cdn.us;
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.KEYSTONE_VERSION;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ProviderModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule.ProviderModule;
 import org.jclouds.openstack.poppy.v1.PoppyApiMetadata;
 import org.jclouds.openstack.poppy.v1.config.PoppyHttpApiModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
@@ -67,6 +68,7 @@ public class CDNUSProviderMetadata extends BaseProviderMetadata {
       Properties properties = new Properties();
       properties.setProperty(CREDENTIAL_TYPE, CloudIdentityCredentialTypes.API_KEY_CREDENTIALS);
       properties.setProperty(SERVICE_TYPE, ServiceType.CDN);
+      properties.setProperty(KEYSTONE_VERSION, "2");
 
       properties.setProperty(PROPERTY_REGIONS, "ORD,DFW,IAD,SYD,HKG");
       properties.setProperty(PROPERTY_REGION + ".ORD." + ISO3166_CODES, "US-IL");
@@ -91,8 +93,8 @@ public class CDNUSProviderMetadata extends BaseProviderMetadata {
                .endpointName("Rackspace Cloud Identity service URL ending in /v2.0/")
                .version("1")
                .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                     .add(CloudIdentityAuthenticationApiModule.class)
                      .add(CloudIdentityAuthenticationModule.class)
+                     .add(ServiceCatalogModule.class)
                      .add(ProviderModule.class)
                      .add(PoppyHttpApiModule.class)
                      .build())
