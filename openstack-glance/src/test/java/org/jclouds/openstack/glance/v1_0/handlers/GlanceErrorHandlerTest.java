@@ -54,7 +54,7 @@ public class GlanceErrorHandlerTest {
 
    private void assertCodeMakes(String method, URI uri, int statusCode,
             String message, String content, Class<? extends Exception> expected) {
-      assertCodeMakes(method, Multimaps.forMap(Collections.EMPTY_MAP), uri, statusCode, message, "text/plain", content, expected);
+      assertCodeMakes(method, Multimaps.forMap(Collections.<String, String>emptyMap()), uri, statusCode, message, "text/plain", content, expected);
    }
 
    private void assertCodeMakes(String method, Multimap<String, String> headers, URI uri, int statusCode,
