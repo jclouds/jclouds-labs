@@ -23,11 +23,6 @@ import java.util.List;
 
 
 public abstract class BaseImage {
-   public static final String IMAGE_TYPE_METADATA_KEY = "IMAGE_TYPE";
-   public static final String OS_FAMILY_METADATA_KEY = "OS_FAMILY";
-
-   public static final String OS_FAMILY_UNIX = "UNIX";
-   public static final String OS_FAMILY_WINDOWS = "WINDOWS";
 
    public String type;
 
@@ -53,6 +48,7 @@ public abstract class BaseImage {
 
    public abstract int memoryGb();
 
+   @Nullable
    public abstract List<ImageNic> nics();
 
    public abstract List<Disk> disks();

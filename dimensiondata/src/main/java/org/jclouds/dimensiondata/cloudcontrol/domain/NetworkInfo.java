@@ -18,6 +18,7 @@ package org.jclouds.dimensiondata.cloudcontrol.domain;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public abstract class NetworkInfo {
 
    public abstract NIC primaryNic();
 
+   @Nullable
    public abstract List<NIC> additionalNic();
 
    @SerializedNames({ "networkDomainId", "primaryNic", "additionalNic" })
