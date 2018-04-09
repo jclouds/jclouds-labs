@@ -22,7 +22,6 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.CPU;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Cluster;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Disk;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Guest;
-import org.jclouds.dimensiondata.cloudcontrol.domain.ImageNic;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystem;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImages;
@@ -50,11 +49,10 @@ public class OsImagesParseTest extends BaseDimensionDataCloudControlParseTest<Os
             .description("DRaaS CentOS Release 5.9 64-bit").guest(Guest.builder().osCustomization(false)
                   .operatingSystem(
                         OperatingSystem.builder().id("CENTOS564").displayName("CENTOS5/64").family("UNIX").build())
-                  .build()).cpu(CPU.builder().count(2).speed("STANDARD").coresPerSocket(1).build()).memoryGb(4)
-            .nics(ImmutableList.of(ImageNic.builder().networkAdapter("E1000").key(4040).build())).disks(ImmutableList
-                  .of(Disk.builder().id("98299851-37a3-4ebe-9cf1-090da9ae42a0").scsiId(0).sizeGb(20).speed("STANDARD")
-                        .build())).softwareLabels(Lists.<String>newArrayList()).osImageKey("T-CENT-5-64-2-4-10")
-            .createTime(parseDate("2016-06-09T17:36:31.000Z")).datacenterId("NA1")
+                  .build()).cpu(CPU.builder().count(2).speed("STANDARD").coresPerSocket(1).build()).memoryGb(4).disks(
+                  ImmutableList.of(Disk.builder().id("98299851-37a3-4ebe-9cf1-090da9ae42a0").scsiId(0).sizeGb(20)
+                        .speed("STANDARD").build())).softwareLabels(Lists.<String>newArrayList())
+            .osImageKey("T-CENT-5-64-2-4-10").createTime(parseDate("2016-06-09T17:36:31.000Z")).datacenterId("NA1")
             .cluster(Cluster.builder().id("NA12-01").name("my cluster name").build()).build();
       assertEquals(osImage.type, OsImage.TYPE, "OsImage type is not OS_IMAGE");
       List<OsImage> osImages = ImmutableList.of(osImage);

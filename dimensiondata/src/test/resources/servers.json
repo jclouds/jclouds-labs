@@ -34,7 +34,7 @@
           "key": "4000",
           "state": "NORMAL"
         },
-        "additionalNic": [],
+        "additionalNic": null,
         "networkDomainId": "690de302-bb80-49c6-b401-8c02bbefb945"
       },
       "softwareLabel": [],

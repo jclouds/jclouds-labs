@@ -21,12 +21,7 @@
           "speed": "STANDARD"
         }
       ],
-      "nic": [
-        {
-          "networkAdapter": "E1000",
-          "key": "4040"
-        }
-      ],
+      "nic": null,
       "softwareLabel": [],
       "createTime": "2016-06-09T17:36:31.000Z",
       "id": "12ea8472-6e4e-4068-b2cb-f04ecacd3962",
