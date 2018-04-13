@@ -40,7 +40,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-@Test(groups = "unit", testName = "ImageDescriptionToOsFamilyTest")
+@Test(groups = "unit", testName = "BaseImageToHardwareTest")
 public class BaseImageToHardwareTest {
 
    private BaseImageToHardware baseImageToHardware;
