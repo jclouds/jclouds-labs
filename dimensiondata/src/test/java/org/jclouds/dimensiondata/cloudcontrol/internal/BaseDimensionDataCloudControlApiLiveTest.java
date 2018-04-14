@@ -40,7 +40,7 @@ import org.testng.annotations.Test;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_DELETED_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_NORMAL_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
@@ -54,7 +54,7 @@ import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudCo
 @Test(groups = "live")
 public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<DimensionDataCloudControlApi> {
 
-   private static final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+   private static final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(newDirectExecutorService()));
 
    protected static final String PREPARED_CUSTOMER_IMAGE_ID = "fb438e00-10f8-47ac-a434-f3f9461c3a76";
 

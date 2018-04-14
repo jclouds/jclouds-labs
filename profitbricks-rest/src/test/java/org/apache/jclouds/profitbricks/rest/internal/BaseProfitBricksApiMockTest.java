@@ -16,7 +16,7 @@
  */
 package org.apache.jclouds.profitbricks.rest.internal;
 
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class BaseProfitBricksApiMockTest {
    protected static final String authHeader = BasicAuthentication.basic("username", "password");
    private static final String DEFAULT_ENDPOINT = new ProfitBricksProviderMetadata().getEndpoint();
 
-   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(newDirectExecutorService()));
 
    protected MockWebServer server;
    protected ProfitBricksApi api;

@@ -46,7 +46,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.size;
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;
 import static org.testng.Assert.assertEquals;
@@ -61,7 +61,7 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
    private static final String DEFAULT_ENDPOINT = PROVIDER_METADATA.getEndpoint();
    protected static final String VERSION = PROVIDER_METADATA.getApiMetadata().getVersion();
 
-   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(newDirectExecutorService()));
 
    protected MockWebServer server;
    protected DimensionDataCloudControlApi api;

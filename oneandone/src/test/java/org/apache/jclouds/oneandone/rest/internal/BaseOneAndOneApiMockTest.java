@@ -20,7 +20,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Resources;
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import com.google.gson.JsonParser;
 import com.google.inject.Module;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -43,7 +43,7 @@ public class BaseOneAndOneApiMockTest {
    private static final OneAndOneProviderMetadata METADATA = new OneAndOneProviderMetadata();
    protected static final String AUTH_HEADER = "token";
    private static final String DEFAULT_ENDPOINT = METADATA.getEndpoint();
-   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(newDirectExecutorService()));
    protected MockWebServer server;
    protected OneAndOneApi api;
    private Json json;

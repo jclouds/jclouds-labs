@@ -17,7 +17,7 @@
 package org.jclouds.azurecompute.internal;
 
 import static com.google.common.base.Charsets.UTF_8;
-import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 public class BaseAzureComputeApiMockTest {
 
-   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
+   private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(newDirectExecutorService()));
 
    protected String provider;
 
