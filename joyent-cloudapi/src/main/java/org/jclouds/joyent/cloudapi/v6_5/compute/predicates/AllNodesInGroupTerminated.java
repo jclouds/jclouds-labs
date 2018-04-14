@@ -17,7 +17,6 @@
 package org.jclouds.joyent.cloudapi.v6_5.compute.predicates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.Iterables.all;
 import static org.jclouds.compute.predicates.NodePredicates.TERMINATED;
 import static org.jclouds.compute.predicates.NodePredicates.inGroup;
@@ -29,6 +28,7 @@ import org.jclouds.compute.ComputeService;
 import org.jclouds.joyent.cloudapi.v6_5.domain.datacenterscoped.DatacenterAndName;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 public class AllNodesInGroupTerminated implements Predicate<DatacenterAndName> {
    private final ComputeService computeService;
@@ -42,6 +42,6 @@ public class AllNodesInGroupTerminated implements Predicate<DatacenterAndName> {
 
    @Override
    public boolean apply(DatacenterAndName input) {
-      return all(computeService.listNodesDetailsMatching(locationId(input.getDatacenter())), and(inGroup(input.getName()), TERMINATED));
+      return all(computeService.listNodesDetailsMatching(locationId(input.getDatacenter())), Predicates.and(inGroup(input.getName()), TERMINATED));
    }
 }
