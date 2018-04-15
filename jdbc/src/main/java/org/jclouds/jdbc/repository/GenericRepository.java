@@ -16,7 +16,6 @@
  */
 package org.jclouds.jdbc.repository;
 
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import javax.persistence.EntityManager;
@@ -28,7 +27,6 @@ public abstract class GenericRepository<T, PK extends Serializable> {
    protected final Class<T> entityClass;
    protected final Provider<EntityManager> entityManager;
 
-   @Inject
    @SuppressWarnings("unchecked")
    protected GenericRepository(Provider<EntityManager> entityManager) {
       this.entityManager = entityManager;

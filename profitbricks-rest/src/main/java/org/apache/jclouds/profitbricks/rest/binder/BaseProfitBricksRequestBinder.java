@@ -19,7 +19,6 @@ package org.apache.jclouds.profitbricks.rest.binder;
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
-import com.google.inject.Inject;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +35,6 @@ public abstract class BaseProfitBricksRequestBinder<T> implements MapBinder {
    protected final Map<String, Object> requestBuilder;
    protected final Json jsonBinder;
 
-   @Inject
    protected BaseProfitBricksRequestBinder(String paramName, Json jsonBinder, Supplier<URI> endpointSupplier) {
       this.paramName = checkNotNull(paramName, "Initialize 'paramName' in constructor");
       this.jsonBinder = jsonBinder;
