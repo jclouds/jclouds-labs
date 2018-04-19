@@ -27,17 +27,16 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.options.CloneServerOptions;
 import org.jclouds.dimensiondata.cloudcontrol.domain.options.CreateServerOptions;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseAccountAwareCloudControlMockTest;
 import org.jclouds.http.Uris;
-import org.jclouds.location.suppliers.ZoneIdsSupplier;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.HttpMethod;
 import java.util.List;
-import java.util.Set;
 
 import static javax.ws.rs.HttpMethod.GET;
 import static javax.ws.rs.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters.Builder.datacenterId;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -107,13 +106,19 @@ public class ServerApiMockTest extends BaseAccountAwareCloudControlMockTest {
       }
    }
 
-   private Uris.UriBuilder getListServerUriBuilder() {
-      Uris.UriBuilder uriBuilder = Uris.uriBuilder("/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/server");
-      Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
-      for (String zone : zones) {
-         uriBuilder.addQuery("datacenterId", zone);
+   public void testListServersWithDatacenterFiltering() throws Exception {
+      server.enqueue(jsonResponse("/servers.json"));
+      List<Server> servers = serverApi().listServers(datacenterId(datacenters)).toList();
+      Uris.UriBuilder uriBuilder = addZonesToUriBuilder("datacenterId", getListServerUriBuilder());
+      assertSent(GET, uriBuilder.toString());
+      assertEquals(servers.size(), 1);
+      for (Server s : servers) {
+         assertNotNull(s);
       }
-      return uriBuilder;
+   }
+
+   private Uris.UriBuilder getListServerUriBuilder() {
+      return Uris.uriBuilder("/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/server");
    }
 
    public void testListServers_404() throws Exception {

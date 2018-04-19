@@ -145,7 +145,6 @@
                                         <test.dimensiondata-cloudcontrol.credential>
                                             ${test.dimensiondata-cloudcontrol.credential}
                                         </test.dimensiondata-cloudcontrol.credential>
-                                        <jclouds.zones>NA9</jclouds.zones>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>

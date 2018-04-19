@@ -20,13 +20,12 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImage;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseAccountAwareCloudControlMockTest;
 import org.jclouds.http.Uris;
-import org.jclouds.location.suppliers.ZoneIdsSupplier;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.HttpMethod;
-import java.util.Set;
 
 import static com.google.common.collect.Iterables.size;
+import static org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters.Builder.datacenterId;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -58,7 +57,16 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       assertEquals(size(osImages), 1);
       assertEquals(server.getRequestCount(), 2);
 
-      assertSent(HttpMethod.GET, getListOsImageUrl().toString());
+      assertSent(HttpMethod.GET, getOsImageUrl().toString());
+   }
+
+   public void testListOsImageWithDatacenterIdFiltering() throws Exception {
+      server.enqueue(jsonResponse("/osImages.json"));
+      Iterable<OsImage> osImages = api.getServerImageApi().listOsImages(datacenterId(datacenters)).toList();
+      assertEquals(size(osImages), 1);
+      assertEquals(server.getRequestCount(), 2);
+
+      assertSent(HttpMethod.GET, addZonesToUriBuilder("datacenterId", getOsImageUrl()).toString());
    }
 
    public void testListOsImageWithPagination() throws Exception {
@@ -68,24 +76,15 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       assertNotNull(osImages);
       consumeIterableAndAssertAdditionalPagesRequested(osImages, 2, 1);
 
-      Uris.UriBuilder uriBuilder = getListOsImageUrl();
+      Uris.UriBuilder uriBuilder = getOsImageUrl();
       assertSent(HttpMethod.GET, uriBuilder.toString());
-      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(uriBuilder, 2, false).toString());
+      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(uriBuilder, 2, true).toString());
    }
 
    public void testListOsImage_404() throws Exception {
       server.enqueue(response404());
       assertTrue(api.getServerImageApi().listOsImages().concat().isEmpty());
-      assertSent(HttpMethod.GET, getListOsImageUrl().toString());
-   }
-
-   private Uris.UriBuilder getListOsImageUrl() {
-      Uris.UriBuilder uriBuilder = getOsImageUrl();
-      Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
-      for (String zone : zones) {
-         uriBuilder.addQuery("datacenterId", zone);
-      }
-      return uriBuilder;
+      assertSent(HttpMethod.GET, getOsImageUrl().toString());
    }
 
    public void testGetCustomerImage() throws Exception {
@@ -108,7 +107,16 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       assertEquals(size(customerImages), 1);
       assertEquals(server.getRequestCount(), 2);
 
-      assertSent(HttpMethod.GET, getListCustomerImageUrl().toString());
+      assertSent(HttpMethod.GET, getCustomerImageUrl().toString());
+   }
+
+   public void testListCustomerImageWithDatacenterFiltering() throws Exception {
+      server.enqueue(jsonResponse("/customerImages.json"));
+      Iterable<CustomerImage> customerImages = api.getServerImageApi().listCustomerImages(datacenterId(datacenters));
+      assertEquals(size(customerImages), 1);
+      assertEquals(server.getRequestCount(), 2);
+
+      assertSent(HttpMethod.GET, addZonesToUriBuilder("datacenterId", getCustomerImageUrl()).toString());
    }
 
    public void testListCustomerImageWithPagination() throws Exception {
@@ -118,25 +126,16 @@ public class ServerImageApiMockTest extends BaseAccountAwareCloudControlMockTest
       assertNotNull(customerImages);
       consumeIterableAndAssertAdditionalPagesRequested(customerImages, 10, 1);
 
-      Uris.UriBuilder uriBuilder = getListCustomerImageUrl();
+      Uris.UriBuilder uriBuilder = getCustomerImageUrl();
 
       assertSent(HttpMethod.GET, uriBuilder.toString());
-      assertSent(HttpMethod.GET, addZonesToUriBuilder(addPageNumberToUriBuilder(uriBuilder, 2, true)).toString());
+      assertSent(HttpMethod.GET, addPageNumberToUriBuilder(uriBuilder, 2, true).toString());
    }
 
    public void testListCustomerImage_404() throws Exception {
       server.enqueue(response404());
       assertTrue(api.getServerImageApi().listCustomerImages().concat().isEmpty());
-      assertSent(HttpMethod.GET, getListCustomerImageUrl().toString());
-   }
-
-   private Uris.UriBuilder getListCustomerImageUrl() {
-      Uris.UriBuilder uriBuilder = getCustomerImageUrl();
-      Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
-      for (String zone : zones) {
-         uriBuilder.addQuery("datacenterId", zone);
-      }
-      return uriBuilder;
+      assertSent(HttpMethod.GET, getCustomerImageUrl().toString());
    }
 
    private Uris.UriBuilder getOsImageUrl() {

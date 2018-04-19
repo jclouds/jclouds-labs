@@ -29,8 +29,8 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImages;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImages;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PaginatedCollection;
-import org.jclouds.dimensiondata.cloudcontrol.filters.DatacenterIdFilter;
 import org.jclouds.dimensiondata.cloudcontrol.filters.OrganisationIdFilter;
+import org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters;
 import org.jclouds.dimensiondata.cloudcontrol.options.PaginationOptions;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.http.functions.ParseJson;
@@ -57,16 +57,14 @@ public interface ServerImageApi {
    @GET
    @Path("/osImage")
    @ResponseParser(ParseOsImages.class)
-   @RequestFilters(DatacenterIdFilter.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
-   PaginatedCollection<OsImage> listOsImages(PaginationOptions options);
+   PaginatedCollection<OsImage> listOsImages(DatacenterIdListFilters datacenterIdListFilters);
 
    @Named("image:listOsImages")
    @GET
    @Path("/osImage")
    @Transform(ParseOsImages.ToPagedIterable.class)
    @ResponseParser(ParseOsImages.class)
-   @RequestFilters(DatacenterIdFilter.class)
    @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<OsImage> listOsImages();
 
@@ -74,16 +72,14 @@ public interface ServerImageApi {
    @GET
    @Path("/customerImage")
    @ResponseParser(ParseCustomerImages.class)
-   @RequestFilters(DatacenterIdFilter.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
-   PaginatedCollection<CustomerImage> listCustomerImages(PaginationOptions options);
+   PaginatedCollection<CustomerImage> listCustomerImages(DatacenterIdListFilters datacenterIdListFilters);
 
    @Named("image:listCustomerImages")
    @GET
    @Path("/customerImage")
    @Transform(ParseCustomerImages.ToPagedIterable.class)
    @ResponseParser(ParseCustomerImages.class)
-   @RequestFilters(DatacenterIdFilter.class)
    @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<CustomerImage> listCustomerImages();
 
@@ -111,17 +107,19 @@ public interface ServerImageApi {
          private DimensionDataCloudControlApi api;
 
          @Inject
-         ToPagedIterable(DimensionDataCloudControlApi api) {
+         ToPagedIterable(final DimensionDataCloudControlApi api) {
             this.api = api;
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<OsImage>> markerToNextForArg0(Optional<Object> arg0) {
+         protected Function<Object, IterableWithMarker<OsImage>> markerToNextForArg0(final Optional<Object> arg0) {
             return new Function<Object, IterableWithMarker<OsImage>>() {
                @Override
                public IterableWithMarker<OsImage> apply(Object input) {
-                  PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                  return api.getServerImageApi().listOsImages(paginationOptions);
+                  DatacenterIdListFilters datacenterIdListFilters = arg0.isPresent() ?
+                        ((DatacenterIdListFilters) arg0.get()).paginationOptions(PaginationOptions.class.cast(input)) :
+                        DatacenterIdListFilters.Builder.paginationOptions(PaginationOptions.class.cast(input));
+                  return api.getServerImageApi().listOsImages(datacenterIdListFilters);
                }
             };
          }
@@ -140,17 +138,20 @@ public interface ServerImageApi {
          private DimensionDataCloudControlApi api;
 
          @Inject
-         ToPagedIterable(DimensionDataCloudControlApi api) {
+         ToPagedIterable(final DimensionDataCloudControlApi api) {
             this.api = api;
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<CustomerImage>> markerToNextForArg0(Optional<Object> arg0) {
+         protected Function<Object, IterableWithMarker<CustomerImage>> markerToNextForArg0(
+               final Optional<Object> arg0) {
             return new Function<Object, IterableWithMarker<CustomerImage>>() {
                @Override
                public IterableWithMarker<CustomerImage> apply(Object input) {
-                  PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                  return api.getServerImageApi().listCustomerImages(paginationOptions);
+                  DatacenterIdListFilters datacenterIdListFilters = arg0.isPresent() ?
+                        ((DatacenterIdListFilters) arg0.get()).paginationOptions(PaginationOptions.class.cast(input)) :
+                        DatacenterIdListFilters.Builder.paginationOptions(PaginationOptions.class.cast(input));
+                  return api.getServerImageApi().listCustomerImages(datacenterIdListFilters);
                }
             };
          }

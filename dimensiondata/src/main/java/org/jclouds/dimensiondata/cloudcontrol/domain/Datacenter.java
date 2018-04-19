@@ -38,6 +38,7 @@ public abstract class Datacenter {
 
    public abstract String city();
 
+   @Nullable
    public abstract String state();
 
    public abstract String country();
