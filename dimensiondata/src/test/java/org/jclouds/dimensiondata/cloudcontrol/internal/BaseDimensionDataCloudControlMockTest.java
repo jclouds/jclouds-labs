@@ -17,6 +17,7 @@
 package org.jclouds.dimensiondata.cloudcontrol.internal;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Resources;
@@ -31,7 +32,8 @@ import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlProviderMetadata;
 import org.jclouds.http.Uris;
 import org.jclouds.json.Json;
-import org.jclouds.location.suppliers.ZoneIdsSupplier;
+import org.jclouds.location.suppliers.ImplicitRegionIdSupplier;
+import org.jclouds.location.suppliers.RegionIdToZoneIdsSupplier;
 import org.jclouds.rest.ApiContext;
 import org.testng.IHookCallBack;
 import org.testng.IHookable;
@@ -42,6 +44,7 @@ import org.testng.annotations.BeforeMethod;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -68,6 +71,7 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
    protected ApiContext<DimensionDataCloudControlApi> ctx;
    private Json json;
    private int assertedRequestCount;
+   protected Set<String> datacenters;
 
    // So that we can ignore formatting.
    private final JsonParser parser = new JsonParser();
@@ -77,11 +81,19 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
       server = new MockWebServer();
       server.play();
       ctx = ContextBuilder.newBuilder(DimensionDataCloudControlProviderMetadata.builder().build()).credentials("", "")
-            .endpoint(url("/caas/")).modules(modules).overrides(overrides()).build();
+            .endpoint(url("/caas/")).modules(modules).overrides(new Properties()).build();
       json = ctx.utils().injector().getInstance(Json.class);
       api = ctx.getApi();
       applyAdditionalServerConfig();
       assertedRequestCount = 0;
+      datacenters = getZones();
+   }
+
+   private Set<String> getZones() {
+      final String region = ctx.utils().injector().getInstance(ImplicitRegionIdSupplier.class).get();
+      final Map<String, Supplier<Set<String>>> regionToZoneMap = ctx.utils().injector()
+            .getInstance(RegionIdToZoneIdsSupplier.class).get();
+      return regionToZoneMap.get(region).get();
    }
 
    /**
@@ -120,10 +132,6 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
    public void stop() throws IOException {
       server.shutdown();
       api.close();
-   }
-
-   protected Properties overrides() {
-      return new Properties();
    }
 
    protected String url(String path) {
@@ -207,16 +215,15 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
    }
 
    protected Uris.UriBuilder addPageNumberToUriBuilder(Uris.UriBuilder uriBuilder, int pageNumber, boolean clearQuery) {
-      if (clearQuery){
+      if (clearQuery) {
          uriBuilder.clearQuery();
       }
       return uriBuilder.addQuery("pageNumber", Integer.toString(pageNumber));
    }
 
-   protected Uris.UriBuilder addZonesToUriBuilder(Uris.UriBuilder uriBuilder) {
-      Set<String> zones = ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
-      for (String zone : zones) {
-         uriBuilder.addQuery("datacenterId", zone);
+   protected Uris.UriBuilder addZonesToUriBuilder(String zoneQueryParameter, Uris.UriBuilder uriBuilder) {
+      for (String datacenter : datacenters) {
+         uriBuilder.addQuery(zoneQueryParameter, datacenter);
       }
       return uriBuilder;
    }

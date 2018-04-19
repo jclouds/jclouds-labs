@@ -31,8 +31,8 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Servers;
 import org.jclouds.dimensiondata.cloudcontrol.domain.options.CloneServerOptions;
 import org.jclouds.dimensiondata.cloudcontrol.domain.options.CreateServerOptions;
-import org.jclouds.dimensiondata.cloudcontrol.filters.DatacenterIdFilter;
 import org.jclouds.dimensiondata.cloudcontrol.filters.OrganisationIdFilter;
+import org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters;
 import org.jclouds.dimensiondata.cloudcontrol.options.PaginationOptions;
 import org.jclouds.dimensiondata.cloudcontrol.utils.ParseResponse;
 import org.jclouds.http.filters.BasicAuthentication;
@@ -69,7 +69,7 @@ public interface ServerApi {
    @Path("/server")
    @ResponseParser(ParseServers.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
-   PaginatedCollection<Server> listServers(PaginationOptions options);
+   PaginatedCollection<Server> listServers(DatacenterIdListFilters datacenterIdListFilters);
 
    @Named("server:list")
    @GET
@@ -77,7 +77,6 @@ public interface ServerApi {
    @Transform(ParseServers.ToPagedIterable.class)
    @ResponseParser(ParseServers.class)
    @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
-   @RequestFilters({ DatacenterIdFilter.class })
    PagedIterable<Server> listServers();
 
    @Named("server:get")
@@ -164,7 +163,7 @@ public interface ServerApi {
    final class ParseServers extends ParseJson<Servers> {
 
       @Inject
-      ParseServers(Json json) {
+      ParseServers(final Json json) {
          super(json, TypeLiteral.get(Servers.class));
       }
 
@@ -173,17 +172,19 @@ public interface ServerApi {
          private DimensionDataCloudControlApi api;
 
          @Inject
-         ToPagedIterable(DimensionDataCloudControlApi api) {
+         ToPagedIterable(final DimensionDataCloudControlApi api) {
             this.api = api;
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<Server>> markerToNextForArg0(Optional<Object> arg0) {
+         protected Function<Object, IterableWithMarker<Server>> markerToNextForArg0(final Optional<Object> arg0) {
             return new Function<Object, IterableWithMarker<Server>>() {
                @Override
                public IterableWithMarker<Server> apply(Object input) {
-                  PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                  return api.getServerApi().listServers(paginationOptions);
+                  DatacenterIdListFilters datacenterIdListFilters = arg0.isPresent() ?
+                        ((DatacenterIdListFilters) arg0.get()).paginationOptions(PaginationOptions.class.cast(input)) :
+                        DatacenterIdListFilters.Builder.paginationOptions(PaginationOptions.class.cast(input));
+                  return api.getServerApi().listServers(datacenterIdListFilters);
                }
             };
          }
@@ -195,7 +196,7 @@ public interface ServerApi {
    final class ServerId extends ParseResponse {
 
       @Inject
-      ServerId(Json json) {
+      ServerId(final Json json) {
          super(json, "serverId");
       }
    }
@@ -204,7 +205,7 @@ public interface ServerApi {
    final class ImageId extends ParseResponse {
 
       @Inject
-      ImageId(Json json) {
+      ImageId(final Json json) {
          super(json, "imageId");
       }
    }

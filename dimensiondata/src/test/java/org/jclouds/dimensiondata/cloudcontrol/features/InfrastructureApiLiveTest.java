@@ -17,14 +17,16 @@
 package org.jclouds.dimensiondata.cloudcontrol.features;
 
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Datacenter;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystem;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.testng.annotations.Test;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
+import static org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters.Builder.datacenterId;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -52,7 +54,8 @@ public class InfrastructureApiLiveTest extends BaseDimensionDataCloudControlApiL
       for (Datacenter dc : getDatacenters()) {
          datacenterIds.add(dc.id());
       }
-      FluentIterable<OperatingSystem> operatingSystems = api().listOperatingSystems(datacenterIds).concat();
+      ImmutableList<OperatingSystem> operatingSystems = api().listOperatingSystems(datacenterId(datacenterIds))
+            .toList();
       assertNotNull(operatingSystems);
       assertTrue(!operatingSystems.isEmpty());
       for (OperatingSystem operatingSystem : operatingSystems) {

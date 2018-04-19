@@ -23,6 +23,11 @@ import org.jclouds.providers.internal.BaseProviderMetadata;
 import java.net.URI;
 import java.util.Properties;
 
+import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
+import static org.jclouds.location.reference.LocationConstants.PROPERTY_ZONE;
+
 /**
  * Implementation of {@link ProviderMetadata} for DimensionData CloudController.
  */
@@ -42,12 +47,31 @@ public class DimensionDataCloudControlProviderMetadata extends BaseProviderMetad
       super(builder());
    }
 
-   public DimensionDataCloudControlProviderMetadata(Builder builder) {
+   public DimensionDataCloudControlProviderMetadata(final Builder builder) {
       super(builder);
    }
 
    public static Properties defaultProperties() {
       Properties properties = DimensionDataCloudControlApiMetadata.defaultProperties();
+      properties.setProperty(PROPERTY_REGIONS, "na,eu,au,mea,ap,canada");
+      properties.setProperty(PROPERTY_REGION + ".na.zones", "NA9,NA12");
+      properties.setProperty(PROPERTY_ZONE + "NA9" + ISO3166_CODES, "US-VA");
+      properties.setProperty(PROPERTY_ZONE + "NA12" + ISO3166_CODES, "US-CA");
+      properties.setProperty(PROPERTY_REGION + ".eu.zones", "EU6,EU7,EU8");
+      properties.setProperty(PROPERTY_ZONE + "EU6" + ISO3166_CODES, "DE-HE");
+      properties.setProperty(PROPERTY_ZONE + "EU7" + ISO3166_CODES, "NL-NH");
+      properties.setProperty(PROPERTY_ZONE + "EU8" + ISO3166_CODES, "BE-BRU");
+      properties.setProperty(PROPERTY_REGION + ".au.zones", "AU9,AU10,AU11");
+      properties.setProperty(PROPERTY_ZONE + "AU9" + ISO3166_CODES, "AU-NSW");
+      properties.setProperty(PROPERTY_ZONE + "AU10" + ISO3166_CODES, "AU-VIC");
+      properties.setProperty(PROPERTY_ZONE + "AU11" + ISO3166_CODES, "NZ-WKO");
+      properties.setProperty(PROPERTY_REGION + ".mea.zones", "AF3");
+      properties.setProperty(PROPERTY_ZONE + "AF3" + ISO3166_CODES, "ZA-GT");
+      properties.setProperty(PROPERTY_REGION + ".ap.zones", "AP4,AP5");
+      properties.setProperty(PROPERTY_ZONE + "AP4" + ISO3166_CODES, "JP-13");
+      properties.setProperty(PROPERTY_ZONE + "AP5" + ISO3166_CODES, "HK");
+      properties.setProperty(PROPERTY_REGION + ".canada.zones", "CA2");
+      properties.setProperty(PROPERTY_ZONE + "CA2" + ISO3166_CODES, "CA-ON");
       return properties;
    }
 
@@ -68,7 +92,7 @@ public class DimensionDataCloudControlProviderMetadata extends BaseProviderMetad
       }
 
       @Override
-      public Builder fromProviderMetadata(ProviderMetadata in) {
+      public Builder fromProviderMetadata(final ProviderMetadata in) {
          super.fromProviderMetadata(in);
          return this;
       }

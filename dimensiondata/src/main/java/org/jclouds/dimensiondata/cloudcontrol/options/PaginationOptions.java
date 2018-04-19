@@ -23,21 +23,37 @@ import static com.google.common.base.Preconditions.checkState;
 
 public class PaginationOptions extends BaseHttpRequestOptions {
 
+   public static final String PAGE_NUMBER = "pageNumber";
+   public static final String ORDER_BY = "orderBy";
+   public static final String PAGE_SIZE = "pageSize";
+
    public PaginationOptions pageNumber(int pageNumber) {
-      this.queryParameters.put("pageNumber", Integer.toString(pageNumber));
+      this.queryParameters.put(PAGE_NUMBER, Integer.toString(pageNumber));
       return this;
    }
 
+   public String pageNumber() {
+      return getFirstQueryOrNull(PAGE_NUMBER);
+   }
+
    public PaginationOptions orderBy(String orderBy) {
-      this.queryParameters.put("orderBy", checkNotNull(orderBy, "orderBy"));
+      this.queryParameters.put(ORDER_BY, checkNotNull(orderBy, ORDER_BY));
       return this;
+   }
+
+   public String orderBy() {
+      return getFirstQueryOrNull(ORDER_BY);
    }
 
    public PaginationOptions pageSize(int pageSize) {
       checkState(pageSize >= 0, "pageSize must be >= 0");
       checkState(pageSize <= 10000, "limit must be <= 10000");
-      queryParameters.put("pageSize", Integer.toString(pageSize));
+      queryParameters.put(PAGE_SIZE, Integer.toString(pageSize));
       return this;
+   }
+
+   public String pageSize() {
+      return getFirstQueryOrNull(PAGE_SIZE);
    }
 
    public static class Builder {

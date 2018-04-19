@@ -29,8 +29,9 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.Datacenters;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystem;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystems;
 import org.jclouds.dimensiondata.cloudcontrol.domain.PaginatedCollection;
-import org.jclouds.dimensiondata.cloudcontrol.filters.DatacenterIdListDatacentersFilter;
 import org.jclouds.dimensiondata.cloudcontrol.filters.OrganisationIdFilter;
+import org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters;
+import org.jclouds.dimensiondata.cloudcontrol.options.IdListFilters;
 import org.jclouds.dimensiondata.cloudcontrol.options.PaginationOptions;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.http.functions.ParseJson;
@@ -45,9 +46,7 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.Set;
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
@@ -58,16 +57,14 @@ public interface InfrastructureApi {
    @GET
    @Path("/datacenter")
    @ResponseParser(ParseDatacenters.class)
-   @RequestFilters(DatacenterIdListDatacentersFilter.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
-   PaginatedCollection<Datacenter> listDatacenters(PaginationOptions options);
+   PaginatedCollection<Datacenter> listDatacenters(IdListFilters idListFilters);
 
    @Named("infrastructure:datacenter")
    @GET
    @Path("/datacenter")
    @Transform(ParseDatacenters.ToPagedIterable.class)
    @ResponseParser(ParseDatacenters.class)
-   @RequestFilters(DatacenterIdListDatacentersFilter.class)
    @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<Datacenter> listDatacenters();
 
@@ -76,8 +73,7 @@ public interface InfrastructureApi {
    @Path("/operatingSystem")
    @ResponseParser(ParseOperatingSystems.class)
    @Fallback(Fallbacks.EmptyIterableWithMarkerOnNotFoundOr404.class)
-   PaginatedCollection<OperatingSystem> listOperatingSystems(@QueryParam("datacenterId") Set<String> datacenterId,
-         PaginationOptions options);
+   PaginatedCollection<OperatingSystem> listOperatingSystems(DatacenterIdListFilters datacenterIdListFilters);
 
    @Named("infrastructure:operatingSystem")
    @GET
@@ -85,12 +81,12 @@ public interface InfrastructureApi {
    @Transform(ParseOperatingSystems.ToPagedIterable.class)
    @ResponseParser(ParseOperatingSystems.class)
    @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
-   PagedIterable<OperatingSystem> listOperatingSystems(@QueryParam("datacenterId") Set<String> datacenterId);
+   PagedIterable<OperatingSystem> listOperatingSystems();
 
    final class ParseDatacenters extends ParseJson<Datacenters> {
 
       @Inject
-      ParseDatacenters(Json json) {
+      ParseDatacenters(final Json json) {
          super(json, TypeLiteral.get(Datacenters.class));
       }
 
@@ -99,17 +95,19 @@ public interface InfrastructureApi {
          private DimensionDataCloudControlApi api;
 
          @Inject
-         ToPagedIterable(DimensionDataCloudControlApi api) {
+         ToPagedIterable(final DimensionDataCloudControlApi api) {
             this.api = api;
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<Datacenter>> markerToNextForArg0(Optional<Object> arg) {
+         protected Function<Object, IterableWithMarker<Datacenter>> markerToNextForArg0(final Optional<Object> arg) {
             return new Function<Object, IterableWithMarker<Datacenter>>() {
                @Override
                public IterableWithMarker<Datacenter> apply(Object input) {
-                  PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                  return api.getInfrastructureApi().listDatacenters(paginationOptions);
+                  IdListFilters idListFilters = arg.isPresent() ?
+                        ((IdListFilters) arg.get()).paginationOptions(PaginationOptions.class.cast(input)) :
+                        IdListFilters.Builder.paginationOptions(PaginationOptions.class.cast(input));
+                  return api.getInfrastructureApi().listDatacenters(idListFilters);
                }
             };
          }
@@ -119,7 +117,7 @@ public interface InfrastructureApi {
    final class ParseOperatingSystems extends ParseJson<OperatingSystems> {
 
       @Inject
-      ParseOperatingSystems(Json json) {
+      ParseOperatingSystems(final Json json) {
          super(json, TypeLiteral.get(OperatingSystems.class));
       }
 
@@ -128,18 +126,20 @@ public interface InfrastructureApi {
          private DimensionDataCloudControlApi api;
 
          @Inject
-         ToPagedIterable(DimensionDataCloudControlApi api) {
+         ToPagedIterable(final DimensionDataCloudControlApi api) {
             this.api = api;
          }
 
          @Override
          protected Function<Object, IterableWithMarker<OperatingSystem>> markerToNextForArg0(
-               final Optional<Object> arg) {
+               final Optional<Object> arg0) {
             return new Function<Object, IterableWithMarker<OperatingSystem>>() {
                @Override
                public IterableWithMarker<OperatingSystem> apply(Object input) {
-                  PaginationOptions paginationOptions = PaginationOptions.class.cast(input);
-                  return api.getInfrastructureApi().listOperatingSystems((Set<String>) arg.get(), paginationOptions);
+                  DatacenterIdListFilters datacenterIdListFilters = arg0.isPresent() ?
+                        ((DatacenterIdListFilters) arg0.get()).paginationOptions(PaginationOptions.class.cast(input)) :
+                        DatacenterIdListFilters.Builder.paginationOptions(PaginationOptions.class.cast(input));
+                  return api.getInfrastructureApi().listOperatingSystems(datacenterIdListFilters);
                }
             };
          }

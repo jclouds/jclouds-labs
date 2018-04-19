@@ -31,17 +31,17 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import static org.jclouds.dimensiondata.cloudcontrol.features.NetworkApiMockTest.DEFAULT_ACTION;
 import static org.jclouds.dimensiondata.cloudcontrol.features.NetworkApiMockTest.DEFAULT_IP_VERSION;
 import static org.jclouds.dimensiondata.cloudcontrol.utils.DimensionDataCloudControlResponseUtils.generateFirewallRuleName;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "NetworkApiLiveTest", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest {
@@ -173,7 +173,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
    @Test
    public void testDeployNetworkDomain() {
       networkDomainName = NetworkApiLiveTest.class.getSimpleName() + new Date().getTime();
-      networkDomainId = api().deployNetworkDomain(DATACENTERS.iterator().next(), networkDomainName,
+      networkDomainId = api().deployNetworkDomain(datacenters.iterator().next(), networkDomainName,
             NetworkApiLiveTest.class.getSimpleName() + new Date().getTime() + "description", "ESSENTIALS");
       assertNotNull(networkDomainId);
       assertTrue(networkDomainNormalPredicate.apply(networkDomainId),
@@ -182,7 +182,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
 
    @Test(expectedExceptions = ResourceAlreadyExistsException.class)
    public void testDeploySameNetworkDomain() {
-      api().deployNetworkDomain(DATACENTERS.iterator().next(), networkDomainName, networkDomainName, "ESSENTIALS");
+      api().deployNetworkDomain(datacenters.iterator().next(), networkDomainName, networkDomainName, "ESSENTIALS");
    }
 
    @AfterClass

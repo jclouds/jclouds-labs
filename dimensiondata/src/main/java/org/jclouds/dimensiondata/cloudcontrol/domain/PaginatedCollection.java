@@ -100,5 +100,4 @@ public class PaginatedCollection<T> extends IterableWithMarker<T> {
    private Object toPaginationOptions(Integer pageNumber) {
       return PaginationOptions.Builder.pageNumber(pageNumber);
    }
-
 }
