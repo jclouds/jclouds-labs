@@ -259,7 +259,8 @@ public class NetworkApiMockTest extends BaseAccountAwareCloudControlMockTest {
 
    public void testListNatRules() throws Exception {
       server.enqueue(new MockResponse().setBody(payloadFromResource("/natRules.json")));
-      api().listNatRules("12345").concat().toList();
+      Iterable<NatRule> natRules = api().listNatRules("12345").concat().toList();
+      assertEquals(size(natRules), 2);
       assertSent(GET, "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/network/natRule?networkDomainId=12345");
    }
 
@@ -294,13 +295,15 @@ public class NetworkApiMockTest extends BaseAccountAwareCloudControlMockTest {
 
    public void testListFirewallRules() throws Exception {
       server.enqueue(new MockResponse().setBody(payloadFromResource("/firewallRules.json")));
-      api().listFirewallRules("12345").concat().toList();
+      Iterable<FirewallRule> firewallRules =  api().listFirewallRules("12345").concat().toList();
+      assertEquals(size(firewallRules), 1);
       assertSent(GET, "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/network/firewallRule?networkDomainId=12345");
    }
 
    public void testListFirewallRules_404() throws Exception {
       server.enqueue(response404());
-      api().listFirewallRules("12345").concat().toList();
+      Iterable<FirewallRule> firewallRules =  api().listFirewallRules("12345").concat().toList();
+      assertEquals(size(firewallRules), 0);
       assertSent(GET, "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/network/firewallRule?networkDomainId=12345");
    }
 
