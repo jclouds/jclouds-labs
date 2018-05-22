@@ -41,11 +41,11 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.extensions.ImageExtension;
 import org.jclouds.compute.extensions.SecurityGroupExtension;
+import org.jclouds.compute.extensions.internal.DelegatingImageExtension;
 import org.jclouds.compute.functions.GroupNamingConvention;
 import org.jclouds.compute.internal.BaseComputeService;
 import org.jclouds.compute.internal.PersistNodeCredentials;
 import org.jclouds.compute.options.TemplateOptions;
-import org.jclouds.compute.reference.ComputeServiceConstants.Timeouts;
 import org.jclouds.compute.strategy.CreateNodesInGroupThenAddToSet;
 import org.jclouds.compute.strategy.DestroyNodeStrategy;
 import org.jclouds.compute.strategy.GetImageStrategy;
@@ -97,17 +97,18 @@ public class JoyentCloudComputeService extends BaseComputeService {
          @Named(TIMEOUT_NODE_SUSPENDED) Predicate<AtomicReference<NodeMetadata>> nodeSuspended,
          InitializeRunScriptOnNodeOrPlaceInBadMap.Factory initScriptRunnerFactory,
          RunScriptOnNode.Factory runScriptOnNodeFactory, InitAdminAccess initAdminAccess,
-         PersistNodeCredentials persistNodeCredentials, Timeouts timeouts,
+         PersistNodeCredentials persistNodeCredentials,
          @Named(Constants.PROPERTY_USER_THREADS) ListeningExecutorService userExecutor, JoyentCloudApi novaApi,
          LoadingCache<DatacenterAndName, KeyAndPrivateKey> keyCache,
          Function<Set<? extends NodeMetadata>, Multimap<String, String>> orphanedGroupsByDatacenterId,
          GroupNamingConvention.Factory namingConvention, Optional<ImageExtension> imageExtension,
-         Optional<SecurityGroupExtension> securityGroupExtension) {
+         Optional<SecurityGroupExtension> securityGroupExtension,
+         DelegatingImageExtension.Factory delegatingImageExtension) {
       super(context, credentialStore, images, sizes, locations, listNodesStrategy, getImageStrategy,
             getNodeMetadataStrategy, runNodesAndAddToSetStrategy, rebootNodeStrategy, destroyNodeStrategy,
             startNodeStrategy, stopNodeStrategy, templateBuilderProvider, templateOptionsProvider, nodeRunning,
             nodeTerminated, nodeSuspended, initScriptRunnerFactory, initAdminAccess, runScriptOnNodeFactory,
-            persistNodeCredentials, timeouts, userExecutor, imageExtension, securityGroupExtension);
+            persistNodeCredentials, userExecutor, imageExtension, securityGroupExtension, delegatingImageExtension);
       this.novaApi = checkNotNull(novaApi, "novaApi");
       this.keyCache = checkNotNull(keyCache, "keyCache");
       this.orphanedGroupsByDatacenterId = checkNotNull(orphanedGroupsByDatacenterId, "orphanedGroupsByDatacenterId");
