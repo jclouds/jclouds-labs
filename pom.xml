@@ -72,6 +72,7 @@
     <module>profitbricks-rest</module>
     <module>oneandone</module>
     <module>vagrant</module>
+    <module>aliyun-ecs</module>
   </modules>
 
   <build>
