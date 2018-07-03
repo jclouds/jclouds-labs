@@ -1,0 +1,18 @@
+{
+  "PageNumber": 1,
+  "InstanceStatuses": {
+    "InstanceStatus": [
+      {
+        "Status": "Stopped",
+        "InstanceId": "i-gw8dvsswhc7iifle1hp7"
+      },
+      {
+        "Status": "Stopped",
+        "InstanceId": "i-gw8g25hfbxhyykn3jevq"
+      }
+    ]
+  },
+  "TotalCount": 2,
+  "PageSize": 10,
+  "RequestId": "BDE228AF-8B12-439B-8C1C-FB42CCEB4A65"
+}

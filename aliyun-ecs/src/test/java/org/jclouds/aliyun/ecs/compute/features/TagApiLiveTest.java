@@ -18,7 +18,6 @@ package org.jclouds.aliyun.ecs.compute.features;
 
 import com.google.common.base.Predicate;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiLiveTest;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.domain.Request;
 import org.jclouds.aliyun.ecs.domain.SecurityGroupRequest;
 import org.jclouds.aliyun.ecs.domain.Tag;
@@ -32,6 +31,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.jclouds.aliyun.ecs.domain.ResourceType.SECURITYGROUP;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -40,38 +40,36 @@ import static org.testng.util.Strings.isNullOrEmpty;
 @Test(groups = "live", testName = "TagApiLiveTest")
 public class TagApiLiveTest extends BaseECSComputeServiceApiLiveTest {
 
-   public static final String RESOURCE_TYPE = "securitygroup";
-
    private String securityGroupName = "pre-test-security";
    private String securityGroupId;
 
    @BeforeClass
    public void setUp() {
-      SecurityGroupRequest preRequisite = api.securityGroupApi().create(Regions.EU_CENTRAL_1.getName(),
+      SecurityGroupRequest preRequisite = api.securityGroupApi().create(TEST_REGION,
               CreateSecurityGroupOptions.Builder.securityGroupName(securityGroupName)
       );
       securityGroupId = preRequisite.getSecurityGroupId();
-      Request request = api().add(Regions.EU_CENTRAL_1.getName(), securityGroupId, RESOURCE_TYPE,
+      Request request = api().add(TEST_REGION, securityGroupId, SECURITYGROUP,
               TagOptions.Builder.tag(1, "owner"));
       assertNotNull(request.getRequestId());
    }
 
    @AfterClass
    public void tearDown() {
-      api().remove(Regions.EU_CENTRAL_1.getName(), securityGroupId, RESOURCE_TYPE);
+      api().remove(TEST_REGION, securityGroupId, SECURITYGROUP);
       if (securityGroupId != null) {
-         api.securityGroupApi().delete(Regions.EU_CENTRAL_1.getName(), securityGroupId);
+         api.securityGroupApi().delete(TEST_REGION, securityGroupId);
       }
    }
 
    public void testList() {
       final AtomicInteger found = new AtomicInteger(0);
-      assertFalse(api().list(Regions.EU_CENTRAL_1.getName(), ListTagsOptions.Builder.resourceId(securityGroupId))
+      assertFalse(api().list(TEST_REGION, ListTagsOptions.Builder.resourceId(securityGroupId))
               .filter(new Predicate<Tag>() {
                  @Override
                  public boolean apply(Tag input) {
                     found.incrementAndGet();
-                    return !isNullOrEmpty(input.tagKey());
+                    return !isNullOrEmpty(input.key());
                  }
               }).isEmpty(), "All tags must have the 'key' field populated");
       assertTrue(found.get() > 0, "Expected some tags to be returned");

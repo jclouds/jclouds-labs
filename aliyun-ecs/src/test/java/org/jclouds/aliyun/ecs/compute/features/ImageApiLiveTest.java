@@ -20,14 +20,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiLiveTest;
 import org.jclouds.aliyun.ecs.domain.Image;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
+import org.jclouds.aliyun.ecs.domain.options.ListImagesOptions;
 import org.jclouds.aliyun.ecs.features.ImageApi;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.jclouds.aliyun.ecs.domain.options.ListImagesOptions.Builder.imageIds;
-import static org.jclouds.aliyun.ecs.domain.options.PaginationOptions.Builder.pageNumber;
+import static org.jclouds.aliyun.ecs.domain.options.PaginationOptions.Builder.pageSize;
 import static org.testng.Assert.assertTrue;
 import static org.testng.util.Strings.isNullOrEmpty;
 
@@ -36,7 +35,7 @@ public class ImageApiLiveTest extends BaseECSComputeServiceApiLiveTest {
 
    public void testList() {
       final AtomicInteger found = new AtomicInteger(0);
-      assertTrue(Iterables.all(api().list(Regions.EU_CENTRAL_1.getName()).concat(), new Predicate<Image>() {
+      assertTrue(Iterables.all(api().list(TEST_REGION).concat(), new Predicate<Image>() {
          @Override
          public boolean apply(Image input) {
             found.incrementAndGet();
@@ -48,9 +47,9 @@ public class ImageApiLiveTest extends BaseECSComputeServiceApiLiveTest {
 
    public void testListWithOptions() {
       final AtomicInteger found = new AtomicInteger(0);
-      assertTrue(api().list(Regions.EU_CENTRAL_1.getName(),
-              imageIds("debian_8_09_64_20G_alibase_20170824.vhd")
-              .paginationOptions(pageNumber(3)))
+      assertTrue(api().list(TEST_REGION,
+              ListImagesOptions.Builder.imageName("debian_8_09_64_20G_alibase_20170824.vhd")
+              .paginationOptions(pageSize(1)))
               .firstMatch(new Predicate<Image>() {
                  @Override
                  public boolean apply(Image input) {

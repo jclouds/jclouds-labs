@@ -21,9 +21,8 @@ import com.google.common.collect.Iterables;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiLiveTest;
 import org.jclouds.aliyun.ecs.domain.KeyPair;
 import org.jclouds.aliyun.ecs.domain.KeyPairRequest;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.features.SshKeyPairApi;
-import org.jclouds.ssh.SshKeys;
+import org.jclouds.compute.ComputeTestUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -43,22 +42,22 @@ public class SshKeyPairApiLiveTest extends BaseECSComputeServiceApiLiveTest {
 
    @BeforeClass
    public void setUp() {
-      KeyPairRequest request = api().create(Regions.EU_CENTRAL_1.getName(), keyPairName);
+      KeyPairRequest request = api().create(TEST_REGION, keyPairName);
       assertNotNull(request.getRequestId());
    }
 
    @AfterClass
    public void tearDown() {
       if (keyPairName != null) {
-         api().delete(Regions.EU_CENTRAL_1.getName(), keyPairName);
+         api().delete(TEST_REGION, keyPairName);
       }
    }
 
    public void testImport() {
       String importedKeyPairName = keyPairName  + new Random().nextInt(1024);
       KeyPair imported = api().importKeyPair(
-              Regions.EU_CENTRAL_1.getName(),
-              SshKeys.generate().get("public"),
+              TEST_REGION,
+              ComputeTestUtils.setupKeyPair().get("public"), //SshKeys.generate().get("public"),
               importedKeyPairName);
       assertEquals(imported.name(), importedKeyPairName);
       assertNotNull(imported.privateKeyBody());
@@ -67,7 +66,7 @@ public class SshKeyPairApiLiveTest extends BaseECSComputeServiceApiLiveTest {
 
    public void testList() {
       final AtomicInteger found = new AtomicInteger(0);
-      assertTrue(Iterables.all(api().list(Regions.EU_CENTRAL_1.getName()).concat(), new Predicate<KeyPair>() {
+      assertTrue(Iterables.all(api().list(TEST_REGION).concat(), new Predicate<KeyPair>() {
          @Override
          public boolean apply(KeyPair input) {
             found.incrementAndGet();

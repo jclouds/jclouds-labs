@@ -19,7 +19,6 @@ package org.jclouds.aliyun.ecs.compute.features;
 import com.google.common.collect.ImmutableMap;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiMockTest;
 import org.jclouds.aliyun.ecs.domain.Region;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.domain.Zone;
 import org.testng.annotations.Test;
 
@@ -51,18 +50,18 @@ public class RegionAndZoneApiMockTest extends BaseECSComputeServiceApiMockTest {
 
    public void testListZones() throws InterruptedException {
       server.enqueue(jsonResponse("/zones.json"));
-      List<Zone> zones = api.regionAndZoneApi().describeZones(Regions.EU_CENTRAL_1.getName());
+      List<Zone> zones = api.regionAndZoneApi().describeZones(TEST_REGION);
       assertEquals(size(zones), 2);
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeZones", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
+      assertSent(server, "GET", "DescribeZones", ImmutableMap.of("RegionId", TEST_REGION));
    }
 
    public void testListZonesReturns404() throws InterruptedException {
       server.enqueue(response404());
-      List<Zone> zones = api.regionAndZoneApi().describeZones(Regions.EU_CENTRAL_1.getName());
+      List<Zone> zones = api.regionAndZoneApi().describeZones(TEST_REGION);
       assertTrue(isEmpty(zones));
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeZones", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
+      assertSent(server, "GET", "DescribeZones", ImmutableMap.of("RegionId", TEST_REGION));
    }
 
 }

@@ -16,14 +16,21 @@
  */
 package org.jclouds.aliyun.ecs.config;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Provides;
 import org.jclouds.aliyun.ecs.ECSComputeServiceApi;
 import org.jclouds.aliyun.ecs.handlers.ECSComputeServiceErrorHandler;
+import org.jclouds.aliyun.ecs.handlers.ECSErrorRetryHandler;
 import org.jclouds.http.HttpErrorHandler;
+import org.jclouds.http.HttpRetryHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
+
+import javax.inject.Singleton;
+import java.util.Set;
 
 @ConfiguresHttpApi
 public class ECSComputeServiceHttpApiModule extends HttpApiModule<ECSComputeServiceApi> {
@@ -33,6 +40,23 @@ public class ECSComputeServiceHttpApiModule extends HttpApiModule<ECSComputeServ
       bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(ECSComputeServiceErrorHandler.class);
       bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(ECSComputeServiceErrorHandler.class);
       bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(ECSComputeServiceErrorHandler.class);
+   }
+
+   @Override
+   protected void bindRetryHandlers() {
+      bind(HttpRetryHandler.class).annotatedWith(ClientError.class).to(ECSErrorRetryHandler.class);
+   }
+
+   /**
+    * It combines the error codes explicitly described as retryable from ECS and VPC
+    * https://error-center.alibabacloud.com/status/product/Ecs?spm=a2c63.p38356.a3.5.2a9859c1Fzi5nr
+    * https://error-center.alibabacloud.com/status/product/Vpc?spm=a2c63.p38356.a3.1.1442dd2f4qFMSW
+    */
+   @Provides
+   @ClientError
+   @Singleton
+   protected final Set<String> provideRetryableCodes() {
+      return ImmutableSet.of("InstanceNotReady", "IncorrectInstanceStatus.Initializing", "DependencyViolation", "IncorrectVpcStatus", "IncorrectStatus");
    }
 
 }

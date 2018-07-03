@@ -29,6 +29,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import org.jclouds.ContextBuilder;
 import org.jclouds.aliyun.ecs.ECSComputeServiceApi;
 import org.jclouds.aliyun.ecs.ECSComputeServiceProviderMetadata;
+import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.json.Json;
 import org.jclouds.rest.ApiContext;
@@ -48,6 +49,8 @@ import static org.testng.Assert.assertTrue;
 public class BaseECSComputeServiceApiMockTest {
 
    private static final String DEFAULT_ENDPOINT = new ECSComputeServiceProviderMetadata().getEndpoint();
+   protected static final String TEST_REGION = Regions.EU_CENTRAL_1.getName();
+   protected static final String TEST_ZONE = TEST_REGION + "a";
 
    private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(newDirectExecutorService()));
    protected MockWebServer server;
@@ -59,7 +62,7 @@ public class BaseECSComputeServiceApiMockTest {
    public void start() throws IOException {
       server = new MockWebServer();
       server.play();
-      ctx = ContextBuilder.newBuilder("aliyun-ecs").credentials("user", "password").endpoint(url("")).modules(modules)
+      ctx = ContextBuilder.newBuilder("alibaba-ecs").credentials("user", "password").endpoint(url("")).modules(modules)
             .overrides(overrides()).build();
       json = ctx.utils().injector().getInstance(Json.class);
       api = ctx.getApi();

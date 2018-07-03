@@ -21,7 +21,6 @@ import com.google.common.collect.Iterables;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiLiveTest;
 import org.jclouds.aliyun.ecs.domain.IpProtocol;
 import org.jclouds.aliyun.ecs.domain.Permission;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.domain.SecurityGroup;
 import org.jclouds.aliyun.ecs.domain.SecurityGroupRequest;
 import org.jclouds.aliyun.ecs.domain.options.CreateSecurityGroupOptions;
@@ -46,7 +45,7 @@ public class SecurityGroupApiLiveTest extends BaseECSComputeServiceApiLiveTest {
 
    @BeforeClass
    public void setUp() {
-      SecurityGroupRequest request = api().create(Regions.EU_CENTRAL_1.getName(),
+      SecurityGroupRequest request = api().create(TEST_REGION,
             CreateSecurityGroupOptions.Builder
                   .securityGroupName("jclouds-test")
       );
@@ -56,24 +55,24 @@ public class SecurityGroupApiLiveTest extends BaseECSComputeServiceApiLiveTest {
    @AfterClass
    public void tearDown() {
       if (securityGroupId != null) {
-         api().delete(Regions.EU_CENTRAL_1.getName(), securityGroupId);
+         api().delete(TEST_REGION, securityGroupId);
       }
    }
 
    public void testAddRules() {
-      api().addInboundRule(Regions.EU_CENTRAL_1.getName(), securityGroupId, IpProtocol.TCP, TEST_PORT_RANGE, INTERNET);
+      api().addInboundRule(TEST_REGION, securityGroupId, IpProtocol.TCP, TEST_PORT_RANGE, INTERNET);
    }
 
    @Test(groups = "live", dependsOnMethods = "testAddRules")
    public void testGet() {
-      Permission permission = Iterables.getOnlyElement(api().get(Regions.EU_CENTRAL_1.getName(), securityGroupId));
+      Permission permission = Iterables.getOnlyElement(api().get(TEST_REGION, securityGroupId));
       checkPermission(permission);
    }
 
    @Test(groups = "live", dependsOnMethods = "testGet")
    public void testList() {
       final AtomicInteger found = new AtomicInteger(0);
-      assertTrue(Iterables.all(api().list(Regions.EU_CENTRAL_1.getName()).concat(), new Predicate<SecurityGroup>() {
+      assertTrue(Iterables.all(api().list(TEST_REGION).concat(), new Predicate<SecurityGroup>() {
          @Override
          public boolean apply(SecurityGroup input) {
             found.incrementAndGet();

@@ -16,19 +16,33 @@
  */
 package org.jclouds.aliyun.ecs.compute.internal;
 
+import com.google.common.base.Predicate;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 import org.jclouds.aliyun.ecs.ECSComputeServiceApi;
+import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.compute.config.ComputeServiceProperties;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_RUNNING;
+import static org.jclouds.compute.config.ComputeServiceProperties.TIMEOUT_NODE_SUSPENDED;
+
 public class BaseECSComputeServiceApiLiveTest extends BaseApiLiveTest<ECSComputeServiceApi> {
 
+   protected static final String TEST_REGION = System.getProperty("test.alibaba-ecs.region", Regions.EU_CENTRAL_1.getName());
+   protected static final String TEST_ZONE = System.getProperty("test.alibaba-ecs.zone", TEST_REGION + "a");
+
+   protected Predicate<String> instanceRunningPredicate;
+   protected Predicate<String> instanceSuspendedPredicate;
+
    public BaseECSComputeServiceApiLiveTest() {
-      provider = "aliyun-ecs";
+      provider = "alibaba-ecs";
    }
 
    @Override
@@ -43,6 +57,12 @@ public class BaseECSComputeServiceApiLiveTest extends BaseApiLiveTest<ECSCompute
    @Override
    protected ECSComputeServiceApi create(Properties props, Iterable<Module> modules) {
       Injector injector = newBuilder().modules(modules).overrides(props).buildInjector();
+
+      instanceRunningPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
+      }, Names.named(TIMEOUT_NODE_RUNNING)));
+      instanceSuspendedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
+      }, Names.named(TIMEOUT_NODE_SUSPENDED)));
+
       return injector.getInstance(ECSComputeServiceApi.class);
    }
 

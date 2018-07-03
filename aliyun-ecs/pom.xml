@@ -32,8 +32,6 @@
 
     <properties>
         <test.aliyun-ecs.endpoint>https://ecs.aliyuncs.com/</test.aliyun-ecs.endpoint>
-        <test.aliyun-ecs.api-version></test.aliyun-ecs.api-version>
-        <test.aliyun-ecs.build-version/>
         <test.aliyun-ecs.identity>FIXME_IDENTITY</test.aliyun-ecs.identity>
         <test.aliyun-ecs.credential>FIXME_CREDENTIALS</test.aliyun-ecs.credential>
         <test.aliyun-ecs.template/>
@@ -141,7 +139,6 @@
             </build>
         </profile>
     </profiles>
-
 
 </project>
 

@@ -1,0 +1,22 @@
+{
+  "PageNumber": 1,
+  "VSwitches": {
+    "VSwitch": [
+      {
+        "CreationTime": "2018-07-17T09:38:54Z",
+        "CidrBlock": "172.16.1.0/24",
+        "Status": "Available",
+        "Description": "",
+        "IsDefault": false,
+        "AvailableIpAddressCount": 252,
+        "VSwitchName": "jclouds-vswitch",
+        "ZoneId": "eu-central-1a",
+        "VSwitchId": "vsw-gw8rg87kqcw1kh2qms0pj",
+        "VpcId": "vpc-gw8myavcsj64kfpp92kd0"
+      }
+    ]
+  },
+  "TotalCount": 2,
+  "PageSize": 1,
+  "RequestId": "58A5DDE8-DFAE-42E8-AAC8-61D385CCA8A0"
+}

@@ -1,0 +1,29 @@
+{
+  "PageNumber": 2,
+  "TotalCount": 2,
+  "Vpcs": {
+    "Vpc": [
+      {
+        "CreationTime": "2018-06-19T12:43:23Z",
+        "CidrBlock": "192.168.1.0/16",
+        "VpcName": "test",
+        "Status": "Available",
+        "Description": "",
+        "VSwitchIds": {
+          "VSwitchId": [
+            "vsw-gw8c79bsp4ezbe34ij3w8"
+          ]
+        },
+        "IsDefault": false,
+        "UserCidrs": {
+          "UserCidr": []
+        },
+        "RegionId": "eu-central-1",
+        "VRouterId": "vrt-gw8rs2qwhlasfwtqozz3a",
+        "VpcId": "vpc-gw8vbir5z9j9lncyrjjhe"
+      }
+    ]
+  },
+  "PageSize": 1,
+  "RequestId": "F237893B-BC7A-4A3D-B952-6795D6590C4A"
+}

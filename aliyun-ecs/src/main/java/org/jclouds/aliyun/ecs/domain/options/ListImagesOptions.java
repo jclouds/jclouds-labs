@@ -16,8 +16,10 @@
  */
 package org.jclouds.aliyun.ecs.domain.options;
 
-import org.jclouds.aliyun.ecs.functions.ArrayToCommaSeparatedString;
+import com.google.common.base.Joiner;
 import org.jclouds.http.options.BaseHttpRequestOptions;
+
+import java.util.Arrays;
 
 public class ListImagesOptions extends BaseHttpRequestOptions {
    public static final String IMAGE_ID_PARAM = "ImageId";
@@ -28,7 +30,7 @@ public class ListImagesOptions extends BaseHttpRequestOptions {
    public static final String USAGE_PARAM = "Usage";
 
    public ListImagesOptions imageIds(String... instanceIds) {
-      queryParameters.put(IMAGE_ID_PARAM, String.format("[%s]", new ArrayToCommaSeparatedString().apply(instanceIds)));
+      queryParameters.put(IMAGE_ID_PARAM, Joiner.on(",").join(Arrays.asList(instanceIds)));
       return this;
    }
 

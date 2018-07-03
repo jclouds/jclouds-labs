@@ -1,0 +1,22 @@
+{
+  "PageNumber": 2,
+  "VSwitches": {
+    "VSwitch": [
+      {
+        "CreationTime": "2018-06-19T12:44:58Z",
+        "CidrBlock": "192.168.0.0/24",
+        "Status": "Available",
+        "Description": "",
+        "IsDefault": false,
+        "AvailableIpAddressCount": 252,
+        "VSwitchName": "default-fra1-a",
+        "ZoneId": "eu-central-1a",
+        "VSwitchId": "vsw-gw8c79bsp4ezbe34ij3w8",
+        "VpcId": "vpc-gw8vbir5z9j9lncyrjjhx"
+      }
+    ]
+  },
+  "TotalCount": 2,
+  "PageSize": 1,
+  "RequestId": "58A5DDE8-DFAE-42E8-AAC8-61D385CCA8A1"
+}

@@ -21,8 +21,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.jclouds.http.options.BaseHttpRequestOptions;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -66,6 +66,16 @@ public class TagOptions extends BaseHttpRequestOptions {
       return this;
    }
 
+   public TagOptions tags(Map<String, String> tags) {
+      checkState(tags.size() <= 5, "tags size must be <= 5");
+      int i = 1;
+      for (Map.Entry<String, String> entry : tags.entrySet()) {
+         tag(i, entry.getKey(), entry.getValue());
+         i++;
+      }
+      return this;
+   }
+
    public static class Builder {
 
       public static TagOptions tag(int pos, String key, String value) {
@@ -79,6 +89,10 @@ public class TagOptions extends BaseHttpRequestOptions {
       public static TagOptions keys(Set<String> keys) {
          return new TagOptions().keys(keys);
       }
+
+      public static TagOptions tags(Map<String, String> tags) {
+         return new TagOptions().tags(tags);
+      }
    }
 
    private void validateInput(final String input, int maxLength) {
@@ -86,10 +100,10 @@ public class TagOptions extends BaseHttpRequestOptions {
       checkState(input.length() <= maxLength, String.format("input must be <= %d chars", maxLength));
       checkState(!Iterables.any(FORBIDDEN_PREFIX, new Predicate<String>() {
          @Override
-         public boolean apply(@Nullable String input) {
-            return input.startsWith(input);
+         public boolean apply(String forbiddenPrefix) {
+            return input.startsWith(forbiddenPrefix);
          }
-      }), "Cannot starts with " + Iterables.toString(FORBIDDEN_PREFIX));
+      }), input + " cannot starts with any of " + Iterables.toString(FORBIDDEN_PREFIX));
    }
 
 }

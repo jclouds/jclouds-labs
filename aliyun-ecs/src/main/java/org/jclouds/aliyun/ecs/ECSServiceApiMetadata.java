@@ -18,6 +18,7 @@ package org.jclouds.aliyun.ecs;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
+import org.jclouds.aliyun.ecs.compute.config.ECSServiceContextModule;
 import org.jclouds.aliyun.ecs.config.ECSComputeServiceHttpApiModule;
 import org.jclouds.aliyun.ecs.config.ECSComputeServiceParserModule;
 import org.jclouds.apis.ApiMetadata;
@@ -46,7 +47,7 @@ public class ECSServiceApiMetadata extends BaseHttpApiMetadata<ECSComputeService
 
    public static Properties defaultProperties() {
       Properties properties = BaseHttpApiMetadata.defaultProperties();
-      properties.put(TEMPLATE, "osFamily=CENTOS,os64Bit=true,osVersionMatches=7.4");
+      properties.put(TEMPLATE, "osFamily=CENTOS,os64Bit=true,osVersionMatches=7.*");
       properties.put(TIMEOUT_NODE_RUNNING, 900000); // 15 mins
       properties.put(TIMEOUT_NODE_SUSPENDED, 900000); // 15 mins
       return properties;
@@ -60,7 +61,7 @@ public class ECSServiceApiMetadata extends BaseHttpApiMetadata<ECSComputeService
    public static class Builder extends BaseHttpApiMetadata.Builder<ECSComputeServiceApi, Builder> {
 
       protected Builder() {
-         id("aliyun-ecs")
+         id("alibaba-ecs")
                  .name("Alibaba Elastic Compute Service API")
                  .identityName("user name")
                  .credentialName("user password")
@@ -72,6 +73,7 @@ public class ECSServiceApiMetadata extends BaseHttpApiMetadata<ECSComputeService
                  .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                          .add(ECSComputeServiceHttpApiModule.class)
                          .add(ECSComputeServiceParserModule.class)
+                         .add(ECSServiceContextModule.class)
                          .build());
       }
 

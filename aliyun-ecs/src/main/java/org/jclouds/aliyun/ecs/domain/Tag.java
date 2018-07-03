@@ -17,19 +17,25 @@
 package org.jclouds.aliyun.ecs.domain;
 
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Tag {
 
+   public static final String DEFAULT_OWNER_KEY = "owner";
+   public static final String DEFAULT_OWNER_VALUE = "jclouds";
+   public static final String GROUP = "group";
+
    Tag() {}
 
    @SerializedNames({ "TagKey", "TagValue" })
-   public static Tag create(String tagKey, String tagValue) {
-      return new AutoValue_Tag(tagKey, tagValue);
+   public static Tag create(String key, String value) {
+      return new AutoValue_Tag(key, value);
    }
 
-   public abstract String tagKey();
+   public abstract String key();
 
-   public abstract String tagValue();
+   @Nullable
+   public abstract String value();
 }

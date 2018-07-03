@@ -55,6 +55,9 @@ import java.beans.ConstructorProperties;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * https://www.alibabacloud.com/help/doc-detail/51771.htm?spm=a2c63.p38356.b99.338.1da53569DqQAVv
+ */
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestFilters(FormSign.class)
 @QueryParams(keys = { "Version", "Format", "SignatureVersion", "ServiceCode", "SignatureMethod" },
@@ -135,6 +138,7 @@ public interface SshKeyPairApi {
    @Named("sshKeyPair:delete")
    @POST
    @QueryParams(keys = "Action", values = "DeleteKeyPairs")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    Request delete(@QueryParam("RegionId") String region,
                   @ParamParser(ArrayToCommaSeparatedString.class) @QueryParam("KeyPairNames") String... keyPairNames);
 

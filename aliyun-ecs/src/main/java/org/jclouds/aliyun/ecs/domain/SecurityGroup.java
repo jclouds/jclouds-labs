@@ -17,7 +17,11 @@
 package org.jclouds.aliyun.ecs.domain;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableMap;
 import org.jclouds.json.SerializedNames;
+
+import java.util.List;
+import java.util.Map;
 
 @AutoValue
 public abstract class SecurityGroup {
@@ -25,10 +29,12 @@ public abstract class SecurityGroup {
    SecurityGroup() {
    }
 
-   @SerializedNames({ "SecurityGroupId", "Description", "SecurityGroupName", "VpcId" })
+   @SerializedNames({ "SecurityGroupId", "Description", "SecurityGroupName", "VpcId", "Tags" })
    public static SecurityGroup create(String id, String description, String name,
-                                      String vpcId) {
-      return new AutoValue_SecurityGroup(id, description, name, vpcId);
+                                      String vpcId, Map<String, List<Tag>> tags) {
+      return new AutoValue_SecurityGroup(id, description, name, vpcId, tags == null ?
+              ImmutableMap.<String, List<Tag>>of() :
+              ImmutableMap.copyOf(tags));
    }
 
    public abstract String id();
@@ -38,5 +44,7 @@ public abstract class SecurityGroup {
    public abstract String name();
 
    public abstract String vpcId();
+
+   public abstract Map<String, List<Tag>> tags();
 
 }

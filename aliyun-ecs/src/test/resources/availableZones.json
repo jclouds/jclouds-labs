@@ -1,0 +1,423 @@
+{
+  "RequestId": "C51117E9-1989-4407-AAB6-5E3E433E9A75",
+  "AvailableZones": {
+    "AvailableZone": [
+      {
+        "Status": "Available",
+        "RegionId": "eu-central-1",
+        "AvailableResources": {
+          "AvailableResource": [
+            {
+              "Type": "InstanceType",
+              "SupportedResources": {
+                "SupportedResource": [
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m1.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m4.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m4.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m2.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m2.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m4.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m1.small"
+                  },
+                  {
+                    "Status": "SoldOut",
+                    "Value": "ecs.hfg5.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m2.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m1.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc2m1.nano"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m2.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.large"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "ZoneId": "eu-central-1b"
+      },
+      {
+        "Status": "Available",
+        "RegionId": "eu-central-1",
+        "AvailableResources": {
+          "AvailableResource": [
+            {
+              "Type": "InstanceType",
+              "SupportedResources": {
+                "SupportedResource": [
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.n4.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m2.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m4.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.mn4.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.i1.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.mn4.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m2.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.e4.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m4.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.mn4.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.n4.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.i1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2.large"
+                  },
+                  {
+                    "Status": "SoldOut",
+                    "Value": "ecs.ce4.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.ce4.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.mn4.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m2.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m1.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.d1.4xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m2.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.gn5-c4g1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m1.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2.medium"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-c1m4.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1.medium"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.n4.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfg5.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.gn5-c8g1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.hfc5.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.i1.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1ne.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.i2.xlarge"
+                  },
+                  {
+                    "Status": "SoldOut",
+                    "Value": "ecs.d1.3xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.xn4.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc1m1.small"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.d1.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.t5-lc2m1.nano"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.i2.2xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.gn5-c4g1.xlarge"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.se1.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.n4.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn1ne.large"
+                  },
+                  {
+                    "Status": "Available",
+                    "Value": "ecs.sn2ne.large"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "ZoneId": "eu-central-1a"
+      }
+    ]
+  }
+}

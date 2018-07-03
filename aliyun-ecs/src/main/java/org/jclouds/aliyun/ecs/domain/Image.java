@@ -17,6 +17,10 @@
 package org.jclouds.aliyun.ecs.domain;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Enums;
+import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import org.jclouds.json.SerializedNames;
 
@@ -24,8 +28,30 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @AutoValue
 public abstract class Image {
+
+   public enum Status {
+      AVAILABLE, UNAVAILABLE;
+
+
+      public static Status fromValue(String value) {
+         Optional<Status> status = Enums.getIfPresent(Status.class, value.toUpperCase());
+         checkArgument(status.isPresent(), "Expected one of %s but was %s", Joiner.on(',').join(Status.values()), value);
+         return status.get();
+      }
+
+      public String value() {
+         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+      }
+
+      @Override
+      public String toString() {
+         return value();
+      }
+   }
 
    Image() {}
 
@@ -36,15 +62,15 @@ public abstract class Image {
    public static Image create(String id, String description, String productCode, String osType,
                               String architecture, String osName, Map<String, List<DiskDeviceMapping>> diskDeviceMappings,
                               String imageOwnerAlias, String progress, Boolean isSupportCloudinit, String usage, Date creationTime,
-                              Map<String, List<Tag>> tags, String imageVersion, String status, String name,
+                              Map<String, List<Tag>> tags, String imageVersion, Status status, String name,
                               Boolean isSupportIoOptimized, Boolean isSelfShared, Boolean isCopied, Boolean isSubscribed, String platform,
-                              String size) {
-      return new AutoValue_Image(id, description, productCode, osType, architecture, osName,
-              diskDeviceMappings == null ?
-                      ImmutableMap.<String, List<DiskDeviceMapping>>of() :
-                      ImmutableMap.copyOf(diskDeviceMappings), imageOwnerAlias, progress, isSupportCloudinit, usage,
-              creationTime, tags == null ? ImmutableMap.<String, List<Tag>>of() : ImmutableMap.copyOf(tags), imageVersion,
-              status, name, isSupportIoOptimized, isSelfShared, isCopied, isSubscribed, platform, size);
+                              int size) {
+      return builder().id(id).description(description).productCode(productCode).osType(osType)
+              .architecture(architecture).osName(osName).diskDeviceMappings(diskDeviceMappings).imageOwnerAlias(imageOwnerAlias)
+              .progress(progress).isSupportCloudinit(isSupportCloudinit).usage(usage).creationTime(creationTime)
+              .tags(tags).imageVersion(imageVersion).status(status).name(name).isSupportIoOptimizeds(isSupportIoOptimized)
+              .isSelfShared(isSelfShared).isCopied(isCopied).isSubscribed(isSubscribed).platform(platform).size(size)
+              .build();
    }
 
    public abstract String id();
@@ -75,7 +101,7 @@ public abstract class Image {
 
    public abstract String imageVersion();
 
-   public abstract String status();
+   public abstract Status status();
 
    public abstract String name();
 
@@ -89,6 +115,72 @@ public abstract class Image {
 
    public abstract String platform();
 
-   public abstract String size();
+   public abstract int size();
+
+   public abstract Builder toBuilder();
+
+   public static Builder builder() {
+      return new AutoValue_Image.Builder();
+   }
+
+   @AutoValue.Builder
+   public abstract static class Builder {
+
+      public abstract Builder id(String id);
+
+      public abstract Builder description(String description);
+
+      public abstract Builder productCode(String productCode);
+
+      public abstract Builder osType(String osType);
+
+      public abstract Builder architecture(String architecture);
+
+      public abstract Builder osName(String osName);
+
+      public abstract Builder diskDeviceMappings(Map<String, List<DiskDeviceMapping>> diskDeviceMappings);
+
+      public abstract Builder imageOwnerAlias(String imageOwnerAlias);
+
+      public abstract Builder progress(String progress);
+
+      public abstract Builder isSupportCloudinit(Boolean isSupportCloudinit);
+
+      public abstract Builder usage(String usage);
+
+      public abstract Builder creationTime(Date creationTime);
+
+      public abstract Builder tags(Map<String, List<Tag>> tags);
+
+      public abstract Builder imageVersion(String imageVersion);
+
+      public abstract Builder status(Status status);
+
+      public abstract Builder name(String name);
+
+      public abstract Builder isSupportIoOptimizeds(Boolean isSupportIoOptimizeds);
+
+      public abstract Builder isSelfShared(Boolean isSelfShared);
+
+      public abstract Builder isCopied(Boolean isCopied);
+
+      public abstract Builder isSubscribed(Boolean isSubscribed);
+
+      public abstract Builder platform(String platform);
+
+      public abstract Builder size(int size);
+
+      abstract Image autoBuild();
+
+      abstract Map<String, List<DiskDeviceMapping>> diskDeviceMappings();
+
+      abstract Map<String, List<Tag>> tags();
+
+      public Image build() {
+         diskDeviceMappings(diskDeviceMappings() != null ? ImmutableMap.copyOf(diskDeviceMappings()) : ImmutableMap.<String, List<DiskDeviceMapping>>of());
+         tags(tags() != null ? ImmutableMap.copyOf(tags()) : ImmutableMap.<String, List<Tag>>of());
+         return autoBuild();
+      }
+   }
 
 }

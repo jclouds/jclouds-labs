@@ -18,7 +18,6 @@ package org.jclouds.aliyun.ecs.compute.features;
 
 import com.google.common.collect.ImmutableMap;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiMockTest;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.domain.SecurityGroup;
 import org.testng.annotations.Test;
 
@@ -35,35 +34,35 @@ public class SecurityGroupApiMockTest extends BaseECSComputeServiceApiMockTest {
    public void testListSecurityGroups() throws InterruptedException {
       server.enqueue(jsonResponse("/securitygroups-first.json"));
       server.enqueue(jsonResponse("/securitygroups-last.json"));
-      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(Regions.EU_CENTRAL_1.getName()).concat();
+      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(TEST_REGION).concat();
       assertEquals(size(securitygroups), 7); // Force the PagedIterable to advance
       assertEquals(server.getRequestCount(), 2);
-      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
-      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);
+      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", TEST_REGION));
+      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", TEST_REGION), 2);
    }
 
    public void testListSecurityGroupsReturns404() throws InterruptedException {
       server.enqueue(response404());
-      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(Regions.EU_CENTRAL_1.getName()).concat();
+      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(TEST_REGION).concat();
       assertTrue(isEmpty(securitygroups));
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
+      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", TEST_REGION));
    }
 
    public void testListSecurityGroupsWithOptions() throws InterruptedException {
       server.enqueue(jsonResponse("/securitygroups-first.json"));
-      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(1).pageSize(5)));
+      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(TEST_REGION, paginationOptions(pageNumber(1).pageSize(5)));
       assertEquals(size(securitygroups), 5);
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 1);
+      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", TEST_REGION), 1);
    }
 
    public void testListSecurityGroupsWithOptionsReturns404() throws InterruptedException {
       server.enqueue(response404());
-      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(2)));
+      Iterable<SecurityGroup> securitygroups = api.securityGroupApi().list(TEST_REGION, paginationOptions(pageNumber(2)));
       assertTrue(isEmpty(securitygroups));
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);
+      assertSent(server, "GET", "DescribeSecurityGroups", ImmutableMap.of("RegionId", TEST_REGION), 2);
    }
 
 }

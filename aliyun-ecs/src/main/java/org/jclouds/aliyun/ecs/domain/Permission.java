@@ -50,7 +50,7 @@ public abstract class Permission {
    }
 
    public enum Direction {
-      EGRESS, ALL;
+      EGRESS, INGRESS, ALL;
 
       public static Direction fromValue(String value) {
          Optional<Direction> direction = Enums.getIfPresent(Direction.class, value.toUpperCase());

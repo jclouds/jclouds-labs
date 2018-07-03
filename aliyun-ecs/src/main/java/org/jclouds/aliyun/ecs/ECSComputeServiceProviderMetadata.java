@@ -51,8 +51,8 @@ public class ECSComputeServiceProviderMetadata extends BaseProviderMetadata {
    public static class Builder extends BaseProviderMetadata.Builder {
 
       protected Builder() {
-         id("aliyun-ecs")
-               .name("Alibaba Elastic Compute Service")
+         id("alibaba-ecs")
+               .name("Alibaba Cloud Elastic Compute Service")
                .apiMetadata(new ECSServiceApiMetadata())
                .homepage(URI.create("https://www.alibabacloud.com"))
                .console(URI.create("https://ecs.console.aliyun.com"))

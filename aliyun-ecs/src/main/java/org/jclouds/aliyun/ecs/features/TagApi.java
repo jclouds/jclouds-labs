@@ -24,6 +24,7 @@ import org.jclouds.Constants;
 import org.jclouds.Fallbacks;
 import org.jclouds.aliyun.ecs.ECSComputeServiceApi;
 import org.jclouds.aliyun.ecs.domain.Request;
+import org.jclouds.aliyun.ecs.domain.ResourceType;
 import org.jclouds.aliyun.ecs.domain.Tag;
 import org.jclouds.aliyun.ecs.domain.internal.PaginatedCollection;
 import org.jclouds.aliyun.ecs.domain.options.ListTagsOptions;
@@ -53,6 +54,9 @@ import java.beans.ConstructorProperties;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * https://www.alibabacloud.com/help/doc-detail/25616.htm?spm=a2c63.p38356.b99.382.580b30373FFIDb
+ */
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestFilters(FormSign.class)
 @QueryParams(keys = { "Version", "Format", "SignatureVersion", "ServiceCode", "SignatureMethod" },
@@ -122,7 +126,7 @@ public interface TagApi {
    @POST
    @QueryParams(keys = "Action", values = "AddTags")
    Request add(@QueryParam("RegionId") String region, @QueryParam("ResourceId") String resourceId,
-                            @QueryParam("ResourceType") String resourceType,
+                            @QueryParam("ResourceType") ResourceType resourceType,
                             TagOptions tagOptions);
 
    @Named("tag:remove")
@@ -130,14 +134,14 @@ public interface TagApi {
    @QueryParams(keys = "Action", values = "RemoveTags")
    Request remove(@QueryParam("RegionId") String region,
                   @QueryParam("ResourceId") String resourceId,
-                  @QueryParam("ResourceType") String resourceType);
+                  @QueryParam("ResourceType") ResourceType resourceType);
 
    @Named("tag:remove")
    @POST
    @QueryParams(keys = "Action", values = "RemoveTags")
    Request remove(@QueryParam("RegionId") String region,
                   @QueryParam("ResourceId") String resourceId,
-                  @QueryParam("ResourceType") String resourceType,
+                  @QueryParam("ResourceType") ResourceType resourceType,
                   TagOptions options);
 }
 

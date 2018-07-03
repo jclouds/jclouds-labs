@@ -57,6 +57,9 @@ import java.beans.ConstructorProperties;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * https://www.alibabacloud.com/help/doc-detail/25553.htm?spm=a2c63.p38356.b99.323.1a3b59abPkInRB
+ */
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestFilters(FormSign.class)
 @QueryParams(keys = {"Version", "Format", "SignatureVersion", "ServiceCode", "SignatureMethod"},

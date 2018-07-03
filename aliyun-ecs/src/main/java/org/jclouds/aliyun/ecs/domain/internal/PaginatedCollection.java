@@ -51,8 +51,8 @@ public class PaginatedCollection<T> extends IterableWithMarker<T> {
 
    private final String requestId;
 
-   protected PaginatedCollection(@Nullable Map<String, Iterable<T>> resources, int pageNumber, int totalCount,
-                                 int pageSize, String regionId, String requestId) {
+   public PaginatedCollection(@Nullable Map<String, Iterable<T>> resources, int pageNumber, int totalCount,
+                              int pageSize, String regionId, String requestId) {
       this.resources = resources != null ? resources : ImmutableMap.<String, Iterable<T>>of();
       this.pageNumber = pageNumber;
       this.totalCount = totalCount;

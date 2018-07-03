@@ -18,7 +18,6 @@ package org.jclouds.aliyun.ecs.compute.features;
 
 import com.google.common.collect.ImmutableMap;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiMockTest;
-import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.domain.Tag;
 import org.testng.annotations.Test;
 
@@ -35,35 +34,35 @@ public class TagApiMockTest extends BaseECSComputeServiceApiMockTest {
    public void testListTags() throws InterruptedException {
       server.enqueue(jsonResponse("/tags-first.json"));
       server.enqueue(jsonResponse("/tags-last.json"));
-      Iterable<Tag> tags = api.tagApi().list(Regions.EU_CENTRAL_1.getName()).concat();
+      Iterable<Tag> tags = api.tagApi().list(TEST_REGION).concat();
       assertEquals(size(tags), 10); // Force the PagedIterable to advance
       assertEquals(server.getRequestCount(), 2);
-      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
-      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);
+      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", TEST_REGION));
+      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", TEST_REGION), 2);
    }
 
    public void testListTagsReturns404() throws InterruptedException {
       server.enqueue(response404());
-      Iterable<Tag> tags = api.tagApi().list(Regions.EU_CENTRAL_1.getName()).concat();
+      Iterable<Tag> tags = api.tagApi().list(TEST_REGION).concat();
       assertTrue(isEmpty(tags));
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
+      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", TEST_REGION));
    }
 
    public void testListTagsWithOptions() throws InterruptedException {
       server.enqueue(jsonResponse("/tags-first.json"));
-      Iterable<Tag> tags = api.tagApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(1).pageSize(5)));
+      Iterable<Tag> tags = api.tagApi().list(TEST_REGION, paginationOptions(pageNumber(1).pageSize(5)));
       assertEquals(size(tags), 8);
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 1);
+      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", TEST_REGION), 1);
    }
 
    public void testListTagsWithOptionsReturns404() throws InterruptedException {
       server.enqueue(response404());
-      Iterable<Tag> tags = api.tagApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(2)));
+      Iterable<Tag> tags = api.tagApi().list(TEST_REGION, paginationOptions(pageNumber(2)));
       assertTrue(isEmpty(tags));
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);
+      assertSent(server, "GET", "DescribeTags", ImmutableMap.of("RegionId", TEST_REGION), 2);
    }
 
 }
