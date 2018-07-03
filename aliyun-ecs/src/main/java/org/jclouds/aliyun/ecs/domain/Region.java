@@ -14,20 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.aliyun.ecs;
+package org.jclouds.aliyun.ecs.domain;
 
-import org.jclouds.aliyun.ecs.features.ImageApi;
-import org.jclouds.aliyun.ecs.features.RegionAndZoneApi;
-import org.jclouds.rest.annotations.Delegate;
+import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 
-import java.io.Closeable;
+@AutoValue
+public abstract class Region {
 
-public interface ECSComputeServiceApi extends Closeable {
+   Region() {}
 
-   @Delegate
-   ImageApi imageApi();
+   @SerializedNames({ "RegionId", "LocalName" })
+   public static Region create(String regionId, String localName) {
+      return new AutoValue_Region(regionId, localName);
+   }
 
-   @Delegate
-   RegionAndZoneApi regionAndZoneApi();
+   public abstract String regionId();
+
+   public abstract String localName();
 
 }

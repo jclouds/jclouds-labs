@@ -19,6 +19,7 @@ package org.jclouds.aliyun.ecs.compute.internal;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Resources;
 import com.google.inject.Module;
@@ -42,6 +43,7 @@ import java.util.Set;
 import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static org.jclouds.Constants.PROPERTY_MAX_RETRIES;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class BaseECSComputeServiceApiMockTest {
 
@@ -97,20 +99,25 @@ public class BaseECSComputeServiceApiMockTest {
    }
 
    protected RecordedRequest assertSent(MockWebServer server, String method, String action) throws InterruptedException {
-      RecordedRequest request = server.takeRequest();
-      assertEquals(request.getMethod(), method);
-      Map<String, String> queryParameters = Splitter.on('&').trimResults().withKeyValueSeparator("=").split(request.getPath());
-      assertEquals(queryParameters.get("Action"), action);
-      assertEquals(request.getHeader("Accept"), "application/json");
-      return request;
+      return assertSent(server, method, action, ImmutableMap.<String, String>of(), null);
    }
 
-   protected RecordedRequest assertSent(MockWebServer server, String method, String action, Integer page) throws InterruptedException {
+   protected RecordedRequest assertSent(MockWebServer server, String method, String action, Map<String, String> queryParameters) throws InterruptedException {
+      return assertSent(server, method, action, queryParameters, null);
+   }
+
+   protected RecordedRequest assertSent(MockWebServer server, String method, String action, Map<String, String> queryParameters, Integer page) throws InterruptedException {
       RecordedRequest request = server.takeRequest();
       assertEquals(request.getMethod(), method);
-      Map<String, String> queryParameters = Splitter.on('&').trimResults().withKeyValueSeparator("=").split(request.getPath());
-      assertEquals(queryParameters.get("Action"), action);
-      assertEquals(Integer.valueOf(queryParameters.get("pageNumber")), page);
+      Map<String, String> requestQueryParameters = Splitter.on('&').trimResults().withKeyValueSeparator("=").split(request.getPath());
+      assertEquals(requestQueryParameters.get("Action"), action);
+
+      for (Map.Entry<String, String> keyAndValue : queryParameters.entrySet()) {
+         assertTrue(requestQueryParameters.containsKey(keyAndValue.getKey()));
+         assertTrue(requestQueryParameters.containsValue(keyAndValue.getValue()));
+         assertEquals(requestQueryParameters.get(keyAndValue.getKey()), keyAndValue.getValue());
+      }
+      if (page != null) assertEquals(Integer.valueOf(requestQueryParameters.get("pageNumber")), page);
       assertEquals(request.getHeader("Accept"), "application/json");
       return request;
    }

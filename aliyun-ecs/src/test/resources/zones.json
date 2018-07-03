@@ -1,0 +1,477 @@
+{
+  "RequestId": "A1E88D60-8179-4524-B4D4-1293A5CD986F",
+  "Zones": {
+    "Zone": [
+      {
+        "DedicatedHostGenerations": {
+          "DedicatedHostGeneration": []
+        },
+        "AvailableResourceCreation": {
+          "ResourceTypes": [
+            "VSwitch",
+            "IoOptimized",
+            "Instance",
+            "Disk"
+          ]
+        },
+        "AvailableDedicatedHostTypes": {
+          "DedicatedHostType": []
+        },
+        "AvailableResources": {
+          "ResourcesInfo": [
+            {
+              "IoOptimized": true,
+              "SystemDiskCategories": {
+                "supportedSystemDiskCategory": [
+                  "cloud_ssd",
+                  "cloud_efficiency"
+                ]
+              },
+              "InstanceTypes": {
+                "supportedInstanceType": [
+                  "ecs.hfg5.large",
+                  "ecs.hfc5.xlarge",
+                  "ecs.hfc5.8xlarge",
+                  "ecs.hfc5.4xlarge",
+                  "ecs.se1ne.2xlarge",
+                  "ecs.hfg5.6xlarge",
+                  "ecs.t5-c1m2.4xlarge",
+                  "ecs.se1ne.xlarge",
+                  "ecs.t5-c1m2.2xlarge",
+                  "ecs.hfg5.xlarge",
+                  "ecs.sn2ne.8xlarge",
+                  "ecs.se1ne.4xlarge",
+                  "ecs.sn2ne.4xlarge",
+                  "ecs.sn1ne.8xlarge",
+                  "ecs.t5-c1m1.xlarge",
+                  "ecs.sn2ne.large",
+                  "ecs.sn2ne.xlarge",
+                  "ecs.hfg5.4xlarge",
+                  "ecs.sn1ne.large",
+                  "ecs.t5-c1m4.xlarge",
+                  "ecs.sn1ne.2xlarge",
+                  "ecs.hfc5.2xlarge",
+                  "ecs.t5-lc1m4.large",
+                  "ecs.hfg5.2xlarge",
+                  "ecs.t5-c1m1.4xlarge",
+                  "ecs.t5-c1m2.xlarge",
+                  "ecs.t5-c1m1.large",
+                  "ecs.sn2ne.2xlarge",
+                  "ecs.hfc5.6xlarge",
+                  "ecs.t5-lc1m2.small",
+                  "ecs.t5-c1m4.large",
+                  "ecs.t5-c1m1.2xlarge",
+                  "ecs.sn1ne.4xlarge",
+                  "ecs.t5-lc1m1.small",
+                  "ecs.t5-c1m4.2xlarge",
+                  "ecs.sn1ne.xlarge",
+                  "ecs.se1ne.large",
+                  "ecs.t5-lc1m2.large",
+                  "ecs.hfc5.large",
+                  "ecs.se1ne.8xlarge",
+                  "ecs.t5-lc2m1.nano",
+                  "ecs.t5-c1m2.large"
+                ]
+              },
+              "InstanceTypeFamilies": {
+                "supportedInstanceTypeFamily": [
+                  "ecs.hfc5",
+                  "ecs.sn1ne",
+                  "ecs.hfg5",
+                  "ecs.se1ne",
+                  "ecs.t5",
+                  "ecs.sn2ne"
+                ]
+              },
+              "DataDiskCategories": {
+                "supportedDataDiskCategory": [
+                  "cloud_ssd",
+                  "cloud_efficiency"
+                ]
+              },
+              "InstanceGenerations": {
+                "supportedInstanceGeneration": [
+                  "ecs-3",
+                  "ecs-4"
+                ]
+              },
+              "NetworkTypes": {
+                "supportedNetworkCategory": [
+                  "vpc"
+                ]
+              }
+            }
+          ]
+        },
+        "AvailableInstanceTypes": {
+          "InstanceTypes": [
+            "ecs.hfc5.xlarge",
+            "ecs.hfc5.8xlarge",
+            "ecs.t5-c1m2.4xlarge",
+            "ecs.hfg5.6xlarge",
+            "ecs.se1ne.2xlarge",
+            "ecs.sn1ne.3xlarge",
+            "ecs.sn2ne.3xlarge",
+            "ecs.t5-c1m2.2xlarge",
+            "ecs.se1ne.3xlarge",
+            "ecs.hfg5.xlarge",
+            "ecs.sn2ne.8xlarge",
+            "ecs.hfg5.3xlarge",
+            "ecs.sn2ne.4xlarge",
+            "ecs.sn1ne.8xlarge",
+            "ecs.sn2ne.large",
+            "ecs.sn2ne.xlarge",
+            "ecs.hfg5.4xlarge",
+            "ecs.hfc5.2xlarge",
+            "ecs.sn1ne.2xlarge",
+            "ecs.se1ne.6xlarge",
+            "ecs.sn2ne.2xlarge",
+            "ecs.hfc5.3xlarge",
+            "ecs.sn2ne.6xlarge",
+            "ecs.t5-lc1m2.small",
+            "ecs.t5-c1m4.large",
+            "ecs.t5-lc1m1.small",
+            "ecs.t5-c1m4.2xlarge",
+            "ecs.sn1ne.xlarge",
+            "ecs.se1ne.large",
+            "ecs.t5-lc1m2.large",
+            "ecs.t5-c1m2.large",
+            "ecs.hfg5.large",
+            "ecs.hfc5.4xlarge",
+            "ecs.se1ne.xlarge",
+            "ecs.se1ne.4xlarge",
+            "ecs.t5-c1m1.xlarge",
+            "ecs.sn1ne.large",
+            "ecs.t5-c1m4.xlarge",
+            "ecs.sn1ne.6xlarge",
+            "ecs.t5-lc1m4.large",
+            "ecs.hfg5.2xlarge",
+            "ecs.t5-c1m1.4xlarge",
+            "ecs.t5-c1m2.xlarge",
+            "ecs.t5-c1m1.large",
+            "ecs.hfc5.6xlarge",
+            "ecs.sn1ne.4xlarge",
+            "ecs.t5-c1m1.2xlarge",
+            "ecs.hfc5.large",
+            "ecs.se1ne.8xlarge",
+            "ecs.t5-lc2m1.nano"
+          ]
+        },
+        "ZoneId": "eu-central-1b",
+        "AvailableVolumeCategories": {
+          "VolumeCategories": [
+            "san_ssd",
+            "san_efficiency"
+          ]
+        },
+        "LocalName": "[0xe6][0xac][0xa7][0xe6][0xb4][0xb2][0xe4][0xb8][0xad][0xe9][0x83][0xa8]1 [0xe5][0x8f][0xaf][0xe7][0x94][0xa8][0xe5][0x8c][0xba]B",
+        "AvailableDiskCategories": {
+          "DiskCategories": [
+            "cloud_ssd",
+            "cloud_efficiency"
+          ]
+        }
+      },
+      {
+        "DedicatedHostGenerations": {
+          "DedicatedHostGeneration": [
+            "ddh-3"
+          ]
+        },
+        "AvailableResourceCreation": {
+          "ResourceTypes": [
+            "IoOptimized",
+            "VSwitch",
+            "Instance",
+            "DedicatedHost",
+            "Disk"
+          ]
+        },
+        "AvailableDedicatedHostTypes": {
+          "DedicatedHostType": [
+            "ddh.se1ne"
+          ]
+        },
+        "AvailableResources": {
+          "ResourcesInfo": [
+            {
+              "IoOptimized": true,
+              "SystemDiskCategories": {
+                "supportedSystemDiskCategory": [
+                  "cloud_ssd",
+                  "cloud_efficiency"
+                ]
+              },
+              "InstanceTypes": {
+                "supportedInstanceType": [
+                  "ecs.hfc5.xlarge",
+                  "ecs.hfc5.8xlarge",
+                  "ecs.hfg5.8xlarge",
+                  "ecs.n4.4xlarge",
+                  "ecs.sn2.7xlarge",
+                  "ecs.sn2ne.14xlarge",
+                  "ecs.sn2.medium",
+                  "ecs.gn5-c48g1.12xlarge",
+                  "ecs.n4.xlarge",
+                  "ecs.se1.large",
+                  "ecs.t5-c1m2.4xlarge",
+                  "ecs.hfg5.6xlarge",
+                  "ecs.se1ne.2xlarge",
+                  "ecs.t5-c1m2.2xlarge",
+                  "ecs.hfg5.xlarge",
+                  "ecs.xn4.small",
+                  "ecs.se1.14xlarge",
+                  "ecs.sn2ne.8xlarge",
+                  "ecs.sn2ne.4xlarge",
+                  "ecs.mn4.large",
+                  "ecs.sn1ne.8xlarge",
+                  "ecs.sn1.7xlarge",
+                  "ecs.mn4.2xlarge",
+                  "ecs.mn4.8xlarge",
+                  "ecs.n4.2xlarge",
+                  "ecs.sn2ne.large",
+                  "ecs.hfg5.4xlarge",
+                  "ecs.sn2ne.xlarge",
+                  "ecs.hfc5.2xlarge",
+                  "ecs.sn1ne.2xlarge",
+                  "ecs.e4.small",
+                  "ecs.i1.4xlarge",
+                  "ecs.i2.16xlarge",
+                  "ecs.sn2ne.2xlarge",
+                  "ecs.se1.8xlarge",
+                  "ecs.t5-lc1m2.small",
+                  "ecs.t5-c1m4.large",
+                  "ecs.sn2.3xlarge",
+                  "ecs.n4.small",
+                  "ecs.t5-lc1m1.small",
+                  "ecs.i2.xlarge",
+                  "ecs.se1ne.large",
+                  "ecs.t5-c1m4.2xlarge",
+                  "ecs.sn1ne.xlarge",
+                  "ecs.t5-lc1m2.large",
+                  "ecs.sn2.large",
+                  "ecs.i2.2xlarge",
+                  "ecs.sn1.large",
+                  "ecs.t5-c1m2.large",
+                  "ecs.mn4.xlarge",
+                  "ecs.se1.xlarge",
+                  "ecs.gn5-c8g1.4xlarge",
+                  "ecs.hfg5.large",
+                  "ecs.i1.8xlarge",
+                  "ecs.gn5-c4g1.xlarge",
+                  "ecs.hfc5.4xlarge",
+                  "ecs.gn5-c8g1.2xlarge",
+                  "ecs.se1.2xlarge",
+                  "ecs.i1.2xlarge",
+                  "ecs.se1ne.14xlarge",
+                  "ecs.sn2.xlarge",
+                  "ecs.se1ne.xlarge",
+                  "ecs.se1ne.4xlarge",
+                  "ecs.sn1.medium",
+                  "ecs.n4.8xlarge",
+                  "ecs.t5-c1m1.xlarge",
+                  "ecs.sn1ne.large",
+                  "ecs.t5-c1m4.xlarge",
+                  "ecs.n4.large",
+                  "ecs.sn1.3xlarge",
+                  "ecs.hfg5.2xlarge",
+                  "ecs.t5-lc1m4.large",
+                  "ecs.t5-c1m1.4xlarge",
+                  "ecs.gn5-c4g1.2xlarge",
+                  "ecs.se1.4xlarge",
+                  "ecs.t5-c1m2.xlarge",
+                  "ecs.t5-c1m1.large",
+                  "ecs.sn2.13xlarge",
+                  "ecs.i2.8xlarge",
+                  "ecs.i1.14xlarge",
+                  "ecs.hfc5.6xlarge",
+                  "ecs.i2.4xlarge",
+                  "ecs.i1.xlarge",
+                  "ecs.sn1ne.4xlarge",
+                  "ecs.t5-c1m1.2xlarge",
+                  "ecs.mn4.4xlarge",
+                  "ecs.hfc5.large",
+                  "ecs.se1ne.8xlarge",
+                  "ecs.sn1.xlarge",
+                  "ecs.t5-lc2m1.nano",
+                  "ecs.mn4.small"
+                ]
+              },
+              "InstanceTypeFamilies": {
+                "supportedInstanceTypeFamily": [
+                  "ecs.hfc5",
+                  "ecs.gn5",
+                  "ecs.sn1ne",
+                  "ecs.hfg5",
+                  "ecs.t5",
+                  "ecs.mn4",
+                  "ecs.sn1",
+                  "ecs.sn2",
+                  "ecs.d1",
+                  "ecs.xn4",
+                  "ecs.i1",
+                  "ecs.n4",
+                  "ecs.se1ne",
+                  "ecs.e4",
+                  "ecs.se1",
+                  "ecs.i2",
+                  "ecs.sn2ne"
+                ]
+              },
+              "DataDiskCategories": {
+                "supportedDataDiskCategory": [
+                  "cloud_ssd",
+                  "cloud_efficiency"
+                ]
+              },
+              "InstanceGenerations": {
+                "supportedInstanceGeneration": [
+                  "ecs-3",
+                  "ecs-2",
+                  "ecs-4"
+                ]
+              },
+              "NetworkTypes": {
+                "supportedNetworkCategory": [
+                  "vpc"
+                ]
+              }
+            }
+          ]
+        },
+        "AvailableInstanceTypes": {
+          "InstanceTypes": [
+            "ecs.hfc5.xlarge",
+            "ecs.hfg5.8xlarge",
+            "ecs.sn2.7xlarge",
+            "ecs.sn2ne.14xlarge",
+            "ecs.sn2.medium",
+            "ecs.n4.xlarge",
+            "ecs.t5-c1m2.4xlarge",
+            "ecs.se1.large",
+            "ecs.sn1ne.3xlarge",
+            "ecs.sn2ne.3xlarge",
+            "ecs.t5-c1m2.2xlarge",
+            "ecs.xn4.small",
+            "ecs.se1ne.3xlarge",
+            "ecs.i1.3xlarge",
+            "ecs.sn2ne.8xlarge",
+            "ecs.hfg5.3xlarge",
+            "ecs.mn4.large",
+            "ecs.sn1.7xlarge",
+            "ecs.mn4.8xlarge",
+            "ecs.n4.2xlarge",
+            "ecs.hfg5.4xlarge",
+            "ecs.hfc5.2xlarge",
+            "ecs.i1.4xlarge",
+            "ecs.i2.16xlarge",
+            "ecs.se1.8xlarge",
+            "ecs.hfc5.3xlarge",
+            "ecs.t5-lc1m2.small",
+            "ecs.sn2.3xlarge",
+            "ecs.t5-lc1m1.small",
+            "ecs.i2.xlarge",
+            "ecs.t5-c1m4.2xlarge",
+            "ecs.se1ne.large",
+            "ecs.i2.2xlarge",
+            "ecs.sn1.large",
+            "ecs.mn4.xlarge",
+            "ecs.hfg5.large",
+            "ecs.gn5-c4g1.xlarge",
+            "ecs.hfc5.4xlarge",
+            "ecs.gn5-c8g1.2xlarge",
+            "ecs.i1.2xlarge",
+            "ecs.se1ne.xlarge",
+            "ecs.d1-c8d3.8xlarge",
+            "ecs.se1ne.4xlarge",
+            "ecs.sn1.medium",
+            "ecs.n4.8xlarge",
+            "ecs.e4.xlarge",
+            "ecs.n4.large",
+            "ecs.sn1ne.6xlarge",
+            "ecs.t5-lc1m4.large",
+            "ecs.t5-c1m1.4xlarge",
+            "ecs.d1.2xlarge",
+            "ecs.se1.4xlarge",
+            "ecs.t5-c1m2.xlarge",
+            "ecs.t5-c1m1.large",
+            "ecs.i2.8xlarge",
+            "ecs.i1.14xlarge",
+            "ecs.hfc5.6xlarge",
+            "ecs.i2.4xlarge",
+            "ecs.t5-c1m1.2xlarge",
+            "ecs.t5-lc2m1.nano",
+            "ecs.sn1.xlarge",
+            "ecs.hfc5.8xlarge",
+            "ecs.n4.4xlarge",
+            "ecs.gn5-c48g1.12xlarge",
+            "ecs.hfg5.6xlarge",
+            "ecs.se1ne.2xlarge",
+            "ecs.i1.6xlarge",
+            "ecs.hfg5.xlarge",
+            "ecs.se1.14xlarge",
+            "ecs.sn2ne.4xlarge",
+            "ecs.sn1ne.8xlarge",
+            "ecs.mn4.2xlarge",
+            "ecs.sn2ne.large",
+            "ecs.sn2ne.xlarge",
+            "ecs.i1-c10d1.8xlarge",
+            "ecs.e4.4xlarge",
+            "ecs.sn1ne.2xlarge",
+            "ecs.e4.small",
+            "ecs.se1ne.6xlarge",
+            "ecs.sn2ne.2xlarge",
+            "ecs.sn2ne.6xlarge",
+            "ecs.t5-c1m4.large",
+            "ecs.n4.small",
+            "ecs.gn5-c28g1.14xlarge",
+            "ecs.sn1ne.xlarge",
+            "ecs.t5-lc1m2.large",
+            "ecs.sn2.large",
+            "ecs.i1-c5d1.4xlarge",
+            "ecs.t5-c1m2.large",
+            "ecs.d1.6xlarge",
+            "ecs.se1.xlarge",
+            "ecs.gn5-c8g1.4xlarge",
+            "ecs.i1.8xlarge",
+            "ecs.e4.large",
+            "ecs.se1.2xlarge",
+            "ecs.se1ne.14xlarge",
+            "ecs.sn2.xlarge",
+            "ecs.gn5-c28g1.7xlarge",
+            "ecs.e4.2xlarge",
+            "ecs.t5-c1m1.xlarge",
+            "ecs.sn1ne.large",
+            "ecs.t5-c1m4.xlarge",
+            "ecs.sn1.3xlarge",
+            "ecs.hfg5.2xlarge",
+            "ecs.d1.4xlarge",
+            "ecs.gn5-c4g1.2xlarge",
+            "ecs.sn2.13xlarge",
+            "ecs.i1.xlarge",
+            "ecs.sn1ne.4xlarge",
+            "ecs.mn4.4xlarge",
+            "ecs.d1-c14d3.14xlarge",
+            "ecs.hfc5.large",
+            "ecs.se1ne.8xlarge",
+            "ecs.mn4.small"
+          ]
+        },
+        "ZoneId": "eu-central-1a",
+        "AvailableVolumeCategories": {
+          "VolumeCategories": [
+            "san_ssd",
+            "san_efficiency"
+          ]
+        },
+        "LocalName": "[0xe6][0xac][0xa7][0xe6][0xb4][0xb2][0xe4][0xb8][0xad][0xe9][0x83][0xa8]1 [0xe5][0x8f][0xaf][0xe7][0x94][0xa8][0xe5][0x8c][0xba]A",
+        "AvailableDiskCategories": {
+          "DiskCategories": [
+            "cloud_ssd",
+            "cloud_efficiency"
+          ]
+        }
+      }
+    ]
+  }
+}

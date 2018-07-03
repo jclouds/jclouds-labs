@@ -16,16 +16,17 @@
  */
 package org.jclouds.aliyun.ecs.compute.features;
 
+import com.google.common.collect.ImmutableMap;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiMockTest;
 import org.jclouds.aliyun.ecs.domain.Image;
 import org.jclouds.aliyun.ecs.domain.Regions;
-import org.jclouds.aliyun.ecs.domain.options.ListImagesOptions;
-import org.jclouds.aliyun.ecs.domain.options.PaginationOptions;
 import org.jclouds.collect.IterableWithMarker;
 import org.testng.annotations.Test;
 
 import static com.google.common.collect.Iterables.isEmpty;
 import static com.google.common.collect.Iterables.size;
+import static org.jclouds.aliyun.ecs.domain.options.ListImagesOptions.Builder.paginationOptions;
+import static org.jclouds.aliyun.ecs.domain.options.PaginationOptions.Builder.pageNumber;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -36,13 +37,12 @@ public class ImageApiMockTest extends BaseECSComputeServiceApiMockTest {
       server.enqueue(jsonResponse("/images-first.json"));
       server.enqueue(jsonResponse("/images-second.json"));
       server.enqueue(jsonResponse("/images-last.json"));
-
       Iterable<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName()).concat();
       assertEquals(size(images), 28); // Force the PagedIterable to advance
       assertEquals(server.getRequestCount(), 3);
-      assertSent(server, "GET", "DescribeImages");
-      assertSent(server, "GET", "DescribeImages", 2);
-      assertSent(server, "GET", "DescribeImages", 3);
+      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
+      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);
+      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 3);
    }
 
    public void testListImagesReturns404() {
@@ -54,26 +54,18 @@ public class ImageApiMockTest extends BaseECSComputeServiceApiMockTest {
 
    public void testListImagesWithOptions() throws InterruptedException {
       server.enqueue(jsonResponse("/images-first.json"));
-
-      IterableWithMarker<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), ListImagesOptions.Builder
-              .paginationOptions(PaginationOptions.Builder.pageNumber(1)));
-
+      IterableWithMarker<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(1)));
       assertEquals(size(images), 10);
       assertEquals(server.getRequestCount(), 1);
-
-      assertSent(server, "GET", "DescribeImages", 1);
+      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 1);
    }
 
    public void testListImagesWithOptionsReturns404() throws InterruptedException {
       server.enqueue(response404());
-
-      IterableWithMarker<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), ListImagesOptions.Builder
-              .paginationOptions(PaginationOptions.Builder.pageNumber(2)));
-
+      IterableWithMarker<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(2)));
       assertTrue(isEmpty(images));
-
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeImages", 2);
+      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);
    }
 
 }

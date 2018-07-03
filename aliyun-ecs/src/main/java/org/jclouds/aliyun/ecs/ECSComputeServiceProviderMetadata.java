@@ -57,7 +57,7 @@ public class ECSComputeServiceProviderMetadata extends BaseProviderMetadata {
                .homepage(URI.create("https://www.alibabacloud.com"))
                .console(URI.create("https://ecs.console.aliyun.com"))
                .endpoint("https://ecs.aliyuncs.com")
-               .iso3166Codes("US-CA", "US-VA", "DE", "JP", "ID-JK", "SG", "IN", "AU-NSW", "MY", "CN-HE", "CN-SH", "CN-ZJ", "CN-GD", "HK", "AE-DU") // TODO
+               .iso3166Codes("US-CA", "US-VA", "DE", "JP", "ID-JK", "SG", "IN", "AU-NSW", "MY", "CN-HE", "CN-SH", "CN-ZJ", "CN-GD", "HK", "AE-DU")
                .defaultProperties(ECSServiceApiMetadata.defaultProperties());
       }
 
