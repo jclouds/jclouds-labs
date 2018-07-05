@@ -14,32 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.aliyun.ecs;
+package org.jclouds.aliyun.ecs.domain;
 
-import org.jclouds.aliyun.ecs.features.ImageApi;
-import org.jclouds.aliyun.ecs.features.RegionAndZoneApi;
-import org.jclouds.aliyun.ecs.features.SecurityGroupApi;
-import org.jclouds.aliyun.ecs.features.SshKeyPairApi;
-import org.jclouds.aliyun.ecs.features.TagApi;
-import org.jclouds.rest.annotations.Delegate;
+import com.google.common.base.Enums;
+import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 
-import java.io.Closeable;
+import static com.google.common.base.Preconditions.checkArgument;
 
-public interface ECSComputeServiceApi extends Closeable {
+/**
+ * IP protocol. Not case sensitive. Optional values:
+ * icmp
+ * gre
+ * tcp
+ * udp
+ * all: Support four protocols at the same time
+ */
+public enum IpProtocol {
+   ICMP, GRE, TCP, UDP, ALL;
 
-   @Delegate
-   ImageApi imageApi();
-
-   @Delegate
-   RegionAndZoneApi regionAndZoneApi();
-
-   @Delegate
-   SecurityGroupApi securityGroupApi();
-
-   @Delegate
-   SshKeyPairApi sshKeyPairApi();
-
-   @Delegate
-   TagApi tagApi();
-
+   public static IpProtocol fromValue(String value) {
+      Optional<IpProtocol> ipProtocol = Enums.getIfPresent(IpProtocol.class, value.toUpperCase());
+      checkArgument(ipProtocol.isPresent(), "Expected one of %s but was %s", Joiner.on(',').join(IpProtocol.values()), value);
+      return ipProtocol.get();
+   }
 }

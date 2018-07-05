@@ -33,21 +33,21 @@ public abstract class Image {
            "ImageOwnerAlias", "Progress", "IsSupportCloudinit", "Usage", "CreationTime", "Tags",
            "ImageVersion", "Status", "ImageName", "IsSupportIoOptimized", "IsSelfShared", "IsCopied",
            "IsSubscribed", "Platform", "Size"})
-   public static Image create(String imageId, String description, String productCode, String osType,
+   public static Image create(String id, String description, String productCode, String osType,
                               String architecture, String osName, Map<String, List<DiskDeviceMapping>> diskDeviceMappings,
                               String imageOwnerAlias, String progress, Boolean isSupportCloudinit, String usage, Date creationTime,
-                              Map<String, List<Tag>> tags, String imageVersion, String status, String imageName,
+                              Map<String, List<Tag>> tags, String imageVersion, String status, String name,
                               Boolean isSupportIoOptimized, Boolean isSelfShared, Boolean isCopied, Boolean isSubscribed, String platform,
                               String size) {
-      return new AutoValue_Image(imageId, description, productCode, osType, architecture, osName,
+      return new AutoValue_Image(id, description, productCode, osType, architecture, osName,
               diskDeviceMappings == null ?
                       ImmutableMap.<String, List<DiskDeviceMapping>>of() :
                       ImmutableMap.copyOf(diskDeviceMappings), imageOwnerAlias, progress, isSupportCloudinit, usage,
               creationTime, tags == null ? ImmutableMap.<String, List<Tag>>of() : ImmutableMap.copyOf(tags), imageVersion,
-              status, imageName, isSupportIoOptimized, isSelfShared, isCopied, isSubscribed, platform, size);
+              status, name, isSupportIoOptimized, isSelfShared, isCopied, isSubscribed, platform, size);
    }
 
-   public abstract String imageId();
+   public abstract String id();
 
    public abstract String description();
 
@@ -77,7 +77,7 @@ public abstract class Image {
 
    public abstract String status();
 
-   public abstract String imageName();
+   public abstract String name();
 
    public abstract Boolean isSupportIoOptimizeds();
 

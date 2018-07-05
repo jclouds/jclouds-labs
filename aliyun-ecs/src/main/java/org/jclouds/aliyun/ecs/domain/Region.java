@@ -25,11 +25,11 @@ public abstract class Region {
    Region() {}
 
    @SerializedNames({ "RegionId", "LocalName" })
-   public static Region create(String regionId, String localName) {
-      return new AutoValue_Region(regionId, localName);
+   public static Region create(String id, String localName) {
+      return new AutoValue_Region(id, localName);
    }
 
-   public abstract String regionId();
+   public abstract String id();
 
    public abstract String localName();
 

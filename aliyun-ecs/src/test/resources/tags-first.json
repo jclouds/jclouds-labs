@@ -1,0 +1,66 @@
+{
+  "PageNumber": 1,
+  "Tags": {
+    "Tag": [
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val1",
+        "TagKey": "key1"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val2",
+        "TagKey": "key2"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val3",
+        "TagKey": "key3"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val4",
+        "TagKey": "key4"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val5",
+        "TagKey": "key5"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val6",
+        "TagKey": "key6"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val7",
+        "TagKey": "key7"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "val8",
+        "TagKey": "key8"
+      }
+    ]
+  },
+  "TotalCount": 10,
+  "PageSize": 8,
+  "RequestId": "3A4B8581-8AAE-4E09-A4BB-3F568AB4293B"
+}

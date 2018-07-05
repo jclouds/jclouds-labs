@@ -1,0 +1,31 @@
+{
+  "PageNumber": 2,
+  "TotalCount": 7,
+  "PageSize": 5,
+  "RegionId": "eu-central-1",
+  "RequestId": "3F76B1CB-6930-4D5F-81E4-70F85FC239CB",
+  "SecurityGroups": {
+    "SecurityGroup": [
+      {
+        "CreationTime": "2018-07-06T12:14:21Z",
+        "Tags": {
+          "Tag": []
+        },
+        "SecurityGroupId": "sg-gw8e5qdwvppsinxlmeu6",
+        "Description": "",
+        "SecurityGroupName": "jclouds-test6",
+        "VpcId": "vpc-gw8vbir5z9j9lncyrjjhx"
+      },
+      {
+        "CreationTime": "2018-08-07T12:14:21Z",
+        "Tags": {
+          "Tag": []
+        },
+        "SecurityGroupId": "sg-gw8e5qdwvppsinxlmeu7",
+        "Description": "",
+        "SecurityGroupName": "jclouds-test7",
+        "VpcId": "vpc-gw8vbir5z9j9lncyrjjha"
+      }
+    ]
+  }
+}

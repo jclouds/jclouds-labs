@@ -19,7 +19,7 @@ package org.jclouds.aliyun.ecs.compute.features;
 import com.google.common.collect.ImmutableMap;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiMockTest;
 import org.jclouds.aliyun.ecs.domain.Region;
-import org.jclouds.aliyun.ecs.domain.Regions;
+import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.domain.Zone;
 import org.testng.annotations.Test;
 

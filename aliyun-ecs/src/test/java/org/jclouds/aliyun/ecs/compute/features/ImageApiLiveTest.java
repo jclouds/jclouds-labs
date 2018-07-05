@@ -20,12 +20,14 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiLiveTest;
 import org.jclouds.aliyun.ecs.domain.Image;
-import org.jclouds.aliyun.ecs.domain.Regions;
+import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.jclouds.aliyun.ecs.features.ImageApi;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.jclouds.aliyun.ecs.domain.options.ListImagesOptions.Builder.imageIds;
+import static org.jclouds.aliyun.ecs.domain.options.PaginationOptions.Builder.pageNumber;
 import static org.testng.Assert.assertTrue;
 import static org.testng.util.Strings.isNullOrEmpty;
 
@@ -38,9 +40,24 @@ public class ImageApiLiveTest extends BaseECSComputeServiceApiLiveTest {
          @Override
          public boolean apply(Image input) {
             found.incrementAndGet();
-            return !isNullOrEmpty(input.imageId());
+            return !isNullOrEmpty(input.id());
          }
       }), "All images must have the 'id' field populated");
+      assertTrue(found.get() > 0, "Expected some image to be returned");
+   }
+
+   public void testListWithOptions() {
+      final AtomicInteger found = new AtomicInteger(0);
+      assertTrue(api().list(Regions.EU_CENTRAL_1.getName(),
+              imageIds("debian_8_09_64_20G_alibase_20170824.vhd")
+              .paginationOptions(pageNumber(3)))
+              .firstMatch(new Predicate<Image>() {
+                 @Override
+                 public boolean apply(Image input) {
+                    found.incrementAndGet();
+                    return !isNullOrEmpty(input.id());
+                 }
+              }).isPresent(), "All images must have the 'id' field populated");
       assertTrue(found.get() > 0, "Expected some image to be returned");
    }
 

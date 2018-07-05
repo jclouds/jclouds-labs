@@ -1,0 +1,24 @@
+{
+  "PageNumber": 2,
+  "Tags": {
+    "Tag": [
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "jclouds",
+        "TagKey": "owner"
+      },
+      {
+        "ResourceTypeCount": {
+          "Securitygroup": 1
+        },
+        "TagValue": "test1",
+        "TagKey": "test1"
+      }
+    ]
+  },
+  "TotalCount": 10,
+  "PageSize": 8,
+  "RequestId": "56E7EF73-A13F-44D4-9839-0C451E999226"
+}

@@ -31,7 +31,7 @@ public abstract class Zone {
    @SerializedNames({ "ZoneId", "LocalName", "DedicatedHostGenerations", "AvailableResourceCreation",
                           "AvailableDedicatedHostTypes", "AvailableResources", "AvailableInstanceTypes",
                           "AvailableVolumeCategories", "AvailableDiskCategories" })
-   public static Zone create(String zoneId, String localName,
+   public static Zone create(String id, String localName,
                              Map<String, List<Object>> dedicatedHostGenerations, // FIXME neither doc nor example showed the type in the list
                              Map<String, List<String>> availableResourceCreation,
                              Map<String, List<String>> availableDedicatedHostTypes,
@@ -39,7 +39,7 @@ public abstract class Zone {
                              Map<String, List<String>> availableInstanceTypes,
                              Map<String, List<String>> availableVolumeCategories,
                              Map<String, List<String>> availableDiskCategories) {
-      return new AutoValue_Zone(zoneId, localName,
+      return new AutoValue_Zone(id, localName,
               dedicatedHostGenerations == null ? ImmutableMap.<String, List<Object>>of() : ImmutableMap.copyOf(dedicatedHostGenerations),
               availableResourceCreation == null ? ImmutableMap.<String, List<String>>of() : ImmutableMap.copyOf(availableResourceCreation),
               availableDedicatedHostTypes == null ? ImmutableMap.<String, List<String>>of() : ImmutableMap.copyOf(availableDedicatedHostTypes),
@@ -50,7 +50,7 @@ public abstract class Zone {
       );
    }
 
-   public abstract String zoneId();
+   public abstract String id();
 
    public abstract String localName();
 

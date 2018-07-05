@@ -89,6 +89,10 @@ public class BaseECSComputeServiceApiMockTest {
       return new MockResponse().setStatus("HTTP/1.1 404 Not Found");
    }
 
+   protected MockResponse response204() {
+      return new MockResponse().setStatus("HTTP/1.1 204 No Content");
+   }
+
    protected String stringFromResource(String resourceName) {
       try {
          return Resources.toString(getClass().getResource(resourceName), Charsets.UTF_8)
@@ -98,8 +102,17 @@ public class BaseECSComputeServiceApiMockTest {
       }
    }
 
+   protected <T> T objectFromResource(String resourceName, Class<T> type) {
+      String text = stringFromResource(resourceName);
+      return json.fromJson(text, type);
+   }
+
    protected RecordedRequest assertSent(MockWebServer server, String method, String action) throws InterruptedException {
       return assertSent(server, method, action, ImmutableMap.<String, String>of(), null);
+   }
+
+   protected RecordedRequest assertSent(MockWebServer server, String method, String action, Integer page) throws InterruptedException {
+      return assertSent(server, method, action, ImmutableMap.<String, String>of(), page);
    }
 
    protected RecordedRequest assertSent(MockWebServer server, String method, String action, Map<String, String> queryParameters) throws InterruptedException {

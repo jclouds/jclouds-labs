@@ -1,0 +1,50 @@
+{
+  "PageNumber": 1,
+  "TotalCount": 12,
+  "KeyPairs": {
+    "KeyPair": [
+      {
+        "KeyPairFingerPrint": "188a7d0fdbfbf42a632ed34b1f7f0b12",
+        "KeyPairName": "jclouds-jclouds-imported-831"
+      },
+      {
+        "KeyPairFingerPrint": "259eea89c50e16a54ccc9558a15ca8b3",
+        "KeyPairName": "jclouds-test1"
+      },
+      {
+        "KeyPairFingerPrint": "388a7d0fdbfbf42a632ed34b1f7f0b12",
+        "KeyPairName": "jclouds-jclouds-imported-832"
+      },
+      {
+        "KeyPairFingerPrint": "459eea89c50e16a54ccc9558a15ca8b3",
+        "KeyPairName": "jclouds-test2"
+      },
+      {
+        "KeyPairFingerPrint": "588a7d0fdbfbf42a632ed34b1f7f0b12",
+        "KeyPairName": "jclouds-jclouds-imported-833"
+      },
+      {
+        "KeyPairFingerPrint": "659eea89c50e16a54ccc9558a15ca8b3",
+        "KeyPairName": "jclouds-test2"
+      },
+      {
+        "KeyPairFingerPrint": "788a7d0fdbfbf42a632ed34b1f7f0b12",
+        "KeyPairName": "jclouds-jclouds-imported-834"
+      },
+      {
+        "KeyPairFingerPrint": "859eea89c50e16a54ccc9558a15ca8b3",
+        "KeyPairName": "jclouds-test3"
+      },
+      {
+        "KeyPairFingerPrint": "988a7d0fdbfbf42a632ed34b1f7f0b12",
+        "KeyPairName": "jclouds-jclouds-imported-835"
+      },
+      {
+        "KeyPairFingerPrint": "059eea89c50e16a54ccc9558a15ca8b3",
+        "KeyPairName": "jclouds-test4"
+      }
+    ]
+  },
+  "PageSize": 10,
+  "RequestId": "3E2D8822-5058-4E2F-9D51-7A0E4EC93E33"
+}

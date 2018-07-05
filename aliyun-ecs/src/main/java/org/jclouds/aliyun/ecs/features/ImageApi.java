@@ -17,19 +17,20 @@
 package org.jclouds.aliyun.ecs.features;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
 import com.google.inject.TypeLiteral;
 import org.jclouds.Constants;
 import org.jclouds.Fallbacks;
 import org.jclouds.aliyun.ecs.ECSComputeServiceApi;
 import org.jclouds.aliyun.ecs.domain.Image;
-import org.jclouds.aliyun.ecs.domain.Images;
+import org.jclouds.aliyun.ecs.domain.internal.PaginatedCollection;
 import org.jclouds.aliyun.ecs.domain.options.ListImagesOptions;
 import org.jclouds.aliyun.ecs.domain.options.PaginationOptions;
 import org.jclouds.aliyun.ecs.filters.FormSign;
 import org.jclouds.collect.IterableWithMarker;
 import org.jclouds.collect.PagedIterable;
-import org.jclouds.collect.internal.Arg0ToPagedIterable;
+import org.jclouds.collect.internal.ArgsToPagedIterable;
 import org.jclouds.http.functions.ParseJson;
 import org.jclouds.json.Json;
 import org.jclouds.rest.annotations.Fallback;
@@ -45,6 +46,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.beans.ConstructorProperties;
+import java.util.List;
+import java.util.Map;
 
 /**
  * https://www.alibabacloud.com/help/doc-detail/25534.htm?spm=a2c63.p38356.b99.330.79eb59abhmnMDE
@@ -71,14 +75,22 @@ public interface ImageApi {
    PagedIterable<Image> list(@QueryParam("RegionId") String region);
 
    @Singleton
-   final class ParseImages extends ParseJson<Images> {
+   final class ParseImages extends ParseJson<ParseImages.Images> {
 
       @Inject
       ParseImages(final Json json) {
          super(json, TypeLiteral.get(Images.class));
       }
 
-      static class ToPagedIterable extends Arg0ToPagedIterable<Image, ToPagedIterable> {
+      private static class Images extends PaginatedCollection<Image> {
+
+         @ConstructorProperties({ "Images", "PageNumber", "TotalCount", "PageSize", "RegionId", "RequestId" })
+         public Images(Map<String, Iterable<Image>> content, Integer pageNumber, Integer totalCount, Integer pageSize, String regionId, String requestId) {
+            super(content, pageNumber, totalCount, pageSize, regionId, requestId);
+         }
+      }
+
+      private static class ToPagedIterable extends ArgsToPagedIterable<Image, ToPagedIterable> {
 
          private final ECSComputeServiceApi api;
 
@@ -88,13 +100,18 @@ public interface ImageApi {
          }
 
          @Override
-         protected Function<Object, IterableWithMarker<Image>> markerToNextForArg0(final Optional<Object> arg0) {
+         protected Function<Object, IterableWithMarker<Image>> markerToNextForArgs(final List<Object> args) {
+            if (args == null || args.isEmpty()) throw new IllegalStateException("Can't advance the PagedIterable");
+            final String regionId = args.get(0).toString();
+            final ListImagesOptions original = (ListImagesOptions) Iterables.tryFind(args, Predicates.instanceOf(ListImagesOptions.class)).orNull();
+
             return new Function<Object, IterableWithMarker<Image>>() {
                @Override
                public IterableWithMarker<Image> apply(Object input) {
-                  String regionId = arg0.get().toString();
-                  ListImagesOptions listImagesOptions = ListImagesOptions.Builder.paginationOptions(PaginationOptions.class.cast(input));
-                  return api.imageApi().list(regionId, listImagesOptions);
+                  ListImagesOptions options = original == null ?
+                     ListImagesOptions.Builder.paginationOptions(PaginationOptions.class.cast(input)) :
+                     original.paginationOptions(PaginationOptions.class.cast(input));
+                  return api.imageApi().list(regionId, options);
                }
             };
          }

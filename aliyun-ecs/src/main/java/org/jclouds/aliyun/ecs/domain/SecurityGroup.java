@@ -16,18 +16,27 @@
  */
 package org.jclouds.aliyun.ecs.domain;
 
-import org.jclouds.aliyun.ecs.domain.internal.PaginatedCollection;
+import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 
-import java.beans.ConstructorProperties;
-import java.util.Map;
+@AutoValue
+public abstract class SecurityGroup {
 
-/**
- * A collection of Image
- */
-public class Images extends PaginatedCollection<Image> {
-
-   @ConstructorProperties({ "Images", "PageNumber", "TotalCount", "PageSize", "RegionId", "RequestId" })
-   public Images(Map<String, Iterable<Image>> content, Integer pageNumber, Integer totalCount, Integer pageSize, String regionId, String requestId) {
-      super(content, pageNumber, totalCount, pageSize, regionId, requestId);
+   SecurityGroup() {
    }
+
+   @SerializedNames({ "SecurityGroupId", "Description", "SecurityGroupName", "VpcId" })
+   public static SecurityGroup create(String id, String description, String name,
+                                      String vpcId) {
+      return new AutoValue_SecurityGroup(id, description, name, vpcId);
+   }
+
+   public abstract String id();
+
+   public abstract String description();
+
+   public abstract String name();
+
+   public abstract String vpcId();
+
 }

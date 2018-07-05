@@ -19,8 +19,7 @@ package org.jclouds.aliyun.ecs.compute.features;
 import com.google.common.collect.ImmutableMap;
 import org.jclouds.aliyun.ecs.compute.internal.BaseECSComputeServiceApiMockTest;
 import org.jclouds.aliyun.ecs.domain.Image;
-import org.jclouds.aliyun.ecs.domain.Regions;
-import org.jclouds.collect.IterableWithMarker;
+import org.jclouds.aliyun.ecs.domain.internal.Regions;
 import org.testng.annotations.Test;
 
 import static com.google.common.collect.Iterables.isEmpty;
@@ -54,15 +53,15 @@ public class ImageApiMockTest extends BaseECSComputeServiceApiMockTest {
 
    public void testListImagesWithOptions() throws InterruptedException {
       server.enqueue(jsonResponse("/images-first.json"));
-      IterableWithMarker<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(1)));
+      Iterable<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(1)));
       assertEquals(size(images), 10);
       assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 1);
+      assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()));
    }
 
    public void testListImagesWithOptionsReturns404() throws InterruptedException {
       server.enqueue(response404());
-      IterableWithMarker<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(2)));
+      Iterable<Image> images = api.imageApi().list(Regions.EU_CENTRAL_1.getName(), paginationOptions(pageNumber(2)));
       assertTrue(isEmpty(images));
       assertEquals(server.getRequestCount(), 1);
       assertSent(server, "GET", "DescribeImages", ImmutableMap.of("RegionId", Regions.EU_CENTRAL_1.getName()), 2);

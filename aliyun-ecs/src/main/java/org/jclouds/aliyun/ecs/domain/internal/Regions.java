@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.aliyun.ecs.domain;
+package org.jclouds.aliyun.ecs.domain.internal;
 
 /**
  * Enumeration of region names

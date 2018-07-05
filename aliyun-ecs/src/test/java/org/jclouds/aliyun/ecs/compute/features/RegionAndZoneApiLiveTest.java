@@ -38,7 +38,7 @@ public class RegionAndZoneApiLiveTest extends BaseECSComputeServiceApiLiveTest {
          @Override
          public boolean apply(Region input) {
             found.incrementAndGet();
-            return !isNullOrEmpty(input.regionId());
+            return !isNullOrEmpty(input.id());
          }
       }), "All regions must have the 'id' field populated");
       assertTrue(found.get() > 0, "Expected some region to be returned");
@@ -50,7 +50,7 @@ public class RegionAndZoneApiLiveTest extends BaseECSComputeServiceApiLiveTest {
          @Override
          public boolean apply(Zone input) {
             found.incrementAndGet();
-            return !isNullOrEmpty(input.zoneId());
+            return !isNullOrEmpty(input.id());
          }
       }), "All zones must have the 'id' field populated");
       assertTrue(found.get() > 0, "Expected some zone to be returned");
