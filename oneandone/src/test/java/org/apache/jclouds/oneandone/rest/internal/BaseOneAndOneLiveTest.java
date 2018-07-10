@@ -25,6 +25,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.apache.jclouds.oneandone.rest.OneAndOneApi;
 import org.apache.jclouds.oneandone.rest.OneAndOneProviderMetadata;
+import org.apache.jclouds.oneandone.rest.domain.BlockStorage;
 import org.apache.jclouds.oneandone.rest.domain.Hardware;
 import org.apache.jclouds.oneandone.rest.domain.Hdd;
 import org.apache.jclouds.oneandone.rest.domain.PrivateNetwork;
@@ -43,6 +44,7 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
    Predicate<Server> waitUntilServerReady;
    Predicate<ServerPrivateNetworkRef> waitUntilPrivateNetworkReady;
    Predicate<Vpn> waitUntilVPNReady;
+   Predicate<BlockStorage> waitUntilBlockStorageReady;
    Timeouts timeouts;
    PollPeriod pollPeriod;
    private static final OneAndOneProviderMetadata METADATA = new OneAndOneProviderMetadata();
@@ -86,9 +88,18 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
             return result.state() == Types.GenericState.ACTIVE;
          }
       };
+      
+      Predicate<BlockStorage> bsAvailableCheck = new Predicate<BlockStorage>() {
+         @Override
+         public boolean apply(BlockStorage bs) {
+            BlockStorage result = api.blockStorageApi().get(bs.id());
+            return "POWERED_ON".equals(result.state());
+         }
+      };
       waitUntilVPNReady = Predicates2.retry(vpnAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
       waitUntilPrivateNetworkReady = Predicates2.retry(privateNetworkAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
       waitUntilServerReady = Predicates2.retry(serverAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
+      waitUntilBlockStorageReady = Predicates2.retry(bsAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
 
       return injector.getInstance(OneAndOneApi.class);
    }
@@ -103,7 +114,7 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
               .name(serverName)
               .description("testing with jclouds")
               .hardware(hardware)
-              .applianceId("81504C620D98BCEBAA5202D145203B4B")
+              .applianceId("753E3C1F859874AA74EB63B3302601F5")
               .dataCenterId("908DC2072407C94C8054610AD5A53B8C")
               .password("Test123!")
               .powerOn(Boolean.TRUE).build());
@@ -117,6 +128,10 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
 
    protected void assertNodeAvailable(Server server) {
       assertTrue(waitUntilServerReady.apply(server), String.format("Server %s is not Ready", server));
+   }
+   
+    protected void assertBlockStorageAvailable(BlockStorage bs) {
+      assertTrue(waitUntilBlockStorageReady.apply(bs), String.format("BlockStorage %s is not Ready", bs));
    }
 
    protected void assertPrivateNetworkAvailable(ServerPrivateNetworkRef ref) {

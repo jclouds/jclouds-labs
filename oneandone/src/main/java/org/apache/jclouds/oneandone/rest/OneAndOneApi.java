@@ -17,6 +17,7 @@
 package org.apache.jclouds.oneandone.rest;
 
 import java.io.Closeable;
+import org.apache.jclouds.oneandone.rest.features.BlockStorageApi;
 import org.apache.jclouds.oneandone.rest.features.DataCenterApi;
 import org.apache.jclouds.oneandone.rest.features.FirewallPolicyApi;
 import org.apache.jclouds.oneandone.rest.features.ImageApi;
@@ -28,7 +29,9 @@ import org.apache.jclouds.oneandone.rest.features.PublicIpApi;
 import org.apache.jclouds.oneandone.rest.features.ServerApi;
 import org.apache.jclouds.oneandone.rest.features.ServerApplianceApi;
 import org.apache.jclouds.oneandone.rest.features.SharedStorageApi;
+import org.apache.jclouds.oneandone.rest.features.SshKeyApi;
 import org.apache.jclouds.oneandone.rest.features.VpnApi;
+
 import org.jclouds.rest.annotations.Delegate;
 
 public interface OneAndOneApi extends Closeable {
@@ -68,4 +71,10 @@ public interface OneAndOneApi extends Closeable {
 
    @Delegate
    ServerApplianceApi serverApplianceApi();
+
+   @Delegate
+   BlockStorageApi blockStorageApi();
+
+   @Delegate
+   SshKeyApi sshKeyApi();
 }
