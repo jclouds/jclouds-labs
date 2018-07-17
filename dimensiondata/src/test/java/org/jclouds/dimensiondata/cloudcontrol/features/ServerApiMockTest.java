@@ -26,11 +26,10 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
 import org.jclouds.dimensiondata.cloudcontrol.domain.options.CloneServerOptions;
 import org.jclouds.dimensiondata.cloudcontrol.domain.options.CreateServerOptions;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseAccountAwareCloudControlMockTest;
+import org.jclouds.http.HttpResponseException;
 import org.jclouds.http.Uris;
-import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.HttpMethod;
 import java.util.List;
 
 import static javax.ws.rs.HttpMethod.GET;
@@ -39,6 +38,7 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.jclouds.dimensiondata.cloudcontrol.options.DatacenterIdListFilters.Builder.datacenterId;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -55,8 +55,8 @@ public class ServerApiMockTest extends BaseAccountAwareCloudControlMockTest {
       try {
          serverApi().deployServer(ServerApiMockTest.class.getSimpleName(), "imageId", true, networkInfo,
                "administratorPassword");
-         failBecauseExceptionWasNotThrown(ResourceNotFoundException.class);
-      } catch (ResourceNotFoundException e) {
+         failBecauseExceptionWasNotThrown(HttpResponseException.class);
+      } catch (HttpResponseException e) {
          assertNotNull(e);
          assertSent(POST, "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/deployServer");
       }
@@ -121,10 +121,9 @@ public class ServerApiMockTest extends BaseAccountAwareCloudControlMockTest {
       return Uris.uriBuilder("/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/server");
    }
 
-   public void testListServers_404() throws Exception {
-      server.enqueue(response404());
-      assertTrue(serverApi().listServers().concat().isEmpty());
-      assertSent(HttpMethod.GET, getListServerUriBuilder().toString());
+   public void testListServers_NoServersFound() {
+      server.enqueue(emptyListResponse("server"));
+      assertTrue(serverApi().listServers().concat().isEmpty(), "should return empty list when no Servers found");
    }
 
    public void testGetServer() throws Exception {
@@ -135,10 +134,10 @@ public class ServerApiMockTest extends BaseAccountAwareCloudControlMockTest {
       assertNotNull(found.guest().vmTools());
    }
 
-   public void testGetServer_404() throws Exception {
-      server.enqueue(response404());
-      serverApi().getServer("12345");
-      assertSent(GET, "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/server/12345");
+   public void testGetServer_NotFound() {
+      server.enqueue(responseResourceNotFound());
+      Server foundServer = serverApi().getServer("12345");
+      assertNull(foundServer, "should return null when Server was not found");
    }
 
    public void testDeleteServer() throws Exception {
@@ -149,10 +148,9 @@ public class ServerApiMockTest extends BaseAccountAwareCloudControlMockTest {
       assertBodyContains(recordedRequest, "{\"id\":\"12345\"}");
    }
 
-   public void testDeleteServer_404() throws Exception {
-      server.enqueue(response404());
+   public void testDeleteServer_NotFound() {
+      server.enqueue(responseResourceNotFound());
       serverApi().deleteServer("12345");
-      assertSent(POST, "/caas/2.4/6ac1e746-b1ea-4da5-a24e-caf1a978789d/server/deleteServer");
    }
 
    public void testPowerOffServer() throws Exception {

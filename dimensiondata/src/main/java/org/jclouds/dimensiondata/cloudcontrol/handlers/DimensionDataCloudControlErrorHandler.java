@@ -26,6 +26,8 @@ import org.jclouds.rest.ResourceNotFoundException;
 
 import javax.inject.Singleton;
 
+import java.util.ConcurrentModificationException;
+
 import static org.jclouds.http.HttpUtils.closeClientButKeepContentStream;
 
 /**
@@ -47,16 +49,22 @@ public class DimensionDataCloudControlErrorHandler implements HttpErrorHandler {
             String.format("%s -> %s", command.getCurrentRequest().getRequestLine(), response.getStatusLine());
       switch (response.getStatusCode()) {
          case 400:
-            if (message.contains("RESOURCE_NOT_FOUND") || message.contains("OPERATION_NOT_SUPPORTED")) {
+            if (message.contains("RESOURCE_NOT_FOUND")) {
                exception = new ResourceNotFoundException(message, exception);
-            } else if (message.contains("INVALID_INPUT_DATA") || message.contains("ORGANIZATION_NOT_VERIFIED")
-                  || (message.contains("SYSTEM_ERROR") && !message.contains("RETRYABLE_SYSTEM_ERROR")) || message
-                  .contains("CPU_SPEED_NOT_AVAILABLE") || message.contains("CONFIGURATION_NOT_SUPPORTED")) {
+            } else if (message.contains("OPERATION_NOT_SUPPORTED")) {
+               exception = new UnsupportedOperationException(message, exception);
+            } else if (message.contains("RESOURCE_BUSY")) {
+               exception = new ConcurrentModificationException(message, exception);
+            } else if (message.contains("RESOURCE_LOCKED")) {
                exception = new IllegalStateException(message, exception);
-            } else if (message.contains("RESOURCE_BUSY") || message.contains("UNEXPECTED_ERROR")) {
-               exception = new ResourceNotFoundException(message, exception);
             } else if (message.contains("NAME_NOT_UNIQUE")) {
                exception = new ResourceAlreadyExistsException(message, exception);
+            } else if (message.contains("UNEXPECTED_ERROR")
+                  || message.contains("RETRYABLE_SYSTEM_ERROR")
+                  || message.contains("SYSTEM_ERROR")) {
+               break;
+            } else {
+               exception = new IllegalArgumentException(message, exception);
             }
             break;
          case 401:
@@ -66,9 +74,9 @@ public class DimensionDataCloudControlErrorHandler implements HttpErrorHandler {
             exception = new AuthorizationException(message, exception);
             break;
          case 404:
-            if (!command.getCurrentRequest().getMethod().equals("DELETE")) {
-               exception = new ResourceNotFoundException(message, exception);
-            }
+            // CloudControl uses error code 400 with RESOURCE_NOT_FOUND to report missing assets
+            // 404 means malformed URI only
+            exception = new IllegalArgumentException(message, exception);
             break;
       }
       command.setException(exception);

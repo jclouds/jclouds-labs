@@ -149,7 +149,7 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
     */
    protected MockResponse responseUnexpectedError() {
       return new MockResponse().setResponseCode(400).setStatus("HTTP/1.1 400 Bad Request")
-            .setBody("content: [{\"operation\":\"OPERATION\",\"responseCode\":\"UNEXPECTED_ERROR\"}]");
+            .setBody("{\"operation\":\"OPERATION\",\"responseCode\":\"UNEXPECTED_ERROR\"}");
    }
 
    /**
@@ -159,11 +159,19 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
     */
    protected MockResponse responseResourceNotFound() {
       return new MockResponse().setResponseCode(400).setStatus("HTTP/1.1 400 Bad Request")
-            .setBody("content: [{\"operation\":\"OPERATION\",\"responseCode\":\"RESOURCE_NOT_FOUND\"}]");
+            .setBody("{\"operation\":\"OPERATION\",\"responseCode\":\"RESOURCE_NOT_FOUND\"}");
    }
 
    protected MockResponse response404() {
       return new MockResponse().setStatus("HTTP/1.1 404 Not Found");
+   }
+
+   protected MockResponse emptyListResponse(String assetName) {
+      return new MockResponse().setBody("{ \"" + assetName + "\": [],"
+            + " \"pageNumber\": 1,\n"
+            + " \"pageCount\": 0,\n"
+            + " \"totalCount\": 0,\n"
+            + " \"pageSize\": 250}");
    }
 
    /**
