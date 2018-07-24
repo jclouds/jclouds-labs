@@ -19,6 +19,7 @@ package org.apache.jclouds.oneandone.rest.domain;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import org.apache.jclouds.oneandone.rest.domain.Types.FirewallRuleAction;
 import org.apache.jclouds.oneandone.rest.domain.Types.RuleProtocol;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
@@ -147,14 +148,26 @@ public abstract class FirewallPolicy {
          @Nullable
          public abstract String source();
 
-         @SerializedNames({"protocol", "port_from", "port_to", "source"})
-         public static CreatePayload create(RuleProtocol protocol, Integer portFrom, Integer portTo, String source) {
+         @Nullable
+         public abstract FirewallRuleAction action();
+         
+         @Nullable
+         public abstract String port();
+         
+         @Nullable
+         public abstract String description();
+
+         @SerializedNames({"protocol", "port_from", "port_to", "source", "action", "port", "description"})
+         public static CreatePayload create(RuleProtocol protocol, Integer portFrom, Integer portTo, String source, FirewallRuleAction action, String port, String description) {
             return builder()
-                    .portFrom(portFrom)
-                    .portTo(portTo)
-                    .protocol(protocol)
-                    .source(source)
-                    .build();
+                  .portFrom(portFrom)
+                  .portTo(portTo)
+                  .protocol(protocol)
+                  .source(source)
+                  .action(action)
+                  .port(port)
+                  .description(description)
+                  .build();
          }
 
          public static Builder builder() {
@@ -171,6 +184,12 @@ public abstract class FirewallPolicy {
             public abstract Builder portTo(Integer portTo);
 
             public abstract Builder source(String source);
+            
+            public abstract Builder action(FirewallRuleAction action);
+            
+            public abstract Builder port(String port);
+            
+            public abstract Builder description(String description);
 
             public abstract CreatePayload build();
          }

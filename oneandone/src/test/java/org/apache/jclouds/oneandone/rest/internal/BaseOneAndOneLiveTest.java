@@ -30,8 +30,10 @@ import org.apache.jclouds.oneandone.rest.domain.Hardware;
 import org.apache.jclouds.oneandone.rest.domain.Hdd;
 import org.apache.jclouds.oneandone.rest.domain.PrivateNetwork;
 import org.apache.jclouds.oneandone.rest.domain.Server;
+import org.apache.jclouds.oneandone.rest.domain.ServerIp;
 import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.apache.jclouds.oneandone.rest.domain.Vpn;
+import org.apache.jclouds.oneandone.rest.ids.ServerIpRef;
 import org.apache.jclouds.oneandone.rest.ids.ServerPrivateNetworkRef;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.jclouds.compute.reference.ComputeServiceConstants.PollPeriod;
@@ -42,6 +44,8 @@ import static org.testng.Assert.assertTrue;
 public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
 
    Predicate<Server> waitUntilServerReady;
+   Predicate<Server> waitUntilServerRemoved;
+   Predicate<ServerIpRef> waitUntilIServerIPRemoved;
    Predicate<ServerPrivateNetworkRef> waitUntilPrivateNetworkReady;
    Predicate<Vpn> waitUntilVPNReady;
    Predicate<BlockStorage> waitUntilBlockStorageReady;
@@ -64,12 +68,28 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
             Server server = api.serverApi().get(currentServer.id());
 
             if ((server.status().state() != Types.ServerState.POWERED_OFF
-                    && server.status().state() != Types.ServerState.POWERED_ON)
-                    || server.status().percent() != 0) {
+                  && server.status().state() != Types.ServerState.POWERED_ON)
+                  || server.status().percent() != 0) {
                return false;
             } else {
                return true;
             }
+         }
+      };
+
+      Predicate<Server> serverRemovedCheck = new Predicate<Server>() {
+         @Override
+         public boolean apply(Server currentServer) {
+            Server server = api.serverApi().get(currentServer.id());
+            return server == null;
+         }
+      };
+
+      Predicate<ServerIpRef> serverIPRemovedCheck = new Predicate<ServerIpRef>() {
+         @Override
+         public boolean apply(ServerIpRef serverWithIp) {
+            ServerIp server = api.serverApi().getIp(serverWithIp.serverId(), serverWithIp.ipId());
+            return server == null;
          }
       };
 
@@ -88,7 +108,7 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
             return result.state() == Types.GenericState.ACTIVE;
          }
       };
-      
+
       Predicate<BlockStorage> bsAvailableCheck = new Predicate<BlockStorage>() {
          @Override
          public boolean apply(BlockStorage bs) {
@@ -100,6 +120,8 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
       waitUntilPrivateNetworkReady = Predicates2.retry(privateNetworkAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
       waitUntilServerReady = Predicates2.retry(serverAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
       waitUntilBlockStorageReady = Predicates2.retry(bsAvailableCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
+      waitUntilServerRemoved = Predicates2.retry(serverRemovedCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
+      waitUntilIServerIPRemoved = Predicates2.retry(serverIPRemovedCheck, timeouts.nodeRunning, pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod, TimeUnit.SECONDS);
 
       return injector.getInstance(OneAndOneApi.class);
    }
@@ -111,13 +133,13 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
       hdds.add(hdd);
       Hardware.CreateHardware hardware = Hardware.CreateHardware.create(4.0, 1.0, 2.0, hdds);
       return api.serverApi().create(Server.CreateServer.builder()
-              .name(serverName)
-              .description("testing with jclouds")
-              .hardware(hardware)
-              .applianceId("753E3C1F859874AA74EB63B3302601F5")
-              .dataCenterId("908DC2072407C94C8054610AD5A53B8C")
-              .password("Test123!")
-              .powerOn(Boolean.TRUE).build());
+            .name(serverName)
+            .description("testing with jclouds")
+            .hardware(hardware)
+            .applianceId("753E3C1F859874AA74EB63B3302601F5")
+            .dataCenterId("908DC2072407C94C8054610AD5A53B8C")
+            .password("Test123!")
+            .powerOn(Boolean.TRUE).build());
    }
 
    protected Server updateServerStatus(Server server) {
@@ -129,8 +151,16 @@ public class BaseOneAndOneLiveTest extends BaseApiLiveTest<OneAndOneApi> {
    protected void assertNodeAvailable(Server server) {
       assertTrue(waitUntilServerReady.apply(server), String.format("Server %s is not Ready", server));
    }
-   
-    protected void assertBlockStorageAvailable(BlockStorage bs) {
+
+   protected void assertNodeRemoved(Server server) {
+      assertTrue(waitUntilServerRemoved.apply(server), String.format("Server %s is not Removed", server));
+   }
+
+   protected void assertServerIPRemoved(ServerIpRef server) {
+      assertTrue(waitUntilIServerIPRemoved.apply(server), String.format("IP %s is not Removed", server));
+   }
+
+   protected void assertBlockStorageAvailable(BlockStorage bs) {
       assertTrue(waitUntilBlockStorageReady.apply(bs), String.format("BlockStorage %s is not Ready", bs));
    }
 

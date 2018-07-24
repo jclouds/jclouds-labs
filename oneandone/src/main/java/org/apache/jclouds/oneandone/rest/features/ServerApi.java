@@ -226,13 +226,6 @@ public interface ServerApi extends Closeable {
    @MapBinder(BindToJsonPayload.class)
    Server addFirewallPolicy(@PathParam("serverId") String serverId, @PathParam("ipId") String ipId, @PayloadParam("id") String policyId);
 
-   @Named("servers:ip:firewallPolicy:delete")
-   @DELETE
-   @Path("/{serverId}/ips/{ipId}/firewall_policy")
-   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-   @MapBinder(BindToJsonPayload.class)
-   Server deleteIpFirewallPolicy(@PathParam("serverId") String serverId, @PathParam("ipId") String ipId);
-
    @Named("servers:ip:loadBalancer:list")
    @GET
    @Path("/{serverId}/ips/{ipId}/load_balancers")

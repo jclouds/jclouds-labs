@@ -260,4 +260,27 @@ public class Types {
       }
 
    }
+
+   public enum FirewallRuleAction {
+      ALLOW("allow"),
+      DENY("deny"),
+      UNRECOGNIZED("");
+
+      public static FirewallRuleAction fromValue(String v) {
+         return Enums.getIfPresent(FirewallRuleAction.class, v).or(UNRECOGNIZED);
+      }
+      
+      // the value which is used for matching
+      // the json node value with this enum
+      private final String value;
+
+      FirewallRuleAction(final String type) {
+         value = type;
+      }
+
+      @Override
+      public String toString() {
+         return value;
+      }
+   }
 }

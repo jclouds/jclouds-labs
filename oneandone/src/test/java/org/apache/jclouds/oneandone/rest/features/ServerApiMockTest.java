@@ -435,30 +435,6 @@ public class ServerApiMockTest extends BaseOneAndOneApiMockTest {
    }
 
    @Test
-   public void testDeleteIpFirewallPolicy() throws InterruptedException {
-      server.enqueue(
-              new MockResponse().setBody(stringFromResource("/server/delete.json"))
-      );
-      Server response = serverApi().deleteIpFirewallPolicy("serverId", "ipId");
-
-      assertNotNull(response);
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "DELETE", "/servers/serverId/ips/ipId/firewall_policy");
-   }
-
-   @Test
-   public void testDeleteIpFirewallPolicy404() throws InterruptedException {
-      server.enqueue(
-              new MockResponse().setResponseCode(404)
-      );
-      Server response = serverApi().deleteIpFirewallPolicy("serverId", "ipId");
-
-      assertEquals(response, null);
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "DELETE", "/servers/serverId/ips/ipId/firewall_policy");
-   }
-
-   @Test
    public void testListIpLoadBalancer() throws InterruptedException {
       server.enqueue(
               new MockResponse().setBody(stringFromResource("/server/list.ip.loadBalancers.json"))

@@ -49,11 +49,11 @@ public class FirewallPolicyApiLiveTest extends BaseOneAndOneLiveTest {
 
       List<FirewallPolicy.Rule.CreatePayload> rules = new ArrayList<FirewallPolicy.Rule.CreatePayload>();
       FirewallPolicy.Rule.CreatePayload rule = FirewallPolicy.Rule.CreatePayload.builder()
-              .portFrom(80)
-              .portTo(80)
-              .protocol(Types.RuleProtocol.TCP)
-              .source("0.0.0.0")
-              .build();
+            .port("80")
+            .action(Types.FirewallRuleAction.ALLOW)
+            .protocol(Types.RuleProtocol.TCP)
+            .source("0.0.0.0")
+            .build();
       rules.add(rule);
       currentFirewallPolicy = firewallPolicyApi().create(FirewallPolicy.CreateFirewallPolicy.create("jclouds firewall policy", "desc", rules));
    }
@@ -127,25 +127,17 @@ public class FirewallPolicyApiLiveTest extends BaseOneAndOneLiveTest {
       assertNotNull(result);
    }
 
-   @Test(dependsOnMethods = "testServerIpGet")
-   public void testUnassignServer() {
-      FirewallPolicy result = firewallPolicyApi().unassignServerIp(currentFirewallPolicy.id(), currentServer.ips().get(0).id());
-
-      assertNotNull(result);
-      assertEquals(result.serverIps().size(), 0);
-   }
-
-   @Test(dependsOnMethods = "testUnassignServer")
+   @Test(dependsOnMethods = "testListServerIps")
    public void testAddRules() {
       assertNodeAvailable(currentServer);
       currentServer = updateServerStatus(currentServer);
       List<FirewallPolicy.Rule.CreatePayload> rules = new ArrayList<FirewallPolicy.Rule.CreatePayload>();
       FirewallPolicy.Rule.CreatePayload rule = FirewallPolicy.Rule.CreatePayload.builder()
-              .portFrom(4567)
-              .portTo(4567)
-              .protocol(Types.RuleProtocol.TCP)
-              .source("0.0.0.0")
-              .build();
+            .port("4567")
+            .action(Types.FirewallRuleAction.ALLOW)
+            .protocol(Types.RuleProtocol.TCP)
+            .source("0.0.0.0")
+            .build();
       rules.add(rule);
       FirewallPolicy response = firewallPolicyApi().addRules(currentFirewallPolicy.id(), FirewallPolicy.Rule.AddRule.create(rules));
       FirewallPolicy.Rule ruleFromApi = firewallPolicyApi().getRule(currentFirewallPolicy.id(), currentFirewallPolicy.rules().get(0).id());
@@ -184,8 +176,9 @@ public class FirewallPolicyApiLiveTest extends BaseOneAndOneLiveTest {
    @AfterClass(alwaysRun = true)
    public void teardownTest() throws InterruptedException {
       assertNodeAvailable(currentServer);
-      firewallPolicyApi().delete(currentFirewallPolicy.id());
-      assertNodeAvailable(currentServer);
       deleteServer(currentServer.id());
+      assertNodeRemoved(currentServer);
+      firewallPolicyApi().delete(currentFirewallPolicy.id());
+
    }
 }

@@ -237,18 +237,6 @@ public class FirewallPolicyApiMockTest extends BaseOneAndOneApiMockTest {
    }
 
    @Test
-   public void testUnassignServerIp() throws InterruptedException {
-      server.enqueue(
-              new MockResponse().setBody(stringFromResource("/firewallpolicies/get.json"))
-      );
-      FirewallPolicy response = firewallpolicyApi().unassignServerIp("firewallpolicyId", "serverIpId");
-
-      assertNotNull(response);
-      assertEquals(server.getRequestCount(), 1);
-      assertSent(server, "DELETE", "/firewall_policies/firewallpolicyId/server_ips/serverIpId");
-   }
-
-   @Test
    public void testListRules() throws InterruptedException {
       server.enqueue(
               new MockResponse().setBody(stringFromResource("/firewallpolicies/list.rules.json"))

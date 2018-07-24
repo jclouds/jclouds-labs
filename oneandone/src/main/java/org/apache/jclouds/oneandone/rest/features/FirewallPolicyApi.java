@@ -92,12 +92,6 @@ public interface FirewallPolicyApi extends Closeable {
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    FirewallPolicy.ServerIp getServerIp(@PathParam("firewallPolicyId") String firewallPolicyId, @PathParam("serverIpId") String serverIpId);
 
-   @Named("firewallpolicies:serverips:delete")
-   @DELETE
-   @Path("/{firewallPolicyId}/server_ips/{serverIpId}")
-   @MapBinder(BindToJsonPayload.class)
-   FirewallPolicy unassignServerIp(@PathParam("firewallPolicyId") String firewallPolicyId, @PathParam("serverIpId") String serverIpId);
-
    @Named("firewallpolicies:rules:list")
    @GET
    @Path("/{firewallPolicyId}/rules")

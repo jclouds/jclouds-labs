@@ -16,12 +16,16 @@
  */
 package org.apache.jclouds.oneandone.rest.features;
 
+import java.util.ArrayList;
 import java.util.List;
+import org.apache.jclouds.oneandone.rest.domain.FirewallPolicy;
+import org.apache.jclouds.oneandone.rest.domain.LoadBalancer;
 import org.apache.jclouds.oneandone.rest.domain.Server;
 import org.apache.jclouds.oneandone.rest.domain.ServerFirewallPolicy;
 import org.apache.jclouds.oneandone.rest.domain.ServerIp;
 import org.apache.jclouds.oneandone.rest.domain.ServerLoadBalancer;
 import org.apache.jclouds.oneandone.rest.domain.Types;
+import org.apache.jclouds.oneandone.rest.ids.ServerIpRef;
 import org.apache.jclouds.oneandone.rest.internal.BaseOneAndOneLiveTest;
 import org.testng.Assert;
 import static org.testng.Assert.assertFalse;
@@ -34,21 +38,53 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
 
    private Server currentServer;
    private ServerIp currentIP;
-   private ServerFirewallPolicy currentPolicy;
-   private ServerLoadBalancer currentBalancer;
+   private ServerLoadBalancer currentServerBalancer;
+   private LoadBalancer currentLoadBalancer;
+   private FirewallPolicy currentFirewallPolicy;
 
    @BeforeClass
    public void setupTest() {
       currentServer = createServer("jclouds network test");
+      List<LoadBalancer.Rule.CreatePayload> rules = new ArrayList<LoadBalancer.Rule.CreatePayload>();
+      LoadBalancer.Rule.CreatePayload rule = LoadBalancer.Rule.CreatePayload.builder()
+            .portBalancer(4567)
+            .portServer(4567)
+            .protocol(Types.RuleProtocol.TCP)
+            .source("0.0.0.0")
+            .build();
+      rules.add(rule);
+      currentLoadBalancer = loadBalancerApi().create(LoadBalancer.CreateLoadBalancer.builder()
+            .name("jclouds loadbalancer")
+            .rules(rules)
+            .description("description")
+            .healthCheckInterval(1)
+            .healthCheckPath("path")
+            .healthCheckTest(Types.HealthCheckTestTypes.TCP)
+            .method(Types.LoadBalancerMethod.ROUND_ROBIN)
+            .persistence(Boolean.TRUE)
+            .persistenceTime(200)
+            .build());
+
+      List<FirewallPolicy.Rule.CreatePayload> fwrules = new ArrayList<FirewallPolicy.Rule.CreatePayload>();
+      FirewallPolicy.Rule.CreatePayload fwrule = FirewallPolicy.Rule.CreatePayload.builder()
+            .port("80")
+            .action(Types.FirewallRuleAction.ALLOW)
+            .protocol(Types.RuleProtocol.TCP)
+            .source("0.0.0.0")
+            .build();
+      fwrules.add(fwrule);
+      currentFirewallPolicy = firewallPolicyApi().create(FirewallPolicy.CreateFirewallPolicy.create("jclouds firewall policy", "desc", fwrules));
    }
 
    @AfterClass(alwaysRun = true)
    public void teardownTest() throws InterruptedException {
       deleteIp();
-      //give time for operations to finish
       if (currentServer != null) {
          assertNodeAvailable(currentServer);
          deleteServer(currentServer.id());
+         assertNodeRemoved(currentServer);
+         loadBalancerApi().delete(currentLoadBalancer.id());
+         firewallPolicyApi().delete(currentFirewallPolicy.id());
       }
    }
 
@@ -57,11 +93,21 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
       return api.serverApi();
    }
 
+   private LoadBalancerApi loadBalancerApi() {
+
+      return api.loadBalancerApi();
+   }
+
+   private FirewallPolicyApi firewallPolicyApi() {
+      return api.firewallPolicyApi();
+   }
+
    private void deleteIp() throws InterruptedException {
       assertNodeAvailable(currentServer);
 
       Server response = serverApi().deleteIp(currentServer.id(), currentIP.id());
-
+      assertNodeAvailable(currentServer);
+      assertServerIPRemoved(ServerIpRef.create(currentServer.id(), currentIP.id()));
       assertNotNull(response);
    }
 
@@ -78,7 +124,7 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
       assertNodeAvailable(currentServer);
 
       Server response = serverApi().addIp(currentServer.id(), Types.IPType.IPV4);
-
+      assertNodeAvailable(currentServer);
       assertNotNull(response);
    }
 
@@ -86,7 +132,6 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
    public void testListipFirewallPolicies() throws InterruptedException {
       assertNodeAvailable(currentServer);
       List<ServerFirewallPolicy> policies = serverApi().listIpFirewallPolicies(currentServer.id(), currentIP.id());
-      currentPolicy = policies.get(0);
       assertNotNull(policies);
       assertFalse(policies.isEmpty());
       Assert.assertTrue(policies.size() > 0);
@@ -95,17 +140,9 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
    @Test(dependsOnMethods = "testListips")
    public void testAddIpFirewallPolicy() throws InterruptedException {
       assertNodeAvailable(currentServer);
-      //TODO:: replace with live api data
-      String firewallPolicyId = "34A7E423DA3253E6D38563ED06F1041F";
 
-      Server response = serverApi().addFirewallPolicy(currentServer.id(), currentIP.id(), firewallPolicyId);
-      assertNotNull(response);
-   }
-
-   @Test(dependsOnMethods = "testListipFirewallPolicies")
-   public void testDeleteIpFirewallPolicy() throws InterruptedException {
+      Server response = serverApi().addFirewallPolicy(currentServer.id(), currentIP.id(), currentFirewallPolicy.id());
       assertNodeAvailable(currentServer);
-      Server response = serverApi().deleteIpFirewallPolicy(currentServer.id(), currentIP.id());
       assertNotNull(response);
    }
 
@@ -117,16 +154,14 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
       assertFalse(balancers.isEmpty());
    }
 
-   @Test(dependsOnMethods = "testAddIp")
+   @Test(dependsOnMethods = "testListipFirewallPolicies")
    public void testAddIpLoadBalancer() throws InterruptedException {
       assertNodeAvailable(currentServer);
-      //TODO:: replace with live api data
-      String loadBalancerId = "13C3F75BA55AF28B8B2B4E508786F48B";
 
-      Server response = serverApi().addIpLoadBalancer(currentServer.id(), currentIP.id(), loadBalancerId);
+      Server response = serverApi().addIpLoadBalancer(currentServer.id(), currentIP.id(), currentLoadBalancer.id());
 
       List<ServerLoadBalancer> balancers = serverApi().listIpLoadBalancer(currentServer.id(), currentIP.id());
-      currentBalancer = balancers.get(0);
+      currentServerBalancer = balancers.get(0);
 
       assertNotNull(response);
    }
@@ -134,7 +169,7 @@ public class ServerNetworkApiLiveTest extends BaseOneAndOneLiveTest {
    @Test(dependsOnMethods = "testListipLoadBalancer")
    public void testDeleteIpLoadBalancer() throws InterruptedException {
       assertNodeAvailable(currentServer);
-      Server response = serverApi().deleteIpLoadBalancer(currentServer.id(), currentIP.id(), currentBalancer.id());
+      Server response = serverApi().deleteIpLoadBalancer(currentServer.id(), currentIP.id(), currentServerBalancer.id());
       assertNotNull(response);
    }
 
