@@ -46,17 +46,19 @@ public class ParseResponse implements Function<HttpResponse, String> {
    }
 
    public String apply(HttpResponse from) {
-      try {
-         InputStream gson = from.getPayload().openStream();
-
-         final Response response = json.fromJson(gson, TypeLiteral.get(Response.class).getType());
+      Response response = null;
+      try (InputStream gson = from.getPayload().openStream()) {
+         response = json.fromJson(gson, TypeLiteral.get(Response.class).getType());
          return tryFindInfoPropertyValue(response);
       } catch (Exception e) {
          StringBuilder message = new StringBuilder();
-         message.append("Error parsing input: ");
-         message.append(e.getMessage());
+         message.append("Error parsing input: ").append(e.getMessage());
+         if (response != null) {
+            message.append(" ").append("Response Message: ").append(response.message());
+            message.append(" ").append(checkForErrorElements(response));
+         }
          logger.error(e, message.toString());
-         throw new HttpResponseException(message.toString() + "\n" + from, null, from, e);
+         throw new HttpResponseException(message.toString() + ".\n" + from, null, from, e);
       } finally {
          releasePayload(from);
       }
@@ -82,5 +84,16 @@ public class ParseResponse implements Function<HttpResponse, String> {
          return optionalPropertyName.get();
       }
       return "";
+   }
+
+   final String checkForErrorElements(final Response response) {
+      if (response.error() != null && !response.error().isEmpty()) {
+         StringBuilder message = new StringBuilder("Error Elements: ");
+         for (Property e : response.error()) {
+            message.append(e.name()).append(":").append(e.value()).append(", ");
+         }
+         return message.subSequence(0, message.length() - 2).toString() + ".";
+      }
+      return null;
    }
 }

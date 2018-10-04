@@ -39,16 +39,16 @@ public abstract class Response {
    public abstract List<Property> info();
 
    @Nullable
-   public abstract List<String> warning();
+   public abstract List<Property> warning();
 
    @Nullable
-   public abstract List<String> error();
+   public abstract List<Property> error();
 
    public abstract String requestId();
 
    @SerializedNames({ "operation", "responseCode", "message", "info", "warning", "error", "requestId" })
    public static Response create(String operation, String responseCode, String message, List<Property> info,
-         List<String> warning, List<String> error, String requestId) {
+         List<Property> warning, List<Property> error, String requestId) {
       return builder().operation(operation).responseCode(responseCode).message(message).info(info).warning(warning)
             .error(error).requestId(requestId).build();
    }
@@ -66,17 +66,17 @@ public abstract class Response {
 
       public abstract Builder info(List<Property> info);
 
-      public abstract Builder warning(List<String> warning);
+      public abstract Builder warning(List<Property> warning);
 
-      public abstract Builder error(List<String> error);
+      public abstract Builder error(List<Property> error);
 
       public abstract Builder requestId(String requestId);
 
       abstract Response autoBuild();
 
-      abstract List<String> warning();
+      abstract List<Property> warning();
 
-      abstract List<String> error();
+      abstract List<Property> error();
 
       abstract List<Property> info();
 

@@ -24,8 +24,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "unit", testName = "ResponseParseTest", singleThreaded = true)
-public class ResponseParseTest {
+@Test(groups = "unit", testName = "ParseResponseTest", singleThreaded = true)
+public class ParseResponseTest {
 
    public void testTryFindPropertyValue() {
 
@@ -53,4 +53,18 @@ public class ResponseParseTest {
 
       new ParseResponse(null, "noProperty").tryFindInfoPropertyValue(response);
    }
+
+   public void testTryFindPropertyValue_ErrorReturned() {
+
+      List<Property> errorProperties = new ArrayList<Property>();
+      errorProperties.add(Property.create("propertyName1", "propertyValue1"));
+      errorProperties.add(Property.create("propertyName2", "propertyValue2"));
+
+      Response response = Response.builder().responseCode("responseCode").error(errorProperties).message("message")
+            .operation("operation").requestId("requestId").info(null).build();
+
+      Assert.assertEquals(new ParseResponse(null, "noProperty").checkForErrorElements(response),
+            "Error Elements: propertyName1:propertyValue1, propertyName2:propertyValue2.");
+   }
+
 }
