@@ -47,7 +47,8 @@ public class ParseResponse implements Function<HttpResponse, String> {
 
    public String apply(HttpResponse from) {
       Response response = null;
-      try (InputStream gson = from.getPayload().openStream()) {
+      try {
+         InputStream gson = from.getPayload().openStream();
          response = json.fromJson(gson, TypeLiteral.get(Response.class).getType());
          return tryFindInfoPropertyValue(response);
       } catch (Exception e) {
