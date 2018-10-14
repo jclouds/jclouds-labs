@@ -178,10 +178,10 @@ public class CreateResourcesThenCreateNodes extends CreateNodesWithGroupEncodedI
                                   String securityGroupName,
                                   String vpcIdFromSecurityGroup) {
       Optional<VSwitch> optionalVSwitch = tryFindVSwitchInVPC(regionId, vpcIdFromSecurityGroup, vSwitchId);
-      if (optionalVSwitch.isPresent()) {
+      if (!optionalVSwitch.isPresent()) {
          String message = String.format("security group (%s) and vSwitch (%s) must be in the same VPC_PREFIX (%s)",
                  securityGroupName,
-                 optionalVSwitch.get().name(),
+                 vSwitchId,
                  vpcIdFromSecurityGroup);
 
          throw new IllegalStateException(message);
