@@ -56,7 +56,7 @@ public abstract class Server {
    public abstract Dvd dvd();
 
    @Nullable
-   public abstract Snapshot Snapshot();
+   public abstract Snapshot snapshot();
 
    @Nullable
    public abstract DataCenter datacenter();
@@ -149,7 +149,7 @@ public abstract class Server {
       public abstract Dvd dvd();
 
       @Nullable
-      public abstract Snapshot Snapshot();
+      public abstract Snapshot snapshot();
 
       @Nullable
       public abstract DataCenter datacenter();

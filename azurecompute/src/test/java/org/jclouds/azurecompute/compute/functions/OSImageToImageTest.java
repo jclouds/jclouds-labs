@@ -108,8 +108,8 @@ public class OSImageToImageTest {
 
       List<OSImage> images = createOSImage();
       for (int i = 0; i < images.size(); i++) {
-         OSImage OSImage = images.get(i);
-         OperatingSystem os = OSImageToImage.osFamily().apply(OSImage).build();
+         OSImage osImage = images.get(i);
+         OperatingSystem os = OSImageToImage.osFamily().apply(osImage).build();
          assertEquals(os.getFamily(), osFamily.get(i));
          assertEquals(os.getVersion(), version.get(i));
       }

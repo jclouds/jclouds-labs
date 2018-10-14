@@ -63,10 +63,6 @@ public class DataNonCDMIContentTypeApiLiveTest extends BaseCDMIApiLiveTest {
       byte[] bytes;
       DataObject dataObject;
       Map<String, String> pContainerMetaDataIn = Maps.newHashMap();
-      Map<String, String> pDataObjectMetaDataIn = Maps.newLinkedHashMap();
-      pDataObjectMetaDataIn.put("dataObjectkey1", "value1");
-      pDataObjectMetaDataIn.put("dataObjectkey2", "value2");
-      pDataObjectMetaDataIn.put("dataObjectkey3", "value3");
 
       Payload payloadIn;
       Payload payloadOut;

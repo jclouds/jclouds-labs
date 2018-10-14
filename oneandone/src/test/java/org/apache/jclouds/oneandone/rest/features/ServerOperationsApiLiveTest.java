@@ -139,7 +139,7 @@ public class ServerOperationsApiLiveTest extends BaseOneAndOneLiveTest {
    public void testRestoreSnapshot() throws InterruptedException {
       assertNodeAvailable(currentServer);
       currentServer = serverApi().get(currentServer.id());
-      Server response = serverApi().restoreSnapshot(currentServer.id(), currentServer.Snapshot().id());
+      Server response = serverApi().restoreSnapshot(currentServer.id(), currentServer.snapshot().id());
 
       assertNotNull(response);
    }
@@ -157,7 +157,7 @@ public class ServerOperationsApiLiveTest extends BaseOneAndOneLiveTest {
       assertNodeAvailable(currentServer);
       Thread.sleep(120000);
       currentServer = serverApi().get(currentServer.id());
-      Server response = serverApi().deleteSnapshot(currentServer.id(), currentServer.Snapshot().id());
+      Server response = serverApi().deleteSnapshot(currentServer.id(), currentServer.snapshot().id());
 
       assertNotNull(response);
    }

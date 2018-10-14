@@ -28,11 +28,11 @@ import java.util.List;
 
 public final class ListVMImagesHandler extends ParseSax.HandlerForGeneratedRequestWithResult<List<VMImage>> {
    private boolean inVMImage;
-   private final VMImageHandler VMImageHandler;
+   private final VMImageHandler vmImageHandler;
    private final Builder<VMImage> images = ImmutableList.builder();
 
    @Inject ListVMImagesHandler(VMImageHandler vmImageHandler) {
-      this.VMImageHandler = vmImageHandler;
+      this.vmImageHandler = vmImageHandler;
    }
 
    @Override
@@ -46,7 +46,7 @@ public final class ListVMImagesHandler extends ParseSax.HandlerForGeneratedReque
          inVMImage = true;
       }
       if (inVMImage) {
-         VMImageHandler.startElement(url, name, qName, attributes);
+         vmImageHandler.startElement(url, name, qName, attributes);
       }
    }
 
@@ -54,17 +54,17 @@ public final class ListVMImagesHandler extends ParseSax.HandlerForGeneratedReque
    public void endElement(String uri, String name, String qName) {
       if (qName.equals("VMImage")) {
          inVMImage = false;
-         images.add(VMImageHandler.getResult());
+         images.add(vmImageHandler.getResult());
       }
       if (inVMImage) {
-         VMImageHandler.endElement(uri, name, qName);
+         vmImageHandler.endElement(uri, name, qName);
       }
    }
 
    @Override
    public void characters(char[] ch, int start, int length) {
       if (inVMImage) {
-         VMImageHandler.characters(ch, start, length);
+         vmImageHandler.characters(ch, start, length);
       }
    }
 }

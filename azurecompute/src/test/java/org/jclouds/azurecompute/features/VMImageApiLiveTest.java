@@ -156,8 +156,8 @@ public class VMImageApiLiveTest extends BaseAzureComputeApiLiveTest {
     public void testList() {
         List<VMImage> vmImageList = api().list();
         assertTrue(vmImageList.size() > 0);
-        for (VMImage VMImage : vmImageList) {
-            checkVMImage(VMImage);
+        for (VMImage vmImage : vmImageList) {
+            checkVMImage(vmImage);
         }
     }
 

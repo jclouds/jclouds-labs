@@ -42,12 +42,12 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         OSImage OSImage = ListOSImagesHandlerTest.expected().get(5); // Centos
+         OSImage osImage = ListOSImagesHandlerTest.expected().get(5); // Centos
 
          DeploymentParams params = DeploymentParams.builder()
                  .name("mydeployment")
                  .size(RoleSize.Type.MEDIUM)
-                 .sourceImageName(OSImage.name()).mediaLink(URI.create("https://mydeployment.blob.core.windows.net/vhds/disk-mydeployment.vhd")).os(OSImage.os())
+                 .sourceImageName(osImage.name()).mediaLink(URI.create("https://mydeployment.blob.core.windows.net/vhds/disk-mydeployment.vhd")).os(osImage.os())
                  .username("username").password("testpwd")
                  .virtualNetworkName("my-virtualNetworkName")
                  .reservedIPName("myreservedip")
@@ -69,12 +69,12 @@ public class DeploymentApiMockTest extends BaseAzureComputeApiMockTest {
       try {
          DeploymentApi api = api(server.getUrl("/")).getDeploymentApiForService("myservice");
 
-         OSImage OSImage = ListOSImagesHandlerTest.expected().get(1); // Windows
+         OSImage osImage = ListOSImagesHandlerTest.expected().get(1); // Windows
 
          DeploymentParams params = DeploymentParams.builder()
                  .name("mydeployment")
                  .size(RoleSize.Type.MEDIUM)
-                 .sourceImageName(OSImage.name()).mediaLink(OSImage.mediaLink()).os(OSImage.os())
+                 .sourceImageName(osImage.name()).mediaLink(osImage.mediaLink()).os(osImage.os())
                  .username("username").password("testpwd")
                  .virtualNetworkName("my-virtualNetworkName")
                  .externalEndpoints(ImmutableSet.of(inboundTcpToLocalPort(80, 8080), inboundUdpToLocalPort(53, 53)))
