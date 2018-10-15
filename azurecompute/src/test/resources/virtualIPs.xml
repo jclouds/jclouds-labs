@@ -1,7 +1,0 @@
-<VirtualIPs>
-  <VirtualIP>
-    <Address>104.40.193.219</Address>
-    <IsDnsProgrammed>true</IsDnsProgrammed>
-    <Name>__PseudoBackEndContractVip</Name>
-  </VirtualIP>
-</VirtualIPs>
