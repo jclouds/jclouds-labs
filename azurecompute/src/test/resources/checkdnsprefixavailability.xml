@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<AvailabilityResponse xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-  <Result>true</Result>
-</AvailabilityResponse>

@@ -1,1 +1,0 @@
-<CaptureRoleOperation xmlns="http://schemas.microsoft.com/windowsazure"><OperationType>CaptureRoleOperation</OperationType><PostCaptureAction>Delete</PostCaptureAction><TargetImageLabel>myImageLabel</TargetImageLabel><TargetImageName>myImageName</TargetImageName></CaptureRoleOperation>
