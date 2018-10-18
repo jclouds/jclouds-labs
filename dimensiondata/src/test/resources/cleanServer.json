@@ -1,0 +1,9 @@
+{
+  "operation": "CLEAN_SERVER",
+  "responseCode": "IN_PROGRESS",
+  "message": "Request to Clean Server has been accepted. Please use appropriate Get or List API for status.",
+  "info": [],
+  "warning": [],
+  "error": [],
+  "requestId": "na9_20160321T074626030-0400_7e9fffe7-190b-46f2-9107-9d52fe57d0ad"
+}
