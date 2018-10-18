@@ -17,6 +17,7 @@
 package org.jclouds.dimensiondata.cloudcontrol.domain;
 
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import java.util.Date;
@@ -35,6 +36,7 @@ public abstract class Vlan {
 
    public abstract String name();
 
+   @Nullable
    public abstract String description();
 
    public abstract String datacenterId();

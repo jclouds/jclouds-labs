@@ -150,6 +150,18 @@ public interface ServerApi {
    @MapBinder(BindToJsonPayload.class)
    void startServer(@PayloadParam("id") String id);
 
+   /**
+    * Operation for cleaning servers with FAILED_ADD state
+    *
+    * @see org.jclouds.dimensiondata.cloudcontrol.domain.State.FAILED_ADD
+    */
+   @Named("server:cleanServer")
+   @POST
+   @Path("/cleanServer")
+   @Produces(MediaType.APPLICATION_JSON)
+   @MapBinder(BindToJsonPayload.class)
+   void cleanServer(@PayloadParam("id") String id);
+
    @Named("server:shutdown")
    @POST
    @Path("/shutdownServer")
