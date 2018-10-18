@@ -32,7 +32,6 @@ import java.util.List;
 
 /**
  * Accepts requests and modifies the endpoint path so that it is injected with the organisation id.
- * Handles both oec and caas based URLs.
  */
 @Singleton
 public class OrganisationIdFilter implements HttpRequestFilter {

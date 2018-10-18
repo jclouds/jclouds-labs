@@ -18,6 +18,7 @@ package org.jclouds.dimensiondata.cloudcontrol.domain;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import java.util.Date;
@@ -31,6 +32,7 @@ public abstract class OsImage extends BaseImage {
       type = TYPE;
    }
 
+   @Nullable
    public abstract String osImageKey();
 
    @SerializedNames({ "id", "name", "description", "cluster", "guest", "datacenterId", "cpu", "memoryGb", "nic", "disk",

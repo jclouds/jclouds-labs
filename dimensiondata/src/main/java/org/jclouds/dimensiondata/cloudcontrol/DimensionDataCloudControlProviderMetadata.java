@@ -81,8 +81,7 @@ public class DimensionDataCloudControlProviderMetadata extends BaseProviderMetad
          id("dimensiondata-cloudcontrol").name("DimensionData Cloud Control")
                .apiMetadata(new DimensionDataCloudControlApiMetadata())
                .homepage(URI.create("https://na-cloud.dimensiondata.com/"))
-               .console(URI.create("https://na-cloud.dimensiondata.com/"))
-               .endpoint("https://api-na.dimensiondata.com/caas")
+               .console(URI.create("https://na-cloud.dimensiondata.com/")).endpoint("https://api-na.dimensiondata.com")
                .defaultProperties(DimensionDataCloudControlProviderMetadata.defaultProperties());
       }
 

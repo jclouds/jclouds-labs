@@ -17,6 +17,7 @@
 package org.jclouds.dimensiondata.cloudcontrol.internal;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -30,17 +31,20 @@ import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApiMetadata;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlProviderMetadata;
-import org.jclouds.location.suppliers.ZoneIdsSupplier;
+import org.jclouds.location.suppliers.ImplicitRegionIdSupplier;
+import org.jclouds.location.suppliers.RegionIdToZoneIdsSupplier;
 import org.jclouds.logging.config.LoggingModule;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.rest.ApiContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.CUSTOMER_IMAGE_DELETED_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_DELETED_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_NORMAL_PREDICATE;
 import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
@@ -58,15 +62,10 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
    private final Set<Module> modules = ImmutableSet.<Module>of(new ExecutorServiceModule(sameThreadExecutor()));
    protected Set<String> datacenters;
 
-   protected static final String PREPARED_CUSTOMER_IMAGE_ID = "fb438e00-10f8-47ac-a434-f3f9461c3a76";
-   protected static final String NETWORK_DOMAIN_ID = System
-         .getProperty("networkDomainId", "690de302-bb80-49c6-b401-8c02bbefb945");
-   protected static final String VLAN_ID = System.getProperty("vlanId", "6b25b02e-d3a2-4e69-8ca7-9bab605deebd");
-   protected static final String IMAGE_ID = System.getProperty("imageId", "4c02126c-32fc-4b4c-9466-9824c1b5aa0f");
-   protected static final String PREPARED_NETWORK_DOMAIN_ID = System
-         .getProperty("networkDomainId", "d122949b-8990-46d6-98f0-91c8676fc720");
    protected static final String PREPARED_PRIVATE_IPV4_ADDRESS = "10.0.0.6";
-   protected static final String SERVER_ID = System.getProperty("serverId", "b1c537bb-018c-49ba-beef-e0600e948149");
+   protected static final String DEFAULT_PRIVATE_IPV4_BASE_ADDRESS = "10.0.0.0";
+   protected static final Integer DEFAULT_PRIVATE_IPV4_PREFIX_SIZE = 24;
+   protected static final String DEFAULT_PROTOCOL = "TCP";
 
    protected Predicate<String> vlanDeletedPredicate;
    protected Predicate<String> vlanNormalPredicate;
@@ -77,6 +76,7 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
    protected Predicate<String> serverDeletedPredicate;
    protected Predicate<String> serverNormalPredicate;
    protected Predicate<String> vmtoolsRunningPredicate;
+   protected Predicate<String> customerImageDeletedPredicate;
 
    public BaseDimensionDataCloudControlApiLiveTest() {
       provider = "dimensiondata-cloudcontrol";
@@ -89,8 +89,17 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
       datacenters = getZones();
    }
 
+   //   private Set<String> getZones() {
+   //      return ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
+   //   }
+
+   // TODO this leads to a warning - WARNING: failed to find key for value https://api-na.dimensiondata.com in {au=https://api-au.dimensiondata.com}; choosing first: au
+   // would like to improve this.  Currently I override the location config using -  -Djclouds.regions=au -Djclouds.region.au.zones=AU9
    private Set<String> getZones() {
-      return ctx.utils().injector().getInstance(ZoneIdsSupplier.class).get();
+      final String region = ctx.utils().injector().getInstance(ImplicitRegionIdSupplier.class).get();
+      final Map<String, Supplier<Set<String>>> regionToZoneMap = ctx.utils().injector()
+            .getInstance(RegionIdToZoneIdsSupplier.class).get();
+      return regionToZoneMap.get(region).get();
    }
 
    @Override
@@ -124,6 +133,8 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
       }, Names.named(SERVER_NORMAL_PREDICATE)));
       vmtoolsRunningPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
       }, Names.named(VM_TOOLS_RUNNING_PREDICATE)));
+      customerImageDeletedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
+      }, Names.named(CUSTOMER_IMAGE_DELETED_PREDICATE)));
 
       return injector.getInstance(DimensionDataCloudControlApi.class);
    }

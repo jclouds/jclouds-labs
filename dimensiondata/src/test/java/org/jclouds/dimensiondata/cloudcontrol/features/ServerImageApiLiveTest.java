@@ -18,7 +18,6 @@ package org.jclouds.dimensiondata.cloudcontrol.features;
 
 import com.google.common.collect.FluentIterable;
 import org.jclouds.collect.PagedIterable;
-import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OsImage;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.testng.annotations.Test;
@@ -49,28 +48,6 @@ public class ServerImageApiLiveTest extends BaseDimensionDataCloudControlApiLive
       FluentIterable<OsImage> osImages = getOsImages().concat();
       final OsImage osImage = api().getOsImage(osImages.iterator().next().id());
       assertNotNull(osImage);
-   }
-
-   @Test
-   public void testListCustomerImages() {
-      FluentIterable<CustomerImage> customerImages = getCustomerImages();
-      assertNotNull(customerImages);
-      for (CustomerImage customerImage : customerImages) {
-         assertNotNull(customerImage);
-      }
-   }
-
-   @Test
-   public void testGetCustomerImage() {
-      CustomerImage customerImage = api().getCustomerImage(PREPARED_CUSTOMER_IMAGE_ID);
-      assertNotNull(customerImage);
-      assertTrue(customerImage.datacenterId().equals("NA9"));
-   }
-
-   private FluentIterable<CustomerImage> getCustomerImages() {
-      FluentIterable<CustomerImage> customerImages = api().listCustomerImages().concat();
-      assertNotNull(customerImages);
-      return customerImages;
    }
 
    private ServerImageApi api() {

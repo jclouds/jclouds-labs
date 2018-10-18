@@ -54,7 +54,7 @@ public class DimensionDataCloudControlApiMetadata extends BaseHttpApiMetadata<Di
          id("dimensiondata-cloudcontrol").name("DimensionData CloudControl API").identityName("user name")
                .credentialName("user password")
                .documentation(URI.create("http://www.dimensiondata.com/en-US/Solutions/Cloud"))
-               .defaultEndpoint("https://api-REGION.dimensiondata.com/caas").version("2.4")
+               .defaultEndpoint("https://api-REGION.dimensiondata.com").version("2.4")
                .defaultProperties(defaultProperties).view(typeToken(ComputeServiceContext.class)).defaultModules(
                ImmutableSet.<Class<? extends Module>>builder().add(DimensionDataCloudControlHttpApiModule.class)
                      .add(DimensionDataCloudControlParserModule.class)
