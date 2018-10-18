@@ -26,6 +26,7 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.Disk;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Guest;
 import org.jclouds.dimensiondata.cloudcontrol.domain.ImageNic;
 import org.jclouds.dimensiondata.cloudcontrol.domain.OperatingSystem;
+import org.jclouds.dimensiondata.cloudcontrol.domain.State;
 import org.jclouds.dimensiondata.cloudcontrol.domain.VirtualHardware;
 import org.jclouds.dimensiondata.cloudcontrol.domain.VmTools;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlParseTest;
@@ -52,7 +53,7 @@ public class CustomerImagesParseTest extends BaseDimensionDataCloudControlParseT
                   .of(Disk.builder().id("1bddd4ed-67dc-4e5e-a0d5-b5a6c012ec14").scsiId(0).sizeGb(50)
                         .speed("HIGHPERFORMANCE").build()))
             .createTime(new SimpleDateFormatDateService().iso8601DateParse("2016-07-17T23:53:48.000Z"))
-            .datacenterId("QA1_N2_VMWARE_1").state("FAILED_ADD").guest(Guest.builder().operatingSystem(
+            .datacenterId("QA1_N2_VMWARE_1").state(State.FAILED_ADD).guest(Guest.builder().operatingSystem(
                   OperatingSystem.builder().id("WIN2012DC64").displayName("WIN2012DC/64").family("WINDOWS").build())
                   .vmTools(VmTools.builder().versionStatus(VmTools.VersionStatus.CURRENT)
                         .runningStatus(VmTools.RunningStatus.NOT_RUNNING).apiVersion(9354)

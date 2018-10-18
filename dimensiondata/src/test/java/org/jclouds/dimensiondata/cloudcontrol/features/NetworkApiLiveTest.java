@@ -22,9 +22,7 @@ import org.jclouds.collect.PagedIterable;
 import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.FirewallRuleTarget;
 import org.jclouds.dimensiondata.cloudcontrol.domain.IpRange;
-import org.jclouds.dimensiondata.cloudcontrol.domain.NatRule;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Placement;
-import org.jclouds.dimensiondata.cloudcontrol.domain.PublicIpBlock;
 import org.jclouds.dimensiondata.cloudcontrol.internal.BaseDimensionDataCloudControlApiLiveTest;
 import org.jclouds.rest.ResourceAlreadyExistsException;
 import org.testng.annotations.AfterClass;
@@ -46,18 +44,11 @@ import static org.testng.Assert.assertTrue;
 @Test(groups = "live", testName = "NetworkApiLiveTest", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest {
 
-   private static final String DEFAULT_PRIVATE_IPV4_BASE_ADDRESS = "10.0.0.0";
-   private static final Integer DEFAULT_PRIVATE_IPV4_PREFIX_SIZE = 24;
-   private static final String DEFAULT_PROTOCOL = "TCP";
-
    private String networkDomainId;
    private String networkDomainName;
    private String vlanId;
    private String portListId;
    private String firewallRuleId;
-   private String publicIpv4BlockId;
-   private PublicIpBlock publicIpBlock;
-   private String natRuleId;
 
    private List<String> firewallRuleIds;
 
@@ -114,63 +105,6 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
    }
 
    @Test
-   public void testAddPublicIPv4Block() {
-      publicIpv4BlockId = api().addPublicIpBlock(PREPARED_NETWORK_DOMAIN_ID);
-      assertNotNull(publicIpv4BlockId);
-   }
-
-   @Test(dependsOnMethods = "testAddPublicIPv4Block")
-   public void testListPublicIPv4AddressBlocks() {
-      PagedIterable<PublicIpBlock> ipBlockList = api().listPublicIPv4AddressBlocks(PREPARED_NETWORK_DOMAIN_ID);
-      assertTrue(!ipBlockList.isEmpty());
-      assertEquals(ipBlockList.last().get().first().get().size(), 2);
-      assertEquals(ipBlockList.last().get().first().get().networkDomainId(), PREPARED_NETWORK_DOMAIN_ID);
-   }
-
-   @Test(dependsOnMethods = "testAddPublicIPv4Block")
-   public void testGetPublicIPv4AddressBlocks() {
-      publicIpBlock = api().getPublicIPv4AddressBlock(publicIpv4BlockId);
-      assertNotNull(publicIpBlock);
-      assertEquals(publicIpBlock.size(), 2);
-      assertEquals(publicIpBlock.networkDomainId(), PREPARED_NETWORK_DOMAIN_ID);
-   }
-
-   @Test(dependsOnMethods = "testGetPublicIPv4AddressBlocks")
-   public void testCreateNatRule() {
-      natRuleId = api()
-            .createNatRule(PREPARED_NETWORK_DOMAIN_ID, PREPARED_PRIVATE_IPV4_ADDRESS, publicIpBlock.baseIp());
-      assertNotNull(natRuleId);
-   }
-
-   @Test(dependsOnMethods = "testCreateNatRule")
-   public void testListNatRules() {
-      PagedIterable<NatRule> natRulesList = api().listNatRules(PREPARED_NETWORK_DOMAIN_ID);
-      assertTrue(!natRulesList.isEmpty());
-      assertEquals(natRulesList.last().get().first().get().networkDomainId(), PREPARED_NETWORK_DOMAIN_ID);
-   }
-
-   @Test(dependsOnMethods = { "testCreateNatRule", "testListNatRules" })
-   public void testGetNatRule() {
-      NatRule natRule = api().getNatRule(natRuleId);
-      assertNotNull(natRule);
-      assertEquals(natRule.networkDomainId(), PREPARED_NETWORK_DOMAIN_ID);
-   }
-
-   @Test(dependsOnMethods = "testGetNatRule", alwaysRun = true)
-   public void testDeleteNatRule() {
-      api().deleteNatRule(natRuleId);
-      NatRule natRule = api().getNatRule(natRuleId);
-      assertNull(natRule);
-   }
-
-   @Test(dependsOnMethods = "testDeleteNatRule")
-   public void testRemovePublicIpBlock() {
-      api().removePublicIpBlock(publicIpv4BlockId);
-      publicIpBlock = api().getPublicIPv4AddressBlock(publicIpv4BlockId);
-      assertNull(publicIpBlock);
-   }
-
-   @Test
    public void testDeployNetworkDomain() {
       networkDomainName = NetworkApiLiveTest.class.getSimpleName() + new Date().getTime();
       networkDomainId = api().deployNetworkDomain(datacenters.iterator().next(), networkDomainName,
@@ -203,9 +137,6 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
          api().deleteNetworkDomain(networkDomainId);
          assertTrue(networkDomainDeletedPredicate.apply(networkDomainId),
                "network domain is not in a DELETED state after timeout");
-      }
-      if (publicIpBlock != null) {
-         api().removePublicIpBlock(publicIpBlock.id());
       }
    }
 

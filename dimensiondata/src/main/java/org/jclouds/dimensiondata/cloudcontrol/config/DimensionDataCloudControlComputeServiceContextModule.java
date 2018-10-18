@@ -22,6 +22,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.dimensiondata.cloudcontrol.DimensionDataCloudControlApi;
+import org.jclouds.dimensiondata.cloudcontrol.domain.CustomerImage;
 import org.jclouds.dimensiondata.cloudcontrol.domain.NetworkDomain;
 import org.jclouds.dimensiondata.cloudcontrol.domain.Server;
 import org.jclouds.dimensiondata.cloudcontrol.domain.State;
@@ -29,6 +30,7 @@ import org.jclouds.dimensiondata.cloudcontrol.domain.Vlan;
 import org.jclouds.dimensiondata.cloudcontrol.domain.VmTools;
 import org.jclouds.dimensiondata.cloudcontrol.features.NetworkApi;
 import org.jclouds.dimensiondata.cloudcontrol.features.ServerApi;
+import org.jclouds.dimensiondata.cloudcontrol.features.ServerImageApi;
 import org.jclouds.logging.Logger;
 
 import javax.annotation.Resource;
@@ -52,6 +54,7 @@ public class DimensionDataCloudControlComputeServiceContextModule extends Abstra
    public static final String SERVER_DELETED_PREDICATE = "SERVER_DELETED_PREDICATE";
    public static final String SERVER_NORMAL_PREDICATE = "SERVER_NORMAL_PREDICATE";
    public static final String VM_TOOLS_RUNNING_PREDICATE = "VM_TOOLS_RUNNING_PREDICATE";
+   public static final String CUSTOMER_IMAGE_DELETED_PREDICATE = "CUSTOMER_IMAGE_DELETED_PREDICATE";
 
    @Override
    protected void configure() {
@@ -130,6 +133,14 @@ public class DimensionDataCloudControlComputeServiceContextModule extends Abstra
          @Named(OPERATION_TIMEOUT) final Long operationTimeout, final ComputeServiceConstants.PollPeriod pollPeriod) {
       return retry(new VMToolsRunningStatus(api.getServerApi()), operationTimeout, pollPeriod.pollInitialPeriod,
             pollPeriod.pollMaxPeriod);
+   }
+
+   @Provides
+   @Named(CUSTOMER_IMAGE_DELETED_PREDICATE)
+   protected Predicate<String> provideCustomerImageDeletedPredicate(final DimensionDataCloudControlApi api,
+         @Named(OPERATION_TIMEOUT) final Long operationTimeout, final ComputeServiceConstants.PollPeriod pollPeriod) {
+      return retry(new CustomerImageState(api.getServerImageApi(), State.DELETED), operationTimeout,
+            pollPeriod.pollInitialPeriod, pollPeriod.pollMaxPeriod);
    }
 
    private class VlanState implements Predicate<String> {
@@ -247,6 +258,26 @@ public class DimensionDataCloudControlComputeServiceContextModule extends Abstra
          }
          final VmTools vmTools = server.guest().vmTools();
          return vmTools != null && vmTools.runningStatus() == VmTools.RunningStatus.RUNNING;
+      }
+   }
+
+   private class CustomerImageState implements Predicate<String> {
+
+      private final State state;
+      private final ServerImageApi serverImageApi;
+
+      private CustomerImageState(final ServerImageApi serverImageApi, final State state) {
+         this.serverImageApi = serverImageApi;
+         this.state = state;
+      }
+
+      @Override
+      public boolean apply(final String customerImageId) {
+         checkNotNull(customerImageId, "customerImageId");
+         logger.trace("looking for state on customer image %s", customerImageId);
+         final CustomerImage customerImage = serverImageApi.getCustomerImage(customerImageId);
+         final boolean isDeleted = customerImage == null && state == State.DELETED;
+         return isDeleted || (customerImage != null && customerImage.state() == state);
       }
    }
 }

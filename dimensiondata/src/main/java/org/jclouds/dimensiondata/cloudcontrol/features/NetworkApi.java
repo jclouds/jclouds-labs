@@ -68,7 +68,7 @@ import java.util.List;
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/{jclouds.api-version}/network")
+@Path("/caas/{jclouds.api-version}/network")
 public interface NetworkApi {
 
    @Named("network:deployNetworkDomain")

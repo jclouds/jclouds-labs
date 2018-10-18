@@ -58,7 +58,7 @@ import java.util.List;
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/{jclouds.api-version}/tag")
+@Path("/caas/{jclouds.api-version}/tag")
 public interface TagApi {
 
    @Named("tag:createTagKey")

@@ -41,7 +41,7 @@ public abstract class CustomerImage extends BaseImage {
          "softwareLabel", "createTime", "state", "tag", "progress", "virtualHardware", "source" })
    public static CustomerImage create(String id, String name, String description, Cluster cluster, Guest guest,
          String datacenterId, CPU cpu, int memoryGb, List<ImageNic> nics, List<Disk> disk, List<String> softwareLabel,
-         Date createTime, String state, List<TagWithIdAndName> tags, Progress progress, VirtualHardware virtualHardware,
+         Date createTime, State state, List<TagWithIdAndName> tags, Progress progress, VirtualHardware virtualHardware,
          Source source) {
       return builder().id(id).datacenterId(datacenterId).name(name).description(description).cluster(cluster)
             .guest(guest).cpu(cpu).memoryGb(memoryGb).nics(nics).disks(disk).softwareLabels(softwareLabel)
@@ -49,7 +49,7 @@ public abstract class CustomerImage extends BaseImage {
             .source(source).build();
    }
 
-   public abstract String state();
+   public abstract State state();
 
    @Nullable
    public abstract List<TagWithIdAndName> tags();
@@ -96,7 +96,7 @@ public abstract class CustomerImage extends BaseImage {
 
       public abstract Builder createTime(Date createTime);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Builder progress(Progress progress);
 

@@ -81,7 +81,7 @@ public class BaseDimensionDataCloudControlMockTest implements IHookable {
       server = new MockWebServer();
       server.play();
       ctx = ContextBuilder.newBuilder(DimensionDataCloudControlProviderMetadata.builder().build()).credentials("", "")
-            .endpoint(url("/caas/")).modules(modules).overrides(new Properties()).build();
+            .endpoint(url("")).modules(modules).overrides(new Properties()).build();
       json = ctx.utils().injector().getInstance(Json.class);
       api = ctx.getApi();
       applyAdditionalServerConfig();
