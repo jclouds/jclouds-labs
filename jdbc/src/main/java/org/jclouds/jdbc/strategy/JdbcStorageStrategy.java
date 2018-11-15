@@ -47,6 +47,7 @@ import org.jclouds.jdbc.predicates.validators.JdbcBlobKeyValidator;
 import org.jclouds.jdbc.predicates.validators.JdbcContainerNameValidator;
 import org.jclouds.jdbc.service.JdbcService;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -185,6 +186,7 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
     */
    @Override
    public void clearContainer(String container, ListContainerOptions options) {
+      Preconditions.checkArgument(options.getPrefix() == null, "prefix not yet implemented");
       if (options.getDir() != null) {
          jdbcService.deleteBlobsByDirectory(container, options.getDir(), true);
       }

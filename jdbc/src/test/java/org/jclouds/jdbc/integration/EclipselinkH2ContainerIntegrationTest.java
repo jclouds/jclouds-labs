@@ -39,4 +39,9 @@ public class EclipselinkH2ContainerIntegrationTest extends BaseContainerIntegrat
    public void testSetContainerAccess() throws Exception {
       throw new SkipException("jdbc does not support anonymous access");
    }
+
+   @Override
+   public void testClearWithOptions() throws InterruptedException {
+      throw new SkipException("jdbc does not support clear with options");
+   }
 }
