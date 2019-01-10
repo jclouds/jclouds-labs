@@ -18,6 +18,8 @@ package org.jclouds.dimensiondata.cloudcontrol.features;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import org.jclouds.Fallbacks;
 import org.jclouds.collect.IterableWithMarker;
@@ -58,6 +60,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_NORMAL_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STARTED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STOPPED_PREDICATE;
+
+/**
+ * For examples of how to use this API please refer to https://jclouds.apache.org/guides/dimensiondata/
+ */
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
@@ -168,6 +179,22 @@ public interface ServerApi {
    @Produces(MediaType.APPLICATION_JSON)
    @MapBinder(BindToJsonPayload.class)
    void shutdownServer(@PayloadParam("id") String id);
+
+   @Provides
+   @Named(SERVER_STOPPED_PREDICATE)
+   Predicate<String> serverStoppedPredicate();
+
+   @Provides
+   @Named(SERVER_DELETED_PREDICATE)
+   Predicate<String> serverDeletedPredicate();
+
+   @Provides
+   @Named(SERVER_STARTED_PREDICATE)
+   Predicate<String> serverStartedPredicate();
+
+   @Provides
+   @Named(SERVER_NORMAL_PREDICATE)
+   Predicate<String> serverNormalPredicate();
 
    @Singleton
    final class ParseServers extends ParseJson<Servers> {
