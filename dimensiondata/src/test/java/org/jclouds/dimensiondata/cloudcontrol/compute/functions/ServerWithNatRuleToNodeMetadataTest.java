@@ -106,7 +106,7 @@ public class ServerWithNatRuleToNodeMetadataTest {
 
       server = Server.builder().id("serverId").name(serverName).datacenterId(datacenterId)
             .networkInfo(NetworkInfo.create(networkDomainId, nic, new ArrayList<NIC>())).cpu(cpu).deployed(true)
-            .state(State.NORMAL).sourceImageId("imageId").started(false).createTime(new Date()).memoryGb(1024)
+            .state(State.NORMAL).sourceImageId("imageId").started(true).createTime(new Date()).memoryGb(1024)
             .guest(Guest.builder().osCustomization(false).operatingSystem(os).build()).build();
 
       serverWithNatRuleToNodeMetadata = new ServerWithNatRuleToNodeMetadata(locations, conventionFactory,
@@ -140,7 +140,7 @@ public class ServerWithNatRuleToNodeMetadataTest {
 
       server = Server.builder().id("serverId").name(serverName).datacenterId(datacenterId)
             .networkInfo(NetworkInfo.create(networkDomainId, nic, new ArrayList<NIC>())).cpu(cpu).deployed(true)
-            .state(State.DELETED).sourceImageId("imageId").started(false).createTime(new Date()).memoryGb(1024)
+            .state(State.DELETED).sourceImageId("imageId").started(true).createTime(new Date()).memoryGb(1024)
             .guest(Guest.builder().osCustomization(false).operatingSystem(os).build()).build();
 
       serverWithExternalIp = ServerWithExternalIp.create(server, null);
@@ -153,6 +153,33 @@ public class ServerWithNatRuleToNodeMetadataTest {
 
       assertNodeMetadata(serverWithNatRuleToNodeMetadata.apply(serverWithExternalIp), null, "imageId",
             NodeMetadata.Status.TERMINATED, ImmutableSet.<String>of(), ImmutableSet.<String>of());
+   }
+
+   @Test(dependsOnMethods = "testApplyWithNullables")
+   public void testApplyServerStopped() {
+
+      server = Server.builder().id("serverId").name(serverName).datacenterId(datacenterId)
+            .networkInfo(NetworkInfo.create(networkDomainId, nic, new ArrayList<NIC>())).cpu(cpu).deployed(true)
+            .state(State.DELETED).sourceImageId("imageId").started(false).createTime(new Date()).memoryGb(1024)
+            .guest(Guest.builder().osCustomization(false).operatingSystem(os).build()).build();
+
+      serverWithExternalIp = ServerWithExternalIp.create(server, externalIp);
+
+      org.jclouds.compute.domain.OperatingSystem operatingSystem = org.jclouds.compute.domain.OperatingSystem.builder()
+            .description("Windows 10 x64").name("Win10x64").is64Bit(true).family(OsFamily.WINDOWS).build();
+
+      expect(image.getId()).andReturn("imageId");
+      expect(image.getOperatingSystem()).andReturn(operatingSystem);
+      expect(nic.privateIpv4()).andReturn("192.168.1.1").anyTimes();
+      expect(nodeNamingConvention.groupInUniqueNameOrNull(serverName)).andReturn("[" + serverName + "]").anyTimes();
+      expect(serverToHardware.apply(server)).andReturn(hardware);
+      expect(operatingSystemToOperatingSystem.apply(os)).andReturn(operatingSystem);
+
+      EasyMock.replay(nodeNamingConvention, serverImageApi, image, nic, serverToHardware, operatingSystemToOperatingSystem);
+
+      assertNodeMetadata(serverWithNatRuleToNodeMetadata.apply(serverWithExternalIp), operatingSystem,
+                  serverWithExternalIp.server().sourceImageId(), NodeMetadata.Status.SUSPENDED,
+                  ImmutableSet.of(nic.privateIpv4()), ImmutableSet.of(externalIp));
    }
 
    private void assertNodeMetadata(NodeMetadata result, org.jclouds.compute.domain.OperatingSystem os, String imageId,

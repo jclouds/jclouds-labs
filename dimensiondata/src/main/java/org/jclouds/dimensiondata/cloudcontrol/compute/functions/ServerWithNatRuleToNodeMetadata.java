@@ -48,10 +48,10 @@ class ServerWithNatRuleToNodeMetadata implements Function<ServerWithExternalIp, 
 
    private static final Map<State, NodeMetadata.Status> serverStateToNodeStatus = ImmutableMap.<State, NodeMetadata.Status>builder()
          .put(State.PENDING_DELETE, NodeMetadata.Status.PENDING).put(State.PENDING_CHANGE, NodeMetadata.Status.PENDING)
-         .put(State.FAILED_ADD, NodeMetadata.Status.ERROR).put(State.FAILED_CHANGE, NodeMetadata.Status.ERROR)
-         .put(State.FAILED_DELETE, NodeMetadata.Status.ERROR).put(State.DELETED, NodeMetadata.Status.TERMINATED)
-         .put(State.NORMAL, NodeMetadata.Status.RUNNING).put(State.UNRECOGNIZED, NodeMetadata.Status.UNRECOGNIZED)
-         .build();
+         .put(State.PENDING_ADD, NodeMetadata.Status.PENDING).put(State.FAILED_ADD, NodeMetadata.Status.ERROR)
+         .put(State.FAILED_CHANGE, NodeMetadata.Status.ERROR).put(State.FAILED_DELETE, NodeMetadata.Status.ERROR)
+         .put(State.DELETED, NodeMetadata.Status.TERMINATED).put(State.NORMAL, NodeMetadata.Status.RUNNING)
+         .put(State.UNRECOGNIZED, NodeMetadata.Status.UNRECOGNIZED).build();
 
    private final Supplier<Set<? extends Location>> locations;
    private final GroupNamingConvention nodeNamingConvention;
@@ -80,7 +80,9 @@ class ServerWithNatRuleToNodeMetadata implements Function<ServerWithExternalIp, 
       builder.hardware(serverToHardware.apply(serverWithExternalIp.server()));
       builder.imageId(server.sourceImageId());
       builder.operatingSystem(operatingSystemToOperatingSystem.apply(server.guest().operatingSystem()));
-      builder.status(serverStateToNodeStatus.get(server.state()));
+      builder.status(server.started() ?
+            serverStateToNodeStatus.get(server.state()) :
+            NodeMetadata.Status.SUSPENDED);
 
       Set<String> privateAddresses = new HashSet<String>();
       if (server.networkInfo() != null) {
