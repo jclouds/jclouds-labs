@@ -18,6 +18,8 @@ package org.jclouds.dimensiondata.cloudcontrol.features;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import org.jclouds.Fallbacks;
 import org.jclouds.Fallbacks.NullOnNotFoundOr404;
@@ -65,6 +67,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_NORMAL_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VLAN_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VLAN_NORMAL_PREDICATE;
+
+/**
+ * For examples of how to use this API please refer to https://jclouds.apache.org/guides/dimensiondata/
+ */
 
 @RequestFilters({ BasicAuthentication.class, OrganisationIdFilter.class })
 @Consumes(MediaType.APPLICATION_JSON)
@@ -296,6 +307,22 @@ public interface NetworkApi {
    @MapBinder(BindToJsonPayload.class)
    @Fallback(Fallbacks.VoidOnNotFoundOr404.class)
    void deletePortList(@PayloadParam("id") String portListId);
+
+   @Provides
+   @Named(VLAN_DELETED_PREDICATE)
+   Predicate<String> vlanDeletedPredicate();
+
+   @Provides
+   @Named(NETWORK_DOMAIN_DELETED_PREDICATE)
+   Predicate<String> networkDomainDeletedPredicate();
+
+   @Provides
+   @Named(NETWORK_DOMAIN_NORMAL_PREDICATE)
+   Predicate<String> networkDomainNormalPredicate();
+
+   @Provides
+   @Named(VLAN_NORMAL_PREDICATE)
+   Predicate<String> vlanNormalPredicate();
 
    @Singleton
    final class ParseFirewallRules extends ParseJson<FirewallRules> {
