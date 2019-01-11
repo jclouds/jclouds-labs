@@ -38,10 +38,10 @@ public abstract class Disk {
    public abstract String speed();
 
    @Nullable
-   public abstract String state();
+   public abstract State state();
 
    @SerializedNames({ "id", "scsiId", "sizeGb", "speed", "state" })
-   public static Disk create(String id, Integer scsiId, Integer sizeGb, String speed, String state) {
+   public static Disk create(String id, Integer scsiId, Integer sizeGb, String speed, State state) {
       return builder().id(id).scsiId(scsiId).sizeGb(sizeGb).speed(speed).state(state).build();
    }
 
@@ -57,7 +57,7 @@ public abstract class Disk {
 
       public abstract Builder speed(String speed);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract Disk build();
    }

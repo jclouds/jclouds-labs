@@ -41,10 +41,10 @@ public abstract class NIC {
    public abstract String vlanName();
 
    @Nullable
-   public abstract String state();
+   public abstract State state();
 
    @SerializedNames({ "id", "privateIpv4", "ipv6", "vlanId", "vlanName", "state" })
-   public static NIC create(String id, String privateIpv4, String ipv6, String vlanId, String vlanName, String state) {
+   public static NIC create(String id, String privateIpv4, String ipv6, String vlanId, String vlanName, State state) {
       return builder().id(id).privateIpv4(privateIpv4).ipv6(ipv6).vlanId(vlanId).vlanName(vlanName).state(state)
             .build();
    }
@@ -63,7 +63,7 @@ public abstract class NIC {
 
       public abstract Builder vlanName(String vlanName);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       public abstract NIC build();
    }

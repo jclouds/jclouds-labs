@@ -59,11 +59,11 @@ public class ServersParseTest extends BaseDimensionDataCloudControlParseTest<Ser
                               .runningStatus(VmTools.RunningStatus.RUNNING).build()).osCustomization(true).build())
                   .cpu(CPU.builder().count(2).speed("STANDARD").coresPerSocket(1).build()).memoryGb(4).disks(Collections
                         .singletonList(Disk.builder().id("0ba67812-d7b7-4c3f-b114-870fbea24d42").scsiId(0).sizeGb(10)
-                              .speed("STANDARD").state("NORMAL").build())).networkInfo(NetworkInfo.builder().primaryNic(
+                              .speed("STANDARD").state(State.NORMAL).build())).networkInfo(NetworkInfo.builder().primaryNic(
                         NIC.builder().id("980a9fdd-4ea2-478b-85b4-f016349f1738").privateIpv4("10.0.0.8")
                               .ipv6("2607:f480:111:1575:c47:7479:2af8:3f1a")
                               .vlanId("6b25b02e-d3a2-4e69-8ca7-9bab605deebd")
-                              .vlanId("6b25b02e-d3a2-4e69-8ca7-9bab605deebd").vlanName("vlan1").state("NORMAL").build())
+                              .vlanId("6b25b02e-d3a2-4e69-8ca7-9bab605deebd").vlanName("vlan1").state(State.NORMAL).build())
                         .additionalNic(null).networkDomainId("690de302-bb80-49c6-b401-8c02bbefb945").build())
                   .virtualHardware(VirtualHardware.builder().upToDate(false).version("vmx-08").build())
                   .softwareLabels(Collections.emptyList()).build());
