@@ -56,10 +56,10 @@ public class ServerParseTest extends BaseDimensionDataCloudControlParseTest<Serv
             .cpu(CPU.builder().count(2).speed("STANDARD").coresPerSocket(1).build()).memoryGb(4).disks(Collections
                   .singletonList(
                         Disk.builder().id("918f12ba-5e5e-4cd6-87bd-60c18293c24d").scsiId(0).sizeGb(20).speed("STANDARD")
-                              .state("NORMAL").build())).networkInfo(NetworkInfo.builder().primaryNic(
+                              .state(State.NORMAL).build())).networkInfo(NetworkInfo.builder().primaryNic(
                   NIC.builder().id("f0c00cab-bfa3-4c51-8c0a-c52fdac1ae4b").privateIpv4("10.0.0.7")
                         .ipv6("2a00:47c0:111:1131:5851:1950:411c:3dd8").vlanId("7bd12a4d-4e83-4254-a266-174aa5f55187")
-                        .vlanName("jclouds vlan").state("NORMAL").build()).additionalNic(Collections.<NIC>emptyList())
+                        .vlanName("jclouds vlan").state(State.NORMAL).build()).additionalNic(Collections.<NIC>emptyList())
                   .networkDomainId("d122949b-8990-46d6-98f0-91c8676fc720").build())
             .virtualHardware(VirtualHardware.builder().upToDate(true).version("vmx-10").build())
             .softwareLabels(Collections.emptyList()).build();

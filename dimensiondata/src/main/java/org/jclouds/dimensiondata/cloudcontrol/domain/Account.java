@@ -54,7 +54,7 @@ public abstract class Account {
    public abstract AccountOrganization organization();
 
    @Nullable
-   public abstract String state();
+   public abstract State state();
 
    Account() {
    }
@@ -63,7 +63,7 @@ public abstract class Account {
          "customDefined1", "customDefined2", "organization", "state" })
    public static Account create(String userName, String fullName, String firstName, String lastName,
          String emailAddress, List<RoleType> roles, AccountPhoneNumber phone, String department, String customDefined1,
-         String customDefined2, AccountOrganization organization, String state) {
+         String customDefined2, AccountOrganization organization, State state) {
       return builder().userName(userName).fullName(fullName).firstName(firstName).lastName(lastName)
             .emailAddress(emailAddress).roles(roles).phone(phone).department(department).customDefined1(customDefined1)
             .customDefined2(customDefined2).organization(organization).state(state).build();
@@ -99,7 +99,7 @@ public abstract class Account {
 
       public abstract Builder organization(AccountOrganization organization);
 
-      public abstract Builder state(String state);
+      public abstract Builder state(State state);
 
       abstract Account autoBuild();
 
