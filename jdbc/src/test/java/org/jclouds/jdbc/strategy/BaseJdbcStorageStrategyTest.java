@@ -148,7 +148,7 @@ public abstract class BaseJdbcStorageStrategyTest {
             .name(BLOB_NAME + "3")
             .payload(randomByteSource().slice(0, 4 * 1024 * 1024))
             .build());
-      assertThat(storageStrategy.getBlobKeysInsideContainer(CONTAINER_NAME))
+      assertThat(storageStrategy.getBlobKeysInsideContainer(CONTAINER_NAME, null))
             .containsExactly(BLOB_NAME + "1", BLOB_NAME + "2", BLOB_NAME + "3");
    }
 
@@ -195,10 +195,10 @@ public abstract class BaseJdbcStorageStrategyTest {
             new BlobBuilderImpl().name(BLOB_NAME + "2").payload(randomByteSource().slice(0, 4 * 1024 * 1024)).build());
       storageStrategy.putBlob(CONTAINER_NAME,
             new BlobBuilderImpl().name(BLOB_NAME + "3").payload(randomByteSource().slice(0, 4 * 1024 * 1024)).build());
-      assertThat(storageStrategy.getBlobKeysInsideContainer(CONTAINER_NAME))
+      assertThat(storageStrategy.getBlobKeysInsideContainer(CONTAINER_NAME, null))
             .containsExactly(BLOB_NAME + "1", BLOB_NAME + "2", BLOB_NAME + "3");
       storageStrategy.clearContainer(CONTAINER_NAME);
-      assertThat(storageStrategy.getBlobKeysInsideContainer(CONTAINER_NAME)).isEmpty();
+      assertThat(storageStrategy.getBlobKeysInsideContainer(CONTAINER_NAME, null)).isEmpty();
       storageStrategy.deleteContainer(CONTAINER_NAME);
       assertThat(storageStrategy.containerExists(CONTAINER_NAME)).isFalse();
    }

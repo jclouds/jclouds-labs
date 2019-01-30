@@ -236,10 +236,13 @@ public class JdbcStorageStrategy implements LocalStorageStrategy {
     * @return the blob keys inside the container
     */
    @Override
-   public Iterable<String> getBlobKeysInsideContainer(String container) throws IOException {
+   public Iterable<String> getBlobKeysInsideContainer(String container, String prefix) throws IOException {
       List<BlobEntity> blobEntities = jdbcService.findBlobsByContainer(container);
       ImmutableList.Builder<String> result = ImmutableList.builder();
       for (BlobEntity blobEntity : blobEntities) {
+         if (prefix != null && !blobEntity.getKey().startsWith(prefix)) {
+            continue;
+         }
          result.add(blobEntity.getKey());
       }
       return result.build();
