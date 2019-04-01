@@ -95,14 +95,14 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
       serverId = api.getServerApi()
             .deployServer(deployedServerName, imageId, started, networkInfo, "P$$ssWwrrdGoDd!", disks, null);
       assertNotNull(serverId);
-      assertTrue(serverStartedPredicate.apply(serverId), "server did not start after timeout");
-      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
+      assertTrue(api.serverStartedPredicate().apply(serverId), "server did not start after timeout");
+      assertTrue(api.serverNormalPredicate().apply(serverId), "server was not NORMAL after timeout");
    }
 
    @Test(dependsOnMethods = "testDeployAndStartServer")
    public void testReconfigureServer() {
       api.getServerApi().reconfigureServer(serverId, 4, CpuSpeed.HIGHPERFORMANCE.name(), 1);
-      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
+      assertTrue(api.serverNormalPredicate().apply(serverId), "server was not NORMAL after timeout");
    }
 
    @Test(dependsOnMethods = "testDeployAndStartServer")
@@ -136,8 +136,8 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
    @Test(dependsOnMethods = "testDeployAndStartServer")
    public void testRebootServer() {
       api.getServerApi().rebootServer(serverId);
-      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
-      assertTrue(vmtoolsRunningPredicate.apply(serverId), "server vm tools not running after timeout");
+      assertTrue(api.serverNormalPredicate().apply(serverId), "server was not NORMAL after timeout");
+      assertTrue(api.vmToolsRunningPredicate().apply(serverId), "server vm tools not running after timeout");
    }
 
    @Test(dependsOnMethods = "testDeployAndStartServer")
@@ -200,20 +200,20 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
    @Test(dependsOnMethods = "testRebootServer")
    public void testPowerOffServer() {
       api.getServerApi().powerOffServer(serverId);
-      assertTrue(serverStoppedPredicate.apply(serverId), "server did not power off after timeout");
+      assertTrue(api.serverStoppedPredicate().apply(serverId), "server did not power off after timeout");
    }
 
    @Test(dependsOnMethods = "testPowerOffServer")
    public void testStartServer() {
       api.getServerApi().startServer(serverId);
-      assertTrue(serverStartedPredicate.apply(serverId), "server did not start after timeout");
-      assertTrue(vmtoolsRunningPredicate.apply(serverId), "server vm tools not running after timeout");
+      assertTrue(api.serverStartedPredicate().apply(serverId), "server did not start after timeout");
+      assertTrue(api.vmToolsRunningPredicate().apply(serverId), "server vm tools not running after timeout");
    }
 
    @Test(dependsOnMethods = "testStartServer")
    public void testShutdownServer() {
       api.getServerApi().shutdownServer(serverId);
-      assertTrue(serverStoppedPredicate.apply(serverId), "server did not shutdown after timeout");
+      assertTrue(api.serverStoppedPredicate().apply(serverId), "server did not shutdown after timeout");
    }
 
    @Test(dependsOnMethods = "testShutdownServer")
@@ -223,7 +223,7 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
       cloneImageId = api.getServerApi()
             .cloneServer(serverId, "ServerApiLiveTest-" + System.currentTimeMillis(), options);
       assertNotNull(cloneImageId);
-      assertTrue(serverNormalPredicate.apply(serverId), "server was not NORMAL after timeout");
+      assertTrue(api.serverNormalPredicate().apply(serverId), "server was not NORMAL after timeout");
    }
 
    @Test(dependsOnMethods = "testCloneServerToMakeCustomerImage")
@@ -248,7 +248,8 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
    public void testDeleteCustomerImage() {
       boolean deleted = api.getCustomerImageApi().deleteCustomerImage(cloneImageId);
       assertTrue(deleted);
-      assertTrue(customerImageDeletedPredicate.apply(cloneImageId), "customer image was not DELETED after timeout");
+      assertTrue(api.customerImageDeletedPredicate().apply(cloneImageId),
+            "customer image was not DELETED after timeout");
    }
 
    @AfterClass(alwaysRun = true)
@@ -258,15 +259,15 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
       }
       if (serverId != null) {
          api.getServerApi().deleteServer(serverId);
-         assertTrue(serverDeletedPredicate.apply(serverId), "server was not DELETED after timeout");
+         assertTrue(api.serverDeletedPredicate().apply(serverId), "server was not DELETED after timeout");
       }
       if (vlanId != null) {
          api.getNetworkApi().deleteVlan(vlanId);
-         assertTrue(vlanDeletedPredicate.apply(vlanId), "vlan is not in a DELETED state after timeout");
+         assertTrue(api.vlanDeletedPredicate().apply(vlanId), "vlan is not in a DELETED state after timeout");
       }
       if (networkDomainId != null) {
          api.getNetworkApi().deleteNetworkDomain(networkDomainId);
-         assertTrue(networkDomainDeletedPredicate.apply(networkDomainId),
+         assertTrue(api.networkDomainDeletedPredicate().apply(networkDomainId),
                "network domain is not in a DELETED state after timeout");
       }
       if (tagKeyId != null && !tagKeyId.isEmpty()) {
@@ -287,7 +288,7 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
                   ServerApiLiveTest.class.getSimpleName() + new Date().getTime(), DEFAULT_PRIVATE_IPV4_BASE_ADDRESS,
                   DEFAULT_PRIVATE_IPV4_PREFIX_SIZE);
       assertNotNull(vlanId);
-      assertTrue(vlanNormalPredicate.apply(vlanId), "vlan is not in a NORMAL state after timeout");
+      assertTrue(api.vlanNormalPredicate().apply(vlanId), "vlan is not in a NORMAL state after timeout");
    }
 
    private String deployNetworkDomain() {
@@ -296,7 +297,7 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest 
       networkDomainId = api.getNetworkApi().deployNetworkDomain(datacenterId, networkDomainName,
             ServerApiLiveTest.class.getSimpleName() + new Date().getTime() + "description", "ESSENTIALS");
       assertNotNull(networkDomainId);
-      assertTrue(networkDomainNormalPredicate.apply(networkDomainId),
+      assertTrue(api.networkDomainNormalPredicate().apply(networkDomainId),
             "network domain is not in a NORMAL state after timeout");
       return datacenterId;
    }
