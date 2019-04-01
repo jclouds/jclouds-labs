@@ -101,7 +101,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
             NetworkApiLiveTest.class.getSimpleName() + new Date().getTime(), DEFAULT_PRIVATE_IPV4_BASE_ADDRESS,
             DEFAULT_PRIVATE_IPV4_PREFIX_SIZE);
       assertNotNull(vlanId);
-      assertTrue(vlanNormalPredicate.apply(vlanId), "vlan is not in a NORMAL state after timeout");
+      assertTrue(api.vlanNormalPredicate().apply(vlanId), "vlan is not in a NORMAL state after timeout");
    }
 
    @Test
@@ -110,7 +110,7 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
       networkDomainId = api().deployNetworkDomain(datacenters.iterator().next(), networkDomainName,
             NetworkApiLiveTest.class.getSimpleName() + new Date().getTime() + "description", "ESSENTIALS");
       assertNotNull(networkDomainId);
-      assertTrue(networkDomainNormalPredicate.apply(networkDomainId),
+      assertTrue(api.networkDomainNormalPredicate().apply(networkDomainId),
             "network domain is not in a NORMAL state after timeout");
    }
 
@@ -131,11 +131,11 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControlApiLiveTest
       }
       if (vlanId != null) {
          api().deleteVlan(vlanId);
-         assertTrue(vlanDeletedPredicate.apply(vlanId), "vlan is not in a DELETED state after timeout");
+         assertTrue(api.vlanDeletedPredicate().apply(vlanId), "vlan is not in a DELETED state after timeout");
       }
       if (networkDomainId != null) {
          api().deleteNetworkDomain(networkDomainId);
-         assertTrue(networkDomainDeletedPredicate.apply(networkDomainId),
+         assertTrue(api.networkDomainDeletedPredicate().apply(networkDomainId),
                "network domain is not in a DELETED state after timeout");
       }
    }

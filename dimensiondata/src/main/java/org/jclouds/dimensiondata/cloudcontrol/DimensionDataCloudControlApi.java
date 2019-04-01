@@ -16,6 +16,8 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol;
 
+import com.google.common.base.Predicate;
+import com.google.inject.Provides;
 import org.jclouds.dimensiondata.cloudcontrol.features.AccountApi;
 import org.jclouds.dimensiondata.cloudcontrol.features.CustomerImageApi;
 import org.jclouds.dimensiondata.cloudcontrol.features.InfrastructureApi;
@@ -25,7 +27,19 @@ import org.jclouds.dimensiondata.cloudcontrol.features.ServerImageApi;
 import org.jclouds.dimensiondata.cloudcontrol.features.TagApi;
 import org.jclouds.rest.annotations.Delegate;
 
+import javax.inject.Named;
 import java.io.Closeable;
+
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.CUSTOMER_IMAGE_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_NORMAL_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_NORMAL_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STARTED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STOPPED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VLAN_DELETED_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VLAN_NORMAL_PREDICATE;
+import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VM_TOOLS_RUNNING_PREDICATE;
 
 public interface DimensionDataCloudControlApi extends Closeable {
 
@@ -49,4 +63,45 @@ public interface DimensionDataCloudControlApi extends Closeable {
 
    @Delegate
    CustomerImageApi getCustomerImageApi();
+
+   @Provides
+   @Named(VLAN_DELETED_PREDICATE)
+   Predicate<String> vlanDeletedPredicate();
+
+   @Provides
+   @Named(NETWORK_DOMAIN_DELETED_PREDICATE)
+   Predicate<String> networkDomainDeletedPredicate();
+
+   @Provides
+   @Named(NETWORK_DOMAIN_NORMAL_PREDICATE)
+   Predicate<String> networkDomainNormalPredicate();
+
+   @Provides
+   @Named(VLAN_NORMAL_PREDICATE)
+   Predicate<String> vlanNormalPredicate();
+
+   @Provides
+   @Named(SERVER_STOPPED_PREDICATE)
+   Predicate<String> serverStoppedPredicate();
+
+   @Provides
+   @Named(SERVER_DELETED_PREDICATE)
+   Predicate<String> serverDeletedPredicate();
+
+   @Provides
+   @Named(SERVER_STARTED_PREDICATE)
+   Predicate<String> serverStartedPredicate();
+
+   @Provides
+   @Named(SERVER_NORMAL_PREDICATE)
+   Predicate<String> serverNormalPredicate();
+
+   @Provides
+   @Named(VM_TOOLS_RUNNING_PREDICATE)
+   Predicate<String> vmToolsRunningPredicate();
+
+   @Provides
+   @Named(CUSTOMER_IMAGE_DELETED_PREDICATE)
+   Predicate<String> customerImageDeletedPredicate();
+
 }

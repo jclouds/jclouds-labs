@@ -16,14 +16,10 @@
  */
 package org.jclouds.dimensiondata.cloudcontrol.internal;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 import org.jclouds.ContextBuilder;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.BaseApiLiveTest;
@@ -44,16 +40,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import static com.google.common.util.concurrent.MoreExecutors.sameThreadExecutor;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.CUSTOMER_IMAGE_DELETED_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_DELETED_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.NETWORK_DOMAIN_NORMAL_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_DELETED_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_NORMAL_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STARTED_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.SERVER_STOPPED_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VLAN_DELETED_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VLAN_NORMAL_PREDICATE;
-import static org.jclouds.dimensiondata.cloudcontrol.config.DimensionDataCloudControlComputeServiceContextModule.VM_TOOLS_RUNNING_PREDICATE;
 
 @Test(groups = "live")
 public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<DimensionDataCloudControlApi> {
@@ -66,17 +52,6 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
    protected static final String DEFAULT_PRIVATE_IPV4_BASE_ADDRESS = "10.0.0.0";
    protected static final Integer DEFAULT_PRIVATE_IPV4_PREFIX_SIZE = 24;
    protected static final String DEFAULT_PROTOCOL = "TCP";
-
-   protected Predicate<String> vlanDeletedPredicate;
-   protected Predicate<String> vlanNormalPredicate;
-   protected Predicate<String> networkDomainDeletedPredicate;
-   protected Predicate<String> networkDomainNormalPredicate;
-   protected Predicate<String> serverStoppedPredicate;
-   protected Predicate<String> serverStartedPredicate;
-   protected Predicate<String> serverDeletedPredicate;
-   protected Predicate<String> serverNormalPredicate;
-   protected Predicate<String> vmtoolsRunningPredicate;
-   protected Predicate<String> customerImageDeletedPredicate;
 
    public BaseDimensionDataCloudControlApiLiveTest() {
       provider = "dimensiondata-cloudcontrol";
@@ -115,27 +90,6 @@ public class BaseDimensionDataCloudControlApiLiveTest extends BaseApiLiveTest<Di
    @Override
    protected DimensionDataCloudControlApi create(Properties props, Iterable<Module> modules) {
       Injector injector = newBuilder().modules(modules).overrides(props).buildInjector();
-      vlanDeletedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(VLAN_DELETED_PREDICATE)));
-      vlanNormalPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(VLAN_NORMAL_PREDICATE)));
-      networkDomainDeletedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(NETWORK_DOMAIN_DELETED_PREDICATE)));
-      networkDomainNormalPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(NETWORK_DOMAIN_NORMAL_PREDICATE)));
-      serverStartedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(SERVER_STARTED_PREDICATE)));
-      serverStoppedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(SERVER_STOPPED_PREDICATE)));
-      serverDeletedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(SERVER_DELETED_PREDICATE)));
-      serverNormalPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(SERVER_NORMAL_PREDICATE)));
-      vmtoolsRunningPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(VM_TOOLS_RUNNING_PREDICATE)));
-      customerImageDeletedPredicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<String>>() {
-      }, Names.named(CUSTOMER_IMAGE_DELETED_PREDICATE)));
-
       return injector.getInstance(DimensionDataCloudControlApi.class);
    }
 
