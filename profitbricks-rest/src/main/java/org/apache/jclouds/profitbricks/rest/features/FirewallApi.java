@@ -124,8 +124,8 @@ public interface FirewallApi extends Closeable {
                      "servers", "serverId"
                   ),
                   "nics", "nicId"
-               )
-            , type);
+               ),
+            type);
          } finally {
             if (stream != null)
                stream.close();

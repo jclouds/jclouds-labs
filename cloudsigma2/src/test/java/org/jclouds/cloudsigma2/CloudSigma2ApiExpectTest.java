@@ -285,9 +285,9 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
    @Test
    public void testDeleteDrives() throws Exception {
       List<String> deleteList = ImmutableList.of(
-            "b137e217-42b6-4ecf-8575-d72efc2d3dbd"
-            , "e035a488-8587-4a15-ab25-9b7343236bc9"
-            , "feded33c-106f-49fa-a1c4-be5c718ad1b5");
+            "b137e217-42b6-4ecf-8575-d72efc2d3dbd",
+            "e035a488-8587-4a15-ab25-9b7343236bc9",
+            "feded33c-106f-49fa-a1c4-be5c718ad1b5");
 
       CloudSigma2Api api = requestSendsResponse(
             deleteBuilder()
@@ -515,8 +515,8 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
       CloudSigma2Api api = requestSendsResponse(
             postBuilder()
                   .endpoint(endpoint + "servers/")
-                  .payload(payloadFromResourceWithContentType("/servers-create-request.json"
-                        , MediaType.APPLICATION_JSON))
+                  .payload(payloadFromResourceWithContentType("/servers-create-request.json",
+                        MediaType.APPLICATION_JSON))
                   .build(),
             responseBuilder()
                   .payload(payloadFromResourceWithContentType("/servers-single.json", MediaType.APPLICATION_JSON))
@@ -1349,11 +1349,11 @@ public class CloudSigma2ApiExpectTest extends BaseRestApiExpectTest<CloudSigma2A
             new Tag.Builder()
                   .name("TagCreatedWithResource")
                   .resources(ImmutableList.of(
-                        new TagResource.Builder().uuid("61bcc398-c034-42f1-81c9-f6d7f62c4ea0").build()
-                        , new TagResource.Builder().uuid("8ac6ac13-a55e-4b01-bcf4-5eed7b60a3ed").build()
-                        , new TagResource.Builder().uuid("3610d935-514a-4552-acf3-a40dd0a5f961").build()
-                        , new TagResource.Builder().uuid("185.12.6.183").build()
-                        , new TagResource.Builder().uuid("96537817-f4b6-496b-a861-e74192d3ccb0").build()
+                        new TagResource.Builder().uuid("61bcc398-c034-42f1-81c9-f6d7f62c4ea0").build(),
+                        new TagResource.Builder().uuid("8ac6ac13-a55e-4b01-bcf4-5eed7b60a3ed").build(),
+                        new TagResource.Builder().uuid("3610d935-514a-4552-acf3-a40dd0a5f961").build(),
+                        new TagResource.Builder().uuid("185.12.6.183").build(),
+                        new TagResource.Builder().uuid("96537817-f4b6-496b-a861-e74192d3ccb0").build()
                   ))
                   .build());
       assertNotNull(result);

@@ -71,8 +71,8 @@ public class ServerInfoToJsonTest {
                               .resourceUri(new URI("/api/2.0/drives/ae78e68c-9daa-4471-8878-0bb87fa80260/"))
                               .uuid("ae78e68c-9daa-4471-8878-0bb87fa80260")
                               .build())
-                        .build()
-                  , new ServerDrive.Builder()
+                        .build(),
+                  new ServerDrive.Builder()
                   .bootOrder(1)
                   .deviceChannel("0:0")
                   .deviceEmulationType(DeviceEmulationType.VIRTIO)

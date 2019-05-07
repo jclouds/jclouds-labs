@@ -57,14 +57,14 @@ public class TagToJsonTest {
             .resources(ImmutableList.of(
                   new TagResource.Builder()
                         .uuid("96537817-f4b6-496b-a861-e74192d3ccb0")
-                        .build()
-                  , new TagResource.Builder()
+                        .build(),
+                  new TagResource.Builder()
                   .uuid("61bcc398-c034-42f1-81c9-f6d7f62c4ea0")
-                  .build()
-                  , new TagResource.Builder()
+                  .build(),
+                  new TagResource.Builder()
                   .uuid("3610d935-514a-4552-acf3-a40dd0a5f961")
-                  .build()
-                  , new TagResource.Builder()
+                  .build(),
+                  new TagResource.Builder()
                   .resourceType(TagResourceType.IPS)
                   .resourceUri(new URI("/api/2.0/ips/185.12.6.183/"))
                   .uuid("185.12.6.183")

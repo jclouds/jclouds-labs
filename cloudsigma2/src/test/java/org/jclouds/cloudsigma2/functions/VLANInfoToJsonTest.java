@@ -56,8 +56,8 @@ public class VLANInfoToJsonTest {
                      new Server.Builder()
                            .uuid("81f911f9-5152-4328-8671-02543bafbd0e")
                            .resourceUri(new URI("/api/2.0/servers/81f911f9-5152-4328-8671-02543bafbd0e/"))
-                           .build()
-                     , new Server.Builder()
+                           .build(),
+                     new Server.Builder()
                      .uuid("19163e1a-a6d6-4e73-8087-157dd302c373")
                      .resourceUri(new URI("/api/2.0/servers/19163e1a-a6d6-4e73-8087-157dd302c373/"))
                      .build()

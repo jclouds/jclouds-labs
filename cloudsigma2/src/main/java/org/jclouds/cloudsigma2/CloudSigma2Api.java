@@ -302,8 +302,8 @@ public interface CloudSigma2Api extends Closeable {
    @Path("/libdrives/{uuid}/action/?do=clone")
    @SelectJson("objects")
    @OnlyElement
-   LibraryDrive cloneLibraryDrive(@PathParam("uuid") String uuid
-         , @Nullable @BinderParam(BindLibraryDriveToJson.class) LibraryDrive libraryDrive);
+   LibraryDrive cloneLibraryDrive(@PathParam("uuid") String uuid,
+         @Nullable @BinderParam(BindLibraryDriveToJson.class) LibraryDrive libraryDrive);
 
    /**
     * Gets the list of servers to which the authenticated user has access.
@@ -391,8 +391,8 @@ public interface CloudSigma2Api extends Closeable {
    @Named("server:editServer")
    @PUT
    @Path("/servers/{uuid}/")
-   ServerInfo editServer(@PathParam("uuid") String uuid
-         , @BinderParam(BindServerInfoToJsonRequest.class) ServerInfo server);
+   ServerInfo editServer(@PathParam("uuid") String uuid,
+         @BinderParam(BindServerInfoToJsonRequest.class) ServerInfo server);
 
    /**
     * Deletes a single server.
@@ -613,8 +613,8 @@ public interface CloudSigma2Api extends Closeable {
    @Named("fwpolicy:editFirewallPolicy")
    @PUT
    @Path("/fwpolicies/{uuid}/")
-   FirewallPolicy editFirewallPolicy(@PathParam("uuid") String uuid
-         , @BinderParam(BindFirewallPolicyToJsonRequest.class) FirewallPolicy firewallPolicy);
+   FirewallPolicy editFirewallPolicy(@PathParam("uuid") String uuid,
+         @BinderParam(BindFirewallPolicyToJsonRequest.class) FirewallPolicy firewallPolicy);
 
    /**
     * Deletes a single firewall policy.
@@ -695,8 +695,8 @@ public interface CloudSigma2Api extends Closeable {
    @Named("vlan:listVLANInfo")
    @PUT
    @Path("/vlans/{uuid}/")
-   VLANInfo editVLAN(@PathParam("uuid") String uuid
-         , @BinderParam(BindVLANToJsonRequest.class) VLANInfo vlanInfo);
+   VLANInfo editVLAN(@PathParam("uuid") String uuid,
+       @BinderParam(BindVLANToJsonRequest.class) VLANInfo vlanInfo);
 
    /**
     * Gets the list of IPs to which the authenticated user has access.
