@@ -17,16 +17,19 @@
 package org.apache.jclouds.oneandone.rest.util;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.inject.Inject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.jclouds.oneandone.rest.domain.SingleServerAppliance;
 import org.apache.jclouds.oneandone.rest.domain.Types;
 import org.jclouds.json.Json;
+import org.jclouds.json.gson.internal.LinkedTreeMap;
+
+import com.google.common.reflect.TypeToken;
+import com.google.inject.Inject;
 
 public class ServerApplianceParser {
 
