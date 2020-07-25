@@ -1,7 +1,9 @@
 jclouds Labs
 ============
 
-Repository for incubator providers and APIs
+Repository for incubator providers and APIs.
+
+This repository is archived. Please see [apache/jclouds-labs](https://github.com/jclouds/jclouds-labs).
 
 License
 -------
